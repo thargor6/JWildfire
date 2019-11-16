@@ -6454,7 +6454,7 @@ public class MainEditorFrame extends JFrame {
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
         getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(),
-        getTinaPaletteFadeColorsCBx(), getTinaPaletteUniformWidthCBx(), getLayerWeightEd(), getLayerDensityREd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
+        getTinaPaletteFadeColorsCBx(), getTinaPaletteUniformWidthCBx(), getLayerWeightEd(), getLayerDensityREd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(), getLayerExtractBtn(),
         getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
         getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getMotionBlurLengthField(), getMotionBlurLengthSlider(),
         getMotionBlurTimeStepField(), getMotionBlurTimeStepSlider(), getMotionBlurDecayField(), getMotionBlurDecaySlider(),
@@ -11719,6 +11719,7 @@ public class MainEditorFrame extends JFrame {
   private JToggleButton layerVisibleBtn;
   private JButton layerAddBtn;
   private JButton layerDuplicateBtn;
+  private JButton layerExtractBtn;
   private JToggleButton layerAppendBtn;
   private JButton layerShowAllBtn;
   private JButton layerHideOthersBtn;
@@ -14737,6 +14738,19 @@ public class MainEditorFrame extends JFrame {
       layerDeleteBtn.setBounds(112, 100, 90, 24);
       panel_75.add(layerDeleteBtn);
 
+      layerExtractBtn = new JButton();
+      layerExtractBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.extractLayerBtn_clicked();
+        }
+      });
+      layerExtractBtn.setToolTipText("Extract layer to a new flame");
+      layerExtractBtn.setText("Extract");
+      layerExtractBtn.setPreferredSize(new Dimension(90, 24));
+      layerExtractBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      layerExtractBtn.setBounds(112, 126, 90, 24);
+      panel_75.add(layerExtractBtn);
+
       layerVisibleBtn = new JToggleButton();
       layerVisibleBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -14866,6 +14880,10 @@ public class MainEditorFrame extends JFrame {
 
   public JToggleButton getLayerAppendBtn() {
     return layerAppendBtn;
+  }
+
+  public JButton getLayerExtractBtn() {
+    return layerExtractBtn;
   }
 
   public JButton getLayerShowAllBtn() {

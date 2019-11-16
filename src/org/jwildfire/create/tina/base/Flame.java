@@ -586,6 +586,12 @@ public class Flame implements Assignable<Flame>, Serializable {
     res.assign(this);
     return res;
   }
+  
+  public Flame makeCopy(Layer pLayer) {
+    Flame res = new Flame();
+    res.assign(this, pLayer);
+    return res;
+  }
 
   public double getFocusX() {
     return focusX;
@@ -669,6 +675,10 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   @Override
   public void assign(Flame pFlame) {
+    assign(pFlame, null);
+  }
+  
+  public void assign(Flame pFlame, Layer pLayer) {
     centreX = pFlame.centreX;
     centreXCurve.assign(pFlame.centreXCurve);
     centreY = pFlame.centreY;
@@ -833,8 +843,13 @@ public class Flame implements Assignable<Flame>, Serializable {
     mixerBBCurve.assign(pFlame.mixerBBCurve);
     editPlane = pFlame.editPlane;
     layers.clear();
-    for (Layer layer : pFlame.getLayers()) {
-      layers.add(layer.makeCopy());
+    if (pLayer == null) {
+      for (Layer layer : pFlame.getLayers()) {
+        layers.add(layer.makeCopy());
+      }
+    }
+    else {
+      layers.add(pLayer);
     }
 
     solidRenderSettings.assign(pFlame.solidRenderSettings);

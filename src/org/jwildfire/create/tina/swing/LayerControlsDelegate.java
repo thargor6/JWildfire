@@ -62,6 +62,7 @@ public class LayerControlsDelegate extends AbstractControlsDelegate {
     data.layerAddBtn.setEnabled(flame != null);
     data.layerDuplicateBtn.setEnabled(layer != null);
     data.layerDeleteBtn.setEnabled(flame != null && layer != null && flame.getLayers().size() > 1);
+    data.layerExtractBtn.setEnabled(layer != null);
     data.layersTable.setEnabled(flame != null);
     data.layerVisibleBtn.setEnabled(layer != null);
     data.layerAppendBtn.setEnabled(flame != null);

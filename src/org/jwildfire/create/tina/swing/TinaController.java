@@ -608,6 +608,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.layerAddBtn = parameterObject.layerAddBtn;
     data.layerDuplicateBtn = parameterObject.layerDuplicateBtn;
     data.layerDeleteBtn = parameterObject.layerDeleteBtn;
+    data.layerExtractBtn = parameterObject.layerExtractBtn;
     data.layersTable = parameterObject.layersTable;
     data.layerVisibleBtn = parameterObject.layerVisibleBtn;
     data.layerAppendBtn = parameterObject.layerAppendBtn;
@@ -4417,9 +4418,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       errorHandler.handleError(ex);
     }
   }
-
+  
   private Flame generateExportFlame(Flame pFlame) {
-    Flame res = pFlame.makeCopy();
+    return generateExportFlame(pFlame, null);
+  }
+
+  private Flame generateExportFlame(Flame pFlame, Layer pLayer) {
+    Flame res = pFlame.makeCopy(pLayer);
     ResolutionProfile resProfile = getResolutionProfile();
 
     double wScl = (double) resProfile.getWidth() / (double) res.getWidth();
@@ -5001,6 +5006,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     Flame flame = getCurrFlame();
     if (flame != null) {
       Flame storedFlame = generateExportFlame(flame);
+      undoManager.initUndoStack(storedFlame);
+      randomBatch.add(0, new FlameThumbnail(storedFlame, null, null));
+      updateThumbnails();
+    }
+  }
+
+  public void extractLayerBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      Flame storedFlame = generateExportFlame(flame, getCurrLayer());
       undoManager.initUndoStack(storedFlame);
       randomBatch.add(0, new FlameThumbnail(storedFlame, null, null));
       updateThumbnails();

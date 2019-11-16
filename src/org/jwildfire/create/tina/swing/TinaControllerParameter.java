@@ -403,6 +403,7 @@ public class TinaControllerParameter {
   public JButton layerAddBtn;
   public JButton layerDuplicateBtn;
   public JButton layerDeleteBtn;
+  public JButton layerExtractBtn;
   public JTable layersTable;
   public JToggleButton layerVisibleBtn;
   public JToggleButton layerAppendBtn;
@@ -1024,7 +1025,7 @@ public class TinaControllerParameter {
       JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree, JButton pGradientLibraryRescanBtn,
       JButton pGradientLibraryNewFolderBtn, JButton pGradientLibraryRenameFolderBtn, JList pGradientsList,
       JButton pBackgroundColorIndicatorBtn, JButton pRandomizeButton, JCheckBox pPaletteFadeColorsCBx, JCheckBox pPaletteUniformWidthCBx,
-      JWFNumberField pLayerWeightEd, JWFNumberField pLayerDensityREd, JButton pLayerAddBtn, JButton pLayerDuplicateBtn, JButton pLayerDeleteBtn,
+      JWFNumberField pLayerWeightEd, JWFNumberField pLayerDensityREd, JButton pLayerAddBtn, JButton pLayerDuplicateBtn, JButton pLayerDeleteBtn, JButton pLayerExtractBtn,
       JTable pLayersTable, JToggleButton pLayerVisibleBtn, JToggleButton pLayerAppendBtn, JButton pLayerHideOthersBtn,
       JButton pLayerShowAllBtn, JToggleButton pLayerPreviewBtn,
       JWFNumberField pKeyframesFrameField, JSlider pKeyframesFrameSlider, JWFNumberField pKeyframesFrameCountField,
@@ -1084,6 +1085,7 @@ public class TinaControllerParameter {
     this.layerAddBtn = pLayerAddBtn;
     this.layerDuplicateBtn = pLayerDuplicateBtn;
     this.layerDeleteBtn = pLayerDeleteBtn;
+    this.layerExtractBtn = pLayerExtractBtn;
     this.layersTable = pLayersTable;
     this.layerVisibleBtn = pLayerVisibleBtn;
     this.layerAppendBtn = pLayerAppendBtn;
