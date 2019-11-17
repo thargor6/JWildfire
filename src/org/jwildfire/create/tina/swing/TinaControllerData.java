@@ -137,6 +137,10 @@ public class TinaControllerData {
   public JSlider postBlurFallOffSlider;
   public JWFNumberField tinaZBufferScaleREd;
   public JSlider tinaZBufferScaleSlider;
+  public JWFNumberField tinaZBufferBiasREd;
+  public JSlider tinaZBufferBiasSlider;
+  public JRadioButton tinaZBufferFilename1;
+  public JRadioButton tinaZBufferFilename2;
   public JTextField paletteRandomPointsREd;
   public JComboBox paletteRandomGeneratorCmb;
   public JCheckBox paletteFadeColorsCBx;

@@ -657,6 +657,19 @@ public class AbstractFlameReader {
       pFlame.setZBufferScale(Double.parseDouble(hs));
     }
 
+    if ((hs = atts.get(ATTR_ZBUFFER_BIAS)) != null) {
+      pFlame.setZBufferBias(Double.parseDouble(hs));
+    }
+    
+    if ((hs = atts.get(ATTR_ZBUFFER_FILENAME)) != null) {
+      try {
+        pFlame.setZBufferFilename(ZBufferFilename.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
     if ((hs = atts.get(ATTR_SLD_RENDER_ENABLED)) != null) {
       pFlame.getSolidRenderSettings().setSolidRenderingEnabled(Integer.parseInt(hs) == 1);
     }
@@ -903,6 +916,8 @@ public class AbstractFlameReader {
   public static final String ATTR_POSTBLUR_FADE = "post_blur_fade";
   public static final String ATTR_POSTBLUR_FALLOFF = "post_blur_falloff";
   public static final String ATTR_ZBUFFER_SCALE = "zbuffer_scale";
+  public static final String ATTR_ZBUFFER_BIAS = "zbuffer_bias";
+  public static final String ATTR_ZBUFFER_FILENAME = "zbuffer_filename";
   public static final String ATTR_MIRROR_PRE_POST_TRANSLATIONS = "mirror_pre_post_translations";
 
   public static final String ATTR_WFIELD_TYPE = "wfield_type";

@@ -87,7 +87,7 @@ public class RenderMainFlameThread implements Runnable {
         new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(outFile.getAbsolutePath()));
       }
       if (res.getZBuffer() != null) {
-        new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(outFile.getAbsolutePath()));
+        new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(outFile.getAbsolutePath(), flame.getZBufferFilename()));
       }
 
       if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {

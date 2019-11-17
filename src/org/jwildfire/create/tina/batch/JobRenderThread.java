@@ -133,7 +133,7 @@ public class JobRenderThread implements Runnable {
                       new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(job.getImageFilename(flame.getStereo3dMode())));
                     }
                     if (res.getZBuffer() != null) {
-                      new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(job.getImageFilename(flame.getStereo3dMode())));
+                      new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(job.getImageFilename(flame.getStereo3dMode()), flame.getZBufferFilename()));
                     }
                   }
                 }

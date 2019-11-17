@@ -30,8 +30,9 @@ public class RenderZBufferThread extends AbstractImageRenderThread {
   private final SimpleGrayImage img;
   private final double zScale;
   private final double imgSize;
+  private final int zBias;
 
-  public RenderZBufferThread(Flame pFlame, LogDensityFilter pLogDensityFilter, int pStartRow, int pEndRow, SimpleGrayImage pImg, double pZScale) {
+  public RenderZBufferThread(Flame pFlame, LogDensityFilter pLogDensityFilter, int pStartRow, int pEndRow, SimpleGrayImage pImg, double pZScale, double pZBias) {
     logDensityFilter = pLogDensityFilter;
     startRow = pStartRow;
     endRow = pEndRow;
@@ -40,6 +41,7 @@ public class RenderZBufferThread extends AbstractImageRenderThread {
     img = pImg;
     imgSize = MathLib.sqrt(MathLib.sqr(pImg.getImageWidth()) + MathLib.sqr(pImg.getImageHeight()));
     zScale = pZScale * 1000.0 / imgSize;
+    zBias = (pZBias <= 0.0) ? 0 : (pZBias >= 1.0) ? 0xffff : Tools.FTOI(pZBias * 0xffff);
   }
 
   @Override
@@ -55,12 +57,14 @@ public class RenderZBufferThread extends AbstractImageRenderThread {
               int lvl = Tools.FTOI(-zScale * accumSample.z * 32767.0 + 32767.0);
               if (lvl < 0) {
                 lvl = 0;
+              } else if (lvl > 0xffff) {
+                lvl = 0xffff;
               }
               int grayValue = 0xffff - lvl & 0xffff;
               img.setValue(j, i, grayValue);
             }
             else {
-              img.setValue(j, i, 0xffff);
+              img.setValue(j, i, 0xffff - zBias);
             }
           }
           // positive zScale: black to white (white near camera, black background, which is the default)
@@ -69,9 +73,14 @@ public class RenderZBufferThread extends AbstractImageRenderThread {
               int lvl = Tools.FTOI(zScale * accumSample.z * 32767.0 + 32767.0);
               if (lvl < 0) {
                 lvl = 0;
+              } else if (lvl > 0xffff) {
+                lvl = 0xffff;
               }
               int grayValue = lvl & 0xffff;
               img.setValue(j, i, grayValue);
+            }
+            else {
+              img.setValue(j,  i, zBias);
             }
           }
         }

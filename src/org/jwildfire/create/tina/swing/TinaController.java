@@ -686,6 +686,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     data.tinaZBufferScaleREd = parameterObject.tinaZBufferScaleREd;
     data.tinaZBufferScaleSlider = parameterObject.tinaZBufferScaleSlider;
+    data.tinaZBufferBiasREd = parameterObject.tinaZBufferBiasREd;
+    data.tinaZBufferBiasSlider = parameterObject.tinaZBufferBiasSlider;
+    data.tinaZBufferFilename1 = parameterObject.tinaZBufferFilename1;
+    data.tinaZBufferFilename2 = parameterObject.tinaZBufferFilename2;
 
     data.tinaSpatialOversamplingREd = parameterObject.tinaSpatialOversamplingREd;
     data.tinaSpatialOversamplingSlider = parameterObject.tinaSpatialOversamplingSlider;
@@ -5094,7 +5098,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               try {
                 messageHelper.showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
                 mainController.loadImage(file.getAbsolutePath(), false);
-                File zBuffer = new File(Tools.makeZBufferFilename(file.getAbsolutePath()));
+                File zBuffer = new File(Tools.makeZBufferFilename(file.getAbsolutePath(), flame.getZBufferFilename()));
                 if (zBuffer.exists()) {
                   mainController.loadImage(zBuffer.getAbsolutePath(), false);
                 }

@@ -247,6 +247,10 @@ public class TinaControllerParameter {
   public JSlider postBlurFallOffSlider;
   public JWFNumberField tinaZBufferScaleREd;
   public JSlider tinaZBufferScaleSlider;
+  public JWFNumberField tinaZBufferBiasREd;
+  public JSlider tinaZBufferBiasSlider;
+  public JRadioButton tinaZBufferFilename1;
+  public JRadioButton tinaZBufferFilename2;
   public JToggleButton pAffineScaleXButton;
   public JToggleButton pAffineScaleYButton;
   public JPanel pGradientLibraryPanel;
@@ -769,8 +773,8 @@ public class TinaControllerParameter {
                          JToggleButton pMouseTransformSlowButton,
                          JPanel pRootPanel, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pPostBlurRadiusREd, JSlider pPostBlurRadiusSlider, JWFNumberField pPostBlurFadeREd, JSlider pPostBlurFadeSlider, JWFNumberField pPostBlurFallOffREd, JSlider pPostBlurFallOffSlider,
                          JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JToggleButton pAffineMirrorPrePostTranslationsButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
-                         JWFNumberField tinaZBufferScaleREd, JSlider tinaZBufferScaleSlider, JComboBox tinaFilterTypeCmb, JLabel tinaFilterKernelCmbLbl, JLabel tinaFilterRadiusLbl, JCheckBox tinaFilterIndicatorCBx,
-                         JPopupMenu thumbnailSelectPopupMenu, JPopupMenu thumbnailRemovePopupMenu, JWFNumberField tinaFilterSharpnessREd, JSlider tinaFilterSharpnessSlider,
+                         JWFNumberField tinaZBufferScaleREd, JSlider tinaZBufferScaleSlider, JWFNumberField tinaZBufferBiasREd, JSlider tinaZBufferBiasSlider, JRadioButton tinaZBufferFilename1, JRadioButton tinaZBufferFilename2,
+                         JComboBox tinaFilterTypeCmb, JLabel tinaFilterKernelCmbLbl, JLabel tinaFilterRadiusLbl, JCheckBox tinaFilterIndicatorCBx, JPopupMenu thumbnailSelectPopupMenu, JPopupMenu thumbnailRemovePopupMenu, JWFNumberField tinaFilterSharpnessREd, JSlider tinaFilterSharpnessSlider,
                          JWFNumberField tinaFilterLowDensityREd, JSlider tinaFilterLowDensitySlider, JButton randomBatchButton, JProgressBar randomBatchProgressBar
   ) {
 
@@ -940,6 +944,10 @@ public class TinaControllerParameter {
     this.pXFormAntialiasRadiusSlider = pXFormAntialiasRadiusSlider;
     this.tinaZBufferScaleREd = tinaZBufferScaleREd;
     this.tinaZBufferScaleSlider = tinaZBufferScaleSlider;
+    this.tinaZBufferBiasREd = tinaZBufferBiasREd;
+    this.tinaZBufferBiasSlider = tinaZBufferBiasSlider;
+    this.tinaZBufferFilename1 = tinaZBufferFilename1;
+    this.tinaZBufferFilename2 = tinaZBufferFilename2;
     this.tinaFilterTypeCmb = tinaFilterTypeCmb;
     this.tinaFilterKernelCmbLbl = tinaFilterKernelCmbLbl;
     this.tinaFilterRadiusLbl = tinaFilterRadiusLbl;
