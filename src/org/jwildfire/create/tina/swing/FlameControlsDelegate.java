@@ -40,6 +40,7 @@ import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
+import org.jwildfire.create.tina.base.ZBufferFilename;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFunc;
@@ -852,6 +853,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       data.tinaZBufferScaleREd.setText(Tools.doubleToString(getCurrFlame().getZBufferScale()));
       data.tinaZBufferScaleSlider.setValue(Tools.FTOI(getCurrFlame().getZBufferScale() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaZBufferBiasREd.setText(Tools.doubleToString(getCurrFlame().getZBufferBias()));
+      data.tinaZBufferBiasSlider.setValue(Tools.FTOI(getCurrFlame().getZBufferBias() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaZBufferFilename1.setSelected(getCurrFlame().getZBufferFilename() == ZBufferFilename.PRE_ZBUF);
+      data.tinaZBufferFilename2.setSelected(getCurrFlame().getZBufferFilename() == ZBufferFilename.POST_DEPTH);
 
       setupDOFParamsControls(getCurrFlame().getCamDOFShape());
       data.dofDOFShapeCmb.setSelectedItem(getCurrFlame().getCamDOFShape());
@@ -1499,6 +1504,27 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void zBufferScaleSlider_changed() {
     flameSliderChanged(data.tinaZBufferScaleSlider, data.tinaZBufferScaleREd, "zBufferScale", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void zBufferBiasREd_changed() {
+    flameTextFieldChanged(data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void zBufferBiasSlider_changed() {
+    flameSliderChanged(data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+  
+  public ZBufferFilename getZBufferFilenameSetting() {
+    if (data.tinaZBufferFilename1.isSelected())
+      return ZBufferFilename.PRE_ZBUF;
+    else if (data.tinaZBufferFilename2.isSelected()) 
+      return ZBufferFilename.POST_DEPTH;
+    else
+      return ZBufferFilename.PRE_ZBUF;
+  }
+  
+  public void zBufferFilename_changed() {
+    getCurrFlame().setZBufferFilename(getZBufferFilenameSetting());
   }
 
   public void postBlurFadeREd_changed() {

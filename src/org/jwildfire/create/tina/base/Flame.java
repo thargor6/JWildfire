@@ -39,6 +39,7 @@ import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
+import org.jwildfire.create.tina.base.ZBufferFilename;
 
 public class Flame implements Assignable<Flame>, Serializable {
   private static final long serialVersionUID = 1L;
@@ -213,6 +214,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int frameCount = 300;
   private int fps = 30;
   private double zBufferScale = 1.0;
+  private double zBufferBias = 0.0;
+  private ZBufferFilename zBufferFilename = ZBufferFilename.PRE_ZBUF;
 
   private int postBlurRadius;
   private double postBlurFade;
@@ -805,6 +808,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     postBlurFade = pFlame.postBlurFade;
     postBlurFallOff = pFlame.postBlurFallOff;
     zBufferScale = pFlame.zBufferScale;
+    zBufferBias = pFlame.zBufferBias;
+    zBufferFilename = pFlame.zBufferFilename; 
 
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
@@ -951,7 +956,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         !mixerGBCurve.isEqual(pFlame.mixerGBCurve) || !mixerBRCurve.isEqual(pFlame.mixerBRCurve) || !mixerBGCurve.isEqual(pFlame.mixerBGCurve) ||
         !mixerBBCurve.isEqual(pFlame.mixerBBCurve) || !solidRenderSettings.isEqual(pFlame.solidRenderSettings) ||
         postBlurRadius != pFlame.postBlurRadius || (fabs(postBlurFade - pFlame.postBlurFade) > EPSILON) ||
-        (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON) || (fabs(zBufferScale - pFlame.zBufferScale) > EPSILON)) {
+        (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON) || (zBufferFilename == pFlame.zBufferFilename) ||
+        (fabs(zBufferScale - pFlame.zBufferScale) > EPSILON) || (fabs(zBufferBias - pFlame.zBufferBias) > EPSILON)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -1686,6 +1692,22 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setZBufferScale(double zBufferScale) {
     this.zBufferScale = zBufferScale;
+  }
+
+  public double getZBufferBias() {
+    return zBufferBias;
+  }
+
+  public void setZBufferBias(double zBufferBias) {
+    this.zBufferBias = zBufferBias;
+  }
+  
+  public ZBufferFilename getZBufferFilename() {
+    return zBufferFilename;
+  }
+  
+  public void setZBufferFilename(ZBufferFilename zBufferFilename) {
+    this.zBufferFilename = zBufferFilename;
   }
 
   public double getLowDensityBrightness() {

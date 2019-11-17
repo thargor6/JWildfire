@@ -6443,8 +6443,8 @@ public class MainEditorFrame extends JFrame {
         interactiveRendererFrame.getInteractiveResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
-        getTinaZBufferScaleREd(), getTinaZBufferScaleSlider(), getTinaFilterTypeCmb(), getTinaFilterKernelCmbLbl(), getTinaFilterRadiusLbl(),
-        getTinaFilterIndicatorCBx(), getThumbnailSelectPopupMenu(), getThumbnailRemovePopupMenu(), getTinaFilterSharpnessREd(),
+        getTinaZBufferScaleREd(), getTinaZBufferScaleSlider(), getTinaZBufferBiasREd(), getTinaZBufferBiasSlider(), getTinaZBufferFilename1(), getTinaZBufferFilename2(),
+        getTinaFilterTypeCmb(), getTinaFilterKernelCmbLbl(), getTinaFilterRadiusLbl(), getTinaFilterIndicatorCBx(), getThumbnailSelectPopupMenu(), getThumbnailRemovePopupMenu(), getTinaFilterSharpnessREd(),
         getTinaFilterSharpnessSlider(), getTinaFilterLowDensityREd(), getTinaFilterLowDensitySlider(), getRandomBatchButton(), getRandomBatchProgressBar());
 
     params.setParams2(getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getSendFlameToIRButton(),
@@ -12068,6 +12068,11 @@ public class MainEditorFrame extends JFrame {
   private JPanel panel_5;
   private JWFNumberField tinaZBufferScaleREd;
   private JSlider tinaZBufferScaleSlider;
+  private JWFNumberField tinaZBufferBiasREd;
+  private JSlider tinaZBufferBiasSlider;
+  private JRadioButton tinaZBufferFilename1;
+  private JRadioButton tinaZBufferFilename2;
+  private ButtonGroup tinaZBufferFilename;
   private JButton button_1;
   private JPanel postBokehSettingsPnl;
   private JWFNumberField postBokehBrightnessREd;
@@ -21441,7 +21446,7 @@ public class MainEditorFrame extends JFrame {
       tinaZBufferScaleREd.setLinkedMotionControlName("tinaZBufferScaleSlider");
       tinaZBufferScaleREd.setLinkedLabelControlName("tinaZBufferScaleLbl");
       tinaZBufferScaleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      tinaZBufferScaleREd.setBounds(90, 8, 100, 24);
+      tinaZBufferScaleREd.setBounds(102, 6, 100, 24);
       tinaZBufferScaleREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (!tinaZBufferScaleREd.isMouseAdjusting() || tinaZBufferScaleREd.getMouseChangeCount() == 0) {
@@ -21462,7 +21467,7 @@ public class MainEditorFrame extends JFrame {
       lblZbufferScale.setName("tinaZBufferScaleLbl");
       lblZbufferScale.setLocation(new Point(390, 6));
       lblZbufferScale.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblZbufferScale.setBounds(6, 8, 84, 22);
+      lblZbufferScale.setBounds(6, 6, 84, 22);
       panel_5.add(lblZbufferScale);
 
       tinaZBufferScaleSlider = new JSlider();
@@ -21473,7 +21478,7 @@ public class MainEditorFrame extends JFrame {
       tinaZBufferScaleSlider.setMinimum(-25000);
       tinaZBufferScaleSlider.setMaximum(25000);
       tinaZBufferScaleSlider.setLocation(new Point(558, 4));
-      tinaZBufferScaleSlider.setBounds(192, 8, 205, 19);
+      tinaZBufferScaleSlider.setBounds(204, 6, 205, 19);
       tinaZBufferScaleSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
           tinaController.getFlameControls().zBufferScaleSlider_changed();
@@ -21481,7 +21486,100 @@ public class MainEditorFrame extends JFrame {
       });
 
       panel_5.add(tinaZBufferScaleSlider);
-    }
+
+      tinaZBufferBiasREd = new JWFNumberField();
+      tinaZBufferBiasREd.setToolTipText("Normally 0 but increase slightly to make background value closer if needed");
+      tinaZBufferBiasREd.setValueStep(0.05);
+      tinaZBufferBiasREd.setHasMinValue(true);
+      tinaZBufferBiasREd.setHasMaxValue(true);
+      tinaZBufferBiasREd.setMaxValue(1.0);
+      tinaZBufferBiasREd.setText("");
+      tinaZBufferBiasREd.setSize(new Dimension(100, 24));
+      tinaZBufferBiasREd.setPreferredSize(new Dimension(100, 24));
+      tinaZBufferBiasREd.setMotionPropertyName("centreX");
+      tinaZBufferBiasREd.setLocation(new Point(456, 4));
+      tinaZBufferBiasREd.setLinkedMotionControlName("tinaZBufferBiasSlider");
+      tinaZBufferBiasREd.setLinkedLabelControlName("lblZBufferBias");
+      tinaZBufferBiasREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      tinaZBufferBiasREd.setBounds(102, 30, 100, 24);
+      tinaZBufferBiasREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!tinaZBufferBiasREd.isMouseAdjusting() || tinaZBufferBiasREd.getMouseChangeCount() == 0) {
+            if (!tinaZBufferScaleSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.getFlameControls().zBufferBiasREd_changed();
+        }
+      });
+
+      panel_5.add(tinaZBufferBiasREd);
+
+      JLabel lblZBufferBias = new JLabel();
+      lblZBufferBias.setText("ZBuffer bias");
+      lblZBufferBias.setSize(new Dimension(68, 22));
+      lblZBufferBias.setPreferredSize(new Dimension(94, 22));
+      lblZBufferBias.setName("lblZBufferBias");
+      lblZBufferBias.setLocation(new Point(390, 6));
+      lblZBufferBias.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblZBufferBias.setBounds(6, 30, 84, 22);
+      panel_5.add(lblZBufferBias);
+
+      tinaZBufferBiasSlider = new JSlider();
+      tinaZBufferBiasSlider.setValue(0);
+      tinaZBufferBiasSlider.setSize(new Dimension(205, 19));
+      tinaZBufferBiasSlider.setPreferredSize(new Dimension(220, 19));
+      tinaZBufferBiasSlider.setName("tinaZBufferBiasSlider");
+      tinaZBufferBiasSlider.setMinimum(0);
+      tinaZBufferBiasSlider.setMaximum(1000);
+      tinaZBufferBiasSlider.setValue(0);
+      tinaZBufferBiasSlider.setLocation(new Point(558, 4));
+      tinaZBufferBiasSlider.setBounds(204, 30, 205, 19);
+      tinaZBufferBiasSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().zBufferBiasSlider_changed();
+        }
+      });
+
+      panel_5.add(tinaZBufferBiasSlider);
+
+      JLabel lblZBufferFilename = new JLabel();
+      lblZBufferFilename.setText("ZBuffer filename");
+      lblZBufferFilename.setSize(new Dimension(68, 22));
+      lblZBufferFilename.setPreferredSize(new Dimension(94, 22));
+      lblZBufferFilename.setName("lblZBufferFilename");
+      lblZBufferFilename.setLocation(new Point(390, 6));
+      lblZBufferFilename.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblZBufferFilename.setBounds(6, 54, 84, 22);
+      panel_5.add(lblZBufferFilename);
+      
+      tinaZBufferFilename1 = new JRadioButton("zbuf_name");
+      tinaZBufferFilename1.setSelected(true);
+      tinaZBufferFilename1.setToolTipText("Use image filename prefixed with \"zbuf_\" for zbuffer filename");
+      tinaZBufferFilename1.setBounds(102, 54, 95, 22);
+      tinaZBufferFilename1.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.getFlameControls().zBufferFilename_changed();
+        }
+      });
+      panel_5.add(tinaZBufferFilename1);
+
+      tinaZBufferFilename2 = new JRadioButton("name_depth");
+      tinaZBufferFilename2.setSelected(false);
+      tinaZBufferFilename2.setToolTipText("Append \"_depth\" to image filename for zbuffer filename");
+      tinaZBufferFilename2.setBounds(202, 54, 110, 22);
+      tinaZBufferFilename2.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          tinaController.getFlameControls().zBufferFilename_changed();
+        }
+      });
+      panel_5.add(tinaZBufferFilename2);
+      
+      ButtonGroup zBufferFilenameButtonGroup = new ButtonGroup();
+      zBufferFilenameButtonGroup.add(tinaZBufferFilename1);
+      zBufferFilenameButtonGroup.add(tinaZBufferFilename2);
+
+}
     return panel_5;
   }
 
@@ -21491,6 +21589,22 @@ public class MainEditorFrame extends JFrame {
 
   public JSlider getTinaZBufferScaleSlider() {
     return tinaZBufferScaleSlider;
+  }
+
+  public JWFNumberField getTinaZBufferBiasREd() {
+    return tinaZBufferBiasREd;
+  }
+
+  public JSlider getTinaZBufferBiasSlider() {
+    return tinaZBufferBiasSlider;
+  }
+  
+  public JRadioButton getTinaZBufferFilename1() {
+    return tinaZBufferFilename1;
+  }
+  
+  public JRadioButton getTinaZBufferFilename2() {
+    return tinaZBufferFilename2;
   }
 
   private JButton getButton_1() {
