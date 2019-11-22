@@ -135,6 +135,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     res.add(data.cameraRollREd);
     res.add(data.cameraPitchREd);
     res.add(data.cameraYawREd);
+    res.add(data.cameraBankREd);
     res.add(data.cameraPerspectiveREd);
     res.add(data.cameraCentreXREd);
     res.add(data.cameraCentreYREd);
@@ -181,6 +182,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.cameraRollREd, false);
     enableControl(data.cameraPitchREd, false);
     enableControl(data.cameraYawREd, false);
+    enableControl(data.cameraBankREd, false);
     enableControl(data.cameraPerspectiveREd, false);
     enableControl(data.cameraCentreXREd, false);
     enableControl(data.cameraCentreYREd, false);
@@ -412,6 +414,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0, false);
   }
 
+  public void cameraBankSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.cameraBankSlider, data.cameraBankREd, "camBank", 1.0, false);
+  }
+
   public void cameraCentreYSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", TinaController.SLIDER_SCALE_CENTRE, false);
   }
@@ -606,6 +612,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void cameraYawREd_changed() {
     flameTextFieldChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0, false);
+  }
+
+  public void cameraBankREd_changed() {
+    flameTextFieldChanged(data.cameraBankSlider, data.cameraBankREd, "camBank", 1.0, false);
   }
 
   public void cameraPerspectiveREd_changed() {
@@ -1092,6 +1102,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       data.cameraYawREd.setText(Tools.doubleToString(getCurrFlame().getCamYaw()));
       data.cameraYawSlider.setValue(Tools.FTOI(getCurrFlame().getCamYaw()));
+
+      data.cameraBankREd.setText(Tools.doubleToString(getCurrFlame().getCamBank()));
+      data.cameraBankSlider.setValue(Tools.FTOI(getCurrFlame().getCamBank()));
 
       data.cameraCentreXREd.setText(Tools.doubleToString(getCurrFlame().getCentreX()));
       data.cameraCentreXSlider.setValue(Tools.FTOI(getCurrFlame().getCentreX() * TinaController.SLIDER_SCALE_CENTRE));

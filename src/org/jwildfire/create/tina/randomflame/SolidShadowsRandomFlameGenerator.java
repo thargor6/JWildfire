@@ -98,6 +98,7 @@ public class SolidShadowsRandomFlameGenerator extends RandomFlameGenerator {
     pFlame.setCamPerspective(0.05 + Math.random() * 0.15);
     pFlame.setCamPitch(-5.0 - Math.random() * 30.0);
     pFlame.setCamYaw(-25.0 + Math.random() * 50.0);
+    pFlame.setCamBank(-15.0 + Math.random() * 30.0);
     pFlame.setCamRoll(0.0);
 
     XForm xform0 = pFlame.getFirstLayer().getXForms().get(0);

@@ -431,6 +431,7 @@ public class JWFScriptController {
     sb.append("  flame.setCentreY(" + Tools.doubleToString(pFlame.getCentreY()) + ");\n");
     sb.append("  flame.setCamPitch(" + Tools.doubleToString(pFlame.getCamPitch()) + ");\n");
     sb.append("  flame.setCamYaw(" + Tools.doubleToString(pFlame.getCamYaw()) + ");\n");
+    sb.append("  flame.setCamBank(" + Tools.doubleToString(pFlame.getCamBank()) + ");\n");
     sb.append("  flame.setCamPerspective(" + Tools.doubleToString(pFlame.getCamPerspective()) + ");\n");
     sb.append("  flame.setWidth(" + pFlame.getWidth() + ");\n");
     sb.append("  flame.setHeight(" + pFlame.getHeight() + ");\n");

@@ -486,6 +486,7 @@ public class MeshGenController {
       setGradient(res);
       res.setCamPitch(60.0);
       res.setCamYaw(30.0);
+      res.setCamBank(0.0);
       res.setCamPerspective(0.20);
       addSliceVariation(res, false);
       return res;
@@ -592,7 +593,9 @@ public class MeshGenController {
     res.setCamPerspective(0.0);
     res.setCamPitch(0.0);
     res.setCamRoll(0.0);
+    res.setCamBank(0.0);
     res.setCamYaw(0.0);
+    res.setCamBank(0.0);
     res.setCamZ(0.0);
     res.setCamPosX(0.0);
     res.setCamPosY(0.0);

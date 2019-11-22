@@ -21,6 +21,7 @@ public enum GlobalScriptType {
   ROTATE_PITCH,
   ROTATE_ROLL,
   ROTATE_YAW,
+  ROTATE_BANK,
   MOVE_CAM_X,
   MOVE_CAM_Y,
   MOVE_CAM_Z

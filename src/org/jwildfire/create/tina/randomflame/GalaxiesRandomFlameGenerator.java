@@ -36,6 +36,7 @@ public class GalaxiesRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamRoll(1.49758722);
     flame.setCamPitch(0);
     flame.setCamYaw(0);
+    flame.setCamBank(0);
     flame.setCamPerspective(0);
     flame.setWidth(601);
     flame.setHeight(338);

@@ -35,6 +35,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamPitch(37);
     flame.setCamRoll(0);
     flame.setCamYaw(0);
+    flame.setCamBank(0);
     flame.setPixelsPerUnit(200);
     flame.setCamZoom(2.0);
     flame.setCamPerspective(0.32);

@@ -39,6 +39,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
 
     flame.setCamPitch(0);
     flame.setCamYaw(0);
+    flame.setCamBank(0.0);
     flame.setCamPerspective(0);
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);

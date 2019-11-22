@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import org.jwildfire.create.tina.base.ZBufferFilename;
 
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.Pixel;
@@ -600,10 +601,17 @@ public class Tools {
     }
   }
 
-  public static String makeZBufferFilename(String absolutePath) {
+  public static String makeZBufferFilename(String absolutePath, ZBufferFilename zBufferFilename) {
     File f = new File(absolutePath);
-    return new File(f.getParent(), "zbuf_" + f.getName()).getAbsolutePath();
-  }
+    switch (zBufferFilename) {
+    case PRE_ZBUF:
+      return new File(f.getParent(), "zbuf_" + f.getName()).getAbsolutePath();
+    case POST_DEPTH:
+      return new File(f.getParent(), f.getName().replaceFirst("[.]([^.]+)$", "_depth.$1")).getAbsolutePath();
+    default:
+      return new File(f.getParent(), "zbuf_" + f.getName()).getAbsolutePath();
+    }
+   }
 
   public static String makeHDRFilename(String absolutePath) {
     File f = new File(absolutePath);
