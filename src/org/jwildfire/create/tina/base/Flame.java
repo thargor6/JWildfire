@@ -60,6 +60,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double camYaw;
   private final MotionCurve camYawCurve = new MotionCurve();
   @AnimAware
+  private double camBank;
+  private final MotionCurve camBankCurve = new MotionCurve();
+  @AnimAware
   private double camPerspective;
   private final MotionCurve camPerspectiveCurve = new MotionCurve();
   @AnimAware
@@ -394,6 +397,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     camRoll = 0.0;
     camPitch = 0.0;
     camYaw = 0.0;
+    camBank = 0.0;
     camPerspective = 0.0;
     centreX = 0.0;
     centreY = 0.0;
@@ -541,6 +545,14 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setCamYaw(double camYaw) {
     this.camYaw = camYaw;
+  }
+
+  public double getCamBank() {
+    return camBank;
+  }
+
+  public void setCamBank(double pCamBank) {
+    this.camBank = pCamBank;
   }
 
   public double getCamPerspective() {
@@ -696,6 +708,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     camPerspectiveCurve.assign(pFlame.camPerspectiveCurve);
     camRoll = pFlame.camRoll;
     camRollCurve.assign(pFlame.camRollCurve);
+    camBank = pFlame.camBank;
+    camBankCurve.assign(pFlame.camBankCurve);
     camZoom = pFlame.camZoom;
     camZoomCurve.assign(pFlame.camZoomCurve);
     focusX = pFlame.focusX;
@@ -873,6 +887,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camYaw - pFlame.camYaw) > EPSILON) || !camYawCurve.isEqual(pFlame.camYawCurve) ||
         (fabs(camPerspective - pFlame.camPerspective) > EPSILON) || !camPerspectiveCurve.isEqual(pFlame.camPerspectiveCurve) ||
         (fabs(camRoll - pFlame.camRoll) > EPSILON) || !camRollCurve.isEqual(pFlame.camRollCurve) ||
+        (fabs(camBank - pFlame.camBank) > EPSILON) || !camBankCurve.isEqual(pFlame.camBankCurve) ||
         (fabs(camZoom - pFlame.camZoom) > EPSILON) || !camZoomCurve.isEqual(pFlame.camZoomCurve) ||
         (fabs(focusX - pFlame.focusX) > EPSILON) || !focusXCurve.isEqual(pFlame.focusXCurve) ||
         (fabs(focusY - pFlame.focusY) > EPSILON) || !focusYCurve.isEqual(pFlame.focusYCurve) ||
@@ -1344,7 +1359,7 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public boolean is3dProjectionRequired() {
     return getSolidRenderSettings().isSolidRenderingEnabled() ||
-        fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() ||
+        fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamBank()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() ||
         fabs(getDimishZ()) > EPSILON || fabs(getCamPosX()) > EPSILON || fabs(getCamPosY()) > EPSILON || fabs(getCamPosZ()) > EPSILON;
   }
 
@@ -1358,6 +1373,10 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public MotionCurve getCamYawCurve() {
     return camYawCurve;
+  }
+
+  public MotionCurve getCamBankCurve() {
+    return camBankCurve;
   }
 
   public boolean isStereo3dSwapSides() {

@@ -35,6 +35,7 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamPitch(0.0);
     flame.setCamRoll(90.0);
     flame.setCamYaw(0.0);
+    flame.setCamBank(0.0);
     flame.setCamZoom(2.4);
     flame.setCamPerspective(0.32);
     flame.setPixelsPerUnit(200);

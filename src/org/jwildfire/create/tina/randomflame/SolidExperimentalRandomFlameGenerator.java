@@ -37,6 +37,7 @@ public class SolidExperimentalRandomFlameGenerator extends SolidRandomFlameGener
     flame.setCamRoll(0);
     flame.setCamPitch(90.0 - Math.random() * 180.0);
     flame.setCamYaw(30.0 - Math.random() * 60.0);
+    flame.setCamBank(45.0 - Math.random() * 90.0);
     flame.setCamPerspective(Math.random() * 0.2);
     flame.setWidth(601);
     flame.setHeight(338);

@@ -182,6 +182,7 @@ public class FlameMorphService {
     res.setCamPerspective(morphValue(pFlame1.getCamPerspective(), pFlame2.getCamPerspective(), fScl));
     res.setCamPitch(morphValue(pFlame1.getCamPitch(), pFlame2.getCamPitch(), fScl));
     res.setCamYaw(morphValue(pFlame1.getCamYaw(), pFlame2.getCamYaw(), fScl));
+    res.setCamBank(morphValue(pFlame1.getCamBank(), pFlame2.getCamBank(), fScl));
     res.setCamRoll(morphValue(pFlame1.getCamRoll(), pFlame2.getCamRoll(), fScl));
     res.setFocusZ(morphValue(pFlame1.getFocusZ(), pFlame2.getFocusZ(), fScl));
     res.setCamZoom(morphValue(pFlame1.getCamZoom(), pFlame2.getCamZoom(), fScl));

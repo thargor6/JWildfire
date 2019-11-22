@@ -44,6 +44,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCentreY(0.0);
     flame.setCamPitch(0.0);
     flame.setCamYaw(0.0);
+    flame.setCamBank(0.0);
     flame.setCamZoom(1.0);
     flame.setCamPerspective(0.0);
     flame.setPixelsPerUnit(100);

@@ -34,6 +34,7 @@ public class SpiralsRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamRoll(90.0 - Math.random() * 180);
     flame.setCamPitch(0);
     flame.setCamYaw(0);
+    flame.setCamBank(0);
     flame.setCamPerspective(0);
     flame.setCamZoom(2.0);
 

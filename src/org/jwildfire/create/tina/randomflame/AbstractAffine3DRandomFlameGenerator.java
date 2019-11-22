@@ -36,6 +36,7 @@ public abstract class AbstractAffine3DRandomFlameGenerator extends RandomFlameGe
     flame.setCamRoll(0);
     flame.setCamPitch(25.0 + Math.random() * 30.0);
     flame.setCamYaw(10 + Math.random() * 20.0);
+    flame.setCamBank(5.0 + Math.random() * 10.0);
     flame.setCamPerspective(0.1 + Math.random() * 0.3);
     flame.setCamZoom(0.5);
     flame.setPreserveZ(true);

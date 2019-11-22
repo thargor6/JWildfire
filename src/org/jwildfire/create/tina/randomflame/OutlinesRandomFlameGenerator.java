@@ -36,6 +36,7 @@ public class OutlinesRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamRoll(0);
     flame.setCamPitch(0);
     flame.setCamYaw(0);
+    flame.setCamBank(0.0);
     flame.setCamPerspective(0);
     flame.setPixelsPerUnit(200);
     layer.getFinalXForms().clear();

@@ -34,6 +34,7 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCentreY(0.0);
     flame.setCamPitch(49.0);
     flame.setCamYaw(12.0);
+    flame.setCamBank(0.0);
     flame.setPixelsPerUnit(200);
     layer.getFinalXForms().clear();
     layer.getXForms().clear();

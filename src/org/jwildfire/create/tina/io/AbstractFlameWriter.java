@@ -320,6 +320,7 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr("cam_zoom", pFlame.getCamZoom()));
     attrList.add(xb.createAttr("cam_pitch", (pFlame.getCamPitch() * Math.PI) / 180.0));
     attrList.add(xb.createAttr("cam_yaw", (pFlame.getCamYaw() * Math.PI) / 180.0));
+    attrList.add(xb.createAttr("cam_roll", (pFlame.getCamBank() * Math.PI) / 180.0));
     attrList.add(xb.createAttr("cam_persp", pFlame.getCamPerspective()));
     attrList.add(xb.createAttr("cam_xfocus", pFlame.getFocusX()));
     attrList.add(xb.createAttr("cam_yfocus", pFlame.getFocusY()));

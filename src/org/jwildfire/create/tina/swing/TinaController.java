@@ -384,6 +384,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.cameraPitchSlider = parameterObject.pCameraPitchSlider;
     data.cameraYawREd = parameterObject.pCameraYawREd;
     data.cameraYawSlider = parameterObject.pCameraYawSlider;
+    data.cameraBankREd = parameterObject.pCameraBankREd;
+    data.cameraBankSlider = parameterObject.pCameraBankSlider;
     data.cameraPerspectiveREd = parameterObject.pCameraPerspectiveREd;
     data.cameraPerspectiveSlider = parameterObject.pCameraPerspectiveSlider;
     data.cameraCentreXREd = parameterObject.pCameraCentreXREd;

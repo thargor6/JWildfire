@@ -43,6 +43,7 @@ public class SplitsRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamPitch(0.0);
     flame.setCamRoll(00.0);
     flame.setCamYaw(0.0);
+    flame.setCamBank(0);
     flame.setCamZoom(2.0);
     flame.setGamma(2.7);
     flame.setCamPerspective(0.0);

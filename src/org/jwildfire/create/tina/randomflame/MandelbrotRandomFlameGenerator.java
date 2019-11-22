@@ -41,6 +41,7 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamPitch(49.0);
     flame.setCamRoll(00.0);
     flame.setCamYaw(0.0);
+    flame.setCamBank(0.0);
     flame.setCamZoom(1.0);
     flame.setGamma(2.0);
     flame.setCamPerspective(0.05 + Math.random() * 0.12);

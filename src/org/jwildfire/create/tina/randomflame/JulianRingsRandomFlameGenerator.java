@@ -31,6 +31,7 @@ public class JulianRingsRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamRoll(Math.random()*360.0);
     flame.setCamPitch(0);
     flame.setCamYaw(0);
+    flame.setCamBank(0.0);
     flame.setCamPerspective(0);
     flame.setWidth(962);
     flame.setHeight(541);

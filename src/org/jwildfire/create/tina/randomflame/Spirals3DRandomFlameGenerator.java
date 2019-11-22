@@ -44,6 +44,7 @@ public class Spirals3DRandomFlameGenerator extends AbstractAffine3DRandomFlameGe
   protected Flame postProcessFlame(Flame pFlame) {
     pFlame.setCamYaw((0.5 - Math.random()) * 75.0 + pFlame.getCamYaw());
     pFlame.setCamPitch((0.5 - Math.random()) * 135.0 + pFlame.getCamPitch());
+    pFlame.setCamBank((0.5 - Math.random()) * 75.0 + pFlame.getCamYaw());
     pFlame.setCamPerspective(0.1 + Math.random() * 0.4);
     pFlame.setCamZoom(2.0);
     rotateXForm(pFlame, 0, 30.0);

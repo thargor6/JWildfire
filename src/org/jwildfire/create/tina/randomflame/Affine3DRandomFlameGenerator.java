@@ -36,6 +36,7 @@ public class Affine3DRandomFlameGenerator extends RandomFlameGenerator {
 
     flame.setCamPitch(49.0-100.0*Math.random());
     flame.setCamYaw(22.0-44.0*Math.random());
+    flame.setCamBank(44.0-88.0*Math.random());
     flame.setCamPerspective(0.06+0.36*Math.random());
 
 

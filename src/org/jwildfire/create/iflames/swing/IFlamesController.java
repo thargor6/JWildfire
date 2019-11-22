@@ -511,6 +511,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     flame.setCamRoll(0);
     flame.setCamPitch(0);
     flame.setCamYaw(0);
+    flame.setCamBank(0);
     flame.setCamPerspective(0);
     flame.setWidth(800);
     flame.setHeight(600);

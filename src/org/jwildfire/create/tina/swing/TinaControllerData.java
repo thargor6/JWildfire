@@ -55,6 +55,8 @@ public class TinaControllerData {
   public JSlider cameraPitchSlider;
   public JWFNumberField cameraYawREd;
   public JSlider cameraYawSlider;
+  public JWFNumberField cameraBankREd;
+  public JSlider cameraBankSlider;
   public JWFNumberField cameraPerspectiveREd;
   public JSlider cameraPerspectiveSlider;
   public JWFNumberField camPosXREd;
