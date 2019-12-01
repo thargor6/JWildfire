@@ -755,7 +755,7 @@ public class MainEditorFrame extends JFrame {
       tinaDOFPanel.add(lblDepthOfField);
 
       dofNewDOFCBx = new JCheckBox("New DOF");
-      dofNewDOFCBx.setToolTipText("<html>Unchecked: distant points are blurred, near points are not (threshold set with Camera distance)<br>Checked: points outside the set focal area are blurred (focal area set with FocusX, Y, Z)</html>");
+      dofNewDOFCBx.setToolTipText("<html>Unchecked: distant points are blurred, near points are not (threshold set with Camera distance)<br>Checked: points outside the focal area are blurred (set focal area \"Edit focus point\" mode above)</html>");
       dofNewDOFCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -902,7 +902,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblCameraDistance = new JLabel();
       lblCameraDistance.setName("lblCameraDistance");
       lblCameraDistance.setText("Camera distance");
-      lblCameraDistance.setToolTipText("Distance where DOF effect begins; large values start DOF effect closer to the camera");
+      lblCameraDistance.setToolTipText("Distance where DOF effect begins; increase to start DOF effect closer to the camera");
       lblCameraDistance.setSize(new Dimension(94, 22));
       lblCameraDistance.setPreferredSize(new Dimension(94, 22));
       lblCameraDistance.setLocation(new Point(4, 98));
@@ -1252,7 +1252,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblDimZDistance = new JLabel();
       lblDimZDistance.setName("lblDimZDistance");
       lblDimZDistance.setText("DiminishZ Distance");
-      lblDimZDistance.setToolTipText("Distance where Z diminishing starts");
+      lblDimZDistance.setToolTipText("Distance where Z diminishing starts; increase to start closer to the camera");
       lblDimZDistance.setSize(new Dimension(94, 22));
       lblDimZDistance.setPreferredSize(new Dimension(94, 22));
       lblDimZDistance.setLocation(new Point(4, 98));
@@ -1501,7 +1501,7 @@ public class MainEditorFrame extends JFrame {
       tinaCameraPerspectiveLbl = new JLabel();
       tinaCameraPerspectiveLbl.setName("tinaCameraPerspectiveLbl");
       tinaCameraPerspectiveLbl.setText("Perspective");
-      tinaCameraPerspectiveLbl.setToolTipText("Amount of foreshortening; positive values make objects closer to the camera appear larger (small values work best)");
+      tinaCameraPerspectiveLbl.setToolTipText("Foreshorten image to add perspective; positive values make objects closer to the camera appear larger");
       tinaCameraPerspectiveLbl.setLocation(new Point(4, 100));
       tinaCameraPerspectiveLbl.setSize(new Dimension(68, 22));
       tinaCameraPerspectiveLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1509,7 +1509,7 @@ public class MainEditorFrame extends JFrame {
       tinaCameraYawLbl = new JLabel();
       tinaCameraYawLbl.setName("tinaCameraYawLbl");
       tinaCameraYawLbl.setText("Yaw");
-      tinaCameraYawLbl.setToolTipText("Rotation of flame around its Z axis; same as Roll when Pitch is 0");
+      tinaCameraYawLbl.setToolTipText("Rotation of flame around its Z axis");
       tinaCameraYawLbl.setLocation(new Point(4, 52));
       tinaCameraYawLbl.setSize(new Dimension(68, 22));
       tinaCameraYawLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1597,7 +1597,6 @@ public class MainEditorFrame extends JFrame {
       tinaCameraPanel.add(tinaCameraCamPosXREd);
 
       JLabel tinaCameraCamPosXLbl = new JLabel();
-      tinaCameraCamPosXLbl.setToolTipText("");
       tinaCameraCamPosXLbl.setText("CamPosX");
       tinaCameraCamPosXLbl.setToolTipText("Camera X (horizontal) position");
       tinaCameraCamPosXLbl.setSize(new Dimension(68, 22));
@@ -5607,7 +5606,6 @@ public class MainEditorFrame extends JFrame {
       tinaPaletteSubTabbedPane = new JTabbedPane();
       tinaPaletteSubTabbedPane.setTabPlacement(JTabbedPane.LEFT);
       tinaPaletteSubTabbedPane.setAutoscrolls(true);
-      tinaPaletteSubTabbedPane.setToolTipText("");
       tinaPaletteSubTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteSubTabbedPane.addTab("Gradient Library", null, getGradientLibraryPanel(), null);
       tinaPaletteSubTabbedPane.addTab("Create new", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
@@ -8973,7 +8971,7 @@ public class MainEditorFrame extends JFrame {
     if (mouseTransformEditFocusPointButton == null) {
       mouseTransformEditFocusPointButton = new JToggleButton();
       mouseTransformEditFocusPointButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformEditFocusPointButton.setToolTipText("Edit focus point");
+      mouseTransformEditFocusPointButton.setToolTipText("Edit focus point (left mouse: x and y; mouse wheel: z)");
       mouseTransformEditFocusPointButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/games-config-background.png")));
       mouseTransformEditFocusPointButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -13129,7 +13127,6 @@ public class MainEditorFrame extends JFrame {
       antialiasPanel.add(tinaPostNoiseThresholdField);
 
       JLabel lblNoiseThreshold = new JLabel();
-      lblNoiseThreshold.setToolTipText("");
       lblNoiseThreshold.setText("Noise threshold");
       lblNoiseThreshold.setToolTipText("Threshold for noise reduction: 0 (no noise reduction) to 1 (soften entire image)");
       lblNoiseThreshold.setSize(new Dimension(94, 22));
@@ -13377,6 +13374,7 @@ public class MainEditorFrame extends JFrame {
       panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
 
       resolutionProfileCmb = new JComboBox();
+      resolutionProfileCmb.setToolTipText("Resolution profile for this flame");
       resolutionProfileCmb.setMinimumSize(new Dimension(100, 24));
       resolutionProfileCmb.setMaximumSize(new Dimension(32767, 24));
       panel_1.add(resolutionProfileCmb);
@@ -13398,6 +13396,7 @@ public class MainEditorFrame extends JFrame {
       panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
 
       qualityProfileCmb = new JComboBox();
+      qualityProfileCmb.setToolTipText("Quality profile to use with Render flame");
       qualityProfileCmb.setMinimumSize(new Dimension(100, 24));
       qualityProfileCmb.setMaximumSize(new Dimension(32767, 24));
       panel_2.add(qualityProfileCmb);
@@ -14719,7 +14718,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblDensity = new JLabel();
       lblDensity.setText("Density");
       lblDensity.setName("lblDensity");
-      lblDensity.setToolTipText("Layer density from 0 (invisible) to 1 (full density)");
+      lblDensity.setToolTipText("Layer density from 0 (invisible) to 1 (full density); at least one layer should have density 1");
       lblDensity.setSize(new Dimension(20, 22));
       lblDensity.setPreferredSize(new Dimension(24, 22));
       lblDensity.setLocation(new Point(212, 6));
@@ -17125,7 +17124,7 @@ public class MainEditorFrame extends JFrame {
 
       dofDOFFadeLbl = new JLabel();
       dofDOFFadeLbl.setText("Fade");
-      dofDOFFadeLbl.setToolTipText("Amount of bokeh fading");
+      dofDOFFadeLbl.setToolTipText("Amount of bokeh fading (effect depends on the shape)");
       dofDOFFadeLbl.setSize(new Dimension(94, 22));
       dofDOFFadeLbl.setPreferredSize(new Dimension(94, 22));
       dofDOFFadeLbl.setName("dofDOFFadeLbl");
@@ -18156,7 +18155,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getLblHoffset() {
     if (lblHoffset == null) {
       lblHoffset = new JLabel();
-      lblHoffset.setToolTipText("Horizontal offset");
+      lblHoffset.setToolTipText("Horizontal offset; shift map right or left");
       lblHoffset.setText("H Offset");
       lblHoffset.setSize(new Dimension(56, 22));
       lblHoffset.setPreferredSize(new Dimension(64, 22));
@@ -18170,7 +18169,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getLblHscale() {
     if (lblHscale == null) {
       lblHscale = new JLabel();
-      lblHscale.setToolTipText("Horizontal scale");
+      lblHscale.setToolTipText("Horizontal scale; stretch or squish map right to left");
       lblHscale.setText("HScale");
       lblHscale.setSize(new Dimension(56, 22));
       lblHscale.setPreferredSize(new Dimension(64, 22));
@@ -18184,7 +18183,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getLblLocalCAdd() {
     if (lblLocalCAdd == null) {
       lblLocalCAdd = new JLabel();
-      lblLocalCAdd.setToolTipText("Local color add");
+      lblLocalCAdd.setToolTipText("Local color add; amount transform Color value will shift map");
       lblLocalCAdd.setText("Local Add");
       lblLocalCAdd.setSize(new Dimension(56, 22));
       lblLocalCAdd.setPreferredSize(new Dimension(64, 22));
@@ -18198,7 +18197,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getLblLocalScl() {
     if (lblLocalScl == null) {
       lblLocalScl = new JLabel();
-      lblLocalScl.setToolTipText("Local color scale");
+      lblLocalScl.setToolTipText("Local color scale; amount transform Color value will scale map");
       lblLocalScl.setText("Local Scl");
       lblLocalScl.setSize(new Dimension(56, 22));
       lblLocalScl.setPreferredSize(new Dimension(64, 22));
@@ -18212,7 +18211,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getLblVoffset() {
     if (lblVoffset == null) {
       lblVoffset = new JLabel();
-      lblVoffset.setToolTipText("Vertical offset");
+      lblVoffset.setToolTipText("Vertical offset; shift map up or down");
       lblVoffset.setText("V Offset");
       lblVoffset.setSize(new Dimension(56, 22));
       lblVoffset.setPreferredSize(new Dimension(64, 22));
@@ -18227,6 +18226,7 @@ public class MainEditorFrame extends JFrame {
     if (lblVScale == null) {
       lblVScale = new JLabel();
       lblVScale.setText("V Scale");
+      lblVScale.setToolTipText("Vertical scale; stretch or squish map top to bottom");
       lblVScale.setSize(new Dimension(56, 22));
       lblVScale.setPreferredSize(new Dimension(64, 22));
       lblVScale.setLocation(new Point(334, 32));
@@ -19429,7 +19429,6 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingLightPnl.add(lblSelectLight);
 
       tinaSolidRenderingSelectedLightCmb = new JComboBox();
-      tinaSolidRenderingSelectedLightCmb.setToolTipText("");
       tinaSolidRenderingSelectedLightCmb.setPreferredSize(new Dimension(110, 24));
       tinaSolidRenderingSelectedLightCmb.setMinimumSize(new Dimension(110, 24));
       tinaSolidRenderingSelectedLightCmb.setMaximumSize(new Dimension(32767, 24));
@@ -19446,7 +19445,6 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingSelectedLightCmb);
 
       JLabel tinaSolidRenderingLightAltitudeLbl = new JLabel();
-      tinaSolidRenderingLightAltitudeLbl.setToolTipText("");
       tinaSolidRenderingLightAltitudeLbl.setText("Altitude*");
       tinaSolidRenderingLightAltitudeLbl.setToolTipText("Angle between the light and the -Z axis (-90 = +Y, 0 = -Z, 90 = -Y, 180 = +Z)");
       tinaSolidRenderingLightAltitudeLbl.setSize(new Dimension(68, 22));
@@ -19814,7 +19812,6 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      tinaSolidRenderingMaterialSpecularColorBtn.setToolTipText("");
       tinaSolidRenderingMaterialSpecularColorBtn.setPreferredSize(new Dimension(190, 24));
       tinaSolidRenderingMaterialSpecularColorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingMaterialSpecularColorBtn.setBackground(Color.BLACK);
@@ -19899,7 +19896,6 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(tinaSolidRenderingMaterialSpecularSharpnessSlider);
 
       tinaSolidRenderingSelectedMaterialCmb = new JComboBox();
-      tinaSolidRenderingSelectedMaterialCmb.setToolTipText("");
       tinaSolidRenderingSelectedMaterialCmb.setPreferredSize(new Dimension(110, 24));
       tinaSolidRenderingSelectedMaterialCmb.setMinimumSize(new Dimension(110, 24));
       tinaSolidRenderingSelectedMaterialCmb.setMaximumSize(new Dimension(32767, 24));
@@ -20146,7 +20142,6 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(tinaSolidRenderingMaterialSpecularSlider);
 
       tinaSolidRenderingMaterialDiffuseResponseCmb = new JComboBox();
-      tinaSolidRenderingMaterialDiffuseResponseCmb.setToolTipText("");
       tinaSolidRenderingMaterialDiffuseResponseCmb.setPreferredSize(new Dimension(110, 24));
       tinaSolidRenderingMaterialDiffuseResponseCmb.setMinimumSize(new Dimension(110, 24));
       tinaSolidRenderingMaterialDiffuseResponseCmb.setMaximumSize(new Dimension(32767, 24));
@@ -20241,7 +20236,6 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(tinaSolidRenderingMaterialReflectionMapIntensitySlider);
 
       tinaSolidRenderingMaterialReflectionMappingCmb = new JComboBox();
-      tinaSolidRenderingMaterialReflectionMappingCmb.setToolTipText("");
       tinaSolidRenderingMaterialReflectionMappingCmb.setPreferredSize(new Dimension(110, 24));
       tinaSolidRenderingMaterialReflectionMappingCmb.setMinimumSize(new Dimension(110, 24));
       tinaSolidRenderingMaterialReflectionMappingCmb.setMaximumSize(new Dimension(32767, 24));
@@ -21271,7 +21265,6 @@ public class MainEditorFrame extends JFrame {
       panel_4.add(tinaSolidRenderingShadowSmoothRadiusSlider);
 
       tinaSolidRenderingShadowTypeCmb = new JComboBox();
-      tinaSolidRenderingShadowTypeCmb.setToolTipText("");
       tinaSolidRenderingShadowTypeCmb.setPreferredSize(new Dimension(110, 24));
       tinaSolidRenderingShadowTypeCmb.setMinimumSize(new Dimension(110, 24));
       tinaSolidRenderingShadowTypeCmb.setMaximumSize(new Dimension(32767, 24));
@@ -21309,7 +21302,6 @@ public class MainEditorFrame extends JFrame {
       panel_4.add(tinaSolidRenderingShadowmapSizeLbl);
 
       tinaSolidRenderingShadowmapSizeCmb = new JComboBox();
-      tinaSolidRenderingShadowmapSizeCmb.setToolTipText("");
       tinaSolidRenderingShadowmapSizeCmb.setPreferredSize(new Dimension(110, 24));
       tinaSolidRenderingShadowmapSizeCmb.setMinimumSize(new Dimension(110, 24));
       tinaSolidRenderingShadowmapSizeCmb.setMaximumSize(new Dimension(32767, 24));
@@ -22228,7 +22220,6 @@ public class MainEditorFrame extends JFrame {
     if (weightingFieldColorMapFilenameInfoLbl == null) {
       weightingFieldColorMapFilenameInfoLbl = new JLabel();
       weightingFieldColorMapFilenameInfoLbl.setHorizontalAlignment(SwingConstants.LEFT);
-      weightingFieldColorMapFilenameInfoLbl.setToolTipText("");
       weightingFieldColorMapFilenameInfoLbl.setText(ImageMapWeightingField.DFLT_IMAGE_FILE_NAME);
       weightingFieldColorMapFilenameInfoLbl.setSize(new Dimension(94, 22));
       weightingFieldColorMapFilenameInfoLbl.setPreferredSize(new Dimension(94, 22));

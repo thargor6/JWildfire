@@ -409,6 +409,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     int yOff = 2 * BORDER_SIZE + imageHeight;
     {
       JLabel framesLbl = new JLabel("Duration (frames)");
+      framesLbl.setToolTipText("Number of frames to show this flame");
       framesLbl.setBounds(xOff + BORDER_SIZE, yOff, LABEL_WIDTH, LABEL_HEIGHT);
       panel.add(framesLbl);
       final JWFNumberField framesField = new JWFNumberField();
@@ -428,6 +429,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     yOff += FIELD_HEIGHT;
     {
       JLabel framesMorphLbl = new JLabel("Morph (frames)");
+      framesMorphLbl.setToolTipText("Number of frames to change this flame to the next; 0 for sudden change");
       framesMorphLbl.setBounds(xOff + BORDER_SIZE, yOff, LABEL_WIDTH, LABEL_HEIGHT);
       panel.add(framesMorphLbl);
       final JWFNumberField framesMorphField = new JWFNumberField();
@@ -448,9 +450,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     yOff += FIELD_HEIGHT;
     {
       JLabel morphTypeLbl = new JLabel("Morph type");
+      morphTypeLbl.setToolTipText("How to morph this flame to the next one");
       morphTypeLbl.setBounds(xOff + BORDER_SIZE, yOff, LABEL_WIDTH, LABEL_HEIGHT);
       panel.add(morphTypeLbl);
       final JComboBox morphTypeCmb = new JComboBox();
+      morphTypeCmb.setToolTipText("<html>FADE: fade in the next flame and fade out this one<br>"
+          + "MORPH: try to change the settings from this flame to those of the next one</html>");
       morphTypeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           morpthTypeChanged(morphTypeCmb, pPart);
@@ -479,7 +484,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JButton editButton = new JButton("E");
       editButton.setBounds(btnOff, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
       editButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      editButton.setToolTipText("Edit flame");
+      editButton.setToolTipText("Edit flame in editor");
       editButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           editPartBtn_clicked(pPart);
