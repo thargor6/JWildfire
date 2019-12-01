@@ -746,6 +746,7 @@ public class EasyMovieMakerFrame extends JFrame {
       });
       swfAnimatorGenerateButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorGenerateButton.setText("Generate sequence");
+      swfAnimatorGenerateButton.setToolTipText("Generate a sequence; the type is defined by Output");
       swfAnimatorGenerateButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorGenerateButton;
@@ -973,6 +974,7 @@ public class EasyMovieMakerFrame extends JFrame {
       label.setBounds(132, 13, 80, 14);
       panel_5.add(label);
       label.setText("  Rnd Generator");
+      label.setToolTipText("Select type of random movies to generate");
       label.setPreferredSize(new Dimension(80, 22));
       label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label.setAlignmentX(1.0f);
@@ -980,7 +982,7 @@ public class EasyMovieMakerFrame extends JFrame {
       swfAnimatorRandGenCmb = new JComboBox();
       swfAnimatorRandGenCmb.setBounds(132, 31, 160, 24);
       panel_5.add(swfAnimatorRandGenCmb);
-      swfAnimatorRandGenCmb.setToolTipText("Random-flame-generator");
+      swfAnimatorRandGenCmb.setToolTipText("Random movie generator");
       swfAnimatorRandGenCmb.setPreferredSize(new Dimension(100, 24));
       swfAnimatorRandGenCmb.setMinimumSize(new Dimension(100, 24));
       swfAnimatorRandGenCmb.setMaximumSize(new Dimension(32767, 24));
@@ -1004,6 +1006,9 @@ public class EasyMovieMakerFrame extends JFrame {
 
       JLabel lblOutput = new JLabel();
       lblOutput.setText("Output");
+      lblOutput.setToolTipText("<html>FLAMES: save sequence of (unrendered) flame files<br>" 
+          + "PNG_IMAGES: render sequence of PNG images (combine into a movie with a separate program)<br>"
+          + "ANB: create PD Howler AnimBrush");
       lblOutput.setPreferredSize(new Dimension(94, 22));
       lblOutput.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblOutput.setBounds(994, 6, 52, 22);
@@ -1027,6 +1032,7 @@ public class EasyMovieMakerFrame extends JFrame {
 
       JLabel lblQuality = new JLabel();
       lblQuality.setText("Quality");
+      lblQuality.setToolTipText("Quality profile to use when rendering movie");
       lblQuality.setPreferredSize(new Dimension(94, 22));
       lblQuality.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblQuality.setBounds(772, 6, 45, 22);
@@ -1107,6 +1113,7 @@ public class EasyMovieMakerFrame extends JFrame {
       label_3 = new JLabel();
       label_3.setBounds(578, 6, 65, 22);
       label_3.setText("Resolution");
+      label_3.setToolTipText("Resolution profile for this movie");
       label_3.setPreferredSize(new Dimension(94, 22));
       label_3.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
@@ -1233,6 +1240,7 @@ public class EasyMovieMakerFrame extends JFrame {
         }
       });
       swfAnimatorMovieFromClipboardButton.setText("From Clipboard");
+      swfAnimatorMovieFromClipboardButton.setToolTipText("Load a movie from the clipboard");
       swfAnimatorMovieFromClipboardButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorMovieFromClipboardButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorMovieFromClipboardButton.setBounds(new Rectangle(504, 7, 125, 24));
@@ -1250,6 +1258,7 @@ public class EasyMovieMakerFrame extends JFrame {
         }
       });
       swfAnimatorMovieFromDiscButton.setText("Load Movie");
+      swfAnimatorMovieFromDiscButton.setToolTipText("Load a movie from a file");
       swfAnimatorMovieFromDiscButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorMovieFromDiscButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorMovieFromDiscButton.setBounds(new Rectangle(504, 35, 125, 24));
@@ -1267,6 +1276,7 @@ public class EasyMovieMakerFrame extends JFrame {
         }
       });
       swfAnimatorMovieToClipboardButton.setText("To Clipboard");
+      swfAnimatorMovieToClipboardButton.setToolTipText("Save the current movie to the clipboard");
       swfAnimatorMovieToClipboardButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorMovieToClipboardButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorMovieToClipboardButton.setBounds(new Rectangle(643, 7, 125, 24));
@@ -1284,6 +1294,7 @@ public class EasyMovieMakerFrame extends JFrame {
         }
       });
       swfAnimatorMovieToDiscButton.setText("Save Movie");
+      swfAnimatorMovieToDiscButton.setToolTipText("Save the current movie to a file");
       swfAnimatorMovieToDiscButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorMovieToDiscButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorMovieToDiscButton.setBounds(new Rectangle(643, 35, 125, 24));
