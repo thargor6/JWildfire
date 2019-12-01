@@ -143,6 +143,7 @@ public class EasyMovieMakerFrame extends JFrame {
       panel_3.add(getSwfAnimatorMoveDownButton());
       panel_3.add(getSwfAnimatorRemoveFlameButton());
       panel_3.add(getSwfAnimatorRemoveAllFlamesButton());
+      panel_3.add(getSwfAnimatorCompatCBx());
 
       swfAnimatorPanel_1 = new JPanel();
       swfAnimatorPanel_1.setBorder(new TitledBorder(null, "Preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -907,6 +908,7 @@ public class EasyMovieMakerFrame extends JFrame {
   private JPanel panel_93;
   private JComboBox swfAnimatorQualityProfileCmb;
   private JComboBox swfAnimatorOutputTypeCmb;
+  private JCheckBox swfAnimatorCompatCBx;
 
   public JWFNumberField getSwfAnimatorFramesPerSecondREd() {
     return swfAnimatorFramesPerSecondREd;
@@ -1197,6 +1199,22 @@ public class EasyMovieMakerFrame extends JFrame {
       swfAnimatorRemoveAllFlamesButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorRemoveAllFlamesButton;
+  }
+  
+  JCheckBox getSwfAnimatorCompatCBx() {
+    if (swfAnimatorCompatCBx == null) {
+      swfAnimatorCompatCBx = new JCheckBox();
+      swfAnimatorCompatCBx.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getSwfAnimatorCtrl().compatCBx_changed(swfAnimatorCompatCBx);
+        }
+      });
+      swfAnimatorCompatCBx.setToolTipText("Make fading compatible with previous versions (fade to black instead of fade to invisible)");
+      swfAnimatorCompatCBx.setText("Compatibility");
+      swfAnimatorCompatCBx.setPreferredSize(new Dimension(135, 24));
+      swfAnimatorCompatCBx.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+    }
+    return swfAnimatorCompatCBx;
   }
 
   JButton getSwfAnimatorMoveUpButton() {

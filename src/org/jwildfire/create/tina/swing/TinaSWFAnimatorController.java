@@ -41,6 +41,7 @@ import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -1074,6 +1075,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     flamePartPanelList.clear();
     flamePartRadioButtonList.clear();
     swfAnimatorFlamesPanel.getParent().validate();
+    previewFlameImage();
+    enableControls();
+    clearCurrentPreview();
+    updateThumbnails();
+  }
+  
+  public void compatCBx_changed(JCheckBox pCompatCbx) {
+    currMovie.setCompat(pCompatCbx.isSelected());
     previewFlameImage();
     enableControls();
     clearCurrentPreview();
