@@ -38,6 +38,7 @@ public class FlameMovie {
   private String name = "";
   private SequenceOutputType sequenceOutputType = SequenceOutputType.FLAMES;
   private int quality = 100;
+  private boolean compat = false;
 
   public FlameMovie(Prefs pPrefs) {
     prefs = pPrefs;
@@ -92,7 +93,7 @@ public class FlameMovie {
           Flame flame2 = parts.get(i + 1).getFlame().makeCopy();
           int morphFrame = pFrame - (currFrame - morphFrames);
           //          System.out.println(pFrame + ": " + morphFrame);
-          return FlameMorphService.morphFlames(prefs, part.getFlameMorphType(), flame1, flame2, morphFrame, morphFrames);
+          return FlameMorphService.morphFlames(prefs, part.getFlameMorphType(), flame1, flame2, morphFrame, morphFrames, compat);
         }
       }
     }
@@ -179,5 +180,13 @@ public class FlameMovie {
 
   public void setQuality(int pQuality) {
     quality = pQuality;
+  }
+  
+  public boolean getCompat() {
+    return compat;
+  }
+  
+  public void setCompat(boolean pCompat) {
+    compat = pCompat;
   }
 }

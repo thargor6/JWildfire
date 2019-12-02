@@ -41,6 +41,7 @@ import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -563,7 +564,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   protected void replacePartBtn_clicked(FlameMoviePart pPart) {
     Flame flame = parentCtrl.getCurrFlame();
     if (flame != null) {
-      pPart.setFlame(flame);
+      pPart.setFlame(flame.makeCopy());
       int idx = currMovie.getParts().indexOf(pPart);
       if (idx >= 0) {
         JPanel pnl = flamePartPanelList.get(idx);
@@ -1073,7 +1074,20 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
     flamePartPanelList.clear();
     flamePartRadioButtonList.clear();
+    swfAnimatorFlamesPanel.invalidate();
+    swfAnimatorFlamesPanel.repaint();
+    swfAnimatorFlamesPanel.getParent().invalidate();
     swfAnimatorFlamesPanel.getParent().validate();
+    
+    refreshFrameCount();
+    previewFlameImage();
+    enableControls();
+    clearCurrentPreview();
+    updateThumbnails();
+  }
+  
+  public void compatCBx_changed(JCheckBox pCompatCbx) {
+    currMovie.setCompat(pCompatCbx.isSelected());
     previewFlameImage();
     enableControls();
     clearCurrentPreview();

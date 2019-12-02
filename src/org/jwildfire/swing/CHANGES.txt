@@ -1,3 +1,85 @@
+V5.xx (TBD)
+ - new variations (no particular order):
+    by Jesus Sosa
+    - cut_2ewangtile
+    - cut_alientext
+    - cut_apollonian
+    - cut_booleans
+    - cut_bricks
+    - cut_cirdes
+    - cut_fingerprint
+    - cut_fun
+    - cut_glypho
+    - cut_hexdots
+    - cut_hextruchetflow
+    - cut_jigsaw
+    - cut_kaleido
+    - cut_metaballs
+    - cut_pattern
+    - cut_randomtile
+    - cut_rgrid
+    - cut_shapes
+    - cut_sincos
+    - cut_snowflake
+    - cut_sqcir
+    - cut_sqsplits
+    - cut_swarp
+    - cut_triantess
+    - cut_truchet
+    - cut_truchetweaving
+    - cut_tstruchet
+    - cut_wood
+    - cut_yuebing
+    - dc_booleans
+    - dc_butterflies
+    - dc_spacefold
+    - f_complex
+    - msTruchet
+    by Brad Stefanov
+    - exp_multi
+    - parallel
+    - shredded
+
+ - Additional presets added to isosfplot3d_wf variation
+ 
+ - Two modes added to jubiQ variation
+ 
+ - New option to specify color for DiminishZ; this is useful when using DiminishZ with a colored background
+ 
+ - New coloring type:
+ 	CYCLIC shifts the gradient index right by the amount specified by Speed,
+    wrapping as needed to cycle through gradient colors. It doesn't converge
+    to a color when iterated, so some other transform needs to use DIFFUSION
+    to get a stable color that CYCLIC can use as a starting point.
+    CYCLIC is especially useful for coloring tilings.
+
+ - New coloring types descriptions in the Fractal Flames: Help window
+ 
+ - New Density option for layers.
+   Layer density allows fading some layers with respect to others to better
+   balance the overall flame. It is complimentary to Weight, which controls
+   the intensity of the layer to balance its brightness, but can only make
+   it darker, not less dense.
+ 
+ - New layer Extract button extracts the selected layer to a new flame in the editor
+ 
+ - New ZBuffer controls
+   - ZBuffer bias makes the background appear closer. This is sometimes needed when using the ZBuffer
+     for 3D photos in Facebook, which creates white splotches if the background is too far away.
+   - ZBuffer filename option to select between traditional zbuf_name and name_depth (what Facebook requires).
+
+ - New Camera tab Bank control to rotate flame around the Y axis. This rotation is normally called Roll, 
+   but that name is already used; Bank is a synonym. It works in conjunction with Pitch (rotate around X
+   axis) and Yaw (rotate around Z axis).
+
+ - New FastNoiseCreator in Image Processing to create images containing various types of noise
+ 
+ - Change Easy movie maker FADE function to better fade between flames. A compatibility option allows using the old method.
+ 
+ - Tooltips added to many controls
+
+ - Various fixes, including one that prevented the Mesh generator from working.
+
 V5.00 (28.06.2019)
  - Introducing a new artistic concept to flame-fractals: weighting-fields.
    I had this in mind for a while, but never found the time to really "grasp" it.

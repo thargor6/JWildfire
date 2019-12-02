@@ -37,18 +37,18 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class FlameMorphService {
-  public static Flame morphFlames(Prefs pPrefs, FlameMorphType pFlameMorphType, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames) {
+  public static Flame morphFlames(Prefs pPrefs, FlameMorphType pFlameMorphType, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames, boolean pCompat) {
     switch (pFlameMorphType) {
       case FADE:
-        return morphFlames_fade(pPrefs, pFlame1, pFlame2, pFrame, pFrames);
+        return morphFlames_fade(pPrefs, pFlame1, pFlame2, pFrame, pFrames, pCompat);
       case MORPH:
-        return morphFlames_morph(pPrefs, pFlame1, pFlame2, pFrame, pFrames);
+        return morphFlames_morph(pPrefs, pFlame1, pFlame2, pFrame, pFrames, pCompat);
       default:
         throw new IllegalArgumentException(pFlameMorphType.toString());
     }
   }
 
-  private static Flame morphFlames_fade(Prefs pPrefs, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames) {
+  private static Flame morphFlames_fade(Prefs pPrefs, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames, boolean pCompat) {
     if (pFrame < 1 || pFrames < 2)
       return pFlame1;
     double fScl = (double) (pFrame - 1) / (pFrames - 1);
@@ -58,22 +58,39 @@ public class FlameMorphService {
     else if (fScl >= 1.0 - MathLib.EPSILON) {
       return pFlame2;
     }
-    // fade out layerz of the source flame 
-    Flame res = pFlame1.makeCopy();
-    morphFlameValues(pFlame1, pFlame2, fScl, res);
-    for (Layer layer : res.getLayers()) {
-      layer.setWeight(layer.getWeight() * (1.0 - fScl));
+    if (pCompat) {
+      // fade out layers of the source flame (using layer weight for compatibility)
+      Flame res = pFlame1.makeCopy();
+      morphFlameValues(pFlame1, pFlame2, fScl, res, pCompat);
+      for (Layer layer : res.getLayers()) {
+        layer.setWeight(layer.getWeight() * (1.0 - fScl));
+      }
+      // add and fade in layers of the dest flame (using layer weight for compatibility)
+      for (Layer layer : pFlame2.getLayers()) {
+        Layer copy = layer.makeCopy();
+        copy.setWeight(copy.getWeight() * fScl);
+        res.getLayers().add(copy);
+      }
+      return res;
     }
-    // add and fade in layerz of the dest flame
-    for (Layer layer : pFlame2.getLayers()) {
-      Layer copy = layer.makeCopy();
-      copy.setWeight(copy.getWeight() * fScl);
-      res.getLayers().add(copy);
+    else {
+      // fade out layers of the source flame (second half, using layer density)
+      Flame res = pFlame1.makeCopy();
+      morphFlameValues(pFlame1, pFlame2, fScl, res, pCompat);
+      for (Layer layer : res.getLayers()) {
+        layer.setDensity(layer.getDensity() * Tools.limitValue(2.0 - 2.0 * fScl, 0.0, 1.0));
+      }
+      // add and fade in layers of the dest flame (first half, using layer density)
+      for (Layer layer : pFlame2.getLayers()) {
+        Layer copy = layer.makeCopy();
+        copy.setDensity(copy.getDensity() * Tools.limitValue(2.0 * fScl, 0.0, 1.0));
+        res.getLayers().add(copy);
+      }
+      return res;      
     }
-    return res;
   }
 
-  private static Flame morphFlames_morph(Prefs pPrefs, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames) {
+  private static Flame morphFlames_morph(Prefs pPrefs, Flame pFlame1, Flame pFlame2, int pFrame, int pFrames, boolean pCompat) {
     if (pFrame < 1 || pFrames < 2)
       return pFlame1;
     double fScl = (double) (pFrame - 1) / (pFrames - 1);
@@ -99,6 +116,7 @@ public class FlameMorphService {
         layer.getXForms().clear();
         layer.getFinalXForms().clear();
         layer.setWeight(morphValue(layer1.getWeight(), layer2.getWeight(), fScl));
+        layer.setDensity(morphValue(layer1.getDensity(), layer2.getDensity(), fScl));
         // morph XForms
         {
           int size1 = layer1.getXForms().size();
@@ -119,7 +137,7 @@ public class FlameMorphService {
               xForm2.setWeight(0.0);
             }
 
-            XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
+            XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames, pCompat);
             layer.getXForms().add(morphedXForm);
           }
         }
@@ -143,7 +161,7 @@ public class FlameMorphService {
               xForm2.setWeight(0.0);
             }
 
-            XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames);
+            XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames, pCompat);
             layer.getFinalXForms().add(morphedXForm);
           }
         }
@@ -159,33 +177,56 @@ public class FlameMorphService {
           layer.getPalette().setColor(i, red, green, blue);
         }
       }
-      // fade out layer1 to black
+      // fade out layer1
       else if (lIdx < layerSize1) {
         Layer layer1 = pFlame1.getLayers().get(lIdx);
         layer.assign(layer1);
-        layer.setWeight(morphValue(layer1.getWeight(), 0.0, fScl));
+        if (pCompat) {
+          layer.setWeight(morphValue(layer1.getWeight(), 0.0, fScl));
+        }
+        else {
+          layer.setDensity(morphValue(layer1.getDensity(), 0.0, fScl));
+        }
       }
-      // fade in layer2 from black
+      // fade in layer2
       else if (lIdx < layerSize2) {
         Layer layer2 = pFlame2.getLayers().get(lIdx);
         layer.assign(layer2);
-        layer.setWeight(morphValue(0.0, layer2.getWeight(), fScl));
+        if (pCompat) {
+          layer.setWeight(morphValue(0.0, layer2.getWeight(), fScl));
+        }
+        else {
+          layer.setDensity(morphValue(0.0, layer2.getDensity(), fScl));
+        }
       }
     }
     // morph camera settings etc.
-    morphFlameValues(pFlame1, pFlame2, fScl, res);
+    morphFlameValues(pFlame1, pFlame2, fScl, res, pCompat);
     return res;
   }
 
-  private static void morphFlameValues(Flame pFlame1, Flame pFlame2, double fScl, Flame res) {
+  private static void morphFlameValues(Flame pFlame1, Flame pFlame2, double fScl, Flame res, boolean pCompat) {
     res.setCamDOF(morphValue(pFlame1.getCamDOF(), pFlame2.getCamDOF(), fScl));
+    res.setCamZ(morphValue(pFlame1.getCamZ(), pFlame2.getCamZ(), fScl));
     res.setCamPerspective(morphValue(pFlame1.getCamPerspective(), pFlame2.getCamPerspective(), fScl));
     res.setCamPitch(morphValue(pFlame1.getCamPitch(), pFlame2.getCamPitch(), fScl));
     res.setCamYaw(morphValue(pFlame1.getCamYaw(), pFlame2.getCamYaw(), fScl));
     res.setCamBank(morphValue(pFlame1.getCamBank(), pFlame2.getCamBank(), fScl));
     res.setCamRoll(morphValue(pFlame1.getCamRoll(), pFlame2.getCamRoll(), fScl));
+    res.setFocusX(morphValue(pFlame1.getFocusX(), pFlame2.getFocusX(), fScl));
+    res.setFocusY(morphValue(pFlame1.getFocusY(), pFlame2.getFocusY(), fScl));
     res.setFocusZ(morphValue(pFlame1.getFocusZ(), pFlame2.getFocusZ(), fScl));
     res.setCamZoom(morphValue(pFlame1.getCamZoom(), pFlame2.getCamZoom(), fScl));
+    res.setCamPosX(morphValue(pFlame1.getCamPosX(), pFlame2.getCamPosX(), fScl));
+    res.setCamPosY(morphValue(pFlame1.getCamPosY(), pFlame2.getCamPosY(), fScl));
+    res.setCamPosZ(morphValue(pFlame1.getCamPosZ(), pFlame2.getCamPosZ(), fScl));
+    res.setCamDOFArea(morphValue(pFlame1.getCamDOFArea(), pFlame2.getCamDOFArea(), fScl));
+    res.setCamDOFExponent(morphValue(pFlame1.getCamDOFExponent(), pFlame2.getCamDOFExponent(), fScl));
+    res.setDimishZ(morphValue(pFlame1.getDimishZ(), pFlame2.getDimishZ(), fScl));
+    res.setDimishZRed(morphColorValue(pFlame1.getDimishZRed(), pFlame2.getDimishZRed(), fScl));
+    res.setDimishZGreen(morphColorValue(pFlame1.getDimishZGreen(), pFlame2.getDimishZGreen(), fScl));
+    res.setDimishZBlue(morphColorValue(pFlame1.getDimishZBlue(), pFlame2.getDimishZBlue(), fScl));
+    res.setDimZDistance(morphValue(pFlame1.getDimZDistance(), pFlame2.getDimZDistance(), fScl));
     res.setBgColorRed(morphColorValue(pFlame1.getBgColorRed(), pFlame2.getBgColorRed(), fScl));
     res.setBgColorGreen(morphColorValue(pFlame1.getBgColorGreen(), pFlame2.getBgColorGreen(), fScl));
     res.setBgColorBlue(morphColorValue(pFlame1.getBgColorBlue(), pFlame2.getBgColorBlue(), fScl));
@@ -205,6 +246,7 @@ public class FlameMorphService {
     res.setBgColorCCRed(morphColorValue(pFlame1.getBgColorCCRed(), pFlame2.getBgColorCCRed(), fScl));
     res.setBgColorCCGreen(morphColorValue(pFlame1.getBgColorCCGreen(), pFlame2.getBgColorCCGreen(), fScl));
     res.setBgColorCCBlue(morphColorValue(pFlame1.getBgColorCCBlue(), pFlame2.getBgColorCCBlue(), fScl));
+    res.setForegroundOpacity(morphValue(pFlame1.getForegroundOpacity(), pFlame2.getForegroundOpacity(), fScl));
     res.setBrightness(morphValue(pFlame1.getBrightness(), pFlame2.getBrightness(), fScl));
     res.setCentreX(morphValue(pFlame1.getCentreX(), pFlame2.getCentreX(), fScl));
     res.setCentreY(morphValue(pFlame1.getCentreY(), pFlame2.getCentreY(), fScl));
@@ -218,7 +260,10 @@ public class FlameMorphService {
     res.setSpatialFilterRadius(morphValue(pFlame1.getSpatialFilterRadius(), pFlame2.getSpatialFilterRadius(), fScl));
     res.setSpatialFilterSharpness(morphValue(pFlame1.getSpatialFilterSharpness(), pFlame2.getSpatialFilterSharpness(), fScl));
     res.setSpatialFilterLowDensity(morphValue(pFlame1.getSpatialFilterLowDensity(), pFlame2.getSpatialFilterLowDensity(), fScl));
+    res.setAntialiasAmount(morphValue(pFlame1.getAntialiasAmount(), pFlame2.getAntialiasAmount(), fScl));
+    res.setAntialiasRadius(morphValue(pFlame1.getAntialiasRadius(), pFlame2.getAntialiasRadius(), fScl));
     res.setVibrancy(morphValue(pFlame1.getVibrancy(), pFlame2.getVibrancy(), fScl));
+    res.setSaturation(morphValue(pFlame1.getSaturation(), pFlame2.getSaturation(), fScl));
     res.setLowDensityBrightness(morphValue(pFlame1.getLowDensityBrightness(), pFlame2.getLowDensityBrightness(), fScl));
     res.setBalanceRed(morphValue(pFlame1.getBalanceRed(), pFlame2.getBalanceRed(), fScl));
     res.setBalanceGreen(morphValue(pFlame1.getBalanceGreen(), pFlame2.getBalanceGreen(), fScl));
@@ -226,7 +271,7 @@ public class FlameMorphService {
     res.setWhiteLevel(morphValue(pFlame1.getWhiteLevel(), pFlame2.getWhiteLevel(), fScl));
   }
 
-  private static XForm morphXForms(Prefs pPrefs, XForm pXForm1, XForm pXForm2, double pFScl, int pFrame, int pFrames) {
+  private static XForm morphXForms(Prefs pPrefs, XForm pXForm1, XForm pXForm2, double pFScl, int pFrame, int pFrames, boolean pCompat) {
     pXForm1 = pXForm1.makeCopy();
     pXForm2 = pXForm2.makeCopy();
     prepareMorphXForm(pXForm1);
@@ -259,8 +304,6 @@ public class FlameMorphService {
     res.setZXCoeff20(morphValue(pXForm1.getZXCoeff20(), pXForm2.getZXCoeff20(), pFScl));
     res.setZXCoeff21(morphValue(pXForm1.getZXCoeff21(), pXForm2.getZXCoeff21(), pFScl));
 
-    res.setOpacity(morphValue(pXForm1.getOpacity(), pXForm2.getOpacity(), pFScl));
-
     res.setXYPostCoeff00(morphValue(pXForm1.getXYPostCoeff00(), pXForm2.getXYPostCoeff00(), pFScl));
     res.setXYPostCoeff01(morphValue(pXForm1.getXYPostCoeff01(), pXForm2.getXYPostCoeff01(), pFScl));
     res.setXYPostCoeff10(morphValue(pXForm1.getXYPostCoeff10(), pXForm2.getXYPostCoeff10(), pFScl));
@@ -285,6 +328,11 @@ public class FlameMorphService {
     res.setOpacity(morphValue(pXForm1.getOpacity(), pXForm2.getOpacity(), pFScl));
     res.setDrawMode(pFScl >= 0.5 ? pXForm2.getDrawMode() : pXForm1.getDrawMode());
     res.setColorType(pFScl >= 0.5 ? pXForm2.getColorType() : pXForm1.getColorType());
+    {
+      RGBColor tc1 = pXForm1.getTargetColor();
+      RGBColor tc2 = pXForm2.getTargetColor();
+      res.setTargetColor(morphColorValue(tc1.getRed(), tc2.getRed(), pFScl), morphColorValue(tc1.getGreen(), tc2.getGreen(), pFScl), morphColorValue(tc1.getBlue(), tc2.getBlue(), pFScl));
+    }
     for (int i = 0; i < pXForm1.getModifiedWeights().length; i++) {
       res.getModifiedWeights()[i] = morphValue(pXForm1.getModifiedWeights()[i], pXForm2.getModifiedWeights()[i], pFScl);
     }
@@ -374,7 +422,7 @@ public class FlameMorphService {
             try {
               Flame flame1 = new FlameReader(pPrefs).readFlamesfromXML(flame1XML).get(0);
               Flame flame2 = new FlameReader(pPrefs).readFlamesfromXML(flame2XML).get(0);
-              Flame morphedFlame = morphFlames(pPrefs, FlameMorphType.MORPH, flame1, flame2, pFrame, pFrames);
+              Flame morphedFlame = morphFlames(pPrefs, FlameMorphType.MORPH, flame1, flame2, pFrame, pFrames, pCompat);
               String morphedFlameXML = new FlameWriter().getFlameXML(morphedFlame);
               var.getFunc().setRessource(SubFlameWFFunc.RESSOURCE_FLAME, morphedFlameXML.getBytes());
             }
