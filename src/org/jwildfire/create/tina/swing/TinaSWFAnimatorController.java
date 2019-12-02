@@ -564,7 +564,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   protected void replacePartBtn_clicked(FlameMoviePart pPart) {
     Flame flame = parentCtrl.getCurrFlame();
     if (flame != null) {
-      pPart.setFlame(flame);
+      pPart.setFlame(flame.makeCopy());
       int idx = currMovie.getParts().indexOf(pPart);
       if (idx >= 0) {
         JPanel pnl = flamePartPanelList.get(idx);
@@ -1074,7 +1074,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     }
     flamePartPanelList.clear();
     flamePartRadioButtonList.clear();
+    swfAnimatorFlamesPanel.invalidate();
+    swfAnimatorFlamesPanel.repaint();
+    swfAnimatorFlamesPanel.getParent().invalidate();
     swfAnimatorFlamesPanel.getParent().validate();
+    
+    refreshFrameCount();
     previewFlameImage();
     enableControls();
     clearCurrentPreview();

@@ -207,13 +207,26 @@ public class FlameMorphService {
 
   private static void morphFlameValues(Flame pFlame1, Flame pFlame2, double fScl, Flame res, boolean pCompat) {
     res.setCamDOF(morphValue(pFlame1.getCamDOF(), pFlame2.getCamDOF(), fScl));
+    res.setCamZ(morphValue(pFlame1.getCamZ(), pFlame2.getCamZ(), fScl));
     res.setCamPerspective(morphValue(pFlame1.getCamPerspective(), pFlame2.getCamPerspective(), fScl));
     res.setCamPitch(morphValue(pFlame1.getCamPitch(), pFlame2.getCamPitch(), fScl));
     res.setCamYaw(morphValue(pFlame1.getCamYaw(), pFlame2.getCamYaw(), fScl));
     res.setCamBank(morphValue(pFlame1.getCamBank(), pFlame2.getCamBank(), fScl));
     res.setCamRoll(morphValue(pFlame1.getCamRoll(), pFlame2.getCamRoll(), fScl));
+    res.setFocusX(morphValue(pFlame1.getFocusX(), pFlame2.getFocusX(), fScl));
+    res.setFocusY(morphValue(pFlame1.getFocusY(), pFlame2.getFocusY(), fScl));
     res.setFocusZ(morphValue(pFlame1.getFocusZ(), pFlame2.getFocusZ(), fScl));
     res.setCamZoom(morphValue(pFlame1.getCamZoom(), pFlame2.getCamZoom(), fScl));
+    res.setCamPosX(morphValue(pFlame1.getCamPosX(), pFlame2.getCamPosX(), fScl));
+    res.setCamPosY(morphValue(pFlame1.getCamPosY(), pFlame2.getCamPosY(), fScl));
+    res.setCamPosZ(morphValue(pFlame1.getCamPosZ(), pFlame2.getCamPosZ(), fScl));
+    res.setCamDOFArea(morphValue(pFlame1.getCamDOFArea(), pFlame2.getCamDOFArea(), fScl));
+    res.setCamDOFExponent(morphValue(pFlame1.getCamDOFExponent(), pFlame2.getCamDOFExponent(), fScl));
+    res.setDimishZ(morphValue(pFlame1.getDimishZ(), pFlame2.getDimishZ(), fScl));
+    res.setDimishZRed(morphColorValue(pFlame1.getDimishZRed(), pFlame2.getDimishZRed(), fScl));
+    res.setDimishZGreen(morphColorValue(pFlame1.getDimishZGreen(), pFlame2.getDimishZGreen(), fScl));
+    res.setDimishZBlue(morphColorValue(pFlame1.getDimishZBlue(), pFlame2.getDimishZBlue(), fScl));
+    res.setDimZDistance(morphValue(pFlame1.getDimZDistance(), pFlame2.getDimZDistance(), fScl));
     res.setBgColorRed(morphColorValue(pFlame1.getBgColorRed(), pFlame2.getBgColorRed(), fScl));
     res.setBgColorGreen(morphColorValue(pFlame1.getBgColorGreen(), pFlame2.getBgColorGreen(), fScl));
     res.setBgColorBlue(morphColorValue(pFlame1.getBgColorBlue(), pFlame2.getBgColorBlue(), fScl));
@@ -233,6 +246,7 @@ public class FlameMorphService {
     res.setBgColorCCRed(morphColorValue(pFlame1.getBgColorCCRed(), pFlame2.getBgColorCCRed(), fScl));
     res.setBgColorCCGreen(morphColorValue(pFlame1.getBgColorCCGreen(), pFlame2.getBgColorCCGreen(), fScl));
     res.setBgColorCCBlue(morphColorValue(pFlame1.getBgColorCCBlue(), pFlame2.getBgColorCCBlue(), fScl));
+    res.setForegroundOpacity(morphValue(pFlame1.getForegroundOpacity(), pFlame2.getForegroundOpacity(), fScl));
     res.setBrightness(morphValue(pFlame1.getBrightness(), pFlame2.getBrightness(), fScl));
     res.setCentreX(morphValue(pFlame1.getCentreX(), pFlame2.getCentreX(), fScl));
     res.setCentreY(morphValue(pFlame1.getCentreY(), pFlame2.getCentreY(), fScl));
@@ -246,7 +260,10 @@ public class FlameMorphService {
     res.setSpatialFilterRadius(morphValue(pFlame1.getSpatialFilterRadius(), pFlame2.getSpatialFilterRadius(), fScl));
     res.setSpatialFilterSharpness(morphValue(pFlame1.getSpatialFilterSharpness(), pFlame2.getSpatialFilterSharpness(), fScl));
     res.setSpatialFilterLowDensity(morphValue(pFlame1.getSpatialFilterLowDensity(), pFlame2.getSpatialFilterLowDensity(), fScl));
+    res.setAntialiasAmount(morphValue(pFlame1.getAntialiasAmount(), pFlame2.getAntialiasAmount(), fScl));
+    res.setAntialiasRadius(morphValue(pFlame1.getAntialiasRadius(), pFlame2.getAntialiasRadius(), fScl));
     res.setVibrancy(morphValue(pFlame1.getVibrancy(), pFlame2.getVibrancy(), fScl));
+    res.setSaturation(morphValue(pFlame1.getSaturation(), pFlame2.getSaturation(), fScl));
     res.setLowDensityBrightness(morphValue(pFlame1.getLowDensityBrightness(), pFlame2.getLowDensityBrightness(), fScl));
     res.setBalanceRed(morphValue(pFlame1.getBalanceRed(), pFlame2.getBalanceRed(), fScl));
     res.setBalanceGreen(morphValue(pFlame1.getBalanceGreen(), pFlame2.getBalanceGreen(), fScl));
@@ -287,8 +304,6 @@ public class FlameMorphService {
     res.setZXCoeff20(morphValue(pXForm1.getZXCoeff20(), pXForm2.getZXCoeff20(), pFScl));
     res.setZXCoeff21(morphValue(pXForm1.getZXCoeff21(), pXForm2.getZXCoeff21(), pFScl));
 
-    res.setOpacity(morphValue(pXForm1.getOpacity(), pXForm2.getOpacity(), pFScl));
-
     res.setXYPostCoeff00(morphValue(pXForm1.getXYPostCoeff00(), pXForm2.getXYPostCoeff00(), pFScl));
     res.setXYPostCoeff01(morphValue(pXForm1.getXYPostCoeff01(), pXForm2.getXYPostCoeff01(), pFScl));
     res.setXYPostCoeff10(morphValue(pXForm1.getXYPostCoeff10(), pXForm2.getXYPostCoeff10(), pFScl));
@@ -313,6 +328,11 @@ public class FlameMorphService {
     res.setOpacity(morphValue(pXForm1.getOpacity(), pXForm2.getOpacity(), pFScl));
     res.setDrawMode(pFScl >= 0.5 ? pXForm2.getDrawMode() : pXForm1.getDrawMode());
     res.setColorType(pFScl >= 0.5 ? pXForm2.getColorType() : pXForm1.getColorType());
+    {
+      RGBColor tc1 = pXForm1.getTargetColor();
+      RGBColor tc2 = pXForm2.getTargetColor();
+      res.setTargetColor(morphColorValue(tc1.getRed(), tc2.getRed(), pFScl), morphColorValue(tc1.getGreen(), tc2.getGreen(), pFScl), morphColorValue(tc1.getBlue(), tc2.getBlue(), pFScl));
+    }
     for (int i = 0; i < pXForm1.getModifiedWeights().length; i++) {
       res.getModifiedWeights()[i] = morphValue(pXForm1.getModifiedWeights()[i], pXForm2.getModifiedWeights()[i], pFScl);
     }
