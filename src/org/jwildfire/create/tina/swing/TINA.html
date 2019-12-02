@@ -28,9 +28,11 @@ yplot3d_wf
 <li>Anton Liasotskiy (zy0rg): circleblur, cpow3, helicoid, helix, hypershift, logtile2, post_depth, post_smartcrop, shredlin, shredrad, 
 sineblur, starblur, tile_hlp, and tile_log
 <li>Antonio Intrieri (gygrazok): arch, blade, blade3D, disc2, popcorn2, secant2, square, tangent, and twintrian
-<li>Brad Stefanov (snicker02): bipolar2, cos2_bs, cosh2_bs, cot2_bs, coth2_bs, csc2_bs, csch2_bs, dc_dmodulus, dc_gnarly, dc_kaleidotile, 
-disc3, elliptic2, exp2_bs, gridout2, intersection, juliascope3Db, circular2, complex, cone, dc_carpet3D, gridout3D, jubiQ, quaternion, 
-sec2_bs, sec2h_bs, sin2_bs, sin2h_bs, sphtiling3v2, spliptic_bs, tan2_bs, tan2h_bs, and tqmirror
+<li>Brad Stefanov (snicker02): bipolar2, circular2, complex, cone, cos2_bs, cosh2_bs, cot2_bs, coth2_bs, csc2_bs, csch2_bs, dc_carpet3D, 
+dc_dmodulus, dc_gnarly, dc_kaleidotile, 
+disc3, elliptic2, exp_multi, exp2_bs, gridout2, gridout3D, intersection, juliascope3Db, jubiQ, parallel, quaternion, 
+sec2_bs, sec2h_bs, shredded, sin2_bs, sin2h_bs, sphtiling3v2, spliptic_bs, tan2_bs, tan2h_bs, tqmirror,
+and conversion of many variations from other authors to JWildfire
 <li>Branden Brown (zephyrtronium): chunk, coshq, cosq, cothq, cotq, cschq, cscq, erf, erf3D, estiq, exblur, farblur, gamma, loq, mobiq, 
 post_heat, sechq, secq, sinhq, sinq, tanhq, tanq, and xerf
 <li>Chris Johns (TyrantWave): henon, lozi, phoenix_julia, spherical3D, splits3D, and truchet
@@ -51,15 +53,18 @@ mobius_strip, and rhodonea, and rosoni
 <li>Jed Kelsey (Lu-Kout): lissajous, mandelbrot spirograph, and waffle
 <li>Jessica Darling (FarDareisMai): lazyjess, pulse, and vibration2
 <li>Jesus Sosa: anamorphcl, apocarpet_js, apollony, arctruchet, brownian_js, chrysanthemum, clifford_js, colordomain, crown_js, curliecue, 
-curliecue2, dc_acrilic, dc_apollonian, dc_cairotiles, dc_circlesblue, dc_circuits, dc_code, dc_dmodulus, dc_ducks, dc_fingerprint, dc_fractaldots, 
+curliecue2, cut_2ewangtile, cut_alientext, cut_apollonian, cut_booleans, cut_bricks, cut_cirdes, cut_fingerprint, cut_fun, cut_glypho,
+cut_hexdots, cut_hextruchetflow, cut_jigsaw, cut_kaleido, cut_metaballs, cut_pattern, cut_randomtile, cut_rgrid, cut_shapes, cut_sincos, 
+cut_snowflake, cut_sqcir, cut_sqsplits, cut_swarp, cut_triantess, cut_truchet, cut_truchetweaving, cut_tstruchet, cut_wood, cut_yuebing,
+dc_acrilic, dc_apollonian, dc_booleans, dc_butterflies, dc_cairotiles, dc_circlesblue, dc_circuits, dc_code, dc_dmodulus, dc_ducks, dc_fingerprint, dc_fractaldots, 
 dc_gabornoise, dc_glypho, dc_grid3D, dc_hexagons, dc_hoshi, dc_hyperbolictile, dc_inversion, dc_kaleidocomplex, dc_kaleidoscopic, 
 dc_kaliset, dc_kaliset2, dc_layers, dc_mandala, dc_mandbrot, dc_mandelbox2D, dc_menger, dc_mobiuslog, dc_pentatiles, dc_poincaredisc, 
-dc_quadtree, dc_randomoctree, dc_rotations, dc_squares, dc_starsfield, dc_sunflower, dc_tesla, dc_tree, dc_triantess, dc_truchet, 
-dc_turbulance, dc_voronoise, dc_worley, dragon_js, ducks, dustpoint, glsl_acrilic, glsl_apollonian, glsl_circlesblue, glsl_circuits, 
+dc_quadtree, dc_randomoctree, dc_rotations, dc_spacefold, dc_squares, dc_starsfield, dc_sunflower, dc_tesla, dc_tree, dc_triantess, dc_truchet, 
+dc_turbulance, dc_voronoise, dc_worley, dragon_js, ducks, dustpoint, f_complex, glsl_acrilic, glsl_apollonian, glsl_circlesblue, glsl_circuits, 
 glsl_code, glsl_fractaldots, glsl_grid3D, glsl_hoshi, glsl_hyperbolictile, glsl_kaleidocomplex, glsl_kaleidoscopic, glsl_kaliset, 
 glsl_kaliset2, glsl_mandala, glsl_mandelbox2D, glsl_randomoctree, glsl_squares, glsl_starsfield, glynnlisa, glynn3subfl, glynnspiro, 
 glynnSShape, gosperisland_js, gpattern, hadamard_js, hamid_js, harmonograph_js, hilbert_js, htree_js, hyperbolicelipse, iconattractor_js, 
-invtree_js, knots3D, koch_js, lace_js, lorenz_js, lsystem_js, lsystem3D_js, macmillan, mandala, mandala2, nsudoku, recurrenceplot, 
+invtree_js, knots3D, koch_js, lace_js, lorenz_js, lsystem_js, lsystem3D_js, macmillan, mandala, mandala2, msTruchet, nsudoku, recurrenceplot, 
 ringsubflame, rsquares_js, sattractor_js, sattractor3D, seashell3D, siercarpet_js, starfractal, sunflower, sunvoroni, svensson_js, 
 swirl3D_wf, szubieta, taprats, terrain3D, threepoint_js, tree_js, triantruchet, wallpaper_js, wangtiles, and woggle_js
 <li>Joel Faber: bipolar, blur_circle, blur_linear, blur_pixelize, blur_zoom, boarders, butterfly, cell, circlize, cpow, cross, curve, edisc, elliptic, escher, foci, julia3D, 
@@ -90,8 +95,8 @@ pTransform, spherecrop, and spirograph3D
 <li>Scott Draves: bent, blob, blur, bubble, curl, cylinder, eyefish, fan, fan2, fisheye, gaussian_blur, handkerchief, horseshoe, julia, 
 julian, juliascope, noise, pdj, perspective, polar, radial_blur, rays, rings, rings2, sinusoidal, spherical, swirl, and waves
 <li>Shortgreenpigg: bi_linear
-<li>Tatyana Zabanova (tatasz): arcsech2, arcsinh, arctanh, circlesplit, circular, circular2, d_spherical, hypercrop, hypershift2, 
-panorama1, panorama2, r_circleblur, shift, truchet_fill, truchet2, and waves2_radial
+<li>Tatyana Zabanova (tatasz): arcsech2, arcsinh, arctanh, circlesplit, circular, circular2, d_spherical, hex_modulus, hypercrop, hypershift2, 
+panorama1, panorama2, r_circleblur, shift, truchet_fill, truchet_hex_crop, truchet_hex_fill, truchet2, waves2_radial, waves22, waves23, waves3, waves4, and waves42
 <li>Timothy Vincent: pressure_wave
 <li>Victor Ganora: vogel
 <li>Whittaker Courtney: acosech, acosh, acoth, atan2_spirals, corners, inverted_julia, pre_recip, sqrt_acosech, sqrt_acosh, sqrt_acoth, 
