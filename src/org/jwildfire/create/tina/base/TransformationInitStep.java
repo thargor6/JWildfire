@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.base;
 
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public final class TransformationInitStep extends AbstractTransformationStep {
   private static final long serialVersionUID = 1L;
@@ -30,7 +31,13 @@ public final class TransformationInitStep extends AbstractTransformationStep {
     pAffineT.clear();
     pAffineT.doHide = pSrcPoint.doHide;
     pAffineT.receiveOnlyShadows = false;
-    pAffineT.color = pSrcPoint.color * xform.c1 + xform.c2;
+    if (xform.getColorType() != ColorType.CYCLIC) {
+       pAffineT.color = pSrcPoint.color * xform.c1 + xform.c2;
+    }
+    else {
+      pAffineT.color = fmod(pSrcPoint.color + xform.getColorSymmetry(), 1.0);
+      if (pAffineT.color < 0) pAffineT.color += 1.0;
+    }
     pAffineT.rgbColor = false;  // used to detect variations that use true color
     pAffineT.redColor = pSrcPoint.redColor;
     pAffineT.greenColor = pSrcPoint.greenColor;

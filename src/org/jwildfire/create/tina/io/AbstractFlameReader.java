@@ -93,6 +93,7 @@ public class AbstractFlameReader {
   public static final String ATTR_RGB = "rgb";
   public static final String ATTR_CAM_PITCH = "cam_pitch";
   public static final String ATTR_CAM_YAW = "cam_yaw";
+  public static final String ATTR_CAM_ROLL = "cam_roll";
   public static final String ATTR_CAM_PERSP = "cam_persp";
   public static final String ATTR_CAM_PERSPECTIVE = "cam_perspective"; // old version
   public static final String ATTR_CAM_POS_X = "cam_pos_x";
@@ -103,6 +104,8 @@ public class AbstractFlameReader {
   public static final String ATTR_CAM_YFOCUS = "cam_yfocus";
   public static final String ATTR_CAM_ZFOCUS = "cam_zfocus";
   public static final String ATTR_CAM_ZDIMISH = "cam_zdimish";
+  public static final String ATTR_CAM_ZDIM_COLOR = "cam_zdimcolor";
+  public static final String ATTR_CAM_ZDIM_DIST = "cam_zdimdist";
   public static final String ATTR_CAM_DOF = "cam_dof";
   public static final String ATTR_CAM_DOF_AREA = "cam_dof_area";
   public static final String ATTR_CAM_DOF_EXPONENT = "cam_dof_exponent";
@@ -451,6 +454,15 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_CAM_ZDIMISH)) != null) {
       pFlame.setDimishZ(Double.parseDouble(hs));
     }
+    if ((hs = atts.get(ATTR_CAM_ZDIM_COLOR)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setDimishZRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setDimishZGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setDimishZBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+    if ((hs = atts.get(ATTR_CAM_ZDIM_DIST)) != null) {
+      pFlame.setDimZDistance(Double.parseDouble(hs));
+    }
     if ((hs = atts.get(ATTR_CAM_DOF)) != null) {
       pFlame.setCamDOF(Double.parseDouble(hs));
     }
@@ -507,6 +519,9 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_CAM_YAW)) != null) {
       pFlame.setCamYaw(Double.parseDouble(hs) * 180.0 / Math.PI);
+    }
+    if ((hs = atts.get(ATTR_CAM_ROLL)) != null) {
+      pFlame.setCamBank(Double.parseDouble(hs) * 180.0 / Math.PI);
     }
     if ((hs = atts.get(ATTR_CAM_ZOOM)) != null) {
       pFlame.setCamZoom(Double.parseDouble(hs));
@@ -644,6 +659,19 @@ public class AbstractFlameReader {
 
     if ((hs = atts.get(ATTR_ZBUFFER_SCALE)) != null) {
       pFlame.setZBufferScale(Double.parseDouble(hs));
+    }
+
+    if ((hs = atts.get(ATTR_ZBUFFER_BIAS)) != null) {
+      pFlame.setZBufferBias(Double.parseDouble(hs));
+    }
+    
+    if ((hs = atts.get(ATTR_ZBUFFER_FILENAME)) != null) {
+      try {
+        pFlame.setZBufferFilename(ZBufferFilename.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
 
     if ((hs = atts.get(ATTR_SLD_RENDER_ENABLED)) != null) {
@@ -892,6 +920,8 @@ public class AbstractFlameReader {
   public static final String ATTR_POSTBLUR_FADE = "post_blur_fade";
   public static final String ATTR_POSTBLUR_FALLOFF = "post_blur_falloff";
   public static final String ATTR_ZBUFFER_SCALE = "zbuffer_scale";
+  public static final String ATTR_ZBUFFER_BIAS = "zbuffer_bias";
+  public static final String ATTR_ZBUFFER_FILENAME = "zbuffer_filename";
   public static final String ATTR_MIRROR_PRE_POST_TRANSLATIONS = "mirror_pre_post_translations";
 
   public static final String ATTR_WFIELD_TYPE = "wfield_type";

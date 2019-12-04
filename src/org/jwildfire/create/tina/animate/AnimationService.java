@@ -440,6 +440,10 @@ public class AnimationService {
           curve = pFlame.getCamYawCurve();
           points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, 360.0);
           break;
+        case ROTATE_BANK:
+          curve = pFlame.getCamBankCurve();
+          points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, 360.0);
+          break;
         case MOVE_CAM_X:
           curve = pFlame.getCamPosXCurve();
           points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.SINE, 1.0);

@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.jwildfire.create.tina.animate.AnimAware;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RenderColor;
@@ -41,6 +42,10 @@ public class Layer implements Assignable<Layer>, Serializable {
 
   @AnimAware
   private double weight = 1.0;
+  private final MotionCurve weightCurve = new MotionCurve();
+  @AnimAware
+  private double density = 1.0;
+  private final MotionCurve densityCurve = new MotionCurve();
   @AnimAware
   private RGBPalette palette = new RGBPalette();
   @AnimAware
@@ -182,6 +187,9 @@ public class Layer implements Assignable<Layer>, Serializable {
   @Override
   public void assign(Layer pSrc) {
     weight = pSrc.weight;
+    weightCurve.assign(pSrc.weightCurve);
+    density = pSrc.density;
+    densityCurve.assign(pSrc.densityCurve);
     visible = pSrc.visible;
     name = pSrc.name;
     gradientMapFilename = pSrc.gradientMapFilename;
@@ -212,7 +220,8 @@ public class Layer implements Assignable<Layer>, Serializable {
 
   @Override
   public boolean isEqual(Layer pSrc) {
-    if ((fabs(weight - pSrc.weight) > EPSILON) ||
+    if ((fabs(weight - pSrc.weight) > EPSILON) || !weightCurve.isEqual(pSrc.weightCurve) ||
+        (fabs(density - pSrc.density) > EPSILON) || !densityCurve.isEqual(pSrc.densityCurve) ||
         (fabs(gradientMapHorizOffset - pSrc.gradientMapHorizOffset) > EPSILON) || (fabs(gradientMapHorizScale - pSrc.gradientMapHorizScale) > EPSILON) ||
         (fabs(gradientMapVertOffset - pSrc.gradientMapVertOffset) > EPSILON) || (fabs(gradientMapVertScale - pSrc.gradientMapVertScale) > EPSILON) ||
         (fabs(gradientMapLocalColorAdd - pSrc.gradientMapLocalColorAdd) > EPSILON) || (fabs(gradientMapLocalColorScale - pSrc.gradientMapLocalColorScale) > EPSILON) ||
@@ -243,7 +252,15 @@ public class Layer implements Assignable<Layer>, Serializable {
   public void setWeight(double pWeight) {
     weight = pWeight;
   }
-
+  
+  public double getDensity() {
+    return density;
+  }
+  
+  public void setDensity(double pDensity) {
+    density = pDensity;
+  }
+  
   public boolean isVisible() {
     return visible;
   }
@@ -253,7 +270,7 @@ public class Layer implements Assignable<Layer>, Serializable {
   }
 
   public boolean isRenderable() {
-    return isVisible() && getWeight() > -EPSILON && getXForms().size() > 0;
+    return isVisible() && getWeight() > -EPSILON && getDensity() > -EPSILON && getXForms().size() > 0;
   }
 
   public String getName() {

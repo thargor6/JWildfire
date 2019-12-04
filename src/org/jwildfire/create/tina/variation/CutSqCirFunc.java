@@ -34,18 +34,19 @@ public class  CutSqCirFunc  extends VariationFunc  {
 
 
 
+	private static final String PARAM_MODE = "mode";
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_INVERT = "invert";
 	private static final String PARAM_POWER = "power";
 
 
-
-	double zoom=1.;
+    int mode=1;
+	double zoom=2.;
 	private int invert = 0;
 	double power=2.0;
 
 
-	private static final String[] paramNames = { PARAM_ZOOM,PARAM_INVERT,PARAM_POWER};
+	private static final String[] paramNames = { PARAM_MODE,PARAM_ZOOM,PARAM_INVERT,PARAM_POWER};
 
 	
     @Override
@@ -55,8 +56,16 @@ public class  CutSqCirFunc  extends VariationFunc  {
 
 
 	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-		    double x = pAffineTP.x;
-		    double y = pAffineTP.y;
+		  double x,y;  
+		  if(mode==0)
+		    {
+		      x= pAffineTP.x;
+		      y =pAffineTP.y;
+		    }else
+		    {
+		     x=pContext.random()-0.5;
+		     y=pContext.random()-0.5;		     
+		    }
 		       
 			vec2 uv=new vec2(x*zoom,y*zoom);
 		    int color=0;  
@@ -101,11 +110,14 @@ public class  CutSqCirFunc  extends VariationFunc  {
 
 
 	public Object[] getParameterValues() { 
-		return new Object[] { zoom,invert,power};
+		return new Object[] { mode,zoom,invert,power};
 	}
 
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_ZOOM)) {
+		if (pName.equalsIgnoreCase(PARAM_MODE)) {
+			   mode =   (int)Tools.limitValue(pValue, 0 , 1);
+		}
+		else if (pName.equalsIgnoreCase(PARAM_ZOOM)) {
 			zoom = Tools.limitValue(pValue, 0.1 , 50.0);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_INVERT)) {

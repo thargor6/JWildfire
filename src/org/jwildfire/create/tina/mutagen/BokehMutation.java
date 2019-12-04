@@ -36,6 +36,7 @@ public class BokehMutation implements Mutation {
     flame.setNewCamDOF(true);
     flame.setCamPitch(30 + Math.random() * 20.0);
     flame.setCamYaw(15 - Math.random() * 30.0);
+    flame.setCamBank(15 - Math.random() * 30.0);
     flame.setCamPerspective(0.05 + Math.random() * 0.2);
     flame.setCamDOFArea(0.2 + Math.random() * 0.5);
 

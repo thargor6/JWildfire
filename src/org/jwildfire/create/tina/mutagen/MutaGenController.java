@@ -220,7 +220,7 @@ public class MutaGenController {
     else {
       int morphFrames = 1000;
       int morphFrame = Tools.FTOI(morphFrames * amount);
-      return FlameMorphService.morphFlames(prefs, FlameMorphType.MORPH, pBaseFlame.makeCopy(), pFlame.makeCopy(), morphFrame, morphFrames);
+      return FlameMorphService.morphFlames(prefs, FlameMorphType.MORPH, pBaseFlame.makeCopy(), pFlame.makeCopy(), morphFrame, morphFrames, false);
     }
   }
 

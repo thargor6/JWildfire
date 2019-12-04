@@ -561,6 +561,7 @@ public class FlameRenderer {
 
   private void renderZBuffer(SimpleGrayImage pGreyImage) {
     double zScale = 0.001 * flame.getZBufferScale();
+    double zBias = flame.getZBufferBias();
     if (pGreyImage != null) {
       int threadCount = prefs.getTinaRenderThreads();
       if (threadCount < 1 || pGreyImage.getImageHeight() < 8 * threadCount) {
@@ -571,7 +572,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pGreyImage.getImageHeight();
-        RenderZBufferThread thread = new RenderZBufferThread(flame, logDensityFilter, startRow, endRow, pGreyImage, zScale);
+        RenderZBufferThread thread = new RenderZBufferThread(flame, logDensityFilter, startRow, endRow, pGreyImage, zScale, zBias);
         threads.add(thread);
         if (threadCount > 1) {
           Thread t = new Thread(thread);

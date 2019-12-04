@@ -431,6 +431,7 @@ public class JWFScriptController {
     sb.append("  flame.setCentreY(" + Tools.doubleToString(pFlame.getCentreY()) + ");\n");
     sb.append("  flame.setCamPitch(" + Tools.doubleToString(pFlame.getCamPitch()) + ");\n");
     sb.append("  flame.setCamYaw(" + Tools.doubleToString(pFlame.getCamYaw()) + ");\n");
+    sb.append("  flame.setCamBank(" + Tools.doubleToString(pFlame.getCamBank()) + ");\n");
     sb.append("  flame.setCamPerspective(" + Tools.doubleToString(pFlame.getCamPerspective()) + ");\n");
     sb.append("  flame.setWidth(" + pFlame.getWidth() + ");\n");
     sb.append("  flame.setHeight(" + pFlame.getHeight() + ");\n");
@@ -558,6 +559,7 @@ public class JWFScriptController {
     pSB.append("    Layer layer = new Layer();\n");
     pSB.append("    flame.getLayers().add(layer);\n");
     pSB.append("    layer.setWeight(" + Tools.doubleToString(pLayer.getWeight()) + ");\n");
+    pSB.append("    layer.setDensity(" + Tools.doubleToString(pLayer.getDensity()) + ");\n");
     pSB.append("    layer.setVisible(" + pLayer.isVisible() + ");\n");
     pSB.append("    // create a random gradient\n");
     pSB.append("    new RandomGradientMutation().execute(layer);\n");
@@ -623,6 +625,8 @@ public class JWFScriptController {
     case DISTANCE:
       pSB.append("      xForm.setColorType(ColorType.DISTANCE);\n");
       break;
+    case CYCLIC:
+      pSB.append("      xForm.setColorType(ColorType.CYCLIC);\n");
     }
     pSB.append("      xForm.setMaterial(" + Tools.doubleToString(pXForm.getMaterial()) + ");\n");
     pSB.append("      xForm.setMaterialSpeed(" + Tools.doubleToString(pXForm.getMaterialSpeed()) + ");\n");

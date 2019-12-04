@@ -27,7 +27,7 @@ public class  CutMetaBallsFunc  extends VariationFunc  {
 	 * Variation : cut_metaballs
 	 * Autor: Jesus Sosa
 	 * Date: August 20, 2019
-	 * Reference 
+	 * Reference & Credits:  https://thebookofshaders.com/edit.php#12/metaballs.frag
 	 */
 
 
@@ -35,19 +35,19 @@ public class  CutMetaBallsFunc  extends VariationFunc  {
 	private static final long serialVersionUID = 1L;
 
 
-
+	private static final String PARAM_MODE = "mode";
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_INVERT = "invert";
 	private static final String PARAM_TIME = "time";
 	
 
-
+    int mode=1;
 	double zoom=7.0;
 	private int invert = 0;
 	double time=0.0;
 	
 
-	private static final String[] additionalParamNames = { PARAM_ZOOM,PARAM_INVERT,PARAM_TIME};
+	private static final String[] additionalParamNames = { PARAM_MODE,PARAM_ZOOM,PARAM_INVERT,PARAM_TIME};
 
 
 
@@ -58,8 +58,21 @@ public class  CutMetaBallsFunc  extends VariationFunc  {
 	   
 	
 	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-		    double x = pAffineTP.x;
-		    double y = pAffineTP.y;
+		    double x,y,px_center,py_center;
+		    
+		    if(mode==0)
+		    {
+		      x= pAffineTP.x;
+		      y =pAffineTP.y;
+		      px_center=0.0;
+		      py_center=0.0;
+		    }else
+		    {
+		     x=pContext.random();
+		     y=pContext.random();
+		      px_center=0.5;
+		      py_center=0.5;		     
+		    }
   
 		    vec2 st=new vec2(x*zoom,y*zoom);
 		    
@@ -110,8 +123,8 @@ public class  CutMetaBallsFunc  extends VariationFunc  {
 			        pVarTP.doHide = true;
 			      }
 		    }
-		    pVarTP.x = pAmount * x;
-		    pVarTP.y = pAmount * y;
+		    pVarTP.x = pAmount * (x-px_center);
+		    pVarTP.y = pAmount * (y-py_center);
 		    if (pContext.isPreserveZCoordinate()) {
 		      pVarTP.z += pAmount * pAffineTP.z;
 		    }
@@ -127,11 +140,14 @@ public class  CutMetaBallsFunc  extends VariationFunc  {
 
 
 	public Object[] getParameterValues() { 
-		return new Object[] { zoom,invert,time};
+		return new Object[] { mode,zoom,invert,time};
 	}
 
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_ZOOM)) {
+		if (pName.equalsIgnoreCase(PARAM_MODE)) {
+			   mode =   (int)Tools.limitValue(pValue, 0 , 1);
+		}
+		else if (pName.equalsIgnoreCase(PARAM_ZOOM)) {
 			zoom = Tools.limitValue(pValue, 0.1 , 50.0);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_INVERT)) {

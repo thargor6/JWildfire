@@ -123,6 +123,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamPitch(0);
     flame.setCamRoll(-2);
     flame.setCamYaw(0);
+    flame.setCamBank(0);
     flame.setPixelsPerUnit(200);
     return flame;
   }

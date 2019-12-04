@@ -40,7 +40,7 @@ public class DancingFlameStack {
     else {
       Flame prevFlame = flames.get(flames.size() - 1).getFlame();
       for (int i = 1; i < pMorphFrameCount; i++) {
-        Flame flame = FlameMorphService.morphFlames(prefs, FlameMorphType.MORPH, prevFlame, pFlame, i, pMorphFrameCount);
+        Flame flame = FlameMorphService.morphFlames(prefs, FlameMorphType.MORPH, prevFlame, pFlame, i, pMorphFrameCount, false);
         // TODO how to morph motions?
         flames.add(new DancingFlame(flame, pMotions));
       }

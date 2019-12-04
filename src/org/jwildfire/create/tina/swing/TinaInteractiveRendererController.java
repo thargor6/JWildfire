@@ -490,7 +490,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
             new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(file.getAbsolutePath()));
           }
           if (res.getZBuffer() != null) {
-            new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(file.getAbsolutePath()));
+            new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(file.getAbsolutePath(), currFlame.getZBufferFilename()));
           }
           if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
             new FlameWriter().writeFlame(getCurrFlame(), file.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(file.getName()) + ".flame");

@@ -40,6 +40,7 @@ import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
+import org.jwildfire.create.tina.base.ZBufferFilename;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFunc;
@@ -134,6 +135,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     res.add(data.cameraRollREd);
     res.add(data.cameraPitchREd);
     res.add(data.cameraYawREd);
+    res.add(data.cameraBankREd);
     res.add(data.cameraPerspectiveREd);
     res.add(data.cameraCentreXREd);
     res.add(data.cameraCentreYREd);
@@ -159,6 +161,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     res.add(data.focusXREd);
     res.add(data.focusYREd);
     res.add(data.focusZREd);
+    res.add(data.dimZDistanceREd);
 
     res.add(data.dofDOFScaleREd);
     res.add(data.dofDOFAngleREd);
@@ -179,6 +182,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.cameraRollREd, false);
     enableControl(data.cameraPitchREd, false);
     enableControl(data.cameraYawREd, false);
+    enableControl(data.cameraBankREd, false);
     enableControl(data.cameraPerspectiveREd, false);
     enableControl(data.cameraCentreXREd, false);
     enableControl(data.cameraCentreYREd, false);
@@ -386,6 +390,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.dimishZSlider, data.dimishZREd, "dimishZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
+  public void dimZDistanceSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dimZDistanceSlider, data.dimZDistanceREd, "dimZDistance", TinaController.SLIDER_SCALE_ZPOS, false);
+  }
+
   public void camZSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.camZSlider, data.camZREd, "camZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
@@ -404,6 +412,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void cameraRollSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0, false);
+  }
+
+  public void cameraBankSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.cameraBankSlider, data.cameraBankREd, "camBank", 1.0, false);
   }
 
   public void cameraCentreYSlider_stateChanged(ChangeEvent e) {
@@ -602,6 +614,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameTextFieldChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0, false);
   }
 
+  public void cameraBankREd_changed() {
+    flameTextFieldChanged(data.cameraBankSlider, data.cameraBankREd, "camBank", 1.0, false);
+  }
+
   public void cameraPerspectiveREd_changed() {
     flameTextFieldChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE, false);
   }
@@ -620,6 +636,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void diminishZREd_changed() {
     flameTextFieldChanged(data.dimishZSlider, data.dimishZREd, "dimishZ", TinaController.SLIDER_SCALE_ZPOS, false);
+  }
+
+  public void dimZDistanceREd_changed() {
+    flameTextFieldChanged(data.dimZDistanceSlider, data.dimZDistanceREd, "dimZDistance", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void cameraDOFREd_changed() {
@@ -652,10 +672,13 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     data.cameraDOFAreaSlider.setEnabled(newDOF);
     data.cameraDOFExponentREd.setEnabled(newDOF);
     data.cameraDOFExponentSlider.setEnabled(newDOF);
-    data.camZREd.setEnabled(getCurrFlame() != null);
-    data.camZSlider.setEnabled(getCurrFlame() != null);
+    data.camZREd.setEnabled(!newDOF);
+    data.camZSlider.setEnabled(!newDOF);
     data.dimishZREd.setEnabled(getCurrFlame() != null);
     data.dimishZSlider.setEnabled(getCurrFlame() != null);
+    data.dimishZColorButton.setEnabled(getCurrFlame() != null);
+    data.dimZDistanceREd.setEnabled(getCurrFlame() != null);
+    data.dimZDistanceSlider.setEnabled(getCurrFlame() != null);    
   }
 
   public void enablePostSymmetryUI() {
@@ -840,6 +863,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       data.tinaZBufferScaleREd.setText(Tools.doubleToString(getCurrFlame().getZBufferScale()));
       data.tinaZBufferScaleSlider.setValue(Tools.FTOI(getCurrFlame().getZBufferScale() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaZBufferBiasREd.setText(Tools.doubleToString(getCurrFlame().getZBufferBias()));
+      data.tinaZBufferBiasSlider.setValue(Tools.FTOI(getCurrFlame().getZBufferBias() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaZBufferFilename1.setSelected(getCurrFlame().getZBufferFilename() == ZBufferFilename.PRE_ZBUF);
+      data.tinaZBufferFilename2.setSelected(getCurrFlame().getZBufferFilename() == ZBufferFilename.POST_DEPTH);
 
       setupDOFParamsControls(getCurrFlame().getCamDOFShape());
       data.dofDOFShapeCmb.setSelectedItem(getCurrFlame().getCamDOFShape());
@@ -1076,6 +1103,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.cameraYawREd.setText(Tools.doubleToString(getCurrFlame().getCamYaw()));
       data.cameraYawSlider.setValue(Tools.FTOI(getCurrFlame().getCamYaw()));
 
+      data.cameraBankREd.setText(Tools.doubleToString(getCurrFlame().getCamBank()));
+      data.cameraBankSlider.setValue(Tools.FTOI(getCurrFlame().getCamBank()));
+
       data.cameraCentreXREd.setText(Tools.doubleToString(getCurrFlame().getCentreX()));
       data.cameraCentreXSlider.setValue(Tools.FTOI(getCurrFlame().getCentreX() * TinaController.SLIDER_SCALE_CENTRE));
 
@@ -1096,9 +1126,37 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       data.dimishZREd.setText(Tools.doubleToString(getCurrFlame().getDimishZ()));
       data.dimishZSlider.setValue(Tools.FTOI(getCurrFlame().getDimishZ() * TinaController.SLIDER_SCALE_ZPOS));
+      
+      data.dimZDistanceREd.setText(Tools.doubleToString(getCurrFlame().getDimZDistance()));
+      data.dimZDistanceSlider.setValue(Tools.FTOI(getCurrFlame().getDimZDistance() * TinaController.SLIDER_SCALE_ZPOS));
+      
+      refreshDimishZColorIndicator();
     }
     finally {
       setNoRefresh(oldNoRefrsh);
+    }
+  }
+  
+  private void refreshDimishZColorIndicator() {
+    Color color = getCurrFlame() != null ? new Color(getCurrFlame().getDimishZRed(), 
+        getCurrFlame().getDimishZGreen(), getCurrFlame().getDimishZBlue()) : Color.BLACK;
+    data.dimishZColorButton.setBackground(color);
+  }
+  
+  public void dimishZColorBtn_clicked() {
+    if (getCurrFlame() != null) {
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+      
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getDimishZRed(), 
+          getCurrFlame().getDimishZGreen(), getCurrFlame().getDimishZBlue()));
+      if (selectedColor != null) {
+        getCurrFlame().setDimishZRed(selectedColor.getRed());
+        getCurrFlame().setDimishZGreen(selectedColor.getGreen());
+        getCurrFlame().setDimishZBlue(selectedColor.getBlue());
+        refreshDimishZColorIndicator();
+        owner.refreshFlameImage(true, false, 1, true, false);
+      }
     }
   }
 
@@ -1459,6 +1517,27 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void zBufferScaleSlider_changed() {
     flameSliderChanged(data.tinaZBufferScaleSlider, data.tinaZBufferScaleREd, "zBufferScale", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void zBufferBiasREd_changed() {
+    flameTextFieldChanged(data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void zBufferBiasSlider_changed() {
+    flameSliderChanged(data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+  
+  public ZBufferFilename getZBufferFilenameSetting() {
+    if (data.tinaZBufferFilename1.isSelected())
+      return ZBufferFilename.PRE_ZBUF;
+    else if (data.tinaZBufferFilename2.isSelected()) 
+      return ZBufferFilename.POST_DEPTH;
+    else
+      return ZBufferFilename.PRE_ZBUF;
+  }
+  
+  public void zBufferFilename_changed() {
+    getCurrFlame().setZBufferFilename(getZBufferFilenameSetting());
   }
 
   public void postBlurFadeREd_changed() {

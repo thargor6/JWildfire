@@ -786,6 +786,7 @@ public class VariationFuncList {
 
     registerVariationFunc(MSTruchetFunc.class);	
     registerVariationFunc(F_ComplexFunc.class);
+    registerVariationFunc(TruchetFlowFunc.class); 
     
     registerVariationFunc(CutTruchetFunc.class);  
     registerVariationFunc(CutFingerPrintFunc.class);  
@@ -805,6 +806,26 @@ public class VariationFuncList {
     registerVariationFunc(CutSqCirFunc.class);  
     registerVariationFunc(ShreddedFunc.class);      
     
+    registerVariationFunc(CutRGridFunc.class); 
+    registerVariationFunc(CutYuebingFunc.class);    
+    registerVariationFunc(CutRandomTileFunc.class);   
+    registerVariationFunc(CutTriScaleTruchetFunc.class);  
+    registerVariationFunc(CutAlienTextFunc.class);    
+    registerVariationFunc(CutTrianTessFunc.class); 
+    registerVariationFunc(Cut2eWangTileFunc.class);   
+
+    registerVariationFunc(CutBooleansFunc.class);  
+    registerVariationFunc(CutApollonianFunc.class); 
+    registerVariationFunc(CutTruchetWeavingFunc.class);      
+    registerVariationFunc(CutHexTruchetFlowFunc.class);    
+    registerVariationFunc(CutHexDotsFunc.class);    
+    registerVariationFunc(CutJigsawFunc.class);   
+    registerVariationFunc(CutChainsFunc.class); 
+    registerVariationFunc(CutWoodFunc.class); 
+    
+    registerVariationFunc(DC_BooleansFunc.class); 
+    registerVariationFunc(DC_SpacefoldFunc.class);   
+    registerVariationFunc(DC_ButerfliesFunc.class); 
     
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

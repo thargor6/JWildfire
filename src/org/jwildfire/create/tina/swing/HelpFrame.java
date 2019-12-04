@@ -94,6 +94,7 @@ public class HelpFrame extends JFrame {
       panel_1.add(getScrollPane(), BorderLayout.CENTER);
       tabbedPane_1.addTab("Tips for Apophysis users ", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-2.png")), getPanel_103(), null);
       tabbedPane_1.addTab("3DMesh Generation tips ", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")), getPanel_105(), null);
+      tabbedPane_1.addTab("JWildfire Coloring Types ", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/color-wheel.png")), getPanel_109(), null);
     }
     return rootTabbedPane;
   }
@@ -104,8 +105,11 @@ public class HelpFrame extends JFrame {
   private JTextPane meshGenHintPane;
   private JPanel panel_103;
   private JPanel panel_105;
+  private JPanel panel_109;
   private JScrollPane scrollPane_11;
+  private JScrollPane scrollPane_12;
   private JTextPane apophysisHintsPane;
+  private JTextPane colorTypesPane;
 
   private JScrollPane getScrollPane() {
     if (scrollPane == null) {
@@ -174,12 +178,29 @@ public class HelpFrame extends JFrame {
     return panel_105;
   }
 
+  private JPanel getPanel_109() {
+    if (panel_109 == null) {
+      panel_109 = new JPanel();
+      panel_109.setLayout(new BorderLayout(0, 0));
+      panel_109.add(getScrollPane_12(), BorderLayout.CENTER);
+    }
+    return panel_109;
+  }
+
   private JScrollPane getScrollPane_11() {
     if (scrollPane_11 == null) {
       scrollPane_11 = new JScrollPane();
       scrollPane_11.setViewportView(getApophysisHintsPane());
     }
     return scrollPane_11;
+  }
+
+  private JScrollPane getScrollPane_12() {
+    if (scrollPane_12 == null) {
+      scrollPane_12 = new JScrollPane();
+      scrollPane_12.setViewportView(getColorTypesPane());
+    }
+    return scrollPane_12;
   }
 
   JTextPane getApophysisHintsPane() {
@@ -190,6 +211,16 @@ public class HelpFrame extends JFrame {
       apophysisHintsPane.setEditable(false);
     }
     return apophysisHintsPane;
+  }
+
+  JTextPane getColorTypesPane() {
+    if (colorTypesPane == null) {
+      colorTypesPane = new JTextPane();
+      colorTypesPane.setBackground(SystemColor.menu);
+      colorTypesPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
+      colorTypesPane.setEditable(false);
+    }
+    return colorTypesPane;
   }
 
   public void setTinaController(TinaController tinaController) {

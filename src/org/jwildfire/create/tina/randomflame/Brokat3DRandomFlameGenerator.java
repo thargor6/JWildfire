@@ -40,6 +40,7 @@ public class Brokat3DRandomFlameGenerator extends AbstractAffine3DRandomFlameGen
     pFlame.setCamZoom(2.0 * pFlame.getCamZoom());
     pFlame.setCamYaw((0.5 - Math.random()) * 75.0 + pFlame.getCamYaw());
     pFlame.setCamPitch((0.5 - Math.random()) * 135.0 + pFlame.getCamPitch());
+    pFlame.setCamBank((0.5 - Math.random()) * 15.0 + pFlame.getCamBank());
     pFlame.setCamPerspective(0.1 + Math.random() * 0.4);
     final double amp0 = 33.0;
     final double amp1 = 15.0;

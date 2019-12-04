@@ -39,6 +39,7 @@ import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
+import org.jwildfire.create.tina.base.ZBufferFilename;
 
 public class Flame implements Assignable<Flame>, Serializable {
   private static final long serialVersionUID = 1L;
@@ -58,6 +59,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double camYaw;
   private final MotionCurve camYawCurve = new MotionCurve();
+  @AnimAware
+  private double camBank;
+  private final MotionCurve camBankCurve = new MotionCurve();
   @AnimAware
   private double camPerspective;
   private final MotionCurve camPerspectiveCurve = new MotionCurve();
@@ -91,6 +95,12 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double dimishZ;
   private final MotionCurve dimishZCurve = new MotionCurve();
+  private int dimishZRed;
+  private int dimishZGreen;
+  private int dimishZBlue;
+  @AnimAware
+  private double dimZDistance;
+  private final MotionCurve dimZDistanceCurve = new MotionCurve();
   @AnimAware
   private double camDOF;
   private final MotionCurve camDOFCurve = new MotionCurve();
@@ -207,6 +217,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int frameCount = 300;
   private int fps = 30;
   private double zBufferScale = 1.0;
+  private double zBufferBias = 0.0;
+  private ZBufferFilename zBufferFilename = ZBufferFilename.PRE_ZBUF;
 
   private int postBlurRadius;
   private double postBlurFade;
@@ -371,6 +383,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFExponent = 2.0;
     camDOF = 0.0;
     dimishZ = 0.0;
+    dimishZRed = 0;
+    dimishZGreen = 0;
+    dimishZBlue = 0;
+    dimZDistance = 0.0;
     camZ = 0.0;
     focusX = 0.0;
     focusY = 0.0;
@@ -381,6 +397,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     camRoll = 0.0;
     camPitch = 0.0;
     camYaw = 0.0;
+    camBank = 0.0;
     camPerspective = 0.0;
     centreX = 0.0;
     centreY = 0.0;
@@ -530,6 +547,14 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.camYaw = camYaw;
   }
 
+  public double getCamBank() {
+    return camBank;
+  }
+
+  public void setCamBank(double pCamBank) {
+    this.camBank = pCamBank;
+  }
+
   public double getCamPerspective() {
     return camPerspective;
   }
@@ -574,6 +599,12 @@ public class Flame implements Assignable<Flame>, Serializable {
   public Flame makeCopy() {
     Flame res = new Flame();
     res.assign(this);
+    return res;
+  }
+  
+  public Flame makeCopy(Layer pLayer) {
+    Flame res = new Flame();
+    res.assign(this, pLayer);
     return res;
   }
 
@@ -659,6 +690,10 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   @Override
   public void assign(Flame pFlame) {
+    assign(pFlame, null);
+  }
+  
+  public void assign(Flame pFlame, Layer pLayer) {
     centreX = pFlame.centreX;
     centreXCurve.assign(pFlame.centreXCurve);
     centreY = pFlame.centreY;
@@ -673,6 +708,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     camPerspectiveCurve.assign(pFlame.camPerspectiveCurve);
     camRoll = pFlame.camRoll;
     camRollCurve.assign(pFlame.camRollCurve);
+    camBank = pFlame.camBank;
+    camBankCurve.assign(pFlame.camBankCurve);
     camZoom = pFlame.camZoom;
     camZoomCurve.assign(pFlame.camZoomCurve);
     focusX = pFlame.focusX;
@@ -683,6 +720,11 @@ public class Flame implements Assignable<Flame>, Serializable {
     focusZCurve.assign(pFlame.focusZCurve);
     dimishZ = pFlame.dimishZ;
     dimishZCurve.assign(pFlame.dimishZCurve);
+    dimishZRed = pFlame.dimishZRed;
+    dimishZGreen = pFlame.dimishZGreen;
+    dimishZBlue = pFlame.dimishZBlue;
+    dimZDistance = pFlame.dimZDistance;
+    dimZDistanceCurve.assign(pFlame.dimZDistanceCurve);
     camPosX = pFlame.camPosX;
     camPosXCurve.assign(pFlame.camPosXCurve);
     camPosY = pFlame.camPosY;
@@ -780,6 +822,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     postBlurFade = pFlame.postBlurFade;
     postBlurFallOff = pFlame.postBlurFallOff;
     zBufferScale = pFlame.zBufferScale;
+    zBufferBias = pFlame.zBufferBias;
+    zBufferFilename = pFlame.zBufferFilename; 
 
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
@@ -818,8 +862,13 @@ public class Flame implements Assignable<Flame>, Serializable {
     mixerBBCurve.assign(pFlame.mixerBBCurve);
     editPlane = pFlame.editPlane;
     layers.clear();
-    for (Layer layer : pFlame.getLayers()) {
-      layers.add(layer.makeCopy());
+    if (pLayer == null) {
+      for (Layer layer : pFlame.getLayers()) {
+        layers.add(layer.makeCopy());
+      }
+    }
+    else {
+      layers.add(pLayer);
     }
 
     solidRenderSettings.assign(pFlame.solidRenderSettings);
@@ -838,11 +887,14 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camYaw - pFlame.camYaw) > EPSILON) || !camYawCurve.isEqual(pFlame.camYawCurve) ||
         (fabs(camPerspective - pFlame.camPerspective) > EPSILON) || !camPerspectiveCurve.isEqual(pFlame.camPerspectiveCurve) ||
         (fabs(camRoll - pFlame.camRoll) > EPSILON) || !camRollCurve.isEqual(pFlame.camRollCurve) ||
+        (fabs(camBank - pFlame.camBank) > EPSILON) || !camBankCurve.isEqual(pFlame.camBankCurve) ||
         (fabs(camZoom - pFlame.camZoom) > EPSILON) || !camZoomCurve.isEqual(pFlame.camZoomCurve) ||
         (fabs(focusX - pFlame.focusX) > EPSILON) || !focusXCurve.isEqual(pFlame.focusXCurve) ||
         (fabs(focusY - pFlame.focusY) > EPSILON) || !focusYCurve.isEqual(pFlame.focusYCurve) ||
         (fabs(focusZ - pFlame.focusZ) > EPSILON) || !focusZCurve.isEqual(pFlame.focusZCurve) ||
         (fabs(dimishZ - pFlame.dimishZ) > EPSILON) || !dimishZCurve.isEqual(pFlame.dimishZCurve) ||
+        (fabs(dimishZRed - pFlame.dimishZRed) > EPSILON) || (fabs(dimishZGreen - pFlame.dimishZGreen) > EPSILON) || (fabs(dimishZBlue - pFlame.dimishZBlue) > EPSILON) ||
+        (fabs(dimZDistance - pFlame.dimZDistance) > EPSILON) || !dimZDistanceCurve.isEqual(pFlame.dimZDistanceCurve) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
         (camDOFShape != pFlame.camDOFShape) || (spatialOversampling != pFlame.spatialOversampling) ||
         (postNoiseFilter != pFlame.postNoiseFilter) || (fabs(postNoiseFilterThreshold - pFlame.postNoiseFilterThreshold) > EPSILON) ||
@@ -919,7 +971,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         !mixerGBCurve.isEqual(pFlame.mixerGBCurve) || !mixerBRCurve.isEqual(pFlame.mixerBRCurve) || !mixerBGCurve.isEqual(pFlame.mixerBGCurve) ||
         !mixerBBCurve.isEqual(pFlame.mixerBBCurve) || !solidRenderSettings.isEqual(pFlame.solidRenderSettings) ||
         postBlurRadius != pFlame.postBlurRadius || (fabs(postBlurFade - pFlame.postBlurFade) > EPSILON) ||
-        (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON) || (fabs(zBufferScale - pFlame.zBufferScale) > EPSILON)) {
+        (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON) || (zBufferFilename == pFlame.zBufferFilename) ||
+        (fabs(zBufferScale - pFlame.zBufferScale) > EPSILON) || (fabs(zBufferBias - pFlame.zBufferBias) > EPSILON)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -976,6 +1029,38 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setDimishZ(double dimishZ) {
     this.dimishZ = dimishZ;
+  }
+
+  public int getDimishZRed() {
+    return dimishZRed;
+  }
+
+  public void setDimishZRed(int dimishZRed) {
+    this.dimishZRed = dimishZRed;
+  }
+
+  public int getDimishZGreen() {
+    return dimishZGreen;
+  }
+
+  public void setDimishZGreen(int dimishZGreen) {
+    this.dimishZGreen = dimishZGreen;
+  }
+
+  public int getDimishZBlue() {
+    return dimishZBlue;
+  }
+
+  public void setDimishZBlue(int dimishZBlue) {
+    this.dimishZBlue = dimishZBlue;
+  }
+
+  public double getDimZDistance() {
+    return dimZDistance;
+  }
+
+  public void setDimZDistance(double dimZDistance) {
+    this.dimZDistance = dimZDistance;
   }
 
   public Layer getFirstLayer() {
@@ -1088,7 +1173,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public boolean hasPreRenderMotionProperty() {
-    return brightnessCurve.isEnabled() || contrastCurve.isEnabled() || gammaCurve.isEnabled() || gammaThresholdCurve.isEnabled() || vibrancyCurve.isEnabled() || saturationCurve.isEnabled();
+    return brightnessCurve.isEnabled() || contrastCurve.isEnabled() || gammaCurve.isEnabled() || gammaThresholdCurve.isEnabled() || 
+        vibrancyCurve.isEnabled() || saturationCurve.isEnabled() || whiteLevelCurve.isEnabled();
   }
 
   public PostSymmetryType getPostSymmetryType() {
@@ -1273,7 +1359,7 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public boolean is3dProjectionRequired() {
     return getSolidRenderSettings().isSolidRenderingEnabled() ||
-        fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() ||
+        fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamBank()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() ||
         fabs(getDimishZ()) > EPSILON || fabs(getCamPosX()) > EPSILON || fabs(getCamPosY()) > EPSILON || fabs(getCamPosZ()) > EPSILON;
   }
 
@@ -1287,6 +1373,10 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public MotionCurve getCamYawCurve() {
     return camYawCurve;
+  }
+
+  public MotionCurve getCamBankCurve() {
+    return camBankCurve;
   }
 
   public boolean isStereo3dSwapSides() {
@@ -1621,6 +1711,22 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setZBufferScale(double zBufferScale) {
     this.zBufferScale = zBufferScale;
+  }
+
+  public double getZBufferBias() {
+    return zBufferBias;
+  }
+
+  public void setZBufferBias(double zBufferBias) {
+    this.zBufferBias = zBufferBias;
+  }
+  
+  public ZBufferFilename getZBufferFilename() {
+    return zBufferFilename;
+  }
+  
+  public void setZBufferFilename(ZBufferFilename zBufferFilename) {
+    this.zBufferFilename = zBufferFilename;
   }
 
   public double getLowDensityBrightness() {

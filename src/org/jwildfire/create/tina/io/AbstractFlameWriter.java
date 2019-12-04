@@ -320,12 +320,15 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr("cam_zoom", pFlame.getCamZoom()));
     attrList.add(xb.createAttr("cam_pitch", (pFlame.getCamPitch() * Math.PI) / 180.0));
     attrList.add(xb.createAttr("cam_yaw", (pFlame.getCamYaw() * Math.PI) / 180.0));
+    attrList.add(xb.createAttr("cam_roll", (pFlame.getCamBank() * Math.PI) / 180.0));
     attrList.add(xb.createAttr("cam_persp", pFlame.getCamPerspective()));
     attrList.add(xb.createAttr("cam_xfocus", pFlame.getFocusX()));
     attrList.add(xb.createAttr("cam_yfocus", pFlame.getFocusY()));
     attrList.add(xb.createAttr("cam_zfocus", pFlame.getFocusZ()));
     if (pFlame.getDimishZ() != 0.0) {
       attrList.add(xb.createAttr("cam_zdimish", pFlame.getDimishZ()));
+      attrList.add(xb.createAttr("cam_zdimcolor", (double) pFlame.getDimishZRed() / 255.0 + " " + (double) pFlame.getDimishZGreen() / 255.0 + " " + (double) pFlame.getDimishZBlue() / 255.0));
+      attrList.add(xb.createAttr("cam_zdimdist", pFlame.getDimZDistance()));
     }
     attrList.add(xb.createAttr(ATTR_CAM_POS_X, pFlame.getCamPosX()));
     attrList.add(xb.createAttr(ATTR_CAM_POS_Y, pFlame.getCamPosY()));
@@ -416,6 +419,8 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_FALLOFF, pFlame.getPostBlurFallOff()));
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZBUFFER_SCALE, pFlame.getZBufferScale()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZBUFFER_BIAS, pFlame.getZBufferBias()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZBUFFER_FILENAME, pFlame.getZBufferFilename().name()));
 
     if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_ENABLED, pFlame.getSolidRenderSettings().isSolidRenderingEnabled()));

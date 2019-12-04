@@ -127,6 +127,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void iterateNext() {
+    if (layer.getDensity() < 1 && randGen.random() > layer.getDensity()*layer.getDensity())
+      return;
     xf = selectNextXForm(xf);
     transformPoint();
     if (xf.getDrawMode() == DrawMode.HIDDEN)
@@ -144,6 +146,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void iterateNext(List<RenderSlice> pSlices) {
+    if (layer.getDensity() < 1 && randGen.random() > layer.getDensity()*layer.getDensity())
+      return;
     int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
     xf = xf.getNextAppliedXFormTable()[nextXForm];
     if (xf == null) {
@@ -206,6 +210,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   protected double plotRed, plotGreen, plotBlue, plotContribution;
+  protected double dimishZRed = flame.getDimishZRed();
+  protected double dimishZGreen = flame.getDimishZGreen();
+  protected double  dimishZBlue = flame.getDimishZBlue();
 
   protected int plotBufferIdx = 0;
 
@@ -214,16 +221,23 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected int shadowMapPlotBufferIdx[] = initShadowMapPlotBufferIdx();
   protected PlotSample[][] shadowMapPlotBuffer = initShadowMapPlotBuffer();
 
-  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity, XYZPoint origin) {
+  protected double lerp(double a, double b, double t) {
+    return (1 - t) * a + t * b;
+  }
+  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double dzIntensity, double lIntensity, XYZPoint origin) {
     plotRed = origin.redColor;
     plotGreen = origin.greenColor;
     plotBlue = origin.blueColor;
+    
+    dimishZRed = flame.getDimishZRed();
+    dimishZGreen = flame.getDimishZGreen();
+    dimishZBlue = flame.getDimishZBlue();
 
     if (!solidRendering)
       transformPlotColor(p);
-    double finalRed = plotRed * intensity;
-    double finalGreen = plotGreen * intensity;
-    double finalBlue = plotBlue * intensity;
+    double finalRed = lerp(dimishZRed, plotRed,  dzIntensity) * lIntensity;
+    double finalGreen = lerp(dimishZGreen, plotGreen,  dzIntensity) * lIntensity;
+    double finalBlue = lerp(dimishZBlue, plotBlue,  dzIntensity) * lIntensity;
     plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z, p.receiveOnlyShadows);
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
@@ -498,8 +512,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
         if (screenY < 0 || screenY >= renderer.rasterHeight)
           return;
       }
-      double intensity = prj.intensity * layer.getWeight();
-      plotPoint(screenX, screenY, rawX, rawY, intensity, untransformed);
+      plotPoint(screenX, screenY, rawX, rawY, prj.intensity, layer.getWeight(), untransformed);
     }
 
     private void plotShadowMapPoint(int i, double x, double y, double z) {

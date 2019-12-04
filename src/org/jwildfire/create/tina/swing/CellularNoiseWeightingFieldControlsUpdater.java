@@ -65,6 +65,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
     controls.weightingFieldParam01REd.setMotionPropertyName("weightingFieldNoiseSeed");
     controls.weightingFieldParam01Lbl.setVisible(true);
     controls.weightingFieldParam01Lbl.setText("Seed");
+    controls.weightingFieldParam01Lbl.setToolTipText("Random number generator seed");
 
     controls.weightingFieldParam02REd.setVisible(false);
     controls.weightingFieldParam02Lbl.setVisible(false);
@@ -76,6 +77,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
     controls.weightingFieldParam04Cmb.setEnabled(enabled);
     controls.weightingFieldParam04Lbl.setVisible(true);
     controls.weightingFieldParam04Lbl.setText("Return Type");
+    controls.weightingFieldParam04Lbl.setToolTipText("Type of cellular noise");
     fillingComboBox = true;
     try {
       controls.weightingFieldParam04Cmb.removeAllItems();
@@ -95,6 +97,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
     controls.weightingFieldParam05REd.setMotionPropertyName("weightingFieldNoiseFrequency");
     controls.weightingFieldParam05Lbl.setVisible(true);
     controls.weightingFieldParam05Lbl.setText("Frequency");
+    controls.weightingFieldParam05Lbl.setToolTipText("Noise frequency; increase to put peaks closer together");
 
     controls.weightingFieldParam06REd.setVisible(false);
     controls.weightingFieldParam06Lbl.setVisible(false);
@@ -106,6 +109,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
     controls.weightingFieldParam08Cmb.setEnabled(enabled);
     controls.weightingFieldParam08Lbl.setVisible(true);
     controls.weightingFieldParam08Lbl.setText("Distance Fnct");
+    controls.weightingFieldParam08Lbl.setToolTipText("Method for measuring distances between cells");
     fillingComboBox = true;
     try {
       controls.weightingFieldParam08Cmb.removeAllItems();

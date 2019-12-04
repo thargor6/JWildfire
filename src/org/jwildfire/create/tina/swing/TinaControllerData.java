@@ -55,6 +55,8 @@ public class TinaControllerData {
   public JSlider cameraPitchSlider;
   public JWFNumberField cameraYawREd;
   public JSlider cameraYawSlider;
+  public JWFNumberField cameraBankREd;
+  public JSlider cameraBankSlider;
   public JWFNumberField cameraPerspectiveREd;
   public JSlider cameraPerspectiveSlider;
   public JWFNumberField camPosXREd;
@@ -77,6 +79,9 @@ public class TinaControllerData {
   public JSlider focusZSlider;
   public JWFNumberField dimishZREd;
   public JSlider dimishZSlider;
+  public JButton dimishZColorButton;
+  public JWFNumberField dimZDistanceREd;
+  public JSlider dimZDistanceSlider;
   public JWFNumberField camZREd;
   public JSlider camZSlider;
   public JWFNumberField cameraDOFREd;
@@ -134,6 +139,10 @@ public class TinaControllerData {
   public JSlider postBlurFallOffSlider;
   public JWFNumberField tinaZBufferScaleREd;
   public JSlider tinaZBufferScaleSlider;
+  public JWFNumberField tinaZBufferBiasREd;
+  public JSlider tinaZBufferBiasSlider;
+  public JRadioButton tinaZBufferFilename1;
+  public JRadioButton tinaZBufferFilename2;
   public JTextField paletteRandomPointsREd;
   public JComboBox paletteRandomGeneratorCmb;
   public JCheckBox paletteFadeColorsCBx;
@@ -282,6 +291,7 @@ public class TinaControllerData {
   public JButton batchRenderStartButton;
   public JTextPane helpPane;
   public JTextPane apophysisHintsPane;
+  public JTextPane getColorTypesPane;
   public JButton undoButton;
   public JButton redoButton;
   public JButton editTransformCaptionButton;
@@ -313,9 +323,11 @@ public class TinaControllerData {
   public JButton backgroundColorCCIndicatorBtn;
   public JComboBox backgroundColorTypeCmb;
   public JWFNumberField layerWeightEd;
+  public JWFNumberField layerDensityREd;
   public JButton layerAddBtn;
   public JButton layerDuplicateBtn;
   public JButton layerDeleteBtn;
+  public JButton layerExtractBtn;
   public JTable layersTable;
   public JToggleButton layerVisibleBtn;
   public JToggleButton layerAppendBtn;
