@@ -44,11 +44,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -101,12 +99,7 @@ import org.jwildfire.create.tina.mutagen.BokehMutation;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.mutagen.MutationType;
 import org.jwildfire.create.tina.mutagen.WeightingFieldMutation;
-import org.jwildfire.create.tina.palette.DefaultGradientSelectionProvider;
-import org.jwildfire.create.tina.palette.GradientSelectionProvider;
-import org.jwildfire.create.tina.palette.MedianCutQuantizer;
-import org.jwildfire.create.tina.palette.RGBColor;
-import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
+import org.jwildfire.create.tina.palette.*;
 import org.jwildfire.create.tina.quilt.QuiltRendererController;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -143,6 +136,7 @@ import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
@@ -151,6 +145,7 @@ import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.MainController;
+import org.jwildfire.transform.HSLTransformer;
 import org.jwildfire.transform.TextTransformer;
 import org.jwildfire.transform.TextTransformer.FontStyle;
 import org.jwildfire.transform.TextTransformer.HAlignment;
@@ -2235,6 +2230,18 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       refreshPaletteColorsTable();
       RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected(), data.paletteUniformWidthCBx.isSelected());
       saveUndoPoint();
+      getCurrLayer().setPalette(palette);
+      setLastGradient(palette);
+      refreshPaletteUI(palette);
+      refreshFlameImage(true, false, 1, true, false);
+    }
+  }
+
+  public void tinaCreateSimilarPaletteButton_actionPerformed(ActionEvent e) {
+    if (getCurrFlame() != null && getCurrLayer()!=null) {
+      saveUndoPoint();
+      data.paletteKeyFrames = new SimilarGradientCreator().createKeyFrames(getCurrLayer().getPalette().getTransformedColors());
+      RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected(), data.paletteUniformWidthCBx.isSelected());
       getCurrLayer().setPalette(palette);
       setLastGradient(palette);
       refreshPaletteUI(palette);
@@ -5568,7 +5575,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   private List<MutationType> createRandomMutationTypes() {
-    MutationType allMutationTypes[] = { MutationType.LOCAL_GAMMA, MutationType.ADD_TRANSFORM, MutationType.ADD_VARIATION, MutationType.CHANGE_WEIGHT, MutationType.WEIGHTING_FIELD, MutationType.GRADIENT_POSITION, MutationType.AFFINE, MutationType.RANDOM_GRADIENT, MutationType.RANDOM_PARAMETER };
+    MutationType allMutationTypes[] = { MutationType.LOCAL_GAMMA, MutationType.ADD_TRANSFORM, MutationType.ADD_VARIATION, MutationType.CHANGE_WEIGHT, MutationType.WEIGHTING_FIELD, MutationType.GRADIENT_POSITION, MutationType.AFFINE, MutationType.RANDOM_GRADIENT, MutationType.RANDOM_PARAMETER, MutationType.SIMILAR_GRADIENT };
     int[] allCounts = { 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9 };
     int count = allCounts[(int) (Math.random() * allCounts.length)];
     List<MutationType> res = new ArrayList<MutationType>();

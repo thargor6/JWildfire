@@ -107,6 +107,12 @@ public enum MutationType {
       return RandomParamMutation.class;
     }
   },
+  SIMILAR_GRADIENT {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return SimilarGradientMutation.class;
+    }
+  },
   WEIGHTING_FIELD {
     @Override
     protected Class<? extends Mutation> getMutationClass() {

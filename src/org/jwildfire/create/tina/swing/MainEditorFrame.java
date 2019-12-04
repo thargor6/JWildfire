@@ -490,6 +490,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField nonlinearParams12REd = null;
   private JButton nonlinearParams12LeftButton = null;
   private JButton tinaGrabPaletteFromFlameButton = null;
+  private JButton tinaCreateSimilarPaletteButton = null;
   private JButton loadFromClipboardFlameButton = null;
   private JButton saveFlameToClipboardButton = null;
   private JToggleButton mouseTransformSlowButton = null;
@@ -5423,10 +5424,11 @@ public class MainEditorFrame extends JFrame {
       tinaPaletteCreatePanel = new JPanel();
       tinaPaletteCreatePanel.setLayout(null);
       tinaPaletteCreatePanel.add(getTinaRandomPaletteButton());
+      tinaPaletteCreatePanel.add(getTinaCreateSimilarPaletteButton());
       tinaPaletteCreatePanel.add(getTinaGrabPaletteFromFlameButton());
 
       JButton tinaGrabPaletteFromImageButton = new JButton();
-      tinaGrabPaletteFromImageButton.setBounds(5, 89, 148, 24);
+      tinaGrabPaletteFromImageButton.setBounds(5, 124, 148, 24);
       tinaGrabPaletteFromImageButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.grabPaletteFromImageButton_actionPerformed(e);
@@ -11333,7 +11335,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getTinaGrabPaletteFromFlameButton() {
     if (tinaGrabPaletteFromFlameButton == null) {
       tinaGrabPaletteFromFlameButton = new JButton();
-      tinaGrabPaletteFromFlameButton.setBounds(5, 54, 148, 24);
+      tinaGrabPaletteFromFlameButton.setBounds(5, 89, 148, 24);
       tinaGrabPaletteFromFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaGrabPaletteFromFlameButton.setText("Extract from flame");
       tinaGrabPaletteFromFlameButton.setPreferredSize(new Dimension(190, 24));
@@ -11344,6 +11346,23 @@ public class MainEditorFrame extends JFrame {
       });
     }
     return tinaGrabPaletteFromFlameButton;
+  }
+
+  private JButton getTinaCreateSimilarPaletteButton() {
+    if (tinaCreateSimilarPaletteButton == null) {
+      tinaCreateSimilarPaletteButton = new JButton();
+      tinaCreateSimilarPaletteButton.setBounds(5, 54, 148, 24);
+      tinaCreateSimilarPaletteButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      tinaCreateSimilarPaletteButton.setText("Create similar gradient");
+      tinaCreateSimilarPaletteButton.setToolTipText("Tries to create a similar gradient, taking hues and color-distribution of the current gradient into account");
+      tinaCreateSimilarPaletteButton.setPreferredSize(new Dimension(190, 24));
+      tinaCreateSimilarPaletteButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.tinaCreateSimilarPaletteButton_actionPerformed(e);
+        }
+      });
+    }
+    return tinaCreateSimilarPaletteButton;
   }
 
   /**

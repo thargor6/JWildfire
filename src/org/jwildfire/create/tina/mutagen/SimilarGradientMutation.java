@@ -17,7 +17,21 @@
 package org.jwildfire.create.tina.mutagen;
 
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.palette.RGBColor;
+import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.palette.SimilarGradientCreator;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 
-public interface Mutation {
-  public void execute(Layer pLayer);
+import java.util.List;
+
+public class SimilarGradientMutation implements Mutation {
+
+  @Override
+  public void execute(Layer pLayer) {
+    List<RGBColor> keyFrames = new SimilarGradientCreator().createKeyFrames(pLayer.getPalette().getTransformedColors());
+    RGBPalette palette = RandomGradientGenerator.generatePalette(keyFrames, true, false);
+    pLayer.setPalette(palette);
+  }
+
 }
