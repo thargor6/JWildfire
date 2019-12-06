@@ -1693,7 +1693,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaCameraCamPosZLbl = new JLabel();
       tinaCameraCamPosZLbl.setText("CamPosZ");
-      tinaCameraCamPosZLbl.setToolTipText("Camera Z position; changes image size; must be larger than -1");
+      tinaCameraCamPosZLbl.setToolTipText("Camera Z position; changes image size");
       tinaCameraCamPosZLbl.setSize(new Dimension(68, 22));
       tinaCameraCamPosZLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCamPosZLbl.setName("tinaCameraCamPosZLbl");
@@ -6788,7 +6788,8 @@ public class MainEditorFrame extends JFrame {
           easyMovieMakerFrame.getSwfAnimatorFrameToEditorBtn(),
           easyMovieMakerFrame.getSwfAnimatorPlayButton(), easyMovieMakerFrame.getSwfAnimatorMotionBlurLengthREd(),
           easyMovieMakerFrame.getSwfAnimatorMotionBlurTimeStepREd(), easyMovieMakerFrame.getRandomMoviePanel(),
-          easyMovieMakerFrame.getSwfAnimatorQualityProfileCmb(), easyMovieMakerFrame.getSwfAnimatorOutputTypeCmb()));
+          easyMovieMakerFrame.getSwfAnimatorQualityProfileCmb(), easyMovieMakerFrame.getSwfAnimatorOutputTypeCmb(), 
+          easyMovieMakerFrame.getSwfAnimatorCompatCBx()));
       tinaController.getSwfAnimatorCtrl().enableControls();
       tinaController.getSwfAnimatorCtrl().refreshControls();
       getToggleTriangleWithColorsButton().setSelected(pPrefs.isTinaEditorControlsWithColor());

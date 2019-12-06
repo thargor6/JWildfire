@@ -1206,7 +1206,7 @@ public class EasyMovieMakerFrame extends JFrame {
       swfAnimatorCompatCBx = new JCheckBox();
       swfAnimatorCompatCBx.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getSwfAnimatorCtrl().compatCBx_changed(swfAnimatorCompatCBx);
+          tinaController.getSwfAnimatorCtrl().compatCBx_changed();
         }
       });
       swfAnimatorCompatCBx.setToolTipText("Make fading compatible with previous versions (fade to black instead of fade to invisible)");

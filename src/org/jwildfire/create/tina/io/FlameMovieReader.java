@@ -31,6 +31,7 @@ import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_QUALITY;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_SCRIPT_GLOBAL;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_SCRIPT_XFORM;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_SEQUENCE_OUTPUT_TYPE;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_COMPATIBILITY;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.TAG_JWF_MOVIE;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.TAG_JWF_MOVIE_PART;
 
@@ -193,6 +194,9 @@ public class FlameMovieReader {
     }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pMovie.setQuality(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_COMPATIBILITY)) != null) {
+      pMovie.setCompat("1".equals(hs));
     }
     if ((hs = atts.get(ATTR_SEQUENCE_OUTPUT_TYPE)) != null) {
       try {
