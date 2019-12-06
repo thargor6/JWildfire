@@ -129,6 +129,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JButton swfAnimatorPlayButton;
   private final JWFNumberField swfAnimatorMotionBlurLengthREd;
   private final JWFNumberField swfAnimatorMotionBlurTimeStepREd;
+  private final JCheckBox swfAnimatorCompatCBx;
   private FlamePanel flamePanel;
   private final MotionControlsDelegate motionControlsDelegate;
   private final List<JPanel> flamePartPanelList = new ArrayList<JPanel>();
@@ -175,7 +176,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton,
       JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton, JWFNumberField pSwfAnimatorMotionBlurLengthREd,
       JWFNumberField pSwfAnimatorMotionBlurTimeStepREd, JPanel pRandomMoviePanel, JComboBox pSWFAnimatorQualityProfileCmb,
-      JComboBox pSWFAnimatorOutputTypeCmb) {
+      JComboBox pSWFAnimatorOutputTypeCmb, JCheckBox pSWFAnimatorCompatCBx) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
@@ -228,6 +229,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorMotionBlurTimeStepREd = pSwfAnimatorMotionBlurTimeStepREd;
       swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
       swfAnimatorOutputTypeCmb = pSWFAnimatorOutputTypeCmb;
+      swfAnimatorCompatCBx = pSWFAnimatorCompatCBx;
 
       int frameCount = prefs.getTinaRenderMovieFrames();
       swfAnimatorFrameSlider.setValue(1);
@@ -287,6 +289,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorMovieToDiskButton.setEnabled(flameCount > 0);
     swfAnimatorFrameSlider.setEnabled(flameCount > 0);
     swfAnimatorFrameToEditorBtn.setEnabled(flameCount > 0);
+    swfAnimatorCompatCBx.setEnabled(!rendering);
   }
 
   public void loadFlameFromMainButton_clicked() {
@@ -1086,8 +1089,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     updateThumbnails();
   }
   
-  public void compatCBx_changed(JCheckBox pCompatCbx) {
-    currMovie.setCompat(pCompatCbx.isSelected());
+  public void compatCBx_changed() {
+    currMovie.setCompat(swfAnimatorCompatCBx.isSelected());
     previewFlameImage();
     enableControls();
     clearCurrentPreview();
@@ -1166,6 +1169,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           swfAnimatorQualityProfileCmb.setSelectedItem(qualityProfile);
         }
       }
+      
       swfAnimatorOutputTypeCmb.setSelectedItem(currMovie.getSequenceOutputType());
 
       for (JPanel panel : flamePartPanelList) {
@@ -1186,7 +1190,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFrameREd.setMaxValue(frameCount);
       swfAnimatorMotionBlurLengthREd.setValue(currMovie.getMotionBlurLength());
       swfAnimatorMotionBlurTimeStepREd.setValue(currMovie.getMotionBlurTimeStep());
-
+      swfAnimatorCompatCBx.setSelected(currMovie.getCompat());
       for (FlameMoviePart part : currMovie.getParts()) {
         addFlameToFlamePanel(part);
       }

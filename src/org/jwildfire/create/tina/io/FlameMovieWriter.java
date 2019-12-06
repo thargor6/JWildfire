@@ -54,6 +54,7 @@ public class FlameMovieWriter {
   public static final String AMPLITUDE_CURVE_POSTFIX = "_amplitudeCurve";
   public static final String ATTR_MOTIONBLUR_LENGTH = "motion_blur_length";
   public static final String ATTR_MOTIONBLUR_TIMESTEP = "motion_blur_timestep";
+  public static final String ATTR_COMPATIBILITY = "compatibility";
 
   public String getMovieXML(FlameMovie pMovie) throws Exception {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
@@ -81,6 +82,7 @@ public class FlameMovieWriter {
     attrList.add(xb.createAttr(ATTR_FPS, pMovie.getFramesPerSecond()));
     attrList.add(xb.createAttr(ATTR_QUALITY, pMovie.getQuality()));
     attrList.add(xb.createAttr(ATTR_SEQUENCE_OUTPUT_TYPE, pMovie.getSequenceOutputType().toString()));
+    attrList.add(xb.createAttr(ATTR_COMPATIBILITY, pMovie.getCompat()));
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_LENGTH, pMovie.getMotionBlurLength()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_TIMESTEP, pMovie.getMotionBlurTimeStep()));
