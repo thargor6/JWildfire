@@ -710,7 +710,7 @@ public class MainEditorFrame extends JFrame {
       dofDOFSlider.setMinimum(0);
       dofDOFSlider.setMaximum(100);
       dofDOFSlider.setLocation(new Point(202, 98));
-      dofDOFSlider.setBounds(204, 28, 220, 24);
+      dofDOFSlider.setBounds(173, 28, 205, 24);
       tinaDOFPanel.add(dofDOFSlider);
 
       dofDOFREd = new JWFNumberField();
@@ -741,7 +741,7 @@ public class MainEditorFrame extends JFrame {
       dofDOFREd.setLocation(new Point(100, 98));
       dofDOFREd.setHasMinValue(true);
       dofDOFREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      dofDOFREd.setBounds(102, 28, 100, 24);
+      dofDOFREd.setBounds(71, 28, 100, 24);
       tinaDOFPanel.add(dofDOFREd);
 
       JLabel lblDepthOfField = new JLabel();
@@ -752,7 +752,7 @@ public class MainEditorFrame extends JFrame {
       lblDepthOfField.setPreferredSize(new Dimension(94, 22));
       lblDepthOfField.setLocation(new Point(4, 98));
       lblDepthOfField.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblDepthOfField.setBounds(6, 28, 94, 22);
+      lblDepthOfField.setBounds(4, 28, 68, 22);
       tinaDOFPanel.add(lblDepthOfField);
 
       dofNewDOFCBx = new JCheckBox("New DOF");
@@ -764,7 +764,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      dofNewDOFCBx.setBounds(102, 6, 104, 18);
+      dofNewDOFCBx.setBounds(71, 6, 104, 18);
       dofNewDOFCBx.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaDOFPanel.add(dofNewDOFCBx);
 
@@ -776,7 +776,7 @@ public class MainEditorFrame extends JFrame {
       lblArea.setPreferredSize(new Dimension(94, 22));
       lblArea.setLocation(new Point(4, 98));
       lblArea.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblArea.setBounds(6, 52, 94, 22);
+      lblArea.setBounds(4, 52, 68, 22);
       tinaDOFPanel.add(lblArea);
 
       dofDOFAreaSlider = new JSlider();
@@ -800,7 +800,7 @@ public class MainEditorFrame extends JFrame {
       dofDOFAreaSlider.setMinimum(0);
       dofDOFAreaSlider.setMaximum(200);
       dofDOFAreaSlider.setLocation(new Point(202, 98));
-      dofDOFAreaSlider.setBounds(204, 52, 220, 24);
+      dofDOFAreaSlider.setBounds(173, 52, 205, 24);
       tinaDOFPanel.add(dofDOFAreaSlider);
 
       dofDOFAreaREd = new JWFNumberField();
@@ -831,7 +831,7 @@ public class MainEditorFrame extends JFrame {
       dofDOFAreaREd.setLocation(new Point(100, 98));
       dofDOFAreaREd.setHasMinValue(true);
       dofDOFAreaREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      dofDOFAreaREd.setBounds(102, 52, 100, 24);
+      dofDOFAreaREd.setBounds(71, 52, 100, 24);
       tinaDOFPanel.add(dofDOFAreaREd);
 
       JLabel lblExponent = new JLabel();
@@ -842,7 +842,7 @@ public class MainEditorFrame extends JFrame {
       lblExponent.setPreferredSize(new Dimension(94, 22));
       lblExponent.setLocation(new Point(4, 98));
       lblExponent.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblExponent.setBounds(6, 76, 94, 22);
+      lblExponent.setBounds(4, 76, 68, 22);
       tinaDOFPanel.add(lblExponent);
 
       dofDOFExponentSlider = new JSlider();
@@ -866,7 +866,7 @@ public class MainEditorFrame extends JFrame {
       dofDOFExponentSlider.setMinimum(10);
       dofDOFExponentSlider.setMaximum(400);
       dofDOFExponentSlider.setLocation(new Point(202, 98));
-      dofDOFExponentSlider.setBounds(204, 76, 220, 24);
+      dofDOFExponentSlider.setBounds(173, 76, 205, 24);
       tinaDOFPanel.add(dofDOFExponentSlider);
 
       dofDOFExponentREd = new JWFNumberField();
@@ -897,18 +897,18 @@ public class MainEditorFrame extends JFrame {
       dofDOFExponentREd.setLocation(new Point(100, 98));
       dofDOFExponentREd.setHasMinValue(true);
       dofDOFExponentREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      dofDOFExponentREd.setBounds(102, 76, 100, 24);
+      dofDOFExponentREd.setBounds(71, 76, 100, 24);
       tinaDOFPanel.add(dofDOFExponentREd);
 
       JLabel lblCameraDistance = new JLabel();
       lblCameraDistance.setName("lblCameraDistance");
-      lblCameraDistance.setText("Camera distance");
+      lblCameraDistance.setText("Camera dist");
       lblCameraDistance.setToolTipText("Distance where DOF effect begins; increase to start DOF effect closer to the camera");
       lblCameraDistance.setSize(new Dimension(94, 22));
       lblCameraDistance.setPreferredSize(new Dimension(94, 22));
       lblCameraDistance.setLocation(new Point(4, 98));
       lblCameraDistance.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblCameraDistance.setBounds(447, 4, 94, 22);
+      lblCameraDistance.setBounds(390, 4, 68, 22);
       tinaDOFPanel.add(lblCameraDistance);
 
       dofCamZSlider = new JSlider();
@@ -932,7 +932,7 @@ public class MainEditorFrame extends JFrame {
       dofCamZSlider.setMinimum(-100);
       dofCamZSlider.setMaximum(100);
       dofCamZSlider.setLocation(new Point(202, 98));
-      dofCamZSlider.setBounds(645, 4, 220, 24);
+      dofCamZSlider.setBounds(558, 4, 205, 24);
       tinaDOFPanel.add(dofCamZSlider);
 
       dofCamZREd = new JWFNumberField();
@@ -962,7 +962,7 @@ public class MainEditorFrame extends JFrame {
       dofCamZREd.setPreferredSize(new Dimension(100, 24));
       dofCamZREd.setLocation(new Point(100, 98));
       dofCamZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      dofCamZREd.setBounds(543, 4, 100, 24);
+      dofCamZREd.setBounds(456, 4, 100, 24);
       tinaDOFPanel.add(dofCamZREd);
 
       JLabel lblFocusx = new JLabel();
@@ -973,7 +973,7 @@ public class MainEditorFrame extends JFrame {
       lblFocusx.setPreferredSize(new Dimension(94, 22));
       lblFocusx.setLocation(new Point(4, 98));
       lblFocusx.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblFocusx.setBounds(447, 28, 94, 22);
+      lblFocusx.setBounds(390, 28, 68, 22);
       tinaDOFPanel.add(lblFocusx);
 
       dofFocusXREd = new JWFNumberField();
@@ -1003,7 +1003,7 @@ public class MainEditorFrame extends JFrame {
       dofFocusXREd.setPreferredSize(new Dimension(100, 24));
       dofFocusXREd.setLocation(new Point(100, 98));
       dofFocusXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      dofFocusXREd.setBounds(543, 28, 100, 24);
+      dofFocusXREd.setBounds(456, 28, 100, 24);
       tinaDOFPanel.add(dofFocusXREd);
 
       dofFocusXSlider = new JSlider();
@@ -1027,7 +1027,7 @@ public class MainEditorFrame extends JFrame {
       dofFocusXSlider.setMinimum(-100);
       dofFocusXSlider.setMaximum(100);
       dofFocusXSlider.setLocation(new Point(202, 98));
-      dofFocusXSlider.setBounds(645, 28, 220, 24);
+      dofFocusXSlider.setBounds(558, 28, 205, 24);
       tinaDOFPanel.add(dofFocusXSlider);
 
       JLabel lblFocusy = new JLabel();
@@ -1038,7 +1038,7 @@ public class MainEditorFrame extends JFrame {
       lblFocusy.setPreferredSize(new Dimension(94, 22));
       lblFocusy.setLocation(new Point(4, 98));
       lblFocusy.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblFocusy.setBounds(447, 52, 94, 22);
+      lblFocusy.setBounds(390, 52, 68, 22);
       tinaDOFPanel.add(lblFocusy);
 
       dofFocusYREd = new JWFNumberField();
@@ -1068,7 +1068,7 @@ public class MainEditorFrame extends JFrame {
       dofFocusYREd.setPreferredSize(new Dimension(100, 24));
       dofFocusYREd.setLocation(new Point(100, 98));
       dofFocusYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      dofFocusYREd.setBounds(543, 52, 100, 24);
+      dofFocusYREd.setBounds(456, 52, 100, 24);
       tinaDOFPanel.add(dofFocusYREd);
 
       dofFocusYSlider = new JSlider();
@@ -1092,7 +1092,7 @@ public class MainEditorFrame extends JFrame {
       dofFocusYSlider.setMinimum(-100);
       dofFocusYSlider.setMaximum(100);
       dofFocusYSlider.setLocation(new Point(202, 98));
-      dofFocusYSlider.setBounds(645, 52, 220, 24);
+      dofFocusYSlider.setBounds(558, 52, 205, 24);
       tinaDOFPanel.add(dofFocusYSlider);
 
       JLabel lblFocusz = new JLabel();
@@ -1103,7 +1103,7 @@ public class MainEditorFrame extends JFrame {
       lblFocusz.setPreferredSize(new Dimension(94, 22));
       lblFocusz.setLocation(new Point(4, 98));
       lblFocusz.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblFocusz.setBounds(447, 76, 94, 22);
+      lblFocusz.setBounds(390, 76, 68, 22);
       tinaDOFPanel.add(lblFocusz);
 
       dofFocusZSlider = new JSlider();
@@ -1127,7 +1127,7 @@ public class MainEditorFrame extends JFrame {
       dofFocusZSlider.setMinimum(-100);
       dofFocusZSlider.setMaximum(100);
       dofFocusZSlider.setLocation(new Point(202, 98));
-      dofFocusZSlider.setBounds(645, 76, 220, 24);
+      dofFocusZSlider.setBounds(558, 76, 205, 24);
       tinaDOFPanel.add(dofFocusZSlider);
 
       dofFocusZREd = new JWFNumberField();
@@ -1157,7 +1157,7 @@ public class MainEditorFrame extends JFrame {
       dofFocusZREd.setPreferredSize(new Dimension(100, 24));
       dofFocusZREd.setLocation(new Point(100, 98));
       dofFocusZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      dofFocusZREd.setBounds(543, 76, 100, 24);
+      dofFocusZREd.setBounds(456, 76, 100, 24);
       tinaDOFPanel.add(dofFocusZREd);
 
       JLabel lblDimishz = new JLabel();
@@ -1168,7 +1168,7 @@ public class MainEditorFrame extends JFrame {
       lblDimishz.setPreferredSize(new Dimension(94, 22));
       lblDimishz.setLocation(new Point(4, 98));
       lblDimishz.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblDimishz.setBounds(889, 4, 94, 22);
+      lblDimishz.setBounds(774, 4, 68, 22);
       tinaDOFPanel.add(lblDimishz);
 
       camDimishZREd = new JWFNumberField();
@@ -1200,7 +1200,7 @@ public class MainEditorFrame extends JFrame {
       camDimishZREd.setLocation(new Point(100, 98));
       camDimishZREd.setHasMinValue(true);
       camDimishZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      camDimishZREd.setBounds(985, 4, 100, 24);
+      camDimishZREd.setBounds(840, 4, 100, 24);
       tinaDOFPanel.add(camDimishZREd);
 
       camDimishZSlider = new JSlider();
@@ -1221,28 +1221,28 @@ public class MainEditorFrame extends JFrame {
       camDimishZSlider.setValue(0);
       camDimishZSlider.setSize(new Dimension(220, 19));
       camDimishZSlider.setPreferredSize(new Dimension(220, 19));
-      camDimishZSlider.setMinimum(-50);
+      camDimishZSlider.setMinimum(0);
       camDimishZSlider.setMaximum(50);
       camDimishZSlider.setLocation(new Point(202, 98));
-      camDimishZSlider.setBounds(1087, 4, 220, 24);
+      camDimishZSlider.setBounds(942, 4, 205, 24);
       tinaDOFPanel.add(camDimishZSlider);
 
       JLabel lblDimishZColor = new JLabel();
       lblDimishZColor.setName("lblDimishzColor");
-      lblDimishZColor.setText("DiminishZ Color");
+      lblDimishZColor.setText("DimZ color");
       lblDimishZColor.setToolTipText("Color added when diminishing Z");
       lblDimishZColor.setSize(new Dimension(94, 22));
       lblDimishZColor.setPreferredSize(new Dimension(94, 22));
       lblDimishZColor.setLocation(new Point(894, 28));
       lblDimishZColor.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblDimishZColor.setBounds(889, 28, 94, 22);
+      lblDimishZColor.setBounds(774, 28, 68, 22);
       tinaDOFPanel.add(lblDimishZColor);
       
       dimishZColorButton = new JButton();
       dimishZColorButton.setPreferredSize(new Dimension(100, 24));
       dimishZColorButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dimishZColorButton.setBackground(Color.BLACK);
-      dimishZColorButton.setBounds(985, 28, 100, 24);
+      dimishZColorButton.setBounds(840, 28, 100, 24);
       dimishZColorButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().dimishZColorBtn_clicked();
@@ -1252,13 +1252,13 @@ public class MainEditorFrame extends JFrame {
       
       JLabel lblDimZDistance = new JLabel();
       lblDimZDistance.setName("lblDimZDistance");
-      lblDimZDistance.setText("DiminishZ Distance");
+      lblDimZDistance.setText("DimZ dist");
       lblDimZDistance.setToolTipText("Distance where Z diminishing starts; increase to start closer to the camera");
       lblDimZDistance.setSize(new Dimension(94, 22));
       lblDimZDistance.setPreferredSize(new Dimension(94, 22));
       lblDimZDistance.setLocation(new Point(4, 98));
       lblDimZDistance.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblDimZDistance.setBounds(889, 52, 94, 22);
+      lblDimZDistance.setBounds(774, 52, 68, 22);
       tinaDOFPanel.add(lblDimZDistance);
 
       dimZDistanceREd = new JWFNumberField();
@@ -1288,7 +1288,7 @@ public class MainEditorFrame extends JFrame {
       dimZDistanceREd.setPreferredSize(new Dimension(100, 24));
       dimZDistanceREd.setLocation(new Point(100, 98));
       dimZDistanceREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      dimZDistanceREd.setBounds(985, 52, 100, 24);
+      dimZDistanceREd.setBounds(840, 52, 100, 24);
       tinaDOFPanel.add(dimZDistanceREd);
 
       dimZDistanceSlider = new JSlider();
@@ -1309,9 +1309,10 @@ public class MainEditorFrame extends JFrame {
       dimZDistanceSlider.setValue(0);
       dimZDistanceSlider.setSize(new Dimension(220, 19));
       dimZDistanceSlider.setPreferredSize(new Dimension(220, 19));
-      dimZDistanceSlider.setMaximum(75);
+      dimZDistanceSlider.setMinimum(-100);
+      dimZDistanceSlider.setMaximum(100);
       dimZDistanceSlider.setLocation(new Point(202, 98));
-      dimZDistanceSlider.setBounds(1087, 52, 220, 24);
+      dimZDistanceSlider.setBounds(942, 52, 205, 24);
       tinaDOFPanel.add(dimZDistanceSlider);
 
       tinaDOFPanel.add(getResetDOFSettingsButton());
@@ -17798,7 +17799,7 @@ public class MainEditorFrame extends JFrame {
       resetDOFSettingsButton.setMaximumSize(new Dimension(32000, 24));
       resetDOFSettingsButton.setIconTextGap(2);
       resetDOFSettingsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      resetDOFSettingsButton.setBounds(102, 99, 100, 24);
+      resetDOFSettingsButton.setBounds(71, 99, 100, 24);
       resetDOFSettingsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
     return resetDOFSettingsButton;
