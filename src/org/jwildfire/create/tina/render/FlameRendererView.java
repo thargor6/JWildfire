@@ -116,15 +116,15 @@ public class FlameRendererView {
   }
 
   private void createProjectionMatrix(double m[][], double yaw, double pitch, double bank, double roll) {
-    m[0][0] = cos(yaw) * cos(roll) * cos(bank) + sin(yaw) * (cos(roll) * sin(pitch) * sin(bank) - sin(roll) * cos(pitch));
-    m[1][0] = -sin(yaw) * cos(roll) * cos(bank) + cos(yaw) * (sin(pitch) * cos(roll) * sin(bank) - cos(pitch) * sin(roll));
-    m[2][0] = sin(roll) * sin(pitch) + cos(roll) * cos(pitch) * sin(bank);
-    m[0][1] = cos(yaw) * sin(roll) * cos(bank) + sin(yaw) * (sin(roll) * sin(pitch) * sin(bank) + cos(roll) * cos(pitch));
-    m[1][1] = -sin(yaw) * sin(roll) * cos(bank) + cos(yaw) * (sin(pitch) * sin(roll) * sin(bank) + cos(pitch) * cos(roll));
-    m[2][1] = -cos(roll) * sin(pitch) + sin(roll) * cos(pitch) * sin(bank);
-    m[0][2] = sin(yaw) * sin(pitch) * cos(bank) - cos(yaw) * sin(bank);
-    m[1][2] = cos(yaw) * sin(pitch) * cos(bank) + sin(yaw) * sin(bank);
-    m[2][2] = cos(pitch) * cos(bank);
+    m[0][0] = -cos(pitch)*sin(roll)*sin(yaw) - (sin(pitch)*sin(bank)*sin(roll) - cos(bank)*cos(roll))*cos(yaw);
+    m[1][0] = -cos(pitch)*cos(yaw)*sin(roll) + (sin(pitch)*sin(bank)*sin(roll) - cos(bank)*cos(roll))*sin(yaw);
+    m[2][0] = cos(bank)*sin(pitch)*sin(roll) + cos(roll)*sin(bank);
+    m[0][1] = cos(pitch)*cos(roll)*sin(yaw) + (cos(roll)*sin(pitch)*sin(bank) + cos(bank)*sin(roll))*cos(yaw);
+    m[1][1] = cos(pitch)*cos(roll)*cos(yaw) - (cos(roll)*sin(pitch)*sin(bank) + cos(bank)*sin(roll))*sin(yaw);
+    m[2][1] = -cos(bank)*cos(roll)*sin(pitch) + sin(bank)*sin(roll);
+    m[0][2] = -cos(pitch)*cos(yaw)*sin(bank) + sin(pitch)*sin(yaw);
+    m[1][2] = cos(pitch)*sin(bank)*sin(yaw) + cos(yaw)*sin(pitch);
+    m[2][2] = cos(pitch)*cos(bank);
   }
 
   public void initView() {
