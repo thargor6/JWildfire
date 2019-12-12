@@ -378,6 +378,16 @@ public class TinaControllerData {
   public JPanel channelMixerBRRootPanel;
   public JPanel channelMixerBGRootPanel;
   public JPanel channelMixerBBRootPanel;
+
+  public JComboBox gradientCurveEditorModeCmb;
+  public JButton gradientCurveEditorSaveBtn;
+  public JPanel gradientCurveEditorHueRootPanel;
+  public JPanel gradientCurveEditorSaturationRootPanel;
+  public JPanel gradientCurveEditorLuminosityRootPanel;
+  public JPanel gradientCurveEditorRedRootPanel;
+  public JPanel gradientCurveEditorGreenRootPanel;
+  public JPanel gradientCurveEditorBlueRootPanel;
+
   public JComboBox dofDOFShapeCmb;
   public JWFNumberField dofDOFScaleREd;
   public JSlider dofDOFScaleSlider;

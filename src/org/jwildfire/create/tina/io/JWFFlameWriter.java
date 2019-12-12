@@ -65,11 +65,14 @@ public class JWFFlameWriter extends AbstractFlameWriter {
         }
       }
       layerAttrList.add(xb.createAttr(ATTR_SMOOTH_GRADIENT, layer.isSmoothGradient() ? "1" : "0"));
+      layerAttrList.add(xb.createAttr(AbstractFlameReader.ATTR_GRADIENT_EDITOR_CURVE_MODE, layer.getGradientCurveEditorMode().toString()));
       List<String> blackList = Collections.emptyList();
       writeMotionCurves(layer, xb, layerAttrList, null, blackList);
 
       RGBPalette palette = layer.getPalette();
       writeMotionCurves(palette, xb, layerAttrList, "palette_", Collections.<String> emptyList());
+
+
       xb.beginElement("layer", layerAttrList);
 
       // XForm

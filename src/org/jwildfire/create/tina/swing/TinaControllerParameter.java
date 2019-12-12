@@ -557,6 +557,16 @@ public class TinaControllerParameter {
   public JPanel channelMixerBRRootPanel;
   public JPanel channelMixerBGRootPanel;
   public JPanel channelMixerBBRootPanel;
+
+  public JComboBox gradientCurveEditorModeCmb;
+  public JButton gradientCurveEditorSaveBtn;
+  public JPanel gradientCurveEditorHueRootPanel;
+  public JPanel gradientCurveEditorSaturationRootPanel;
+  public JPanel gradientCurveEditorLuminosityRootPanel;
+  public JPanel gradientCurveEditorRedRootPanel;
+  public JPanel gradientCurveEditorGreenRootPanel;
+  public JPanel gradientCurveEditorBlueRootPanel;
+
   public JComboBox meshGenPreFilter1Cmb;
   public JComboBox meshGenPreFilter2Cmb;
 
@@ -1671,5 +1681,18 @@ public class TinaControllerParameter {
     this.pHelpPane = pHelpPane;
     this.apophysisHintsPane = pApophysisHintsPane;
     this.getColorTypesPane = pgetColorTypesPane;
+  }
+
+  public void setGradientCurveEditorParams(JComboBox gradientCurveEditorModeCmb, JButton gradientCurveEditorSaveBtn, JPanel gradientCurveEditorHueRootPanel,
+          JPanel gradientCurveEditorSaturationRootPanel, JPanel gradientCurveEditorLuminosityRootPanel, JPanel gradientCurveEditorRedRootPanel,
+          JPanel gradientCurveEditorGreenRootPanel, JPanel gradientCurveEditorBlueRootPanel) {
+    this.gradientCurveEditorModeCmb = gradientCurveEditorModeCmb;
+    this.gradientCurveEditorSaveBtn = gradientCurveEditorSaveBtn;
+    this.gradientCurveEditorHueRootPanel = gradientCurveEditorHueRootPanel;
+    this.gradientCurveEditorSaturationRootPanel = gradientCurveEditorSaturationRootPanel;
+    this.gradientCurveEditorLuminosityRootPanel = gradientCurveEditorLuminosityRootPanel;
+    this.gradientCurveEditorRedRootPanel = gradientCurveEditorRedRootPanel;
+    this.gradientCurveEditorGreenRootPanel = gradientCurveEditorGreenRootPanel;
+    this.gradientCurveEditorBlueRootPanel = gradientCurveEditorBlueRootPanel;
   }
 }

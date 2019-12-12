@@ -35,11 +35,11 @@ import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
+import org.jwildfire.create.tina.render.GradientCurveEditorMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
-import org.jwildfire.create.tina.base.ZBufferFilename;
 
 public class Flame implements Assignable<Flame>, Serializable {
   private static final long serialVersionUID = 1L;
@@ -251,7 +251,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final MotionCurve mixerBRCurve = new MotionCurve();
   private final MotionCurve mixerBGCurve = new MotionCurve();
   private final MotionCurve mixerBBCurve = new MotionCurve();
-
   private SolidRenderSettings solidRenderSettings = new SolidRenderSettings();
 
   private EditPlane editPlane;
@@ -860,6 +859,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     mixerBRCurve.assign(pFlame.mixerBRCurve);
     mixerBGCurve.assign(pFlame.mixerBGCurve);
     mixerBBCurve.assign(pFlame.mixerBBCurve);
+
     editPlane = pFlame.editPlane;
     layers.clear();
     if (pLayer == null) {

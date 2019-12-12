@@ -18,6 +18,12 @@ package org.jwildfire.create.tina.base;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
+
+import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.palette.RGBColor;
+import org.jwildfire.create.tina.render.GammaCorrectionFilter;
+import org.jwildfire.create.tina.render.GradientCurveEditorMode;
+import org.jwildfire.envelope.Envelope;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.variation.RessourceManager;
@@ -66,6 +72,14 @@ public class Layer implements Assignable<Layer>, Serializable {
   private RenderColor[] colorMap = null;
   private SimpleImage gradientMap = null;
 
+  private GradientCurveEditorMode gradientCurveEditorMode = GradientCurveEditorMode.HSL;
+  private final MotionCurve gradientEditorHueCurve = createGradientCurve();
+  private final MotionCurve gradientEditorSaturationCurve = createGradientCurve();
+  private final MotionCurve gradientEditorLuminosityCurve = createGradientCurve();
+  private final MotionCurve gradientEditorRedCurve = createGradientCurve();
+  private final MotionCurve gradientEditorGreenCurve = createGradientCurve();
+  private final MotionCurve gradientEditorBlueCurve = createGradientCurve();
+
   public List<XForm> getXForms() {
     return xForms;
   }
@@ -78,13 +92,114 @@ public class Layer implements Assignable<Layer>, Serializable {
     return palette;
   }
 
+  private final static int DFLT_CURVE_POINTS = 10;
+
+  private MotionCurve createGradientCurve() {
+    MotionCurve curve = new MotionCurve();
+    double dx = (RGBPalette.PALETTE_SIZE - 1) / (double)(DFLT_CURVE_POINTS - 1);
+    int x[] = new int[DFLT_CURVE_POINTS];
+    double y[] = new double[DFLT_CURVE_POINTS];
+    x[0] = 0;
+    for(int i=1;i<DFLT_CURVE_POINTS-1;i++) {
+      x[i] = Tools.FTOI(i * dx);
+    }
+    x[DFLT_CURVE_POINTS-1] = (RGBPalette.PALETTE_SIZE - 1);
+
+    curve.setPoints(x, y);
+    {
+      int border = 5;
+      curve.setViewXMin(-border);
+      curve.setViewXMax((RGBPalette.PALETTE_SIZE - 1) + border);
+      curve.setViewYMin(-border);
+      curve.setViewYMax((RGBPalette.PALETTE_SIZE - 1) + border);
+    }
+    return curve;
+  }
   public void setPalette(RGBPalette pPalette) {
     if (pPalette == null || pPalette.getSize() != RGBPalette.PALETTE_SIZE)
       throw new IllegalArgumentException(pPalette != null ? pPalette.toString() + " " + pPalette.getSize() : "NULL");
     palette = pPalette;
     colorMap = null;
+    recalcRGBCurves(DFLT_CURVE_POINTS);
+    recalcHSLCurves(DFLT_CURVE_POINTS);
   }
-  
+
+  private void recalcHSLCurves(int maxPoints) {
+    GammaCorrectionFilter.HSLRGBConverter converter = new GammaCorrectionFilter.HSLRGBConverter();
+    {
+      RGBColor color = palette.getRawColor(0);
+      converter.fromRgb(color.getRed() / 255.0, color.getGreen()/ 255.0, color.getBlue()/ 255.0);
+      gradientEditorHueCurve.getY()[0] = converter.getHue() * 255.0;
+      gradientEditorSaturationCurve.getY()[0] = converter.getSaturation() * 255.0;
+      gradientEditorLuminosityCurve.getY()[0] = converter.getLuminosity() * 255.0;
+    }
+
+    {
+      double dx = (RGBPalette.PALETTE_SIZE - 1) / (double) (DFLT_CURVE_POINTS - 1);
+      int avgCount = (RGBPalette.PALETTE_SIZE - 1) / (DFLT_CURVE_POINTS - 1) / 2;
+      for (int i = 1; i < DFLT_CURVE_POINTS - 1; i++) {
+        double hue = 0.0, saturation = 0.0, luminosity = 0.0;
+        int count = 0;
+        for(int j = avgCount; j <= avgCount; j++) {
+          int x = Tools.FTOI( i * dx + j );
+          RGBColor color = palette.getRawColor(x);
+          converter.fromRgb(color.getRed() / 255.0, color.getGreen()/ 255.0, color.getBlue()/ 255.0);
+          hue += converter.getHue();
+          saturation += converter.getSaturation();
+          luminosity += converter.getLuminosity();
+          count++;
+        }
+        gradientEditorHueCurve.getY()[i] = (hue * 255.0) / (double)count;
+        gradientEditorSaturationCurve.getY()[i] = (saturation * 255.0) / (double)count;
+        gradientEditorLuminosityCurve.getY()[i] = (luminosity * 255.0) / (double)count;
+      }
+    }
+
+    {
+      RGBColor color = palette.getRawColor(RGBPalette.PALETTE_SIZE - 1);
+      converter.fromRgb(color.getRed()/ 255.0, color.getGreen()/ 255.0, color.getBlue()/ 255.0);
+      gradientEditorHueCurve.getY()[DFLT_CURVE_POINTS - 1] = converter.getHue() * 255.0;
+      gradientEditorSaturationCurve.getY()[DFLT_CURVE_POINTS - 1] = converter.getSaturation() * 255.0;
+      gradientEditorLuminosityCurve.getY()[DFLT_CURVE_POINTS - 1] = converter.getLuminosity() * 255.0;
+    }
+  }
+
+  private void recalcRGBCurves(int maxPoints) {
+    {
+      RGBColor color = palette.getRawColor(0);
+      gradientEditorRedCurve.getY()[0] = color.getRed();
+      gradientEditorGreenCurve.getY()[0] = color.getGreen();
+      gradientEditorBlueCurve.getY()[0] = color.getBlue();
+    }
+
+    {
+      double dx = (RGBPalette.PALETTE_SIZE - 1) / (double) (DFLT_CURVE_POINTS - 1);
+      int avgCount = (RGBPalette.PALETTE_SIZE - 1) / (DFLT_CURVE_POINTS - 1) / 2;
+      for (int i = 1; i < DFLT_CURVE_POINTS - 1; i++) {
+        int  red = 0, green = 0, blue = 0;
+        int count = 0;
+        for(int j = avgCount; j <= avgCount; j++) {
+          int x = Tools.FTOI( i * dx + j );
+          RGBColor color = palette.getRawColor(x);
+          red += color.getRed();
+          green += color.getGreen();
+          blue += color.getBlue();
+          count++;
+        }
+        gradientEditorRedCurve.getY()[i] = (double)red / (double)count;
+        gradientEditorGreenCurve.getY()[i] = (double)green / (double)count;
+        gradientEditorBlueCurve.getY()[i] = (double)blue / (double)count;
+      }
+    }
+
+    {
+      RGBColor color = palette.getRawColor(RGBPalette.PALETTE_SIZE - 1);
+      gradientEditorRedCurve.getY()[DFLT_CURVE_POINTS - 1] = color.getRed();
+      gradientEditorGreenCurve.getY()[DFLT_CURVE_POINTS - 1] = color.getGreen();
+      gradientEditorBlueCurve.getY()[DFLT_CURVE_POINTS - 1] = color.getBlue();
+    }
+  }
+
   public RenderColor[] getColorMap() {
     if (colorMap == null) {
       colorMap = palette.createRenderPalette(owner.getWhiteLevel());
@@ -200,6 +315,14 @@ public class Layer implements Assignable<Layer>, Serializable {
     gradientMapLocalColorAdd = pSrc.gradientMapLocalColorAdd;
     gradientMapLocalColorScale = pSrc.gradientMapLocalColorScale;
     smoothGradient = pSrc.smoothGradient;
+    gradientCurveEditorMode = pSrc.gradientCurveEditorMode;
+    gradientEditorHueCurve.assign(pSrc.gradientEditorHueCurve);
+    gradientEditorSaturationCurve.assign(pSrc.gradientEditorSaturationCurve);
+    gradientEditorLuminosityCurve.assign(pSrc.gradientEditorLuminosityCurve);
+    gradientEditorRedCurve.assign(pSrc.gradientEditorRedCurve);
+    gradientEditorGreenCurve.assign(pSrc.gradientEditorGreenCurve);
+    gradientEditorBlueCurve.assign(pSrc.gradientEditorBlueCurve);
+
     palette = pSrc.palette.makeCopy();
     xForms.clear();
     for (XForm xForm : pSrc.getXForms()) {
@@ -225,6 +348,10 @@ public class Layer implements Assignable<Layer>, Serializable {
         (fabs(gradientMapHorizOffset - pSrc.gradientMapHorizOffset) > EPSILON) || (fabs(gradientMapHorizScale - pSrc.gradientMapHorizScale) > EPSILON) ||
         (fabs(gradientMapVertOffset - pSrc.gradientMapVertOffset) > EPSILON) || (fabs(gradientMapVertScale - pSrc.gradientMapVertScale) > EPSILON) ||
         (fabs(gradientMapLocalColorAdd - pSrc.gradientMapLocalColorAdd) > EPSILON) || (fabs(gradientMapLocalColorScale - pSrc.gradientMapLocalColorScale) > EPSILON) ||
+        (gradientCurveEditorMode != pSrc.gradientCurveEditorMode) || !gradientEditorHueCurve.isEqual(pSrc.gradientEditorHueCurve) ||
+        !gradientEditorSaturationCurve.isEqual(pSrc.gradientEditorSaturationCurve) || !gradientEditorLuminosityCurve.isEqual(pSrc.gradientEditorLuminosityCurve) ||
+        !gradientEditorRedCurve.isEqual(pSrc.gradientEditorRedCurve) || !gradientEditorGreenCurve.isEqual(pSrc.gradientEditorGreenCurve) ||
+        !gradientEditorBlueCurve.isEqual(pSrc.gradientEditorBlueCurve) ||
         !name.equals(pSrc.name) ||
         !gradientMapFilename.equals(pSrc.gradientMapFilename) ||
         smoothGradient != pSrc.smoothGradient ||
@@ -353,7 +480,39 @@ public class Layer implements Assignable<Layer>, Serializable {
   public void setGradientMapLocalColorScale(double pGradientMapLocalColorScale) {
     gradientMapLocalColorScale = pGradientMapLocalColorScale;
   }
-  
+
+  public GradientCurveEditorMode getGradientCurveEditorMode() {
+    return gradientCurveEditorMode;
+  }
+
+  public void setGradientCurveEditorMode(GradientCurveEditorMode gradientCurveEditorMode) {
+    this.gradientCurveEditorMode = gradientCurveEditorMode;
+  }
+
+  public MotionCurve getGradientEditorHueCurve() {
+    return gradientEditorHueCurve;
+  }
+
+  public MotionCurve getGradientEditorSaturationCurve() {
+    return gradientEditorSaturationCurve;
+  }
+
+  public MotionCurve getGradientEditorLuminosityCurve() {
+    return gradientEditorLuminosityCurve;
+  }
+
+  public MotionCurve getGradientEditorRedCurve() {
+    return gradientEditorRedCurve;
+  }
+
+  public MotionCurve getGradientEditorGreenCurve() {
+    return gradientEditorGreenCurve;
+  }
+
+  public MotionCurve getGradientEditorBlueCurve() {
+    return gradientEditorBlueCurve;
+  }
+
   public boolean isGradientMap() {
     return this.gradientMapFilename != null && this.gradientMapFilename.length() > 0;
   }
@@ -375,4 +534,33 @@ public class Layer implements Assignable<Layer>, Serializable {
     return gradientMap;
   }
 
+  public void refreshGradientForCurve(MotionCurve curve) {
+    if((curve==gradientEditorHueCurve) || (curve==gradientEditorSaturationCurve) || (curve==gradientEditorLuminosityCurve)) {
+      Envelope hueCurve = gradientEditorHueCurve.toEnvelope();
+      Envelope saturationCurve = gradientEditorSaturationCurve.toEnvelope();
+      Envelope luminosityCurve = gradientEditorLuminosityCurve.toEnvelope();
+      GammaCorrectionFilter.HSLRGBConverter converter = new GammaCorrectionFilter.HSLRGBConverter();
+      for(int i=0;i<RGBPalette.PALETTE_SIZE;i++) {
+        double currHue = hueCurve.evaluate(i) / 255.0;
+        double currSaturation = saturationCurve.evaluate(i) / 255.0;
+        double currLuminosity = luminosityCurve.evaluate(i) / 255.0;
+        converter.fromHsl(currHue, currSaturation, currLuminosity);
+        int red =  Math.min( Math.max( Tools.FTOI( converter.getRed() * 255.0), 0), 255);
+        int green = Math.min( Math.max( Tools.FTOI( converter.getGreen() * 255.0), 0), 255);
+        int blue = Math.min( Math.max( Tools.FTOI( converter.getBlue() * 255.0), 0), 255);
+        palette.setColor(i, red, green, blue);
+      }
+    }
+    else if((curve==gradientEditorRedCurve) || (curve==gradientEditorGreenCurve) || (curve==gradientEditorBlueCurve)) {
+      Envelope redCurve = gradientEditorRedCurve.toEnvelope();
+      Envelope greenCurve = gradientEditorGreenCurve.toEnvelope();
+      Envelope blueCurve = gradientEditorBlueCurve.toEnvelope();
+      for(int i=0;i<RGBPalette.PALETTE_SIZE;i++) {
+        int red =  Math.min( Math.max( Tools.FTOI( redCurve.evaluate(i)), 0), 255);
+        int green = Math.min( Math.max( Tools.FTOI( greenCurve.evaluate(i)), 0), 255);
+        int blue = Math.min( Math.max( Tools.FTOI( blueCurve.evaluate(i)), 0), 255);
+        palette.setColor(i, red, green, blue);
+      }
+    }
+  }
 }

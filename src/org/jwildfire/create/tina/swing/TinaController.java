@@ -196,6 +196,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private LayerControlsDelegate layerControls;
   protected XFormControlsDelegate xFormControls;
   private ChannelMixerControlsDelegate channelMixerControls;
+  private GradientCurveEditorControlsDelegate gradientCurveEditorControls;
 
   private final MainEditorFrame mainEditorFrame;
   private final String tinaFrameTitle;
@@ -835,6 +836,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.channelMixerBRRootPanel = parameterObject.channelMixerBRRootPanel;
     data.channelMixerBGRootPanel = parameterObject.channelMixerBGRootPanel;
     data.channelMixerBBRootPanel = parameterObject.channelMixerBBRootPanel;
+
+    data.gradientCurveEditorModeCmb = parameterObject.gradientCurveEditorModeCmb;
+    data.gradientCurveEditorSaveBtn = parameterObject.gradientCurveEditorSaveBtn;
+    data.gradientCurveEditorHueRootPanel = parameterObject.gradientCurveEditorHueRootPanel;
+    data.gradientCurveEditorSaturationRootPanel = parameterObject.gradientCurveEditorSaturationRootPanel;
+    data.gradientCurveEditorLuminosityRootPanel = parameterObject.gradientCurveEditorLuminosityRootPanel;
+    data.gradientCurveEditorRedRootPanel = parameterObject.gradientCurveEditorRedRootPanel;
+    data.gradientCurveEditorGreenRootPanel = parameterObject.gradientCurveEditorGreenRootPanel;
+    data.gradientCurveEditorBlueRootPanel = parameterObject.gradientCurveEditorBlueRootPanel;
+
     data.resetCameraSettingsBtn = parameterObject.resetCameraSettingsBtn;
     data.resetDOFSettingsButton = parameterObject.resetDOFSettingsButton;
     data.resetBokehOptionsButton = parameterObject.resetBokehOptionsButton;
@@ -918,6 +929,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     xFormControls = new XFormControlsDelegate(this, data, weightMapData, rootPanel);
     gradientControls = new GradientControlsDelegate(this, data, rootPanel);
     channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootPanel, true);
+    gradientCurveEditorControls = new GradientCurveEditorControlsDelegate(this, errorHandler, data, rootPanel, true);
 
     messageHelper = new JFrameFlameMessageHelper(mainEditorFrame);
 
@@ -1456,6 +1468,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       enableControls();
       layerControls.enableControls();
+      gradientCurveEditorControls.enableControls();
       channelMixerControls.refreshValues(true);
       refreshPaletteUI(getCurrLayer().getPalette());
     }
@@ -1950,9 +1963,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.paletteSaturationREd.setText(String.valueOf(pPalette.getModSaturation()));
     data.paletteSaturationSlider.setValue(pPalette.getModSaturation());
     refreshPaletteImg();
+    gradientCurveEditorControls.refreshValues(true);
   }
 
-  private void refreshPaletteImg() {
+  void refreshPaletteImg() {
     try {
       if (getCurrLayer() != null) {
         ImagePanel panels[] = { getPalettePanel(), getColorChooserPalettePanel() };
@@ -2524,6 +2538,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     flameControls.enableControls();
     gradientControls.enableControls();
     channelMixerControls.enableControls();
+    gradientCurveEditorControls.enableControls();
     enableUndoControls();
     getBatchRendererController().enableJobRenderControls();
     getQuiltRendererController().enableControls();
@@ -7290,6 +7305,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void weightingFieldTypeCmb_reset() {
     getWeightMapControlsUpdater(getCurrXForm()).weightingFieldTypeCmb_reset();
+  }
+
+  public GradientCurveEditorControlsDelegate getGradientCurveEditorControls() {
+    return gradientCurveEditorControls;
   }
 
 }

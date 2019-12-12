@@ -105,6 +105,7 @@ import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGenerator;
 import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGeneratorList;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
+import org.jwildfire.create.tina.render.GradientCurveEditorMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
@@ -277,6 +278,8 @@ public class MainEditorFrame extends JFrame {
   private JTabbedPane tinaPaletteSubTabbedPane = null;
 
   private JPanel tinaPaletteCreatePanel = null;
+
+  private JPanel gradientCurveEditorPanel = null;
 
   private JPanel tinaPaletteBalancingPanel = null;
 
@@ -5611,6 +5614,7 @@ public class MainEditorFrame extends JFrame {
       tinaPaletteSubTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteSubTabbedPane.addTab("Gradient Library", null, getGradientLibraryPanel(), null);
       tinaPaletteSubTabbedPane.addTab("Create new", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
+      tinaPaletteSubTabbedPane.addTab("Curve editor", null, getGradientCurveEditorPanel(), "Edit the color-components of current gradient in a graphic way");
       tinaPaletteSubTabbedPane.addTab("Modify gradient", null, getTinaPaletteTransformPanel(), "Apply general modifications to the gradient");
       tinaPaletteSubTabbedPane.addTab("Balancing", null, getTinaPaletteBalancingPanel(), "Apply common color balancing options to the gradient");
       tinaPaletteSubTabbedPane.addTab("Color map", null, getGradientColorMapPnl(), null);
@@ -5685,6 +5689,105 @@ public class MainEditorFrame extends JFrame {
       tinaPaletteCreatePanel.add(tinaPaletteRandomGeneratorCmb);
     }
     return tinaPaletteCreatePanel;
+  }
+
+  private JPanel getGradientCurveEditorPanel() {
+    if (gradientCurveEditorPanel == null) {
+      gradientCurveEditorPanel = new JPanel();
+      gradientCurveEditorPanel.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_1 = new JPanel();
+      panel_1.setPreferredSize(new Dimension(80, 10));
+      gradientCurveEditorPanel.add(panel_1, BorderLayout.WEST);
+      panel_1.setLayout(null);
+      panel_1.add(getGradientCurveEditorModeCmb());
+      panel_1.add(getGradientCurveEditorSaveBtn());
+
+      JLabel lblMode = new JLabel();
+      lblMode.setText("Curves");
+      lblMode.setSize(new Dimension(20, 22));
+      lblMode.setPreferredSize(new Dimension(24, 22));
+      lblMode.setLocation(new Point(0, 6));
+      lblMode.setHorizontalAlignment(SwingConstants.LEFT);
+      lblMode.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblMode.setBounds(8, 16, 87, 22);
+      panel_1.add(lblMode);
+
+      JPanel panel_2 = new JPanel();
+      gradientCurveEditorPanel.add(panel_2, BorderLayout.CENTER);
+      panel_2.setLayout(new GridLayout(0, 3, 0, 0));
+
+      JPanel panel_3 = new JPanel();
+      panel_2.add(panel_3);
+      panel_3.setLayout(new BorderLayout(0, 0));
+      panel_3.add(getGradientCurveEditorHueRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_4 = new JPanel();
+      panel_2.add(panel_4);
+      panel_4.setLayout(new BorderLayout(0, 0));
+      panel_4.add(getGradientCurveEditorSaturationRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_5 = new JPanel();
+      panel_2.add(panel_5);
+      panel_5.setLayout(new BorderLayout(0, 0));
+      panel_5.add(getGradientCurveEditorLuminosityRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_6 = new JPanel();
+      panel_2.add(panel_6);
+      panel_6.setLayout(new BorderLayout(0, 0));
+      panel_6.add(getGradientCurveEditorRedRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_7 = new JPanel();
+      panel_2.add(panel_7);
+      panel_7.setLayout(new BorderLayout(0, 0));
+      panel_7.add(getGradientCurveEditorGreenRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_8 = new JPanel();
+      panel_2.add(panel_8);
+      panel_8.setLayout(new BorderLayout(0, 0));
+      panel_8.add(getGradientCurveEditorBlueRootPanel(), BorderLayout.CENTER);
+    }
+    return gradientCurveEditorPanel;
+  }
+
+  private JButton getGradientCurveEditorSaveBtn() {
+    if(gradientCurveEditorSaveBtn==null) {
+      gradientCurveEditorSaveBtn = new JButton();
+      gradientCurveEditorSaveBtn.setToolTipText("Save the current gradient in the gradient-library");
+      gradientCurveEditorSaveBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null) {
+            tinaController.getGradientCurveEditorControls().gradientCurveEditorSaveBtn_clicked();
+          }
+        }
+      });
+      gradientCurveEditorSaveBtn.setText("Save");
+      gradientCurveEditorSaveBtn.setPreferredSize(new Dimension(70, 24));
+      gradientCurveEditorSaveBtn.setMinimumSize(new Dimension(70, 24));
+      gradientCurveEditorSaveBtn.setIconTextGap(2);
+      gradientCurveEditorSaveBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      gradientCurveEditorSaveBtn.setBounds(6, 75, 70, 24);
+    }
+    return gradientCurveEditorSaveBtn;
+  }
+
+  private JComboBox getGradientCurveEditorModeCmb() {
+    if(gradientCurveEditorModeCmb==null) {
+      gradientCurveEditorModeCmb = new JComboBox();
+      gradientCurveEditorModeCmb.setPreferredSize(new Dimension(70, 24));
+      gradientCurveEditorModeCmb.setMinimumSize(new Dimension(70, 24));
+      gradientCurveEditorModeCmb.setMaximumRowCount(32);
+      gradientCurveEditorModeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      gradientCurveEditorModeCmb.setBounds(6, 39, 70, 24);
+      gradientCurveEditorModeCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
+            tinaController.getGradientCurveEditorControls().gradientCurveEditorModeCmb_changed();
+          }
+        }
+      });
+    }
+    return gradientCurveEditorModeCmb;
   }
 
   /**
@@ -6489,6 +6592,10 @@ public class MainEditorFrame extends JFrame {
 
     params.setHelpParams(helpFrame.getMeshGenHintPane(), helpFrame.getHelpPane(), helpFrame.getApophysisHintsPane(), helpFrame.getColorTypesPane());
 
+    params.setGradientCurveEditorParams(getGradientCurveEditorModeCmb(), getGradientCurveEditorSaveBtn(), getGradientCurveEditorHueRootPanel(),
+      getGradientCurveEditorSaturationRootPanel(), getGradientCurveEditorLuminosityRootPanel(), getGradientCurveEditorRedRootPanel(),
+      getGradientCurveEditorGreenRootPanel(), getGradientCurveEditorBlueRootPanel());
+
     params.setParams1(pDesktop, this, pErrorHandler, pPrefs, /* getCenterCenterPanel()*/getMainPrevievPnl(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraBankREd(), getTinaCameraBankSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
@@ -6696,6 +6803,10 @@ public class MainEditorFrame extends JFrame {
       getChannelMixerModeCmb().addItem(ChannelMixerMode.BRIGHTNESS);
       getChannelMixerModeCmb().addItem(ChannelMixerMode.RGB);
       getChannelMixerModeCmb().addItem(ChannelMixerMode.FULL);
+
+      getGradientCurveEditorModeCmb().removeAllItems();
+      getGradientCurveEditorModeCmb().addItem(GradientCurveEditorMode.HSL);
+      getGradientCurveEditorModeCmb().addItem(GradientCurveEditorMode.RGB);
 
       initTriangleStyleCmb(getTriangleStyleCmb(), pPrefs);
       initGlobalScriptCmb(easyMovieMakerFrame.getSwfAnimatorGlobalScript1Cmb());
@@ -11922,6 +12033,14 @@ public class MainEditorFrame extends JFrame {
   private JLabel lblBlue;
   private JButton channelMixerResetBtn;
   private JComboBox channelMixerModeCmb;
+  private JComboBox gradientCurveEditorModeCmb;
+  private JButton gradientCurveEditorSaveBtn;
+  private JPanel gradientCurveEditorHueRootPanel;
+  private JPanel gradientCurveEditorSaturationRootPanel;
+  private JPanel gradientCurveEditorLuminosityRootPanel;
+  private JPanel gradientCurveEditorRedRootPanel;
+  private JPanel gradientCurveEditorGreenRootPanel;
+  private JPanel gradientCurveEditorBlueRootPanel;
   private JButton motionCurvePlayPreviewButton;
   private JPanel panel_92;
   private JTabbedPane tabbedPane_3;
@@ -16583,6 +16702,53 @@ public class MainEditorFrame extends JFrame {
     return channelMixerPanel;
   }
 
+  private JPanel getGradientCurveEditorHueRootPanel() {
+    if (gradientCurveEditorHueRootPanel == null) {
+      gradientCurveEditorHueRootPanel = new JPanel();
+      gradientCurveEditorHueRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return gradientCurveEditorHueRootPanel;
+  }
+
+  private JPanel getGradientCurveEditorSaturationRootPanel() {
+    if (gradientCurveEditorSaturationRootPanel == null) {
+      gradientCurveEditorSaturationRootPanel = new JPanel();
+      gradientCurveEditorSaturationRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return gradientCurveEditorSaturationRootPanel;
+  }
+
+  private JPanel getGradientCurveEditorLuminosityRootPanel() {
+    if (gradientCurveEditorLuminosityRootPanel == null) {
+      gradientCurveEditorLuminosityRootPanel = new JPanel();
+      gradientCurveEditorLuminosityRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return gradientCurveEditorLuminosityRootPanel;
+  }
+
+  private JPanel getGradientCurveEditorRedRootPanel() {
+    if (gradientCurveEditorRedRootPanel == null) {
+      gradientCurveEditorRedRootPanel = new JPanel();
+      gradientCurveEditorRedRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return gradientCurveEditorRedRootPanel;
+  }
+
+  private JPanel getGradientCurveEditorGreenRootPanel() {
+    if (gradientCurveEditorGreenRootPanel == null) {
+      gradientCurveEditorGreenRootPanel = new JPanel();
+      gradientCurveEditorGreenRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return gradientCurveEditorGreenRootPanel;
+  }
+
+  private JPanel getGradientCurveEditorBlueRootPanel() {
+    if (gradientCurveEditorBlueRootPanel == null) {
+      gradientCurveEditorBlueRootPanel = new JPanel();
+      gradientCurveEditorBlueRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return gradientCurveEditorBlueRootPanel;
+  }
   private JPanel getChannelMixerRedRedRootPanel() {
     if (channelMixerRedRedRootPanel == null) {
       channelMixerRedRedRootPanel = new JPanel();
