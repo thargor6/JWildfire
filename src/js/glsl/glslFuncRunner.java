@@ -1984,5 +1984,27 @@ public vec3 app (vec3 v, double k, mat3 m)
 	  double norm = length(c);
 		return new vec2( c.x/(norm * norm), -c.y/(norm * norm));
 	}
+ 
+ public vec2 iabs(vec2 c) {
+	  
+		return new vec2( c.x, Math.abs(c.y));
+	}
+ 
+ public vec2 c_iabs(vec2 c) {
+	  
+		return new vec2( c.x, Math.abs(c.y));
+	}
+
+ public vec2 c_abs(vec2 c) {
+	  
+		return new vec2( Math.abs(c.x), Math.abs(c.y));
+	}
+ 
+ public vec2 f(vec2 z) 
+{	    	
+//	 vec2 a=c_add(c_inv(z),c_exp(c_inv(z)));
+//	 return c_add(a,c_exp(new vec2(0.0, 0.0)));
+	 return z;
+ }	
 	
 }

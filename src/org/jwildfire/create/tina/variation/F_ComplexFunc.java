@@ -14,12 +14,12 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.variation.DucksFunc.ComplexFuncRunner;
+//import org.jwildfire.create.tina.variation.DucksFunc.ComplexFuncRunner;
 
 //import js.colordomain.Complex;
 import org.jwildfire.base.mathlib.Complex;
 import js.glsl.G;
-import js.glsl.glslFuncRunner;
+//import js.glsl.glslFuncRunner;
 import js.glsl.vec2;
 import js.glsl.vec3;
 import js.glsl.vec4;
@@ -49,6 +49,11 @@ public class F_ComplexFunc  extends DC_BaseFunc {
 		      return res;
 		    }
 		    
+			public Complex abs(Complex z)
+			{
+				return new Complex(Math.abs(z.re),Math.abs(z.im));
+			}
+			
 			public Complex iabs(Complex z)
 			{
 				return new Complex(z.re,Math.abs(z.im));
