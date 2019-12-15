@@ -970,7 +970,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         !mixerGBCurve.isEqual(pFlame.mixerGBCurve) || !mixerBRCurve.isEqual(pFlame.mixerBRCurve) || !mixerBGCurve.isEqual(pFlame.mixerBGCurve) ||
         !mixerBBCurve.isEqual(pFlame.mixerBBCurve) || !solidRenderSettings.isEqual(pFlame.solidRenderSettings) ||
         postBlurRadius != pFlame.postBlurRadius || (fabs(postBlurFade - pFlame.postBlurFade) > EPSILON) ||
-        (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON) || (zBufferFilename == pFlame.zBufferFilename) ||
+        (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON) || !zBufferFilename.equals(pFlame.zBufferFilename) ||
         (fabs(zBufferScale - pFlame.zBufferScale) > EPSILON) || (fabs(zBufferBias - pFlame.zBufferBias) > EPSILON)) {
       return false;
     }

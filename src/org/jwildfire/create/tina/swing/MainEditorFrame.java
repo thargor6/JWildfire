@@ -35,35 +35,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JSlider;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.JTree;
-import javax.swing.ListSelectionModel;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
@@ -545,6 +517,8 @@ public class MainEditorFrame extends JFrame {
     this.setResizable(true);
     this.setContentPane(getJContentPane());
     getGradientEditorFncPnl().setVisible(false);
+    getRootPane().registerKeyboardAction(getUndoButton().getActionListeners()[0], KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    getRootPane().registerKeyboardAction(getRedoButton().getActionListeners()[0], KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
   }
 
   /**
@@ -12926,7 +12900,7 @@ public class MainEditorFrame extends JFrame {
           tinaController.undoAction();
         }
       });
-      undoButton.setToolTipText("Undo");
+      undoButton.setToolTipText("Undo (<Strg>+Z)");
       undoButton.setText("Undo");
       undoButton.setPreferredSize(new Dimension(72, 24));
       undoButton.setMnemonic(KeyEvent.VK_Z);
@@ -12955,7 +12929,7 @@ public class MainEditorFrame extends JFrame {
           tinaController.redoAction();
         }
       });
-      redoButton.setToolTipText("Redo");
+      redoButton.setToolTipText("Redo (<Strg>+Y)");
       redoButton.setText("Redo");
       redoButton.setPreferredSize(new Dimension(72, 24));
       redoButton.setMnemonic(KeyEvent.VK_Y);

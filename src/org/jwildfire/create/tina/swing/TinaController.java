@@ -4890,8 +4890,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private boolean undoDebug = false;
 
   private void enableUndoControls() {
-    final String UNDO_LABEL = "Undo";
-    final String REDO_LABEL = "Redo";
+    final String UNDO_LABEL = "Undo (<Strg>+Z)";
+    final String REDO_LABEL = "Redo (<Strg>+Y)";
     if (getCurrFlame() != null) {
       int stackSize = undoManager.getUndoStackSize(getCurrFlame());
       if (stackSize > 0) {
