@@ -35,7 +35,7 @@ public abstract class GradientCurveEditorPanelDelegate {
   private final EnvelopePanel envelopePanel;
   private final EnvelopeDlgController ctrl;
 
-  public GradientCurveEditorPanelDelegate(GradientCurveEditorControlsDelegate pOwner, JPanel pEnvelopeParentPanel) {
+  public GradientCurveEditorPanelDelegate(GradientCurveEditorControlsDelegate pOwner, JPanel pEnvelopeParentPanel, String panelCaption) {
     owner = pOwner;
     envelopeParentPanel = pEnvelopeParentPanel;
     envelopeContainerPanel = envelopeParentPanel.getParent();
@@ -43,6 +43,7 @@ public abstract class GradientCurveEditorPanelDelegate {
     envelopePanel = new EnvelopePanel();
     envelopePanel.setLayout(null);
     envelopePanel.setDrawTicks(false);
+    envelopePanel.setCaption(panelCaption);
     envelopeParentPanel.add(envelopePanel, BorderLayout.CENTER);
 
     addButtons(envelopeParentPanel);

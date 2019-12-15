@@ -35,17 +35,20 @@ public class EnvelopePanel extends JPanel {
   private static final Color BG_COLOR = new Color(0, 0, 0);
   private static final Color GRID_COLOR = new Color(55, 59, 65);
   private static final Color LABEL_COLOR = new Color(174, 179, 186);
+  private static final Color CAPTION_COLOR = new Color(154, 159, 166);
   private static final Color ENVELOPE_COLOR = new Color(217, 219, 223);
 
   //  private static final String LBL_FONT_NAME = "Arial";
   //  private static final int LBL_FONT_SIZE = 10;
   private static final String LBL_FONT_NAME = "SansSerif";
   private static final int LBL_FONT_SIZE = 10;
+  private static final int CAPTION_FONT_SIZE = 12;
 
   private Envelope envelope;
   private final Prefs prefs;
   private boolean drawGrid = true;
   private boolean drawTicks = true;
+  private String panelCaption;
 
   public EnvelopePanel() {
     super();
@@ -176,6 +179,20 @@ public class EnvelopePanel extends JPanel {
         }
         while (x < envelope.getViewYMax() && ++tickCount < lineMax);
       }
+    }
+    // panel caption
+    if(panelCaption!=null && panelCaption.length()>0) {
+      g.setColor(CAPTION_COLOR);
+      Font font = new Font(LBL_FONT_NAME, Font.PLAIN, CAPTION_FONT_SIZE);
+      g.setFont(font);
+      FontMetrics fm = g.getFontMetrics();
+      int yFontOffset = fm.getMaxAscent();
+      FontRenderContext frc = fm.getFontRenderContext();
+      Rectangle2D rect = font.getStringBounds(panelCaption, frc);
+
+      int left = pEnvelopeView.getEnvelopeLeft() + (pEnvelopeView.getEnvelopeRight() - pEnvelopeView.getEnvelopeLeft()) / 2 - Tools.FTOI(rect.getWidth() / 2.0);
+      int top = pEnvelopeView.getEnvelopeTop() + (pEnvelopeView.getEnvelopeBottom() - pEnvelopeView.getEnvelopeTop()) / 2 + yFontOffset / 2;
+      g.drawString(panelCaption, left, top);
     }
   }
 
@@ -345,4 +362,7 @@ public class EnvelopePanel extends JPanel {
     drawTicks = pDrawTicks;
   }
 
+  public void setCaption(String panelCaption) {
+    this.panelCaption = panelCaption;
+  }
 }

@@ -49,7 +49,7 @@ public class GradientCurveEditorControlsDelegate {
 
   private List<GradientCurveEditorPanelDelegate> createEditorPanels() {
     List<GradientCurveEditorPanelDelegate> res = new ArrayList<>();
-    res.add(new GradientCurveEditorPanelDelegate(this, data.gradientCurveEditorHueRootPanel) {
+    res.add(new GradientCurveEditorPanelDelegate(this, data.gradientCurveEditorHueRootPanel, "hue") {
 
       @Override
       public MotionCurve getCurve(Layer pLayer) {
@@ -57,7 +57,7 @@ public class GradientCurveEditorControlsDelegate {
       }
 
     });
-    res.add(new GradientCurveEditorPanelDelegate(this, data.gradientCurveEditorSaturationRootPanel) {
+    res.add(new GradientCurveEditorPanelDelegate(this, data.gradientCurveEditorSaturationRootPanel, "saturation") {
 
       @Override
       public MotionCurve getCurve(Layer pLayer) {
@@ -65,7 +65,7 @@ public class GradientCurveEditorControlsDelegate {
       }
 
     });
-    res.add(new GradientCurveEditorPanelDelegate(this, data.gradientCurveEditorLuminosityRootPanel) {
+    res.add(new GradientCurveEditorPanelDelegate(this, data.gradientCurveEditorLuminosityRootPanel, "luminosity") {
 
       @Override
       public MotionCurve getCurve(Layer pLayer) {
