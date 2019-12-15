@@ -837,14 +837,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.channelMixerBGRootPanel = parameterObject.channelMixerBGRootPanel;
     data.channelMixerBBRootPanel = parameterObject.channelMixerBBRootPanel;
 
-    data.gradientCurveEditorModeCmb = parameterObject.gradientCurveEditorModeCmb;
     data.gradientCurveEditorSaveBtn = parameterObject.gradientCurveEditorSaveBtn;
     data.gradientCurveEditorHueRootPanel = parameterObject.gradientCurveEditorHueRootPanel;
     data.gradientCurveEditorSaturationRootPanel = parameterObject.gradientCurveEditorSaturationRootPanel;
     data.gradientCurveEditorLuminosityRootPanel = parameterObject.gradientCurveEditorLuminosityRootPanel;
-    data.gradientCurveEditorRedRootPanel = parameterObject.gradientCurveEditorRedRootPanel;
-    data.gradientCurveEditorGreenRootPanel = parameterObject.gradientCurveEditorGreenRootPanel;
-    data.gradientCurveEditorBlueRootPanel = parameterObject.gradientCurveEditorBlueRootPanel;
 
     data.resetCameraSettingsBtn = parameterObject.resetCameraSettingsBtn;
     data.resetDOFSettingsButton = parameterObject.resetDOFSettingsButton;

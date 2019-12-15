@@ -680,6 +680,7 @@ public class FlamePreviewHelper implements IterationObserver {
             }
           }
           catch (Throwable e) {
+            cancelSignalled = true;
             e.printStackTrace();
           }
         }

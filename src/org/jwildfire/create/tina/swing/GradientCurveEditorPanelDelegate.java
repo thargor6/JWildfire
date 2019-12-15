@@ -81,29 +81,131 @@ public abstract class GradientCurveEditorPanelDelegate {
     int buttonWidth = 42;
     int buttonHeight = 24;
     int gap = 4;
+    {
+      JButton editCurveButton = createEditCurveButton("/org/jwildfire/swing/icons/new/curve-money2.png");
+      editCurveButton.setBounds(xOffSet, yOffset, buttonWidth, buttonHeight);
+      editCurveButton.setToolTipText("Edit this curve in the motion-curve-editor");
+      yOffset += gap + buttonHeight;
+      editCurveButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          editCurve(e);
+        }
+      });
+      buttonPanel.add(editCurveButton);
+    }
 
-    JButton editCurveButton = createEditCurveButton();
-    editCurveButton.setBounds(xOffSet, yOffset, buttonWidth, buttonHeight);
-    yOffset += gap + buttonHeight;
+    {
+      JButton createRampBtn = createEditCurveButton("/org/jwildfire/swing/icons/new/curve-ramp.png");
+      createRampBtn.setBounds(xOffSet, yOffset, buttonWidth, buttonHeight);
+      createRampBtn.setToolTipText("Turn the current curve into a ramp");
+      createRampBtn.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          modifyCurve(e, new CurveModifier() {
+            @Override
+            public void apply(MotionCurve curve) {
+              for(int i=0;i<curve.getX().length;i++) {
+                curve.getY()[i]=curve.getX()[i];
+              }
+            }
+          });
+        }
+      });
+      yOffset += gap + buttonHeight;
+      buttonPanel.add(createRampBtn);
+    }
 
-    buttonPanel.add(editCurveButton);
+    {
+      JButton createBottomLineBtn = createEditCurveButton("/org/jwildfire/swing/icons/new/curve-bottom-line.png");
+      createBottomLineBtn.setBounds(xOffSet, yOffset, buttonWidth, buttonHeight);
+      createBottomLineBtn.setToolTipText("Turn the current curve into a line at the bottom");
+      createBottomLineBtn.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          modifyCurve(e, new CurveModifier() {
+            @Override
+            public void apply(MotionCurve curve) {
+              for(int i=0;i<curve.getX().length;i++) {
+                curve.getY()[i]=0.0;
+              }
+            }
+          });
+        }
+      });
+      yOffset += gap + buttonHeight;
+      buttonPanel.add(createBottomLineBtn);
+    }
+
+    {
+      JButton createMiddleLineBtn = createEditCurveButton("/org/jwildfire/swing/icons/new/curve-middle-line.png");
+      createMiddleLineBtn.setBounds(xOffSet, yOffset, buttonWidth, buttonHeight);
+      createMiddleLineBtn.setToolTipText("Turn the current curve into a line at the middle");
+      createMiddleLineBtn.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          modifyCurve(e, new CurveModifier() {
+            @Override
+            public void apply(MotionCurve curve) {
+              for(int i=0;i<curve.getX().length;i++) {
+                curve.getY()[i]=127.5;
+              }
+            }
+          });
+        }
+      });
+      yOffset += gap + buttonHeight;
+      buttonPanel.add(createMiddleLineBtn);
+    }
+
+    {
+      JButton createMirrorXBtn = createEditCurveButton("/org/jwildfire/swing/icons/new/curve-mirror-x.png");
+      createMirrorXBtn.setBounds(xOffSet, yOffset, buttonWidth, buttonHeight);
+      createMirrorXBtn.setToolTipText("Mirror the current curve at the vertical axis");
+      createMirrorXBtn.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          modifyCurve(e, new CurveModifier() {
+            @Override
+            public void apply(MotionCurve curve) {
+              double newY[] = new double[curve.getX().length];
+              for(int i=0;i<curve.getX().length;i++) {
+                newY[i] = curve.getY()[curve.getX().length - 1 - i];
+              }
+              curve.setPoints(curve.getX(), newY);
+            }
+          });
+        }
+      });
+      yOffset += gap + buttonHeight;
+      buttonPanel.add(createMirrorXBtn);
+    }
+    {
+      JButton createMirrorYBtn = createEditCurveButton("/org/jwildfire/swing/icons/new/curve-mirror-y.png");
+      createMirrorYBtn.setBounds(xOffSet, yOffset, buttonWidth, buttonHeight);
+      createMirrorYBtn.setToolTipText("Mirror the current curve at the horizontal axis");
+      createMirrorYBtn.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          modifyCurve(e, new CurveModifier() {
+            @Override
+            public void apply(MotionCurve curve) {
+              for(int i=0;i<curve.getX().length;i++) {
+                curve.getY()[i]=255.0 - curve.getY()[i];
+              }
+            }
+          });
+        }
+      });
+      yOffset += gap + buttonHeight;
+      buttonPanel.add(createMirrorYBtn);
+    }
 
     pPanel.add(buttonPanel, BorderLayout.EAST);
   }
 
-  private JButton createEditCurveButton() {
+  private JButton createEditCurveButton(String iconName) {
     JButton res = new JButton();
-    res.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
+    res.setIcon(new ImageIcon(MainEditorFrame.class.getResource(iconName)));
     res.setMinimumSize(new Dimension(100, 24));
     res.setMaximumSize(new Dimension(32000, 24));
     res.setText("");
     res.setPreferredSize(new Dimension(125, 24));
     res.setFont(new Font("Dialog", Font.BOLD, 10));
-    res.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent e) {
-        editCurve(e);
-      }
-    });
     return res;
   }
 
@@ -129,6 +231,25 @@ public abstract class GradientCurveEditorPanelDelegate {
         owner.getOwner().refreshFlameImage(true, false, 1, true, false);
         refreshCurve(layer);
       }
+    }
+  }
+
+  private interface CurveModifier {
+    void apply(MotionCurve curve);
+  }
+
+  protected void modifyCurve(ActionEvent e, CurveModifier modifier) {
+    Flame flame = owner.getOwner().getCurrFlame();
+    Layer layer = owner.getOwner().getCurrLayer();
+    if(flame!=null && layer!=null) {
+      MotionCurve curve = getCurve(layer);
+      modifier.apply(curve);
+      Envelope envelope = curve.toEnvelope();
+      curve.assignFromEnvelope(envelope);
+      owner.getOwner().getCurrLayer().refreshGradientForCurve(curve);
+      owner.getOwner().refreshPaletteImg();
+      owner.getOwner().refreshFlameImage(true, false, 1, true, false);
+      refreshCurve(layer);
     }
   }
 

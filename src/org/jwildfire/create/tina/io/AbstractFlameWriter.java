@@ -504,13 +504,9 @@ public class AbstractFlameWriter {
     }
 
     if(pFlame.getLayers().size()==1) {
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_GRADIENT_EDITOR_CURVE_MODE, pFlame.getFirstLayer().getGradientCurveEditorMode().toString()));
       writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_GRADIENT_EDITOR_HUE_CURVE, pFlame.getFirstLayer().getGradientEditorHueCurve());
       writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_GRADIENT_EDITOR_SATURATION_CURVE, pFlame.getFirstLayer().getGradientEditorSaturationCurve());
       writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_GRADIENT_EDITOR_LUMINOSITY_CURVE, pFlame.getFirstLayer().getGradientEditorLuminosityCurve());
-      writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_GRADIENT_EDITOR_RED_CURVE, pFlame.getFirstLayer().getGradientEditorRedCurve());
-      writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_GRADIENT_EDITOR_GREEN_CURVE, pFlame.getFirstLayer().getGradientEditorGreenCurve());
-      writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_GRADIENT_EDITOR_BLUE_CURVE, pFlame.getFirstLayer().getGradientEditorBlueCurve());
     }
     return attrList;
   }

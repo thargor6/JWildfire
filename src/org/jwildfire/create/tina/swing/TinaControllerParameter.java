@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -558,14 +558,10 @@ public class TinaControllerParameter {
   public JPanel channelMixerBGRootPanel;
   public JPanel channelMixerBBRootPanel;
 
-  public JComboBox gradientCurveEditorModeCmb;
   public JButton gradientCurveEditorSaveBtn;
   public JPanel gradientCurveEditorHueRootPanel;
   public JPanel gradientCurveEditorSaturationRootPanel;
   public JPanel gradientCurveEditorLuminosityRootPanel;
-  public JPanel gradientCurveEditorRedRootPanel;
-  public JPanel gradientCurveEditorGreenRootPanel;
-  public JPanel gradientCurveEditorBlueRootPanel;
 
   public JComboBox meshGenPreFilter1Cmb;
   public JComboBox meshGenPreFilter2Cmb;
@@ -1683,16 +1679,11 @@ public class TinaControllerParameter {
     this.getColorTypesPane = pgetColorTypesPane;
   }
 
-  public void setGradientCurveEditorParams(JComboBox gradientCurveEditorModeCmb, JButton gradientCurveEditorSaveBtn, JPanel gradientCurveEditorHueRootPanel,
-          JPanel gradientCurveEditorSaturationRootPanel, JPanel gradientCurveEditorLuminosityRootPanel, JPanel gradientCurveEditorRedRootPanel,
-          JPanel gradientCurveEditorGreenRootPanel, JPanel gradientCurveEditorBlueRootPanel) {
-    this.gradientCurveEditorModeCmb = gradientCurveEditorModeCmb;
+  public void setGradientCurveEditorParams(JButton gradientCurveEditorSaveBtn, JPanel gradientCurveEditorHueRootPanel,
+          JPanel gradientCurveEditorSaturationRootPanel, JPanel gradientCurveEditorLuminosityRootPanel) {
     this.gradientCurveEditorSaveBtn = gradientCurveEditorSaveBtn;
     this.gradientCurveEditorHueRootPanel = gradientCurveEditorHueRootPanel;
     this.gradientCurveEditorSaturationRootPanel = gradientCurveEditorSaturationRootPanel;
     this.gradientCurveEditorLuminosityRootPanel = gradientCurveEditorLuminosityRootPanel;
-    this.gradientCurveEditorRedRootPanel = gradientCurveEditorRedRootPanel;
-    this.gradientCurveEditorGreenRootPanel = gradientCurveEditorGreenRootPanel;
-    this.gradientCurveEditorBlueRootPanel = gradientCurveEditorBlueRootPanel;
   }
 }

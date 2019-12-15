@@ -36,7 +36,6 @@ import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.base.weightingfield.*;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
-import org.jwildfire.create.tina.render.GradientCurveEditorMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
@@ -876,20 +875,9 @@ public class AbstractFlameReader {
         break;
     }
 
-    if ((hs = atts.get(ATTR_GRADIENT_EDITOR_CURVE_MODE)) != null) {
-      try {
-        pFlame.getFirstLayer().setGradientCurveEditorMode(GradientCurveEditorMode.valueOf(hs));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
     readMotionCurveAttributes(atts, pFlame.getFirstLayer().getGradientEditorHueCurve(), ATTR_GRADIENT_EDITOR_HUE_CURVE + "_");
     readMotionCurveAttributes(atts, pFlame.getFirstLayer().getGradientEditorSaturationCurve(), ATTR_GRADIENT_EDITOR_SATURATION_CURVE + "_");
     readMotionCurveAttributes(atts, pFlame.getFirstLayer().getGradientEditorLuminosityCurve(), ATTR_GRADIENT_EDITOR_LUMINOSITY_CURVE + "_");
-    readMotionCurveAttributes(atts, pFlame.getFirstLayer().getGradientEditorRedCurve(), ATTR_GRADIENT_EDITOR_RED_CURVE + "_");
-    readMotionCurveAttributes(atts, pFlame.getFirstLayer().getGradientEditorGreenCurve(), ATTR_GRADIENT_EDITOR_GREEN_CURVE + "_");
-    readMotionCurveAttributes(atts, pFlame.getFirstLayer().getGradientEditorBlueCurve(), ATTR_GRADIENT_EDITOR_BLUE_CURVE + "_");
 
     return atts;
   }
@@ -933,13 +921,9 @@ public class AbstractFlameReader {
   public static final String ATTR_FX_PRIORITY = "fx_priority";
   public static final String ATTR_SOLID_RENDERING = "solid_rendering";
 
-  public static final String ATTR_GRADIENT_EDITOR_CURVE_MODE = "grad_edit_curve_mode";
   public static final String ATTR_GRADIENT_EDITOR_HUE_CURVE = "grad_edit_hue_curve";
   public static final String ATTR_GRADIENT_EDITOR_SATURATION_CURVE = "grad_edit_saturation_curve";
   public static final String ATTR_GRADIENT_EDITOR_LUMINOSITY_CURVE = "grad_edit_luminosity_curve";
-  public static final String ATTR_GRADIENT_EDITOR_RED_CURVE = "grad_edit_red_curve";
-  public static final String ATTR_GRADIENT_EDITOR_GREEN_CURVE = "grad_edit_green_curve";
-  public static final String ATTR_GRADIENT_EDITOR_BLUE_CURVE = "grad_edit_blue_curve";
 
   public static final String ATTR_POSTBLUR_RADIUS = "post_blur_radius";
   public static final String ATTR_POSTBLUR_FADE = "post_blur_fade";
