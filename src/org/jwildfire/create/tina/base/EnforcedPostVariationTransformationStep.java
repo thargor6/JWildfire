@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,6 +24,8 @@ public final class EnforcedPostVariationTransformationStep extends AbstractTrans
 
   private final Variation variation;
 
+  private final XYZPoint tmp = new XYZPoint();
+
   public EnforcedPostVariationTransformationStep(XForm pXForm, Variation pVariation) {
     super(pXForm);
     variation = pVariation;
@@ -31,7 +33,8 @@ public final class EnforcedPostVariationTransformationStep extends AbstractTrans
 
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
-    variation.transform(pContext, xform, pVarT, pVarT);
+    tmp.assign(pVarT);
+    variation.transform(pContext, xform, tmp, pVarT);
   }
 
 }

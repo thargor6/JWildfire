@@ -24,6 +24,8 @@ public final class EnforcedVariationTransformationStep extends AbstractTransform
 
   private final Variation variation;
 
+  private final XYZPoint tmp = new XYZPoint();
+
   public EnforcedVariationTransformationStep(XForm pXForm, Variation pVariation) {
     super(pXForm);
     variation = pVariation;
@@ -31,7 +33,8 @@ public final class EnforcedVariationTransformationStep extends AbstractTransform
 
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
-    variation.transform(pContext, xform, pVarT, pVarT);
+    tmp.assign(pVarT);
+    variation.transform(pContext, xform, tmp, pVarT);
   }
 
 }
