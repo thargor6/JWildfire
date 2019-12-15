@@ -5731,7 +5731,7 @@ public class MainEditorFrame extends JFrame {
       gradientCurveEditorSaveBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null) {
-            tinaController.getGradientCurveEditorControls().gradientCurveEditorSaveBtn_clicked();
+            tinaController.getGradientController().gradientSaveBtn_clicked();
           }
         }
       });

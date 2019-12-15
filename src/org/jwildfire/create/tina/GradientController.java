@@ -22,10 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Layer;
@@ -55,6 +52,7 @@ public class GradientController {
   private final JButton newFolderBtn;
   private final JButton renameFolderBtn;
   private final JList gradientsList;
+  private String previousGradientPath;
 
   private GradientUserNode userGradientsRootNode;
   private boolean cmbRefreshing;
@@ -100,6 +98,11 @@ public class GradientController {
       return gradientLibraryList;
     }
 
+    public void clear() {
+      gradientLibraryList.clear();
+      thumbnails = null;
+    }
+
     public List<SimpleImage> getThumbnails() {
       if (thumbnails == null) {
         thumbnails = new ArrayList<SimpleImage>();
@@ -137,6 +140,10 @@ public class GradientController {
     @Override
     public boolean isLeaf() {
       return false;
+    }
+
+    public boolean isRoot() {
+      return path == null;
     }
 
     public GradientUserNode(String pCaption, String pPath) {
@@ -426,6 +433,50 @@ public class GradientController {
     enableControls();
   }
 
+  private void rescan(File folder) {
+    TreeModel model = gradientLibTree.getModel();
+    DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+    GradientUserNode userNode = findFolderNode(root, folder);
+    if(userNode!=null) {
+      userNode.clear();
+      scanUserGradients(folder.getAbsolutePath(), userNode);
+      {
+        Object[] pathComponents = new Object[userNode.getLevel()];
+        TreeNode currNode = userNode;
+        int d=userNode.getLevel()-1;
+        while(d>=0) {
+          pathComponents[d--]=currNode;
+          currNode = currNode.getParent();
+        }
+        TreePath path = new TreePath(pathComponents);
+        gradientLibTree.setExpandsSelectedPaths(true);
+        gradientLibTree.setSelectionPath(path);
+      }
+      gradientTree_changed(null);
+    }
+    enableControls();
+  }
+
+  private GradientUserNode findFolderNode(TreeNode parent, File searchFolder) {
+    if(parent instanceof GradientUserNode) {
+      GradientUserNode userNode = (GradientUserNode)parent;
+      if(userNode.getAbsolutePath().equals(searchFolder.getAbsolutePath())) {
+        return userNode;
+      }
+      else if(userNode.isRoot() && new File(prefs.getTinaGradientPath()).getAbsolutePath().equals(searchFolder.getAbsolutePath())) {
+        return userNode;
+      }
+    }
+    for(int i=0;i<parent.getChildCount();i++) {
+      TreeNode child = parent.getChildAt(i);
+      GradientUserNode userNode = findFolderNode(child, searchFolder);
+      if(userNode!=null) {
+        return userNode;
+      }
+    }
+    return null;
+  }
+
   public void newFolderBtn_clicked() {
     try {
       DefaultMutableTreeNode selNode = getSelNode();
@@ -492,7 +543,15 @@ public class GradientController {
       Layer layer = tinaController.getCurrLayer();
       if (layer != null) {
         JFileChooser chooser = new MapFileChooser(prefs);
-        if (prefs.getTinaGradientPath() != null) {
+        if (previousGradientPath != null) {
+          try {
+            chooser.setCurrentDirectory(new File(previousGradientPath));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        else if (prefs.getTinaGradientPath() != null) {
           try {
             chooser.setCurrentDirectory(new File(prefs.getTinaGradientPath()));
           }
@@ -505,7 +564,9 @@ public class GradientController {
           RGBPalette gradient = layer.getPalette().makeCopy();
           gradient.setFlam3Name(file.getName());
           new MapGradientWriter().writeGradient(gradient, file.getAbsolutePath());
-          tinaController.getMessageHelper().showStatusMessage(gradient, "gradient saved to disc");
+          previousGradientPath = file.getParent();
+          tinaController.getMessageHelper().showStatusMessage(gradient, "gradient saved to library");
+          rescan(file.getParentFile());
         }
       }
     }

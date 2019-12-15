@@ -100,10 +100,6 @@ public class GradientCurveEditorControlsDelegate {
     }
   }
 
-  public void gradientCurveEditorSaveBtn_clicked() {
-    // TODO
-  }
-
   protected TinaController getOwner() {
     return owner;
   }
