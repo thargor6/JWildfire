@@ -4657,7 +4657,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldColorIntensityREd.setMaxValue(3.0);
       weightingFieldColorIntensityREd.setLocation(new Point(70, 21));
       weightingFieldColorIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldColorIntensityREd.setBounds(252, 48, 70, 22);
+      weightingFieldColorIntensityREd.setBounds(248, 48, 70, 22);
       weightingFieldColorIntensityREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -4897,7 +4897,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam05REd.setMaxValue(3.0);
       weightingFieldParam05REd.setLocation(new Point(70, 21));
       weightingFieldParam05REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam05REd.setBounds(252, 142, 70, 22);
+      weightingFieldParam05REd.setBounds(248, 142, 70, 22);
       weightingFieldParam05REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -4966,7 +4966,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam06REd.setMaxValue(1.0);
       weightingFieldParam06REd.setLocation(new Point(70, 47));
       weightingFieldParam06REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam06REd.setBounds(252, 162, 70, 22);
+      weightingFieldParam06REd.setBounds(248, 162, 70, 22);
       weightingFieldParam06REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -5121,7 +5121,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam07REd.setMaxValue(3.0);
       weightingFieldParam07REd.setLocation(new Point(70, 21));
       weightingFieldParam07REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam07REd.setBounds(252, 182, 70, 22);
+      weightingFieldParam07REd.setBounds(248, 182, 70, 22);
       weightingFieldParam07REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -5141,7 +5141,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam08Cmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldParam08Cmb.setLocation(new Point(70, 47));
       weightingFieldParam08Cmb.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam08Cmb.setBounds(252, 202, 70, 22);
+      weightingFieldParam08Cmb.setBounds(248, 202, 70, 22);
       weightingFieldParam08Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
@@ -5243,7 +5243,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam1NameCmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldVarParam1NameCmb.setLocation(new Point(70, 47));
       weightingFieldVarParam1NameCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldVarParam1NameCmb.setBounds(165, 69, 157, 22);
+      weightingFieldVarParam1NameCmb.setBounds(165, 69, 153, 22);
       weightingFieldVarParam1NameCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
@@ -5311,7 +5311,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam2NameCmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldVarParam2NameCmb.setLocation(new Point(70, 47));
       weightingFieldVarParam2NameCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldVarParam2NameCmb.setBounds(165, 91, 157, 22);
+      weightingFieldVarParam2NameCmb.setBounds(165, 91, 153, 22);
       weightingFieldVarParam2NameCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
@@ -5377,7 +5377,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam3NameCmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldVarParam3NameCmb.setLocation(new Point(70, 47));
       weightingFieldVarParam3NameCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldVarParam3NameCmb.setBounds(165, 113, 157, 22);
+      weightingFieldVarParam3NameCmb.setBounds(165, 113, 153, 22);
       weightingFieldVarParam3NameCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
