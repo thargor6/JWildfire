@@ -58,7 +58,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private final MotionCurve materialCurve = new MotionCurve();
   @AnimAware
   private double materialSpeed;
-  private final MotionCurve materialSymmetryCurve = new MotionCurve();
+  private final MotionCurve materialSpeedCurve = new MotionCurve();
   @AnimAware
   private double modGamma;
   @AnimAware
@@ -667,7 +667,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     material = pXForm.material;
     materialCurve.assign(pXForm.materialCurve);
     materialSpeed = pXForm.materialSpeed;
-    materialSymmetryCurve.assign(pXForm.materialSymmetryCurve);
+    materialSpeedCurve.assign(pXForm.materialSpeedCurve);
     modGamma = pXForm.modGamma;
     modGammaSpeed = pXForm.modGammaSpeed;
     modContrast = pXForm.modContrast;
@@ -847,7 +847,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
         (!targetColor.isEqual(pSrc.targetColor)) ||
         (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) || !colorSymmetryCurve.isEqual(pSrc.colorSymmetryCurve) ||
         (fabs(material - pSrc.material) > EPSILON) || !materialCurve.isEqual(pSrc.materialCurve) ||
-        (fabs(materialSpeed - pSrc.materialSpeed) > EPSILON) || !materialSymmetryCurve.isEqual(pSrc.materialSymmetryCurve) ||
+        (fabs(materialSpeed - pSrc.materialSpeed) > EPSILON) || !materialSpeedCurve.isEqual(pSrc.materialSpeedCurve) ||
         (fabs(modGamma - pSrc.modGamma) > EPSILON) || (fabs(modGammaSpeed - pSrc.modGammaSpeed) > EPSILON) ||
         (fabs(modContrast - pSrc.modContrast) > EPSILON) || (fabs(modContrastSpeed - pSrc.modContrastSpeed) > EPSILON) ||
         (fabs(modSaturation - pSrc.modSaturation) > EPSILON) || (fabs(modSaturationSpeed - pSrc.modSaturationSpeed) > EPSILON) ||
