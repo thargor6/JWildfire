@@ -61,8 +61,8 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
     controls.weightingFieldColorMapFilenameInfoLbl.setVisible(false);
 
     controls.weightingFieldParam01REd.setVisible(true);
-    controls.weightingFieldParam01REd.setEnabled(enabled);
     controls.weightingFieldParam01REd.setMotionPropertyName("weightingFieldNoiseSeed");
+    xFormControlsDelegate.enableControl(controls.weightingFieldParam01REd, !enabled);
     controls.weightingFieldParam01Lbl.setVisible(true);
     controls.weightingFieldParam01Lbl.setText("Seed");
     controls.weightingFieldParam01Lbl.setToolTipText("Random number generator seed");
@@ -93,8 +93,8 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
     }
 
     controls.weightingFieldParam05REd.setVisible(true);
-    controls.weightingFieldParam05REd.setEnabled(true);
     controls.weightingFieldParam05REd.setMotionPropertyName("weightingFieldNoiseFrequency");
+    xFormControlsDelegate.enableControl(controls.weightingFieldParam05REd, !enabled);
     controls.weightingFieldParam05Lbl.setVisible(true);
     controls.weightingFieldParam05Lbl.setText("Frequency");
     controls.weightingFieldParam05Lbl.setToolTipText("Noise frequency; increase to put peaks closer together");

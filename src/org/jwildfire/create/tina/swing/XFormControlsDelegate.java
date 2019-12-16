@@ -136,7 +136,7 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     data.affineResetTransformButton.setEnabled(enabled);
     data.editTransformCaptionButton.setEnabled(enabled);
 
-    data.transformationWeightREd.setEnabled(enabled);
+    enableControl(data.transformationWeightREd, !enabled);
 
     for (TinaNonlinearControlsRow rows : data.TinaNonlinearControlsRows) {
       rows.getNonlinearVarCmb().setEnabled(enabled);
@@ -148,18 +148,18 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
       // rows.getNonlinearParamsRightButton().setEnabled(enabled);
     }
     boolean colorEnabled = enabled && (xForm.getColorType() != ColorType.NONE );
-    data.xFormColorREd.setVisible(enabled && xForm.getColorType() != ColorType.TARGET && xForm.getColorType() != ColorType.CYCLIC);
-    data.xFormColorREd.setEnabled(colorEnabled && xForm.getColorType() != ColorType.TARGET && xForm.getColorType() != ColorType.CYCLIC);
-    data.xFormColorSlider.setVisible(enabled && xForm.getColorType() != ColorType.TARGET && xForm.getColorType() != ColorType.CYCLIC);
-    data.xFormColorSlider.setEnabled(colorEnabled && xForm.getColorType() != ColorType.TARGET && xForm.getColorType() != ColorType.CYCLIC);
+    data.xFormColorREd.setVisible(enabled && xForm.getColorType() != ColorType.TARGET);
+    enableControl(data.xFormColorREd, !colorEnabled || xForm.getColorType() == ColorType.TARGET || xForm.getColorType() == ColorType.CYCLIC);
+    data.xFormColorSlider.setVisible(data.xFormColorREd.isVisible());
+    data.xFormColorSlider.setEnabled(data.xFormColorREd.isEnabled());
     data.xFormTargetColorBtn.setVisible(enabled && xForm.getColorType() == ColorType.TARGET);
     data.xFormTargetColorBtn.setEnabled(enabled && xForm.getColorType() == ColorType.TARGET);
-    data.xFormSymmetryREd.setEnabled(colorEnabled);
-    data.xFormSymmetrySlider.setEnabled(colorEnabled);
-    data.xFormMaterialREd.setEnabled(enabled);
-    data.xFormMaterialSlider.setEnabled(enabled);
-    data.xFormMaterialSpeedREd.setEnabled(enabled);
-    data.xFormMaterialSpeedSlider.setEnabled(enabled);
+    enableControl(data.xFormSymmetryREd, !colorEnabled);
+    data.xFormSymmetrySlider.setEnabled(data.xFormSymmetryREd.isEnabled());
+    enableControl(data.xFormMaterialREd, !enabled);
+    data.xFormMaterialSlider.setEnabled(data.xFormMaterialREd.isEnabled());
+    enableControl(data.xFormMaterialSpeedREd, !enabled);
+    data.xFormMaterialSpeedSlider.setEnabled(data.xFormMaterialSpeedREd.isEnabled());
     data.xFormModGammaREd.setEnabled(enabled);
     data.xFormModGammaSlider.setEnabled(enabled);
     data.xFormModGammaSpeedREd.setEnabled(enabled);
@@ -176,7 +176,7 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     data.xFormModHueSlider.setEnabled(enabled);
     data.xFormModHueSpeedREd.setEnabled(enabled);
     data.xFormModHueSpeedSlider.setEnabled(enabled);
-    data.xFormOpacityREd.setEnabled(enabled && xForm.getDrawMode() == DrawMode.OPAQUE);
+    enableControl(data.xFormOpacityREd, !(enabled && xForm.getDrawMode() == DrawMode.OPAQUE));
     data.xFormOpacitySlider.setEnabled(data.xFormOpacityREd.isEnabled());
     data.xFormDrawModeCmb.setEnabled(enabled);
     data.xFormColorTypeCmb.setEnabled(enabled);

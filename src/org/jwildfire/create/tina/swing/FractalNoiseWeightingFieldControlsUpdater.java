@@ -69,22 +69,22 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
     controls.weightingFieldColorMapFilenameInfoLbl.setVisible(false);
 
     controls.weightingFieldParam01REd.setVisible(true);
-    controls.weightingFieldParam01REd.setEnabled(enabled);
     controls.weightingFieldParam01REd.setMotionPropertyName("weightingFieldNoiseSeed");
+    xFormControlsDelegate.enableControl(controls.weightingFieldParam01REd, !enabled);
     controls.weightingFieldParam01Lbl.setVisible(true);
     controls.weightingFieldParam01Lbl.setText("Seed");
     controls.weightingFieldParam01Lbl.setToolTipText("Random number generator seed");
 
     controls.weightingFieldParam02REd.setVisible(true);
-    controls.weightingFieldParam02REd.setEnabled(enabled);
     controls.weightingFieldParam02REd.setMotionPropertyName("weightingFieldFractalNoiseGain");
+    xFormControlsDelegate.enableControl(controls.weightingFieldParam02REd, !enabled);
     controls.weightingFieldParam02Lbl.setVisible(true);
     controls.weightingFieldParam02Lbl.setText("Gain");
     controls.weightingFieldParam02Lbl.setToolTipText("Multiply amplitude by this value for each octave");
 
     controls.weightingFieldParam03REd.setVisible(true);
-    controls.weightingFieldParam03REd.setEnabled(enabled);
     controls.weightingFieldParam03REd.setMotionPropertyName("weightingFieldFractalNoiseOctaves");
+    xFormControlsDelegate.enableControl(controls.weightingFieldParam03REd, !enabled);
     controls.weightingFieldParam03Lbl.setVisible(true);
     controls.weightingFieldParam03Lbl.setText("Octaves");
     controls.weightingFieldParam03Lbl.setToolTipText("Number of components for fractal noise");
@@ -106,15 +106,15 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
     }
 
     controls.weightingFieldParam05REd.setVisible(true);
-    controls.weightingFieldParam05REd.setEnabled(true);
     controls.weightingFieldParam05REd.setMotionPropertyName("weightingFieldNoiseFrequency");
+    xFormControlsDelegate.enableControl(controls.weightingFieldParam05REd, !enabled);
     controls.weightingFieldParam05Lbl.setVisible(true);
     controls.weightingFieldParam05Lbl.setText("Frequency");
     controls.weightingFieldParam05Lbl.setToolTipText("Noise frequency; increase to put peaks closer together");
 
     controls.weightingFieldParam06REd.setVisible(true);
-    controls.weightingFieldParam06REd.setEnabled(enabled);
     controls.weightingFieldParam06REd.setMotionPropertyName("weightingFieldFractalNoiseLacunarity");
+    xFormControlsDelegate.enableControl(controls.weightingFieldParam06REd, !enabled);
     controls.weightingFieldParam06Lbl.setVisible(true);
     controls.weightingFieldParam06Lbl.setText("Lacunarity");
     controls.weightingFieldParam06Lbl.setToolTipText("Multiply frequency by this value for each octave");
