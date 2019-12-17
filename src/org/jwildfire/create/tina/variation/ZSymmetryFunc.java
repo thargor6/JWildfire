@@ -29,7 +29,7 @@ import org.jwildfire.base.Tools;
 
 public class ZSymmetryFunc extends VariationFunc {
 	/*
-	 * Variation :  zsymmetry
+	 * Variation :  c_symmetry
 	 * Date: august 29, 2019
 	 * Author: Jesus Sosa
 	 * Reference & Credits:  https://www.shadertoy.com/view/MdyBW3
@@ -77,7 +77,7 @@ public class ZSymmetryFunc extends VariationFunc {
 	   }
 	  
 	public String getName() {
-		return "zsymmetry";
+		return "c_symmetry";
 	}
 
 	public String[] getParameterNames() {

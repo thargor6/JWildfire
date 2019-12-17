@@ -20,6 +20,7 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.base.mathlib.Complex;
 import js.glsl.G;
 //import js.glsl.glslFuncRunner;
+//import js.glsl.glslFuncRunner;
 import js.glsl.vec2;
 import js.glsl.vec3;
 import js.glsl.vec4;
@@ -327,7 +328,9 @@ public class F_ComplexFunc  extends DC_BaseFunc {
     int reset_z=1;
 	
 
-    String code_func = 	"public int[] rgbColor(Complex z, double contrast)\r\n" +
+    String code_func =  "import org.jwildfire.base.mathlib.Complex;\r\n" +
+		                "import js.glsl.vec3;\r\n" +
+                        "public int[] rgbColor(Complex z, double contrast)\r\n" +
     					"{\r\n" +
     					" double t=z.Mag2();\r\n" +
     					"  vec3 color= new vec3(t/64., t/32., t/24.).multiply(t*contrast);\r\n" +
@@ -348,32 +351,29 @@ public class F_ComplexFunc  extends DC_BaseFunc {
 
     
     public void compile() {
+        String code=code_func;	
         try {
-          String code="import org.jwildfire.base.mathlib.Complex;\r\n" +
-        		      "import js.glsl.vec3;\r\n" +
-//                      "double escape=" + escape + ";\r\n"  +
-//                      "int MaxIter=" + maxIters + ";\r\n"  +
-//                      "int nIters=" + nIters + ";\r\n"  +
-                       code_func;	
           cf_runner = ComplexFuncRunner.compile(code);
         } catch (Throwable ex) {
           System.out.println("##############################################################");
           System.out.println(ex.getMessage());
           System.out.println("##############################################################");
-          System.out.println(code_func);
+          System.out.println(code);
           System.out.println("##############################################################");
         }
       }
 
-      @Override
+     
       public void validate() {
-        try {
-          if (code_func != null) {
-            compile();
-          }
-        } catch (Throwable ex) {
-          throw new RuntimeException(ex);
-        }
+    	  try {
+    		  if (code_func != null) {
+
+    			ComplexFuncRunner.compile( code_func);
+    		  }
+    	  }
+    	  catch (Throwable ex) {
+    		  throw new RuntimeException(ex);
+    	  }
       }
       
 	@Override

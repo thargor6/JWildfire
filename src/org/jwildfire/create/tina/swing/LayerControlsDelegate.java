@@ -57,8 +57,8 @@ public class LayerControlsDelegate extends AbstractControlsDelegate {
   public void enableControls() {
     Flame flame = owner.getCurrFlame();
     Layer layer = owner.getCurrLayer();
-    data.layerDensityREd.setEnabled(layer != null);
-    data.layerWeightEd.setEnabled(layer != null);
+    enableControl(data.layerDensityREd, layer == null);
+    enableControl(data.layerWeightEd, layer == null);
     data.layerAddBtn.setEnabled(flame != null);
     data.layerDuplicateBtn.setEnabled(layer != null);
     data.layerDeleteBtn.setEnabled(flame != null && layer != null && flame.getLayers().size() > 1);

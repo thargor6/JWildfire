@@ -29,177 +29,13 @@ import js.glsl.vec4;
 public class ZVarFunc  extends VariationFunc {
 
 	/*
-	 * Variation :zvar
+	 * Variation :c_var
 	 * Date: august 29, 2019
 	 * Author: Jesus Sosa
 	 * Reference & Credits:   Cosmic Pattern  https://www.shadertoy.com/view/3dyXWK
 	 */
 
-/*	  public static class ComplexFuncRunner 
-	  {
 
-		    public static ComplexFuncRunner compile(String pScript) throws Exception {
-		      ComplexFuncRunner res = (ComplexFuncRunner) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(pScript)), ComplexFuncRunner.class, (ClassLoader) null);
-		      return res;
-		    }
-		    
-			public vec2 abs(vec2 z)
-			{
-				return new vec2(G.abs(z.x),G.abs(z.y));
-			}
-			
-			public vec2 iabs(vec2 z)
-			{
-				return new vec2(z.x,G.abs(z.y));
-			}
-			
-			public vec2 re(vec2 a)
-			{
-				return new vec2((a).x, 0.);
-			}
-			
-			public vec2 neg(vec2 a)
-			{
-				return new vec2(-a.x,-a.y);
-			}
-			
-			public vec2 im(vec2 a)
-			{
-				return new vec2(0., (a).y);
-			}
-
-			public vec2 cmul(vec2 a,vec2 b)
-			{
-				return (new mat2(a.x,a.y, -(a).y, (a).x )).times(b);
-			}
-			
-			public vec2 conj(vec2 a)
-			{
-				return new vec2( (a).x, -(a).y);
-			}
-			
-			public vec2 cinv(vec2 a)
-			{
-				return conj(a).division( G.dot(a, a));
-			}
-			
-
-		    public vec2 cdiv(vec2 a,vec2 b)
-			{
-				return  cmul(a,cinv(b));
-			}
-			
-			public vec2 cexp(vec2 a)
-			{
-				return new vec2(Math.cos(a.y), Math.sin(a.y)).multiply(Math.exp(a.x));
-			}
-			
-			public vec2 clog(vec2 a)
-			{
-				return new vec2( Math.log(G.length(a)), G.atan2((a).y,(a).x) );
-			}
-			
-			public double arg(vec2 a) {
-				return G.atan2(a.y, a.x);
-			}
-			
-			public vec2 cpow(vec2 a,double n) {
-				return cexp( clog(a).multiply(n));
-			}
-		    public vec2 csinh(vec2 z)
-		    {
-		        return new vec2(Math.sinh(z.x) * Math.cos(z.y), Math.cosh(z.x) * Math.sin(z.y));
-		    }
-
-		    public vec2 ccosh(vec2 z)
-		    {
-		        return new vec2(Math.cosh(z.x) * Math.cos(z.y), Math.sinh(z.x) * Math.sin(z.y));
-		    }
-		    
-			public vec2 csin(vec2 z)
-			{
-			   return new vec2(Math.cosh(z.y) * Math.sin(z.x), Math.sinh(z.y) * Math.cos(z.x));
-			}
-			
-		    public vec2 ccos(vec2 z)
-		    {
-		        return new vec2(Math.cosh(z.y) * Math.cos(z.x), -Math.sinh(z.y) * Math.sin(z.x));
-		    }
-		    
-		    public vec2 chs(vec2 z)
-		    {
-		    	return new vec2(-z.x,-z.y);
-		    }
-		    
-		    public vec2 i()
-		    {
-		    	return new vec2(1.0,0.0);
-		    }
-		    
-		    public vec2 j()
-		    {
-		    	return new vec2(0.0,1.0);
-		    }
-		    public double mod(vec2 z)
-		    {
-		        if(z.x != 0.0D || z.y != 0.0D)
-		            return Math.sqrt(z.x * z.x + z.y * z.y);
-		        else
-		            return 0.0D;
-		    }
-		    
-		    public vec2 cscale(vec2 z, double s)
-		    {
-		        return new vec2(z.x * s, z.y * s);
-		    }
-		    
-			   public vec2 sinhcosh (double x) {
-				      double ex = Math.exp(x);
-				      double emx = Math.exp(-x);
-				      return cscale(new vec2( ex + emx, ex - emx), 0.5);
-				    }    
-			    public vec2 csqrt(vec2 z)
-			    {
-			        double r = Math.sqrt(mod(z));
-			        double theta = arg(z) / 2D;
-			        return new vec2(r * Math.cos(theta), r * Math.sin(theta));
-			    }
-			   
-			    public vec2 cacos (vec2 z) {
-			        vec2 t1 = csqrt(new vec2(z.x * z.y - z.x * z.x + 1.0, -2.0 * z.x * z.y));
-			        vec2 t2 = clog(new vec2(t1.x - z.y, t1.y + z.x));
-			        return new vec2(Math.PI/2 - t2.y, t2.x);
-			      }
-
-			      public vec2 casin (vec2 z) {
-			        vec2 t1 = csqrt(new vec2(z.y * z.y - z.x * z.x + 1.0, -2.0 * z.x * z.y));
-			        vec2 t2 = clog(new vec2(t1.x - z.y, t1.y + z.x));
-			        return new vec2(t2.y, -t2.x);
-			      }
-			      
-			      public vec2 recip (vec2 z) 
-			      {
-                     return cdiv(i(),z);
-				   } 
-			        
-			   public vec2 ctanh(vec2 z) {
-			        vec2 ez = cexp(z);
-			        vec2 emz = cexp(cscale(z,-1.0));
-			        return cdiv(ez.minus(emz),ez.plus(emz));
-			      }
-			   
-			    public vec2 catan (vec2 z) {
-			        float d = (float) (z.x * z.x + (1.0 - z.y) * (1.0 - z.y));
-			        vec2 t1 = clog(cscale((new vec2(1.0 - z.y * z.y - z.x * z.x, -2.0 * z.x)),(1.0 / d)));
-			        return cscale (new vec2(-t1.y, t1.x),0.5);
-			      }
-
-		    public vec2 f(vec2 z) 
-			{
-		    	vec2 a=iabs(z);		    	
-			   return clog(a); 
-			 };			
-      }*/
 
 	private static final long serialVersionUID = 1L;
 
@@ -227,7 +63,8 @@ public class ZVarFunc  extends VariationFunc {
 	
 
 		
-	String code_func = "public vec2 f(vec2 z)\n" +
+	String code_func ="import js.glsl.vec2;\n" + 
+			"public vec2 f(vec2 z)\n" +
 			"{\n" +
 			"  //vec2 a= c_add(z,new vec2(0.0,0.0));\n" +
 	        "  //vec2 b= c_sub(z,new vec2(0.0,0.0));\n" +
@@ -277,9 +114,9 @@ public class ZVarFunc  extends VariationFunc {
 
 	public void compile() {
 		try {
-			String code="import js.glsl.vec2;\n" +
-  					     code_func;	
-			cf_runner = glslFuncRunner.compile(code);
+			// String code= code_func;	
+			cf_runner = glslFuncRunner.compile(code_func);
+			
 		} catch (Throwable ex) {
 			System.out.println("##############################################################");
 			System.out.println(ex.getMessage());
@@ -289,16 +126,18 @@ public class ZVarFunc  extends VariationFunc {
 		}
 	}
 
-	@Override
-	public void validate() {
-		try {
-			if (code_func != null) {
-				compile();
-			}
-		} catch (Throwable ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    public void validate() {
+
+    	  try {
+    		  if (code_func != null) {
+    			glslFuncRunner.compile( code_func);
+    		  }
+    	  }
+    	  catch (Throwable ex) {
+    		  throw new RuntimeException(ex);
+    	  }
+      }
+	
 
 	@Override
 	public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) 
@@ -346,7 +185,7 @@ public class ZVarFunc  extends VariationFunc {
 
 	  
 	public String getName() {
-		return "zvar";
+		return "c_var";
 	}
 
 	public String[] getParameterNames() {
