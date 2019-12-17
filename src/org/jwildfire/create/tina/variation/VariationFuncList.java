@@ -848,7 +848,7 @@ public class VariationFuncList {
     registerVariationFunc(ZVarFunc.class);
 
     registerVariationFunc(OctapolFunc.class);
-    
+
     
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

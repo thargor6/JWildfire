@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-  <property name="release" value="5.00" />
+  <property name="release" value="5.10" />
   <property name="dist.dir" location="build/dist" />
   <property name="installer.dir" location="build/installer" />
 	<property name="build.dir" location="build/classes" />
@@ -133,6 +133,7 @@
        <fileset file="src/org/jwildfire/swing/GPU_RENDERING.txt" />
        <fileset file="README_LAUNCHING_JWILDFIRE.txt" />
        <fileset file="README!!!.txt" />
+       <fileset file="README_LINUX.txt" />
        <fileset file="README_SUPPORT.txt" />
        <fileset file="README_LEAP_MOTION_SUPPORT.txt" />
        <fileset file="Delphi/JWildfire.exe" />
