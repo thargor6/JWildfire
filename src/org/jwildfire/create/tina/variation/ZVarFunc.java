@@ -29,7 +29,7 @@ import js.glsl.vec4;
 public class ZVarFunc  extends VariationFunc {
 
 	/*
-	 * Variation :zvar
+	 * Variation :c_var
 	 * Date: august 29, 2019
 	 * Author: Jesus Sosa
 	 * Reference & Credits:   Cosmic Pattern  https://www.shadertoy.com/view/3dyXWK
@@ -185,7 +185,7 @@ public class ZVarFunc  extends VariationFunc {
 
 	  
 	public String getName() {
-		return "zvar";
+		return "c_var";
 	}
 
 	public String[] getParameterNames() {

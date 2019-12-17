@@ -25,7 +25,7 @@ import js.glsl.vec4;
 public class CutZFunc  extends VariationFunc {
 
 	/*
-	 * Variation :cut_z
+	 * Variation :cut_c
 	 * Date: august 29, 2019
 	 * Author: Jesus Sosa
 	 * Reference & Credits:   Cosmic Pattern  https://www.shadertoy.com/view/3dyXWK
@@ -198,7 +198,7 @@ public class CutZFunc  extends VariationFunc {
 	  
 	  
 	public String getName() {
-		return "cut_z";
+		return "cut_c";
 	}
 
 	public String[] getParameterNames() {

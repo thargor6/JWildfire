@@ -27,7 +27,7 @@ public class CutMagFieldFunc  extends VariationFunc {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String PARAM_SEED = "seed";
+	private static final String PARAM_SEED = "randomize";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_DENSITY = "linesDensity";
 	private static final String PARAM_ZOOM = "zoom";
