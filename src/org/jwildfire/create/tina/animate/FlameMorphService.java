@@ -74,16 +74,16 @@ public class FlameMorphService {
       return res;
     }
     else {
-      // fade out layers of the source flame (second half, using layer density)
+      // fade out layers of the source flame (using layer density)
       Flame res = pFlame1.makeCopy();
       morphFlameValues(pFlame1, pFlame2, fScl, res, pCompat);
       for (Layer layer : res.getLayers()) {
-        layer.setDensity(layer.getDensity() * Tools.limitValue(2.0 - 2.0 * fScl, 0.0, 1.0));
+        layer.setDensity(layer.getDensity() * (1.0 - fScl));
       }
-      // add and fade in layers of the dest flame (first half, using layer density)
+      // add and fade in layers of the dest flame (using layer density)
       for (Layer layer : pFlame2.getLayers()) {
         Layer copy = layer.makeCopy();
-        copy.setDensity(copy.getDensity() * Tools.limitValue(2.0 * fScl, 0.0, 1.0));
+        copy.setDensity(copy.getDensity() * fScl);
         res.getLayers().add(copy);
       }
       return res;      
