@@ -846,8 +846,8 @@ public class VariationFuncList {
     registerVariationFunc(CutBasicTruchetFunc.class);  
     registerVariationFunc(CutZFunc.class);   
     registerVariationFunc(ZVarFunc.class);
-    registerVariationFunc(CutMagFieldFunc.class);
-    
+    registerVariationFunc(CutMagFieldFunc.class); 
+    registerVariationFunc(CutBTreeFunc.class);
     
     
     resolvedAliasMap = new HashMap<>();

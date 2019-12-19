@@ -1739,6 +1739,36 @@ public vec3 app (vec3 v, double k, mat3 m)
 	return new vec4(xr,yr,zr,wr);
 }
 
+ public double exp2(double x)
+ {
+ 	return  Math.pow(2.,x);
+ }
+
+  public vec2 exp2(vec2 x)
+ {
+
+ 	double xr= Math.pow(2.0,x.x);
+ 	double yr= Math.pow(2.0,x.y);
+ 	return new vec2(xr,yr);
+ }
+
+  public   vec3 exp2(vec3 x)
+ {
+ 	double xr= Math.pow(2.0,x.x);
+ 	double yr= Math.pow(2.0,x.y);
+ 	double zr= Math.pow(2.0,x.z);
+ 	return new vec3(xr,yr,zr);
+ }
+
+  public   vec4 exp2(vec4 x)
+ {
+ 	double xr= Math.pow(2.0,x.x);
+ 	double yr= Math.pow(2.0,x.y);
+ 	double zr= Math.pow(2.0,x.z);
+ 	double wr= Math.pow(2.0,x.w);
+ 	return new vec4(xr,yr,zr,wr);
+ }
+  
  public double cosh(double val) {
 	  double tmp = Math.exp(val);
 	  return (tmp + 1.0 / tmp) / 2.0;
