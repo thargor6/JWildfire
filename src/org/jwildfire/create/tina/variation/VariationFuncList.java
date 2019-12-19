@@ -846,10 +846,13 @@ public class VariationFuncList {
     registerVariationFunc(CutBasicTruchetFunc.class);  
     registerVariationFunc(CutZFunc.class);   
     registerVariationFunc(ZVarFunc.class);
+
     registerVariationFunc(CutMagFieldFunc.class); 
     registerVariationFunc(CutBTreeFunc.class);
-    
-    
+    registerVariationFunc(OctapolFunc.class);
+    registerVariationFunc(Post_CrosscropFunc.class);  
+
+
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
