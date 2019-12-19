@@ -294,6 +294,36 @@ public class G {
 			return new vec4(xr,yr,zr,wr);
 		}
 		
+		 public static double exp2(double x)
+		 {
+		 	return  Math.pow(2.,x);
+		 }
+
+		  public static vec2 exp2(vec2 x)
+		 {
+
+		 	double xr= Math.pow(2.0,x.x);
+		 	double yr= Math.pow(2.0,x.y);
+		 	return new vec2(xr,yr);
+		 }
+
+		  public static vec3 exp2(vec3 x)
+		 {
+		 	double xr= Math.pow(2.0,x.x);
+		 	double yr= Math.pow(2.0,x.y);
+		 	double zr= Math.pow(2.0,x.z);
+		 	return new vec3(xr,yr,zr);
+		 }
+
+		  public static vec4 exp2(vec4 x)
+		 {
+		 	double xr= Math.pow(2.0,x.x);
+		 	double yr= Math.pow(2.0,x.y);
+		 	double zr= Math.pow(2.0,x.z);
+		 	double wr= Math.pow(2.0,x.w);
+		 	return new vec4(xr,yr,zr,wr);
+		 }
+		
 		public static   double clamp(double x,double minVal, double maxVal)
 		{
 			return Math.min(Math.max(x, minVal), maxVal);

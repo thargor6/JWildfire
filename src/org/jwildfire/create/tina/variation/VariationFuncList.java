@@ -846,7 +846,9 @@ public class VariationFuncList {
     registerVariationFunc(CutBasicTruchetFunc.class);  
     registerVariationFunc(CutZFunc.class);   
     registerVariationFunc(ZVarFunc.class);
-    registerVariationFunc(CutMagFieldFunc.class);
+
+    registerVariationFunc(CutMagFieldFunc.class); 
+    registerVariationFunc(CutBTreeFunc.class);
     registerVariationFunc(OctapolFunc.class);
     registerVariationFunc(Post_CrosscropFunc.class);  
 
