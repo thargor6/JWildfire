@@ -852,6 +852,7 @@ public class VariationFuncList {
     registerVariationFunc(OctapolFunc.class);
     registerVariationFunc(Post_CrosscropFunc.class);
     registerVariationFunc(CSinFunc.class);
+    registerVariationFunc(SinusGridFunc.class);
 
 
     resolvedAliasMap = new HashMap<>();
