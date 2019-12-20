@@ -850,7 +850,8 @@ public class VariationFuncList {
     registerVariationFunc(CutMagFieldFunc.class); 
     registerVariationFunc(CutBTreeFunc.class);
     registerVariationFunc(OctapolFunc.class);
-    registerVariationFunc(Post_CrosscropFunc.class);  
+    registerVariationFunc(Post_CrosscropFunc.class);
+    registerVariationFunc(CSinFunc.class);
 
 
     resolvedAliasMap = new HashMap<>();
