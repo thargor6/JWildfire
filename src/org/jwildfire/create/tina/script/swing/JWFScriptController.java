@@ -194,6 +194,8 @@ public class JWFScriptController {
               "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Oily_Juliascope_Rev1", "Oily_Rev3",
               "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3",
 
+              "Keep 'Em Separated and Framed BS",
+
               "UG-", "UG-Ran", "UG-Ran2", "UG-Ran2sym", "UG-Ran2symPersp", "UG-Ran2symPerspYax", "UG-RanRan", "UG-RanRanRan", "UG-Sym", "UG-Sym2",
 
               "HB  0 Final 2 Galaxies", "HB 0 2 Galaxy Final Test", "HB 0 Final 2 Galaxies-cloudier", "HB 0 Final 2 Galaxiesv2",
@@ -204,13 +206,24 @@ public class JWFScriptController {
               "HB Galaxy1", "HB Galaxy1a", "HB Galaxy2moontest", "HB Moon Generator", "HB Moon Surface Generator", "  HB Moon Zoom Generator II",
               "HB Planet Generator", "HB Single Galaxy",
 
+              "LU--Lumiere-", "LU--Lumiere-CurlyCross1", "LU--Lumiere-HyLog", "LU--Lumiere-POL", "LU-Choose-Lumiere-", "LU-ChooseJS-Lumiere-",
+              "LU-ChooseJS2-Lumiere-", "LU-Epi-Lumiere-", "LU-EpipluPAX-Lumiere-", "LU-Epiplus-Lumiere-",  "LU-Epipluspoly-Lumiere-",
+              "LU-JULF-Lumiere-", "LU-JULFLOW-Lumiere-", "LU-Mob-Lumiere-", "LU-RandFinal-Mirror-Lumiere-", "LU-Rays-Lumiere-",
+              "LU-SPHERE-3D-PIF-Mirror-Lumiere-", "LU-SPHEREPIF-Lumiere-", "LU-SPHEREPIF-Mirror-Lumiere-", "LU-SPHERF-Lumiere-", "LU-TanEpi-Lumiere-", "LU-TanF-Lumiere-",
+
               "SX 00 I am Ace  in space", "SX 00 I am Ace  in space2", "SX 00 I am Ace  in space3", "SX 00 I am Julia in space pitch",
               "SX 00 I am Julia in space", "SX 00 I am Julia", "SX 00 I am RanJulia in space", "SX 00 I am RanJulia",
               "SX 0 I am Lovely", "SX 1 I am Peaceful", "SX 1 I am PeacefulRC", "SX 2 I make you think", "SX 3 I need printing",
               "SX 4 I need love", "SX 5 I need patience", "SX 6 I need Tweaks", "SX 7 I make you wonder", "SX hole2Split",
               "SX jispostz", "SX LoonieSplit", "SX octagon2Split", "SX rings2Split", "SX squarize2Split", "SX tancos2Split",
 
-              "Wedge_Sph_Marble"};
+              "Wedge_Sph_Marble",
+
+              "YU-", "YU--Choose", "YU--cot", "YU--coth", "YU--cothtest", "YU--csc",
+              "YU--csch", "YU--curl", "YU--curlZO", "YU--foci", "YU--ho", "YU--invpolar",
+              "YU--log", "YU--secant", "YU--spiralwing", "YU--tancos", "YU-Yugen"
+
+      };
       List<String> resLst = Arrays.asList(ressources);
       Collections.sort(resLst);
       ressources = resLst.toArray(new String[]{});

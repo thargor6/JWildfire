@@ -1,0 +1,6 @@
+/*Keep 'Em Separated and Framed BS
+ScriptInfo
+author="Brad Stefanov" category="Randomizer"
+info="Based on a flame by Brad Stefanov "
+suggestion: Only replaced the mobius variation with other variaitons. 
+*/
