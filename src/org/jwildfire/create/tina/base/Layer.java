@@ -87,7 +87,7 @@ public class Layer implements Assignable<Layer>, Serializable {
     return palette;
   }
 
-  private final static int DFLT_CURVE_POINTS = 10;
+  private final static int DFLT_CURVE_POINTS = 12;
 
   private MotionCurve createGradientCurve() {
     MotionCurve curve = new MotionCurve();
@@ -115,11 +115,14 @@ public class Layer implements Assignable<Layer>, Serializable {
       throw new IllegalArgumentException(pPalette != null ? pPalette.toString() + " " + pPalette.getSize() : "NULL");
     palette = pPalette;
     colorMap = null;
-    recalcHSLCurves(DFLT_CURVE_POINTS);
+    recalcHSLCurves();
   }
 
-  private void recalcHSLCurves(int maxPoints) {
+  public void recalcHSLCurves() {
     GammaCorrectionFilter.HSLRGBConverter converter = new GammaCorrectionFilter.HSLRGBConverter();
+    gradientEditorHueCurve.assign(createGradientCurve());
+    gradientEditorSaturationCurve.assign(createGradientCurve());
+    gradientEditorLuminosityCurve.assign(createGradientCurve());
     {
       RGBColor color = palette.getRawColor(0);
       converter.fromRgb(color.getRed() / 255.0, color.getGreen()/ 255.0, color.getBlue()/ 255.0);
@@ -465,7 +468,7 @@ public class Layer implements Assignable<Layer>, Serializable {
     return gradientMap;
   }
 
-  public void refreshGradientForCurve(MotionCurve curve) {
+  public void refreshGradientFromCurves() {
     Envelope hueCurve = gradientEditorHueCurve.toEnvelope();
     Envelope saturationCurve = gradientEditorSaturationCurve.toEnvelope();
     Envelope luminosityCurve = gradientEditorLuminosityCurve.toEnvelope();

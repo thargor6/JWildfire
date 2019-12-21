@@ -68,6 +68,9 @@ public class JWFFlameReader extends AbstractFlameReader {
         String layerXML = flameXML.substring(layerStart, pLayers);
 
         Layer layer = new Layer();
+        layer.getGradientEditorHueCurve().clear();
+        layer.getGradientEditorSaturationCurve().clear();
+        layer.getGradientEditorLuminosityCurve().clear();
         flame.getLayers().add(layer);
         XMLAttributes atts;
         // Layer attributes
@@ -81,6 +84,9 @@ public class JWFFlameReader extends AbstractFlameReader {
         readXForms(layerXML, flame, layer);
         readFinalXForms(layerXML, flame, layer);
         readColors(layerXML, layer);
+        if(layer.getGradientEditorHueCurve().getX().length==0) {
+          layer.recalcHSLCurves();
+        }
         readMotionCurves(layer.getPalette(), atts, "palette_");
       }
     }

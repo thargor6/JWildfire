@@ -246,4 +246,14 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     return res;
   }
 
+  public void clear() {
+    x = new int[] {};
+    y = new double[] {};
+    viewXMin = -10;
+    viewXMax = 310;
+    viewYMin = -120.0;
+    viewYMax = 120.0;
+    interpolation = Interpolation.SPLINE;
+    selectedIdx = 0;
+  }
 }

@@ -47,6 +47,10 @@ public class Flam3Reader extends AbstractFlameReader {
       }
 
       Flame flame = new Flame();
+      Layer layer = flame.getFirstLayer();
+      layer.getGradientEditorHueCurve().clear();
+      layer.getGradientEditorSaturationCurve().clear();
+      layer.getGradientEditorLuminosityCurve().clear();
       res.add(flame);
       // Flame attributes
       XMLAttributes atts;
@@ -66,10 +70,12 @@ public class Flam3Reader extends AbstractFlameReader {
         String hs = flameXML.substring(ps + 7, pe);
         atts = parseFlameAttributes(flame, hs);
       }
-      Layer layer = flame.getFirstLayer();
       readXForms(flameXML, flame, layer);
       readFinalXForms(flameXML, flame, layer);
       readColors(flameXML, layer);
+      if(layer.getGradientEditorHueCurve().getX().length==0) {
+        layer.recalcHSLCurves();
+      }
       readMotionCurves(layer.getPalette(), atts, "palette_");
     }
     return res;
