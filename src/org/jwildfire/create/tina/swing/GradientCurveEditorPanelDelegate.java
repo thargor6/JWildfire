@@ -227,7 +227,7 @@ public abstract class GradientCurveEditorPanelDelegate {
           owner.getOwner().undoManager.saveUndoPoint(flame);
         }
         curve.assignFromEnvelope(envelope);
-        owner.getOwner().getCurrLayer().refreshGradientForCurve(curve);
+        owner.getOwner().getCurrLayer().refreshGradientFromCurves();
         owner.getOwner().refreshPaletteImg();
         owner.getOwner().refreshFlameImage(true, false, 1, true, false);
         refreshCurve(layer);
@@ -247,7 +247,7 @@ public abstract class GradientCurveEditorPanelDelegate {
       modifier.apply(curve);
       Envelope envelope = curve.toEnvelope();
       curve.assignFromEnvelope(envelope);
-      owner.getOwner().getCurrLayer().refreshGradientForCurve(curve);
+      owner.getOwner().getCurrLayer().refreshGradientFromCurves();
       owner.getOwner().refreshPaletteImg();
       owner.getOwner().refreshFlameImage(true, false, 1, true, false);
       refreshCurve(layer);
@@ -273,7 +273,7 @@ public abstract class GradientCurveEditorPanelDelegate {
 
       MotionCurve curve = getCurve(layer);
       curve.assignFromEnvelope(ctrl.getCurrEnvelope());
-      owner.getOwner().getCurrLayer().refreshGradientForCurve(curve);
+      owner.getOwner().getCurrLayer().refreshGradientFromCurves();
       owner.getOwner().refreshPaletteImg();
       owner.getOwner().refreshFlameImage(true, true, 1, true, false);
     }
