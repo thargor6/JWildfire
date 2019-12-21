@@ -58,10 +58,15 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   @Override
   public void readRasterPoint(int pX, int pY, RasterPoint pDestRasterPoint) {
     pDestRasterPoint.clear();
-    pDestRasterPoint.red = red[pX][pY];
-    pDestRasterPoint.green = green[pX][pY];
-    pDestRasterPoint.blue = blue[pX][pY];
     pDestRasterPoint.count = count[pX][pY];
+    if(pDestRasterPoint.count < 0) {
+      pDestRasterPoint.clear();
+    }
+    else {
+      pDestRasterPoint.red = red[pX][pY];
+      pDestRasterPoint.green = green[pX][pY];
+      pDestRasterPoint.blue = blue[pX][pY];
+    }
   }
 
   @Override

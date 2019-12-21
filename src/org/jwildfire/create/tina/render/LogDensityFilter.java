@@ -773,7 +773,10 @@ public class LogDensityFilter {
 
     double logScale;
 
-    if (rp.count < precalcLogArray.length) {
+    if(rp.count<1) {
+      return primaryFilter;
+    }
+    else if(rp.count < precalcLogArray.length) {
       logScale = precalcLogArray[(int) rp.count];
     }
     else {
