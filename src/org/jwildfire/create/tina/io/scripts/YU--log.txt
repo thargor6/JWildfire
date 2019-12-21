@@ -1,0 +1,22 @@
+The Yugen scripts by Michael Bourne - Started from a series of flames by Mi Mi
+
+There are things you can do to tweak or play with these right away, the first thing to try is Zooming out. As is the flames focus on a section of a flame which usually gives the most detail. However, if you zoom out you may see other areas of interest that you may want to zoom in on and experiment with.
+
+The easiest way to do this is with the view editing mode button (top right, and top most button in the view window). If you click this on, you can drag the image around with your mouse button held. You can rotate it by holding down your right mouse button and moving your mouse around.
+
+Obviously try changing the values of the variations for different looks, and try different variations on the second transform. You can also add a final to experiment further.
+
+Gradients! changing gradients has a dramatic impact, and try to go for darker colours, and also play with gradient and colour settings too.
+
+
+
+Because this combination of variations has been used in the past, there was some issue about crediting previous authors who used these combinations also. Because Mi Mi who created the flames, did so on her own, this isn't necessary, it also looks like others have used these combinations previously also and not been questioned on their origin. In creating the scripts I haven't examined any that used these combinations, I only examined Mick Hogans scripts where he had a pop up choice of transform to see how I could implement that. I also talked with him about it, and have used it in one of the scripts, so thanks Mick Hogan.
+
+Thanks also, to Jesus Sosa and Rick Sidwell more generally for helping me when I got stuck with scripts in the past, and for their random number generator lines.
+
+Thanks to all at the JWildfire Sanctuary facebook group for being supportive of the script development. 
+
+Last, and by no means least, in fact first ! Major thanks to Mi Mi for her set of flames, without which these scripts would not exist. 
+
+
+
