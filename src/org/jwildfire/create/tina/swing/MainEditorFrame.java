@@ -35,7 +35,37 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JSlider;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.JTree;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
@@ -1213,7 +1243,7 @@ public class MainEditorFrame extends JFrame {
       lblDimishZColor.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblDimishZColor.setBounds(774, 28, 68, 22);
       tinaDOFPanel.add(lblDimishZColor);
-      
+
       dimishZColorButton = new JButton();
       dimishZColorButton.setPreferredSize(new Dimension(100, 24));
       dimishZColorButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1225,7 +1255,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       tinaDOFPanel.add(dimishZColorButton);
-      
+
       JLabel lblDimZDistance = new JLabel();
       lblDimZDistance.setName("lblDimZDistance");
       lblDimZDistance.setText("DimZ dist");
@@ -5668,13 +5698,13 @@ public class MainEditorFrame extends JFrame {
     if (gradientCurveEditorPanel == null) {
       gradientCurveEditorPanel = new JPanel();
       gradientCurveEditorPanel.setLayout(new BorderLayout(0, 0));
-/*
+      /*
       JPanel panel_1 = new JPanel();
       panel_1.setPreferredSize(new Dimension(80, 10));
       gradientCurveEditorPanel.add(panel_1, BorderLayout.WEST);
       panel_1.setLayout(null);
       panel_1.add();
-*/
+      */
 
       JPanel panel_2 = new JPanel();
       gradientCurveEditorPanel.add(panel_2, BorderLayout.CENTER);
@@ -5699,7 +5729,7 @@ public class MainEditorFrame extends JFrame {
   }
 
   private JButton getGradientCurveEditorSaveBtn() {
-    if(gradientCurveEditorSaveBtn==null) {
+    if (gradientCurveEditorSaveBtn == null) {
       gradientCurveEditorSaveBtn = new JButton();
       gradientCurveEditorSaveBtn.setToolTipText("Save the current gradient in the gradient-library");
       gradientCurveEditorSaveBtn.addActionListener(new ActionListener() {
@@ -5714,9 +5744,30 @@ public class MainEditorFrame extends JFrame {
       gradientCurveEditorSaveBtn.setMinimumSize(new Dimension(70, 24));
       gradientCurveEditorSaveBtn.setIconTextGap(2);
       gradientCurveEditorSaveBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      gradientCurveEditorSaveBtn.setBounds(210, 0, 70, 24);
+      gradientCurveEditorSaveBtn.setBounds(244, 0, 70, 24);
     }
     return gradientCurveEditorSaveBtn;
+  }
+
+  private JButton getGradientCurveEditorNewRndBtn() {
+    if (gradientCurveEditorNewRndBtn == null) {
+      gradientCurveEditorNewRndBtn = new JButton();
+      gradientCurveEditorNewRndBtn.setToolTipText("Create a new random gradient");
+      gradientCurveEditorNewRndBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null) {
+            tinaController.randomPaletteButton_actionPerformed(e);
+          }
+        }
+      });
+      gradientCurveEditorNewRndBtn.setText("Random");
+      gradientCurveEditorNewRndBtn.setPreferredSize(new Dimension(70, 24));
+      gradientCurveEditorNewRndBtn.setMinimumSize(new Dimension(70, 24));
+      gradientCurveEditorNewRndBtn.setIconTextGap(2);
+      gradientCurveEditorNewRndBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      gradientCurveEditorNewRndBtn.setBounds(168, 0, 70, 24);
+    }
+    return gradientCurveEditorNewRndBtn;
   }
 
   /**
@@ -6522,7 +6573,7 @@ public class MainEditorFrame extends JFrame {
     params.setHelpParams(helpFrame.getMeshGenHintPane(), helpFrame.getHelpPane(), helpFrame.getApophysisHintsPane(), helpFrame.getColorTypesPane());
 
     params.setGradientCurveEditorParams(getGradientCurveEditorSaveBtn(), getGradientCurveEditorHueRootPanel(),
-      getGradientCurveEditorSaturationRootPanel(), getGradientCurveEditorLuminosityRootPanel());
+        getGradientCurveEditorSaturationRootPanel(), getGradientCurveEditorLuminosityRootPanel());
 
     params.setParams1(pDesktop, this, pErrorHandler, pPrefs, /* getCenterCenterPanel()*/getMainPrevievPnl(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraBankREd(), getTinaCameraBankSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
@@ -6826,7 +6877,7 @@ public class MainEditorFrame extends JFrame {
           easyMovieMakerFrame.getSwfAnimatorFrameToEditorBtn(),
           easyMovieMakerFrame.getSwfAnimatorPlayButton(), easyMovieMakerFrame.getSwfAnimatorMotionBlurLengthREd(),
           easyMovieMakerFrame.getSwfAnimatorMotionBlurTimeStepREd(), easyMovieMakerFrame.getRandomMoviePanel(),
-          easyMovieMakerFrame.getSwfAnimatorQualityProfileCmb(), easyMovieMakerFrame.getSwfAnimatorOutputTypeCmb(), 
+          easyMovieMakerFrame.getSwfAnimatorQualityProfileCmb(), easyMovieMakerFrame.getSwfAnimatorOutputTypeCmb(),
           easyMovieMakerFrame.getSwfAnimatorCompatCBx()));
       tinaController.getSwfAnimatorCtrl().enableControls();
       tinaController.getSwfAnimatorCtrl().refreshControls();
@@ -8669,7 +8720,7 @@ public class MainEditorFrame extends JFrame {
     if (xFormColorTypeCmb == null) {
       xFormColorTypeCmb = new JComboBox();
       xFormColorTypeCmb.setToolTipText("<html>NONE: don't change color<br>DIFFUSION: move color along gradient toward target gradient color<br>"
-          + "TARGET: move color toward arbitrary target color<br>TARGETG: move color toward target gradient color (not along gradient)<br>" 
+          + "TARGET: move color toward arbitrary target color<br>TARGETG: move color toward target gradient color (not along gradient)<br>"
           + "DISTANCE: use the gradient indexed by the distance the point moved<br>CYCLIC: cycle through gradient colors (requires DIFFUSION on a different transform)</html>");
       xFormColorTypeCmb.setPreferredSize(new Dimension(120, 22));
       xFormColorTypeCmb.setSize(new Dimension(120, 22));
@@ -11958,6 +12009,7 @@ public class MainEditorFrame extends JFrame {
   private JButton channelMixerResetBtn;
   private JComboBox channelMixerModeCmb;
   private JButton gradientCurveEditorSaveBtn;
+  private JButton gradientCurveEditorNewRndBtn;
   private JPanel gradientCurveEditorHueRootPanel;
   private JPanel gradientCurveEditorSaturationRootPanel;
   private JPanel gradientCurveEditorLuminosityRootPanel;
@@ -13926,7 +13978,7 @@ public class MainEditorFrame extends JFrame {
   public JSlider getCamDimishZSlider() {
     return camDimishZSlider;
   }
-  
+
   public JButton getDimishZColorButton() {
     return dimishZColorButton;
   }
@@ -13938,7 +13990,7 @@ public class MainEditorFrame extends JFrame {
   public JSlider getDimZDistanceSlider() {
     return dimZDistanceSlider;
   }
-  
+
   private JButton getTinaAddLinkedTransformationButton() {
     if (tinaAddLinkedTransformationButton == null) {
       tinaAddLinkedTransformationButton = new JButton();
@@ -14734,7 +14786,7 @@ public class MainEditorFrame extends JFrame {
       mouseTransformEditGradientButton.setToolTipText("Edit gradient (use cursor-left and -right to control marker 1 and cursor-up and -down to control marker 2, press the 1 or 2 key for color choosers)");
       mouseTransformEditGradientButton.setPreferredSize(new Dimension(72, 24));
 
-
+      panel_73.add(getGradientCurveEditorNewRndBtn());
       panel_73.add(getGradientCurveEditorSaveBtn());
 
     }
@@ -14819,7 +14871,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      
+
       panel_75.add(layerDensityREd);
 
       JLabel lblWeight = new JLabel();
@@ -15488,7 +15540,7 @@ public class MainEditorFrame extends JFrame {
       JLabel postSymmetryTypeLbl = new JLabel();
       postSymmetryTypeLbl.setText("Symmetry type");
       postSymmetryTypeLbl.setToolTipText("Type of post symmetry to perform");
-          postSymmetryTypeLbl.setSize(new Dimension(94, 22));
+      postSymmetryTypeLbl.setSize(new Dimension(94, 22));
       postSymmetryTypeLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryTypeLbl.setLocation(new Point(488, 2));
       postSymmetryTypeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -21715,7 +21767,7 @@ public class MainEditorFrame extends JFrame {
       lblZBufferFilename.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblZBufferFilename.setBounds(6, 54, 84, 22);
       panel_5.add(lblZBufferFilename);
-      
+
       tinaZBufferFilename1 = new JRadioButton("zbuf_name");
       tinaZBufferFilename1.setSelected(true);
       tinaZBufferFilename1.setToolTipText("Use image filename prefixed with \"zbuf_\" for zbuffer filename");
@@ -21737,12 +21789,12 @@ public class MainEditorFrame extends JFrame {
         }
       });
       panel_5.add(tinaZBufferFilename2);
-      
+
       ButtonGroup zBufferFilenameButtonGroup = new ButtonGroup();
       zBufferFilenameButtonGroup.add(tinaZBufferFilename1);
       zBufferFilenameButtonGroup.add(tinaZBufferFilename2);
 
-}
+    }
     return panel_5;
   }
 
@@ -21761,11 +21813,11 @@ public class MainEditorFrame extends JFrame {
   public JSlider getTinaZBufferBiasSlider() {
     return tinaZBufferBiasSlider;
   }
-  
+
   public JRadioButton getTinaZBufferFilename1() {
     return tinaZBufferFilename1;
   }
-  
+
   public JRadioButton getTinaZBufferFilename2() {
     return tinaZBufferFilename2;
   }

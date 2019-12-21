@@ -1,6 +1,79 @@
-V5.xx (TBD)
+V5.50 (21.12.2019)
+ - New "Curve Editor" for gradients at the gradient tab. This gives much more control over the final result because it allows a very interactive editing
+   of the gradient and the flame at the same time. Additionally, it allows more direct control over modifying the colors of a gradient,
+   making it much easier to create "dramatic" effects.
+
+   Internally, each gradient now consist both of the "classic" part of the gradient and three new curves: hue, saturation and luminosity.
+   Those curves belong to the flames, and are also stored within the flame-files.
+
+   When loading an old flame without those curves, or assigning a "classic" gradient to a flame, the color curves are approximated.
+   This usually is only a very raw approximation, but this is absolutely intended. To reach a very accurate approximation, it would require
+   to have a lot of curve-points, which would make the curve very hard to edit.
+
+   So, there is no exact synchronisation between the gradient and the colors curves, in order to not break existing flames and concepts.
+   Instead, it is meant as powerful additional tool, whioch is useful in very many cases, but might not be useful in each case.
+
+   Only when you start to edit one of the curves, the gradient is synchronized to shape of the curves. When you save and re-load a flame
+   you can continue the editing of the curves.
+
+   Each curve has a toolbar with little buttons to help with editing:
+     - open a modal dialog for editing an enlarged version of a particular curve
+     - create ramp-shaped curve
+     - create line-shaped curve at the bottom (constant zero intensity)
+     - create line-shaped curve at the middle (constant halve intensity)
+     - mirror the curve at the vertical axis
+     - mirror the curve at the horizontal axis (e.g., to turn a constant line of zero intensity into a line with maximum intensity)
+
+   Two new random-gradient-generators directly support the concept of color-curves. I. e., they create random color-curves instead of random gradients.
+   All existing random-gradient-generators works as before. I.e., they create only random gradients, while the color-curves are approximated from
+   the gradients.
+
+ - new "Uneven curves"-random-gradient-generator, which generated both a color-curve and a gradient (derived from this color-curve)
+
+ - new "Uniform curves"-random-gradient-generator, which generated both a color-curve and a gradient (derived from this color-curve)
+
+ - made "Uneven curves" the new default random-gradient-generator
+
+ - New coloring type (by Rick Sidwell):
+ 	CYCLIC shifts the gradient index right by the amount specified by Speed,
+    wrapping as needed to cycle through gradient colors. It doesn't converge
+    to a color when iterated, so some other transform needs to use DIFFUSION
+    to get a stable color that CYCLIC can use as a starting point.
+    CYCLIC is especially useful for coloring tilings.
+
+ - function to create a simular gradient (using the currently loaded gradient as reference)
+
+ - new "EDisc"-random-flame-generator
+
+ - new "Save Gradient"-button at the gradient-tab
+
+ - new "Random Gradient"-button direct at the gradient-tab
+
  - new variations (no particular order):
+    - octapol (by xyrus02)
+    - sinusgrid (by xyrus02)
+    - csin (by zephyrtronium)
     by Jesus Sosa
+    - cut_tileillusion
+    - dc_fractcolor
+    - cut_fractal
+    - cut_zigzag
+    - cut_x
+    - cut_spiral
+    - cut_spiralcb
+    - joukowski
+    - jac_elk
+    - c_symmetry
+    - cut_celtic
+    - cut_triskel
+    - cut_vasarely
+    - cut_web
+    - cut_spots
+    - cut_btruchet
+    - cut_c
+    - c_var
+    - cut_magfield
+    - cut_btree
     - cut_2ewangtile
     - cut_alientext
     - cut_apollonian
@@ -36,9 +109,26 @@ V5.xx (TBD)
     - f_complex
     - msTruchet
     by Brad Stefanov
-    - exp_multi
+    - exp_multi (by Whittaker Courtney)
     - parallel
-    - shredded
+    - shredded (by Brad Stefanov and Rick Sidwell)
+    - post_crosscrop (by Whittaker Courtney)
+
+ - added "Lumiere Scripts" by Michael Bourne (a collection of 22 scripts) as built-in scripts
+ - added "The Yugen Scripts" by Michael Bourne (a collection of 17 scripts) as built-in scripts
+ - added "Keep 'Em Separated and Framed Script" by Brad Stefanov as built-in scripts
+
+ - fixed a nasty bug which could cause the final image to contain black stripes
+
+ - Making a variaton a pre or post now works as intended
+
+ - added standard shortcuts to Undo/Redo (<Strg>+Z/Y)
+
+ - slighlty increased variation cost threshold to increase diversity in random flames
+
+ - small optimization of the space at WField-tab
+
+ - new README-file with hints for Linux-users
 
  - Additional presets added to isosfplot3d_wf variation
  
@@ -46,16 +136,9 @@ V5.xx (TBD)
  
  - New option to specify color for DiminishZ; this is useful when using DiminishZ with a colored background
  
- - New coloring type:
- 	CYCLIC shifts the gradient index right by the amount specified by Speed,
-    wrapping as needed to cycle through gradient colors. It doesn't converge
-    to a color when iterated, so some other transform needs to use DIFFUSION
-    to get a stable color that CYCLIC can use as a starting point.
-    CYCLIC is especially useful for coloring tilings.
-
  - New coloring types descriptions in the Fractal Flames: Help window
  
- - New Density option for layers.
+ - New Density option for layers (by Rick Sidwell).
    Layer density allows fading some layers with respect to others to better
    balance the overall flame. It is complimentary to Weight, which controls
    the intensity of the layer to balance its brightness, but can only make
@@ -63,7 +146,7 @@ V5.xx (TBD)
  
  - New layer Extract button extracts the selected layer to a new flame in the editor
  
- - New ZBuffer controls
+ - New ZBuffer controls (by Rick Sidwell)
    - ZBuffer bias makes the background appear closer. This is sometimes needed when using the ZBuffer
      for 3D photos in Facebook, which creates white splotches if the background is too far away.
    - ZBuffer filename option to select between traditional zbuf_name and name_depth (what Facebook requires).
@@ -78,7 +161,17 @@ V5.xx (TBD)
  
  - Tooltips added to many controls
 
- - Various fixes, including one that prevented the Mesh generator from working.
+ - Rick Sidwell: Various fixes, including one that prevented the Mesh generator from working.
+     1. Added some null pointer checks to AnimationService.java
+     2. Removed print statement from Variation.java (only noticable if
+     started from the command line for debugging)
+     3. Fixed BokehOptionsBuggon tooltip text
+     4. Corrected class for PerlinNoiseCreator so Transformation expression
+     can be edited
+     5. Camera distance field now allows negative distances.
+     6. Motion curve for Fade to white now works.
+     7. Edit gradient now puts focus on gradient so cursor keys work.
+     8. Make a copy of a thumbnail flame before appending it as a layer to avoid confusing situations when editing one flame changes another.
 
 V5.00 (28.06.2019)
  - Introducing a new artistic concept to flame-fractals: weighting-fields.
