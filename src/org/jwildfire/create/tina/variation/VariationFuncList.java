@@ -31,7 +31,7 @@ import java.util.Map.Entry;
 
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
-  private static final double VARIATION_COST_THRESHOLD = 0.02;
+  private static final double VARIATION_COST_THRESHOLD = 0.03;
   private static final double MEMORY_THRESHOLD = 10.0;
   private static List<Class<? extends VariationFunc>> items = new ArrayList<Class<? extends VariationFunc>>();
   private static List<String> unfilteredNameList = null;
