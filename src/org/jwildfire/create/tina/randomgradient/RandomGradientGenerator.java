@@ -62,6 +62,13 @@ public abstract class RandomGradientGenerator {
     layer.getGradientEditorLuminosityCurve().setPoints(luminosityX, luminosity);
     layer.refreshGradientFromCurves();
 
+    layer.getPalette().setGradHueX(hueX);
+    layer.getPalette().setGradHue(hue);
+    layer.getPalette().setGradSaturationX(saturationX);
+    layer.getPalette().setGradSaturation(saturation);
+    layer.getPalette().setGradLuminosityX(luminosityX);
+    layer.getPalette().setGradLuminosity(luminosity);
+
     return layer.getPalette();
   }
 

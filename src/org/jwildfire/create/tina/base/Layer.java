@@ -115,7 +115,14 @@ public class Layer implements Assignable<Layer>, Serializable {
       throw new IllegalArgumentException(pPalette != null ? pPalette.toString() + " " + pPalette.getSize() : "NULL");
     palette = pPalette;
     colorMap = null;
-    recalcHSLCurves();
+    if(pPalette.getGradHueX()!=null && pPalette.getGradHue() != null && pPalette.getGradSaturationX()!=null && pPalette.getGradSaturation()!=null && pPalette.getGradLuminosityX()!=null && pPalette.getGradLuminosity()!=null) {
+      gradientEditorHueCurve.setPoints(pPalette.getGradHueX(), pPalette.getGradHue());
+      gradientEditorSaturationCurve.setPoints(pPalette.getGradSaturationX(), pPalette.getGradSaturation());
+      gradientEditorLuminosityCurve.setPoints(pPalette.getGradLuminosityX(), pPalette.getGradLuminosity());
+    }
+    else {
+      recalcHSLCurves();
+    }
   }
 
   public void recalcHSLCurves() {

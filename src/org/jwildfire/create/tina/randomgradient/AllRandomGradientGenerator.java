@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -28,14 +28,28 @@ public class AllRandomGradientGenerator extends RandomGradientGenerator {
     generators = new ArrayList<RandomGradientGenerator>();
     generators.add(new StrongHueRandomGradientGenerator());
     generators.add(new StrongHueRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
     generators.add(new StrongHueRandomGradientGenerator());
     generators.add(new StrongHueRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
+    generators.add(new UniformColorCurveRandomGradientGenerator());
     generators.add(new StripesRandomGradientGenerator());
     generators.add(new StripesRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
     generators.add(new MonochromeRandomGradientGenerator());
     generators.add(new SmoothRandomGradientGenerator());
     generators.add(new BoldRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
     generators.add(new BoldRandomGradientGenerator());
+    generators.add(new UniformColorCurveRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
+    generators.add(new UniformColorCurveRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
+    generators.add(new UnevenColorCurveRandomGradientGenerator());
     generators.add(new BoldRandomGradientGenerator());
     generators.add(new TwoColorsRandomGradientGenerator());
   }

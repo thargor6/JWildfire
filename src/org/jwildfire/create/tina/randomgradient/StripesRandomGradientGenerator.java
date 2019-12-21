@@ -91,4 +91,5 @@ public class StripesRandomGradientGenerator extends RandomGradientGenerator {
     HSLTransformer.hsl2rgb(hslPixel, rgbPixel);
     return new RGBColor(rgbPixel.r, rgbPixel.g, rgbPixel.b);
   }
+
 }

@@ -75,6 +75,14 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
 
   private GradientSelectionProvider selectionProvider = new DefaultGradientSelectionProvider();
 
+  // only required to add the feature of creating color-curves by random-gradient-generators without changing (=breaking) the api for existing scripts
+  private int gradHueX[];
+  private double gradHue[];
+  private int gradSaturationX[];
+  private double gradSaturation[];
+  private int gradLuminosityX[];
+  private double gradLuminosity[];
+
   public void addColor(int pRed, int pGreen, int pBlue) {
     RGBColor color = new RGBColor(pRed, pGreen, pBlue);
     if (highestIdx + 1 == PALETTE_SIZE) {
@@ -778,5 +786,53 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
       rawColors = newColors;
       modified = true;
     }
+  }
+
+  public int[] getGradHueX() {
+    return gradHueX;
+  }
+
+  public void setGradHueX(int[] gradHueX) {
+    this.gradHueX = gradHueX;
+  }
+
+  public double[] getGradHue() {
+    return gradHue;
+  }
+
+  public void setGradHue(double[] gradHue) {
+    this.gradHue = gradHue;
+  }
+
+  public int[] getGradSaturationX() {
+    return gradSaturationX;
+  }
+
+  public void setGradSaturationX(int[] gradSaturationX) {
+    this.gradSaturationX = gradSaturationX;
+  }
+
+  public double[] getGradSaturation() {
+    return gradSaturation;
+  }
+
+  public void setGradSaturation(double[] gradSaturation) {
+    this.gradSaturation = gradSaturation;
+  }
+
+  public int[] getGradLuminosityX() {
+    return gradLuminosityX;
+  }
+
+  public void setGradLuminosityX(int[] gradLuminosityX) {
+    this.gradLuminosityX = gradLuminosityX;
+  }
+
+  public double[] getGradLuminosity() {
+    return gradLuminosity;
+  }
+
+  public void setGradLuminosity(double[] gradLuminosity) {
+    this.gradLuminosity = gradLuminosity;
   }
 }

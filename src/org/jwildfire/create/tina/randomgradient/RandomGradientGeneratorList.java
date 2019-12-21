@@ -23,7 +23,7 @@ public class RandomGradientGeneratorList {
   private static List<Class<? extends RandomGradientGenerator>> items = new ArrayList<Class<? extends RandomGradientGenerator>>();
   private static final List<String> nameList;
 
-  public static final RandomGradientGenerator DEFAULT = new StrongHueRandomGradientGenerator();
+  public static final RandomGradientGenerator DEFAULT = new UnevenColorCurveRandomGradientGenerator();
   public static final String DEFAULT_GENERATOR_NAME = DEFAULT.getName();
 
   static {
@@ -33,6 +33,8 @@ public class RandomGradientGeneratorList {
     registerRandomGradientGenerator(MonochromeRandomGradientGenerator.class);
     registerRandomGradientGenerator(SmoothRandomGradientGenerator.class);
     registerRandomGradientGenerator(BoldRandomGradientGenerator.class);
+    registerRandomGradientGenerator(UniformColorCurveRandomGradientGenerator.class);
+    registerRandomGradientGenerator(UnevenColorCurveRandomGradientGenerator.class);
     registerRandomGradientGenerator(TwoColorsRandomGradientGenerator.class);
     nameList = new ArrayList<String>();
     for (Class<? extends RandomGradientGenerator> funcCls : items) {
