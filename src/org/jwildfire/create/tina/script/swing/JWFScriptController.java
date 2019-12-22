@@ -194,7 +194,7 @@ public class JWFScriptController {
               "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Oily_Juliascope_Rev1", "Oily_Rev3",
               "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3",
 
-              "Keep 'Em Separated and Framed BS",
+              "Keep 'Em Separated and Framed BS", "Minkowscope-Painting-BS",
 
               "UG-", "UG-Ran", "UG-Ran2", "UG-Ran2sym", "UG-Ran2symPersp", "UG-Ran2symPerspYax", "UG-RanRan", "UG-RanRanRan", "UG-Sym", "UG-Sym2",
 

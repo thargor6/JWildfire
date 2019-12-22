@@ -117,6 +117,7 @@ V5.50 (21.12.2019)
  - added "Lumiere Scripts" by Michael Bourne (a collection of 22 scripts) as built-in scripts
  - added "The Yugen Scripts" by Michael Bourne (a collection of 17 scripts) as built-in scripts
  - added "Keep 'Em Separated and Framed Script" by Brad Stefanov as built-in scripts
+ - added "Minkowscope Painting Script" by Brad Stefanov as built-in scripts
 
  - fixed a nasty bug which could cause the final image to contain black stripes
 

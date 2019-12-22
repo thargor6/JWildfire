@@ -1,0 +1,5 @@
+/*ScriptInfo
+Minkowscope Painting BS
+author="Brad Stefanov" category="Randomizer"
+info="Based on flame by Brad Stefanov"
+*/
