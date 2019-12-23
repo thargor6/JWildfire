@@ -6,7 +6,7 @@ package org.jwildfire.create.tina.variation;
  *
  * @author Jesus Sosa
  * @date January 11 , 2018
- * Attractors came from the book  Symmetry in Chaos by Michael Field and Martin Golubitsky
+ * Attractors came from the book  “Symmetry in Chaos” by Michael Field and Martin Golubitsky
  * Reference:
  * https://softologyblog.wordpress.com/2017/03/04/2d-strange-attractors/
  */
@@ -144,16 +144,6 @@ public class IconAttractorFunc extends VariationFunc {
     else
       throw new IllegalArgumentException(pName);
   }
-	@Override
-	public boolean dynamicParameterExpansion() {
-		return true;
-	}
-
-	@Override
-	public boolean dynamicParameterExpansion(String pName) {
-		// preset_id doesn't really expand parameters, but it changes them; this will make them refresh
-		return true;
-	}	
 }
 
 

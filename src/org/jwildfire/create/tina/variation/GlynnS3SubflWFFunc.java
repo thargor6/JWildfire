@@ -24,7 +24,6 @@ import java.io.Serializable;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-
 public class GlynnS3SubflWFFunc extends SubFlameWFFunc {
   private static final long serialVersionUID = 1L;
 
