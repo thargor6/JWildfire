@@ -1,6 +1,9 @@
 package js.glsl;
 
-public class mat3 {
+import java.io.Serializable;
+
+public class mat3 implements Serializable {
+  private static final long serialVersionUID = 1L;
 
 	
 /*a00 a01 a02

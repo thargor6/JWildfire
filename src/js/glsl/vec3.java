@@ -1,8 +1,10 @@
 package js.glsl;
 
+import java.io.Serializable;
 
-public  class vec3
+public  class vec3 implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     public double x, y, z,r,g,b;
     
     public void copyColor(double r,double g,double b)
