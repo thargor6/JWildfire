@@ -853,6 +853,10 @@ public class VariationFuncList {
     registerVariationFunc(Post_CrosscropFunc.class);
     registerVariationFunc(CSinFunc.class);
     registerVariationFunc(SinusGridFunc.class);
+	  
+    registerVariationFunc(CombimirrorFunc.class);
+	  
+
 
 
     resolvedAliasMap = new HashMap<>();
