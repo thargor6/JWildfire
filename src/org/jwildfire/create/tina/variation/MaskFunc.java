@@ -52,7 +52,7 @@ public class MaskFunc extends VariationFunc {
     } else {
       double xfactor = xscale * pAffineTP.x + xshift;
       double yfactor = yscale * pAffineTP.y + yshift;
-      pVarTP.x = (pAmount / sumsq) * sin(xfactor) * (cosh(yfactor) + ushift) * sqr(sin(xfactor));
+      pVarTP.x += (pAmount / sumsq) * sin(xfactor) * (cosh(yfactor) + ushift) * sqr(sin(xfactor));
       pVarTP.y += (pAmount / sumsq) * cos(xfactor) * (cosh(yfactor) + ushift) * sqr(sin(xfactor));
     }
     if (pContext.isPreserveZCoordinate()) {
