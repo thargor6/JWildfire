@@ -1,0 +1,126 @@
+Formula presets for the polarplot2d_wf variation of JWildfire.
+
+
+##0
+Archimedes' spiral
+formula = t*param_a
+param_a = 0.25
+tmin = 0
+tmax = 6*pi
+
+##1
+Hyperbolic spiral
+formula = param_a / t
+param_a = 1
+tmin = 0
+tmax = 5*pi
+
+##2
+Rose curve
+formula = cos(t*param_a/param_b) + param_c
+param_a = 5
+param_b = 3
+param_c = 0
+tmin = 0
+tmax = 3*pi
+
+##3
+Limaçon
+formula = param_b + param_a*cos(t)
+param_a = 1
+param_b = 0.5
+tmin = -pi
+tmax = pi
+
+##4
+Lemniscate
+formula = sqrt(sqr(param_a) * sin(2*t))
+param_a = 1.5
+tmin = -pi
+tmax = pi
+
+##5
+Devil's curve
+formula = sqrt((sqr(param_a)*sqr(sin(t)) - sqr(param_b)*sqr(cos(t))) / (sqr(sin(t)) - sqr(cos(t))))
+param_a = 1.5
+param_b = 2
+tmin = -pi
+tmax = pi
+
+##6
+Garfield curve
+formula = t * cos(param_a*t)
+tmin = -2*pi
+tmax = 2*pi
+param_a = 1
+
+##7
+Lituus
+formula = sqrt(sqr(param_a)/t)
+param_a = 1
+tmin = 0.01
+tmax = 8*pi
+
+##8
+Hippopede
+formula = sqrt(4*param_b*(param_a - param_b*sqr(sin(t))))
+param_a = 4/3
+param_b = 1
+tmin = -pi
+tmax = pi
+
+##9
+Neoid
+formula = param_a * t + param_b
+param_a = 0.25
+param_b = 0.5
+tmin = -4*pi
+tmax = 4*pi
+
+##10
+Folium
+formula = cos(t) * (4*param_a*sqr(sin(t)) - param_b)
+param_a = 1
+param_b = 2
+tmin = 0
+tmax = pi
+
+##11
+Logarithmic spiral
+formula = param_a * exp(param_b * t)
+param_a = 3
+param_b = 0.2
+tmin = -6*pi
+tmax = 1.5*pi
+
+##12
+Parabolic spiral
+formula = sqrt(sqr(param_a)*t)
+param_a = 1
+tmin = 0
+tmax = 6*pi
+
+##13
+Generalized bean curve
+formula = pow(sin(t),param_a) + pow(cos(t),param_b)
+param_a = 3
+param_b = 3
+tmin = 0
+tmax = pi
+
+##14
+Cochleoid
+formula = param_a * sin(t) / t
+param_a = 1
+tmin = -3*pi
+tmax = 3*pi
+
+##15
+Gear curve
+formula = param_a + tanh(param_b * sin(param_c*t))/param_b
+param_a = 1
+param_b = 5
+param_c = 9
+tmin = -pi
+tmax = pi
+
