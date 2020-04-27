@@ -719,6 +719,7 @@ public class JWFScriptController {
       pSB.append("      xForm.setWeightingFieldVarParam3Intensity(" + Tools.doubleToString(pXForm.getWeightingFieldVarParam3Intensity()) + ");\n");
       pSB.append("      xForm.setWeightingFieldVarParam3VarName(\"" + (pXForm.getWeightingFieldVarParam3ParamName() != null ? pXForm.getWeightingFieldVarParam3ParamName() : "") + "\");\n");
       pSB.append("      xForm.setWeightingFieldVarParam3ParamName(\"" + (pXForm.getWeightingFieldVarParam3ParamName() != null ? pXForm.getWeightingFieldVarParam3ParamName() : "") + "\");\n");
+      pSB.append("      xForm.setWeightingFieldJitterIntensity(" + Tools.doubleToString(pXForm.getWeightingFieldJitterIntensity()) + ");\n");
       switch (pXForm.getWeightingFieldType()) {
         case CELLULAR_NOISE:
           pSB.append("      xForm.setWeightingFieldNoiseSeed(" + pXForm.getWeightingFieldNoiseSeed() + ");\n");

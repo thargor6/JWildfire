@@ -116,6 +116,7 @@ public class AbstractFlameWriter {
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM3_VAR_NAME, xForm.getWeightingFieldVarParam3VarName()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM3_PARAM_NAME, xForm.getWeightingFieldVarParam3ParamName()));
       }
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_JITTER_INTENSITY, xForm.getWeightingFieldJitterIntensity()));
       switch(xForm.getWeightingFieldType()) {
         case CELLULAR_NOISE:
           attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_SEED, xForm.getWeightingFieldNoiseSeed()));

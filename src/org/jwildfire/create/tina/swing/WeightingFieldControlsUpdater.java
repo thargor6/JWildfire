@@ -56,6 +56,8 @@ public abstract class WeightingFieldControlsUpdater {
     xFormControlsDelegate.enableControl(controls.weightingFieldColorIntensityREd, true);
     controls.weightingFieldVariationIntensityREd.setValue(0.0);
     xFormControlsDelegate.enableControl(controls.weightingFieldVariationIntensityREd, true);
+    controls.weightingFieldJitterIntensityREd.setValue(0.0);
+    xFormControlsDelegate.enableControl(controls.weightingFieldJitterIntensityREd, true);
     controls.weightingFieldVarParam1AmountREd.setValue(0.0);
     xFormControlsDelegate.enableControl(controls.weightingFieldVarParam1AmountREd, true);
     controls.weightingFieldVarParam2AmountREd.setValue(0.0);
@@ -101,6 +103,7 @@ public abstract class WeightingFieldControlsUpdater {
     controls.weightingFieldInputCmb.setSelectedItem(xform.getWeightingFieldInput());
     controls.weightingFieldColorIntensityREd.setText(Tools.doubleToString(xform.getWeightingFieldColorIntensity()));
     controls.weightingFieldVariationIntensityREd.setText(Tools.doubleToString(xform.getWeightingFieldVarAmountIntensity()));
+    controls.weightingFieldJitterIntensityREd.setText(Tools.doubleToString(xform.getWeightingFieldJitterIntensity()));
 
     controls.weightingFieldVarParam1AmountREd.setText(Tools.doubleToString(xform.getWeightingFieldVarParam1Intensity()));
     controls.weightingFieldVarParam2AmountREd.setText(Tools.doubleToString(xform.getWeightingFieldVarParam2Intensity()));
@@ -120,6 +123,7 @@ public abstract class WeightingFieldControlsUpdater {
     controls.weightingFieldInputCmb.setEnabled(enabled && hasWeightingFieldType);
     xFormControlsDelegate.enableControl(controls.weightingFieldColorIntensityREd, !(enabled && hasWeightingFieldType));
     xFormControlsDelegate.enableControl(controls.weightingFieldVariationIntensityREd, !(enabled && hasWeightingFieldType));
+    xFormControlsDelegate.enableControl(controls.weightingFieldJitterIntensityREd, !(enabled && hasWeightingFieldType));
 
     xFormControlsDelegate.enableControl(controls.weightingFieldVarParam1AmountREd, !(enabled && hasWeightingFieldType));
     xFormControlsDelegate.enableControl(controls.weightingFieldVarParam2AmountREd ,!(enabled && hasWeightingFieldType));
@@ -166,6 +170,17 @@ public abstract class WeightingFieldControlsUpdater {
       controller.saveUndoPoint();
       xForm.setWeightingFieldVarAmountIntensity(new XForm().getWeightingFieldVarAmountIntensity());
       controls.weightingFieldVariationIntensityREd.setText(Tools.doubleToString(xForm.getWeightingFieldVarAmountIntensity()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  public void weightingFieldJitterIntensityREd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldJitterIntensity(new XForm().getWeightingFieldJitterIntensity());
+      controls.weightingFieldJitterIntensityREd.setText(Tools.doubleToString(xForm.getWeightingFieldJitterIntensity()));
       controller.refreshFlameImage(true, false, 1, true, false);
       refreshFieldPreviewImage(xForm);
     }
@@ -369,6 +384,10 @@ public abstract class WeightingFieldControlsUpdater {
 
   public void weightingFieldVarAmountIntensityREd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldVariationIntensityREd, "weightingFieldVarAmountIntensity", 1.0);
+  }
+
+  public void weightingFieldJitterIntensityREd_changed() {
+    controller.xFormTextFieldChanged(null, controls.weightingFieldJitterIntensityREd, "weightingFieldJitterIntensity", 1.0);
   }
 
   public void weightingFieldVarParam1AmountREd_changed() {

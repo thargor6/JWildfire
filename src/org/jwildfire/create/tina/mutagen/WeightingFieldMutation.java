@@ -89,6 +89,9 @@ public class WeightingFieldMutation implements Mutation {
     if(Math.random()>0.42) {
       xForm.setWeightingFieldColorIntensity(0.5-Math.random());
     }
+    if(Math.random()>0.87) {
+      xForm.setWeightingFieldJitterIntensity(0.5-Math.random());
+    }
     // var params
     xForm.setWeightingFieldVarParam1Intensity(0.0);
     xForm.setWeightingFieldVarParam1VarName("");
