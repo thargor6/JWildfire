@@ -945,6 +945,7 @@ public class AbstractFlameReader {
   public static final String ATTR_WFIELD_VAR_PARAM2_PARAM_NAME = "wfield_var_param2_param_name";
   public static final String ATTR_WFIELD_VAR_PARAM3_INTENSITY = "wfield_var_param3_intensity";
   public static final String ATTR_WFIELD_VAR_PARAM3_VAR_NAME = "wfield_var_param3_var_name";
+  public static final String ATTR_WFIELD_JITTER_INTENSITY = "wfield_jitter_intensity";
   public static final String ATTR_WFIELD_VAR_PARAM3_PARAM_NAME = "wfield_var_param3_param_name";
   public static final String ATTR_WFIELD_CMAP_FILENAME = "wfield_cmap_filename";
   public static final String ATTR_WFIELD_CMAP_XSIZE = "wfield_cmap_xsize";
@@ -1100,6 +1101,9 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_WFIELD_VAR_PARAM3_PARAM_NAME)) != null) {
       xForm.setWeightingFieldVarParam3ParamName(hs);
+    }
+    if ((hs = atts.get(ATTR_WFIELD_JITTER_INTENSITY)) != null) {
+      xForm.setWeightingFieldJitterIntensity(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_WFIELD_CMAP_FILENAME)) != null) {
       xForm.setWeightingFieldColorMapFilename(hs);

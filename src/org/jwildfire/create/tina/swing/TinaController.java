@@ -891,6 +891,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     weightMapData.weightingFieldInputCmb = parameterObject.weightingFieldInputCmb;
     weightMapData.weightingFieldColorIntensityREd = parameterObject.weightingFieldColorIntensityREd;
     weightMapData.weightingFieldVariationIntensityREd = parameterObject.weightingFieldVariationIntensityREd;
+    weightMapData.weightingFieldJitterIntensityREd = parameterObject.weightingFieldJitterIntensityREd;
     weightMapData.weightingFieldVarParam1AmountREd = parameterObject.weightingFieldVarParam1AmountREd;
     weightMapData.weightingFieldVarParam2AmountREd = parameterObject.weightingFieldVarParam2AmountREd;
     weightMapData.weightingFieldVarParam3AmountREd = parameterObject.weightingFieldVarParam3AmountREd;
@@ -5937,6 +5938,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     animationController.registerMotionPropertyControls(data.layerDensityREd);
     animationController.registerMotionPropertyControls(data.layerWeightEd);
     animationController.registerMotionPropertyControls(weightMapData.weightingFieldVariationIntensityREd);
+    animationController.registerMotionPropertyControls(weightMapData.weightingFieldJitterIntensityREd);
     animationController.registerMotionPropertyControls(weightMapData.weightingFieldColorIntensityREd);
     animationController.registerMotionPropertyControls(weightMapData.weightingFieldVarParam1AmountREd);
     animationController.registerMotionPropertyControls(weightMapData.weightingFieldVarParam2AmountREd);
@@ -7159,6 +7161,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarAmountIntensityREd_changed();
   }
 
+  public void weightingFieldJitterIntensityREd_changed() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldJitterIntensityREd_changed();
+  }
+
   public void weightingFieldVarParam1AmountREd_changed() {
     getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarParam1AmountREd_changed();
   }
@@ -7241,6 +7247,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void weightMapVariationIntensityREd_reset() {
     getWeightMapControlsUpdater(getCurrXForm()).weightMapVariationIntensityREd_reset();
+  }
+
+  public void weightingFieldJitterIntensityREd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldJitterIntensityREd_reset();
   }
 
   public void weightMapInputCmb_reset() {
