@@ -39,6 +39,7 @@ public class VariationFuncList {
   private static List<String> filteredNameList = null;
   private static Map<Class<? extends VariationFunc>, String> aliasMap = new HashMap<Class<? extends VariationFunc>, String>();
   private static final Map<String, String> resolvedAliasMap;
+  public static boolean considerVariationCosts = true;
 
   static {
     initializeCostsMaps();
@@ -1009,7 +1010,7 @@ public class VariationFuncList {
   }
 
   public static boolean isValidRandomVariation(String name) {
-    return getVariationEvalCost(name) < VARIATION_COST_THRESHOLD &&
+    return (!considerVariationCosts || getVariationEvalCost(name) < VARIATION_COST_THRESHOLD) &&
            !(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0)
            && !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf") && !name.equals("flatten");
   }
