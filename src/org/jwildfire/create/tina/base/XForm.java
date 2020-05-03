@@ -217,6 +217,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private String weightingFieldVarParam3VarName = "";
   private String weightingFieldVarParam3ParamName = "";
   private final MotionCurve weightingFieldVarParam3IntensityCurve = new MotionCurve();
+  @AnimAware
+  private double weightingFieldJitterIntensity;
+  private final MotionCurve weightingFieldJitterIntensityCurve = new MotionCurve();
 
   private String weightingFieldColorMapFilename = "";
   private double weightingFieldColorMapXSize = 4.0;
@@ -574,6 +577,10 @@ public final class XForm implements Assignable<XForm>, Serializable {
     else {
       t.add(new TransformationPostAffineStep(this));
     }
+    
+    if (isWeightingFieldActive() && fabs(weightingFieldJitterIntensity)>EPSILON) {
+      t.add(new TransformationApplyWeightMapJitter(this));
+    }
 
     if(isWeightingFieldActive() && fabs(weightingFieldColorIntensity)>EPSILON) {
       t.add(new TransformationApplyWeightMapToColorStep(this));
@@ -808,6 +815,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
     weightingFieldVarParam3VarName = pXForm.weightingFieldVarParam3VarName;
     weightingFieldVarParam3ParamName = pXForm.weightingFieldVarParam3ParamName;
     weightingFieldVarParam3IntensityCurve.assign(pXForm.weightingFieldVarParam3IntensityCurve);
+    
+    weightingFieldJitterIntensity = pXForm.weightingFieldJitterIntensity;
+    weightingFieldJitterIntensityCurve.assign(pXForm.weightingFieldJitterIntensityCurve);    
 
     weightingFieldColorMapFilename = pXForm.weightingFieldColorMapFilename;
     weightingFieldColorMapXSize = pXForm.weightingFieldColorMapXSize;
@@ -917,6 +927,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
          !weightingFieldVarParam2ParamName.equals(pSrc.weightingFieldVarParam2ParamName) || !weightingFieldVarParam2IntensityCurve.isEqual(pSrc.weightingFieldVarParam2IntensityCurve) ||
          (fabs(weightingFieldVarParam3Intensity - pSrc.weightingFieldVarParam3Intensity) > EPSILON) || !weightingFieldVarParam3VarName.equals(pSrc.weightingFieldVarParam3VarName) ||
          !weightingFieldVarParam3ParamName.equals(pSrc.weightingFieldVarParam3ParamName) || !weightingFieldVarParam3IntensityCurve.isEqual(pSrc.weightingFieldVarParam3IntensityCurve) ||
+
+         (fabs(weightingFieldJitterIntensity - pSrc.weightingFieldJitterIntensity) > EPSILON) || !weightingFieldJitterIntensityCurve.isEqual(pSrc.weightingFieldJitterIntensityCurve) ||
 
          !weightingFieldColorMapFilename.equals(pSrc.weightingFieldColorMapFilename) ||
          (fabs(weightingFieldColorMapXSize - pSrc.weightingFieldColorMapXSize) > EPSILON) || !weightingFieldColorMapXSizeCurve.isEqual(pSrc.weightingFieldColorMapXSizeCurve) ||
@@ -1933,6 +1945,18 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return weightingFieldVarAmountIntensityCurve;
   }
 
+  public double getWeightingFieldJitterIntensity() {
+    return weightingFieldJitterIntensity;
+  }
+
+  public void setWeightingFieldJitterIntensity(double weightingFieldJitterIntensity) {
+    this.weightingFieldJitterIntensity = weightingFieldJitterIntensity;
+  }
+
+  public MotionCurve getWeightingFieldJitterIntensityCurve() {
+    return weightingFieldJitterIntensityCurve;
+  }
+
   public String getWeightingFieldColorMapFilename() {
     return weightingFieldColorMapFilename;
   }
@@ -2125,7 +2149,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return (fabs(weightingFieldColorIntensity)>EPSILON || fabs(weightingFieldVarAmountIntensity)>EPSILON ||
             (fabs(weightingFieldVarParam1Intensity)>EPSILON && weightingFieldVarParam1VarName.length()>0) ||
             (fabs(weightingFieldVarParam2Intensity)>EPSILON && weightingFieldVarParam2VarName.length()>0) ||
-            (fabs(weightingFieldVarParam3Intensity)>EPSILON && weightingFieldVarParam3VarName.length()>0)
+            (fabs(weightingFieldVarParam3Intensity)>EPSILON && weightingFieldVarParam3VarName.length()>0) ||
+            fabs(weightingFieldJitterIntensity)>EPSILON
             ) && (
             (WeightingFieldType.IMAGE_MAP.equals(weightingFieldType) && weightingFieldColorMapFilename !=null && !weightingFieldColorMapFilename.equals("")) ||
             (weightingFieldType !=null && !WeightingFieldType.NONE.equals(weightingFieldType))

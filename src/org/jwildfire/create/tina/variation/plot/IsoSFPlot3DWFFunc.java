@@ -215,6 +215,8 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    colorMapHolder.init();
+    uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     hits = new AtomicInteger(0);
     misses = new AtomicInteger(0);
     super.init(pContext, pLayer, pXForm, pAmount);
@@ -390,15 +392,17 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
             double iu, iv;
             switch (color_mode) {
               case CM_COLORMAP_X:
-                iu = GfxMathLib.clamp(y * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - z * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                iu = GfxMathLib.clamp(((y - _ymin) / _dy) * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
+                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - ((z - _zmin) / _dz) * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                break;
               case CM_COLORMAP_Y:
-                iu = GfxMathLib.clamp(z * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - x * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                iu = GfxMathLib.clamp(((z - _zmin) / _dz) * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
+                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - ((x - _xmin) / _dx) * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                break;
               case CM_COLORMAP_Z:
               default:
-                iu = GfxMathLib.clamp(x * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - y * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                iu = GfxMathLib.clamp(((x - _xmin) / _dx) * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
+                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - ((y - _ymin) / _dy) * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
                 break;
             }
             int ix = (int) MathLib.trunc(iu);

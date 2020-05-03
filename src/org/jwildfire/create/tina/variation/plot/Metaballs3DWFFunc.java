@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.variation.ColorMapHolder;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.mesh.AbstractOBJMeshWFFunc;
 
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
   private static final String PARAM_MAX_ITER = "max_iter";
 
   private static final String[] paramNames = {PARAM_MB_MODE, PARAM_MB_COUNT, PARAM_MB_MIN_RADIUS, PARAM_MB_MAX_RADIUS, PARAM_MB_NEGATIVE, PARAM_MB_SEED, PARAM_MB_SHARPNESS, PARAM_BORDER_SIZE, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_MAX_ITER, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP};
+  private static final String[] ressourceNames = {RESSOURCE_COLORMAP_FILENAME};
 
   private static final int CM_COLORMAP_X = 0;
   private static final int CM_COLORMAP_Y = 1;
@@ -97,8 +99,6 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
   private double mb_negative = 0.3;
   private int mb_seed = (int) (Math.random() * 1234567);
   private double border_size = 0.42;
-
-  private ColorMapHolder colorMapHolder = new ColorMapHolder();
 
   @Override
   public String[] getParameterNames() {
@@ -165,6 +165,33 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
     return "metaballs3d_wf";
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][]{(colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null)};
+  }
+
+  @Override
+  public void setRessource(String pName, byte[] pValue) {
+    if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+      colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
+      colorMapHolder.clear();
+      uvIdxMap.clear();
+    } else
+      throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILENAME;
+    } else
+      throw new IllegalArgumentException(pName);
+  }
   private double _xmin, _xmax, _dx;
   private double _ymin, _ymax, _dy;
   private double _zmin, _zmax, _dz;
@@ -177,6 +204,7 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.init(pContext, pLayer, pXForm, pAmount);
+    uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     hits = new AtomicInteger(0);
     misses = new AtomicInteger(0);
     updateBoundingBoxSettings();
@@ -359,15 +387,17 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
             double iu, iv;
             switch (color_mode) {
               case CM_COLORMAP_X:
-                iu = GfxMathLib.clamp(y * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - z * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                iu = GfxMathLib.clamp((y - _ymin) / _dy * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
+                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - (z - _zmin) / _dz * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                break;
               case CM_COLORMAP_Y:
-                iu = GfxMathLib.clamp(z * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - x * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                iu = GfxMathLib.clamp((z - _zmin) / _dz * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
+                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - (x - _xmin) / _dx * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                break;
               case CM_COLORMAP_Z:
               default:
-                iu = GfxMathLib.clamp(x * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - y * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                iu = GfxMathLib.clamp((x - _xmin) / _dx * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
+                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - (y - _ymin) / _dy * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
                 break;
             }
             int ix = (int) MathLib.trunc(iu);

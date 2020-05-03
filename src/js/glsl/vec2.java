@@ -1,8 +1,10 @@
 package js.glsl;
 
+import java.io.Serializable;
 
-public class vec2
+public class vec2 implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     public double x, y;
 
 	public vec2(double val)

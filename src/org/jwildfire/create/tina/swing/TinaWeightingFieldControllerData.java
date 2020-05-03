@@ -25,6 +25,7 @@ public class TinaWeightingFieldControllerData {
   public JComboBox weightingFieldInputCmb;
   public JWFNumberField weightingFieldColorIntensityREd;
   public JWFNumberField weightingFieldVariationIntensityREd;
+  public JWFNumberField weightingFieldJitterIntensityREd;
   public JWFNumberField weightingFieldVarParam1AmountREd;
   public JWFNumberField weightingFieldVarParam2AmountREd;
   public JWFNumberField weightingFieldVarParam3AmountREd;

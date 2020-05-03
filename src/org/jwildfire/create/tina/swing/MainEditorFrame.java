@@ -4653,7 +4653,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldColorMapFilenameLbl.setPreferredSize(new Dimension(94, 22));
       weightingFieldColorMapFilenameLbl.setLocation(new Point(4, 4));
       weightingFieldColorMapFilenameLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldColorMapFilenameLbl.setBounds(4, 224, 90, 22);
+      weightingFieldColorMapFilenameLbl.setBounds(4, 244, 90, 22);
       tinaWeightMapPanel.add(weightingFieldColorMapFilenameLbl);
 
       weightingFieldColorMapFilenameBtn = new JButton();
@@ -4661,7 +4661,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldColorMapFilenameBtn.setText("Select image...");
       weightingFieldColorMapFilenameBtn.setPreferredSize(new Dimension(190, 24));
       weightingFieldColorMapFilenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldColorMapFilenameBtn.setBounds(92, 224, 116, 24);
+      weightingFieldColorMapFilenameBtn.setBounds(92, 244, 116, 24);
       weightingFieldColorMapFilenameBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null) {
@@ -4744,6 +4744,27 @@ public class MainEditorFrame extends JFrame {
       lblVariationIntensity.setBounds(4, 48, 90, 22);
       tinaWeightMapPanel.add(lblVariationIntensity);
 
+      JLabel lblJitterIntensity = new JLabel();
+      lblJitterIntensity.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightingFieldJitterIntensityREd_reset();
+            }
+          }
+        }
+      });
+
+      lblJitterIntensity.setToolTipText("Change intensity of jitter");
+      lblJitterIntensity.setText("Jitter amount");
+      lblJitterIntensity.setSize(new Dimension(64, 22));
+      lblJitterIntensity.setPreferredSize(new Dimension(64, 22));
+      lblJitterIntensity.setLocation(new Point(6, 47));
+      lblJitterIntensity.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblJitterIntensity.setBounds(4, 133, 90, 22);
+      tinaWeightMapPanel.add(lblJitterIntensity);
+
       weightingFieldVariationAmountsREd = new JWFNumberField();
       weightingFieldVariationAmountsREd.setMotionPropertyName("weightingFieldVarAmountIntensity");
       weightingFieldVariationAmountsREd.addActionListener(new ActionListener() {
@@ -4774,6 +4795,37 @@ public class MainEditorFrame extends JFrame {
       });
 
       tinaWeightMapPanel.add(weightingFieldVariationAmountsREd);
+
+      weightingFieldJitterIntensityREd = new JWFNumberField();
+      weightingFieldJitterIntensityREd.setMotionPropertyName("weightingFieldJitterIntensity");
+      weightingFieldJitterIntensityREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
+      weightingFieldJitterIntensityREd.setValueStep(0.01);
+      weightingFieldJitterIntensityREd.setText("");
+      weightingFieldJitterIntensityREd.setSize(new Dimension(55, 22));
+      weightingFieldJitterIntensityREd.setPreferredSize(new Dimension(55, 22));
+      weightingFieldJitterIntensityREd.setMinValue(-1.0);
+      weightingFieldJitterIntensityREd.setMaxValue(1.0);
+      weightingFieldJitterIntensityREd.setLocation(new Point(70, 47));
+      weightingFieldJitterIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldJitterIntensityREd.setBounds(92, 133, 70, 22);
+      weightingFieldJitterIntensityREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightingFieldJitterIntensityREd.isMouseAdjusting() || weightingFieldJitterIntensityREd.getMouseChangeCount() == 0) {
+              //if (!weightMapVariationIntensitySlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightingFieldJitterIntensityREd_changed();
+          }
+        }
+      });
+
+      tinaWeightMapPanel.add(weightingFieldJitterIntensityREd);
 
       weightingFieldInputCmb = new JComboBox();
       weightingFieldInputCmb.setSize(new Dimension(125, 22));
@@ -4827,7 +4879,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam01REd.setMaxValue(3.0);
       weightingFieldParam01REd.setLocation(new Point(70, 21));
       weightingFieldParam01REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam01REd.setBounds(92, 142, 70, 22);
+      weightingFieldParam01REd.setBounds(92, 162, 70, 22);
       weightingFieldParam01REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -4861,7 +4913,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam01Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam01Lbl.setLocation(new Point(6, 21));
       weightingFieldParam01Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldParam01Lbl.setBounds(4, 142, 90, 22);
+      weightingFieldParam01Lbl.setBounds(4, 162, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam01Lbl);
 
       weightingFieldParam02Lbl = new JLabel();
@@ -4881,7 +4933,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam02Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam02Lbl.setLocation(new Point(6, 47));
       weightingFieldParam02Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldParam02Lbl.setBounds(4, 162, 90, 22);
+      weightingFieldParam02Lbl.setBounds(4, 182, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam02Lbl);
 
       weightingFieldParam02REd = new JWFNumberField();
@@ -4898,7 +4950,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam02REd.setMaxValue(1.0);
       weightingFieldParam02REd.setLocation(new Point(70, 47));
       weightingFieldParam02REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam02REd.setBounds(92, 162, 70, 22);
+      weightingFieldParam02REd.setBounds(92, 182, 70, 22);
       weightingFieldParam02REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -4927,7 +4979,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam05REd.setMaxValue(3.0);
       weightingFieldParam05REd.setLocation(new Point(70, 21));
       weightingFieldParam05REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam05REd.setBounds(248, 142, 70, 22);
+      weightingFieldParam05REd.setBounds(248, 162, 70, 22);
       weightingFieldParam05REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -4959,7 +5011,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam05Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam05Lbl.setLocation(new Point(6, 21));
       weightingFieldParam05Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldParam05Lbl.setBounds(164, 142, 90, 22);
+      weightingFieldParam05Lbl.setBounds(164, 162, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam05Lbl);
 
       weightingFieldParam06Lbl = new JLabel();
@@ -4979,7 +5031,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam06Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam06Lbl.setLocation(new Point(6, 47));
       weightingFieldParam06Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldParam06Lbl.setBounds(165, 162, 90, 22);
+      weightingFieldParam06Lbl.setBounds(165, 182, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam06Lbl);
 
       weightingFieldParam06REd = new JWFNumberField();
@@ -4996,7 +5048,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam06REd.setMaxValue(1.0);
       weightingFieldParam06REd.setLocation(new Point(70, 47));
       weightingFieldParam06REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam06REd.setBounds(248, 162, 70, 22);
+      weightingFieldParam06REd.setBounds(248, 182, 70, 22);
       weightingFieldParam06REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -5025,7 +5077,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam03REd.setMaxValue(3.0);
       weightingFieldParam03REd.setLocation(new Point(70, 21));
       weightingFieldParam03REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam03REd.setBounds(92, 182, 70, 22);
+      weightingFieldParam03REd.setBounds(92, 202, 70, 22);
       weightingFieldParam03REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -5057,7 +5109,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam03Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam03Lbl.setLocation(new Point(6, 21));
       weightingFieldParam03Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldParam03Lbl.setBounds(4, 182, 90, 22);
+      weightingFieldParam03Lbl.setBounds(4, 202, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam03Lbl);
 
       weightingFieldParam04Lbl = new JLabel();
@@ -5077,7 +5129,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam04Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam04Lbl.setLocation(new Point(6, 47));
       weightingFieldParam04Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldParam04Lbl.setBounds(4, 202, 90, 22);
+      weightingFieldParam04Lbl.setBounds(4, 222, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam04Lbl);
 
       weightingFieldParam04Cmb = new JComboBox();
@@ -5085,7 +5137,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam04Cmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldParam04Cmb.setLocation(new Point(70, 47));
       weightingFieldParam04Cmb.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam04Cmb.setBounds(92, 202, 70, 22);
+      weightingFieldParam04Cmb.setBounds(92, 222, 70, 22);
       weightingFieldParam04Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
@@ -5114,7 +5166,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam07Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam07Lbl.setLocation(new Point(6, 21));
       weightingFieldParam07Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldParam07Lbl.setBounds(165, 182, 90, 22);
+      weightingFieldParam07Lbl.setBounds(165, 202, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam07Lbl);
 
       weightingFieldParam08Lbl = new JLabel();
@@ -5134,7 +5186,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam08Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam08Lbl.setLocation(new Point(6, 47));
       weightingFieldParam08Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldParam08Lbl.setBounds(165, 202, 90, 22);
+      weightingFieldParam08Lbl.setBounds(165, 222, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam08Lbl);
 
       weightingFieldParam07REd = new JWFNumberField();
@@ -5151,7 +5203,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam07REd.setMaxValue(3.0);
       weightingFieldParam07REd.setLocation(new Point(70, 21));
       weightingFieldParam07REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam07REd.setBounds(248, 182, 70, 22);
+      weightingFieldParam07REd.setBounds(248, 202, 70, 22);
       weightingFieldParam07REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -5171,7 +5223,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam08Cmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldParam08Cmb.setLocation(new Point(70, 47));
       weightingFieldParam08Cmb.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightingFieldParam08Cmb.setBounds(248, 202, 70, 22);
+      weightingFieldParam08Cmb.setBounds(248, 222, 70, 22);
       weightingFieldParam08Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
@@ -5194,7 +5246,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldRandomizeAllBtn.setText("Randomize all");
       weightingFieldRandomizeAllBtn.setPreferredSize(new Dimension(104, 24));
       weightingFieldRandomizeAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldRandomizeAllBtn.setBounds(0, 255, 104, 24);
+      weightingFieldRandomizeAllBtn.setBounds(0, 275, 104, 24);
       tinaWeightMapPanel.add(weightingFieldRandomizeAllBtn);
 
       weightingFieldResetAllBtn = new JButton();
@@ -5207,13 +5259,13 @@ public class MainEditorFrame extends JFrame {
       weightingFieldResetAllBtn.setText("Reset all");
       weightingFieldResetAllBtn.setPreferredSize(new Dimension(190, 24));
       weightingFieldResetAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldResetAllBtn.setBounds(107, 255, 104, 24);
+      weightingFieldResetAllBtn.setBounds(107, 275, 104, 24);
       tinaWeightMapPanel.add(weightingFieldResetAllBtn);
 
       weightingFieldEditWholeFractalCBx = new JCheckBox("Whole fractal");
       weightingFieldEditWholeFractalCBx.setToolTipText("Check if Randomize/Reset should apply to the whole fractal rather than only to the selected transform");
       weightingFieldEditWholeFractalCBx.setSelected(true);
-      weightingFieldEditWholeFractalCBx.setBounds(214, 258, 104, 18);
+      weightingFieldEditWholeFractalCBx.setBounds(214, 278, 104, 18);
       tinaWeightMapPanel.add(weightingFieldEditWholeFractalCBx);
 
       weightingFieldVarParam1AmountREd = new JWFNumberField();
@@ -5424,7 +5476,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldPreviewImgRootPanel.setLayout(new BorderLayout(0, 0));
 
       JSeparator separator = new JSeparator();
-      separator.setBounds(4, 137, 316, 2);
+      separator.setBounds(4, 157, 316, 2);
       tinaWeightMapPanel.add(separator);
       tinaWeightMapPanel.add(getSeparator_1());
     }
@@ -6705,7 +6757,7 @@ public class MainEditorFrame extends JFrame {
         getBackgroundColorURIndicatorBtn(), getBackgroundColorLLIndicatorBtn(), getBackgroundColorLRIndicatorBtn(), getBackgroundColorTypeCmb(),
         getBackgroundColorCCIndicatorBtn());
 
-    params.setParams4(getWeightingFieldTypeCmb(), getWeightingFieldInputCmb(), getWeightingFieldColorIntensityREd(), getWeightingFieldVariationIntensityREd(),
+    params.setParams4(getWeightingFieldTypeCmb(), getWeightingFieldInputCmb(), getWeightingFieldColorIntensityREd(), getWeightingFieldVariationIntensityREd(), getWeightingFieldJitterIntensityREd(),
         getWeightingFieldVarParam1AmountREd(), getWeightingFieldVarParam2AmountREd(), getWeightingFieldVarParam3AmountREd(),
         getWeightingFieldVarParam1NameCmb(), getWeightingFieldVarParam2NameCmb(), getWeightingFieldVarParam3NameCmb(),
         getWeightingFieldColorMapFilenameLbl(), getWeightingFieldColorMapFilenameBtn(), getWeightingFieldColorMapFilenameInfoLbl(),
@@ -12325,6 +12377,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox weightingFieldInputCmb;
   private JWFNumberField weightingFieldColorIntensityREd;
   private JWFNumberField weightingFieldVariationAmountsREd;
+  private JWFNumberField weightingFieldJitterIntensityREd;
   private JButton weightingFieldColorMapFilenameBtn;
   private JWFNumberField weightingFieldParam01REd;
   private JWFNumberField weightingFieldParam02REd;
@@ -22288,6 +22341,10 @@ public class MainEditorFrame extends JFrame {
     return weightingFieldVariationAmountsREd;
   }
 
+  public JWFNumberField getWeightingFieldJitterIntensityREd() {
+    return weightingFieldJitterIntensityREd;
+  }
+
   public JButton getWeightingFieldColorMapFilenameBtn() {
     return weightingFieldColorMapFilenameBtn;
   }
@@ -22365,7 +22422,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldColorMapFilenameInfoLbl.setPreferredSize(new Dimension(94, 22));
       weightingFieldColorMapFilenameInfoLbl.setLocation(new Point(4, 4));
       weightingFieldColorMapFilenameInfoLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      weightingFieldColorMapFilenameInfoLbl.setBounds(214, 224, 106, 22);
+      weightingFieldColorMapFilenameInfoLbl.setBounds(214, 244, 106, 22);
     }
     return weightingFieldColorMapFilenameInfoLbl;
   }
@@ -22430,7 +22487,7 @@ public class MainEditorFrame extends JFrame {
   private JSeparator getSeparator_1() {
     if (separator_1 == null) {
       separator_1 = new JSeparator();
-      separator_1.setBounds(4, 250, 316, 2);
+      separator_1.setBounds(4, 270, 316, 2);
     }
     return separator_1;
   }

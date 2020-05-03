@@ -742,6 +742,7 @@ public class TinaControllerParameter {
   public JComboBox weightingFieldInputCmb;
   public JWFNumberField weightingFieldColorIntensityREd;
   public JWFNumberField weightingFieldVariationIntensityREd;
+  public JWFNumberField weightingFieldJitterIntensityREd;
   public JWFNumberField weightingFieldVarParam1AmountREd;
   public JWFNumberField weightingFieldVarParam2AmountREd;
   public JWFNumberField weightingFieldVarParam3AmountREd;
@@ -1445,7 +1446,7 @@ public class TinaControllerParameter {
     this.backgroundColorCCIndicatorBtn = backgroundColorCCIndicatorBtn;
   }
 
-  public void setParams4(JComboBox weightingFieldTypeCmb, JComboBox weightingFieldInputCmb, JWFNumberField weightingFieldColorIntensityREd, JWFNumberField weightingFieldVariationIntensityREd,
+  public void setParams4(JComboBox weightingFieldTypeCmb, JComboBox weightingFieldInputCmb, JWFNumberField weightingFieldColorIntensityREd, JWFNumberField weightingFieldVariationIntensityREd, JWFNumberField weightingFieldJitterIntensityREd,
     JWFNumberField weightingFieldVarParam1AmountREd, JWFNumberField weightingFieldVarParam2AmountREd, JWFNumberField weightingFieldVarParam3AmountREd,
     JComboBox weightingFieldVarParam1NameCmb, JComboBox weightingFieldVarParam2NameCmb, JComboBox weightingFieldVarParam3NameCmb,
     JLabel weightingFieldColorMapFilenameLbl, JButton weightingFieldColorMapFilenameBtn, JLabel weightingFieldColorMapFilenameInfoLbl, JWFNumberField weightingFieldParam01REd, JLabel weightingFieldParam01Lbl,
@@ -1457,6 +1458,7 @@ public class TinaControllerParameter {
       this.weightingFieldInputCmb = weightingFieldInputCmb;
       this.weightingFieldColorIntensityREd = weightingFieldColorIntensityREd;
       this.weightingFieldVariationIntensityREd = weightingFieldVariationIntensityREd;
+      this.weightingFieldJitterIntensityREd = weightingFieldJitterIntensityREd;
       this.weightingFieldVarParam1AmountREd = weightingFieldVarParam1AmountREd;
       this.weightingFieldVarParam2AmountREd = weightingFieldVarParam2AmountREd;
       this.weightingFieldVarParam3AmountREd = weightingFieldVarParam3AmountREd;

@@ -477,6 +477,7 @@ public class VariationFuncList {
 
     registerVariationFunc(YPlot2DWFFunc.class);
     registerVariationFunc(YPlot3DWFFunc.class);
+    registerVariationFunc(PolarPlot2DWFFunc.class);
     registerVariationFunc(ParPlot2DWFFunc.class);
     registerVariationFunc(MobiusNFunc.class);
     registerVariationFunc(OBJMeshWFFunc.class);
@@ -854,6 +855,10 @@ public class VariationFuncList {
     registerVariationFunc(Post_CrosscropFunc.class);
     registerVariationFunc(CSinFunc.class);
     registerVariationFunc(SinusGridFunc.class);
+	  
+    registerVariationFunc(CombimirrorFunc.class);
+	  
+
 
 
     resolvedAliasMap = new HashMap<>();
