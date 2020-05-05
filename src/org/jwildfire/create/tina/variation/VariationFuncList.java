@@ -682,6 +682,7 @@ public class VariationFuncList {
     registerVariationFunc(DucksFunc.class);
     registerVariationFunc(Bipolar2Func.class);
     registerVariationFunc(Elliptic2Func.class);
+    registerVariationFunc(JuliaOutsideFunc.class);
 
     registerVariationFunc(Metaballs3DWFFunc.class);
     registerVariationFunc(PointGridWFFunc.class);
@@ -851,7 +852,7 @@ public class VariationFuncList {
     registerVariationFunc(CutMagFieldFunc.class); 
     registerVariationFunc(CutBTreeFunc.class);
     registerVariationFunc(OctapolFunc.class);
-    registerVariationFunc(Post_CrosscropFunc.class);
+    registerVariationFunc(PostCrosscropFunc.class);
     registerVariationFunc(CSinFunc.class);
     registerVariationFunc(SinusGridFunc.class);
 	  

@@ -19,7 +19,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.*;
 import org.jwildfire.base.Tools;
 
-public class Post_CrosscropFunc extends VariationFunc {
+public class PostCrosscropFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   
   private static final String PARAM_X = "x";
@@ -38,41 +38,42 @@ public class Post_CrosscropFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
 //post_crosscrop by Whittaker Courtney
+
    double rotation_r = rotation * M_PI / 180;
-   double rx = pAffineTP.x * cos(rotation_r) - pAffineTP.y * sin(rotation_r);
-   double ry = pAffineTP.y * cos(rotation_r) + pAffineTP.x * sin(rotation_r);
+   double rx = pVarTP.x * cos(rotation_r) - pVarTP.y * sin(rotation_r);
+   double ry = pVarTP.y * cos(rotation_r) + pVarTP.x * sin(rotation_r);
   
  if (reverse == 0){
-     if ( ((rx <= x && rx >= -x || ry <= y && ry >= -y) && pAffineTP.z <= z && pAffineTP.z >= -z )){
+     if ( ((rx <= x && rx >= -x || ry <= y && ry >= -y) && pVarTP.z <= z && pVarTP.z >= -z )){
        pVarTP.doHide = false;
-       pAffineTP.x = pAmount * rx;  
-       pAffineTP.y = pAmount * ry; 
-       pAffineTP.z = pAmount * pAffineTP.z;     
+       pVarTP.x = pAmount * pVarTP.x;  
+       pVarTP.y = pAmount * pVarTP.y; 
+       pVarTP.z = pAmount * pVarTP.z;     
         }
      else{
-       pAffineTP.x = pAffineTP.y = pAffineTP.z = 0;   
+       pVarTP.x = pVarTP.y = pVarTP.z = 0;   
        pVarTP.doHide = true;
        return;
          }
  }
          
  else if (reverse == 1){        
-     if ( ((rx <= x && rx >= -x || ry <= y && ry >= -y) && pAffineTP.z <= z && pAffineTP.z >= -z )){    
-       pAffineTP.x = pAffineTP.y = pAffineTP.z = 0;   
+     if ( ((rx <= x && rx >= -x || ry <= y && ry >= -y) && pVarTP.z <= z && pVarTP.z >= -z )){    
+       pVarTP.x = pVarTP.y = pVarTP.z = 0;   
        pVarTP.doHide = true;
        return;
      }
      else{
        pVarTP.doHide = false;
-       pAffineTP.x = pAmount * rx;  
-       pAffineTP.y = pAmount * ry; 
-       pAffineTP.z = pAmount * pAffineTP.z;  
+       pVarTP.x = pAmount * pVarTP.x;  
+       pVarTP.y = pAmount * pVarTP.y; 
+       pVarTP.z = pAmount * pVarTP.z;  
          } 
  }
  
-	if (pContext.isPreserveZCoordinate()) {
-		pVarTP.z += pAmount * pAffineTP.z;
-	}
+    if (pContext.isPreserveZCoordinate()) {
+        pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
   
