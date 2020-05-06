@@ -477,6 +477,7 @@ public class VariationFuncList {
     registerVariationFunc(YPlot2DWFFunc.class);
     registerVariationFunc(YPlot3DWFFunc.class);
     registerVariationFunc(PolarPlot2DWFFunc.class);
+    registerVariationFunc(PolarPlot3DWFFunc.class);
     registerVariationFunc(ParPlot2DWFFunc.class);
     registerVariationFunc(MobiusNFunc.class);
     registerVariationFunc(OBJMeshWFFunc.class);
