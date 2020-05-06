@@ -859,8 +859,48 @@ public class VariationFuncList {
     registerVariationFunc(SinusGridFunc.class);
 	  
     registerVariationFunc(CombimirrorFunc.class);
-	  
 
+    
+    
+    registerVariationFunc(GumowskiMiraFunc.class); 
+    
+    registerVariationFunc(HopalongFunc.class);  
+    registerVariationFunc(GingerBreadManFunc.class);   
+    registerVariationFunc(ThreeplyFunc.class); 
+    
+    registerVariationFunc(TriangleFunc.class);   
+    registerVariationFunc(CropTriangleFunc.class); 
+    registerVariationFunc(PostCropTriangleFunc.class);  
+    
+    registerVariationFunc(CropPolygonFunc.class); 
+    registerVariationFunc(PostCropPolygonFunc.class);  
+    
+    registerVariationFunc(CropRhombusFunc.class);  
+    registerVariationFunc(PostCropRhombusFunc.class);
+    
+    registerVariationFunc(CropStarsFunc.class);   
+    registerVariationFunc(PostCropStarsFunc.class);   
+    
+    registerVariationFunc(CropTrapezoidFunc.class);  
+    registerVariationFunc(PostCropTrapezoidFunc.class);
+    
+    registerVariationFunc(CropCrossFunc.class);  
+    registerVariationFunc(PostCropCrossFunc.class);   
+    
+    registerVariationFunc(CropBoxFunc.class);  
+    registerVariationFunc(PostCropBoxFunc.class);
+    
+    registerVariationFunc(CropVesicaFunc.class);  
+    registerVariationFunc(PostCropVesicaFunc.class);   
+    
+    registerVariationFunc(CropXFunc.class);
+    registerVariationFunc(PostCropXFunc.class); 
+    
+    registerVariationFunc(PreZSymmetryFunc.class);  
+    registerVariationFunc(PostZSymmetryFunc.class);
+
+    registerVariationFunc(PreZVarFunc.class);   
+    registerVariationFunc(PostZVarFunc.class);  
 
 
     resolvedAliasMap = new HashMap<>();
