@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -126,6 +126,9 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.5";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
+  static final String KEY_TINA_DEFAULT_POST_OPTIX_DENOISER = "tina.default.post_optix_denoiser";
+  static final String KEY_TINA_DEFAULT_POST_OPTIX_DENOISER_BLEND = "tina.default.post_optix_denoiser_blend";
+
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
   static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel.5";
   static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius.1";
@@ -308,6 +311,12 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Default threshold-setting for the post-noise-filter", category = PropertyCategory.TINA)
   private double tinaDefaultPostNoiseFilterThreshold = 0.35;
+
+  @Property(description = "Default setting for applying the OptiX denoiser by NVidia to rendered images (only when available on your platform)", category = PropertyCategory.TINA)
+  private boolean tinaDefaultPostOptiXDenoiser = false;
+
+  @Property(description = "Default blend-setting for the OptiX denoiser by NVidia in the range 0.0 .. 1.0 (0.0 = denoised image, 1.0 = raw image, use values in between to mix between the images)", category = PropertyCategory.TINA)
+  private double tinaDefaultPostOptiXDenoiserBlend = 0.11111;
 
   @Property(description = "Default foreground-opacity when rendering images with transparent background", category = PropertyCategory.TINA)
   private double tinaDefaultForegroundOpacity = 1.0;
@@ -794,6 +803,9 @@ public class Prefs extends ManagedObject {
     tinaDefaultForegroundOpacity = pSrc.tinaDefaultForegroundOpacity;
     tinaDefaultPostNoiseFilter = pSrc.tinaDefaultPostNoiseFilter;
     tinaDefaultPostNoiseFilterThreshold = pSrc.tinaDefaultPostNoiseFilterThreshold;
+    tinaDefaultPostOptiXDenoiser = pSrc.tinaDefaultPostOptiXDenoiser;
+    tinaDefaultPostOptiXDenoiserBlend = pSrc.tinaDefaultPostOptiXDenoiserBlend;
+
     tinaAdvancedCodeEditor = pSrc.tinaAdvancedCodeEditor;
     tinaAdvancedCodeEditorColorFix = pSrc.tinaAdvancedCodeEditorColorFix;
     tinaAdvancedCodeEditorFontSize = pSrc.tinaAdvancedCodeEditorFontSize;
@@ -1479,6 +1491,23 @@ public class Prefs extends ManagedObject {
   public void setTinaDefaultPostNoiseFilterThreshold(double pTinaDefaultPostNoiseFilterThreshold) {
     tinaDefaultPostNoiseFilterThreshold = pTinaDefaultPostNoiseFilterThreshold;
   }
+
+  public boolean isTinaDefaultPostOptiXDenoiser() {
+    return tinaDefaultPostOptiXDenoiser;
+  }
+
+  public void setTinaDefaultPostOptiXDenoiser(boolean tinaDefaultPostOptiXDenoiser) {
+    this.tinaDefaultPostOptiXDenoiser = tinaDefaultPostOptiXDenoiser;
+  }
+
+  public double getTinaDefaultPostOptiXDenoiserBlend() {
+    return tinaDefaultPostOptiXDenoiserBlend;
+  }
+
+  public void setTinaDefaultPostOptiXDenoiserBlend(double tinaDefaultPostOptiXDenoiserBlend) {
+    this.tinaDefaultPostOptiXDenoiserBlend = tinaDefaultPostOptiXDenoiserBlend;
+  }
+
 
   public double getTinaDefaultForegroundOpacity() {
     return tinaDefaultForegroundOpacity;

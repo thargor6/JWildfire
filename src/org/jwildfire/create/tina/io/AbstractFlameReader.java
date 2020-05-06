@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -67,6 +67,8 @@ public class AbstractFlameReader {
   public static final String ATTR_SPATIAL_OVERSAMPLE = "oversample";
   public static final String ATTR_POST_NOISE_FILTER = "post_noise_filter";
   public static final String ATTR_POST_NOISE_FILTER_THRESHOLD = "post_noise_filter_threshold";
+  public static final String ATTR_POST_OPTIX_DENOISER = "post_optix_denoiser";
+  public static final String ATTR_POST_OPTIX_DENOISER_BLEND = "post_optix_denoiser_blend";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
   public static final String ATTR_FILTER_TYPE = "filter_type";
   public static final String ATTR_FILTER_SHARPNESS = "filter_sharpness";
@@ -327,6 +329,12 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_POST_NOISE_FILTER_THRESHOLD)) != null) {
       pFlame.setPostNoiseFilterThreshold(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_POST_OPTIX_DENOISER)) != null) {
+      pFlame.setPostOptiXDenoiser(Integer.parseInt(hs) == 1);
+    }
+    if ((hs = atts.get(ATTR_POST_OPTIX_DENOISER_BLEND)) != null) {
+      pFlame.setPostOptiXDenoiserBlend(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pFlame.setSampleDensity(Double.parseDouble(hs));

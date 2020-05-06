@@ -127,7 +127,9 @@ public class TinaControllerData {
   public JLabel tinaFilterKernelCmbLbl;
   public JLabel tinaFilterRadiusLbl;
   public JCheckBox tinaFilterIndicatorCBx;
-
+  public JCheckBox tinaOptiXDenoiserCheckBox;
+  public JWFNumberField tinaOptiXDenoiserBlendField;
+  public JSlider tinaOptiXDenoiserBlendSlider;
   public JWFNumberField gammaThresholdREd;
   public JSlider gammaThresholdSlider;
   public JCheckBox bgTransparencyCBx;

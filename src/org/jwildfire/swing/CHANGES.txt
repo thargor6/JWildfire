@@ -1,3 +1,17 @@
+V5.60 (03.05.2019)
+ - new commandline-tool to create and render random flames.
+   Example: java -cp j-wildfire-5.60/lib/j-wildfire.jar org.jwildfire.cli.CreateRandomFlame -w 1200 -h 675 -q 80
+ - new variations:
+     -polarplot2s_wf (Like yplot2d_wf, but uses polar coordinates. Fifteen presets of common polar curves), by Rick Sidwell
+     -combimirror by Thomas Michels and Brad Stefanov
+ - new jitter-option for weighting-fields: Adds noise after transforms, so it works well with blurs as well as normal transforms, by Rick Sidwell
+ - some new presets to yplot2d_wf variation, by Rick Sidwell
+ - FIXED: added missing parameter colormap_filename for metaballs3d_f variation, by Rick Sidwell
+ - FIXED: a bug regarding colormaps in isosfplot_wf, by Rick Sidwell
+ - FIXED: a bug in the mask variation, by Rick Sidwell
+ - FIXED: made js.glsl classes serializable, fixing a bug where dancing flame projects could not be saved, by Rick Sidwell
+ - updated variation credits, by Rick Sidwell
+
 V5.50 (21.12.2019)
  - New "Curve Editor" for gradients at the gradient tab. This gives much more control over the final result because it allows a very interactive editing
    of the gradient and the flame at the same time. Additionally, it allows more direct control over modifying the colors of a gradient,

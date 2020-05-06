@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -120,6 +120,7 @@ import org.jwildfire.create.tina.render.filter.FilterKernelVisualisation3dRender
 import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationFlatRenderer;
 import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationRenderer;
 import org.jwildfire.create.tina.render.filter.FilteringType;
+import org.jwildfire.create.tina.render.optix.OptixCmdLineDenoiser;
 import org.jwildfire.create.tina.script.ScriptParam;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
@@ -145,8 +146,7 @@ import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.MainController;
-import org.jwildfire.transform.HSLTransformer;
-import org.jwildfire.transform.TextTransformer;
+import org.jwildfire.transform.*;
 import org.jwildfire.transform.TextTransformer.FontStyle;
 import org.jwildfire.transform.TextTransformer.HAlignment;
 import org.jwildfire.transform.TextTransformer.Mode;
@@ -167,6 +167,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
   static final double SLIDER_SCALE_GAMMA_THRESHOLD = 5000.0;
   static final double SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD = 1000.0;
+  static final double SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND = 1000.0;
   static final double SLIDER_SCALE_COLOR = 100.0;
   static final double SLIDER_SCALE_ZPOS = 50.0;
   static final double SLIDER_SCALE_DOF = 100.0;
@@ -696,6 +697,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaPostNoiseFilterCheckBox = parameterObject.tinaPostNoiseFilterCheckBox;
     data.tinaPostNoiseThresholdField = parameterObject.tinaPostNoiseThresholdField;
     data.tinaPostNoiseThresholdSlider = parameterObject.tinaPostNoiseThresholdSlider;
+    data.tinaOptiXDenoiserCheckBox = parameterObject.tinaOptiXDenoiserCheckBox;
+    data.tinaOptiXDenoiserBlendField = parameterObject.tinaOptiXDenoiserBlendField;
+    data.tinaOptiXDenoiserBlendSlider = parameterObject.tinaOptiXDenoiserBlendSlider;
+
     data.foregroundOpacityField = parameterObject.foregroundOpacityField;
     data.foregroundOpacitySlider = parameterObject.foregroundOpacitySlider;
 
@@ -6686,6 +6691,21 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
     refreshFlameImage(false, false, 1, true, false);
+  }
+
+  public void optixDenoiserButton_actionPerformed(ActionEvent e) {
+    try {
+      flamePreviewHelper.cancelBackgroundRender();
+      SimpleImage img = flamePreviewHelper.getImage();
+      if(img!=null) {
+        new OptixCmdLineDenoiser().addDenoisePreviewToImage(img, getCurrFlame().getPostOptiXDenoiserBlend());
+        flamePreviewHelper.setImage(img);
+        flamePreviewHelper.forceRepaint();
+      }
+    }
+    catch(Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 
   private void runJWFScript(ScriptRunner pScript) {

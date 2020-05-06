@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -715,6 +715,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSpatialOversamplingREd, false);
     enableControl(data.tinaPostNoiseFilterCheckBox, false);
     enableControl(data.tinaPostNoiseThresholdField, !data.tinaPostNoiseFilterCheckBox.isSelected());
+    enableControl(data.tinaOptiXDenoiserCheckBox, false);
+    //enableControl(data.tinaOptiXDenoiserBlendField, !data.tinaOptiXDenoiserCheckBox.isSelected());
+    enableControl(data.tinaOptiXDenoiserBlendField, false);
   }
 
   public void refreshFlameValues() {
@@ -803,6 +806,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.tinaPostNoiseFilterCheckBox.setSelected(getCurrFlame().isPostNoiseFilter());
       data.tinaPostNoiseThresholdField.setText(String.valueOf(getCurrFlame().getPostNoiseFilterThreshold()));
       data.tinaPostNoiseThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getPostNoiseFilterThreshold() * TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD));
+      data.tinaOptiXDenoiserCheckBox.setSelected(getCurrFlame().isPostOptiXDenoiser());
+      data.tinaOptiXDenoiserBlendField.setText(String.valueOf(getCurrFlame().getPostOptiXDenoiserBlend()));
+      data.tinaOptiXDenoiserBlendSlider.setValue(Tools.FTOI(getCurrFlame().getPostOptiXDenoiserBlend() * TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND));
+
       data.foregroundOpacityField.setText(String.valueOf(getCurrFlame().getForegroundOpacity()));
       data.foregroundOpacitySlider.setValue(Tools.FTOI(getCurrFlame().getForegroundOpacity() * TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD));
 
@@ -1476,6 +1483,18 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
+  public void tinaOptiXDenoiserCheckBox_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setPostOptiXDenoiser(data.tinaOptiXDenoiserCheckBox.isSelected());
+        enableControls();
+        // owner.refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
   public void filterIndicatorCheckBox_changed() {
     if (!isNoRefresh()) {
       Flame flame = getCurrFlame();
@@ -1493,6 +1512,14 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void postNoiseFilterThresholdREd_changed() {
     flameTextFieldChanged(data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, false);
+  }
+
+  public void tinaOptiXDenoiserBlendSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.tinaOptiXDenoiserBlendSlider, data.tinaOptiXDenoiserBlendField, "postOptiXDenoiserBlend", TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND, true);
+  }
+
+  public void tinaOptiXDenoiserBlendField_changed() {
+    flameTextFieldChanged(data.tinaOptiXDenoiserBlendSlider, data.tinaOptiXDenoiserBlendField, "postOptiXDenoiserBlend", TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND, true);
   }
 
   public void foregroundOpacitySlider_stateChanged(ChangeEvent e) {

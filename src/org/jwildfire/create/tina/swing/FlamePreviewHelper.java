@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -195,6 +195,7 @@ public class FlamePreviewHelper implements IterationObserver {
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
         boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
+        boolean oldPostOptiXDenoiser = flame.isPostOptiXDenoiser();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -280,6 +281,7 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSampleDensity(oldSampleDensity);
           flame.setSpatialOversampling(oldSpatialOversampling);
           flame.setPostNoiseFilter(oldPostNoiseFilter);
+          flame.setPostOptiXDenoiser(oldPostOptiXDenoiser);
         }
       }
     }
@@ -423,6 +425,7 @@ public class FlamePreviewHelper implements IterationObserver {
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
         boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
+        boolean oldPostOptiXDenoiser = flame.isPostOptiXDenoiser();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -455,6 +458,7 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSpatialOversampling(oldSpatialOversampling);
           flame.setPostNoiseFilter(oldPostNoiseFilter);
+          flame.setPostOptiXDenoiser(oldPostOptiXDenoiser);
         }
       }
     }
@@ -721,5 +725,10 @@ public class FlamePreviewHelper implements IterationObserver {
 
   public void stopPreviewRendering() {
     cancelBackgroundRender();
+  }
+
+  public SimpleImage getImage() {
+    FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
+    return imgPanel !=null ? imgPanel.getImage() : null;
   }
 }

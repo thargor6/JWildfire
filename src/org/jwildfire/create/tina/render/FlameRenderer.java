@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -51,6 +51,7 @@ import org.jwildfire.create.tina.render.image.RenderImageSimpleScaledThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleThread;
 import org.jwildfire.create.tina.render.image.RenderImageThread;
 import org.jwildfire.create.tina.render.image.RenderZBufferThread;
+import org.jwildfire.create.tina.render.optix.OptixCmdLineDenoiser;
 import org.jwildfire.create.tina.render.postdof.PostDOFBuffer;
 import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -555,8 +556,19 @@ public class FlameRenderer {
     if (flame.isPostNoiseFilter() && flame.getPostNoiseFilterThreshold() > MathLib.EPSILON) {
       postFilterImage(pImage);
     }
+    if (flame.isPostOptiXDenoiser() && flame.getPostOptiXDenoiserBlend() < 1.0 + MathLib.EPSILON && !preview && (renderInfo.getRenderMode() == RenderMode.PRODUCTION || renderInfo.getRenderMode() == RenderMode.INTERACTIVE)) {
+      applyPostOptiXDenoiser(pImage);
+    }
     renderHDRImage(pHDRImage);
     renderZBuffer(pZBufferImg);
+  }
+
+  private void applyPostOptiXDenoiser(SimpleImage pImage) {
+    SimpleImage denoisedImg = new OptixCmdLineDenoiser().denoise(pImage, flame.getPostOptiXDenoiserBlend());
+    if(pImage.getImageWidth()!=denoisedImg.getImageWidth() || pImage.getImageHeight()!=denoisedImg.getImageHeight()) {
+      throw new RuntimeException("Images sizes do not match");
+    }
+    pImage.setBufferedImage(denoisedImg.getBufferedImg(), denoisedImg.getImageWidth(), denoisedImg.getImageHeight());
   }
 
   private void renderZBuffer(SimpleGrayImage pGreyImage) {

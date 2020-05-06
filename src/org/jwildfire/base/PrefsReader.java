@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -171,6 +171,9 @@ public class PrefsReader {
         pPrefs.setTinaDefaultFilterVisualisationFlat(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT, pPrefs.isTinaDefaultFilterVisualisationFlat()));
         pPrefs.setTinaDefaultPostNoiseFilter(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_POST_NOISE_FILTER, pPrefs.isTinaDefaultPostNoiseFilter()));
         pPrefs.setTinaDefaultPostNoiseFilterThreshold(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD, pPrefs.getTinaDefaultPostNoiseFilterThreshold()));
+        pPrefs.setTinaDefaultPostOptiXDenoiser(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_POST_OPTIX_DENOISER, pPrefs.isTinaDefaultPostOptiXDenoiser()));
+        pPrefs.setTinaDefaultPostOptiXDenoiserBlend(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_POST_OPTIX_DENOISER_BLEND, pPrefs.getTinaDefaultPostOptiXDenoiserBlend()));
+
         pPrefs.setTinaDefaultForegroundOpacity(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_FOREGROUND_OPACITY, pPrefs.getTinaDefaultForegroundOpacity()));
         try {
           pPrefs.setTinaDefaultSpatialFilterKernel(FilterKernelType.valueOf(getProperty(props, Prefs.KEY_TINA_DEFAULT_FILTER_KERNEL, pPrefs.getTinaDefaultSpatialFilterKernel().toString())));
