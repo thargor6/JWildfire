@@ -28,6 +28,7 @@ public class WFFuncPresetsStore {
   private static SAttractor3DWFFuncPresets SAttractor3DWFFuncPresets;
   private static Knots3DWFFuncPresets Knots3DWFFuncPresets;
   private static PolarPlot2DWFFuncPresets polarPlot2DWFFuncPresets;
+  private static PolarPlot3DWFFuncPresets polarPlot3DWFFuncPresets;
 
   public static ParPlot2DWFFuncPresets getParPlot2DWFFuncPresets() {
     if (parPlot2DWFFuncPresets == null) {
@@ -76,5 +77,12 @@ public class WFFuncPresetsStore {
       polarPlot2DWFFuncPresets = new PolarPlot2DWFFuncPresets();
     }
     return polarPlot2DWFFuncPresets;
+  }
+
+  public static PolarPlot3DWFFuncPresets getPolarPlot3DWFFuncPresets() {
+    if (polarPlot3DWFFuncPresets == null) {
+      polarPlot3DWFFuncPresets = new PolarPlot3DWFFuncPresets();
+    }
+    return polarPlot3DWFFuncPresets;
   }
 }
