@@ -993,6 +993,7 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FLAMES_GPU));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LIST_OF_CHANGES));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_GPU_RENDERING));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_OPTIX_DENOISER_INFO));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_VARIATIONSSETTINGS));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_QUILTFLAMERENDERER));
   }

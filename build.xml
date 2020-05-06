@@ -51,6 +51,7 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.html"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/CHANGES.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/GPU_RENDERING.txt"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/OptiX_Denoiser.txt"/>
 	  <fileset dir="${src.dir}" includes="org/jwildfire/icons/**/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.png"/>
@@ -132,6 +133,7 @@
   	<copy todir="${dist.dir}/">
        <fileset file="src/org/jwildfire/swing/CHANGES.txt" />
        <fileset file="src/org/jwildfire/swing/GPU_RENDERING.txt" />
+       <fileset file="src/org/jwildfire/swing/OptiX_Denoiser.txt" />
        <fileset file="README_LAUNCHING_JWILDFIRE.txt" />
        <fileset file="README!!!.txt" />
        <fileset file="README_LINUX.txt" />
