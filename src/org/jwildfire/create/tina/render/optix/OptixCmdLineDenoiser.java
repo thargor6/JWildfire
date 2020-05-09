@@ -40,39 +40,44 @@ public class OptixCmdLineDenoiser {
   private final String DENOISER_PATH = "Denoiser_v2.4";
 
   public SimpleImage denoise(SimpleImage img, double blend) {
-    try {
-      File tmpFile = File.createTempFile("jwf", ".png");
+    if (isAvailable()) {
       try {
-        String inputFilename = tmpFile.getAbsolutePath();
-        new ImageWriter().saveImage(img, inputFilename);
-        String outputFilename = denoise(inputFilename, blend);
+        File tmpFile = File.createTempFile("jwf", ".png");
         try {
-          SimpleImage denoisedImage = new ImageReader(new JPanel()).loadImage(outputFilename);
-          if(denoisedImage.getImageWidth()>img.getImageWidth() || denoisedImage.getImageHeight() > denoisedImage.getImageHeight()) {
-            CropTransformer crop=new CropTransformer();
-            crop.setLeft(0);
-            crop.setWidth(img.getImageWidth());
-            crop.setTop(0);
-            crop.setHeight(img.getImageHeight());
-            crop.transformImage(denoisedImage);
+          String inputFilename = tmpFile.getAbsolutePath();
+          new ImageWriter().saveImage(img, inputFilename);
+          String outputFilename = denoise(inputFilename, blend);
+          try {
+            SimpleImage denoisedImage = new ImageReader(new JPanel()).loadImage(outputFilename);
+            if(denoisedImage.getImageWidth()>img.getImageWidth() || denoisedImage.getImageHeight() > denoisedImage.getImageHeight()) {
+              CropTransformer crop=new CropTransformer();
+              crop.setLeft(0);
+              crop.setWidth(img.getImageWidth());
+              crop.setTop(0);
+              crop.setHeight(img.getImageHeight());
+              crop.transformImage(denoisedImage);
+            }
+            return denoisedImage;
+          } finally {
+            try {
+              new File(outputFilename).delete();
+            } catch (Exception ex) {
+              new File(outputFilename).deleteOnExit();
+            }
           }
-          return denoisedImage;
         } finally {
           try {
-            new File(outputFilename).delete();
+            tmpFile.delete();
           } catch (Exception ex) {
-            new File(outputFilename).deleteOnExit();
+            tmpFile.deleteOnExit();
           }
         }
-      } finally {
-        try {
-          tmpFile.delete();
-        } catch (Exception ex) {
-          tmpFile.deleteOnExit();
-        }
+      } catch (Exception ex) {
+        throw new RuntimeException(ex);
       }
-    } catch (Exception ex) {
-      throw new RuntimeException(ex);
+    } else {
+      // OptiX not available
+      return img;
     }
   }
 
