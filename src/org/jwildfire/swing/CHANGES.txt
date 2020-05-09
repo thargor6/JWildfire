@@ -1,4 +1,4 @@
-V5.60 (06.05.2019)
+V5.60 (06.05.2020)
  - new commandline-tool to create and render random flames.
    Example: java -cp j-wildfire-5.60/lib/j-wildfire.jar org.jwildfire.cli.CreateRandomFlame -w 1200 -h 675 -q 80
  - new variations:
@@ -20,8 +20,8 @@ V5.60 (06.05.2019)
      -crop_triangle, post_crop_triangle,
      -crop_vesica,post_crop_vesica,
      -crop_x,post_crop_x,
-     -pre_zsymmetry,
-     -post_zsymetry,
+     -pre_c_symmetry,
+     -post_c_symetry,
      -pre_c_var,
      -post_c_var, all created by Jesus Sosa
  - new jitter-option for weighting-fields: Adds noise after transforms, so it works well with blurs as well as normal transforms, by Rick Sidwell
