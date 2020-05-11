@@ -2,7 +2,7 @@
 
 ## Introduction
 
-JWildire is the spiritual successor of the award winning special effect program Wildfire\7PPC for the Amiga – 
+JWildfire is the spiritual successor of the award winning special effect program Wildfire\7PPC for the Amiga â€“ 
 but this time implemented in Java and with a more sophisticated user interface and more cool effects :-)
 
 ## Key Features
