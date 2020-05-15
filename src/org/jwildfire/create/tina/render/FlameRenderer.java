@@ -556,7 +556,9 @@ public class FlameRenderer {
     if (flame.isPostNoiseFilter() && flame.getPostNoiseFilterThreshold() > MathLib.EPSILON) {
       postFilterImage(pImage);
     }
-    if (flame.isPostOptiXDenoiser() && flame.getPostOptiXDenoiserBlend() < 1.0 + MathLib.EPSILON && !preview && (renderInfo.getRenderMode() == RenderMode.PRODUCTION || renderInfo.getRenderMode() == RenderMode.INTERACTIVE)) {
+    if (flame.isPostOptiXDenoiser() && flame.getPostOptiXDenoiserBlend() < 1.0 + MathLib.EPSILON &&
+            OptixCmdLineDenoiser.isAvailable() &&
+            !preview && (renderInfo.getRenderMode() == RenderMode.PRODUCTION || renderInfo.getRenderMode() == RenderMode.INTERACTIVE)) {
       applyPostOptiXDenoiser(pImage);
     }
     renderHDRImage(pHDRImage);
