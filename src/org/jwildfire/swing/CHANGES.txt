@@ -1,4 +1,6 @@
-V5.60 (06.05.2019)
+V5.60 (07.05.2019)
+ - support for NVidia's NVidia's OptiX denoiser as a powerful tool to cut down render times and improve image quality.
+   Please consult the comprehensive documentation inside the software ("Help -> OptiX denoiser") for more information.
  - new commandline-tool to create and render random flames.
    Example: java -cp j-wildfire-5.60/lib/j-wildfire.jar org.jwildfire.cli.CreateRandomFlame -w 1200 -h 675 -q 80
  - new variations:
@@ -22,8 +24,8 @@ V5.60 (06.05.2019)
      -crop_x,post_crop_x,
      -pre_zsymmetry,
      -post_zsymetry,
-     -pre_c_var,
-     -post_c_var, all created by Jesus Sosa
+     -pre_z_var,
+     -post_z_var, all created by Jesus Sosa
  - new jitter-option for weighting-fields: Adds noise after transforms, so it works well with blurs as well as normal transforms, by Rick Sidwell
  - some new presets to yplot2d_wf variation, by Rick Sidwell
  - FIXED: added missing parameter colormap_filename for metaballs3d_f variation, by Rick Sidwell
