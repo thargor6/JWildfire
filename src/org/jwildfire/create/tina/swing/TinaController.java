@@ -44,9 +44,11 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -99,7 +101,13 @@ import org.jwildfire.create.tina.mutagen.BokehMutation;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.mutagen.MutationType;
 import org.jwildfire.create.tina.mutagen.WeightingFieldMutation;
-import org.jwildfire.create.tina.palette.*;
+import org.jwildfire.create.tina.palette.DefaultGradientSelectionProvider;
+import org.jwildfire.create.tina.palette.GradientSelectionProvider;
+import org.jwildfire.create.tina.palette.MedianCutQuantizer;
+import org.jwildfire.create.tina.palette.RGBColor;
+import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
+import org.jwildfire.create.tina.palette.SimilarGradientCreator;
 import org.jwildfire.create.tina.quilt.QuiltRendererController;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -137,7 +145,6 @@ import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
-import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
@@ -146,7 +153,8 @@ import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.MainController;
-import org.jwildfire.transform.*;
+import org.jwildfire.swing.RenderOutputFileChooser;
+import org.jwildfire.transform.TextTransformer;
 import org.jwildfire.transform.TextTransformer.FontStyle;
 import org.jwildfire.transform.TextTransformer.HAlignment;
 import org.jwildfire.transform.TextTransformer.Mode;
@@ -2289,7 +2297,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void tinaCreateSimilarPaletteButton_actionPerformed(ActionEvent e) {
-    if (getCurrFlame() != null && getCurrLayer()!=null) {
+    if (getCurrFlame() != null && getCurrLayer() != null) {
       saveUndoPoint();
       data.paletteKeyFrames = new SimilarGradientCreator().createKeyFrames(getCurrLayer().getPalette().getTransformedColors());
       RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected(), data.paletteUniformWidthCBx.isSelected());
@@ -4448,7 +4456,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       errorHandler.handleError(ex);
     }
   }
-  
+
   private Flame generateExportFlame(Flame pFlame) {
     return generateExportFlame(pFlame, null);
   }
@@ -5102,7 +5110,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     else if (getCurrFlame() != null) {
       try {
         String dfltFileExt = Stereo3dMode.SIDE_BY_SIDE.equals(getCurrFlame().getStereo3dMode()) ? Tools.FILEEXT_PNS : Tools.FILEEXT_PNG;
-        JFileChooser chooser = new ImageFileChooser(dfltFileExt);
+        JFileChooser chooser = new RenderOutputFileChooser(dfltFileExt);
         if (prefs.getOutputImagePath() != null) {
           try {
             chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
@@ -5117,16 +5125,19 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           final Flame flame = getCurrFlame();
           final File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
+
           RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
 
             @Override
             public void succeeded(double pElapsedTime) {
               try {
                 messageHelper.showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
-                mainController.loadImage(file.getAbsolutePath(), false);
-                File zBuffer = new File(Tools.makeZBufferFilename(file.getAbsolutePath(), flame.getZBufferFilename()));
-                if (zBuffer.exists()) {
-                  mainController.loadImage(zBuffer.getAbsolutePath(), false);
+                if (Tools.isImageFile(file.getAbsolutePath())) {
+                  mainController.loadImage(file.getAbsolutePath(), false);
+                  File zBuffer = new File(Tools.makeZBufferFilename(file.getAbsolutePath(), flame.getZBufferFilename()));
+                  if (zBuffer.exists()) {
+                    mainController.loadImage(zBuffer.getAbsolutePath(), false);
+                  }
                 }
               }
               catch (Throwable ex) {
@@ -5145,6 +5156,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
           };
           mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, finishEvent, mainProgressUpdater);
+
           enableMainRenderControls();
           Thread worker = new Thread(mainRenderThread);
           worker.setPriority(Thread.MIN_PRIORITY);
@@ -5966,7 +5978,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public FlameControlsDelegate getFlameControls() {
     return flameControls;
   }
-  
+
   public LayerControlsDelegate getLayerControls() {
     return layerControls;
   }
@@ -6697,13 +6709,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     try {
       flamePreviewHelper.cancelBackgroundRender();
       SimpleImage img = flamePreviewHelper.getImage();
-      if(img!=null) {
+      if (img != null) {
         new OptixCmdLineDenoiser().addDenoisePreviewToImage(img, getCurrFlame().getPostOptiXDenoiserBlend());
         flamePreviewHelper.setImage(img);
         flamePreviewHelper.forceRepaint();
       }
     }
-    catch(Throwable ex) {
+    catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -6979,6 +6991,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         refreshing = false;
       }
     }
+  }
+
+  public boolean isRealtimePreviewRefresh() {
+    return data.realtimePreviewToggleButton.isSelected();
   }
 
   public void relWeightsResetButton_clicked() {

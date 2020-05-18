@@ -2868,10 +2868,10 @@ public class MainEditorFrame extends JFrame {
   private JButton getRenderMainButton() {
     if (renderMainButton == null) {
       renderMainButton = new JButton();
-      renderMainButton.setToolTipText("Render the flame-fractal at the size chosen to the right and save the result");
+      renderMainButton.setToolTipText("Render the flame-fractal at the size chosen to the right and save the result. Choose an image-file-format to render the current frame. Choose a movie-file-format to render the whole sequence and encode it as movie-file.");
       renderMainButton.setMinimumSize(new Dimension(125, 52));
       renderMainButton.setMaximumSize(new Dimension(32000, 52));
-      renderMainButton.setText("Render flame");
+      renderMainButton.setText("Render image/movie");
       renderMainButton.setPreferredSize(new Dimension(115, 24));
       renderMainButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       renderMainButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive3.png")));
@@ -6785,7 +6785,7 @@ public class MainEditorFrame extends JFrame {
         getWeightingFieldParam01REd(), getWeightingFieldParam01Lbl(), getWeightingFieldParam02REd(), getWeightingFieldParam02Lbl(), getWeightingFieldParam03REd(), getWeightingFieldParam03Lbl(),
         getWeightingFieldParam04Cmb(), getWeightingFieldParam04Lbl(), getWeightingFieldParam05REd(), getWeightingFieldParam05Lbl(), getWeightingFieldParam06REd(), getWeightingFieldParam06Lbl(),
         getWeightingFieldParam07REd(), getWeightingFieldParam07Lbl(), getWeightingFieldParam08Cmb(), getWeightingFieldParam08Lbl(), getWeightingFieldPreviewImgRootPanel(),
-        getTinaOptiXDenoiserCheckBox(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider() );
+        getTinaOptiXDenoiserCheckBox(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider());
 
     tinaController = new TinaController(params);
 
@@ -6965,7 +6965,7 @@ public class MainEditorFrame extends JFrame {
       try {
         enableOptixControls(OptixCmdLineDenoiser.isAvailable());
       }
-      catch(Throwable ex) {
+      catch (Throwable ex) {
         enableOptixControls(false);
       }
 
@@ -12107,6 +12107,7 @@ public class MainEditorFrame extends JFrame {
   private JPanel gradientCurveEditorSaturationRootPanel;
   private JPanel gradientCurveEditorLuminosityRootPanel;
   private JButton motionCurvePlayPreviewButton;
+  private JButton motionCurveCreateKeyFrameButton;
   private JPanel panel_92;
   private JTabbedPane tabbedPane_3;
   private JPanel bokehSettingsPnl;
@@ -13371,7 +13372,6 @@ public class MainEditorFrame extends JFrame {
       });
 
       antialiasPanel.add(tinaOptiXDenoiserBlendSlider);
-
 
       tinaPostNoiseFilterCheckBox = new JCheckBox("Post noise reduction");
       tinaPostNoiseFilterCheckBox.setToolTipText("Enable a filter to reduce noise after the render");
@@ -14796,6 +14796,7 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameSlider.setMinorTickSpacing(5);
       keyframesFrameSlider.setMinimum(1);
       keyframesFrameSlider.setMaximum(300);
+      keyframesFrameSlider.setPaintTicks(true);
       keyframesFrameSlider.setMajorTickSpacing(10);
     }
     return frameSliderPanel;
@@ -15509,7 +15510,7 @@ public class MainEditorFrame extends JFrame {
   private JPanel getPanel_79() {
     if (panel_79 == null) {
       panel_79 = new JPanel();
-      panel_79.setPreferredSize(new Dimension(128, 10));
+      panel_79.setPreferredSize(new Dimension(228, 10));
       panel_79.setLayout(null);
 
       keyframesFrameLbl = new JLabel();
@@ -15541,6 +15542,28 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameField.setHasMinValue(true);
       keyframesFrameField.setHasMaxValue(true);
       keyframesFrameField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+
+      motionCurveCreateKeyFrameButton = new JButton();
+      motionCurveCreateKeyFrameButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            try {
+              tinaController.getAnimationController().addKeyFrameButtonClicked();
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+      motionCurveCreateKeyFrameButton.setToolTipText("Create a new key-frame at the current frame.");
+      motionCurveCreateKeyFrameButton.setText("Add key-frame");
+      motionCurveCreateKeyFrameButton.setSize(new Dimension(70, 24));
+      motionCurveCreateKeyFrameButton.setPreferredSize(new Dimension(104, 24));
+      motionCurveCreateKeyFrameButton.setLocation(new Point(122, 2));
+      motionCurveCreateKeyFrameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      motionCurveCreateKeyFrameButton.setBounds(122, 2, 104, 24);
+      panel_79.add(motionCurveCreateKeyFrameButton);
     }
     return panel_79;
   }

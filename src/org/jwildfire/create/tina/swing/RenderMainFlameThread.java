@@ -16,13 +16,19 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Calendar;
 
+import org.jcodec.api.awt.AWTSequenceEncoder;
+import org.jcodec.common.io.NIOUtils;
+import org.jcodec.common.io.SeekableByteChannel;
+import org.jcodec.common.model.Rational;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -30,6 +36,8 @@ import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 
 public class RenderMainFlameThread implements Runnable {
@@ -58,48 +66,155 @@ public class RenderMainFlameThread implements Runnable {
   public void run() {
     finished = forceAbort = false;
     try {
-      int width = resProfile.getWidth();
-      int height = resProfile.getHeight();
-      RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
-      double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-      double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-      flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-      flame.setWidth(info.getImageWidth());
-      flame.setHeight(info.getImageHeight());
-      boolean renderHDR = qualProfile.isWithHDR();
-      info.setRenderHDR(renderHDR);
-      boolean renderZBuffer = qualProfile.isWithZBuffer();
-      info.setRenderZBuffer(renderZBuffer);
-
-      flame.setSampleDensity(qualProfile.getQuality());
-      long t0, t1;
-      renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
-      renderer.setProgressUpdater(progressUpdater);
-      t0 = Calendar.getInstance().getTimeInMillis();
-      RenderedFlame res = renderer.renderFlame(info);
-      if (forceAbort) {
-        finished = true;
-        return;
+      if(Tools.isMovieFile(outFile.getAbsolutePath())) {
+        renderMovie();
       }
-      t1 = Calendar.getInstance().getTimeInMillis();
-      new ImageWriter().saveImage(res.getImage(), outFile.getAbsolutePath());
-      if (res.getHDRImage() != null) {
-        new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(outFile.getAbsolutePath()));
+      else {
+        renderSingleFrame();
       }
-      if (res.getZBuffer() != null) {
-        new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(outFile.getAbsolutePath(), flame.getZBufferFilename()));
-      }
-
-      if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
-        new FlameWriter().writeFlame(flame, outFile.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(outFile.getName()) + ".flame");
-      }
-      finished = true;
-      finishEvent.succeeded((t1 - t0) * 0.001);
     }
     catch (Throwable ex) {
       finished = true;
       finishEvent.failed(ex);
     }
+  }
+
+  private void renderMovie() throws Exception {
+    long t0 = Calendar.getInstance().getTimeInMillis();
+    if(flame.getFrameCount()<1) {
+      throw new Exception("Invalif frame count <" + flame.getFrameCount()+">");
+    }
+    progressUpdater.initProgress(flame.getFrameCount()+flame.getFrameCount()/4);
+    int step=1;
+
+    for(int i=1;i<flame.getFrameCount();i++) {
+      if (forceAbort) {
+        finished = true;
+        return;
+      }
+      String fn = makeFrameName(outFile.getAbsolutePath(),i);
+      if(!new File(fn).exists()) {
+        renderMovieFrame(i);
+      }
+      progressUpdater.updateProgress(step++);
+    }
+    if(forceAbort) {
+      finished = true;
+      return;
+    }
+
+    SeekableByteChannel out = null;
+    try {
+      out = NIOUtils.writableFileChannel(outFile.getAbsolutePath());
+      AWTSequenceEncoder encoder = new AWTSequenceEncoder(out, Rational.R(flame.getFps(), 1));
+      for(int i=1;i<flame.getFrameCount();i++) {
+        if (forceAbort) {
+          finished = true;
+          return;
+        }
+        String fn = makeFrameName(outFile.getAbsolutePath(),i);
+        SimpleImage img = new ImageReader().loadImage(fn);
+        BufferedImage image = img.getBufferedImg();
+        encoder.encodeImage(image);
+        if(i%4==0) {
+          progressUpdater.updateProgress(step++);
+        }
+      }
+      encoder.finish();
+    } finally {
+      NIOUtils.closeQuietly(out);
+    }
+
+    for(int i=1;i<flame.getFrameCount();i++) {
+      if (forceAbort) {
+        finished = true;
+        return;
+      }
+      File f = new File(makeFrameName(outFile.getAbsolutePath(), i));
+      try {
+        if(!f.delete()) {
+          f.deleteOnExit();
+        }
+      }
+      finally {
+        f.deleteOnExit();
+      }
+    }
+
+    long t1 = Calendar.getInstance().getTimeInMillis();
+    finished = true;
+    finishEvent.succeeded((t1 - t0) * 0.001);
+  }
+
+  private String makeFrameName(String moveFilename, int frame) {
+    File basefn =new File(moveFilename.substring(0, moveFilename.lastIndexOf(".")));
+    File tmpFn;
+    if(basefn.getParentFile()!=null) {
+      tmpFn = new File(basefn.getParent(), "_"+basefn.getName());
+    }
+    else {
+      tmpFn = new File("_"+basefn.getAbsolutePath());
+    }
+    return String.format (tmpFn.getAbsolutePath() + "_%04d.png", frame);
+  }
+
+  private void renderMovieFrame(int frame) throws Exception {
+    Flame currFlame = flame.makeCopy();
+    currFlame.setFrame(frame);
+    int width = resProfile.getWidth();
+    int height = resProfile.getHeight();
+    RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
+    double wScl = (double) info.getImageWidth() / (double) currFlame.getWidth();
+    double hScl = (double) info.getImageHeight() / (double) currFlame.getHeight();
+    currFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * currFlame.getPixelsPerUnit());
+    currFlame.setWidth(info.getImageWidth());
+    currFlame.setHeight(info.getImageHeight());
+    info.setRenderHDR(false);
+    info.setRenderZBuffer(false);
+    currFlame.setSampleDensity(qualProfile.getQuality());
+    renderer = new FlameRenderer(currFlame, prefs, false, false);
+    RenderedFlame res = renderer.renderFlame(info);
+    if (!forceAbort) {
+      new ImageWriter().saveImage(res.getImage(), makeFrameName(outFile.getAbsolutePath(), frame));
+    }
+  }
+
+  private void renderSingleFrame() throws Exception {
+    int width = resProfile.getWidth();
+    int height = resProfile.getHeight();
+    RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
+    double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+    double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+    flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+    flame.setWidth(info.getImageWidth());
+    flame.setHeight(info.getImageHeight());
+    boolean renderHDR = qualProfile.isWithHDR();
+    info.setRenderHDR(renderHDR);
+    boolean renderZBuffer = qualProfile.isWithZBuffer();
+    info.setRenderZBuffer(renderZBuffer);
+    flame.setSampleDensity(qualProfile.getQuality());
+    renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
+    renderer.setProgressUpdater(progressUpdater);
+    long t0 = Calendar.getInstance().getTimeInMillis();
+    RenderedFlame res = renderer.renderFlame(info);
+    if (forceAbort) {
+      finished = true;
+      return;
+    }
+    long t1 = Calendar.getInstance().getTimeInMillis();
+    new ImageWriter().saveImage(res.getImage(), outFile.getAbsolutePath());
+    if (res.getHDRImage() != null) {
+      new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(outFile.getAbsolutePath()));
+    }
+    if (res.getZBuffer() != null) {
+      new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(outFile.getAbsolutePath(), flame.getZBufferFilename()));
+    }
+
+    if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
+      new FlameWriter().writeFlame(flame, outFile.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(outFile.getName()) + ".flame");
+    }
+    finished = true;
+    finishEvent.succeeded((t1 - t0) * 0.001);
   }
 
   public boolean isFinished() {

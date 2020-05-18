@@ -57,7 +57,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "V5.60 (07.05.2020)";
+  public static final String APP_VERSION = "V6.00 ALPHA (18.05.2020)";
 
   public static final boolean SPECIAL_VERSION = false;
 
@@ -84,6 +84,7 @@ public class Tools {
   public static final String FILEEXT_JWFRENDER = "jwfrender";
   public static final String FILEEXT_JWFSCRIPT = "jwfscript";
   public static final String FILEEXT_MP3 = "mp3";
+  public static final String FILEEXT_MP4 = "mp4";
   public static final String FILEEXT_OBJ = "obj";
   public static final String FILEEXT_PLY = "ply";
   public static final String FILEEXT_PNG = "png";
@@ -460,6 +461,17 @@ public class Tools {
     fos.write(pData, 0, pData.length);
     fos.flush();
     fos.close();
+  }
+
+  public static boolean isImageFile(String absolutePath) {
+    String lname = absolutePath != null ? absolutePath.toLowerCase() : "";
+    return lname.endsWith(FILEEXT_PNG) || lname.endsWith(FILEEXT_JPG) ||  lname.endsWith(FILEEXT_GIF) || lname.endsWith(FILEEXT_JPEG) ||
+            lname.endsWith(FILEEXT_JPS) || lname.endsWith(FILEEXT_HDR);
+  }
+
+  public static boolean isMovieFile(String absolutePath) {
+    String lname = absolutePath != null ? absolutePath.toLowerCase() : "";
+    return lname.endsWith(FILEEXT_MP4);
   }
 
   public static class XMLAttributes {
