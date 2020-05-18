@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-  <property name="release" value="5.60" />
+  <property name="release" value="6.00ALPHA" />
   <property name="dist.dir" location="build/dist" />
   <property name="installer.dir" location="build/installer" />
 	<property name="build.dir" location="build/classes" />
@@ -89,6 +89,8 @@
       <zipfileset src="lib/jsyntaxpane-1.1.5.jar"/>
       <zipfileset src="lib/vecmath-1.5.1.jar"/>
       <zipfileset src="lib/commons-cli-1.4.jar"/>
+      <zipfileset src="lib/jcodec-0.2.5.jar"/>
+      <zipfileset src="lib/jcodec-javase-0.2.5.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
       <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
 	  <zipfileset src="lib/j-wildfire-lib.jar"/>
