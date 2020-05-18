@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -1005,6 +1005,40 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return xyPostScaleCurve;
   }
 
+
+  public MotionCurve getYZRotateCurve() {
+    return yzRotateCurve;
+  }
+
+  public MotionCurve getYZScaleCurve() {
+    return yzScaleCurve;
+  }
+
+  public MotionCurve getYZPostRotateCurve() {
+    return yzPostRotateCurve;
+  }
+
+  public MotionCurve getYZPostScaleCurve() {
+    return yzPostScaleCurve;
+  }
+
+  public MotionCurve getZXRotateCurve() {
+    return zxRotateCurve;
+  }
+
+  public MotionCurve getZXScaleCurve() {
+    return zxScaleCurve;
+  }
+
+  public MotionCurve getZXPostRotateCurve() {
+    return zxPostRotateCurve;
+  }
+
+  public MotionCurve getZXPostScaleCurve() {
+    return zxPostScaleCurve;
+  }
+
+
   public double getModGamma() {
     return modGamma;
   }
@@ -1821,48 +1855,145 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return xyCoeff00Curve;
   }
 
+  public MotionCurve getYZCoeff00Curve() {
+    return yzCoeff00Curve;
+  }
+
+  public MotionCurve getZXCoeff00Curve() {
+    return zxCoeff00Curve;
+  }
+
   public MotionCurve getXYCoeff01Curve() {
     return xyCoeff01Curve;
+  }
+
+  public MotionCurve getYZCoeff01Curve() {
+    return yzCoeff01Curve;
+  }
+
+  public MotionCurve getZXCoeff01Curve() {
+    return zxCoeff01Curve;
   }
 
   public MotionCurve getXYCoeff10Curve() {
     return xyCoeff10Curve;
   }
 
+  public MotionCurve getYZCoeff10Curve() {
+    return yzCoeff10Curve;
+  }
+
+  public MotionCurve getZXCoeff10Curve() {
+    return zxCoeff10Curve;
+  }
+
   public MotionCurve getXYCoeff11Curve() {
     return xyCoeff11Curve;
+  }
+
+  public MotionCurve getYZCoeff11Curve() {
+    return yzCoeff11Curve;
+  }
+
+  public MotionCurve getZXCoeff11Curve() {
+    return zxCoeff11Curve;
   }
 
   public MotionCurve getXYCoeff20Curve() {
     return xyCoeff20Curve;
   }
 
+  public MotionCurve getYZCoeff20Curve() {
+    return yzCoeff20Curve;
+  }
+
+  public MotionCurve getZXCoeff20Curve() {
+    return zxCoeff20Curve;
+  }
+
+
   public MotionCurve getXYCoeff21Curve() {
     return xyCoeff21Curve;
+  }
+
+  public MotionCurve getYZCoeff21Curve() {
+    return yzCoeff21Curve;
+  }
+
+  public MotionCurve getZXCoeff21Curve() {
+    return zxCoeff21Curve;
   }
 
   public MotionCurve getXYPostCoeff00Curve() {
     return xyPostCoeff00Curve;
   }
 
+  public MotionCurve getYZPostCoeff00Curve() {
+    return yzPostCoeff00Curve;
+  }
+
+  public MotionCurve getZXPostCoeff00Curve() {
+    return zxPostCoeff00Curve;
+  }
+
   public MotionCurve getXYPostCoeff01Curve() {
     return xyPostCoeff01Curve;
+  }
+
+  public MotionCurve getYZPostCoeff01Curve() {
+    return yzPostCoeff01Curve;
+  }
+
+  public MotionCurve getZXPostCoeff01Curve() {
+    return zxPostCoeff01Curve;
   }
 
   public MotionCurve getXYPostCoeff10Curve() {
     return xyPostCoeff10Curve;
   }
 
+  public MotionCurve getYZPostCoeff10Curve() {
+    return yzPostCoeff10Curve;
+  }
+
+  public MotionCurve getZXPostCoeff10Curve() {
+    return zxPostCoeff10Curve;
+  }
+
   public MotionCurve getXYPostCoeff11Curve() {
     return xyPostCoeff11Curve;
+  }
+
+  public MotionCurve getYZPostCoeff11Curve() {
+    return yzPostCoeff11Curve;
+  }
+
+  public MotionCurve getZXPostCoeff11Curve() {
+    return zxPostCoeff11Curve;
   }
 
   public MotionCurve getXYPostCoeff20Curve() {
     return xyPostCoeff20Curve;
   }
 
+  public MotionCurve getYZPostCoeff20Curve() {
+    return yzPostCoeff20Curve;
+  }
+
+  public MotionCurve getZXPostCoeff20Curve() {
+    return zxPostCoeff20Curve;
+  }
+
   public MotionCurve getXYPostCoeff21Curve() {
     return xyPostCoeff21Curve;
+  }
+
+  public MotionCurve getYZPostCoeff21Curve() {
+    return yzPostCoeff21Curve;
+  }
+
+  public MotionCurve getZXPostCoeff21Curve() {
+    return zxPostCoeff21Curve;
   }
 
   public MotionCurve getWeightCurve() {

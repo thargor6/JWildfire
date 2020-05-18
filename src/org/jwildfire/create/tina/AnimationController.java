@@ -27,6 +27,7 @@ import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.MotionCurveEditor;
 import org.jwildfire.create.tina.swing.RenderMainFlameThreadFinishEvent;
@@ -158,7 +159,7 @@ public class AnimationController {
           }
         }
         else {
-          tinaController.refreshFlameImage(true, false, 1, true, false);
+          tinaController.refreshFlameImage(true, tinaController.isRealtimePreviewRefresh(), 1, true, false);
         }
 
       }
@@ -169,8 +170,8 @@ public class AnimationController {
   }
 
   public void refreshUI() {
-	  keyframesFrameCountField.setValue(tinaController.getCurrFlame().getFrameCount());
-	  adjustFrameControls(tinaController.getCurrFlame().getFrame());
+    keyframesFrameCountField.setValue(tinaController.getCurrFlame().getFrameCount());
+    adjustFrameControls(tinaController.getCurrFlame().getFrame());
   }
 
   public void registerMotionPropertyControls(MotionCurveEditor pComponent) {
@@ -254,6 +255,11 @@ public class AnimationController {
 
   private void enablePlayPreviewControls() {
     motionCurvePlayPreviewButton.setText(playPreviewThread == null ? "Play" : "Cancel");
+  }
+
+  public void addKeyFrameButtonClicked() {
+    AnimationService.addKeyFrame(tinaController.getCurrFlame(), tinaController.getCurrFlame().getFrame());
+    tinaController.refreshUI();
   }
 
   public void playPreviewButtonClicked() {
