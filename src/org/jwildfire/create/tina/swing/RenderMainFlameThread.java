@@ -84,7 +84,9 @@ public class RenderMainFlameThread implements Runnable {
     if(flame.getFrameCount()<1) {
       throw new Exception("Invalif frame count <" + flame.getFrameCount()+">");
     }
-    progressUpdater.initProgress(flame.getFrameCount()+flame.getFrameCount()/4);
+
+    int totalProgress = flame.getFrameCount()+flame.getFrameCount()/4;
+    progressUpdater.initProgress(totalProgress);
     int step=1;
 
     for(int i=1;i<flame.getFrameCount();i++) {
@@ -141,19 +143,25 @@ public class RenderMainFlameThread implements Runnable {
       }
     }
 
+    progressUpdater.updateProgress(totalProgress);
     long t1 = Calendar.getInstance().getTimeInMillis();
     finished = true;
     finishEvent.succeeded((t1 - t0) * 0.001);
   }
 
   private String makeFrameName(String moveFilename, int frame) {
+    String titleStr = flame.getName().trim().replace(" - ","_").replace(' ', '_').replace('\\','_').replace('/','_').replace(':','_');
+    if(titleStr.length()>30) {
+      titleStr=titleStr.substring(0,30);
+    }
+    String optionsStr = qualProfile.getQuality()+"_"+resProfile.getWidth()+"_"+resProfile.getHeight();
     File basefn =new File(moveFilename.substring(0, moveFilename.lastIndexOf(".")));
     File tmpFn;
     if(basefn.getParentFile()!=null) {
-      tmpFn = new File(basefn.getParent(), "_"+basefn.getName());
+      tmpFn = new File(basefn.getParent(), "_"+basefn.getName()+"_"+optionsStr+"_"+titleStr);
     }
     else {
-      tmpFn = new File("_"+basefn.getAbsolutePath());
+      tmpFn = new File("_"+basefn.getAbsolutePath()+"_"+optionsStr+"_"+titleStr);
     }
     return String.format (tmpFn.getAbsolutePath() + "_%04d.png", frame);
   }

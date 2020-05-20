@@ -318,27 +318,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       return;
     setNoRefresh(true);
     try {
-      double propValue = pSlider.getValue() / pSliderScale;
-      pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = getCurrFlame().getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(getCurrFlame(), propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(getCurrFlame(), Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
+      owner.getFrameControlsUtil().sliderChanged(getCurrFlame(), pSlider, pTextField, pProperty, pSliderScale);
       owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
@@ -512,28 +492,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
     setNoRefresh(true);
     try {
-      double propValue = Tools.stringToDouble(pTextField.getText());
-      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
-
-      Class<?> cls = getCurrFlame().getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(getCurrFlame(), propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(getCurrFlame(), Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
+      owner.getFrameControlsUtil().textFieldChanged(getCurrFlame(), pSlider, pTextField, pProperty, pSliderScale);
       owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -255,5 +255,56 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     viewYMax = 120.0;
     interpolation = Interpolation.SPLINE;
     selectedIdx = 0;
+  }
+
+  public int indexOfKeyFrame(int frame) {
+    if(x!=null) {
+      for(int i=0;i<x.length;i++) {
+        if(frame==x[i]) {
+          return i;
+        }
+      }
+    }
+    return -1;
+  }
+
+  public boolean hasKeyFrame(int frame) {
+    return indexOfKeyFrame(frame) >= 0;
+  }
+
+  public void modifyKeyFrame(int frame, double value) {
+    int idx = indexOfKeyFrame(frame);
+    if(idx<0) {
+      throw new RuntimeException("Invalid frame <" + frame + ">");
+    }
+    y[idx] = value;
+  }
+
+  public void addKeyFrame(int frame, double value) {
+    if(indexOfKeyFrame(frame)>=0) {
+      throw new RuntimeException("Key-frame <" + frame + "> already exists");
+    }
+    int newx[] = new int[x.length+1];
+    double newy[] = new double[x.length+1];
+    int idx=0;
+    for(int i=0;i<x.length;i++) {
+      if(x[i]<frame) {
+        newx[idx] = x[i];
+        newy[idx++] = y[i];
+      }
+      else {
+        break;
+      }
+    }
+    newx[idx] = frame;
+    newy[idx++] = value;
+    for(int i=0;i<x.length;i++) {
+      if(x[i]>frame) {
+        newx[idx] = x[i];
+        newy[idx++] = y[i];
+      }
+    }
+    x = newx;
+    y = newy;
   }
 }

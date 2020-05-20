@@ -244,7 +244,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private final JPanel nonlinearParamsPanel;
   private final int nonlinearParamsPanelBaseWidth, nonlinearParamsPanelBaseHeight;
 
+  private final FrameControlsUtil frameControlsUtil;
+
   public TinaController(final TinaControllerParameter parameterObject) {
+    frameControlsUtil = new FrameControlsUtil(this);
     desktop = parameterObject.desktop;
     mainEditorFrame = parameterObject.pMainEditorFrame;
     tinaFrameTitle = mainEditorFrame.getTitle();
@@ -1458,6 +1461,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public int getCurrFrame() {
+    return animationController !=null ? animationController.getCurrFrame() : 1;
+  }
+
   public void refreshLayerUI() {
     noRefresh = true;
     try {
@@ -1948,30 +1955,18 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void refreshPaletteUI(RGBPalette pPalette) {
-    data.paletteRedREd.setText(String.valueOf(pPalette.getModRed()));
-    data.paletteRedSlider.setValue(pPalette.getModRed());
-    data.paletteGreenREd.setText(String.valueOf(pPalette.getModGreen()));
-    data.paletteGreenSlider.setValue(pPalette.getModGreen());
-    data.paletteBlueREd.setText(String.valueOf(pPalette.getModBlue()));
-    data.paletteBlueSlider.setValue(pPalette.getModBlue());
-    data.paletteContrastREd.setText(String.valueOf(pPalette.getModContrast()));
-    data.paletteContrastSlider.setValue(pPalette.getModContrast());
-    data.paletteHueREd.setText(String.valueOf(pPalette.getModHue()));
-    data.paletteHueSlider.setValue(pPalette.getModHue());
-    data.paletteBrightnessREd.setText(String.valueOf(pPalette.getModBrightness()));
-    data.paletteBrightnessSlider.setValue(pPalette.getModBrightness());
-    data.paletteSwapRGBREd.setText(String.valueOf(pPalette.getModSwapRGB()));
-    data.paletteSwapRGBSlider.setValue(pPalette.getModSwapRGB());
-    data.paletteFrequencyREd.setText(String.valueOf(pPalette.getModFrequency()));
-    data.paletteFrequencySlider.setValue(pPalette.getModFrequency());
-    data.paletteBlurREd.setText(String.valueOf(pPalette.getModBlur()));
-    data.paletteBlurSlider.setValue(pPalette.getModBlur());
-    data.paletteGammaREd.setText(String.valueOf(pPalette.getModGamma()));
-    data.paletteGammaSlider.setValue(pPalette.getModGamma());
-    data.paletteShiftREd.setText(String.valueOf(pPalette.getModShift()));
-    data.paletteShiftSlider.setValue(pPalette.getModShift());
-    data.paletteSaturationREd.setText(String.valueOf(pPalette.getModSaturation()));
-    data.paletteSaturationSlider.setValue(pPalette.getModSaturation());
+    frameControlsUtil.updateControl(pPalette, data.paletteRedSlider, data.paletteRedREd, "modRed", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteGreenSlider, data.paletteGreenREd, "modGreen", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteBlueSlider, data.paletteBlueREd, "modBlue", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteContrastSlider, data.paletteContrastREd, "modContrast", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteHueSlider, data.paletteHueREd, "modHue", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteBrightnessSlider, data.paletteBrightnessREd, "modBrightness", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteSwapRGBSlider, data.paletteSwapRGBREd, "modSwapRGB", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteFrequencySlider, data.paletteFrequencyREd, "modFrequency", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteBlurSlider, data.paletteBlurREd, "modBlur", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteGammaSlider, data.paletteGammaREd, "modGamma", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteShiftSlider, data.paletteShiftREd, "modShift", 1.0);
+    frameControlsUtil.updateControl(pPalette, data.paletteSaturationSlider, data.paletteSaturationREd, "modSaturation", 1.0);
     refreshPaletteImg();
     gradientCurveEditorControls.refreshValues(true);
   }
@@ -2008,24 +2003,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     noRefresh = true;
     try {
-      double propValue = pSlider.getValue() / pSliderScale;
-      pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = getCurrLayer().getPalette().getClass();
-      Field field;
+      frameControlsUtil.sliderChanged(getCurrLayer().getPalette(), pSlider, pTextField, pProperty, pSliderScale);
       try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(getCurrLayer().getPalette(), propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(getCurrLayer().getPalette(), Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-        field = cls.getDeclaredField("modified");
+        Class<?> cls = getCurrLayer().getPalette().getClass();
+        Field field = cls.getDeclaredField("modified");
         field.setAccessible(true);
         field.setBoolean(getCurrLayer().getPalette(), true);
       }
@@ -2045,27 +2026,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     noRefresh = true;
     try {
-      double propValue = pSlider.getValue() / pSliderScale;
-      pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = getCurrLayer().getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(getCurrLayer(), propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(getCurrLayer(), Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
+      frameControlsUtil.sliderChanged(getCurrLayer(), pSlider, pTextField, pProperty, pSliderScale);
       refreshFlameImage(true, false, 1, true, false);
     }
     finally {
@@ -2086,27 +2047,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     noRefresh = true;
     try {
-      double propValue = pSlider.getValue() / pSliderScale;
-      pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = xForm.getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(xForm, propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(xForm, Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
+      frameControlsUtil.sliderChanged(xForm, pSlider, pTextField, pProperty, pSliderScale);
       refreshFlameImage(true, false, 1, true, false);
     }
     finally {
@@ -2119,25 +2060,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     noRefresh = true;
     try {
-      double propValue = Tools.stringToDouble(pTextField.getText());
-      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
-
-      Class<?> cls = getCurrLayer().getPalette().getClass();
-      Field field;
+      frameControlsUtil.textFieldChanged(getCurrLayer().getPalette(), pSlider, pTextField, pProperty, pSliderScale);
       try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(getCurrLayer().getPalette(), propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(getCurrLayer().getPalette(), Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-        field = cls.getDeclaredField("modified");
+        Class<?> cls = getCurrLayer().getPalette().getClass();
+        Field field = cls.getDeclaredField("modified");
         field.setAccessible(true);
         field.setBoolean(getCurrLayer().getPalette(), true);
       }
@@ -2157,28 +2083,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     noRefresh = true;
     try {
-      double propValue = Tools.stringToDouble(pTextField.getText());
-      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
-
-      Class<?> cls = getCurrLayer().getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(getCurrLayer(), propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(getCurrLayer(), Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
+      frameControlsUtil.textFieldChanged(getCurrLayer(), pSlider, pTextField, pProperty, pSliderScale);
       refreshFlameImage(true, false, 1, true, false);
     }
     finally {
@@ -2196,30 +2101,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     noRefresh = true;
     try {
-      double propValue = Tools.stringToDouble(pTextField.getText());
-      if (pSlider != null) {
-        pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
-      }
-
-      Class<?> cls = xForm.getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(xForm, propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(xForm, Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
+      frameControlsUtil.textFieldChanged(xForm, pSlider, pTextField, pProperty, pSliderScale);
       refreshFlameImage(true, false, 1, true, false);
     }
     finally {
@@ -2571,35 +2453,23 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.layerDensityREd.setText(null);
         data.layerWeightEd.setText(null);
         data.layerVisibleBtn.setSelected(true);
-        data.gradientColorMapHorizOffsetREd.setText(null);
-        data.gradientColorMapHorizOffsetSlider.setValue(0);
-        data.gradientColorMapHorizScaleREd.setText(null);
-        data.gradientColorMapHorizScaleSlider.setValue(0);
-        data.gradientColorMapVertOffsetREd.setText(null);
-        data.gradientColorMapVertOffsetSlider.setValue(0);
-        data.gradientColorMapVertScaleREd.setText(null);
-        data.gradientColorMapVertScaleSlider.setValue(0);
-        data.gradientColorMapLocalColorAddREd.setText(null);
-        data.gradientColorMapLocalColorAddSlider.setValue(0);
-        data.gradientColorMapLocalColorScaleREd.setText(null);
-        data.gradientColorMapLocalColorScaleSlider.setValue(0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapHorizOffsetSlider, data.gradientColorMapHorizOffsetREd, "",1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapHorizScaleSlider, data.gradientColorMapHorizScaleREd, "",1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapVertOffsetSlider, data.gradientColorMapVertOffsetREd, "",1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapVertScaleSlider, data.gradientColorMapVertScaleREd, "",1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapLocalColorAddSlider, data.gradientColorMapLocalColorAddREd, "",1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapLocalColorScaleSlider, data.gradientColorMapLocalColorScaleREd, "",1.0);
       }
       else {
         data.layerDensityREd.setValue(pLayer.getDensity());
         data.layerWeightEd.setValue(pLayer.getWeight());
         data.layerVisibleBtn.setSelected(pLayer.isVisible());
-        data.gradientColorMapHorizOffsetREd.setText(Tools.doubleToString(pLayer.getGradientMapHorizOffset()));
-        data.gradientColorMapHorizOffsetSlider.setValue(Tools.FTOI(pLayer.getGradientMapHorizOffset() * TinaController.SLIDER_SCALE_CENTRE));
-        data.gradientColorMapHorizScaleREd.setText(Tools.doubleToString(pLayer.getGradientMapHorizScale()));
-        data.gradientColorMapHorizScaleSlider.setValue(Tools.FTOI(pLayer.getGradientMapHorizScale() * TinaController.SLIDER_SCALE_CENTRE));
-        data.gradientColorMapVertOffsetREd.setText(Tools.doubleToString(pLayer.getGradientMapVertOffset()));
-        data.gradientColorMapVertOffsetSlider.setValue(Tools.FTOI(pLayer.getGradientMapVertOffset() * TinaController.SLIDER_SCALE_CENTRE));
-        data.gradientColorMapVertScaleREd.setText(Tools.doubleToString(pLayer.getGradientMapVertScale()));
-        data.gradientColorMapVertScaleSlider.setValue(Tools.FTOI(pLayer.getGradientMapVertScale() * TinaController.SLIDER_SCALE_CENTRE));
-        data.gradientColorMapLocalColorAddREd.setText(Tools.doubleToString(pLayer.getGradientMapLocalColorAdd()));
-        data.gradientColorMapLocalColorAddSlider.setValue(Tools.FTOI(pLayer.getGradientMapLocalColorAdd() * TinaController.SLIDER_SCALE_CENTRE));
-        data.gradientColorMapLocalColorScaleREd.setText(Tools.doubleToString(pLayer.getGradientMapLocalColorScale()));
-        data.gradientColorMapLocalColorScaleSlider.setValue(Tools.FTOI(pLayer.getGradientMapLocalColorScale() * TinaController.SLIDER_SCALE_CENTRE));
+        frameControlsUtil.updateControl(pLayer, data.gradientColorMapHorizOffsetSlider, data.gradientColorMapHorizOffsetREd, "gradientMapHorizOffset", TinaController.SLIDER_SCALE_CENTRE);
+        frameControlsUtil.updateControl(pLayer, data.gradientColorMapHorizScaleSlider, data.gradientColorMapHorizScaleREd, "gradientMapHorizScale", TinaController.SLIDER_SCALE_CENTRE);
+        frameControlsUtil.updateControl(pLayer, data.gradientColorMapVertOffsetSlider, data.gradientColorMapVertOffsetREd, "gradientMapVertOffset", TinaController.SLIDER_SCALE_CENTRE);
+        frameControlsUtil.updateControl(pLayer, data.gradientColorMapVertScaleSlider, data.gradientColorMapVertScaleREd, "gradientMapVertScale", TinaController.SLIDER_SCALE_CENTRE);
+        frameControlsUtil.updateControl(pLayer, data.gradientColorMapLocalColorAddSlider, data.gradientColorMapLocalColorAddREd, "gradientMapLocalColorAdd", TinaController.SLIDER_SCALE_CENTRE);
+        frameControlsUtil.updateControl(pLayer, data.gradientColorMapLocalColorScaleSlider, data.gradientColorMapLocalColorScaleREd, "gradientMapLocalColorScale", TinaController.SLIDER_SCALE_CENTRE);
       }
     }
     finally {
@@ -7351,6 +7221,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public GradientCurveEditorControlsDelegate getGradientCurveEditorControls() {
     return gradientCurveEditorControls;
+  }
+
+  public FrameControlsUtil getFrameControlsUtil() {
+    return frameControlsUtil;
   }
 
 }

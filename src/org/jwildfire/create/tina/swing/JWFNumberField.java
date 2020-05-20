@@ -16,12 +16,7 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
@@ -420,10 +415,10 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     motionCurveBtn.setEnabled(enabled);
   }
 
-  public void enableSpinnerField(boolean enabled) {
+/*  public void enableSpinnerField(boolean enabled) {
     spinnerField.setEnabled(enabled);
   }
-
+*/
   public double getMouseSpeed() {
     return mouseSpeed;
   }
@@ -447,8 +442,9 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
       else
         motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
     }
+    /*
     if (spinnerField != null) {
       spinnerField.setVisible(!pHasCurve);
-    }
+    }*/
   }
 }
