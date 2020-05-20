@@ -37,7 +37,7 @@ public class BlurZoomFunc extends VariationFunc {
     double z = 1.0 + this.length * pContext.random();
 
     pVarTP.x += pAmount * ((pAffineTP.x - this.x) * z + this.x);
-    pVarTP.y += pAmount * ((pAffineTP.y - this.y) * z - this.y);
+    pVarTP.y += pAmount * ((pAffineTP.y + this.y) * z - this.y);
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
