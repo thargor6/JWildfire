@@ -51,24 +51,29 @@ public class FlameThumbnail {
         return;
       }
     }
+    RenderInfo info = getPreviewRenderInfo();
+    RenderedFlame res = getPreviewRenderer(info, pQuality).renderFlame(info);
+    preview = res.getImage();
+    if (cacheKey != null) {
+      ThumbnailCacheProvider.storeThumbnail(cacheKey, IMG_WIDTH, IMG_HEIGHT, pQuality, preview);
+    }
+  }
 
+  public RenderInfo getPreviewRenderInfo() {
+    return new RenderInfo(IMG_WIDTH, IMG_HEIGHT, RenderMode.PREVIEW);
+  }
+
+  public FlameRenderer getPreviewRenderer(RenderInfo info, double pQuality) {
     Prefs prefs = Prefs.getPrefs();
-    RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT, RenderMode.PREVIEW);
     Flame renderFlame = flame.makeCopy();
     double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
     renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());
     renderFlame.setWidth(IMG_WIDTH);
     renderFlame.setHeight(IMG_HEIGHT);
-    renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-    renderFlame.setSpatialFilterRadius(0.0);
-    FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, false);
     renderFlame.setSampleDensity(pQuality);
-    RenderedFlame res = renderer.renderFlame(info);
-    preview = res.getImage();
-    if (cacheKey != null) {
-      ThumbnailCacheProvider.storeThumbnail(cacheKey, IMG_WIDTH, IMG_HEIGHT, pQuality, preview);
-    }
+    renderFlame.setSpatialFilterRadius(0.0);
+    return new FlameRenderer(renderFlame, prefs, false, false);
   }
 
   public SimpleImage getPreview(double pQuality) {

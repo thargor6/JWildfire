@@ -142,9 +142,8 @@ public class FlamePreviewHelper implements IterationObserver {
     }
 
     if (pQuickRender && !cfg.isNoControls() && randomBatchHolder != null && !pMouseDown) {
-      refreshThumbnail();
+      refreshThumbnailAsync();
     }
-
   }
 
   private void refreshThumbnail() {
@@ -499,8 +498,7 @@ public class FlamePreviewHelper implements IterationObserver {
       for (Thread thread : threads.getExecutingThreads()) {
         try {
           thread.setPriority(Thread.MIN_PRIORITY);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
@@ -508,8 +506,7 @@ public class FlamePreviewHelper implements IterationObserver {
       if (updateDisplayExecuteThread != null) {
         updateDisplayExecuteThread.setPriority(Thread.NORM_PRIORITY);
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
     while (true) {
@@ -520,8 +517,7 @@ public class FlamePreviewHelper implements IterationObserver {
           thread.cancel();
           try {
             Thread.sleep(1);
-          }
-          catch (InterruptedException e) {
+          } catch (InterruptedException e) {
             e.printStackTrace();
           }
         }
@@ -538,8 +534,7 @@ public class FlamePreviewHelper implements IterationObserver {
         try {
           updateDisplayThread.cancel();
           Thread.sleep(1);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
           e.printStackTrace();
         }
       }
@@ -574,7 +569,6 @@ public class FlamePreviewHelper implements IterationObserver {
     displayUpdater = new BufferedInteractiveRendererDisplayUpdater(pImgPanel, image, true);
     displayUpdater.initRender(prefs.getTinaRenderThreads());
     threads = renderer.startRenderFlame(info);
-
 
     updateDisplayThread = new UpdateDisplayThread(flame, image);
     updateDisplayExecuteThread = new Thread(updateDisplayThread);
@@ -731,4 +725,92 @@ public class FlamePreviewHelper implements IterationObserver {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     return imgPanel !=null ? imgPanel.getImage() : null;
   }
+
+
+  private class RenderThumbnailThread implements Runnable {
+    private final List<FlameThumbnail> randomBatch;
+    private final int flameIdx;
+    private boolean finished;
+    private boolean forceAbort;
+    private FlameRenderer flameRenderer;
+
+    public RenderThumbnailThread(List<FlameThumbnail> randomBatch, int flameIdx) {
+      this.randomBatch = randomBatch;
+      this.flameIdx = flameIdx;
+    }
+
+    @Override
+    public void run() {
+      finished = forceAbort= false;
+      try {
+        FlameThumbnail thumbnail = randomBatch.get(flameIdx);
+        RenderInfo info = thumbnail.getPreviewRenderInfo();
+        int quality = prefs.getTinaRenderPreviewQuality() / 2;
+        flameRenderer = thumbnail.getPreviewRenderer(info, quality);
+        RenderedFlame res = flameRenderer.renderFlame(info);
+        if(!forceAbort) {
+          randomBatch.get(flameIdx).setPreview(res.getImage());
+          ImagePanel pnl = randomBatch.get(flameIdx).getImgPanel();
+          if (pnl != null) {
+            pnl.replaceImage(randomBatch.get(flameIdx).getPreview(quality));
+            pnl.repaint();
+          }
+        }
+      }
+      finally {
+        finished = true;
+      }
+    }
+
+    public void cancel() {
+      try {
+        forceAbort = true;
+        flameRenderer.cancel();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
+    public boolean isFinished() {
+      return finished;
+    }
+  }
+
+  private RenderThumbnailThread renderThumbnailThread = null;
+
+  private void cancelThumbnailBackgroundRender() {
+    if(renderThumbnailThread!=null) {
+      try {
+        renderThumbnailThread.cancel();
+        while (!renderThumbnailThread.isFinished()) {
+          try {
+            Thread.sleep(1);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+      finally {
+        renderThumbnailThread = null;
+      }
+    }
+  }
+
+  private void refreshThumbnailAsync() {
+    cancelThumbnailBackgroundRender();
+    Flame flame = flameHolder.getFlame();
+    List<FlameThumbnail> randomBatch = randomBatchHolder.getRandomBatch();
+    for (int i = 0; i < randomBatch.size(); i++) {
+      Flame bFlame = randomBatch.get(i).getFlame();
+      if (bFlame == flame) {
+        renderThumbnailThread = new RenderThumbnailThread(randomBatch, i);
+        Thread executingThread = new Thread(renderThumbnailThread);
+        executingThread.setPriority(Thread.MIN_PRIORITY);
+        executingThread.start();
+        break;
+      }
+    }
+  }
+
 }
