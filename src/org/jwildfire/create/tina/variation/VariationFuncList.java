@@ -901,7 +901,9 @@ public class VariationFuncList {
 
     registerVariationFunc(PreZVarFunc.class);   
     registerVariationFunc(PostZVarFunc.class);  
-
+	  
+    registerVariationFunc(PixelFlowFunc.class);
+    registerVariationFunc(Glitchy1Func.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
