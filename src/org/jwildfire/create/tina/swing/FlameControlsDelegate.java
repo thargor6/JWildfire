@@ -688,149 +688,80 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       refreshSolidRenderingSelectedLightCmb();
       refreshSolidRenderingSelectedMaterialCmb();
 
-      data.camPosXREd.setText(Tools.doubleToString(getCurrFlame().getCamPosX()));
-      data.camPosXSlider.setValue(Tools.FTOI(getCurrFlame().getCamPosX() * TinaController.SLIDER_SCALE_CENTRE));
-
-      data.camPosYREd.setText(Tools.doubleToString(getCurrFlame().getCamPosY()));
-      data.camPosYSlider.setValue(Tools.FTOI(getCurrFlame().getCamPosY() * TinaController.SLIDER_SCALE_CENTRE));
-
-      data.camPosZREd.setText(Tools.doubleToString(getCurrFlame().getCamPosZ()));
-      data.camPosZSlider.setValue(Tools.FTOI(getCurrFlame().getCamPosZ() * TinaController.SLIDER_SCALE_CENTRE));
-
-      data.cameraPerspectiveREd.setText(Tools.doubleToString(getCurrFlame().getCamPerspective()));
-      data.cameraPerspectiveSlider.setValue(Tools.FTOI(getCurrFlame().getCamPerspective() * TinaController.SLIDER_SCALE_PERSPECTIVE));
-
-      data.cameraZoomREd.setText(Tools.doubleToString(getCurrFlame().getCamZoom()));
-      data.cameraZoomSlider.setValue(Tools.FTOI(getCurrFlame().getCamZoom() * TinaController.SLIDER_SCALE_ZOOM));
-
-      data.cameraDOFREd.setText(Tools.doubleToString(getCurrFlame().getCamDOF()));
-      data.cameraDOFSlider.setValue(Tools.FTOI(getCurrFlame().getCamDOF() * TinaController.SLIDER_SCALE_DOF));
-
-      data.cameraDOFAreaREd.setText(Tools.doubleToString(getCurrFlame().getCamDOFArea()));
-      data.cameraDOFAreaSlider.setValue(Tools.FTOI(getCurrFlame().getCamDOFArea() * TinaController.SLIDER_SCALE_DOF_AREA));
-
-      data.cameraDOFExponentREd.setText(Tools.doubleToString(getCurrFlame().getCamDOFExponent()));
-      data.cameraDOFExponentSlider.setValue(Tools.FTOI(getCurrFlame().getCamDOFExponent() * TinaController.SLIDER_SCALE_DOF_EXPONENT));
-
-      data.camZREd.setText(Tools.doubleToString(getCurrFlame().getCamZ()));
-      data.camZSlider.setValue(Tools.FTOI(getCurrFlame().getCamZ() * TinaController.SLIDER_SCALE_ZPOS));
-
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.cameraZoomSlider, data.cameraZoomREd, "camZoom", TinaController.SLIDER_SCALE_ZOOM);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.cameraDOFSlider, data.cameraDOFREd, "camDOF", TinaController.SLIDER_SCALE_DOF);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.cameraDOFAreaSlider, data.cameraDOFAreaREd, "camDOFArea", TinaController.SLIDER_SCALE_DOF_AREA);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.cameraDOFExponentSlider, data.cameraDOFExponentREd, "camDOFExponent", TinaController.SLIDER_SCALE_DOF_EXPONENT);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.camZSlider, data.camZREd, "camZ", TinaController.SLIDER_SCALE_ZPOS);
       data.newDOFCBx.setSelected(getCurrFlame().isNewCamDOF());
-
-      data.brightnessREd.setText(Tools.doubleToString(getCurrFlame().getBrightness()));
-      data.brightnessSlider.setValue(Tools.FTOI(getCurrFlame().getBrightness() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
-
-      data.saturationREd.setText(Tools.doubleToString(getCurrFlame().getSaturation()));
-      data.saturationSlider.setValue(Tools.FTOI(getCurrFlame().getSaturation() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
-
-      data.contrastREd.setText(Tools.doubleToString(getCurrFlame().getContrast()));
-      data.contrastSlider.setValue(Tools.FTOI(getCurrFlame().getContrast() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
-
-      data.whiteLevelREd.setText(Tools.doubleToString(getCurrFlame().getWhiteLevel()));
-      data.whiteLevelSlider.setValue(Tools.FTOI(getCurrFlame().getWhiteLevel()));
-
-      data.vibrancyREd.setText(Tools.doubleToString(getCurrFlame().getVibrancy()));
-      data.vibrancySlider.setValue(Tools.FTOI(getCurrFlame().getVibrancy() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
-
-      data.gammaREd.setText(Tools.doubleToString(getCurrFlame().getGamma()));
-      data.gammaSlider.setValue(Tools.FTOI(getCurrFlame().getGamma() * TinaController.SLIDER_SCALE_GAMMA));
-
-      data.filterRadiusREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterRadius()));
-      data.filterRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterRadius() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
-
-      data.tinaFilterSharpnessREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterSharpness()));
-      data.tinaFilterSharpnessSlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterSharpness() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
-
-      data.tinaFilterLowDensityREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterLowDensity()));
-      data.tinaFilterLowDensitySlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterLowDensity() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaFilterSharpnessSlider, data.tinaFilterSharpnessREd, "spatialFilterSharpness", TinaController.SLIDER_SCALE_FILTER_RADIUS);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaFilterLowDensitySlider, data.tinaFilterLowDensityREd, "spatialFilterLowDensity", TinaController.SLIDER_SCALE_FILTER_RADIUS);
 
       data.tinaFilterIndicatorCBx.setSelected(getCurrFlame().isSpatialFilterIndicator());
-
       data.tinaFilterTypeCmb.setSelectedItem(getCurrFlame().getSpatialFilteringType());
       fillFilterKernelCmb(getCurrFlame().getSpatialFilteringType());
       data.filterKernelCmb.setSelectedItem(getCurrFlame().getSpatialFilterKernel());
       enableFilterUI();
 
-      data.lowDensityBrightnessREd.setText(Tools.doubleToString(getCurrFlame().getLowDensityBrightness()));
-      data.lowDensityBrightnessSlider.setValue(Tools.FTOI(getCurrFlame().getLowDensityBrightness() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
-      data.balanceRedREd.setText(Tools.doubleToString(getCurrFlame().getBalanceRed()));
-      data.balanceRedSlider.setValue(Tools.FTOI(getCurrFlame().getBalanceRed() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
-      data.balanceGreenREd.setText(Tools.doubleToString(getCurrFlame().getBalanceGreen()));
-      data.balanceGreenSlider.setValue(Tools.FTOI(getCurrFlame().getBalanceGreen() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
-      data.balanceBlueREd.setText(Tools.doubleToString(getCurrFlame().getBalanceBlue()));
-      data.balanceBlueSlider.setValue(Tools.FTOI(getCurrFlame().getBalanceBlue() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
 
-      data.tinaSpatialOversamplingREd.setText(String.valueOf(getCurrFlame().getSpatialOversampling()));
-      data.tinaSpatialOversamplingSlider.setValue(getCurrFlame().getSpatialOversampling());
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
       data.tinaPostNoiseFilterCheckBox.setSelected(getCurrFlame().isPostNoiseFilter());
-      data.tinaPostNoiseThresholdField.setText(String.valueOf(getCurrFlame().getPostNoiseFilterThreshold()));
-      data.tinaPostNoiseThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getPostNoiseFilterThreshold() * TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD));
       data.tinaOptiXDenoiserCheckBox.setSelected(getCurrFlame().isPostOptiXDenoiser());
-      data.tinaOptiXDenoiserBlendField.setText(String.valueOf(getCurrFlame().getPostOptiXDenoiserBlend()));
-      data.tinaOptiXDenoiserBlendSlider.setValue(Tools.FTOI(getCurrFlame().getPostOptiXDenoiserBlend() * TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND));
-
-      data.foregroundOpacityField.setText(String.valueOf(getCurrFlame().getForegroundOpacity()));
-      data.foregroundOpacitySlider.setValue(Tools.FTOI(getCurrFlame().getForegroundOpacity() * TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD));
-
-      data.gammaThresholdREd.setText(String.valueOf(getCurrFlame().getGammaThreshold()));
-      data.gammaThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getGammaThreshold() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
-
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaOptiXDenoiserBlendSlider, data.tinaOptiXDenoiserBlendField, "postOptiXDenoiserBlend", TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
       data.bgTransparencyCBx.setSelected(getCurrFlame().isBGTransparency());
       data.backgroundColorTypeCmb.setSelectedItem(getCurrFlame().getBgColorType());
       enableBGColorUI();
 
-      data.xFormAntialiasAmountREd.setText(Tools.doubleToString(getCurrFlame().getAntialiasAmount()));
-      data.xFormAntialiasAmountSlider.setValue(Tools.FTOI(getCurrFlame().getAntialiasAmount() * TinaController.SLIDER_SCALE_COLOR));
-      data.xFormAntialiasRadiusREd.setText(Tools.doubleToString(getCurrFlame().getAntialiasRadius()));
-      data.xFormAntialiasRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getAntialiasRadius() * TinaController.SLIDER_SCALE_COLOR));
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.motionBlurLengthSlider, data.motionBlurLengthField, "motionBlurLength", 1.0);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.motionBlurTimeStepSlider, data.motionBlurTimeStepField, "motionBlurTimeStep", TinaController.SLIDER_SCALE_COLOR);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.motionBlurDecaySlider, data.motionBlurDecayField, "motionBlurDecay", TinaController.SLIDER_SCALE_ZOOM);
 
-      data.motionBlurLengthField.setText(String.valueOf(getCurrFlame().getMotionBlurLength()));
-      data.motionBlurLengthSlider.setValue(getCurrFlame().getMotionBlurLength());
-      data.motionBlurTimeStepField.setText(Tools.doubleToString(getCurrFlame().getMotionBlurTimeStep()));
-      data.motionBlurTimeStepSlider.setValue(Tools.FTOI(getCurrFlame().getMotionBlurTimeStep() * TinaController.SLIDER_SCALE_COLOR));
-      data.motionBlurDecayField.setText(Tools.doubleToString(getCurrFlame().getMotionBlurDecay()));
-      data.motionBlurDecaySlider.setValue(Tools.FTOI(getCurrFlame().getMotionBlurDecay() * TinaController.SLIDER_SCALE_ZOOM));
       data.flameFPSField.setValue(getCurrFlame().getFps());
-
       data.postSymmetryTypeCmb.setSelectedItem(getCurrFlame().getPostSymmetryType());
       enablePostSymmetryUI();
-      data.postSymmetryDistanceREd.setText(Tools.doubleToString(getCurrFlame().getPostSymmetryDistance()));
-      data.postSymmetryDistanceSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryDistance() * TinaController.SLIDER_SCALE_CENTRE));
-      data.postSymmetryRotationREd.setText(Tools.doubleToString(getCurrFlame().getPostSymmetryRotation()));
-      data.postSymmetryRotationSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryRotation()));
-      data.postSymmetryOrderREd.setText(String.valueOf(getCurrFlame().getPostSymmetryOrder()));
-      data.postSymmetryOrderSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryOrder()));
-      data.postSymmetryCentreXREd.setText(Tools.doubleToString(getCurrFlame().getPostSymmetryCentreX()));
-      data.postSymmetryCentreXSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryCentreX() * TinaController.SLIDER_SCALE_CENTRE));
-      data.postSymmetryCentreYREd.setText(Tools.doubleToString(getCurrFlame().getPostSymmetryCentreY()));
-      data.postSymmetryCentreYSlider.setValue(Tools.FTOI(getCurrFlame().getPostSymmetryCentreY() * TinaController.SLIDER_SCALE_CENTRE));
+
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.postSymmetryDistanceSlider, data.postSymmetryDistanceREd, "postSymmetryDistance", TinaController.SLIDER_SCALE_CENTRE);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.postSymmetryRotationSlider, data.postSymmetryRotationREd, "postSymmetryRotation", 1.0);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.postSymmetryOrderSlider, data.postSymmetryOrderREd, "postSymmetryOrder", 1.0);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.postSymmetryCentreXSlider, data.postSymmetryCentreXREd, "postSymmetryCentreX", TinaController.SLIDER_SCALE_CENTRE);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.postSymmetryCentreYSlider, data.postSymmetryCentreYREd, "postSymmetryCentreY", TinaController.SLIDER_SCALE_CENTRE);
 
       data.stereo3dModeCmb.setSelectedItem(getCurrFlame().getStereo3dMode());
       enableStereo3dUI();
-      data.stereo3dAngleREd.setText(Tools.doubleToString(getCurrFlame().getStereo3dAngle()));
-      data.stereo3dAngleSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dAngle() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
-      data.stereo3dEyeDistREd.setText(Tools.doubleToString(getCurrFlame().getStereo3dEyeDist()));
-      data.stereo3dEyeDistSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dEyeDist() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
-      data.stereo3dFocalOffsetREd.setText(Tools.doubleToString(getCurrFlame().getStereo3dFocalOffset()));
-      data.stereo3dFocalOffsetSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dFocalOffset() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.stereo3dAngleSlider, data.stereo3dAngleREd, "stereo3dAngle", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.stereo3dEyeDistSlider, data.stereo3dEyeDistREd, "stereo3dEyeDist", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.stereo3dFocalOffsetSlider, data.stereo3dFocalOffsetREd, "stereo3dFocalOffset", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
       data.stereo3dLeftEyeColorCmb.setSelectedItem(getCurrFlame().getStereo3dLeftEyeColor());
       data.stereo3dRightEyeColorCmb.setSelectedItem(getCurrFlame().getStereo3dRightEyeColor());
-      data.stereo3dInterpolatedImageCountREd.setText(String.valueOf(getCurrFlame().getStereo3dInterpolatedImageCount()));
-      data.stereo3dInterpolatedImageCountSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dInterpolatedImageCount()));
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.stereo3dInterpolatedImageCountSlider, data.stereo3dInterpolatedImageCountREd, "stereo3dInterpolatedImageCount", 1.0);
       data.stereo3dPreviewCmb.setSelectedItem(getCurrFlame().getStereo3dPreview());
       data.stereo3dSwapSidesCBx.setSelected(getCurrFlame().isStereo3dSwapSides());
 
-      data.postBlurRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getPostBlurRadius()));
-      data.postBlurRadiusREd.setText(Tools.doubleToString(getCurrFlame().getPostBlurRadius()));
-      data.postBlurFadeSlider.setValue(Tools.FTOI(getCurrFlame().getPostBlurFade() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.postBlurFadeREd.setText(Tools.doubleToString(getCurrFlame().getPostBlurFade()));
-      data.postBlurFallOffSlider.setValue(Tools.FTOI(getCurrFlame().getPostBlurFallOff() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.postBlurFallOffREd.setText(Tools.doubleToString(getCurrFlame().getPostBlurFallOff()));
-
-      data.tinaZBufferScaleREd.setText(Tools.doubleToString(getCurrFlame().getZBufferScale()));
-      data.tinaZBufferScaleSlider.setValue(Tools.FTOI(getCurrFlame().getZBufferScale() * TinaController.SLIDER_SCALE_CENTRE));
-      data.tinaZBufferBiasREd.setText(Tools.doubleToString(getCurrFlame().getZBufferBias()));
-      data.tinaZBufferBiasSlider.setValue(Tools.FTOI(getCurrFlame().getZBufferBias() * TinaController.SLIDER_SCALE_CENTRE));
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.postBlurRadiusSlider, data.postBlurRadiusREd, "postBlurRadius", 1.0);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.postBlurFadeSlider, data.postBlurFadeREd, "postBlurFade", TinaController.SLIDER_SCALE_AMBIENT);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.postBlurFallOffSlider, data.postBlurFallOffREd, "postBlurFallOff", TinaController.SLIDER_SCALE_AMBIENT);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaZBufferScaleSlider, data.tinaZBufferScaleREd, "zBufferScale", TinaController.SLIDER_SCALE_CENTRE);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE);
       data.tinaZBufferFilename1.setSelected(getCurrFlame().getZBufferFilename() == ZBufferFilename.PRE_ZBUF);
       data.tinaZBufferFilename2.setSelected(getCurrFlame().getZBufferFilename() == ZBufferFilename.POST_DEPTH);
 

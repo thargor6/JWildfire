@@ -2511,98 +2511,115 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             break;
         }
         if (data.affineEditPostTransformButton.isSelected()) {
-          data.affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
-          data.affineC01REd.setText(Tools.doubleToString(pXForm.getPostCoeff01()));
-          data.affineC10REd.setText(Tools.doubleToString(pXForm.getPostCoeff10()));
-          data.affineC11REd.setText(Tools.doubleToString(pXForm.getPostCoeff11()));
-          data.affineC20REd.setText(Tools.doubleToString(pXForm.getPostCoeff20()));
-          data.affineC21REd.setText(Tools.doubleToString(pXForm.getPostCoeff21()));
+           switch (pXForm.getEditPlane()) {
+             case YZ:
+               frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "yzPostCoeff00", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "yzPostCoeff01", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "yzPostCoeff10", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "yzPostCoeff11", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "yzPostCoeff20", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "yzPostCoeff21", 1.0);
+               break;
+             case ZX:
+               frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "zxPostCoeff00", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "zxPostCoeff01", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "zxPostCoeff10", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "zxPostCoeff11", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "zxPostCoeff20", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "zxPostCoeff21", 1.0);
+               break;
+             case XY:
+             default:
+               frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "xyPostCoeff00", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "xyPostCoeff01", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "xyPostCoeff10", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "xyPostCoeff11", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "xyPostCoeff20", 1.0);
+               frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "xyPostCoeff21", 1.0);
+               break;
+           }
         }
         else {
-          data.affineC00REd.setText(Tools.doubleToString(pXForm.getCoeff00()));
-          data.affineC01REd.setText(Tools.doubleToString(pXForm.getCoeff01()));
-          data.affineC10REd.setText(Tools.doubleToString(pXForm.getCoeff10()));
-          data.affineC11REd.setText(Tools.doubleToString(pXForm.getCoeff11()));
-          data.affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
-          data.affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
+          switch (pXForm.getEditPlane()) {
+            case YZ:
+              frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "yzCoeff00", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "yzCoeff01", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "yzCoeff10", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "yzCoeff11", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "yzCoeff20", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "yzCoeff21", 1.0);
+              break;
+            case ZX:
+              frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "zxCoeff00", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "zxCoeff01", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "zxCoeff10", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "zxCoeff11", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "zxCoeff20", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "zxCoeff21", 1.0);
+              break;
+            case XY:
+            default:
+              frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "xyCoeff00", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "xyCoeff01", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "xyCoeff10", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "xyCoeff11", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "xyCoeff20", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "xyCoeff21", 1.0);
+              break;
+          }
         }
         if (data.affineMirrorPrePostTranslationsButton != null) {
           data.affineMirrorPrePostTranslationsButton.setSelected(pXForm.getMirrorTranslations());
         }
 
-        data.xFormColorREd.setText(Tools.doubleToString(pXForm.getColor()));
-        data.xFormColorSlider.setValue(Tools.FTOI(pXForm.getColor() * SLIDER_SCALE_COLOR));
-        data.xFormSymmetryREd.setText(Tools.doubleToString(pXForm.getColorSymmetry()));
-        data.xFormSymmetrySlider.setValue(Tools.FTOI(pXForm.getColorSymmetry() * SLIDER_SCALE_COLOR));
+        frameControlsUtil.updateControl(pXForm, data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
+        frameControlsUtil.updateControl(pXForm, data.xFormSymmetrySlider, data.xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
 
-        data.xFormMaterialREd.setText(Tools.doubleToString(pXForm.getMaterial()));
-        data.xFormMaterialSlider.setValue(Tools.FTOI(pXForm.getMaterial() * SLIDER_SCALE_COLOR));
-        data.xFormMaterialSpeedREd.setText(Tools.doubleToString(pXForm.getMaterialSpeed()));
-        data.xFormMaterialSpeedSlider.setValue(Tools.FTOI(pXForm.getMaterialSpeed() * SLIDER_SCALE_COLOR));
+        frameControlsUtil.updateControl(pXForm, data.xFormMaterialSlider, data.xFormMaterialREd, "material", SLIDER_SCALE_COLOR);
+        frameControlsUtil.updateControl(pXForm, data.xFormMaterialSpeedSlider, data.xFormMaterialSpeedREd, "materialSpeed", SLIDER_SCALE_COLOR);
 
-        data.xFormModGammaREd.setText(Tools.doubleToString(pXForm.getModGamma()));
-        data.xFormModGammaSlider.setValue(Tools.FTOI(pXForm.getModGamma() * SLIDER_SCALE_COLOR));
-        data.xFormModGammaSpeedREd.setText(Tools.doubleToString(pXForm.getModGammaSpeed()));
-        data.xFormModGammaSpeedSlider.setValue(Tools.FTOI(pXForm.getModGammaSpeed() * SLIDER_SCALE_COLOR));
+        frameControlsUtil.updateControl(pXForm, data.xFormModGammaSlider, data.xFormModGammaREd, "modGamma", SLIDER_SCALE_COLOR);
+        frameControlsUtil.updateControl(pXForm, data.xFormModGammaSpeedSlider, data.xFormModGammaSpeedREd, "modGammaSpeed", SLIDER_SCALE_COLOR);
 
-        data.xFormModContrastREd.setText(Tools.doubleToString(pXForm.getModContrast()));
-        data.xFormModContrastSlider.setValue(Tools.FTOI(pXForm.getModContrast() * SLIDER_SCALE_COLOR));
-        data.xFormModContrastSpeedREd.setText(Tools.doubleToString(pXForm.getModContrastSpeed()));
-        data.xFormModContrastSpeedSlider.setValue(Tools.FTOI(pXForm.getModContrastSpeed() * SLIDER_SCALE_COLOR));
+        frameControlsUtil.updateControl(pXForm, data.xFormModContrastSlider, data.xFormModContrastREd, "modContrast", SLIDER_SCALE_COLOR);
+        frameControlsUtil.updateControl(pXForm, data.xFormModContrastSpeedSlider, data.xFormModContrastSpeedREd, "modContrastSpeed", SLIDER_SCALE_COLOR);
 
-        data.xFormModSaturationREd.setText(Tools.doubleToString(pXForm.getModSaturation()));
-        data.xFormModSaturationSlider.setValue(Tools.FTOI(pXForm.getModSaturation() * SLIDER_SCALE_COLOR));
-        data.xFormModSaturationSpeedREd.setText(Tools.doubleToString(pXForm.getModSaturationSpeed()));
-        data.xFormModSaturationSpeedSlider.setValue(Tools.FTOI(pXForm.getModSaturationSpeed() * SLIDER_SCALE_COLOR));
+        frameControlsUtil.updateControl(pXForm, data.xFormModSaturationSlider, data.xFormModSaturationREd, "modSaturation", SLIDER_SCALE_COLOR);
+        frameControlsUtil.updateControl(pXForm, data.xFormModSaturationSpeedSlider, data.xFormModSaturationSpeedREd, "modSaturationSpeed", SLIDER_SCALE_COLOR);
 
-        data.xFormModHueREd.setText(Tools.doubleToString(pXForm.getModHue()));
-        data.xFormModHueSlider.setValue(Tools.FTOI(pXForm.getModHue() * SLIDER_SCALE_COLOR));
-        data.xFormModHueSpeedREd.setText(Tools.doubleToString(pXForm.getModHueSpeed()));
-        data.xFormModHueSpeedSlider.setValue(Tools.FTOI(pXForm.getModHueSpeed() * SLIDER_SCALE_COLOR));
+        frameControlsUtil.updateControl(pXForm, data.xFormModHueSlider, data.xFormModHueREd, "modHue", SLIDER_SCALE_COLOR);
+        frameControlsUtil.updateControl(pXForm, data.xFormModHueSpeedSlider, data.xFormModHueSpeedREd, "modHueSpeed", SLIDER_SCALE_COLOR);
 
-        data.xFormOpacityREd.setText(Tools.doubleToString(pXForm.getOpacity()));
-        data.xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
+        frameControlsUtil.updateControl(pXForm, data.xFormOpacitySlider, data.xFormOpacityREd, "opacity", SLIDER_SCALE_COLOR);
+
         data.xFormDrawModeCmb.setSelectedItem(pXForm.getDrawMode());
         data.xFormColorTypeCmb.setSelectedItem(pXForm.getColorType());
         data.xFormTargetColorBtn.setBackground(pXForm.getTargetColor().getColor());
 
-        data.transformationWeightREd.setText(Tools.doubleToString(pXForm.getWeight()));
+        frameControlsUtil.updateControl(pXForm, null, data.transformationWeightREd, "weight", 1.0);
         getWeightMapControlsUpdater(pXForm).updateControls(pXForm);
       }
       else {
-        data.affineC00REd.setText(null);
-        data.affineC01REd.setText(null);
-        data.affineC10REd.setText(null);
-        data.affineC11REd.setText(null);
-        data.affineC20REd.setText(null);
-        data.affineC21REd.setText(null);
-        data.xFormColorREd.setText(null);
-        data.xFormColorSlider.setValue(0);
-        data.xFormSymmetryREd.setText(null);
-        data.xFormSymmetrySlider.setValue(0);
-        data.xFormMaterialREd.setText(null);
-        data.xFormMaterialSlider.setValue(0);
-        data.xFormMaterialSpeedREd.setText(null);
-        data.xFormMaterialSpeedSlider.setValue(0);
-        data.xFormModGammaREd.setText(null);
-        data.xFormModGammaSlider.setValue(0);
-        data.xFormModGammaSpeedREd.setText(null);
-        data.xFormModGammaSpeedSlider.setValue(0);
-        data.xFormModContrastREd.setText(null);
-        data.xFormModContrastSlider.setValue(0);
-        data.xFormModContrastSpeedREd.setText(null);
-        data.xFormModContrastSpeedSlider.setValue(0);
-        data.xFormModSaturationREd.setText(null);
-        data.xFormModSaturationSlider.setValue(0);
-        data.xFormModSaturationSpeedREd.setText(null);
-        data.xFormModSaturationSpeedSlider.setValue(0);
-        data.xFormModHueREd.setText(null);
-        data.xFormModHueSlider.setValue(0);
-        data.xFormModHueSpeedREd.setText(null);
-        data.xFormModHueSpeedSlider.setValue(0);
-        data.xFormOpacityREd.setText(null);
-        data.xFormOpacitySlider.setValue(0);
-        data.transformationWeightREd.setText(null);
+        frameControlsUtil.updateControl(null, null, data.affineC00REd, "", 1.0);
+        frameControlsUtil.updateControl(null, null, data.affineC01REd, "", 1.0);
+        frameControlsUtil.updateControl(null, null, data.affineC10REd, "", 1.0);
+        frameControlsUtil.updateControl(null, null, data.affineC11REd, "", 1.0);
+        frameControlsUtil.updateControl(null, null, data.affineC20REd, "", 1.0);
+        frameControlsUtil.updateControl(null, null, data.affineC21REd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormColorSlider, data.xFormColorREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormSymmetrySlider, data.xFormSymmetryREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormMaterialSlider, data.xFormMaterialREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormMaterialSpeedSlider, data.xFormMaterialSpeedREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormModGammaSlider, data.xFormModGammaREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormModGammaSpeedSlider, data.xFormModGammaSpeedREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormModContrastSlider, data.xFormModContrastREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormModContrastSpeedSlider, data.xFormModContrastSpeedREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormModSaturationSlider, data.xFormModSaturationREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormModSaturationSpeedSlider, data.xFormModSaturationSpeedREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormModHueSlider, data.xFormModHueREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormModHueSpeedSlider, data.xFormModHueSpeedREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.xFormOpacitySlider, data.xFormOpacityREd, "", 1.0);
+        frameControlsUtil.updateControl(null, null, data.transformationWeightREd, "", 1.0);
         data.xFormDrawModeCmb.setSelectedIndex(-1);
         data.xFormColorTypeCmb.setSelectedIndex(-1);
         data.xFormTargetColorBtn.setBackground(Color.BLACK);
