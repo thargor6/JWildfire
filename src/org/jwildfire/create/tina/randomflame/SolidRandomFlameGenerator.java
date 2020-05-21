@@ -48,7 +48,7 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
 
   protected VariationFunc getRandom3DShape() {
     VariationFunc varFunc;
-    switch (Tools.randomInt(7)) {
+    switch (Tools.randomInt(10)) {
       case 0: {
         varFunc = VariationFuncList.getVariationFuncInstance("yplot2d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getYPlot2DWFFuncPresets().getRandomPresetId());
@@ -70,6 +70,31 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("ymax", 2);
         varFunc.setParameter("zmin", -2);
         varFunc.setParameter("zmax", 2);
+        varFunc.setParameter("direct_color", 1);
+        break;
+      }
+      case 7: {
+        varFunc = VariationFuncList.getVariationFuncInstance("polarplot2d_wf", true);
+        varFunc.setParameter("preset_id", WFFuncPresetsStore.getPolarPlot2DWFFuncPresets().getRandomPresetId());
+        varFunc.setParameter("tmin", -Math.PI);
+        varFunc.setParameter("tmax", Math.PI);
+        varFunc.setParameter("rmin", -4);
+        varFunc.setParameter("rmax", 4);
+        varFunc.setParameter("zmin", -2);
+        varFunc.setParameter("zmax", 2);
+        varFunc.setParameter("direct_color", 1);
+        break;
+      }
+      case 8:
+      case 9: {
+        varFunc = VariationFuncList.getVariationFuncInstance("polarplot3d_wf", true);
+        varFunc.setParameter("preset_id", WFFuncPresetsStore.getPolarPlot3DWFFuncPresets().getRandomPresetId());
+        varFunc.setParameter("tmin", -Math.PI);
+        varFunc.setParameter("tmax", Math.PI);
+        varFunc.setParameter("umin", -Math.PI);
+        varFunc.setParameter("umax", Math.PI);
+        varFunc.setParameter("rmin", -2);
+        varFunc.setParameter("rmax", 2);
         varFunc.setParameter("direct_color", 1);
         break;
       }
