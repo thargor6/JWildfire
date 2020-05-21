@@ -98,7 +98,7 @@ public class FrameControlsUtil {
     }
   }
 
-  public void textFieldChanged(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+  public void valueChanged(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     double propValue = Tools.stringToDouble(pTextField.getText());
     if(pSlider!=null) {
       pSlider.setValue(Tools.FTOI(propValue * pSliderScale));

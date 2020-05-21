@@ -2060,7 +2060,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     noRefresh = true;
     try {
-      frameControlsUtil.textFieldChanged(getCurrLayer().getPalette(), pSlider, pTextField, pProperty, pSliderScale);
+      frameControlsUtil.valueChanged(getCurrLayer().getPalette(), pSlider, pTextField, pProperty, pSliderScale);
       try {
         Class<?> cls = getCurrLayer().getPalette().getClass();
         Field field = cls.getDeclaredField("modified");
@@ -2083,7 +2083,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     noRefresh = true;
     try {
-      frameControlsUtil.textFieldChanged(getCurrLayer(), pSlider, pTextField, pProperty, pSliderScale);
+      frameControlsUtil.valueChanged(getCurrLayer(), pSlider, pTextField, pProperty, pSliderScale);
       refreshFlameImage(true, false, 1, true, false);
     }
     finally {
@@ -2101,7 +2101,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     noRefresh = true;
     try {
-      frameControlsUtil.textFieldChanged(xForm, pSlider, pTextField, pProperty, pSliderScale);
+      frameControlsUtil.valueChanged(xForm, pSlider, pTextField, pProperty, pSliderScale);
       refreshFlameImage(true, false, 1, true, false);
     }
     finally {
