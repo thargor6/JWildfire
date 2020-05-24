@@ -176,7 +176,7 @@ public class AnimationService {
       }
       else if (field.getType().isAssignableFrom(ArrayList.class)) {
         List<?> childs = (List<?>) field.get(pObject);
-        if(childs!=null) {
+        if (childs != null) {
           for (Object child : childs) {
             _evalMotionCurves(child, pFrame);
           }
@@ -238,7 +238,8 @@ public class AnimationService {
       }
       else if (field.getType().isAssignableFrom(RGBPalette.class)) {
         RGBPalette gradient = (RGBPalette) field.get(pObject);
-        if (gradient != null) _disableMotionCurves(gradient);
+        if (gradient != null)
+          _disableMotionCurves(gradient);
       }
     }
     if (pObject instanceof Variation) {

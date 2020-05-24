@@ -136,7 +136,8 @@ public class Prefs extends ManagedObject {
 
   public static final String KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION = "tina.editor.default.double_click_action";
   public static final String KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL = "tina.default.fade_to_white_level";
-  public static final String KEY_TINA_DEFAULT_FPS = "tina.default.fps";
+  public static final String KEY_TINA_DEFAULT_FPS = "tina.default.fps.2";
+  public static final String KEY_TINA_DEFAULT_FRAME_COUNT = "tina.default.frame_count";
 
   static final String KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS = "tina.initially_expand_nonlinear_params";
   static final String KEY_TINA_FACLRENDER_PATH = "tina.faclrender_path";
@@ -343,7 +344,10 @@ public class Prefs extends ManagedObject {
   private double tinaDefaultFadeToWhiteLevel = 220.0;
 
   @Property(description = "Default FPS of new generated flames", category = PropertyCategory.TINA)
-  private int tinaDefaultFPS = 30;
+  private int tinaDefaultFPS = 25;
+
+  @Property(description = "Default frame-count for animated flames", category = PropertyCategory.TINA)
+  private int tinaDefaultFrameCount = 125;
 
   @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
   private boolean tinaOptimizedRenderingIR = true;
@@ -795,6 +799,7 @@ public class Prefs extends ManagedObject {
     tinaEditorDoubleClickAction = pSrc.tinaEditorDoubleClickAction;
 
     tinaDefaultFPS = pSrc.tinaDefaultFPS;
+    tinaDefaultFrameCount = pSrc.tinaDefaultFrameCount;
     tinaRawMotionDataPath = pSrc.tinaRawMotionDataPath;
     tinaDefaultSpatialOversampling = pSrc.tinaDefaultSpatialOversampling;
     tinaDefaultSpatialFilterKernel = pSrc.tinaDefaultSpatialFilterKernel;
@@ -1693,6 +1698,14 @@ public class Prefs extends ManagedObject {
   
   public void setTinaLSystemMaxLength(int l) {
     tinaLSystemMaxLength = l;
+  }
+
+  public int getTinaDefaultFrameCount() {
+    return tinaDefaultFrameCount;
+  }
+
+  public void setTinaDefaultFrameCount(int tinaDefaultFrameCount) {
+    this.tinaDefaultFrameCount = tinaDefaultFrameCount;
   }
 
 }

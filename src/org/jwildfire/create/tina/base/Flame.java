@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -217,8 +217,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double motionBlurDecay;
 
   private int frame = 1;
-  private int frameCount = 300;
-  private int fps = 30;
+  private int frameCount = Prefs.getPrefs().getTinaDefaultFrameCount();
+  private int fps = 25;
   private double zBufferScale = 1.0;
   private double zBufferBias = 0.0;
   private ZBufferFilename zBufferFilename = ZBufferFilename.PRE_ZBUF;
@@ -288,7 +288,7 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void resetMotionBlurSettings() {
     motionBlurLength = 0;
-    motionBlurTimeStep = 0.15;
+    motionBlurTimeStep = 0.05;
     motionBlurDecay = 0.03;
     fps = Prefs.getPrefs().getTinaDefaultFPS();
   }

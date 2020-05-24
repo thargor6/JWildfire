@@ -1,3 +1,16 @@
+V6.00 (xx.xx.2020)
+ - dramatic improvement of responsiveness to changes in the UI (sliders, number fields, ...)
+ - automatic creation and updating of key-frames when changing flame-parameters at different frame-numbers, creating
+   of flame-animations has never been easier
+ - changed some default settings in regard to flame-animations
+ - added new property "tinaDefaultFrameCount" to the Preferences, here you can change the default number of frames for a flame-animation,
+   created in the main editor
+ - new variations:
+     -glitchy1 by Brad Stefanov, Rick Sidwell, dark-beam and bezo97
+     -pixel_flow by bezo97
+ - add polarplot variations to solid random flame generator, by Rick Sidwell
+ - fixed bug in blur_zoom, by Rick Sidwell
+
 V5.60 (06.05.2020)
  - new commandline-tool to create and render random flames.
    Example: java -cp j-wildfire-5.60/lib/j-wildfire.jar org.jwildfire.cli.CreateRandomFlame -w 1200 -h 675 -q 80

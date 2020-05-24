@@ -130,6 +130,7 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION, pPrefs.getTinaEditorDoubleClickAction().toString());
     addValue(sb, Prefs.KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL, pPrefs.getTinaDefaultFadeToWhiteLevel());
     addValue(sb, Prefs.KEY_TINA_DEFAULT_FPS, pPrefs.getTinaDefaultFPS());
+    addValue(sb, Prefs.KEY_TINA_DEFAULT_FRAME_COUNT, pPrefs.getTinaDefaultFrameCount());
     // resolution profiles
     addValue(sb, Prefs.KEY_TINA_PROFILE_RESOLUTION_COUNT, pPrefs.getResolutionProfiles().size());
     for (int i = 0; i < pPrefs.getResolutionProfiles().size(); i++) {
