@@ -9312,19 +9312,6 @@ public class MainEditorFrame extends JFrame {
       centerWestPanel.add(getSnapShotButton());
       centerWestPanel.add(getLabel_8());
       centerWestPanel.add(getEditFlameTitleBtn());
-
-      motionCurveEditModeButton = new JToggleButton();
-      centerWestPanel.add(motionCurveEditModeButton);
-      motionCurveEditModeButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getAnimationController().toggleMotionCurveEditing();
-        }
-      });
-      motionCurveEditModeButton.setToolTipText("Enable new controls to edit flame-properties as motion-curves rather than simple values");
-      motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionEditingMode.gif")));
-      motionCurveEditModeButton.setPreferredSize(new Dimension(72, 36));
-      motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
       centerWestPanel.add(getSolidRenderingToggleBtn());
 
       JButton btnWfld = new JButton();
@@ -9340,6 +9327,19 @@ public class MainEditorFrame extends JFrame {
         }
       });
       centerWestPanel.add(btnWfld);
+
+      motionCurveEditModeButton = new JToggleButton();
+      centerWestPanel.add(motionCurveEditModeButton);
+      motionCurveEditModeButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getAnimationController().toggleMotionCurveEditing();
+        }
+      });
+      motionCurveEditModeButton.setToolTipText("Enable new controls to edit flame-properties as motion-curves rather than simple values");
+      motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionEditingMode.gif")));
+      motionCurveEditModeButton.setPreferredSize(new Dimension(72, 36));
+      motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
 
     }
     return centerWestPanel;
@@ -12107,7 +12107,6 @@ public class MainEditorFrame extends JFrame {
   private JPanel gradientCurveEditorSaturationRootPanel;
   private JPanel gradientCurveEditorLuminosityRootPanel;
   private JButton motionCurvePlayPreviewButton;
-  private JButton motionCurveCreateKeyFrameButton;
   private JPanel panel_92;
   private JTabbedPane tabbedPane_3;
   private JPanel bokehSettingsPnl;
@@ -15510,7 +15509,7 @@ public class MainEditorFrame extends JFrame {
   private JPanel getPanel_79() {
     if (panel_79 == null) {
       panel_79 = new JPanel();
-      panel_79.setPreferredSize(new Dimension(228, 10));
+      panel_79.setPreferredSize(new Dimension(128, 10));
       panel_79.setLayout(null);
 
       keyframesFrameLbl = new JLabel();
@@ -15542,28 +15541,6 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameField.setHasMinValue(true);
       keyframesFrameField.setHasMaxValue(true);
       keyframesFrameField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-
-      motionCurveCreateKeyFrameButton = new JButton();
-      motionCurveCreateKeyFrameButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController != null && tinaController.getAnimationController() != null) {
-            try {
-              tinaController.getAnimationController().addKeyFrameButtonClicked();
-            }
-            catch (Exception ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-      });
-      motionCurveCreateKeyFrameButton.setToolTipText("Create a new key-frame at the current frame.");
-      motionCurveCreateKeyFrameButton.setText("Add key-frame");
-      motionCurveCreateKeyFrameButton.setSize(new Dimension(70, 24));
-      motionCurveCreateKeyFrameButton.setPreferredSize(new Dimension(104, 24));
-      motionCurveCreateKeyFrameButton.setLocation(new Point(122, 2));
-      motionCurveCreateKeyFrameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      motionCurveCreateKeyFrameButton.setBounds(122, 2, 104, 24);
-      panel_79.add(motionCurveCreateKeyFrameButton);
     }
     return panel_79;
   }

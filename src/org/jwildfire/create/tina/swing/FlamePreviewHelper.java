@@ -125,9 +125,8 @@ public class FlamePreviewHelper implements IterationObserver {
       centerPanel.getParent().validate();
       centerPanel.repaint();
     }
-    else {
-      imgPanel.repaint();
-    }
+
+
 
     if (pReRender && isProgressivePreviewEnabled(cfg) && pQuickRender) {
       if (pAllowUseCache) {
@@ -141,12 +140,17 @@ public class FlamePreviewHelper implements IterationObserver {
       }
     }
 
+    if (cfg.isNoControls()) {
+      imgPanel.repaint();
+    }
+
+
     if (pQuickRender && !cfg.isNoControls() && randomBatchHolder != null && !pMouseDown) {
       refreshThumbnailAsync();
     }
   }
 
-  private void refreshThumbnail() {
+  private void refreshThumbnailSync() {
     Flame flame = flameHolder.getFlame();
     List<FlameThumbnail> randomBatch = randomBatchHolder.getRandomBatch();
     for (int i = 0; i < randomBatch.size(); i++) {
@@ -592,8 +596,8 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 1;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 1;
-  private final static int MAX_UPDATE_INC_INTERVAL = 100;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 2; // 1
+  private final static int MAX_UPDATE_INC_INTERVAL = 50; // 100
 
   private class UpdateDisplayThread implements Runnable, InteractiveRendererImagePostProcessor {
     private int nextImageUpdate;

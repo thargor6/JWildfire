@@ -17,6 +17,8 @@
 package org.jwildfire.create.tina.swing;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 
 import javax.swing.*;
 import java.lang.reflect.Field;
@@ -29,9 +31,10 @@ public class FrameControlsUtil {
   }
 
   public void updateControl(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    double propertyValue = pTarget!=null ? getPropertyValue(pTarget, pProperty) : 0.0;
     if(pTextField!=null) {
       if(pTarget!=null) {
-        pTextField.setText(Tools.doubleToString(getPropertyValue(pTarget, pProperty)));
+        pTextField.setText(Tools.doubleToString(propertyValue));
       }
       else {
         pTextField.setText(null);
@@ -39,7 +42,7 @@ public class FrameControlsUtil {
     }
     if(pSlider!=null) {
       if(pTarget!=null) {
-        pSlider.setValue(Tools.FTOI(getPropertyValue(pTarget, pProperty) * pSliderScale));
+        pSlider.setValue(Tools.FTOI(propertyValue * pSliderScale));
       }
       else {
         pSlider.setValue(0);
@@ -49,21 +52,24 @@ public class FrameControlsUtil {
 
   private double getPropertyValue(Object pTarget, String pProperty) {
     Class<?> cls = pTarget.getClass();
-    Field field;
     try {
-      field = cls.getDeclaredField(pProperty);
-      field.setAccessible(true);
-      Class<?> fieldCls = field.getType();
-      if (fieldCls == double.class || fieldCls == Double.class) {
-        Double dValue = field.getDouble(pTarget);
-        return dValue!=null ? dValue.doubleValue() : 0.0;
-      }
-      else if (fieldCls == int.class || fieldCls == Integer.class) {
-        Integer iValue = field.getInt(pTarget);
-        return iValue!=null ? iValue.doubleValue() : 0.0;
+      MotionCurve curve = getMotionCurve(pTarget, pProperty);
+      if(curve!=null && curve.isEnabled()) {
+        return AnimationService.evalCurve(ctrl.getCurrFrame(), curve);
       }
       else {
-        throw new IllegalStateException();
+        Field field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          Double dValue = field.getDouble(pTarget);
+          return dValue != null ? dValue.doubleValue() : 0.0;
+        } else if (fieldCls == int.class || fieldCls == Integer.class) {
+          Integer iValue = field.getInt(pTarget);
+          return iValue != null ? iValue.doubleValue() : 0.0;
+        } else {
+          throw new IllegalStateException();
+        }
       }
     }
     catch (Throwable ex) {
@@ -72,30 +78,37 @@ public class FrameControlsUtil {
     }
   }
 
-  public void sliderChanged(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    double propValue = pSlider.getValue() / pSliderScale;
-    if(pTextField!=null) {
-      pTextField.setText(Tools.doubleToString(propValue));
-    }
+  private MotionCurve getMotionCurve(Object pTarget, String pProperty) {
     Class<?> cls = pTarget.getClass();
-    Field field;
     try {
-      field = cls.getDeclaredField(pProperty);
-      field.setAccessible(true);
-      Class<?> fieldCls = field.getType();
-      if (fieldCls == double.class || fieldCls == Double.class) {
-        field.setDouble(pTarget, propValue);
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty+"Curve");
       }
-      else if (fieldCls == int.class || fieldCls == Integer.class) {
-        field.setInt(pTarget, Tools.FTOI(propValue));
+      catch(Exception ex) {
+        field = null;
       }
-      else {
-        throw new IllegalStateException();
+      if(field!=null) {
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == MotionCurve.class) {
+          MotionCurve curve = (MotionCurve) field.get(pTarget);
+          return curve;
+        }
       }
     }
     catch (Throwable ex) {
       ex.printStackTrace();
     }
+    return null;
+  }
+
+  public void sliderChanged(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    double propValue = pSlider.getValue() / pSliderScale;
+    if(pTextField!=null) {
+      pTextField.setText(Tools.doubleToString(propValue));
+    }
+    applyValueChange(pTarget, pProperty, propValue);
   }
 
   public void valueChanged(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
@@ -103,6 +116,10 @@ public class FrameControlsUtil {
     if(pSlider!=null) {
       pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
     }
+    applyValueChange(pTarget, pProperty, propValue);
+  }
+
+  private void applyValueChange(Object pTarget, String pProperty, double propValue) {
     Class<?> cls = pTarget.getClass();
     Field field;
     try {
@@ -111,15 +128,27 @@ public class FrameControlsUtil {
       Class<?> fieldCls = field.getType();
       if (fieldCls == double.class || fieldCls == Double.class) {
         field.setDouble(pTarget, propValue);
-      }
-      else if (fieldCls == int.class || fieldCls == Integer.class) {
+      } else if (fieldCls == int.class || fieldCls == Integer.class) {
         field.setInt(pTarget, Tools.FTOI(propValue));
-      }
-      else {
+      } else {
         throw new IllegalStateException();
       }
-    }
-    catch (Throwable ex) {
+      MotionCurve curve = getMotionCurve(pTarget, pProperty);
+      if(curve!=null) {
+        int frame = ctrl.getCurrFrame();
+        {
+          int idx = curve.indexOfKeyFrame(frame);
+          if (idx >= 0) {
+            curve.getY()[idx] = propValue;
+          } else {
+            curve.addKeyFrame(frame, propValue);
+          }
+        }
+        if (frame > 1 && !curve.isEnabled()) {
+          curve.setEnabled(true);
+        }
+      }
+    } catch (Throwable ex) {
       ex.printStackTrace();
     }
   }
