@@ -199,6 +199,7 @@ public class FlamePreviewHelper implements IterationObserver {
         int oldSpatialOversampling = flame.getSpatialOversampling();
         boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
         boolean oldPostOptiXDenoiser = flame.isPostOptiXDenoiser();
+        int oldMotionBlurLength = flame.getMotionBlurLength();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -285,6 +286,7 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSpatialOversampling(oldSpatialOversampling);
           flame.setPostNoiseFilter(oldPostNoiseFilter);
           flame.setPostOptiXDenoiser(oldPostOptiXDenoiser);
+          flame.setMotionBlurLength(oldMotionBlurLength);
         }
       }
     }

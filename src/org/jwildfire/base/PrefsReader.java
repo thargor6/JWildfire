@@ -213,7 +213,7 @@ public class PrefsReader {
         }
         pPrefs.setTinaDefaultFadeToWhiteLevel(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL, pPrefs.getTinaDefaultFadeToWhiteLevel()));
         pPrefs.setTinaDefaultFPS(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_FPS, pPrefs.getTinaDefaultFPS()));
-        pPrefs.setTinaDefaultFPS(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_FRAME_COUNT, pPrefs.getTinaDefaultFrameCount()));
+        pPrefs.setTinaDefaultFrameCount(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_FRAME_COUNT, pPrefs.getTinaDefaultFrameCount()));
 
         pPrefs.setTinaRandGenColorMapImagePath(getProperty(props, Prefs.KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH, pPrefs.getTinaRandGenColorMapImagePath()));
 
