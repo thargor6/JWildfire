@@ -9335,12 +9335,11 @@ public class MainEditorFrame extends JFrame {
           tinaController.getAnimationController().toggleMotionCurveEditing();
         }
       });
-      motionCurveEditModeButton.setToolTipText("Enable new controls to edit flame-properties as motion-curves rather than simple values");
+      motionCurveEditModeButton.setToolTipText("Activate animation controls in order to create animated flames");
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionEditingMode.gif")));
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 36));
       motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
-
+      //motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
     }
     return centerWestPanel;
   }
@@ -12455,6 +12454,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox weightingFieldVarParam3NameCmb;
   private JComboBox randomWeightingFieldCmb;
   private JSeparator separator_1;
+  private JButton button_2;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -15509,7 +15509,7 @@ public class MainEditorFrame extends JFrame {
   private JPanel getPanel_79() {
     if (panel_79 == null) {
       panel_79 = new JPanel();
-      panel_79.setPreferredSize(new Dimension(128, 10));
+      panel_79.setPreferredSize(new Dimension(264, 10));
       panel_79.setLayout(null);
 
       keyframesFrameLbl = new JLabel();
@@ -15532,7 +15532,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      keyframesFrameField.setBounds(51, 2, 70, 24);
+      keyframesFrameField.setBounds(47, 2, 70, 24);
       panel_79.add(keyframesFrameField);
       keyframesFrameField.setPreferredSize(new Dimension(56, 22));
       keyframesFrameField.setOnlyIntegers(true);
@@ -15541,6 +15541,49 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameField.setHasMinValue(true);
       keyframesFrameField.setHasMaxValue(true);
       keyframesFrameField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+
+      motionCurvePlayPreviewButton = new JButton();
+      motionCurvePlayPreviewButton.setBounds(156, 2, 70, 24);
+      motionCurvePlayPreviewButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-playback-start-7.png")));
+      panel_79.add(motionCurvePlayPreviewButton);
+      motionCurvePlayPreviewButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            try {
+              tinaController.getAnimationController().playPreviewButtonClicked();
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+      motionCurvePlayPreviewButton.setToolTipText("Play animation (turn off Realtime preview if too slow)");
+      motionCurvePlayPreviewButton.setText("Play");
+      motionCurvePlayPreviewButton.setPreferredSize(new Dimension(55, 24));
+      motionCurvePlayPreviewButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+
+      JButton button = new JButton();
+      button.setToolTipText("Goto first frame");
+      button.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-skip-backward-7.png")));
+      button.setText("");
+      button.setPreferredSize(new Dimension(55, 24));
+      button.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      button.setBounds(121, 2, 32, 24);
+      button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            try {
+              tinaController.getAnimationController().skipToFirstFrameButtonClicked();
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+      panel_79.add(button);
+      panel_79.add(getButton_2());
     }
     return panel_79;
   }
@@ -15548,7 +15591,7 @@ public class MainEditorFrame extends JFrame {
   private JPanel getPanel_80() {
     if (panel_80 == null) {
       panel_80 = new JPanel();
-      panel_80.setPreferredSize(new Dimension(220, 10));
+      panel_80.setPreferredSize(new Dimension(150, 10));
       panel_80.setLayout(null);
 
       keyframesFrameCountField = new JWFNumberField();
@@ -15579,7 +15622,7 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameCountField.setHasMinValue(true);
       keyframesFrameCountField.setHasMaxValue(true);
       keyframesFrameCountField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      keyframesFrameCountField.setBounds(144, 0, 70, 24);
+      keyframesFrameCountField.setBounds(74, 0, 70, 24);
       panel_80.add(keyframesFrameCountField);
 
       keyframesFrameCountLbl = new JLabel();
@@ -15588,30 +15631,8 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameCountLbl.setPreferredSize(new Dimension(94, 22));
       keyframesFrameCountLbl.setHorizontalAlignment(SwingConstants.RIGHT);
       keyframesFrameCountLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      keyframesFrameCountLbl.setBounds(70, 0, 70, 22);
+      keyframesFrameCountLbl.setBounds(0, 0, 70, 22);
       panel_80.add(keyframesFrameCountLbl);
-
-      motionCurvePlayPreviewButton = new JButton();
-      motionCurvePlayPreviewButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController != null && tinaController.getAnimationController() != null) {
-            try {
-              tinaController.getAnimationController().playPreviewButtonClicked();
-            }
-            catch (Exception ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-      });
-      motionCurvePlayPreviewButton.setToolTipText("Play animation (turn off Realtime preview if too slow)");
-      motionCurvePlayPreviewButton.setText("Play");
-      motionCurvePlayPreviewButton.setSize(new Dimension(70, 24));
-      motionCurvePlayPreviewButton.setPreferredSize(new Dimension(55, 24));
-      motionCurvePlayPreviewButton.setLocation(new Point(0, 57));
-      motionCurvePlayPreviewButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      motionCurvePlayPreviewButton.setBounds(0, 0, 70, 24);
-      panel_80.add(motionCurvePlayPreviewButton);
     }
     return panel_80;
   }
@@ -22625,7 +22646,7 @@ public class MainEditorFrame extends JFrame {
       randomWeightingFieldCmb.setMinimumSize(new Dimension(100, 24));
       randomWeightingFieldCmb.setMaximumSize(new Dimension(32767, 24));
       randomWeightingFieldCmb.setMaximumRowCount(32);
-      randomWeightingFieldCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomWeightingFieldCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return randomWeightingFieldCmb;
   }
@@ -22642,4 +22663,29 @@ public class MainEditorFrame extends JFrame {
     return lblOptiXBlend;
   }
 
+  private JButton getButton_2() {
+    if (button_2 == null) {
+      button_2 = new JButton();
+      button_2.setToolTipText("Goto last frame");
+      button_2.setText("");
+      button_2.setPreferredSize(new Dimension(55, 24));
+      button_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      button_2.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-skip-forward-7.png")));
+      button_2.setBounds(229, 2, 32, 24);
+      button_2.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            try {
+              tinaController.getAnimationController().skipToLastFrameButtonClicked();
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+
+    }
+    return button_2;
+  }
 } //  @jve:decl-index=0:visual-constraint="10,10"

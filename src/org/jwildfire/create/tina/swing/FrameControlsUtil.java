@@ -126,9 +126,14 @@ public class FrameControlsUtil {
       field = cls.getDeclaredField(pProperty);
       field.setAccessible(true);
       Class<?> fieldCls = field.getType();
+      double oldValue;
       if (fieldCls == double.class || fieldCls == Double.class) {
+        Double ov = field.getDouble(pTarget);
+        oldValue = ov!=null ? ov.doubleValue() : 0.0;
         field.setDouble(pTarget, propValue);
       } else if (fieldCls == int.class || fieldCls == Integer.class) {
+        Integer ov = field.getInt(pTarget);
+        oldValue = ov!=null ? ov.intValue() : 0.0;
         field.setInt(pTarget, Tools.FTOI(propValue));
       } else {
         throw new IllegalStateException();
@@ -136,6 +141,15 @@ public class FrameControlsUtil {
       MotionCurve curve = getMotionCurve(pTarget, pProperty);
       if(curve!=null) {
         int frame = ctrl.getCurrFrame();
+        // ensure that there is a keyframe at the first frame when we are somewhere in the middle of an animation,
+        // also activate the motion curve
+        if (frame > 1 && !curve.isEnabled()) {
+          curve.setEnabled(true);
+          if(!curve.hasKeyFrame(1)) {
+            curve.addKeyFrame(1, oldValue);
+          }
+        }
+        // add/modify the actual keyframe
         {
           int idx = curve.indexOfKeyFrame(frame);
           if (idx >= 0) {
@@ -143,9 +157,6 @@ public class FrameControlsUtil {
           } else {
             curve.addKeyFrame(frame, propValue);
           }
-        }
-        if (frame > 1 && !curve.isEnabled()) {
-          curve.setEnabled(true);
         }
       }
     } catch (Throwable ex) {

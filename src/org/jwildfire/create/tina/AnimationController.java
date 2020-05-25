@@ -20,17 +20,10 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JToggleButton;
+import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.swing.JWFNumberField;
-import org.jwildfire.create.tina.swing.MotionCurveEditor;
-import org.jwildfire.create.tina.swing.RenderMainFlameThreadFinishEvent;
-import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.swing.*;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.swing.ErrorHandler;
 
@@ -164,7 +157,7 @@ public class AnimationController {
         tinaController.setNoRefresh(oldNoRefresh);
       }
 
-      if(playPreviewThread == null) {
+      if (playPreviewThread == null) {
         tinaController.refreshUI();
       }
     }
@@ -255,7 +248,9 @@ public class AnimationController {
   private PlayPreviewThread playPreviewThread = null;
 
   private void enablePlayPreviewControls() {
-    motionCurvePlayPreviewButton.setText(playPreviewThread == null ? "Play" : "Cancel");
+    motionCurvePlayPreviewButton.setText(playPreviewThread == null ? "Play" : "Stop");
+    String iconname = playPreviewThread == null ? "media-playback-start-7" : "media-playback-stop-7";
+    motionCurvePlayPreviewButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/"+iconname+".png")));
   }
 
   public void playPreviewButtonClicked() {
@@ -299,6 +294,20 @@ public class AnimationController {
       playPreviewThread = new PlayPreviewThread(finishEvent);
       enablePlayPreviewControls();
       new Thread(playPreviewThread).start();
+    }
+  }
+
+  public void skipToLastFrameButtonClicked() {
+    if(playPreviewThread == null) {
+      keyframesFrameField.setValue(keyframesFrameCountField.getIntValue());
+      keyframesFrameSlider.setValue(keyframesFrameField.getIntValue());
+    }
+  }
+
+  public void skipToFirstFrameButtonClicked() {
+    if(playPreviewThread == null) {
+      keyframesFrameField.setValue(1);
+      keyframesFrameSlider.setValue(keyframesFrameField.getIntValue());
     }
   }
 }
