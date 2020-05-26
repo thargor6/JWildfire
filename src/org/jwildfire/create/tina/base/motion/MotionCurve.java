@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.envelope.Envelope;
 import org.jwildfire.envelope.Envelope.Interpolation;
@@ -306,5 +307,35 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     }
     x = newx;
     y = newy;
+  }
+
+  public void autoFitRange() {
+    int xmin, xmax;
+    double ymin, ymax;
+    if (x.length > 0) {
+      xmin = xmax = x[0];
+      ymin = ymax = y[0];
+      for (int i = 1; i < x.length; i++) {
+        if (x[i] < xmin)
+          xmin = x[i];
+        else if (x[i] > xmax)
+          xmax = x[i];
+        if (y[i] < ymin)
+          ymin = y[i];
+        else if (y[i] > ymax)
+          ymax = y[i];
+
+      }
+    }
+    else {
+      xmin = 1;
+      xmax = 9;
+      ymin = -0.5;
+      ymax = 0.5;
+    }
+    viewXMin = xmin - Math.max(1, Tools.FTOI((xmax - xmin) * 0.1));
+    viewXMax = xmax + Math.max(1, Tools.FTOI((xmax - xmin) * 0.1));
+    viewYMin = ymin - (ymax - ymin) * 0.1;
+    viewYMax = ymax + (ymax - ymin) * 0.1;
   }
 }

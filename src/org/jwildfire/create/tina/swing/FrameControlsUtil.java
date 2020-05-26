@@ -103,7 +103,7 @@ public class FrameControlsUtil {
     return null;
   }
 
-  public void sliderChanged(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+  public void valueChangedBySlider(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     double propValue = pSlider.getValue() / pSliderScale;
     if(pTextField!=null) {
       pTextField.setText(Tools.doubleToString(propValue));
@@ -111,7 +111,7 @@ public class FrameControlsUtil {
     applyValueChange(pTarget, pProperty, propValue);
   }
 
-  public void valueChanged(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+  public void valueChangedByTextField(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     double propValue = Tools.stringToDouble(pTextField.getText());
     if(pSlider!=null) {
       pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
@@ -158,6 +158,7 @@ public class FrameControlsUtil {
             curve.addKeyFrame(frame, propValue);
           }
         }
+        curve.autoFitRange();
       }
     } catch (Throwable ex) {
       ex.printStackTrace();

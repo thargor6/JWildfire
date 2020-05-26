@@ -322,7 +322,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       return;
     setNoRefresh(true);
     try {
-      owner.getFrameControlsUtil().sliderChanged(getCurrFlame(), pSlider, pTextField, pProperty, pSliderScale);
+      owner.getFrameControlsUtil().valueChangedBySlider(getCurrFlame(), pSlider, pTextField, pProperty, pSliderScale);
       owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
@@ -496,7 +496,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
     setNoRefresh(true);
     try {
-      owner.getFrameControlsUtil().valueChanged(getCurrFlame(), pSlider, pTextField, pProperty, pSliderScale);
+      owner.getFrameControlsUtil().valueChangedByTextField(getCurrFlame(), pSlider, pTextField, pProperty, pSliderScale);
       owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
@@ -1685,7 +1685,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       return;
     setNoRefresh(true);
     try {
-      owner.getFrameControlsUtil().valueChanged(getCurrFlame().getSolidRenderSettings(), pSlider, pTextField, pProperty, pSliderScale);
+      owner.getFrameControlsUtil().valueChangedByTextField(getCurrFlame().getSolidRenderSettings(), pSlider, pTextField, pProperty, pSliderScale);
       owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
@@ -1698,7 +1698,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       return;
     setNoRefresh(true);
     try {
-      owner.getFrameControlsUtil().valueChanged(getCurrFlame().getSolidRenderSettings(), pSlider, pTextField, pProperty, pSliderScale);
+      owner.getFrameControlsUtil().valueChangedByTextField(getCurrFlame().getSolidRenderSettings(), pSlider, pTextField, pProperty, pSliderScale);
       owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
@@ -1714,7 +1714,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       return;
     setNoRefresh(true);
     try {
-      owner.getFrameControlsUtil().valueChanged(getCurrFlame().getSolidRenderSettings().getMaterials().get(idx), pSlider, pTextField, pProperty, pSliderScale);
+      owner.getFrameControlsUtil().valueChangedByTextField(getCurrFlame().getSolidRenderSettings().getMaterials().get(idx), pSlider, pTextField, pProperty, pSliderScale);
       owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
@@ -1730,7 +1730,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       return;
     setNoRefresh(true);
     try {
-      owner.getFrameControlsUtil().valueChanged(getCurrFlame().getSolidRenderSettings().getMaterials().get(idx), pSlider, pTextField, pProperty, pSliderScale);
+      owner.getFrameControlsUtil().valueChangedByTextField(getCurrFlame().getSolidRenderSettings().getMaterials().get(idx), pSlider, pTextField, pProperty, pSliderScale);
       owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
@@ -1746,7 +1746,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       return;
     setNoRefresh(true);
     try {
-      owner.getFrameControlsUtil().valueChanged(getCurrFlame().getSolidRenderSettings().getLights().get(idx), pSlider, pTextField, pProperty, pSliderScale);
+      owner.getFrameControlsUtil().valueChangedByTextField(getCurrFlame().getSolidRenderSettings().getLights().get(idx), pSlider, pTextField, pProperty, pSliderScale);
       owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
@@ -1766,7 +1766,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       return;
     setNoRefresh(true);
     try {
-      owner.getFrameControlsUtil().valueChanged(getCurrFlame().getSolidRenderSettings().getLights().get(idx), pSlider, pTextField, pProperty, pSliderScale);
+      owner.getFrameControlsUtil().valueChangedByTextField(getCurrFlame().getSolidRenderSettings().getLights().get(idx), pSlider, pTextField, pProperty, pSliderScale);
       owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
