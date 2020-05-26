@@ -50,20 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTable;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -1512,6 +1499,32 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public void initRandomizerHintsPanel(JTextPane hintPane) {
+    hintPane.setContentType("text/html");
+    try {
+      Font f = new Font(Font.SANS_SERIF, 3, 10);
+      hintPane.setFont(f);
+
+      InputStream is = this.getClass().getResourceAsStream("randomizers.html");
+      StringBuffer content = new StringBuffer();
+      String lineFeed = System.getProperty("line.separator");
+      String line;
+      Reader r = new InputStreamReader(is, "utf-8");
+      BufferedReader in = new BufferedReader(r);
+      while ((line = in.readLine()) != null) {
+        content.append(line).append(lineFeed);
+      }
+      in.close();
+
+      hintPane.setText(content.toString());
+      hintPane.setSelectionStart(0);
+      hintPane.setSelectionEnd(0);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
   public static class TransformationsTableCellRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 1L;
 
@@ -1708,12 +1721,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             case COL_DENSITY:
               saveUndoPoint();
               layer.setDensity(Tools.limitValue(Tools.stringToDouble((String) aValue), 0.0, 1.0));
-              data.layerDensityREd.setValue(layer.getDensity());
+              frameControlsUtil.updateControl(layer, null, data.layerDensityREd, "density", 1.0);
+              //data.layerDensityREd.setValue(layer.getDensity());
               break;
             case COL_WEIGHT:
               saveUndoPoint();
               layer.setWeight(Tools.stringToDouble((String) aValue));
-              data.layerWeightEd.setValue(layer.getWeight());
+              //data.layerWeightEd.setValue(layer.getWeight());
+              frameControlsUtil.updateControl(layer, null, data.layerWeightEd, "weight", 1.0);
               // refreshed automatically:
               // refreshFlameImage(false);
               break;
@@ -2003,7 +2018,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     noRefresh = true;
     try {
-      frameControlsUtil.sliderChanged(getCurrLayer().getPalette(), pSlider, pTextField, pProperty, pSliderScale);
+      frameControlsUtil.valueChangedBySlider(getCurrLayer().getPalette(), pSlider, pTextField, pProperty, pSliderScale);
       try {
         Class<?> cls = getCurrLayer().getPalette().getClass();
         Field field = cls.getDeclaredField("modified");
@@ -2026,7 +2041,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     noRefresh = true;
     try {
-      frameControlsUtil.sliderChanged(getCurrLayer(), pSlider, pTextField, pProperty, pSliderScale);
+      frameControlsUtil.valueChangedBySlider(getCurrLayer(), pSlider, pTextField, pProperty, pSliderScale);
       refreshFlameImage(true, false, 1, true, false);
     }
     finally {
@@ -2047,7 +2062,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     noRefresh = true;
     try {
-      frameControlsUtil.sliderChanged(xForm, pSlider, pTextField, pProperty, pSliderScale);
+      frameControlsUtil.valueChangedBySlider(xForm, pSlider, pTextField, pProperty, pSliderScale);
       refreshFlameImage(true, false, 1, true, false);
     }
     finally {
@@ -2060,7 +2075,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     noRefresh = true;
     try {
-      frameControlsUtil.valueChanged(getCurrLayer().getPalette(), pSlider, pTextField, pProperty, pSliderScale);
+      frameControlsUtil.valueChangedByTextField(getCurrLayer().getPalette(), pSlider, pTextField, pProperty, pSliderScale);
       try {
         Class<?> cls = getCurrLayer().getPalette().getClass();
         Field field = cls.getDeclaredField("modified");
@@ -2083,7 +2098,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     noRefresh = true;
     try {
-      frameControlsUtil.valueChanged(getCurrLayer(), pSlider, pTextField, pProperty, pSliderScale);
+      frameControlsUtil.valueChangedByTextField(getCurrLayer(), pSlider, pTextField, pProperty, pSliderScale);
       refreshFlameImage(true, false, 1, true, false);
     }
     finally {
@@ -2101,7 +2116,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     noRefresh = true;
     try {
-      frameControlsUtil.valueChanged(xForm, pSlider, pTextField, pProperty, pSliderScale);
+      frameControlsUtil.valueChangedByTextField(xForm, pSlider, pTextField, pProperty, pSliderScale);
       refreshFlameImage(true, false, 1, true, false);
     }
     finally {
@@ -2450,8 +2465,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     gridRefreshing = cmbRefreshing = refreshing = noRefresh = true;
     try {
       if (pLayer == null) {
-        data.layerDensityREd.setText(null);
-        data.layerWeightEd.setText(null);
+        frameControlsUtil.updateControl(null, null, data.layerDensityREd, "", 1.0);
+        frameControlsUtil.updateControl(null, null, data.layerWeightEd, "", 1.0);
         data.layerVisibleBtn.setSelected(true);
         frameControlsUtil.updateControl(null, data.gradientColorMapHorizOffsetSlider, data.gradientColorMapHorizOffsetREd, "",1.0);
         frameControlsUtil.updateControl(null, data.gradientColorMapHorizScaleSlider, data.gradientColorMapHorizScaleREd, "",1.0);
@@ -2461,8 +2476,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         frameControlsUtil.updateControl(null, data.gradientColorMapLocalColorScaleSlider, data.gradientColorMapLocalColorScaleREd, "",1.0);
       }
       else {
-        data.layerDensityREd.setValue(pLayer.getDensity());
-        data.layerWeightEd.setValue(pLayer.getWeight());
+        frameControlsUtil.updateControl(pLayer, null, data.layerDensityREd, "density", 1.0);
+        frameControlsUtil.updateControl(pLayer, null, data.layerWeightEd, "weight", 1.0);
         data.layerVisibleBtn.setSelected(pLayer.isVisible());
         frameControlsUtil.updateControl(pLayer, data.gradientColorMapHorizOffsetSlider, data.gradientColorMapHorizOffsetREd, "gradientMapHorizOffset", TinaController.SLIDER_SCALE_CENTRE);
         frameControlsUtil.updateControl(pLayer, data.gradientColorMapHorizScaleSlider, data.gradientColorMapHorizScaleREd, "gradientMapHorizScale", TinaController.SLIDER_SCALE_CENTRE);
@@ -5704,7 +5719,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void layerDensityREd_changed() {
     if (!gridRefreshing && getCurrLayer() != null) {
       saveUndoPoint();
-      getCurrLayer().setDensity(Tools.stringToDouble(data.layerDensityREd.getText()));
+      frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerDensityREd, "density",1.0);
       int row = data.layersTable.getSelectedRow();
       boolean oldGridRefreshing = gridRefreshing;
       gridRefreshing = true;
@@ -5722,7 +5737,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void layerWeightREd_changed() {
     if (!gridRefreshing && getCurrLayer() != null) {
       saveUndoPoint();
-      getCurrLayer().setWeight(Tools.stringToDouble(data.layerWeightEd.getText()));
+      frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerWeightEd, "weight",1.0);
       int row = data.layersTable.getSelectedRow();
       boolean oldGridRefreshing = gridRefreshing;
       gridRefreshing = true;

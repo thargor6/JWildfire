@@ -59,6 +59,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
@@ -68,6 +69,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
@@ -1433,11 +1435,11 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(getPanel_111(), BorderLayout.CENTER);
 
       JPanel panel_1_1 = new JPanel();
-      tinaSouthTabbedPane.addTab("Randomize", null, panel_1_1, null);
+      tinaSouthTabbedPane.addTab("Randomize", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")), panel_1_1, null);
       panel_1_1.setLayout(null);
 
       randomizeBtn = new JButton();
-      randomizeBtn.setBounds(6, 6, 213, 24);
+      randomizeBtn.setBounds(185, 22, 213, 24);
       panel_1_1.add(randomizeBtn);
       randomizeBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1445,11 +1447,37 @@ public class MainEditorFrame extends JFrame {
         }
       });
       randomizeBtn.setToolTipText("Randomize random parameters of the current flame");
-      randomizeBtn.setText("Randomize all");
-      randomizeBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      randomizeBtn.setText("Randomize random settings");
       randomizeBtn.setSelected(false);
       randomizeBtn.setPreferredSize(new Dimension(42, 24));
       panel_1_1.add(getBokehBtn());
+
+      JButton btnWfld = new JButton();
+      btnWfld.setBounds(185, 64, 213, 24);
+      panel_1_1.add(btnWfld);
+      btnWfld.setToolTipText("Randomize all weighting-field-settings, either of the whole fractal or the selected transform");
+      btnWfld.setText("Randomize weighting-fields");
+
+      btnWfld.setMnemonic(KeyEvent.VK_W);
+      btnWfld.setPreferredSize(new Dimension(72, 36));
+      btnWfld.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
+
+      JPanel panel_8 = new JPanel();
+      panel_8.setBorder(new TitledBorder(null, "Hints", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_8.setBounds(427, 6, 593, 142);
+      panel_1_1.add(panel_8);
+      panel_8.setLayout(new BorderLayout(0, 0));
+
+      randomizersHintPane = new JTextPane();
+      randomizersHintPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+      randomizersHintPane.setEditable(false);
+      randomizersHintPane.setBackground(SystemColor.menu);
+      panel_8.add(randomizersHintPane, BorderLayout.CENTER);
+      btnWfld.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.weightMapRandomizeAllBtn_clicked(getWeightMapEditWholeFractalCBx().isSelected());
+        }
+      });
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -6969,6 +6997,8 @@ public class MainEditorFrame extends JFrame {
 
       tinaController.refreshMacroButtonsPanel();
 
+      tinaController.initRandomizerHintsPanel(getRandomizersHintPane());
+
       try {
         enableOptixControls(OptixCmdLineDenoiser.isAvailable());
       }
@@ -9320,20 +9350,6 @@ public class MainEditorFrame extends JFrame {
       centerWestPanel.add(getLabel_8());
       centerWestPanel.add(getEditFlameTitleBtn());
       centerWestPanel.add(getSolidRenderingToggleBtn());
-
-      JButton btnWfld = new JButton();
-      btnWfld.setToolTipText("Randomize all weightmap-settings, either of the whole fractal or the selected transform");
-      btnWfld.setText("WFld");
-      btnWfld.setMnemonic(KeyEvent.VK_W);
-      btnWfld.setPreferredSize(new Dimension(72, 36));
-      btnWfld.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      btnWfld.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
-      btnWfld.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.weightMapRandomizeAllBtn_clicked(getWeightMapEditWholeFractalCBx().isSelected());
-        }
-      });
-      centerWestPanel.add(btnWfld);
 
       motionCurveEditModeButton = new JToggleButton();
       centerWestPanel.add(motionCurveEditModeButton);
@@ -12462,6 +12478,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox randomWeightingFieldCmb;
   private JSeparator separator_1;
   private JButton button_2;
+  private JTextPane randomizersHintPane;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -18072,7 +18089,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getBokehBtn() {
     if (bokehBtn == null) {
       bokehBtn = new JButton();
-      bokehBtn.setBounds(6, 44, 213, 24);
+      bokehBtn.setBounds(185, 106, 213, 24);
       bokehBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.bokehBtn_clicked();
@@ -18082,7 +18099,6 @@ public class MainEditorFrame extends JFrame {
       bokehBtn.setText("Randomize DOF/bokeh");
       bokehBtn.setPreferredSize(new Dimension(72, 24));
       bokehBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      bokehBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
     }
     return bokehBtn;
   }
@@ -22694,5 +22710,9 @@ public class MainEditorFrame extends JFrame {
 
     }
     return button_2;
+  }
+
+  public JTextPane getRandomizersHintPane() {
+    return randomizersHintPane;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
