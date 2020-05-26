@@ -149,6 +149,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double postOptiXDenoiserBlend;
 
   private double foregroundOpacity;
+  private final MotionCurve foregroundOpacityCurve = new MotionCurve();
 
   private BGColorType bgColorType = BGColorType.GRADIENT_2X2_C;
   @AnimAware
@@ -193,11 +194,18 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double vibrancy;
   private final MotionCurve vibrancyCurve = new MotionCurve();
-
+  @AnimAware
   private double lowDensityBrightness;
+  private final MotionCurve lowDensityBrightnessCurve = new MotionCurve();
+  @AnimAware
   private double balanceRed;
+  private final MotionCurve balanceRedCurve = new MotionCurve();
+  @AnimAware
   private double balanceGreen;
+  private final MotionCurve balanceGreenCurve = new MotionCurve();
+  @AnimAware
   private double balanceBlue;
+  private final MotionCurve balanceBlueCurve = new MotionCurve();
 
   private boolean preserveZ;
   private String resolutionProfile;
@@ -807,9 +815,13 @@ public class Flame implements Assignable<Flame>, Serializable {
     vibrancy = pFlame.vibrancy;
     vibrancyCurve.assign(pFlame.vibrancyCurve);
     lowDensityBrightness = pFlame.lowDensityBrightness;
+    lowDensityBrightnessCurve.assign(pFlame.lowDensityBrightnessCurve);
     balanceRed = pFlame.balanceRed;
+    balanceRedCurve.assign(pFlame.balanceRedCurve);
     balanceGreen = pFlame.balanceGreen;
+    balanceGreenCurve.assign(pFlame.balanceGreenCurve);
     balanceBlue = pFlame.balanceBlue;
+    balanceBlueCurve.assign(pFlame.balanceBlueCurve);
     preserveZ = pFlame.preserveZ;
     resolutionProfile = pFlame.resolutionProfile;
     qualityProfile = pFlame.qualityProfile;
@@ -824,6 +836,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     postOptiXDenoiser = pFlame.postOptiXDenoiser;
     postOptiXDenoiserBlend = pFlame.postOptiXDenoiserBlend;
     foregroundOpacity = pFlame.foregroundOpacity;
+    foregroundOpacityCurve.assign(pFlame.foregroundOpacityCurve);
     postBlurRadius = pFlame.postBlurRadius;
     postBlurFade = pFlame.postBlurFade;
     postBlurFallOff = pFlame.postBlurFallOff;
@@ -906,7 +919,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (camDOFShape != pFlame.camDOFShape) || (spatialOversampling != pFlame.spatialOversampling) ||
         (postNoiseFilter != pFlame.postNoiseFilter) || (fabs(postNoiseFilterThreshold - pFlame.postNoiseFilterThreshold) > EPSILON) ||
         (postOptiXDenoiser != pFlame.postOptiXDenoiser) || (fabs(postOptiXDenoiserBlend - pFlame.postOptiXDenoiserBlend) > EPSILON) ||
-        (fabs(foregroundOpacity - pFlame.foregroundOpacity) > EPSILON) ||
+        (fabs(foregroundOpacity - pFlame.foregroundOpacity) > EPSILON) || !foregroundOpacityCurve.isEqual(pFlame.foregroundOpacityCurve) ||
         (fabs(camDOFScale - pFlame.camDOFScale) > EPSILON) || !camDOFScaleCurve.isEqual(pFlame.camDOFScaleCurve) ||
         (fabs(camDOFAngle - pFlame.camDOFAngle) > EPSILON) || !camDOFAngleCurve.isEqual(pFlame.camDOFAngleCurve) ||
         (fabs(camDOFFade - pFlame.camDOFFade) > EPSILON) || !camDOFFadeCurve.isEqual(pFlame.camDOFFadeCurve) ||
@@ -951,8 +964,10 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(saturation - pFlame.saturation) > EPSILON) || !saturationCurve.isEqual(pFlame.saturationCurve) ||
         (fabs(contrast - pFlame.contrast) > EPSILON) || !contrastCurve.isEqual(pFlame.contrastCurve) ||
         (fabs(vibrancy - pFlame.vibrancy) > EPSILON) || !vibrancyCurve.isEqual(pFlame.vibrancyCurve) ||
-        (fabs(lowDensityBrightness - pFlame.lowDensityBrightness) > EPSILON) || (fabs(balanceRed - pFlame.balanceRed) > EPSILON) ||
-        (fabs(balanceGreen - pFlame.balanceGreen) > EPSILON) || (fabs(balanceBlue - pFlame.balanceBlue) > EPSILON) ||
+        (fabs(lowDensityBrightness - pFlame.lowDensityBrightness) > EPSILON) || !lowDensityBrightnessCurve.isEqual(pFlame.lowDensityBrightnessCurve) ||
+        (fabs(balanceRed - pFlame.balanceRed) > EPSILON) || !balanceRedCurve.isEqual(pFlame.balanceRedCurve) ||
+        (fabs(balanceGreen - pFlame.balanceGreen) > EPSILON) || !balanceGreenCurve.isEqual(pFlame.balanceGreenCurve) ||
+        (fabs(balanceBlue - pFlame.balanceBlue) > EPSILON) || !balanceBlueCurve.isEqual(pFlame.balanceBlueCurve) ||
         (preserveZ != pFlame.preserveZ) ||
         ((resolutionProfile != null && pFlame.resolutionProfile == null) || (resolutionProfile == null && pFlame.resolutionProfile != null) ||
             (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile)))
@@ -1182,7 +1197,8 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public boolean hasPreRenderMotionProperty() {
     return brightnessCurve.isEnabled() || contrastCurve.isEnabled() || gammaCurve.isEnabled() || gammaThresholdCurve.isEnabled() || 
-        vibrancyCurve.isEnabled() || saturationCurve.isEnabled() || whiteLevelCurve.isEnabled();
+        vibrancyCurve.isEnabled() || saturationCurve.isEnabled() || whiteLevelCurve.isEnabled() || lowDensityBrightnessCurve.isEnabled() ||
+            balanceRedCurve.isEnabled() || balanceGreenCurve.isEnabled() || balanceBlueCurve.isEnabled();
   }
 
   public PostSymmetryType getPostSymmetryType() {

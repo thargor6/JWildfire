@@ -151,6 +151,11 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     res.add(data.saturationREd);
     res.add(data.gammaREd);
     res.add(data.gammaThresholdREd);
+    res.add(data.lowDensityBrightnessREd);
+    res.add(data.balanceRedREd);
+    res.add(data.balanceGreenREd);
+    res.add(data.balanceBlueREd);
+    res.add(data.foregroundOpacityField);
 
     res.add(data.cameraDOFREd);
     res.add(data.cameraDOFAreaREd);

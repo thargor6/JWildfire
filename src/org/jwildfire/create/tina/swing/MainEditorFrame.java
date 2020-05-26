@@ -1433,7 +1433,7 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(getPanel_111(), BorderLayout.CENTER);
 
       JPanel panel_1_1 = new JPanel();
-      tinaSouthTabbedPane.addTab("Misc", null, panel_1_1, null);
+      tinaSouthTabbedPane.addTab("Randomize", null, panel_1_1, null);
       panel_1_1.setLayout(null);
 
       randomizeBtn = new JButton();
@@ -2021,6 +2021,8 @@ public class MainEditorFrame extends JFrame {
       tinaColoringPanel.add(backgroundRemoveImageBtn);
 
       foregroundOpacityField = new JWFNumberField();
+      foregroundOpacityField.setMotionPropertyName("foregroundOpacity");
+      foregroundOpacityField.setLinkedLabelControlName("foregroundOpacityLbl");
       foregroundOpacityField.setValueStep(0.05);
       foregroundOpacityField.setText("");
       foregroundOpacityField.setSize(new Dimension(100, 24));
@@ -2049,6 +2051,7 @@ public class MainEditorFrame extends JFrame {
       tinaColoringPanel.add(foregroundOpacityField);
 
       JLabel lblOpacity = new JLabel();
+      lblOpacity.setName("foregroundOpacityLbl");
       lblOpacity.setToolTipText("Foreground opacity; 0 for completely opaque");
       lblOpacity.setText("Fg opacity*");
       lblOpacity.setSize(new Dimension(94, 22));
@@ -2084,6 +2087,7 @@ public class MainEditorFrame extends JFrame {
       tinaColoringPanel.add(foregroundOpacitySlider);
 
       lowDensityBrightnessREd = new JWFNumberField();
+      lowDensityBrightnessREd.setMotionPropertyName("lowDensityBrightness");
       lowDensityBrightnessREd.setValueStep(0.01);
       lowDensityBrightnessREd.setText("");
       lowDensityBrightnessREd.setSize(new Dimension(100, 24));
@@ -2152,6 +2156,7 @@ public class MainEditorFrame extends JFrame {
       tinaColoringPanel.add(lblBgBrightness);
 
       balanceRedREd = new JWFNumberField();
+      balanceRedREd.setMotionPropertyName("balanceRed");
       balanceRedREd.setMouseSpeed(0.1);
       balanceRedREd.setForeground(Color.BLACK);
       balanceRedREd.setValueStep(0.01);
@@ -2223,6 +2228,7 @@ public class MainEditorFrame extends JFrame {
       tinaColoringPanel.add(balanceRedSlider);
 
       balanceGreenREd = new JWFNumberField();
+      balanceGreenREd.setMotionPropertyName("balanceGreen");
       balanceGreenREd.setMouseSpeed(0.1);
       balanceGreenREd.setValueStep(0.01);
       balanceGreenREd.setText("");
@@ -2292,6 +2298,7 @@ public class MainEditorFrame extends JFrame {
       tinaColoringPanel.add(balanceGreenSlider);
 
       balanceBlueREd = new JWFNumberField();
+      balanceBlueREd.setMotionPropertyName("balanceBlue");
       balanceBlueREd.setMouseSpeed(0.1);
       balanceBlueREd.setValueStep(0.01);
       balanceBlueREd.setText("");
