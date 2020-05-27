@@ -94,7 +94,7 @@ public class Onion2Func extends VariationFunc {
     ini.z = pAffineTP.z;
     ini.x -= shift_x;
     ini.y -= shift_y;
-    //ini.z -= shift_z;
+    ini.z -= shift_z;
     ini.invalidate();
 
     // Final coordinates in parametric space
@@ -155,7 +155,7 @@ public class Onion2Func extends VariationFunc {
 
     pVarTP.x += shift_x;
     pVarTP.y += shift_y;
-    //pVarTP.z += shift_z;
+    pVarTP.z += shift_z;
   }
 
   @Override
