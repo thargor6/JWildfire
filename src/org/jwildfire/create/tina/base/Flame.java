@@ -1642,7 +1642,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     setSpatialOversampling(1);
     setPostNoiseFilter(false);
     setPostOptiXDenoiser(false);
-    setMotionBlurLength(0);
   }
 
   public void applyDefaultOversamplingSettings() {

@@ -12,7 +12,8 @@ V6.00 (xx.xx.2020)
      -glitchy1 by Brad Stefanov, Rick Sidwell, dark-beam and bezo97
      -pixel_flow by bezo97
  - add polarplot variations to solid random flame generator, by Rick Sidwell
- - fixed bug in blur_zoom, by Rick Sidwell
+ - fixed a bug in blur_zoom, by Rick Sidwell
+ - fixed a bug in onion2, by Brad Stefanov
 
 V5.60 (06.05.2020)
  - new commandline-tool to create and render random flames.

@@ -1463,7 +1463,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       gridRefreshing = true;
       try {
+        int selectedTransform = data.transformationsTable.getSelectedRow();
         refreshTransformationsTable();
+        if(selectedTransform>=0) {
+          try {
+            data.transformationsTable.setRowSelectionInterval(selectedTransform, selectedTransform);
+          }
+          catch(Exception ex) {
+            ex.printStackTrace();
+          }
+        }
       }
       finally {
         gridRefreshing = false;
@@ -4178,13 +4187,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
-      double value = Tools.stringToDouble(data.affineC21REd.getText());
-      if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff21(value);
-      }
-      else {
-        xForm.setCoeff21(value);
-      }
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC21REd, getAffinePropertyName(xForm, "21"), 1.0);
       transformationChanged(true);
     }
   }
@@ -4195,13 +4198,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
-      double value = Tools.stringToDouble(data.affineC20REd.getText());
-      if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff20(value);
-      }
-      else {
-        xForm.setCoeff20(value);
-      }
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC20REd, getAffinePropertyName(xForm, "20"), 1.0);
       transformationChanged(true);
     }
   }
@@ -4495,13 +4492,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
-      double value = Tools.stringToDouble(data.affineC01REd.getText());
-      if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff01(value);
-      }
-      else {
-        xForm.setCoeff01(value);
-      }
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC01REd, getAffinePropertyName(xForm, "01"), 1.0);
       transformationChanged(true);
     }
   }
@@ -4512,14 +4503,33 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
-      double value = Tools.stringToDouble(data.affineC11REd.getText());
-      if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff11(value);
-      }
-      else {
-        xForm.setCoeff11(value);
-      }
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC11REd, getAffinePropertyName(xForm, "11"), 1.0);
       transformationChanged(true);
+    }
+  }
+
+  private String getAffinePropertyName(XForm xForm, String property) {
+    if (data.affineEditPostTransformButton.isSelected()) {
+      switch(xForm.getEditPlane()) {
+        case YZ:
+          return "yzPostCoeff" + property;
+        case ZX:
+          return "zxPostCoeff" + property;
+        case XY:
+        default:
+          return "xyPostCoeff" + property;
+      }
+    }
+    else {
+      switch(xForm.getEditPlane()) {
+        case YZ:
+          return "yzCoeff" + property;
+        case ZX:
+          return "zxCoeff" + property;
+        case XY:
+        default:
+          return "xyCoeff" + property;
+      }
     }
   }
 
@@ -4529,13 +4539,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
-      double value = Tools.stringToDouble(data.affineC00REd.getText());
-      if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff00(value);
-      }
-      else {
-        xForm.setCoeff00(value);
-      }
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC00REd, getAffinePropertyName(xForm, "00"), 1.0);
       transformationChanged(true);
     }
   }
@@ -4546,13 +4550,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
-      double value = Tools.stringToDouble(data.affineC10REd.getText());
-      if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff10(value);
-      }
-      else {
-        xForm.setCoeff10(value);
-      }
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC10REd, getAffinePropertyName(xForm, "10"), 1.0);
       transformationChanged(true);
     }
   }
