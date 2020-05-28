@@ -291,6 +291,41 @@ public class FlamePreviewHelper implements IterationObserver {
     return null;
   }
 
+  public SimpleImage renderAnimFrame(double imageScale, double quality) {
+    FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
+    FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
+
+    Rectangle panelBounds = imgPanel.getParentImageBounds();
+
+    int width = Tools.FTOI(panelBounds.width * imageScale);
+    int height = Tools.FTOI(panelBounds.height * imageScale);
+
+    if (width >= 16 && height >= 16) {
+      RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
+      Flame flame = flameHolder.getFlame()!=null ? flameHolder.getFlame().makeCopy() : null;
+      if (flame != null) {
+        double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+        double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+        flame.setWidth(info.getImageWidth());
+        flame.setHeight(info.getImageHeight());
+        try {
+          flame.setSampleDensity(quality);
+          flame.setSpatialOversampling(2);
+          FlameRenderer renderer = new FlameRenderer(flame, prefs, isTransparencyEnabled(), false);
+          RenderedFlame res = renderer.renderFlame(info);
+          SimpleImage img = res.getImage();
+          img.getBufferedImg().setAccelerationPriority(1.0f);
+          return img;
+        }
+        catch (Throwable ex) {
+          errorHandler.handleError(ex);
+        }
+      }
+    }
+    return null;
+  }
+
   private SimpleImage createLayerPreview(SimpleImage img, int renderScale, int width, int height) {
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
     Flame flame = flameHolder.getFlame();
@@ -817,4 +852,7 @@ public class FlamePreviewHelper implements IterationObserver {
     }
   }
 
+  public FlamePanelProvider getFlamePanelProvider() {
+    return flamePanelProvider;
+  }
 }

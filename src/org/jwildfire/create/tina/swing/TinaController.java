@@ -198,6 +198,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private final String tinaFrameTitle;
   private final JPanel centerPanel;
   private final FlameMessageHelper messageHelper;
+
   private final FlamePreviewHelper flamePreviewHelper;
   private FlamePanel flamePanel;
   private FlamePanel prevFlamePanel;
@@ -1532,6 +1533,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     catch (Exception ex) {
       ex.printStackTrace();
     }
+  }
+
+  public void cancelBackgroundRender() {
+    flamePreviewHelper.cancelBackgroundRender();
   }
 
   public static class TransformationsTableCellRenderer extends DefaultTableCellRenderer {
@@ -7257,4 +7262,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return frameControlsUtil;
   }
 
+  public FlamePreviewHelper getFlamePreviewHelper() {
+    return flamePreviewHelper;
+  }
 }

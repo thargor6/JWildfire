@@ -4,6 +4,7 @@ V6.00 (xx.xx.2020)
  - automatic creation and updating of key-frames when changing flame-parameters at different frame-numbers, creating
    of flame-animations has never been easier
  - changed some default settings in regard to flame-animations
+ - re-implemented animation-playback in the main editor
  - renamed the "Misc"-tab into "Randomize", moved the "Randomize weighting-fields"-button to this tab, added also a hint-panel
  - added motion curves for the following flame-parameters: balancingRed/Green/Blue, lowDensityBrightness and foregroundOpacity
  - added new property "tinaDefaultFrameCount" to the Preferences, here you can change the default number of frames for a flame-animation,

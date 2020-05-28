@@ -24,8 +24,11 @@ import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.swing.*;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
+import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
+import org.jwildfire.transform.ComposeTransformer;
 
 public class AnimationController {
   private final TinaController tinaController;
@@ -141,6 +144,7 @@ public class AnimationController {
         if (tinaController.getCurrFlame() != null) {
           tinaController.getCurrFlame().setFrame(frame);
         }
+/*
         if (playPreviewThread != null) {
           FlamePanelConfig cfg = tinaController.getFlamePanelConfig();
           boolean oldNoControls = cfg.isNoControls();
@@ -152,6 +156,7 @@ public class AnimationController {
             cfg.setNoControls(oldNoControls);
           }
         }
+ */
       }
       finally {
         tinaController.setNoRefresh(oldNoRefresh);
@@ -207,26 +212,53 @@ public class AnimationController {
     public void run() {
       finished = forceAbort = false;
       try {
-        int frameCount = keyframesFrameCountField.getIntValue();
-        long t0 = System.currentTimeMillis();
-        for (int i = 1; i <= frameCount; i++) {
-          if (forceAbort) {
-            break;
+        tinaController.cancelBackgroundRender();
+        FlamePanel flamePanel = tinaController.getFlamePreviewHelper().getFlamePanelProvider().getFlamePanel();
+
+        SimpleImage origImage = tinaController.getFlamePreviewHelper().getImage();
+        SimpleImage bgImage = origImage.clone();
+        boolean oldNoControls = flamePanel.getConfig().isNoControls();
+        try {
+          flamePanel.getConfig().setNoControls(true);
+
+          int frameStart = Math.max(1, keyframesFrameField.getIntValue());
+          int frameCount = keyframesFrameCountField.getIntValue();
+          if(frameStart==frameCount) {
+            frameStart = 1;
           }
-          long f0 = System.currentTimeMillis();
-          keyframesFrameSlider.setValue(i);
-          while (true) {
-            long f1 = System.currentTimeMillis();
-            if (f1 - f0 > 40) {
+          long t0 = System.currentTimeMillis();
+          for (int i = frameStart; i <= frameCount; i++) {
+            if (forceAbort) {
               break;
             }
-            Thread.sleep(1);
+            long f0 = System.currentTimeMillis();
+            keyframesFrameSlider.setValue(i);
+            // TODO Prefs
+            SimpleImage img = tinaController.getFlamePreviewHelper().renderAnimFrame(0.3, prefs.getTinaRenderRealtimeQuality() * 3.0);
+            ComposeTransformer cT=new ComposeTransformer();
+            cT.setForegroundImage(img);
+            cT.transformImage(bgImage);
+            flamePanel.setImage(bgImage);
+            flamePanel.repaint();
+            while (true) {
+              long f1 = System.currentTimeMillis();
+              if (f1 - f0 > 25) {
+                break;
+              }
+              Thread.sleep(1);
+            }
           }
+          long t1 = System.currentTimeMillis();
+          finished = true;
+          keyframesFrameField.setValue(keyframesFrameSlider.getValue());
+          finishEvent.succeeded((t1 - t0) * 0.001);
         }
-        long t1 = System.currentTimeMillis();
-        finished = true;
-        keyframesFrameField.setValue(keyframesFrameSlider.getValue());
-        finishEvent.succeeded((t1 - t0) * 0.001);
+        finally {
+          flamePanel.getConfig().setNoControls(oldNoControls);
+          flamePanel.setImage(origImage);
+          // no repaint here to avoid flickering
+          // flamePanel.repaint();
+        }
       }
       catch (Throwable ex) {
         finished = true;
