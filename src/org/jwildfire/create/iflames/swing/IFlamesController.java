@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -463,7 +463,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       int height = centerPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getWidth(), this, null);
+      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getWidth(), this, null, null);
       flamePanel.getConfig().setWithColoredTransforms(prefs.isTinaEditorControlsWithColor());
       flamePanel.setFlamePanelTriangleMode(prefs.getTinaEditorControlsStyle());
       flamePanel.getConfig().setProgressivePreview(prefs.isTinaEditorProgressivePreview());
@@ -1158,7 +1158,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       int height = baseFlamePreviewRootPnl.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      baseFlamePreviewPanel = new FlamePanel(prefs, img, 0, 0, baseFlamePreviewRootPnl.getWidth(), this, null);
+      baseFlamePreviewPanel = new FlamePanel(prefs, img, 0, 0, baseFlamePreviewRootPnl.getWidth(), this, null, null);
       ResolutionProfile resProfile = getResolutionProfile();
       baseFlamePreviewPanel.setRenderWidth(resProfile.getWidth());
       baseFlamePreviewPanel.setRenderHeight(resProfile.getHeight());

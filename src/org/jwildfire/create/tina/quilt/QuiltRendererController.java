@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -242,7 +242,7 @@ public class QuiltRendererController implements FlameHolder {
       int height = Math.max(data.quiltRendererPreviewRootPanel.getHeight(), 32);
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      previewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.quiltRendererPreviewRootPanel.getWidth(), this, null);
+      previewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.quiltRendererPreviewRootPanel.getWidth(), this, null, null);
       previewFlamePanel.setRenderWidth(data.quiltRendererRenderWidthEdit.getIntValue());
       previewFlamePanel.setRenderHeight(data.quiltRendererRenderHeightEdit.getIntValue());
       previewFlamePanel.setDrawTriangles(false);

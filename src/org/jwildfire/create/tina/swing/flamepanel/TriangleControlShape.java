@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.swing.flamepanel;
 
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.swing.FrameControlsUtil;
 
 public class TriangleControlShape extends AbstractControlShape {
   double x[] = new double[3];
@@ -24,16 +25,16 @@ public class TriangleControlShape extends AbstractControlShape {
   int viewX[] = new int[3];
   int viewY[] = new int[3];
 
-  protected TriangleControlShape(FlamePanelConfig pConfig, XForm pXForm, double pX[], double pY[], int pViewX[], int pViewY[]) {
-    super(pConfig, pXForm);
+  protected TriangleControlShape(FrameControlsUtil pFrameControlsUtil, FlamePanelConfig pConfig, XForm pXForm, double pX[], double pY[], int pViewX[], int pViewY[]) {
+    super(pFrameControlsUtil, pConfig, pXForm);
     System.arraycopy(pX, 0, x, 0, pX.length);
     System.arraycopy(pY, 0, y, 0, pY.length);
     System.arraycopy(pViewX, 0, viewX, 0, pViewX.length);
     System.arraycopy(pViewY, 0, viewY, 0, pViewY.length);
   }
 
-  public TriangleControlShape(FlamePanelConfig pConfig, XForm pXForm, double pScale) {
-    super(pConfig, pXForm);
+  public TriangleControlShape(FrameControlsUtil pFrameControlsUtil, FlamePanelConfig pConfig, XForm pXForm, double pScale) {
+    super(pFrameControlsUtil, pConfig, pXForm);
     // x
     x[0] = 1.0;
     y[0] = 0.0;
@@ -55,8 +56,8 @@ public class TriangleControlShape extends AbstractControlShape {
     }
   }
 
-  public TriangleControlShape(FlamePanelConfig pConfig, XForm pXForm) {
-    this(pConfig, pXForm, 1.0);
+  public TriangleControlShape(FrameControlsUtil pFrameControlsUtil, FlamePanelConfig pConfig, XForm pXForm) {
+    this(pFrameControlsUtil, pConfig, pXForm, 1.0);
   }
 
 }

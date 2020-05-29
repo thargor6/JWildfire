@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -43,11 +43,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.swing.FlameHolder;
-import org.jwildfire.create.tina.swing.GradientOverlay;
-import org.jwildfire.create.tina.swing.LayerHolder;
-import org.jwildfire.create.tina.swing.MouseDragOperation;
-import org.jwildfire.create.tina.swing.UndoManagerHolder;
+import org.jwildfire.create.tina.swing.*;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
@@ -71,6 +67,7 @@ public class FlamePanel extends ImagePanel {
   private static final long serialVersionUID = 1L;
   private FlameHolder flameHolder;
   private LayerHolder layerHolder;
+  private final FrameControlsUtil frameControlsUtil;
 
   private FlamePanelControlStyle flamePanelTriangleMode = FlamePanelControlStyle.TRIANGLE;
   private boolean withImage = true;
@@ -82,6 +79,7 @@ public class FlamePanel extends ImagePanel {
   private boolean withGuides = false;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
+  private final XForm rotateXForm = new XForm();
   private boolean allowScaleX = true;
   private boolean allowScaleY = true;
 
@@ -109,9 +107,10 @@ public class FlamePanel extends ImagePanel {
   private Color colorGuideThirds;
   private Color colorGuideGoldenRatio;
 
-  public FlamePanel(Prefs pPrefs, SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, LayerHolder pLayerHolder) {
+  public FlamePanel(Prefs pPrefs, SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, LayerHolder pLayerHolder, FrameControlsUtil pFrameControlsUtil) {
     super(pSimpleImage, pX, pY, pWidth);
     prefs = pPrefs;
+    frameControlsUtil = pFrameControlsUtil;
     initPropertiesFromPrefs();
     flameHolder = pFlameHolder;
     layerHolder = pLayerHolder;
@@ -513,7 +512,7 @@ public class FlamePanel extends ImagePanel {
   private AbstractControlHandler<?> getHandler(FlamePanelControlStyle pShape) {
     AbstractControlHandler<?> res = controlHandlerMap.get(pShape);
     if (res == null) {
-      res = pShape.createHandlerInstance(prefs, config);
+      res = pShape.createHandlerInstance(frameControlsUtil, prefs, config);
       controlHandlerMap.put(pShape, res);
     }
     return res;
@@ -591,14 +590,8 @@ public class FlamePanel extends ImagePanel {
                 dy *= 0.05;
               }
               // move
-              if (config.isEditPostTransform()) {
-                selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
-                selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
-              }
-              else {
-                selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
-                selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
-              }
+              frameControlsUtil.setAffineProperty(selectedXForm, "20", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "20", config.isEditPostTransform()) + dx);
+              frameControlsUtil.setAffineProperty(selectedXForm, "21", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "21", config.isEditPostTransform()) - dy);
               return true;
             }
             // rotate
@@ -610,7 +603,7 @@ public class FlamePanel extends ImagePanel {
                 dx *= 0.5;
                 dy *= 0.5;
               }
-              XFormTransformService.rotate(selectedXForm, dx * 30, config.isEditPostTransform());
+              rotateXForm(dx * 30);
               return true;
             }
             // zoom
@@ -623,7 +616,7 @@ public class FlamePanel extends ImagePanel {
                 dx *= 0.25;
                 dy *= 0.25;
               }
-              TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
+              TriangleControlShape triangle = new TriangleControlShape(frameControlsUtil, config, selectedXForm);
               double v1x = triangle.x[0] - triangle.x[1];
               double v1y = triangle.y[0] - triangle.y[1];
               double v2x = v1x + dx;
@@ -631,25 +624,13 @@ public class FlamePanel extends ImagePanel {
               double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
               double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
               double scale = dr2 / dr1;
-              if (config.isEditPostTransform()) {
-                if (allowScaleX) {
-                  selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
-                  selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
-                }
-                if (allowScaleY) {
-                  selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
-                  selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
-                }
+              if (allowScaleX) {
+                frameControlsUtil.setAffineProperty(selectedXForm, "00", config.isEditPostTransform(), frameControlsUtil.getAffineProperty(selectedXForm, "00", config.isEditPostTransform()) * scale);
+                frameControlsUtil.setAffineProperty(selectedXForm, "01", config.isEditPostTransform(), frameControlsUtil.getAffineProperty(selectedXForm, "01", config.isEditPostTransform()) * scale);
               }
-              else {
-                if (allowScaleX) {
-                  selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
-                  selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
-                }
-                if (allowScaleY) {
-                  selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
-                  selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
-                }
+              if (allowScaleY) {
+                frameControlsUtil.setAffineProperty(selectedXForm, "10", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "10", config.isEditPostTransform()) * scale);
+                frameControlsUtil.setAffineProperty(selectedXForm, "11", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "11", config.isEditPostTransform()) * scale);
               }
               return true;
             }
@@ -664,7 +645,7 @@ public class FlamePanel extends ImagePanel {
             else {
               dx *= 0.5;
             }
-            XFormTransformService.rotate(selectedXForm, dx * 30, config.isEditPostTransform());
+            rotateXForm(dx * 30);
             return true;
           }
           case SCALE_TRIANGLE: {
@@ -679,7 +660,7 @@ public class FlamePanel extends ImagePanel {
               dx *= 0.25;
               dy *= 0.25;
             }
-            TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
+            TriangleControlShape triangle = new TriangleControlShape(frameControlsUtil, config, selectedXForm);
             double v1x = triangle.x[0] - triangle.x[1];
             double v1y = triangle.y[0] - triangle.y[1];
             double v2x = v1x + dx;
@@ -687,27 +668,15 @@ public class FlamePanel extends ImagePanel {
             double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
             double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
             double scale = dr2 / dr1;
-            if (config.isEditPostTransform()) {
-              if (allowScaleX) {
-                selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
-                selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
-              }
-              if (allowScaleY) {
-                selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
-                selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
-              }
+            if (allowScaleX) {
+              frameControlsUtil.setAffineProperty(selectedXForm, "00", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "00", config.isEditPostTransform()) * scale);
+              frameControlsUtil.setAffineProperty(selectedXForm, "01", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "01", config.isEditPostTransform()) * scale);
             }
-            else {
-              if (allowScaleX) {
-                selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
-                selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
-              }
-              if (allowScaleY) {
-                selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
-                selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
-              }
+            if (allowScaleY) {
+              frameControlsUtil.setAffineProperty(selectedXForm, "10", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "10", config.isEditPostTransform()) * scale);
+              frameControlsUtil.setAffineProperty(selectedXForm, "11", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "11", config.isEditPostTransform()) * scale);
             }
-            return true;
+          return true;
           }
           case POINTS: {
             if (selectedXForm == null) {
@@ -719,46 +688,22 @@ public class FlamePanel extends ImagePanel {
             }
             switch (config.getSelectedPoint()) {
               case 0:
-                if (config.isEditPostTransform()) {
-                  selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() + dx);
-                  selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() - dy);
-                }
-                else {
-                  selectedXForm.setCoeff00(selectedXForm.getCoeff00() + dx);
-                  selectedXForm.setCoeff01(selectedXForm.getCoeff01() - dy);
-                }
+                frameControlsUtil.setAffineProperty(selectedXForm, "00", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "00", config.isEditPostTransform()) + dx);
+                frameControlsUtil.setAffineProperty(selectedXForm, "01", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "01", config.isEditPostTransform()) - dy);
                 break;
               case 1:
-                if (config.isEditPostTransform()) {
-                  selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
-                  selectedXForm.setPostCoeff21(selectedXForm.getPostCoeff21() - dy);
+                frameControlsUtil.setAffineProperty(selectedXForm, "20", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "20", config.isEditPostTransform()) + dx);
+                frameControlsUtil.setAffineProperty(selectedXForm, "21", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "21", config.isEditPostTransform()) - dy);
 
-                  selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() + dx);
-                  selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() - dy);
+                frameControlsUtil.setAffineProperty(selectedXForm, "10", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "10", config.isEditPostTransform()) + dx);
+                frameControlsUtil.setAffineProperty(selectedXForm, "11", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "11", config.isEditPostTransform()) - dy);
 
-                  selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() - dx);
-                  selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() + dy);
-                }
-                else {
-                  selectedXForm.setCoeff20(selectedXForm.getCoeff20() + dx);
-                  selectedXForm.setCoeff21(selectedXForm.getCoeff21() - dy);
-
-                  selectedXForm.setCoeff10(selectedXForm.getCoeff10() + dx);
-                  selectedXForm.setCoeff11(selectedXForm.getCoeff11() - dy);
-
-                  selectedXForm.setCoeff00(selectedXForm.getCoeff00() - dx);
-                  selectedXForm.setCoeff01(selectedXForm.getCoeff01() + dy);
-                }
+                frameControlsUtil.setAffineProperty(selectedXForm, "00", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "00", config.isEditPostTransform()) - dx);
+                frameControlsUtil.setAffineProperty(selectedXForm, "01", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "01", config.isEditPostTransform()) + dy);
                 break;
               case 2:
-                if (config.isEditPostTransform()) {
-                  selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() - dx);
-                  selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() + dy);
-                }
-                else {
-                  selectedXForm.setCoeff10(selectedXForm.getCoeff10() - dx);
-                  selectedXForm.setCoeff11(selectedXForm.getCoeff11() + dy);
-                }
+                frameControlsUtil.setAffineProperty(selectedXForm, "10", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "10", config.isEditPostTransform()) - dx);
+                frameControlsUtil.setAffineProperty(selectedXForm, "11", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "11", config.isEditPostTransform()) + dy);
                 break;
               default: // nothing to do
                 break;
@@ -846,6 +791,23 @@ public class FlamePanel extends ImagePanel {
       }
     }
     return false;
+  }
+
+  private void rotateXForm(double angle) {
+    rotateXForm.setOwner(layerHolder.getLayer());
+    rotateXForm.setCoeff00(frameControlsUtil.getAffineProperty(selectedXForm, "00", config.isEditPostTransform()));
+    rotateXForm.setCoeff01(frameControlsUtil.getAffineProperty(selectedXForm, "01", config.isEditPostTransform()));
+    rotateXForm.setCoeff10(frameControlsUtil.getAffineProperty(selectedXForm, "10", config.isEditPostTransform()));
+    rotateXForm.setCoeff11(frameControlsUtil.getAffineProperty(selectedXForm, "11", config.isEditPostTransform()));
+    rotateXForm.setCoeff20(frameControlsUtil.getAffineProperty(selectedXForm, "20", config.isEditPostTransform()));
+    rotateXForm.setCoeff21(frameControlsUtil.getAffineProperty(selectedXForm, "21", config.isEditPostTransform()));
+    XFormTransformService.rotate(rotateXForm, angle, false);
+    frameControlsUtil.setAffineProperty(selectedXForm, "00", config.isEditPostTransform(), rotateXForm.getCoeff00());
+    frameControlsUtil.setAffineProperty(selectedXForm, "01", config.isEditPostTransform(), rotateXForm.getCoeff01());
+    frameControlsUtil.setAffineProperty(selectedXForm, "10", config.isEditPostTransform(), rotateXForm.getCoeff10());
+    frameControlsUtil.setAffineProperty(selectedXForm, "11", config.isEditPostTransform(), rotateXForm.getCoeff11());
+    frameControlsUtil.setAffineProperty(selectedXForm, "20", config.isEditPostTransform(), rotateXForm.getCoeff20());
+    frameControlsUtil.setAffineProperty(selectedXForm, "21", config.isEditPostTransform(), rotateXForm.getCoeff21());
   }
 
   public void mousePressed(int x, int y) {
@@ -1015,7 +977,7 @@ public class FlamePanel extends ImagePanel {
           dx *= 0.25;
           dy *= 0.25;
         }
-        TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
+        TriangleControlShape triangle = new TriangleControlShape(frameControlsUtil, config, selectedXForm);
         double v1x = triangle.x[0] - triangle.x[1];
         double v1y = triangle.y[0] - triangle.y[1];
         double v2x = v1x + dx;
@@ -1023,25 +985,13 @@ public class FlamePanel extends ImagePanel {
         double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
         double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
         double scale = pRotateAmount < 0 ? dr2 / dr1 : dr1 / dr2;
-        if (config.isEditPostTransform()) {
-          if (allowScaleX) {
-            selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
-            selectedXForm.setPostCoeff01(selectedXForm.getPostCoeff01() * scale);
-          }
-          if (allowScaleY) {
-            selectedXForm.setPostCoeff10(selectedXForm.getPostCoeff10() * scale);
-            selectedXForm.setPostCoeff11(selectedXForm.getPostCoeff11() * scale);
-          }
+        if (allowScaleX) {
+          frameControlsUtil.setAffineProperty(selectedXForm, "00", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "00", config.isEditPostTransform()) * scale);
+          frameControlsUtil.setAffineProperty(selectedXForm, "01", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "01", config.isEditPostTransform()) * scale);
         }
-        else {
-          if (allowScaleX) {
-            selectedXForm.setCoeff00(selectedXForm.getCoeff00() * scale);
-            selectedXForm.setCoeff01(selectedXForm.getCoeff01() * scale);
-          }
-          if (allowScaleY) {
-            selectedXForm.setCoeff10(selectedXForm.getCoeff10() * scale);
-            selectedXForm.setCoeff11(selectedXForm.getCoeff11() * scale);
-          }
+        if (allowScaleY) {
+          frameControlsUtil.setAffineProperty(selectedXForm, "10", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "10", config.isEditPostTransform()) * scale);
+          frameControlsUtil.setAffineProperty(selectedXForm, "11", config.isEditPostTransform(),frameControlsUtil.getAffineProperty(selectedXForm, "11", config.isEditPostTransform()) * scale);
         }
         return true;
       }

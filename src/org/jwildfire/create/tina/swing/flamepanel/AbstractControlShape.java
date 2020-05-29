@@ -18,38 +18,41 @@ package org.jwildfire.create.tina.swing.flamepanel;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.swing.FrameControlsUtil;
 
 public abstract class AbstractControlShape {
+  protected final FrameControlsUtil frameControlsUtil;
   protected final FlamePanelConfig config;
   protected final XForm xForm;
 
-  public AbstractControlShape(FlamePanelConfig pConfig, XForm pXForm) {
+  public AbstractControlShape(FrameControlsUtil pFrameControlsUtil, FlamePanelConfig pConfig, XForm pXForm) {
+    frameControlsUtil = pFrameControlsUtil;
     config = pConfig;
     xForm = pXForm;
   }
 
   public double getC00() {
-    return config.isEditPostTransform() ? xForm.getPostCoeff00() : xForm.getCoeff00();
+    return frameControlsUtil.getAffineProperty(xForm, "00", config.isEditPostTransform());
   }
 
   public double getC01() {
-    return config.isEditPostTransform() ? xForm.getPostCoeff01() : xForm.getCoeff01();
+    return frameControlsUtil.getAffineProperty(xForm, "01", config.isEditPostTransform());
   }
 
   public double getC10() {
-    return config.isEditPostTransform() ? xForm.getPostCoeff10() : xForm.getCoeff10();
+    return frameControlsUtil.getAffineProperty(xForm, "10", config.isEditPostTransform());
   }
 
   public double getC11() {
-    return config.isEditPostTransform() ? xForm.getPostCoeff11() : xForm.getCoeff11();
+    return frameControlsUtil.getAffineProperty(xForm, "11", config.isEditPostTransform());
   }
 
   public double getC20() {
-    return config.isEditPostTransform() ? xForm.getPostCoeff20() : xForm.getCoeff20();
+    return frameControlsUtil.getAffineProperty(xForm, "20", config.isEditPostTransform());
   }
 
   public double getC21() {
-    return config.isEditPostTransform() ? xForm.getPostCoeff21() : xForm.getCoeff21();
+    return frameControlsUtil.getAffineProperty(xForm, "21", config.isEditPostTransform());
   }
 
   public double affineTransformedX(double pX, double pY) {

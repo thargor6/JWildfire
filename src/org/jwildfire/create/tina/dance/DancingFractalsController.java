@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -234,7 +234,7 @@ public class DancingFractalsController {
         return null;
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, flameRootPanel.getWidth() - borderWidth, null, null);
+      flamePanel = new FlamePanel(prefs, img, 0, 0, flameRootPanel.getWidth() - borderWidth, null, null, null);
       flamePanel.setRenderWidth(640);
       flamePanel.setRenderHeight(480);
       flameRootPanel.add(flamePanel, BorderLayout.CENTER);
@@ -251,7 +251,7 @@ public class DancingFractalsController {
       int height = poolFlamePreviewPnl.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      poolFlamePreviewFlamePanel = new FlamePanel(prefs, img, 0, 0, poolFlamePreviewPnl.getWidth(), poolFlameHolder, null);
+      poolFlamePreviewFlamePanel = new FlamePanel(prefs, img, 0, 0, poolFlamePreviewPnl.getWidth(), poolFlameHolder, null, null);
       poolFlamePreviewFlamePanel.setRenderWidth(640);
       poolFlamePreviewFlamePanel.setRenderHeight(480);
       poolFlamePreviewFlamePanel.setDrawTriangles(false);

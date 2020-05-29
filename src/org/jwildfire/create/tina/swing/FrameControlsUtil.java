@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.swing;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 
 import javax.swing.*;
@@ -48,6 +49,39 @@ public class FrameControlsUtil {
         pSlider.setValue(0);
       }
     }
+  }
+
+  public String getAffinePropertyName(XForm xform, String property, boolean isPostTransform) {
+    if (isPostTransform) {
+      switch(xform.getEditPlane()) {
+        case YZ:
+          return "yzPostCoeff" + property;
+        case ZX:
+          return "zxPostCoeff" + property;
+        case XY:
+        default:
+          return "xyPostCoeff" + property;
+      }
+    }
+    else {
+      switch(xform.getEditPlane()) {
+        case YZ:
+          return "yzCoeff" + property;
+        case ZX:
+          return "zxCoeff" + property;
+        case XY:
+        default:
+          return "xyCoeff" + property;
+      }
+    }
+  }
+
+  public double getAffineProperty(XForm xform, String property, boolean isPostTransform) {
+    return getPropertyValue(xform, getAffinePropertyName(xform, property, isPostTransform));
+  }
+
+  public void setAffineProperty(XForm xform, String property, boolean isPostTransform, double value) {
+    applyValueChange(xform, getAffinePropertyName(xform, property, isPostTransform), value);
   }
 
   private double getPropertyValue(Object pTarget, String pProperty) {

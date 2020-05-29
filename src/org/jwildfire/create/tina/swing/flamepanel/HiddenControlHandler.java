@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -20,11 +20,12 @@ import java.awt.Graphics2D;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.swing.FrameControlsUtil;
 
 public class HiddenControlHandler extends AbstractControlHandler<TriangleControlShape> {
 
-  public HiddenControlHandler(Prefs pPrefs, FlamePanelConfig pConfig) {
-    super(pPrefs, pConfig);
+  public HiddenControlHandler(FrameControlsUtil pFrameControlsUtil, Prefs pPrefs, FlamePanelConfig pConfig) {
+    super(pFrameControlsUtil, pPrefs, pConfig);
   }
 
   @Override
@@ -39,7 +40,7 @@ public class HiddenControlHandler extends AbstractControlHandler<TriangleControl
 
   @Override
   public TriangleControlShape convertXFormToShape(XForm pXForm) {
-    return new TriangleControlShape(config, pXForm);
+    return new TriangleControlShape(frameControlsUtil, config, pXForm);
   }
 
   @Override
