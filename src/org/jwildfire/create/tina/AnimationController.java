@@ -218,6 +218,10 @@ public class AnimationController {
         SimpleImage origImage = tinaController.getFlamePreviewHelper().getImage();
         SimpleImage bgImage = origImage.clone();
         boolean oldNoControls = flamePanel.getConfig().isNoControls();
+
+        double quality = Math.min( Math.max(0.1, prefs.getTinaRenderAnimPreviewQuality()), 5.0);
+        double previewSize = Math.min( Math.max(0.1, prefs.getTinaRenderAnimPreviewSize()), 1.0);
+
         try {
           flamePanel.getConfig().setNoControls(true);
 
@@ -233,8 +237,8 @@ public class AnimationController {
             }
             long f0 = System.currentTimeMillis();
             keyframesFrameSlider.setValue(i);
-            // TODO Prefs
-            SimpleImage img = tinaController.getFlamePreviewHelper().renderAnimFrame(0.3, prefs.getTinaRenderRealtimeQuality() * 3.0);
+
+            SimpleImage img = tinaController.getFlamePreviewHelper().renderAnimFrame(previewSize, quality);
             ComposeTransformer cT=new ComposeTransformer();
             cT.setForegroundImage(img);
             cT.transformImage(bgImage);

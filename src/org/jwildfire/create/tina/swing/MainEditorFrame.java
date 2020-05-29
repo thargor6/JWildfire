@@ -7006,6 +7006,8 @@ public class MainEditorFrame extends JFrame {
         enableOptixControls(false);
       }
 
+      getMotionCurveEditModeButton().setSelected(pPrefs.isTinaDefaultAnimationControlsEnabled());
+
     }
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
@@ -15537,7 +15539,7 @@ public class MainEditorFrame extends JFrame {
       panel_79.setLayout(null);
 
       keyframesFrameLbl = new JLabel();
-      keyframesFrameLbl.setBounds(6, 2, 39, 22);
+      keyframesFrameLbl.setBounds(146, 2, 39, 22);
       panel_79.add(keyframesFrameLbl);
       keyframesFrameLbl.setText("Frame");
       keyframesFrameLbl.setToolTipText("Current frame of animation");
@@ -15556,7 +15558,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      keyframesFrameField.setBounds(47, 2, 70, 24);
+      keyframesFrameField.setBounds(188, 2, 70, 24);
       panel_79.add(keyframesFrameField);
       keyframesFrameField.setPreferredSize(new Dimension(56, 22));
       keyframesFrameField.setOnlyIntegers(true);
@@ -15567,7 +15569,7 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       motionCurvePlayPreviewButton = new JButton();
-      motionCurvePlayPreviewButton.setBounds(156, 2, 70, 24);
+      motionCurvePlayPreviewButton.setBounds(41, 2, 70, 24);
       motionCurvePlayPreviewButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-playback-start-7.png")));
       panel_79.add(motionCurvePlayPreviewButton);
       motionCurvePlayPreviewButton.addActionListener(new ActionListener() {
@@ -15593,7 +15595,7 @@ public class MainEditorFrame extends JFrame {
       button.setText("");
       button.setPreferredSize(new Dimension(55, 24));
       button.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      button.setBounds(121, 2, 32, 24);
+      button.setBounds(6, 2, 32, 24);
       button.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null && tinaController.getAnimationController() != null) {
@@ -15646,7 +15648,7 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameCountField.setHasMinValue(true);
       keyframesFrameCountField.setHasMaxValue(true);
       keyframesFrameCountField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      keyframesFrameCountField.setBounds(74, 0, 70, 24);
+      keyframesFrameCountField.setBounds(74, 2, 70, 24);
       panel_80.add(keyframesFrameCountField);
 
       keyframesFrameCountLbl = new JLabel();
@@ -15655,7 +15657,7 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameCountLbl.setPreferredSize(new Dimension(94, 22));
       keyframesFrameCountLbl.setHorizontalAlignment(SwingConstants.RIGHT);
       keyframesFrameCountLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      keyframesFrameCountLbl.setBounds(0, 0, 70, 22);
+      keyframesFrameCountLbl.setBounds(0, 2, 70, 22);
       panel_80.add(keyframesFrameCountLbl);
     }
     return panel_80;
@@ -22694,7 +22696,7 @@ public class MainEditorFrame extends JFrame {
       button_2.setPreferredSize(new Dimension(55, 24));
       button_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       button_2.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-skip-forward-7.png")));
-      button_2.setBounds(229, 2, 32, 24);
+      button_2.setBounds(114, 2, 32, 24);
       button_2.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null && tinaController.getAnimationController() != null) {

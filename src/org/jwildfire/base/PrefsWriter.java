@@ -63,6 +63,9 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_RENDER_MOVIE_FRAMES, pPrefs.getTinaRenderMovieFrames());
     addValue(sb, Prefs.KEY_TINA_RENDER_PREVIEW_QUALITY, pPrefs.getTinaRenderPreviewQuality());
     addValue(sb, Prefs.KEY_TINA_RENDER_REALTIME_QUALITY, pPrefs.getTinaRenderRealtimeQuality());
+    addValue(sb, Prefs.KEY_TINA_RENDER_ANIM_PREVIEW_QUALITY, pPrefs.getTinaRenderAnimPreviewQuality());
+    addValue(sb, Prefs.KEY_TINA_RENDER_ANIM_PREVIEW_SIZE, pPrefs.getTinaRenderAnimPreviewSize());
+    addValue(sb, Prefs.KEY_TINA_DEFAULT_ANIM_CONTROLS_ENABLED, pPrefs.isTinaDefaultAnimationControlsEnabled());
     addValue(sb, Prefs.KEY_TINA_RANDOM_GENERATOR, pPrefs.getTinaRandomNumberGenerator().toString());
     addValue(sb, Prefs.KEY_TINA_INITIAL_RANDOMBATCH_SIZE, pPrefs.getTinaInitialRandomBatchSize());
     addValue(sb, Prefs.KEY_TINA_RANDOMBATCH_SIZE, pPrefs.getTinaRandomBatchSize());

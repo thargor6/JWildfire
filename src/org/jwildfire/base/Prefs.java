@@ -84,6 +84,11 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality.2";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
+
+  static final String KEY_TINA_RENDER_ANIM_PREVIEW_QUALITY = "tina.render.anim.preview.quality";
+  static final String KEY_TINA_RENDER_ANIM_PREVIEW_SIZE = "tina.render.anim.preview.size";
+  static final String KEY_TINA_DEFAULT_ANIM_CONTROLS_ENABLED = "tina.default.anim.controls.enabled";
+
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
   static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT = "tina.render.default_antialiasing_amount.8";
   static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS = "tina.render.default_antialiasing_radius.5";
@@ -483,6 +488,15 @@ public class Prefs extends ManagedObject {
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
   private double tinaRenderRealtimeQuality = 0.5;
 
+  @Property(description = "Quality for preview rendering of animated flames in the main editor", category = PropertyCategory.TINA)
+  private double tinaRenderAnimPreviewQuality = 1.25;
+
+  @Property(description = "Size of the preview rendering of animated flames in the main editor (as fraction of the size of the editor view)", category = PropertyCategory.TINA)
+  private double tinaRenderAnimPreviewSize = 0.5;
+
+  @Property(description = "Indicates if the animation controls in the main editor are enabled by default", category = PropertyCategory.TINA)
+  private boolean tinaDefaultAnimationControlsEnabled = true;
+
   @Property(description = "Number of random-flames generated during program-start", category = PropertyCategory.TINA)
   private int tinaInitialRandomBatchSize = 3;
   @Property(description = "Number of generated flames by invoking the \"Random flames\" function", category = PropertyCategory.TINA)
@@ -754,6 +768,9 @@ public class Prefs extends ManagedObject {
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
     tinaRenderRealtimeQuality = pSrc.tinaRenderRealtimeQuality;
+    tinaRenderAnimPreviewQuality = pSrc.tinaRenderAnimPreviewQuality;
+    tinaRenderAnimPreviewSize = pSrc.tinaRenderAnimPreviewSize;
+    tinaDefaultAnimationControlsEnabled = pSrc.tinaDefaultAnimationControlsEnabled;
     tinaRandomBatchSize = pSrc.tinaRandomBatchSize;
     tinaInitialRandomBatchSize = pSrc.tinaInitialRandomBatchSize;
     tinaRandomMovieBatchSize = pSrc.tinaRandomMovieBatchSize;
@@ -1708,4 +1725,27 @@ public class Prefs extends ManagedObject {
     this.tinaDefaultFrameCount = tinaDefaultFrameCount;
   }
 
+  public double getTinaRenderAnimPreviewQuality() {
+    return tinaRenderAnimPreviewQuality;
+  }
+
+  public void setTinaRenderAnimPreviewQuality(double tinaRenderAnimPreviewQuality) {
+    this.tinaRenderAnimPreviewQuality = tinaRenderAnimPreviewQuality;
+  }
+
+  public double getTinaRenderAnimPreviewSize() {
+    return tinaRenderAnimPreviewSize;
+  }
+
+  public void setTinaRenderAnimPreviewSize(double tinaRenderAnimPreviewSize) {
+    this.tinaRenderAnimPreviewSize = tinaRenderAnimPreviewSize;
+  }
+
+  public boolean isTinaDefaultAnimationControlsEnabled() {
+    return tinaDefaultAnimationControlsEnabled;
+  }
+
+  public void setTinaDefaultAnimationControlsEnabled(boolean tinaDefaultAnimationControlsEnabled) {
+    this.tinaDefaultAnimationControlsEnabled = tinaDefaultAnimationControlsEnabled;
+  }
 }

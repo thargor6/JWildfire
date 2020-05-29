@@ -147,6 +147,9 @@ public class PrefsReader {
         pPrefs.setTinaRenderMovieFrames(getIntProperty(props, Prefs.KEY_TINA_RENDER_MOVIE_FRAMES, pPrefs.getTinaRenderMovieFrames()));
         pPrefs.setTinaRenderPreviewQuality(getIntProperty(props, Prefs.KEY_TINA_RENDER_PREVIEW_QUALITY, pPrefs.getTinaRenderPreviewQuality()));
         pPrefs.setTinaRenderRealtimeQuality(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_REALTIME_QUALITY, pPrefs.getTinaRenderRealtimeQuality()));
+        pPrefs.setTinaRenderAnimPreviewQuality(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_ANIM_PREVIEW_QUALITY, pPrefs.getTinaRenderAnimPreviewQuality()));
+        pPrefs.setTinaRenderAnimPreviewSize(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_ANIM_PREVIEW_SIZE, pPrefs.getTinaRenderAnimPreviewSize()));
+        pPrefs.setTinaDefaultAnimationControlsEnabled(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_ANIM_CONTROLS_ENABLED, pPrefs.isTinaDefaultAnimationControlsEnabled()));
         pPrefs.setTinaPreserveFreeCPUs(getIntProperty(props, Prefs.KEY_TINA_PRESERVE_FREE_CPUS, pPrefs.getTinaPreserveFreeCPUs()));
         pPrefs.setTinaDisableWikimediaCommonsWarning(getBooleanProperty(props, Prefs.KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING, pPrefs.isTinaDisableWikimediaCommonsWarning()));
         pPrefs.setTinaEditorControlsWithColor(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_WITH_COLOR, pPrefs.isTinaEditorControlsWithColor()));
