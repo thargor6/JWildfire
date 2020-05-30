@@ -352,7 +352,7 @@ public class Prefs extends ManagedObject {
   private int tinaDefaultFPS = 25;
 
   @Property(description = "Default frame-count for animated flames", category = PropertyCategory.TINA)
-  private int tinaDefaultFrameCount = 125;
+  private int tinaDefaultFrameCount = 100;
 
   @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
   private boolean tinaOptimizedRenderingIR = true;

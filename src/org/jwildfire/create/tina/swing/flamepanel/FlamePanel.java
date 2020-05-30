@@ -721,8 +721,9 @@ public class FlamePanel extends ImagePanel {
                   rcY = dy;
                 }
                 else {
-                  double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
-                  double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
+                  double camRoll = frameControlsUtil.getPropertyValue(flame, "camRoll");
+                  double cosa = cos(M_PI * camRoll / 180.0);
+                  double sina = sin(M_PI * camRoll / 180.0);
                   rcX = dx * cosa - dy * sina;
                   rcY = dy * cosa + dx * sina;
                 }
@@ -730,8 +731,8 @@ public class FlamePanel extends ImagePanel {
                   rcX *= 0.1;
                   rcY *= 0.1;
                 }
-                flame.setCentreX(flame.getCentreX() - rcX * 0.3);
-                flame.setCentreY(flame.getCentreY() + rcY * 0.3);
+                frameControlsUtil.applyValueChange(flame, "centreX", frameControlsUtil.getPropertyValue(flame, "centreX") - rcX * 0.3);
+                frameControlsUtil.applyValueChange(flame, "centreY", frameControlsUtil.getPropertyValue(flame, "centreY") + rcY * 0.3);
                 return true;
               }
               // rotate
@@ -741,11 +742,10 @@ public class FlamePanel extends ImagePanel {
                   dy *= 0.1;
                 }
                 if (pLeftButton) {
-                  flame.setCamYaw(flame.getCamYaw() + 12 * dx);
+                  frameControlsUtil.applyValueChange(flame, "camYaw", frameControlsUtil.getPropertyValue(flame, "camYaw") + 12 * dx);
                 }
                 else {
-                  flame.setCamRoll(flame.getCamRoll() - 12 * dx);
-                  //                  flame.setCamPitch(flame.getCamPitch() + 12 * dy);
+                  frameControlsUtil.applyValueChange(flame, "camRoll", frameControlsUtil.getPropertyValue(flame, "camRoll") - 12 * dx);
                 }
                 return true;
               }
@@ -755,25 +755,21 @@ public class FlamePanel extends ImagePanel {
                   dx *= 0.1;
                   dy *= 0.1;
                 }
-                flame.setPixelsPerUnit(flame.getPixelsPerUnit() + 2.0 * dx);
+                frameControlsUtil.applyValueChange(flame, "pixelsPerUnit", frameControlsUtil.getPropertyValue(flame, "pixelsPerUnit") + 2.0 * dx);
                 return true;
               }
             }
           }
           case FOCUS: {
             Flame flame = flameHolder.getFlame();
-            //            double cosa = cos(M_PI * (flame.getCamRoll()) / 180.0);
-            //            double sina = sin(M_PI * (flame.getCamRoll()) / 180.0);
-            //            double rcX = dx * cosa - dy * sina;
-            //            double rcY = dy * cosa + dx * sina;
             double rcX = dx;
             double rcY = dy;
             if (fineMovement) {
               rcX *= 0.1;
               rcY *= 0.1;
             }
-            flame.setFocusX(flame.getFocusX() + rcX * 0.5);
-            flame.setFocusY(flame.getFocusY() - rcY * 0.5);
+            frameControlsUtil.applyValueChange(flame, "focusX", frameControlsUtil.getPropertyValue(flame, "focusX") + rcX * 0.5);
+            frameControlsUtil.applyValueChange(flame, "focusY", frameControlsUtil.getPropertyValue(flame, "focusY") - rcY * 0.5);
             return true;
           }
           case GRADIENT: {
@@ -952,7 +948,7 @@ public class FlamePanel extends ImagePanel {
         else {
           dx *= 0.25;
         }
-        flame.setPixelsPerUnit(flame.getPixelsPerUnit() - dx);
+        frameControlsUtil.applyValueChange(flame, "pixelsPerUnit", frameControlsUtil.getPropertyValue(flame, "pixelsPerUnit") - dx);
         return true;
       }
       if (config.getMouseDragOperation() == MouseDragOperation.TRIANGLE_VIEW && flameHolder != null && flameHolder.getFlame() != null) {
@@ -1004,7 +1000,7 @@ public class FlamePanel extends ImagePanel {
           dz *= 0.25;
         }
         Flame flame = flameHolder.getFlame();
-        flame.setFocusZ(flame.getFocusZ() + dz);
+        frameControlsUtil.applyValueChange(flame, "focusZ", frameControlsUtil.getPropertyValue(flame, "focusZ") + dz);
         return true;
       }
       else if (config.getMouseDragOperation() == MouseDragOperation.GRADIENT && flameHolder != null && flameHolder.getFlame() != null) {

@@ -84,7 +84,7 @@ public class FrameControlsUtil {
     applyValueChange(xform, getAffinePropertyName(xform, property, isPostTransform), value);
   }
 
-  private double getPropertyValue(Object pTarget, String pProperty) {
+  public double getPropertyValue(Object pTarget, String pProperty) {
     Class<?> cls = pTarget.getClass();
     try {
       MotionCurve curve = getMotionCurve(pTarget, pProperty);
@@ -153,7 +153,7 @@ public class FrameControlsUtil {
     applyValueChange(pTarget, pProperty, propValue);
   }
 
-  private void applyValueChange(Object pTarget, String pProperty, double propValue) {
+  public void applyValueChange(Object pTarget, String pProperty, double propValue) {
     Class<?> cls = pTarget.getClass();
     Field field;
     try {

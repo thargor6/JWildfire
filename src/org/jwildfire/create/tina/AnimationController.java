@@ -225,11 +225,14 @@ public class AnimationController {
         try {
           flamePanel.getConfig().setNoControls(true);
 
-          int frameStart = Math.max(1, keyframesFrameField.getIntValue());
           int frameCount = keyframesFrameCountField.getIntValue();
+          int frameStart = 1;
+          /*
+          int frameStart = Math.max(1, keyframesFrameField.getIntValue());
           if(frameStart==frameCount) {
             frameStart = 1;
           }
+          */
           long t0 = System.currentTimeMillis();
           for (int i = frameStart; i <= frameCount; i++) {
             if (forceAbort) {
