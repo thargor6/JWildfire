@@ -15625,11 +15625,18 @@ public class MainEditorFrame extends JFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getAnimationController() != null) {
             try {
-              int frameCount = keyframesFrameCountField.getIntValue();
-              if (keyframesFrameSlider.getValue() > frameCount) {
-                keyframesFrameSlider.setValue(frameCount);
+              boolean oldNoRefresh = tinaController.isNoRefresh();
+              try {
+                tinaController.setNoRefresh(true);
+                int frameCount = keyframesFrameCountField.getIntValue();
+                if (keyframesFrameSlider.getValue() > frameCount) {
+                  keyframesFrameSlider.setValue(frameCount);
+                }
+                keyframesFrameSlider.setMaximum(frameCount);
               }
-              keyframesFrameSlider.setMaximum(frameCount);
+              finally {
+                tinaController.setNoRefresh(oldNoRefresh);
+              }
               tinaController.getAnimationController().keyFrameCountFieldChanged();
             }
             catch (Exception ex) {

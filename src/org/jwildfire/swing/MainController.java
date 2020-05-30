@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,10 +16,11 @@
 */
 package org.jwildfire.swing;
 
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -123,6 +124,14 @@ public class MainController {
     addEvents(buffer);
     refreshWindowMenu();
     return buffer;
+  }
+
+  public void loadMovie(String pFilename) {
+    try {
+      Desktop.getDesktop().open(new File(pFilename));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public Buffer loadImage(boolean pRecordAction) throws Exception {

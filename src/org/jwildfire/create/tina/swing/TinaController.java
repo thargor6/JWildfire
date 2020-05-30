@@ -5019,6 +5019,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                     mainController.loadImage(zBuffer.getAbsolutePath(), false);
                   }
                 }
+                else if (Tools.isMovieFile(file.getAbsolutePath())) {
+                  mainController.loadMovie(file.getAbsolutePath());
+                }
               }
               catch (Throwable ex) {
                 errorHandler.handleError(ex);
