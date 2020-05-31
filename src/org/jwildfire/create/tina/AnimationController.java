@@ -16,11 +16,12 @@
 */
 package org.jwildfire.create.tina;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.swing.*;
@@ -28,6 +29,7 @@ import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
+import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.transform.ComposeTransformer;
 
 public class AnimationController {
@@ -204,6 +206,9 @@ public class AnimationController {
     private boolean forceAbort;
     private final RenderMainFlameThreadFinishEvent finishEvent;
 
+    ImagePanel imagePanel = null;
+
+
     public PlayPreviewThread(RenderMainFlameThreadFinishEvent pFinishEvent) {
       finishEvent = pFinishEvent;
     }
@@ -214,25 +219,17 @@ public class AnimationController {
       try {
         tinaController.cancelBackgroundRender();
         FlamePanel flamePanel = tinaController.getFlamePreviewHelper().getFlamePanelProvider().getFlamePanel();
-
-        SimpleImage origImage = tinaController.getFlamePreviewHelper().getImage();
-        SimpleImage bgImage = origImage.clone();
-        boolean oldNoControls = flamePanel.getConfig().isNoControls();
+        final int prevFrame = keyframesFrameField.getIntValue();
 
         double quality = Math.min( Math.max(0.1, prefs.getTinaRenderAnimPreviewQuality()), 5.0);
         double previewSize = Math.min( Math.max(0.1, prefs.getTinaRenderAnimPreviewSize()), 1.0);
 
+        Container parentContainer = flamePanel.getParent();
+       // flamePanel.setVisible(false);
         try {
-          flamePanel.getConfig().setNoControls(true);
-
           int frameCount = keyframesFrameCountField.getIntValue();
           int frameStart = 1;
-          /*
-          int frameStart = Math.max(1, keyframesFrameField.getIntValue());
-          if(frameStart==frameCount) {
-            frameStart = 1;
-          }
-          */
+
           long t0 = System.currentTimeMillis();
           for (int i = frameStart; i <= frameCount; i++) {
             if (forceAbort) {
@@ -242,11 +239,22 @@ public class AnimationController {
             keyframesFrameSlider.setValue(i);
 
             SimpleImage img = tinaController.getFlamePreviewHelper().renderAnimFrame(previewSize, quality);
-            ComposeTransformer cT=new ComposeTransformer();
-            cT.setForegroundImage(img);
-            cT.transformImage(bgImage);
-            flamePanel.setImage(bgImage);
-            flamePanel.repaint();
+            if(imagePanel==null) {
+              int x = (flamePanel.getImageWidth() - img.getImageWidth()) / 2;
+              int y = (flamePanel.getImageHeight() - img.getImageHeight()) / 2;
+              imagePanel = new ImagePanel(img, x , y, img.getImageWidth());
+              imagePanel.setLocation(new Point(x,y));
+              imagePanel.setSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
+              imagePanel.setPreferredSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
+              imagePanel.setBounds(x,y,img.getImageWidth(), img.getImageHeight());
+              parentContainer.add(imagePanel);
+              parentContainer.getParent().repaint();
+              imagePanel.repaint();
+            }
+            else {
+              imagePanel.setImage(img);
+              imagePanel.repaint();
+            }
             while (true) {
               long f1 = System.currentTimeMillis();
               if (f1 - f0 > 25) {
@@ -257,14 +265,21 @@ public class AnimationController {
           }
           long t1 = System.currentTimeMillis();
           finished = true;
-          keyframesFrameField.setValue(keyframesFrameSlider.getValue());
+          //keyframesFrameField.setValue(keyframesFrameSlider.getValue());
+          //keyframesFrameField.setValue(prevFrame);
+          keyframesFrameSlider.setValue(prevFrame);
           finishEvent.succeeded((t1 - t0) * 0.001);
         }
         finally {
-          flamePanel.getConfig().setNoControls(oldNoControls);
-          flamePanel.setImage(origImage);
-          // no repaint here to avoid flickering
-          // flamePanel.repaint();
+          try {
+            if (imagePanel != null) {
+              parentContainer.remove(imagePanel);
+            }
+          }
+          catch(Exception ex) {
+            ex.printStackTrace();
+          }
+          flamePanel.setVisible(true);
         }
       }
       catch (Throwable ex) {
@@ -318,7 +333,7 @@ public class AnimationController {
           }
           playPreviewThread = null;
           enablePlayPreviewControls();
-          tinaController.refreshFlameImage(true, false, 1, true, false);
+        //  tinaController.refreshFlameImage(true, false, 1, true, false);
         }
 
         @Override
@@ -326,7 +341,7 @@ public class AnimationController {
           errorHandler.handleError(exception);
           playPreviewThread = null;
           enablePlayPreviewControls();
-          tinaController.refreshFlameImage(true, false, 1, true, false);
+        //  tinaController.refreshFlameImage(true, false, 1, true, false);
         }
       };
 
