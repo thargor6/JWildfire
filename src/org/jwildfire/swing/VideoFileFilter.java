@@ -16,6 +16,8 @@
 */
 package org.jwildfire.swing;
 
+import org.jwildfire.base.Tools;
+
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
@@ -26,7 +28,7 @@ public class VideoFileFilter extends FileFilter {
     if (pFile.isDirectory())
       return true;
     String extension = getExtension(pFile);
-    return (extension != null) && (extension.equals("mp4"));
+    return (extension != null) && (extension.equals(Tools.FILEEXT_MP4));
   }
 
   @Override
@@ -43,4 +45,7 @@ public class VideoFileFilter extends FileFilter {
     return null;
   }
 
+  public String getDefaultExtension() {
+    return Tools.FILEEXT_MP4;
+  }
 }

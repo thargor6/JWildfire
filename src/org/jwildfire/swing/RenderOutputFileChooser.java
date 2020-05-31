@@ -21,21 +21,25 @@ import java.awt.*;
 
 public class RenderOutputFileChooser extends DefaultFileChooser {
   private static final long serialVersionUID = 1L;
-  private final String defaultExtension;
+  private final String imageDefaultExtension;
 
   @Override
   protected String getDefaultExtension() {
-    return defaultExtension;
+    FileFilter filter = getFileFilter();
+    if(filter!=null && filter instanceof VideoFileFilter) {
+      return ((VideoFileFilter)filter).getDefaultExtension();
+    }
+    else {
+      return imageDefaultExtension;
+    }
   }
 
-  public RenderOutputFileChooser(String pDefaultExtension) {
-    defaultExtension = pDefaultExtension;
+  public RenderOutputFileChooser(String pImageDefaultExtension) {
+    imageDefaultExtension = pImageDefaultExtension;
     setPreferredSize(new Dimension(960, 600));
     FileFilter filter = new ImageFileFilter();
     addChoosableFileFilter(filter);
     addChoosableFileFilter(new VideoFileFilter());
-    setFileFilter(filter);
-    setAcceptAllFileFilterUsed(false);
     setAccessory(new ImageFilePreview(this));
   }
 
