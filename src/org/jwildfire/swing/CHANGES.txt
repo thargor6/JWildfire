@@ -14,6 +14,12 @@ V6.00 (xx.xx.2020)
  - new variations:
      -glitchy1 by Brad Stefanov, Rick Sidwell, dark-beam and bezo97
      -pixel_flow by bezo97
+     -vortex,
+     -dc_vortex,
+     -dc_warping by Jesus Sosa
+ - Added a mode parameter to the elliptic variation to enable compatibility with the apo plugin; see http://jwildfire.org/forum/viewtopic.php?f=22&t=2681
+   Also added a higher accuracy mode as described by Claude Heiland-Allen.
+   All three modes will look the same for most flames, but the differences are important in some specialized cases, by Rick Sidwell
  - add polarplot variations to solid random flame generator, by Rick Sidwell
  - fixed a bug in blur_zoom, by Rick Sidwell
  - fixed a bug in onion2, by Brad Stefanov

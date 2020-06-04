@@ -82,6 +82,7 @@ public class FrameControlsUtil {
 
   public void setAffineProperty(XForm xform, String property, boolean isPostTransform, double value) {
     applyValueChange(xform, getAffinePropertyName(xform, property, isPostTransform), value);
+    xform.notifyCoeffChange();
   }
 
   public double getPropertyValue(Object pTarget, String pProperty) {

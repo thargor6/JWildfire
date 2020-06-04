@@ -441,6 +441,15 @@ public final class XForm implements Assignable<XForm>, Serializable {
     createTransformations();
   }
 
+  public void notifyCoeffChange() {
+    updateHasXYCoeffs();
+    updateHasXYPostCoeffs();
+    updateHasYZCoeffs();
+    updateHasYZPostCoeffs();
+    updateHasZXCoeffs();
+    updateHasZXPostCoeffs();
+  }
+
   private void updateHasXYPostCoeffs() {
     hasXYPostCoeffs = fabs(xyPostCoeff00 - 1.0) > MathLib.EPSILON || fabs(xyPostCoeff01) > MathLib.EPSILON || fabs(xyPostCoeff10) > MathLib.EPSILON
         || fabs(xyPostCoeff11 - 1.0) > MathLib.EPSILON || fabs(xyPostCoeff20) > MathLib.EPSILON || fabs(xyPostCoeff21) > MathLib.EPSILON;

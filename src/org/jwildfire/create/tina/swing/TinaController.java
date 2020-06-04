@@ -2955,7 +2955,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     double amount = Tools.stringToDouble(data.affineMoveHorizAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
-      XFormTransformService.globalTranslate(getCurrXForm(), amount, 0, data.affineEditPostTransformButton.isSelected());
+      boolean isPost = data.affineEditPostTransformButton.isSelected();
+      applyCurrentXFormToWorkXForm(isPost);
+      XFormTransformService.globalTranslate(workXForm, amount, 0, isPost);
+      applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
   }
@@ -2965,7 +2968,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     double amount = Tools.stringToDouble(data.affineRotateAmountREd.getText());
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
-      XFormTransformService.rotate(getCurrXForm(), -amount, data.affineEditPostTransformButton.isSelected());
+      boolean isPost = data.affineEditPostTransformButton.isSelected();
+      applyCurrentXFormToWorkXForm(isPost);
+      XFormTransformService.rotate(workXForm, -amount, isPost);
+      applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
   }
@@ -2975,7 +2981,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     double amount = Tools.stringToDouble(data.affineMoveHorizAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
-      XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0, data.affineEditPostTransformButton.isSelected());
+      boolean isPost = data.affineEditPostTransformButton.isSelected();
+      applyCurrentXFormToWorkXForm(isPost);
+      XFormTransformService.globalTranslate(workXForm, -amount, 0, isPost);
+      applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
   }
@@ -2983,14 +2992,20 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void xForm_flipHorizontal() {
     forceTriangleMode();
     saveUndoPoint();
-    XFormTransformService.flipHorizontal(getCurrXForm(), data.affineEditPostTransformButton.isSelected());
+    boolean isPost = data.affineEditPostTransformButton.isSelected();
+    applyCurrentXFormToWorkXForm(isPost);
+    XFormTransformService.flipHorizontal(workXForm, isPost);
+    applyWorkXFormToCurrentXForm(isPost);
     transformationChanged(true);
   }
 
   public void xForm_flipVertical() {
     forceTriangleMode();
     saveUndoPoint();
-    XFormTransformService.flipVertical(getCurrXForm(), data.affineEditPostTransformButton.isSelected());
+    boolean isPost = data.affineEditPostTransformButton.isSelected();
+    applyCurrentXFormToWorkXForm(isPost);
+    XFormTransformService.flipVertical(workXForm, isPost);
+    applyWorkXFormToCurrentXForm(isPost);
     transformationChanged(true);
   }
 
@@ -2999,7 +3014,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     double amount = Tools.stringToDouble(data.affineScaleAmountREd.getText()) / 100.0;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
-      XFormTransformService.scale(getCurrXForm(), amount, data.affineScaleXButton.isSelected(), data.affineScaleYButton.isSelected(), data.affineEditPostTransformButton.isSelected());
+      boolean isPost = data.affineEditPostTransformButton.isSelected();
+      applyCurrentXFormToWorkXForm(isPost);
+      XFormTransformService.scale(workXForm, amount, data.affineScaleXButton.isSelected(), data.affineScaleYButton.isSelected(), isPost);
+      applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
   }
@@ -3009,9 +3027,35 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     double amount = 100.0 / Tools.stringToDouble(data.affineScaleAmountREd.getText());
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
-      XFormTransformService.scale(getCurrXForm(), amount, data.affineScaleXButton.isSelected(), data.affineScaleYButton.isSelected(), data.affineEditPostTransformButton.isSelected());
+      boolean isPost = data.affineEditPostTransformButton.isSelected();
+      applyCurrentXFormToWorkXForm(isPost);
+      XFormTransformService.scale(workXForm, amount, data.affineScaleXButton.isSelected(), data.affineScaleYButton.isSelected(), isPost);
+      applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
+  }
+
+  private XForm workXForm = new XForm();
+
+  private void applyCurrentXFormToWorkXForm(boolean usePost) {
+    workXForm.setOwner(getCurrLayer());
+    XForm selectedXForm = getCurrXForm();
+    workXForm.setCoeff00(frameControlsUtil.getAffineProperty(selectedXForm, "00", usePost));
+    workXForm.setCoeff01(frameControlsUtil.getAffineProperty(selectedXForm, "01", usePost));
+    workXForm.setCoeff10(frameControlsUtil.getAffineProperty(selectedXForm, "10", usePost));
+    workXForm.setCoeff11(frameControlsUtil.getAffineProperty(selectedXForm, "11", usePost));
+    workXForm.setCoeff20(frameControlsUtil.getAffineProperty(selectedXForm, "20", usePost));
+    workXForm.setCoeff21(frameControlsUtil.getAffineProperty(selectedXForm, "21", usePost));
+  }
+
+  private void applyWorkXFormToCurrentXForm(boolean usePost) {
+    XForm selectedXForm = getCurrXForm();
+    frameControlsUtil.setAffineProperty(selectedXForm, "00", usePost, workXForm.getCoeff00());
+    frameControlsUtil.setAffineProperty(selectedXForm, "01", usePost, workXForm.getCoeff01());
+    frameControlsUtil.setAffineProperty(selectedXForm, "10", usePost, workXForm.getCoeff10());
+    frameControlsUtil.setAffineProperty(selectedXForm, "11", usePost, workXForm.getCoeff11());
+    frameControlsUtil.setAffineProperty(selectedXForm, "20", usePost, workXForm.getCoeff20());
+    frameControlsUtil.setAffineProperty(selectedXForm, "21", usePost, workXForm.getCoeff21());
   }
 
   public void xForm_rotateLeft() {
@@ -3019,7 +3063,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     double amount = Tools.stringToDouble(data.affineRotateAmountREd.getText());
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
-      XFormTransformService.rotate(getCurrXForm(), amount, data.affineEditPostTransformButton.isSelected());
+      boolean isPost = data.affineEditPostTransformButton.isSelected();
+      applyCurrentXFormToWorkXForm(isPost);
+      XFormTransformService.rotate(workXForm, amount, isPost);
+      applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
   }
@@ -3029,7 +3076,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     double amount = Tools.stringToDouble(data.affineMoveVertAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
-      XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount, data.affineEditPostTransformButton.isSelected());
+      boolean isPost = data.affineEditPostTransformButton.isSelected();
+      applyCurrentXFormToWorkXForm(isPost);
+      XFormTransformService.globalTranslate(workXForm, 0, -amount, isPost);
+      applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
   }
@@ -3051,7 +3101,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     double amount = Tools.stringToDouble(data.affineMoveVertAmountREd.getText()) * pScale;
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
-      XFormTransformService.globalTranslate(getCurrXForm(), 0, amount, data.affineEditPostTransformButton.isSelected());
+      boolean isPost = data.affineEditPostTransformButton.isSelected();
+      applyCurrentXFormToWorkXForm(isPost);
+      XFormTransformService.globalTranslate(workXForm, 0, amount, isPost);
+      applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
   }
@@ -4209,10 +4262,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void affineResetTransformButton_clicked() {
-    XForm xForm = getCurrXForm();
-    if (xForm != null) {
+    if (getCurrXForm() != null) {
       saveUndoPoint();
-      XFormTransformService.reset(xForm, data.affineEditPostTransformButton.isSelected());
+      boolean isPost = data.affineEditPostTransformButton.isSelected();
+      applyCurrentXFormToWorkXForm(isPost);
+      XFormTransformService.reset(workXForm, isPost);
+      applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
   }
@@ -4566,7 +4621,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void affineMirrorPrePostChanged(boolean mirror) {
     if (this.getCurrXForm() != null) {
-      this.getCurrXForm().setMirrorTranslations(mirror, data.affineEditPostTransformButton.isSelected());
+      boolean isPost = data.affineEditPostTransformButton.isSelected();
+      applyCurrentXFormToWorkXForm(isPost);
+      workXForm.setMirrorTranslations(mirror, isPost);
+      applyWorkXFormToCurrentXForm(isPost);
+
+
       refreshFlameImage(true, false, 1, true, false);
     }
   }
