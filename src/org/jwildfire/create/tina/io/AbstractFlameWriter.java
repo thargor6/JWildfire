@@ -79,7 +79,6 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr("color", xForm.getColor()));
     }
     attrList.add(xb.createAttr("symmetry", xForm.getColorSymmetry()));
-    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MIRROR_PRE_POST_TRANSLATIONS, xForm.getMirrorTranslations() ? 1 : 0));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MATERIAL, xForm.getMaterial()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MATERIAL_SPEED, xForm.getMaterialSpeed()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOD_GAMMA, xForm.getModGamma()));

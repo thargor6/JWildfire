@@ -23,6 +23,7 @@ V6.00 (xx.xx.2020)
  - add polarplot variations to solid random flame generator, by Rick Sidwell
  - fixed a bug in blur_zoom, by Rick Sidwell
  - fixed a bug in onion2, by Brad Stefanov
+ - removed the (barely understood) "Mirror translations"-button at the Affine-transforms-tab
 
 V5.60 (06.05.2020)
  - new commandline-tool to create and render random flames.

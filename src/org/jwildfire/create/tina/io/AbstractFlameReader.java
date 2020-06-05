@@ -939,7 +939,6 @@ public class AbstractFlameReader {
   public static final String ATTR_ZBUFFER_SCALE = "zbuffer_scale";
   public static final String ATTR_ZBUFFER_BIAS = "zbuffer_bias";
   public static final String ATTR_ZBUFFER_FILENAME = "zbuffer_filename";
-  public static final String ATTR_MIRROR_PRE_POST_TRANSLATIONS = "mirror_pre_post_translations";
 
   public static final String ATTR_WFIELD_TYPE = "wfield_type";
   public static final String ATTR_WFIELD_INPUT = "wfield_input";
@@ -977,10 +976,6 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_WEIGHT)) != null) {
       xForm.setWeight(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_MIRROR_PRE_POST_TRANSLATIONS)) != null) {
-      double val = Double.parseDouble(hs);
-      xForm.setMirrorTranslations(val == 1);
     }
     if ((hs = atts.get(ATTR_COLOR_TYPE)) != null) {
       try {
