@@ -4,6 +4,7 @@ V6.00 (xx.xx.2020)
  - automatic creation and updating of key-frames when changing flame-parameters at different frame-numbers, creating
    of flame-animations has never been easier
  - changed some default settings in regard to flame-animations
+ - added function to reset all motion curves
  - re-implemented animation-playback in the main editor
  - new settings in the Preferences for animation preview in the main editor: tinaRenderAnimPreviewQuality (render quality) and tinaRenderAnimPreviewSize (size of preview)
  - new setting in the Preferences for default state of the animation-controls in the main editor: tinaDefaultAnimationControlsEnabled (per default: true)

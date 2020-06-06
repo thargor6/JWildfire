@@ -587,7 +587,7 @@ public class MeshGenController {
 
   protected Flame stripFlame(Flame pFlame) {
     Flame res = pFlame.makeCopy();
-    res = AnimationService.disableMotionCurves(res);
+    res = AnimationService.resetMotionCurves(res);
     res.setCamDOF(0.0);
     res.setDimishZ(0.0);
     res.setCamPerspective(0.0);

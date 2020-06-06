@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -45,6 +45,8 @@ import org.jwildfire.envelope.Envelope.Interpolation;
 import org.jwildfire.image.SimpleImage;
 
 public class AnimationService {
+
+  public static final int STARTFRAME = 1;
 
   public static SimpleImage renderFrame(Flame flame, int pWidth, int pHeight, Prefs pPrefs) throws Exception {
     RenderInfo info = new RenderInfo(pWidth, pHeight, RenderMode.PRODUCTION);
@@ -209,9 +211,10 @@ public class AnimationService {
     }
   }
 
-  public static Flame disableMotionCurves(Flame pFlame) {
+  /**  Resets all motion curves to the default state  */
+  public static Flame resetMotionCurves(Flame pFlame) {
     try {
-      _disableMotionCurves(pFlame);
+      _resetMotionCurves(pFlame);
       return pFlame;
     }
     catch (Throwable ex) {
@@ -219,13 +222,14 @@ public class AnimationService {
     }
   }
 
-  private static void _disableMotionCurves(Object pObject) throws IllegalAccessException {
+  private static void _resetMotionCurves(Object pObject) throws IllegalAccessException {
     Class<?> cls = pObject.getClass();
     for (Field field : cls.getDeclaredFields()) {
       field.setAccessible(true);
       if (field.getType() == MotionCurve.class && field.getName().endsWith(Tools.CURVE_POSTFIX)) {
         MotionCurve curve = (MotionCurve) field.get(pObject);
-        if (curve != null && curve.isEnabled()) {
+        if (curve != null) {
+          curve.assign(new MotionCurve());
           curve.setEnabled(false);
         }
       }
@@ -233,13 +237,13 @@ public class AnimationService {
         List<?> childs = (List<?>) field.get(pObject);
         if (childs != null)
           for (Object child : childs) {
-            _disableMotionCurves(child);
+            _resetMotionCurves(child);
           }
       }
       else if (field.getType().isAssignableFrom(RGBPalette.class)) {
         RGBPalette gradient = (RGBPalette) field.get(pObject);
         if (gradient != null)
-          _disableMotionCurves(gradient);
+          _resetMotionCurves(gradient);
       }
     }
     if (pObject instanceof Variation) {
@@ -247,7 +251,8 @@ public class AnimationService {
       VariationFunc func = var.getFunc();
       for (String name : func.getParameterNames()) {
         MotionCurve curve = var.getMotionCurve(name);
-        if (curve != null && curve.isEnabled()) {
+        if (curve != null) {
+          curve.assign(new MotionCurve());
           curve.setEnabled(false);
         }
       }

@@ -16,21 +16,26 @@
 */
 package org.jwildfire.create.tina;
 
-import java.awt.*;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.swing.*;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
-import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
-import org.jwildfire.transform.ComposeTransformer;
 
 public class AnimationController {
   private final TinaController tinaController;
@@ -146,7 +151,7 @@ public class AnimationController {
         if (tinaController.getCurrFlame() != null) {
           tinaController.getCurrFlame().setFrame(frame);
         }
-/*
+        /*
         if (playPreviewThread != null) {
           FlamePanelConfig cfg = tinaController.getFlamePanelConfig();
           boolean oldNoControls = cfg.isNoControls();
@@ -158,7 +163,7 @@ public class AnimationController {
             cfg.setNoControls(oldNoControls);
           }
         }
- */
+         */
       }
       finally {
         tinaController.setNoRefresh(oldNoRefresh);
@@ -208,7 +213,6 @@ public class AnimationController {
 
     ImagePanel imagePanel = null;
 
-
     public PlayPreviewThread(RenderMainFlameThreadFinishEvent pFinishEvent) {
       finishEvent = pFinishEvent;
     }
@@ -221,11 +225,11 @@ public class AnimationController {
         FlamePanel flamePanel = tinaController.getFlamePreviewHelper().getFlamePanelProvider().getFlamePanel();
         final int prevFrame = keyframesFrameField.getIntValue();
 
-        double quality = Math.min( Math.max(0.1, prefs.getTinaRenderAnimPreviewQuality()), 5.0);
-        double previewSize = Math.min( Math.max(0.1, prefs.getTinaRenderAnimPreviewSize()), 1.0);
+        double quality = Math.min(Math.max(0.1, prefs.getTinaRenderAnimPreviewQuality()), 5.0);
+        double previewSize = Math.min(Math.max(0.1, prefs.getTinaRenderAnimPreviewSize()), 1.0);
 
         Container parentContainer = flamePanel.getParent();
-       // flamePanel.setVisible(false);
+        // flamePanel.setVisible(false);
         try {
           int frameCount = keyframesFrameCountField.getIntValue();
           int frameStart = 1;
@@ -239,14 +243,14 @@ public class AnimationController {
             keyframesFrameSlider.setValue(i);
 
             SimpleImage img = tinaController.getFlamePreviewHelper().renderAnimFrame(previewSize, quality);
-            if(imagePanel==null) {
+            if (imagePanel == null) {
               int x = (flamePanel.getImageWidth() - img.getImageWidth()) / 2;
               int y = (flamePanel.getImageHeight() - img.getImageHeight()) / 2;
-              imagePanel = new ImagePanel(img, x , y, img.getImageWidth());
-              imagePanel.setLocation(new Point(x,y));
+              imagePanel = new ImagePanel(img, x, y, img.getImageWidth());
+              imagePanel.setLocation(new Point(x, y));
               imagePanel.setSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
               imagePanel.setPreferredSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
-              imagePanel.setBounds(x,y,img.getImageWidth(), img.getImageHeight());
+              imagePanel.setBounds(x, y, img.getImageWidth(), img.getImageHeight());
               parentContainer.add(imagePanel);
               parentContainer.getParent().repaint();
               imagePanel.repaint();
@@ -276,7 +280,7 @@ public class AnimationController {
               parentContainer.remove(imagePanel);
             }
           }
-          catch(Exception ex) {
+          catch (Exception ex) {
             ex.printStackTrace();
           }
           flamePanel.setVisible(true);
@@ -304,7 +308,7 @@ public class AnimationController {
   private void enablePlayPreviewControls() {
     motionCurvePlayPreviewButton.setText(playPreviewThread == null ? "Play" : "Stop");
     String iconname = playPreviewThread == null ? "media-playback-start-7" : "media-playback-stop-7";
-    motionCurvePlayPreviewButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/"+iconname+".png")));
+    motionCurvePlayPreviewButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/" + iconname + ".png")));
   }
 
   public void playPreviewButtonClicked() {
@@ -333,7 +337,7 @@ public class AnimationController {
           }
           playPreviewThread = null;
           enablePlayPreviewControls();
-        //  tinaController.refreshFlameImage(true, false, 1, true, false);
+          //  tinaController.refreshFlameImage(true, false, 1, true, false);
         }
 
         @Override
@@ -341,7 +345,7 @@ public class AnimationController {
           errorHandler.handleError(exception);
           playPreviewThread = null;
           enablePlayPreviewControls();
-        //  tinaController.refreshFlameImage(true, false, 1, true, false);
+          //  tinaController.refreshFlameImage(true, false, 1, true, false);
         }
       };
 
@@ -352,16 +356,25 @@ public class AnimationController {
   }
 
   public void skipToLastFrameButtonClicked() {
-    if(playPreviewThread == null) {
+    if (playPreviewThread == null) {
       keyframesFrameField.setValue(keyframesFrameCountField.getIntValue());
       keyframesFrameSlider.setValue(keyframesFrameField.getIntValue());
     }
   }
 
   public void skipToFirstFrameButtonClicked() {
-    if(playPreviewThread == null) {
+    if (playPreviewThread == null) {
       keyframesFrameField.setValue(1);
       keyframesFrameSlider.setValue(keyframesFrameField.getIntValue());
+    }
+  }
+
+  public void resetMotionCurvesButtonClicked() {
+    if (StandardDialogs.confirm(rootPanel, "Do you really want to reset all motion curves?\n(Don't worry too much, this can be undone)")) {
+      tinaController.saveUndoPoint();
+      AnimationService.resetMotionCurves(tinaController.getCurrFlame());
+      tinaController.getCurrFlame().setFrame(AnimationService.STARTFRAME);
+      tinaController.refreshUI();
     }
   }
 }

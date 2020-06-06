@@ -1440,6 +1440,7 @@ public class MainEditorFrame extends JFrame {
 
       randomizeBtn = new JButton();
       randomizeBtn.setBounds(185, 22, 213, 24);
+      randomizeBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_1_1.add(randomizeBtn);
       randomizeBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1460,7 +1461,7 @@ public class MainEditorFrame extends JFrame {
 
       btnWfld.setMnemonic(KeyEvent.VK_W);
       btnWfld.setPreferredSize(new Dimension(72, 36));
-      btnWfld.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
+      btnWfld.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       JPanel panel_8 = new JPanel();
       panel_8.setBorder(new TitledBorder(null, "Hints", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -15592,7 +15593,7 @@ public class MainEditorFrame extends JFrame {
   private JPanel getPanel_80() {
     if (panel_80 == null) {
       panel_80 = new JPanel();
-      panel_80.setPreferredSize(new Dimension(150, 10));
+      panel_80.setPreferredSize(new Dimension(185, 10));
       panel_80.setLayout(null);
 
       keyframesFrameCountField = new JWFNumberField();
@@ -15641,6 +15642,27 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameCountLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       keyframesFrameCountLbl.setBounds(0, 2, 70, 22);
       panel_80.add(keyframesFrameCountLbl);
+
+      JButton resetMotionCurvesBtn = new JButton();
+      resetMotionCurvesBtn.setToolTipText("Reset all motion curves");
+      resetMotionCurvesBtn.setText("");
+      resetMotionCurvesBtn.setPreferredSize(new Dimension(55, 24));
+      resetMotionCurvesBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      resetMotionCurvesBtn.setBounds(147, 2, 32, 24);
+      resetMotionCurvesBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/edit-clear-2.png")));
+      resetMotionCurvesBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            try {
+              tinaController.getAnimationController().resetMotionCurvesButtonClicked();
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+      panel_80.add(resetMotionCurvesBtn);
     }
     return panel_80;
   }
@@ -18082,7 +18104,7 @@ public class MainEditorFrame extends JFrame {
       bokehBtn.setToolTipText("Add random bokeh-like-effects (DOF)");
       bokehBtn.setText("Randomize DOF/bokeh");
       bokehBtn.setPreferredSize(new Dimension(72, 24));
-      bokehBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
+      bokehBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return bokehBtn;
   }

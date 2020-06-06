@@ -146,8 +146,8 @@ public class FrameControlsUtil {
     applyValueChange(pTarget, pProperty, propValue);
   }
 
-  public void valueChangedByTextField(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    double propValue = Tools.stringToDouble(pTextField.getText());
+  public void valueChangedByTextField(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, double pDeltaValue) {
+    double propValue = Tools.stringToDouble(pTextField.getText()) + pDeltaValue;
     if(pSlider!=null) {
       pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
     }
