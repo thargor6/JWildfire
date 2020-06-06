@@ -20,11 +20,9 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import javafx.animation.KeyFrame;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
@@ -258,6 +256,209 @@ public class AnimationService {
       }
     }
   }
+
+  private static void _deleteKeyFrame(Object pObject, int pKeyFrame) throws IllegalAccessException {
+    Class<?> cls = pObject.getClass();
+    for (Field field : cls.getDeclaredFields()) {
+      field.setAccessible(true);
+      if (field.getType() == MotionCurve.class && field.getName().endsWith(Tools.CURVE_POSTFIX)) {
+        MotionCurve curve = (MotionCurve) field.get(pObject);
+        if (curve != null) {
+          curve.deleteKeyFrameIfExists(pKeyFrame);
+        }
+      }
+      else if (field.getType().isAssignableFrom(ArrayList.class)) {
+        List<?> childs = (List<?>) field.get(pObject);
+        if (childs != null)
+          for (Object child : childs) {
+            _deleteKeyFrame(child, pKeyFrame);
+          }
+      }
+      else if (field.getType().isAssignableFrom(RGBPalette.class)) {
+        RGBPalette gradient = (RGBPalette) field.get(pObject);
+        if (gradient != null)
+          _deleteKeyFrame(gradient, pKeyFrame);
+      }
+    }
+    if (pObject instanceof Variation) {
+      Variation var = (Variation) pObject;
+      VariationFunc func = var.getFunc();
+      for (String name : func.getParameterNames()) {
+        MotionCurve curve = var.getMotionCurve(name);
+        if (curve != null) {
+          curve.deleteKeyFrameIfExists(pKeyFrame);
+        }
+      }
+    }
+  }
+
+  public static void deleteKeyFrame(Flame pFlame, int pKeyFrame) {
+    try {
+      _deleteKeyFrame(pFlame, pKeyFrame);
+    }
+    catch (Throwable ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  public static boolean hasKeyFrame(Flame pFlame, int pKeyFrame) {
+    try {
+      return _hasKeyFrame(pFlame, pKeyFrame);
+    }
+    catch (Throwable ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  private static boolean _hasKeyFrame(Object pObject, int pKeyFrame) throws IllegalAccessException {
+    Class<?> cls = pObject.getClass();
+    for (Field field : cls.getDeclaredFields()) {
+      field.setAccessible(true);
+      if (field.getType() == MotionCurve.class && field.getName().endsWith(Tools.CURVE_POSTFIX)) {
+        MotionCurve curve = (MotionCurve) field.get(pObject);
+        if (curve != null && curve.hasKeyFrame(pKeyFrame)) {
+          return true;
+        }
+      }
+      else if (field.getType().isAssignableFrom(ArrayList.class)) {
+        List<?> childs = (List<?>) field.get(pObject);
+        if (childs != null)
+          for (Object child : childs) {
+            if(_hasKeyFrame(child, pKeyFrame)) {
+              return true;
+            }
+          }
+      }
+      else if (field.getType().isAssignableFrom(RGBPalette.class)) {
+        RGBPalette gradient = (RGBPalette) field.get(pObject);
+        if (gradient != null) {
+          if(_hasKeyFrame(gradient, pKeyFrame)) {
+            return true;
+          }
+        }
+      }
+    }
+    if (pObject instanceof Variation) {
+      Variation var = (Variation) pObject;
+      VariationFunc func = var.getFunc();
+      for (String name : func.getParameterNames()) {
+        MotionCurve curve = var.getMotionCurve(name);
+        if (curve != null && curve.hasKeyFrame(pKeyFrame)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  public static int getNextKeyFrame(Flame pFlame, int pStartKeyFrame, boolean pForward) {
+    try {
+      List<Integer> keyFrames=new ArrayList<>();
+      _collectNextKeyFrames(pFlame, keyFrames, pStartKeyFrame, pForward);
+      if(keyFrames.isEmpty()) {
+        return -1;
+      }
+      else {
+        if(pForward) {
+          return keyFrames.stream().min(Comparator.comparing(Integer::intValue)).get();
+        }
+        else {
+          return keyFrames.stream().max(Comparator.comparing(Integer::intValue)).get();
+        }
+      }
+    }
+    catch (Throwable ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  private static void _collectNextKeyFrames(Object pObject, List<Integer> pKeyFrames, int pStartKeyFrame, boolean pForward) throws IllegalAccessException {
+    Class<?> cls = pObject.getClass();
+    for (Field field : cls.getDeclaredFields()) {
+      field.setAccessible(true);
+      if (field.getType() == MotionCurve.class && field.getName().endsWith(Tools.CURVE_POSTFIX)) {
+        MotionCurve curve = (MotionCurve) field.get(pObject);
+        if (curve != null && curve.isEnabled()) {
+          int nextKeyFrame = curve.getNextKeyFrame(pStartKeyFrame, pForward);
+          if(nextKeyFrame>=0) {
+            pKeyFrames.add(nextKeyFrame);
+          }
+        }
+      }
+      else if (field.getType().isAssignableFrom(ArrayList.class)) {
+        List<?> childs = (List<?>) field.get(pObject);
+        if (childs != null) {
+          for (Object child : childs) {
+            _collectNextKeyFrames(child, pKeyFrames, pStartKeyFrame, pForward);
+          }
+        }
+      }
+      else if (field.getType().isAssignableFrom(RGBPalette.class)) {
+        RGBPalette gradient = (RGBPalette) field.get(pObject);
+        if (gradient != null) {
+          _collectNextKeyFrames(gradient, pKeyFrames, pStartKeyFrame, pForward);
+        }
+      }
+    }
+    if (pObject instanceof Variation) {
+      Variation var = (Variation) pObject;
+      VariationFunc func = var.getFunc();
+      for (String name : func.getParameterNames()) {
+        MotionCurve curve = var.getMotionCurve(name);
+        if (curve != null && curve.isEnabled()) {
+          int nextKeyFrame = curve.getNextKeyFrame(pStartKeyFrame, pForward);
+          if(nextKeyFrame>=0) {
+            pKeyFrames.add(nextKeyFrame);
+          }
+        }
+      }
+    }
+  }
+
+  private static void _duplicateKeyFrame(Object pObject, int pKeyFrame, int pDestKeyFrame) throws IllegalAccessException {
+    Class<?> cls = pObject.getClass();
+    for (Field field : cls.getDeclaredFields()) {
+      field.setAccessible(true);
+      if (field.getType() == MotionCurve.class && field.getName().endsWith(Tools.CURVE_POSTFIX)) {
+        MotionCurve curve = (MotionCurve) field.get(pObject);
+        if (curve != null && curve.isEnabled()) {
+          curve.duplicateKeyFrameIfExists(pKeyFrame, pDestKeyFrame);
+        }
+      }
+      else if (field.getType().isAssignableFrom(ArrayList.class)) {
+        List<?> childs = (List<?>) field.get(pObject);
+        if (childs != null)
+          for (Object child : childs) {
+            _duplicateKeyFrame(child, pKeyFrame, pDestKeyFrame);
+          }
+      }
+      else if (field.getType().isAssignableFrom(RGBPalette.class)) {
+        RGBPalette gradient = (RGBPalette) field.get(pObject);
+        if (gradient != null)
+          _duplicateKeyFrame(gradient, pKeyFrame, pDestKeyFrame);
+      }
+    }
+    if (pObject instanceof Variation) {
+      Variation var = (Variation) pObject;
+      VariationFunc func = var.getFunc();
+      for (String name : func.getParameterNames()) {
+        MotionCurve curve = var.getMotionCurve(name);
+        if (curve != null && curve.isEnabled()) {
+          curve.duplicateKeyFrameIfExists(pKeyFrame, pDestKeyFrame);
+        }
+      }
+    }
+  }
+
+  public static void duplicateKeyFrame(Flame pFlame, int pKeyFrame, int pDestKeyFrame) {
+    try {
+      _duplicateKeyFrame(pFlame, pKeyFrame, pDestKeyFrame);
+    }
+    catch (Throwable ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
 
   public static double evalCurve(double pFrame, MotionCurve curve) {
     MotionCurve currCurve = curve;

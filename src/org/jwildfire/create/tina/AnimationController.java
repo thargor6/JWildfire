@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -31,7 +31,13 @@ import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.AnimationService;
-import org.jwildfire.create.tina.swing.*;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.swing.JWFNumberField;
+import org.jwildfire.create.tina.swing.MainEditorFrame;
+import org.jwildfire.create.tina.swing.MotionCurveEditor;
+import org.jwildfire.create.tina.swing.RenderMainFlameThreadFinishEvent;
+import org.jwildfire.create.tina.swing.StandardDialogs;
+import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
@@ -357,15 +363,21 @@ public class AnimationController {
 
   public void skipToLastFrameButtonClicked() {
     if (playPreviewThread == null) {
-      keyframesFrameField.setValue(keyframesFrameCountField.getIntValue());
-      keyframesFrameSlider.setValue(keyframesFrameField.getIntValue());
+      int lastFrame = keyframesFrameCountField.getIntValue();
+      tinaController.saveUndoPoint();
+      tinaController.getCurrFlame().setFrame(lastFrame);
+      keyframesFrameField.setValue(lastFrame);
+      keyframesFrameSlider.setValue(lastFrame);
     }
   }
 
   public void skipToFirstFrameButtonClicked() {
     if (playPreviewThread == null) {
-      keyframesFrameField.setValue(1);
-      keyframesFrameSlider.setValue(keyframesFrameField.getIntValue());
+      int firstFrame = 1;
+      tinaController.saveUndoPoint();
+      tinaController.getCurrFlame().setFrame(firstFrame);
+      keyframesFrameField.setValue(firstFrame);
+      keyframesFrameSlider.setValue(firstFrame);
     }
   }
 
@@ -375,6 +387,92 @@ public class AnimationController {
       AnimationService.resetMotionCurves(tinaController.getCurrFlame());
       tinaController.getCurrFlame().setFrame(AnimationService.STARTFRAME);
       tinaController.refreshUI();
+    }
+  }
+
+  public void gotoToPrevKeyFrameButtonClicked() {
+    Flame flame = tinaController.getCurrFlame();
+    if(flame!=null) {
+      int currFrame = flame.getFrame();
+      int nextKeyFrame = AnimationService.getNextKeyFrame(flame, currFrame, false);
+      if(nextKeyFrame<0) {
+        StandardDialogs.message(rootPanel, "There is no keyframe before the current frame (" + currFrame +")");
+      }
+      else {
+        tinaController.saveUndoPoint();
+        tinaController.getCurrFlame().setFrame(nextKeyFrame);
+        keyframesFrameField.setValue(nextKeyFrame);
+        keyframesFrameSlider.setValue(keyframesFrameField.getIntValue());
+      }
+    }
+  }
+
+  public void gotoToNextKeyFrameButtonClicked() {
+    Flame flame = tinaController.getCurrFlame();
+    if(flame!=null) {
+      int currFrame = flame.getFrame();
+      int nextKeyFrame = AnimationService.getNextKeyFrame(flame, currFrame, true);
+      if(nextKeyFrame<0) {
+        StandardDialogs.message(rootPanel, "There is no keyframe after the current frame (" + currFrame +")");
+      }
+      else {
+        tinaController.saveUndoPoint();
+        tinaController.getCurrFlame().setFrame(nextKeyFrame);
+        keyframesFrameField.setValue(nextKeyFrame);
+        keyframesFrameSlider.setValue(keyframesFrameField.getIntValue());
+      }
+    }
+  }
+
+  public void deleteKeyFrameButtonClicked() {
+    Flame flame = tinaController.getCurrFlame();
+    if(flame!=null) {
+      int currFrame = flame.getFrame();
+      if (!AnimationService.hasKeyFrame(flame, currFrame)) {
+        StandardDialogs.message(rootPanel, "There is no keyframe at the current frame (" + currFrame +")");
+      }
+      else {
+        tinaController.saveUndoPoint();
+        int prevKeyFrame = AnimationService.getNextKeyFrame(flame, currFrame, false);
+        AnimationService.deleteKeyFrame(flame, currFrame);
+        if(prevKeyFrame<0) {
+          tinaController.getCurrFlame().setFrame(AnimationService.STARTFRAME);
+          keyframesFrameField.setValue(AnimationService.STARTFRAME);
+          keyframesFrameSlider.setValue(AnimationService.STARTFRAME);
+        }
+        else {
+          tinaController.getCurrFlame().setFrame(prevKeyFrame);
+          keyframesFrameField.setValue(prevKeyFrame);
+          keyframesFrameSlider.setValue(prevKeyFrame);
+        }
+      }
+    }
+  }
+
+  public void duplicateKeyFrameButtonClicked() {
+    Flame flame = tinaController.getCurrFlame();
+    if(flame!=null) {
+      int currFrame = flame.getFrame();
+      if (!AnimationService.hasKeyFrame(flame, currFrame)) {
+        StandardDialogs.message(rootPanel, "There is no keyframe at the current frame (" + currFrame +")");
+      }
+      else {
+        String frameStr = StandardDialogs.promptForText(rootPanel, "Destination frame", String.valueOf(currFrame));
+        try {
+          int dstFrame = Integer.parseInt(frameStr);
+          if(dstFrame<AnimationService.STARTFRAME || dstFrame==currFrame) {
+            throw new RuntimeException("Invalid frame number");
+          }
+          tinaController.saveUndoPoint();
+          AnimationService.duplicateKeyFrame(flame, currFrame, dstFrame);
+          tinaController.getCurrFlame().setFrame(dstFrame);
+          keyframesFrameField.setValue(dstFrame);
+          keyframesFrameSlider.setValue(dstFrame);
+        }
+        catch(Exception ex) {
+          StandardDialogs.message(rootPanel, "Please enter a vlid frame number (which is not equal to the current frame)");
+        }
+      }
     }
   }
 }

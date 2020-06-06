@@ -1,8 +1,14 @@
 V6.00 (xx.xx.2020)
  - dramatic improvement of responsiveness to changes in the UI (sliders, number fields, ...)
  - faster Undo and Randomizers as well (see below)
- - automatic creation and updating of key-frames when changing flame-parameters at different frame-numbers, creating
+ - automatic creation and updating of keyframes when changing flame-parameters at different frame-numbers, creating
    of flame-animations has never been easier
+ - there are the following functions in the UI to deal with keyframes:
+     -jump to previous keyframe (takes all keyframes of all motions curves into account and jumps to the closest keyframe)
+     -jump to next keyframe (same as before, but in the opposite direction)
+     -delete current keyframe (affects all motion curves which contain a corresponding keyframe)
+     -duplicate current keyframe (affects all motion curves which contain a corresponding keyframe)
+     -reset all motion curves/remove all keyframes
  - changed some default settings in regard to flame-animations
  - added function to reset all motion curves
  - re-implemented animation-playback in the main editor

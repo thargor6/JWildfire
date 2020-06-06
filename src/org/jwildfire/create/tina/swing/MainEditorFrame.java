@@ -12457,6 +12457,10 @@ public class MainEditorFrame extends JFrame {
   private JSeparator separator_1;
   private JButton button_2;
   private JTextPane randomizersHintPane;
+  private JButton deleteKeyFrameButton;
+  private JButton gotoPrevKeyFrameButton;
+  private JButton gotoNextKeyFrameButton;
+  private JButton duplicateKeyFrameButton;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -15511,11 +15515,11 @@ public class MainEditorFrame extends JFrame {
   private JPanel getPanel_79() {
     if (panel_79 == null) {
       panel_79 = new JPanel();
-      panel_79.setPreferredSize(new Dimension(264, 10));
+      panel_79.setPreferredSize(new Dimension(382, 10));
       panel_79.setLayout(null);
 
       keyframesFrameLbl = new JLabel();
-      keyframesFrameLbl.setBounds(146, 2, 39, 22);
+      keyframesFrameLbl.setBounds(140, 4, 34, 22);
       panel_79.add(keyframesFrameLbl);
       keyframesFrameLbl.setText("Frame");
       keyframesFrameLbl.setToolTipText("Current frame of animation");
@@ -15534,7 +15538,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      keyframesFrameField.setBounds(188, 2, 70, 24);
+      keyframesFrameField.setBounds(176, 2, 70, 24);
       panel_79.add(keyframesFrameField);
       keyframesFrameField.setPreferredSize(new Dimension(56, 22));
       keyframesFrameField.setOnlyIntegers(true);
@@ -15545,7 +15549,7 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       motionCurvePlayPreviewButton = new JButton();
-      motionCurvePlayPreviewButton.setBounds(41, 2, 70, 24);
+      motionCurvePlayPreviewButton.setBounds(34, 2, 73, 24);
       motionCurvePlayPreviewButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-playback-start-7.png")));
       panel_79.add(motionCurvePlayPreviewButton);
       motionCurvePlayPreviewButton.addActionListener(new ActionListener() {
@@ -15571,7 +15575,7 @@ public class MainEditorFrame extends JFrame {
       button.setText("");
       button.setPreferredSize(new Dimension(55, 24));
       button.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      button.setBounds(6, 2, 32, 24);
+      button.setBounds(2, 2, 32, 24);
       button.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null && tinaController.getAnimationController() != null) {
@@ -15586,6 +15590,73 @@ public class MainEditorFrame extends JFrame {
       });
       panel_79.add(button);
       panel_79.add(getButton_2());
+
+      gotoPrevKeyFrameButton = new JButton();
+      gotoPrevKeyFrameButton.setToolTipText("Goto previous keyframe");
+      gotoPrevKeyFrameButton.setText("");
+      gotoPrevKeyFrameButton.setPreferredSize(new Dimension(55, 24));
+      gotoPrevKeyFrameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      gotoPrevKeyFrameButton.setBounds(247, 2, 32, 24);
+      gotoPrevKeyFrameButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-seek-backward-7.png")));
+      gotoPrevKeyFrameButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            try {
+              tinaController.getAnimationController().gotoToPrevKeyFrameButtonClicked();
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+
+      panel_79.add(gotoPrevKeyFrameButton);
+
+      gotoNextKeyFrameButton = new JButton();
+      gotoNextKeyFrameButton.setToolTipText("Goto next keyframe");
+      gotoNextKeyFrameButton.setText("");
+      gotoNextKeyFrameButton.setPreferredSize(new Dimension(55, 24));
+      gotoNextKeyFrameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      gotoNextKeyFrameButton.setBounds(279, 2, 32, 24);
+      gotoNextKeyFrameButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-seek-forward-7.png")));
+      gotoNextKeyFrameButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            try {
+              tinaController.getAnimationController().gotoToNextKeyFrameButtonClicked();
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+
+      panel_79.add(gotoNextKeyFrameButton);
+
+      duplicateKeyFrameButton = new JButton();
+      duplicateKeyFrameButton.setToolTipText("Duplicate keyframe");
+      duplicateKeyFrameButton.setText("");
+      duplicateKeyFrameButton.setPreferredSize(new Dimension(55, 24));
+      duplicateKeyFrameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      duplicateKeyFrameButton.setBounds(314, 2, 32, 24);
+      duplicateKeyFrameButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/edit-copy-3.png")));
+      duplicateKeyFrameButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            try {
+              tinaController.getAnimationController().duplicateKeyFrameButtonClicked();
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+
+      panel_79.add(duplicateKeyFrameButton);
+      panel_79.add(getDeleteKeyFrameButton());
     }
     return panel_79;
   }
@@ -15640,11 +15711,11 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameCountLbl.setPreferredSize(new Dimension(94, 22));
       keyframesFrameCountLbl.setHorizontalAlignment(SwingConstants.RIGHT);
       keyframesFrameCountLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      keyframesFrameCountLbl.setBounds(0, 2, 70, 22);
+      keyframesFrameCountLbl.setBounds(0, 4, 70, 22);
       panel_80.add(keyframesFrameCountLbl);
 
       JButton resetMotionCurvesBtn = new JButton();
-      resetMotionCurvesBtn.setToolTipText("Reset all motion curves");
+      resetMotionCurvesBtn.setToolTipText("Remove all keyframes/reset all motion curves");
       resetMotionCurvesBtn.setText("");
       resetMotionCurvesBtn.setPreferredSize(new Dimension(55, 24));
       resetMotionCurvesBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -22700,7 +22771,7 @@ public class MainEditorFrame extends JFrame {
       button_2.setPreferredSize(new Dimension(55, 24));
       button_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       button_2.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-skip-forward-7.png")));
-      button_2.setBounds(114, 2, 32, 24);
+      button_2.setBounds(108, 2, 32, 24);
       button_2.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null && tinaController.getAnimationController() != null) {
@@ -22720,5 +22791,42 @@ public class MainEditorFrame extends JFrame {
 
   public JTextPane getRandomizersHintPane() {
     return randomizersHintPane;
+  }
+
+  private JButton getDeleteKeyFrameButton() {
+    if (deleteKeyFrameButton == null) {
+      deleteKeyFrameButton = new JButton();
+      deleteKeyFrameButton.setToolTipText("Delete keyframe");
+      deleteKeyFrameButton.setText("");
+      deleteKeyFrameButton.setPreferredSize(new Dimension(55, 24));
+      deleteKeyFrameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      deleteKeyFrameButton.setBounds(346, 2, 32, 24);
+      deleteKeyFrameButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/removecomment.png")));
+      deleteKeyFrameButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            try {
+              tinaController.getAnimationController().deleteKeyFrameButtonClicked();
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+    }
+    return deleteKeyFrameButton;
+  }
+
+  public JButton getGotoPrevKeyFrameButton() {
+    return gotoPrevKeyFrameButton;
+  }
+
+  public JButton getGotoNextKeyFrameButton() {
+    return gotoNextKeyFrameButton;
+  }
+
+  public JButton getDuplicateKeyFrameButton() {
+    return duplicateKeyFrameButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

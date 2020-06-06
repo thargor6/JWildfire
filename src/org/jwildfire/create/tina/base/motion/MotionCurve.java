@@ -273,7 +273,7 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     return indexOfKeyFrame(frame) >= 0;
   }
 
-  public void modifyKeyFrame(int frame, double value) {
+  public void updateKeyFrame(int frame, double value) {
     int idx = indexOfKeyFrame(frame);
     if(idx<0) {
       throw new RuntimeException("Invalid frame <" + frame + ">");
@@ -324,7 +324,6 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
           ymin = y[i];
         else if (y[i] > ymax)
           ymax = y[i];
-
       }
     }
     else {
@@ -337,5 +336,72 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     viewXMax = xmax + Math.max(1, Tools.FTOI((xmax - xmin) * 0.1));
     viewYMin = ymin - (ymax - ymin) * 0.1;
     viewYMax = ymax + (ymax - ymin) * 0.1;
+  }
+
+  public void deleteKeyFrameIfExists(int pKeyFrame) {
+    int idx = indexOfKeyFrame(pKeyFrame);
+    if(idx>=0) {
+      // last keyframe -> reset the curve
+      if(x.length==1) {
+        assign(new MotionCurve());
+        setEnabled(false);
+      }
+      // remove the keyframe
+      else {
+        deleteKeyFrame(pKeyFrame);
+      }
+    }
+  }
+
+  private void deleteKeyFrame(int pKeyFrame) {
+    if(x.length<2) {
+      throw new RuntimeException("There must be at least one curve point");
+    }
+    int idx = indexOfKeyFrame(pKeyFrame);
+    if(idx<0) {
+      throw new RuntimeException("Keyframe <"+pKeyFrame+"> does not exists");
+    }
+    int newX[] = new int[x.length-1];
+    double newY[] = new double[x.length-1];
+    int dstIdx=0;
+    for(int i=0;i<x.length;i++) {
+      if(i!=idx) {
+        newX[dstIdx] = x[i];
+        newY[dstIdx++] = y[i];
+      }
+    }
+    x = newX;
+    y = newY;
+  }
+
+  public int getNextKeyFrame(int pStartKeyFrame, boolean pForward) {
+    if(pForward) {
+      for(int i=0;i<x.length;i++) {
+        if(x[i]>pStartKeyFrame) {
+          return x[i];
+        }
+      }
+    }
+    else {
+      for(int i=x.length-1;i>=0;i--) {
+        if(x[i]<pStartKeyFrame) {
+          return x[i];
+        }
+      }
+    }
+    return -1;
+  }
+
+  public void duplicateKeyFrameIfExists(int pKeyFrame, int pDestKeyFrame) {
+    int idx = indexOfKeyFrame(pKeyFrame);
+    if(idx>=0) {
+      double valueAtKeyFrame = y[idx];
+      if(hasKeyFrame(pDestKeyFrame)) {
+        updateKeyFrame(pDestKeyFrame, valueAtKeyFrame);
+      }
+      else {
+        addKeyFrame(pDestKeyFrame, valueAtKeyFrame);
+      }
+    }
   }
 }
