@@ -10,6 +10,7 @@ V6.00 (xx.xx.2020)
      -duplicate current keyframe (affects all motion curves which contain a corresponding keyframe)
      -reset all motion curves/remove all keyframes
  - changed some default settings in regard to flame-animations
+ - numeric fields now also react to inputs of the mousewheel
  - added function to reset all motion curves
  - re-implemented animation-playback in the main editor
  - new settings in the Preferences for animation preview in the main editor: tinaRenderAnimPreviewQuality (render quality) and tinaRenderAnimPreviewSize (size of preview)

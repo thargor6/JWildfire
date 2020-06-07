@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.swing;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -193,6 +194,24 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
           }
 
         });
+
+    ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().addMouseWheelListener(
+            new java.awt.event.MouseWheelListener() {
+
+              @Override
+              public void mouseWheelMoved(MouseWheelEvent e) {
+                if (!isEnabled())
+                  return;
+                int notches = e.getWheelRotation();
+                if(notches!=0) {
+                  if (onlyIntegers) {
+                    setValue(getDoubleValue() + (notches > 0 ? 1: -1));
+                  } else {
+                    setValue(getDoubleValue() + notches * valueStep);
+                  }
+                }
+              }
+            });
 
   }
 
