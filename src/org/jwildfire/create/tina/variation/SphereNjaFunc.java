@@ -56,7 +56,7 @@ public class SphereNjaFunc extends VariationFunc {
     ini.z = pAffineTP.z;
     ini.x -= shift_x;
     ini.y -= shift_y;
-    //ini.z -= shift_z;
+    ini.z -= shift_z;
     ini.invalidate();
 
     /* Convert x and y of point to parametric space,
@@ -91,7 +91,7 @@ public class SphereNjaFunc extends VariationFunc {
 
     pVarTP.x += shift_x;
     pVarTP.y += shift_y;
-    //pVarTP.z += shift_z;
+    pVarTP.z += shift_z;
   }
 
   @Override
