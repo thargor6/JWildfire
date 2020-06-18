@@ -35,6 +35,8 @@ public class VortexFunc  extends VariationFunc {
 	 * Reference & Credits:
 	 *   
 	 *   https://www.shadertoy.com/view/MlS3Rh
+	 *   Von Karman vortex shedding
+	 *   https://encyclopediaofmath.org/wiki/Von_K%C3%A1rm%C3%A1n_vortex_shedding
 	 */
 
 
@@ -43,37 +45,48 @@ public class VortexFunc  extends VariationFunc {
 	private static final String PARAM_SEED= "randomize";
 
 	private static final String PARAM_TIME="time";
-	private static final String PARAM_STRENGTH="Flow strength";
-	private static final String PARAM_SIZE="size";
+	private static final String PARAM_STRENGTH="Flow Vel.";
+	private static final String PARAM_ZOOM="zoom";
+	private static final String PARAM_UPDOWN="Up/Down";
+	private static final String PARAM_P1="Vortices Separation";
+	private static final String PARAM_P2="V.-V. inline Distance";
+	private static final String PARAM_P3="V. Diameter";
+
 	
  	int seed=0;
 	double time=0.0;
-	int strength=10;
-	double size=4.0;
+	int strength=20;
+    double zoom=4.0;
+    double updown=0.0;
+    
+    double p1=0.6;
+    double p2=4.;
+    double p3=1.;
 
+    
 	Random randomize=new Random(seed);
 	
  	long last_time=System.currentTimeMillis();
  	long elapsed_time=0;
 	
  	
-	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_TIME,PARAM_STRENGTH,PARAM_SIZE};
+	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_TIME,PARAM_STRENGTH,PARAM_ZOOM,PARAM_UPDOWN,PARAM_P1,PARAM_P2,PARAM_P3};
 	
 	vec2 VortF (vec2 q, vec2 c)
 	{
 		vec2 d = q.minus( c);
-		return new vec2 (d.y, - d.x).division((G.dot (d, d) + 0.05)).multiply(-0.25);
+		return new vec2 (d.y, - d.x).division((G.dot (d, d) + 0.05)).multiply(p3);
 	}
 
 	vec2 FlowField (vec2 q)
 	{
 		vec2 vr, c;
 		double dir = 1.;
-		c = new vec2 (G.mod (time, 10.) - 20., 0.6 * dir);
+		c = new vec2 (G.mod (time, 10.) - 20., p1 * dir);
 		vr = new vec2 (0.);
 		for (int k = 0; k < 30; k ++) {
-			vr = vr.plus(VortF ( q.multiply(10.0-size), c).multiply(dir));
-			c = new vec2 (c.x + 1., - c.y);
+			vr = vr.plus(VortF ( q.multiply(10.0-zoom), c).multiply(dir));
+			c = new vec2 (c.x + p2, - c.y);
 			dir = - dir;
 		}
 		return vr;
@@ -85,7 +98,7 @@ public class VortexFunc  extends VariationFunc {
 	    
 	    vec2 uv =new vec2(pAffineTP.x,pAffineTP.y);
 
-        vec2 p = uv;
+        vec2 p = uv.add(new vec2(0.0,updown));
         for (int i = 0; i < strength ; i ++) 
         	p = p.minus(FlowField (p).multiply( 0.03));             	
 
@@ -113,7 +126,7 @@ public class VortexFunc  extends VariationFunc {
 	}
 
 	public Object[] getParameterValues() { //
-		return (new Object[] {  seed,time, strength,size});
+		return (new Object[] {  seed,time, strength,zoom, updown,p1,p2,p3});
 	}
 
 	public void setParameter(String pName, double pValue) {
@@ -129,11 +142,23 @@ public class VortexFunc  extends VariationFunc {
 		time =pValue;
 		}
 		else if (pName.equalsIgnoreCase(PARAM_STRENGTH)) {
-			strength =(int) Tools.limitValue(pValue, 1 , 30);
+			strength =(int) Tools.limitValue(pValue, 1 , 50);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_SIZE)) {
-			size = Tools.limitValue(pValue, 0.0 , 9.0);
+		else if (pName.equalsIgnoreCase(PARAM_ZOOM)) {
+			zoom = Tools.limitValue(pValue, 0.0 , 9.0);
 		}
+		else if (pName.equalsIgnoreCase(PARAM_UPDOWN)) {
+			updown = pValue;  //  Tools.limitValue(pValue, -2.0 , 2.0);
+		}
+		else if (pName.equalsIgnoreCase(PARAM_P1)) {
+		  p1 =pValue;
+		}
+		else if (pName.equalsIgnoreCase(PARAM_P2)) {
+			  p2 =pValue;
+			}
+		else if (pName.equalsIgnoreCase(PARAM_P3)) {
+			  p3 =pValue;
+			}
 		else
 			  throw new IllegalArgumentException(pName);
 	}

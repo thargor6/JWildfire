@@ -1,11 +1,16 @@
 
 package js.colordomain;
 
+import org.jwildfire.base.mathlib.MathLib;
 
+import odk.lang.FastMath;
 
 public class Complex
 {
 
+    double x;
+    double y;
+    
     public Complex(double u, double v)
     {
         x = u;
@@ -269,22 +274,23 @@ public class Complex
     {
         return (Math.exp(theta) - Math.exp(-theta)) / 2D;
     }
-
+// fix   Ref: https://www.euclideanspace.com/maths/algebra/realNormedAlgebra/complex/functions/index.htm
     public Complex sin()
     {
         return new Complex(cosh(y) * Math.sin(x), sinh(y) * Math.cos(x));
     }
-
+ // fix   Ref: https://www.euclideanspace.com/maths/algebra/realNormedAlgebra/complex/functions/index.htm
     public Complex Sin()
     {
         return new Complex(cosh(y) * Math.sin(x), sinh(y) * Math.cos(x));
     }
-
+ // fix   Ref: https://www.euclideanspace.com/maths/algebra/realNormedAlgebra/complex/functions/index.htm
     public Complex cos()
     {
-        return new Complex(cosh(y) * Math.cos(x), -sinh(y) * Math.sin(x));
+        return new Complex(cosh(y) * Math.cos(x),  -sinh(y) * Math.sin(x));
     }
-
+ // fix   Ref: https://www.euclideanspace.com/maths/algebra/realNormedAlgebra/complex/functions/index.htm
+    //http://www.stumblingrobot.com/2016/02/27/prove-some-properties-of-the-complex-sine-and-cosine-functions/
     public Complex Cos()
     {
         return new Complex(cosh(y) * Math.cos(x), -sinh(y) * Math.sin(x));
@@ -319,7 +325,168 @@ public class Complex
     {
         return sin().div(cos());
     }
+    
+///////  more Complex Functions     
+    
+    public Complex One() {
+        return new Complex(1.0,0.0);
+      }
 
+      public Complex ImOne() {
+          return new Complex(0.0,1.0);
+      }
+
+      public Complex Zero() {
+          return new Complex(0.0,0.0);
+      }
+      public Complex Neg() {
+    	    double re = -this.re();
+    	    double im = -this.im();
+    	    return new Complex(re,im);
+    	  }
+      
+      public double Mag2() {
+    	    return this.re() * this.re() + this.im() * this.im();
+    	  }
+
+    	  public double Mag2eps() { // imprecise for small magnitudes
+    	    return this.re() * this.re() + this.im() * this.im() + 1e-20;
+    	  }
+
+    	  public double MagInv() {
+    	    double M2 = this.Mag2();
+    	    return (M2 < 1e-100 ? 1.0 : 1.0 / M2);
+    	  }
+
+    	  public Complex Recip() {
+    		    double mi = this.MagInv();
+    		    double re = this.re() * mi;
+    		    double im = -this.im() * mi;
+    		    return new Complex(re,im);
+    	}
+
+    	public Complex Scale(double mul) {
+    	    double re = this.re() * mul;
+    	    double im = this.im() * mul;
+    	    return new Complex(re,im);
+       }
+    
+       public Complex Inc() {
+    	 double     re = this.re()+1.0;
+    	 return new Complex(re,this.im());
+       }
+
+      public Complex Dec() {
+    	double	    re = this.re()- 1.0;
+    	return new Complex(re,this.im());
+	  }
+    	
+      public Complex Sqr() {
+    	    double r2 = this.re() * this.re() - this.im() * this.im();
+    	    double i2 = 2 * this.re() * this.im();
+    	    return new Complex(r2,i2);
+    	  }
+      
+//      Complex D = new Complex(this);
+//      D.Dec();
+//      D.Neg();
+//      this.Inc();
+//      this.Div(D);
+//      this.Log();
+//      this.Scale(0.5);
+      
+    public Complex atanh() {
+        Complex d = new Complex(this.Re(),this.im());
+        d=d.Dec();
+        d=d.Neg();
+        Complex e= this.Inc();
+        Complex r=e.Div(d);
+        Complex x=r.Log().Scale(0.5);
+        return x;
+      }
+    
+    public Complex acoth() {
+    	
+        return this.Recip().atanh();
+      }
+
+    // Trascendent functions (slower than others)
+
+    public double Radius() {
+      return FastMath.hypot(this.re(), this.im());
+    }
+
+
+    public Complex ToP() {
+      return new Complex(this.Radius(), this.Arg());
+    }
+
+    public Complex UnP() {
+      return new Complex(this.re() * Math.cos(this.im()), this.re() * Math.sin(this.im()));
+    }
+
+    public void Norm() {
+      this.Scale(Math.sqrt(this.MagInv()));
+    }
+
+    public Complex Pow(double exp) {
+        // some obvious cases come at first
+        // instant evaluation for (-2, -1, -0.5, 0, 0.5, 1, 2)
+        if (exp == 0.0) {
+          return this.One();
+        }
+        double ex = MathLib.fabs(exp);
+        if (exp < 0) {
+          Complex a=Recip();
+          this.x=a.re();
+          this.y=a.Im();
+        }
+        if (ex == 0.5) {
+          return Sqrt();
+        }
+        if (ex == 1.0) {
+          return this;
+        }
+        if (ex == 2.0) {
+          return Sqr();
+        }
+        // In general we need sin, cos etc
+        Complex PF = ToP();
+        PF.x = Math.pow(PF.re(), ex);
+        PF.y = PF.im() * ex;
+        return PF.UnP();
+      }
+    
+    public Complex CPow(Complex ex) {
+        if (ex.im() == 0.0) {
+          return this.Pow(ex.re());          
+        }
+        return this.Log().Mul(ex).Exp();
+      }
+    
+    public Complex asinh() { // slower than AtanH!
+        Complex D = new Complex(this.re(),this.im());
+        Complex x=D.Sqr().Inc().Pow(0.5);
+        return this.Add(x).Log();
+      }
+
+      public Complex acosh() { // slower than Atanh!
+        Complex D = new Complex(this.Re(),this.im());
+        Complex x=D.Sqr().Dec().Pow(0.5);
+        return this.Add(x).Log();
+      }
+      
+   
+      public Complex asech() {
+        return this.Recip().asinh();
+      }
+
+      public Complex acosech() {
+        return this.Recip().acosh();        
+      }
+      
+///////   end of more Complex Functions       
+      
     public Complex chs()
     {
         return new Complex(-x, -y);
@@ -338,9 +505,9 @@ public class Complex
 		      double emx = Math.exp(-x);
 		      return new Complex( ex + emx, ex - emx).scale(0.5);
 		    }    
-	   
+// bug fix	   
 	    public Complex acos () {
-	        Complex t1 = new Complex(re() * im() - re() * re() + 1.0, -2.0 * re() * im()).sqrt();
+	        Complex t1 = new Complex(im() * im() - re() * re() + 1.0, -2.0 * re() * im()).sqrt();
 	        Complex t2 = new Complex(t1.x - im(), t1.y + re()).log();
 	        return new Complex(Math.PI/2 - t2.y, t2.x);
 	      }
@@ -378,6 +545,4 @@ public class Complex
             return (new StringBuilder()).append(x).append(" + i*").append(y).toString();
     }
 
-    private double x;
-    private double y;
 }
