@@ -50,7 +50,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTable;
+import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -509,6 +523,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.affineC11REd = parameterObject.pAffineC11REd;
     data.affineC20REd = parameterObject.pAffineC20REd;
     data.affineC21REd = parameterObject.pAffineC21REd;
+    data.affineCoordsViewTypeCmb = parameterObject.affineCoordsViewTypeCmb;
     data.affineRotateAmountREd = parameterObject.pAffineRotateAmountREd;
     data.affineScaleAmountREd = parameterObject.pAffineScaleAmountREd;
     data.affineMoveHorizAmountREd = parameterObject.affineMoveHorizAmountREd;
@@ -1449,7 +1464,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public int getCurrFrame() {
-    return animationController !=null ? animationController.getCurrFrame() : 1;
+    return animationController != null ? animationController.getCurrFrame() : 1;
   }
 
   public void refreshLayerUI() {
@@ -1465,11 +1480,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       try {
         int selectedTransform = data.transformationsTable.getSelectedRow();
         refreshTransformationsTable();
-        if(selectedTransform>=0 && selectedTransform<data.transformationsTable.getRowCount()) {
+        if (selectedTransform >= 0 && selectedTransform < data.transformationsTable.getRowCount()) {
           try {
             data.transformationsTable.setRowSelectionInterval(selectedTransform, selectedTransform);
           }
-          catch(Exception ex) {
+          catch (Exception ex) {
             ex.printStackTrace();
           }
         }
@@ -1609,7 +1624,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             case COL_VARIATIONS:
               return getXFormCaption(xForm);
             case COL_WEIGHT:
-              return rowIndex < getCurrLayer().getXForms().size() ? Tools.doubleToString(xForm.getWeight()) : "";
+              return rowIndex < getCurrLayer().getXForms().size() ? frameControlsUtil.getPropertyValue(xForm, "weight") : "";
           }
         }
         return null;
@@ -2481,12 +2496,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         frameControlsUtil.updateControl(null, null, data.layerDensityREd, "", 1.0);
         frameControlsUtil.updateControl(null, null, data.layerWeightEd, "", 1.0);
         data.layerVisibleBtn.setSelected(true);
-        frameControlsUtil.updateControl(null, data.gradientColorMapHorizOffsetSlider, data.gradientColorMapHorizOffsetREd, "",1.0);
-        frameControlsUtil.updateControl(null, data.gradientColorMapHorizScaleSlider, data.gradientColorMapHorizScaleREd, "",1.0);
-        frameControlsUtil.updateControl(null, data.gradientColorMapVertOffsetSlider, data.gradientColorMapVertOffsetREd, "",1.0);
-        frameControlsUtil.updateControl(null, data.gradientColorMapVertScaleSlider, data.gradientColorMapVertScaleREd, "",1.0);
-        frameControlsUtil.updateControl(null, data.gradientColorMapLocalColorAddSlider, data.gradientColorMapLocalColorAddREd, "",1.0);
-        frameControlsUtil.updateControl(null, data.gradientColorMapLocalColorScaleSlider, data.gradientColorMapLocalColorScaleREd, "",1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapHorizOffsetSlider, data.gradientColorMapHorizOffsetREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapHorizScaleSlider, data.gradientColorMapHorizScaleREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapVertOffsetSlider, data.gradientColorMapVertOffsetREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapVertScaleSlider, data.gradientColorMapVertScaleREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapLocalColorAddSlider, data.gradientColorMapLocalColorAddREd, "", 1.0);
+        frameControlsUtil.updateControl(null, data.gradientColorMapLocalColorScaleSlider, data.gradientColorMapLocalColorScaleREd, "", 1.0);
       }
       else {
         frameControlsUtil.updateControl(pLayer, null, data.layerDensityREd, "density", 1.0);
@@ -2539,33 +2554,33 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             break;
         }
         if (data.affineEditPostTransformButton.isSelected()) {
-           switch (pXForm.getEditPlane()) {
-             case YZ:
-               frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "yzPostCoeff00", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "yzPostCoeff01", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "yzPostCoeff10", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "yzPostCoeff11", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "yzPostCoeff20", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "yzPostCoeff21", 1.0);
-               break;
-             case ZX:
-               frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "zxPostCoeff00", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "zxPostCoeff01", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "zxPostCoeff10", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "zxPostCoeff11", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "zxPostCoeff20", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "zxPostCoeff21", 1.0);
-               break;
-             case XY:
-             default:
-               frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "xyPostCoeff00", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "xyPostCoeff01", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "xyPostCoeff10", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "xyPostCoeff11", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "xyPostCoeff20", 1.0);
-               frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "xyPostCoeff21", 1.0);
-               break;
-           }
+          switch (pXForm.getEditPlane()) {
+            case YZ:
+              frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "yzPostCoeff00", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "yzPostCoeff01", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "yzPostCoeff10", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "yzPostCoeff11", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "yzPostCoeff20", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "yzPostCoeff21", 1.0);
+              break;
+            case ZX:
+              frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "zxPostCoeff00", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "zxPostCoeff01", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "zxPostCoeff10", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "zxPostCoeff11", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "zxPostCoeff20", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "zxPostCoeff21", 1.0);
+              break;
+            case XY:
+            default:
+              frameControlsUtil.updateControl(pXForm, null, data.affineC00REd, "xyPostCoeff00", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC01REd, "xyPostCoeff01", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC10REd, "xyPostCoeff10", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC11REd, "xyPostCoeff11", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC20REd, "xyPostCoeff20", 1.0);
+              frameControlsUtil.updateControl(pXForm, null, data.affineC21REd, "xyPostCoeff21", 1.0);
+              break;
+          }
         }
         else {
           switch (pXForm.getEditPlane()) {
@@ -3991,13 +4006,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void transformationWeightREd_changed() {
     XForm xForm = getCurrXForm();
     if (!gridRefreshing && xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0) {
-      xForm.setWeight(Tools.stringToDouble(data.transformationWeightREd.getText()));
+      xFormTextFieldChanged(null, data.transformationWeightREd, "weight", 1.0);
       gridRefreshing = true;
       try {
         int row = data.transformationsTable.getSelectedRow();
         refreshTransformationsTable();
         data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-        refreshFlameImage(true, false, 1, true, false);
       }
       finally {
         gridRefreshing = false;
@@ -5748,7 +5762,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void layerDensityREd_changed() {
     if (!gridRefreshing && getCurrLayer() != null) {
       saveUndoPoint();
-      frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerDensityREd, "density",1.0, 0.0);
+      frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerDensityREd, "density", 1.0, 0.0);
       int row = data.layersTable.getSelectedRow();
       boolean oldGridRefreshing = gridRefreshing;
       gridRefreshing = true;
@@ -5766,7 +5780,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void layerWeightREd_changed() {
     if (!gridRefreshing && getCurrLayer() != null) {
       saveUndoPoint();
-      frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerWeightEd, "weight",1.0, 0.0);
+      frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerWeightEd, "weight", 1.0, 0.0);
       int row = data.layersTable.getSelectedRow();
       boolean oldGridRefreshing = gridRefreshing;
       gridRefreshing = true;
@@ -7290,5 +7304,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public FlamePreviewHelper getFlamePreviewHelper() {
     return flamePreviewHelper;
+  }
+
+  public void affineCoordsViewTypeCmd_changed() {
+    // TODO Auto-generated method stub
+
   }
 }

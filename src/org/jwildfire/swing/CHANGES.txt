@@ -30,7 +30,9 @@ V6.00 (xx.xx.2020)
    All three modes will look the same for most flames, but the differences are important in some specialized cases, by Rick Sidwell
  - add polarplot variations to solid random flame generator, by Rick Sidwell
  - fixed a bug in blur_zoom, by Rick Sidwell
+ - fix shift_z in sphere_nja, by Rick Sidwell
  - fixed a bug in onion2, by Brad Stefanov
+ - fixes to package js.colordomain & more params to new variation vortex, fixes to package js.colordomain, more params to new variation vortex, by Jesus Sosa
  - removed the (barely understood) "Mirror translations"-button at the Affine-transforms-tab
 
 V5.60 (06.05.2020)
