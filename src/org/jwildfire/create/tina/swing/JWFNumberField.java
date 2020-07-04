@@ -205,9 +205,9 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
                 int notches = e.getWheelRotation();
                 if(notches!=0) {
                   if (onlyIntegers) {
-                    setValue(getDoubleValue() + (notches > 0 ? 1: -1));
+                    setValue(getDoubleValue() - (notches > 0 ? 1: -1));
                   } else {
-                    setValue(getDoubleValue() + notches * valueStep);
+                    setValue(getDoubleValue() - notches * valueStep);
                   }
                 }
               }

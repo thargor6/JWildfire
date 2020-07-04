@@ -641,7 +641,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     data.dimishZSlider.setEnabled(getCurrFlame() != null);
     data.dimishZColorButton.setEnabled(getCurrFlame() != null);
     data.dimZDistanceREd.setEnabled(getCurrFlame() != null);
-    data.dimZDistanceSlider.setEnabled(getCurrFlame() != null);    
+    data.dimZDistanceSlider.setEnabled(getCurrFlame() != null);
   }
 
   public void enablePostSymmetryUI() {
@@ -983,19 +983,19 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       setNoRefresh(oldNoRefrsh);
     }
   }
-  
+
   private void refreshDimishZColorIndicator() {
-    Color color = getCurrFlame() != null ? new Color(getCurrFlame().getDimishZRed(), 
+    Color color = getCurrFlame() != null ? new Color(getCurrFlame().getDimishZRed(),
         getCurrFlame().getDimishZGreen(), getCurrFlame().getDimishZBlue()) : Color.BLACK;
     data.dimishZColorButton.setBackground(color);
   }
-  
+
   public void dimishZColorBtn_clicked() {
     if (getCurrFlame() != null) {
       ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
       String title = rm.getString("ColorPropertyEditor.title");
-      
-      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getDimishZRed(), 
+
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getDimishZRed(),
           getCurrFlame().getDimishZGreen(), getCurrFlame().getDimishZBlue()));
       if (selectedColor != null) {
         getCurrFlame().setDimishZRed(selectedColor.getRed());
@@ -1393,16 +1393,16 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   public void zBufferBiasSlider_changed() {
     flameSliderChanged(data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE, false);
   }
-  
+
   public ZBufferFilename getZBufferFilenameSetting() {
     if (data.tinaZBufferFilename1.isSelected())
       return ZBufferFilename.PRE_ZBUF;
-    else if (data.tinaZBufferFilename2.isSelected()) 
+    else if (data.tinaZBufferFilename2.isSelected())
       return ZBufferFilename.POST_DEPTH;
     else
       return ZBufferFilename.PRE_ZBUF;
   }
-  
+
   public void zBufferFilename_changed() {
     getCurrFlame().setZBufferFilename(getZBufferFilenameSetting());
   }
@@ -2097,4 +2097,248 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         break;
     }
   }
+
+  private void flameTextFieldReset(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
+    if (isNoRefresh() || pTextField==null || !pTextField.isEnabled() || getCurrFlame() == null) {
+      return;
+    }
+    setNoRefresh(true);
+    try {
+      pTextField.setValue(owner.getFrameControlsUtil().getRawPropertyValue(new Flame(), pProperty));
+      owner.getFrameControlsUtil().valueChangedByTextField(getCurrFlame(), pSlider, pTextField, pProperty, pSliderScale, 0.0);
+      owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+  }
+
+  public void cameraRollREd_reset() {
+    flameTextFieldReset(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0, false);
+  }
+
+  public void cameraPitchREd_reset() {
+    flameTextFieldReset(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0, false);
+  }
+
+  public void cameraYawREd_reset() {
+    flameTextFieldReset(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0, false);
+  }
+
+  public void cameraBankREd_reset() {
+    flameTextFieldReset(data.cameraBankSlider, data.cameraBankREd, "camBank", 1.0, false);
+  }
+
+  public void cameraPerspectiveREd_reset() {
+    flameTextFieldReset(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE, false);
+  }
+
+  public void cameraCentreXREd_reset() {
+    flameTextFieldReset(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void cameraCentreYREd_reset() {
+    flameTextFieldReset(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void cameraZoomREd_reset() {
+    flameTextFieldReset(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", TinaController.SLIDER_SCALE_ZOOM, false);
+  }
+
+  public void pixelsPerUnitREd_reset() {
+    flameTextFieldReset(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0, false);
+  }
+
+  public void camPosXREd_reset() {
+    flameTextFieldReset(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void camPosYREd_reset() {
+    flameTextFieldReset(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void camPosZREd_reset() {
+    flameTextFieldReset(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void cameraDOFREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void cameraDOFAreaREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void cameraDOFExponentREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void camZREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void focusXREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void focusYREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void focusZREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void diminishZREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dimishZColorBtn_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dimZDistanceREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void brightnessREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void lowDensityBrightnessREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void gammaREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void gammaThresholdREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void contrastREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void balanceRedREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void balanceGreenREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void balanceBlueREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void whiteLevelREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void vibrancyREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void saturationREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void backgroundColorTypeCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void foregroundOpacityREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void spatialOversamplingREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void filterRadiusREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void filterSharpnessREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void filterLowDensityREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormAntialiasAmountREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormAntialiasRadiusREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void tinaOptiXDenoiserBlendField_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void postNoiseFilterThresholdREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteFrequencyREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dofDOFShapeCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dofDOFScaleREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dofDOFAngleREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dofDOFFadeREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
 }

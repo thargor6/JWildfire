@@ -32,20 +32,18 @@ public class FrameControlsUtil {
   }
 
   public void updateControl(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
-    double propertyValue = pTarget!=null ? getPropertyValue(pTarget, pProperty) : 0.0;
-    if(pTextField!=null) {
-      if(pTarget!=null) {
+    double propertyValue = pTarget != null ? getEvaluatedPropertyValue(pTarget, pProperty) : 0.0;
+    if (pTextField != null) {
+      if (pTarget != null) {
         pTextField.setText(Tools.doubleToString(propertyValue));
-      }
-      else {
+      } else {
         pTextField.setText(null);
       }
     }
-    if(pSlider!=null) {
-      if(pTarget!=null) {
+    if (pSlider != null) {
+      if (pTarget != null) {
         pSlider.setValue(Tools.FTOI(propertyValue * pSliderScale));
-      }
-      else {
+      } else {
         pSlider.setValue(0);
       }
     }
@@ -53,7 +51,7 @@ public class FrameControlsUtil {
 
   public String getAffinePropertyName(XForm xform, String property, boolean isPostTransform) {
     if (isPostTransform) {
-      switch(xform.getEditPlane()) {
+      switch (xform.getEditPlane()) {
         case YZ:
           return "yzPostCoeff" + property;
         case ZX:
@@ -62,9 +60,8 @@ public class FrameControlsUtil {
         default:
           return "xyPostCoeff" + property;
       }
-    }
-    else {
-      switch(xform.getEditPlane()) {
+    } else {
+      switch (xform.getEditPlane()) {
         case YZ:
           return "yzCoeff" + property;
         case ZX:
@@ -77,7 +74,7 @@ public class FrameControlsUtil {
   }
 
   public double getAffineProperty(XForm xform, String property, boolean isPostTransform) {
-    return getPropertyValue(xform, getAffinePropertyName(xform, property, isPostTransform));
+    return getEvaluatedPropertyValue(xform, getAffinePropertyName(xform, property, isPostTransform));
   }
 
   public void setAffineProperty(XForm xform, String property, boolean isPostTransform, double value) {
@@ -85,29 +82,36 @@ public class FrameControlsUtil {
     xform.notifyCoeffChange();
   }
 
-  public double getPropertyValue(Object pTarget, String pProperty) {
-    Class<?> cls = pTarget.getClass();
+  public double getEvaluatedPropertyValue(Object pTarget, String pProperty) {
     try {
       MotionCurve curve = getMotionCurve(pTarget, pProperty);
-      if(curve!=null && curve.isEnabled()) {
+      if (curve != null && curve.isEnabled()) {
         return AnimationService.evalCurve(ctrl.getCurrFrame(), curve);
+      } else {
+        return getRawPropertyValue(pTarget, pProperty);
       }
-      else {
-        Field field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          Double dValue = field.getDouble(pTarget);
-          return dValue != null ? dValue.doubleValue() : 0.0;
-        } else if (fieldCls == int.class || fieldCls == Integer.class) {
-          Integer iValue = field.getInt(pTarget);
-          return iValue != null ? iValue.doubleValue() : 0.0;
-        } else {
-          throw new IllegalStateException();
-        }
-      }
+    } catch (Throwable ex) {
+      ex.printStackTrace();
+      return 0.0;
     }
-    catch (Throwable ex) {
+  }
+
+  public double getRawPropertyValue(Object pTarget, String pProperty) {
+    try {
+      Class<?> cls = pTarget.getClass();
+      Field field = cls.getDeclaredField(pProperty);
+      field.setAccessible(true);
+      Class<?> fieldCls = field.getType();
+      if (fieldCls == double.class || fieldCls == Double.class) {
+        Double dValue = field.getDouble(pTarget);
+        return dValue != null ? dValue.doubleValue() : 0.0;
+      } else if (fieldCls == int.class || fieldCls == Integer.class) {
+        Integer iValue = field.getInt(pTarget);
+        return iValue != null ? iValue.doubleValue() : 0.0;
+      } else {
+        throw new IllegalStateException();
+      }
+    } catch (Throwable ex) {
       ex.printStackTrace();
       return 0.0;
     }
@@ -118,12 +122,11 @@ public class FrameControlsUtil {
     try {
       Field field;
       try {
-        field = cls.getDeclaredField(pProperty+"Curve");
-      }
-      catch(Exception ex) {
+        field = cls.getDeclaredField(pProperty + "Curve");
+      } catch (Exception ex) {
         field = null;
       }
-      if(field!=null) {
+      if (field != null) {
         field.setAccessible(true);
         Class<?> fieldCls = field.getType();
         if (fieldCls == MotionCurve.class) {
@@ -131,8 +134,7 @@ public class FrameControlsUtil {
           return curve;
         }
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       ex.printStackTrace();
     }
     return null;
@@ -140,7 +142,7 @@ public class FrameControlsUtil {
 
   public void valueChangedBySlider(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     double propValue = pSlider.getValue() / pSliderScale;
-    if(pTextField!=null) {
+    if (pTextField != null) {
       pTextField.setText(Tools.doubleToString(propValue));
     }
     applyValueChange(pTarget, pProperty, propValue);
@@ -148,7 +150,7 @@ public class FrameControlsUtil {
 
   public void valueChangedByTextField(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, double pDeltaValue) {
     double propValue = Tools.stringToDouble(pTextField.getText()) + pDeltaValue;
-    if(pSlider!=null) {
+    if (pSlider != null) {
       pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
     }
     applyValueChange(pTarget, pProperty, propValue);
@@ -164,23 +166,23 @@ public class FrameControlsUtil {
       double oldValue;
       if (fieldCls == double.class || fieldCls == Double.class) {
         Double ov = field.getDouble(pTarget);
-        oldValue = ov!=null ? ov.doubleValue() : 0.0;
+        oldValue = ov != null ? ov.doubleValue() : 0.0;
         field.setDouble(pTarget, propValue);
       } else if (fieldCls == int.class || fieldCls == Integer.class) {
         Integer ov = field.getInt(pTarget);
-        oldValue = ov!=null ? ov.intValue() : 0.0;
+        oldValue = ov != null ? ov.intValue() : 0.0;
         field.setInt(pTarget, Tools.FTOI(propValue));
       } else {
         throw new IllegalStateException();
       }
       MotionCurve curve = getMotionCurve(pTarget, pProperty);
-      if(curve!=null) {
+      if (curve != null) {
         int frame = ctrl.getCurrFrame();
         // ensure that there is a keyframe at the first frame when we are somewhere in the middle of an animation,
         // also activate the motion curve
         if (frame > 1 && !curve.isEnabled()) {
           curve.setEnabled(true);
-          if(!curve.hasKeyFrame(1)) {
+          if (!curve.hasKeyFrame(1)) {
             curve.addKeyFrame(1, oldValue);
           }
         }

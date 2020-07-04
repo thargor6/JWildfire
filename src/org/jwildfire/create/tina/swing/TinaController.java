@@ -1624,7 +1624,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             case COL_VARIATIONS:
               return getXFormCaption(xForm);
             case COL_WEIGHT:
-              return rowIndex < getCurrLayer().getXForms().size() ? frameControlsUtil.getPropertyValue(xForm, "weight") : "";
+              return rowIndex < getCurrLayer().getXForms().size() ? frameControlsUtil.getEvaluatedPropertyValue(xForm, "weight") : "";
           }
         }
         return null;
@@ -6583,7 +6583,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void removeBackgroundImageButton_actionPerformed(ActionEvent e) {
+  public void removeBackgroundImageButton_actionPerformed() {
     saveUndoPoint();
     getCurrFlame().setBGImageFilename(null);
     refreshFlameImage(true, false, 1, true, true);
@@ -7307,6 +7307,101 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void affineCoordsViewTypeCmd_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void spatialFilterTypeCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void spatialFilterKernelCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteShiftREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteSwapRGBREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteBlurREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteRedREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteGreenREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteBlueREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteHueREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteSaturationREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteContrastREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteGammaREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void paletteBrightnessREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void gradientColorMapHorizOffsetREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void gradientColorMapHorizScaleREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void gradientColorMapLocalColorAddREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void gradientColorMapLocalColorScaleREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void gradientColorMapVertOffsetREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void gradientColorMapVertScaleREd_reset() {
     // TODO Auto-generated method stub
 
   }
