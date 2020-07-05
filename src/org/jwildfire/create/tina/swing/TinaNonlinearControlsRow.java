@@ -16,9 +16,7 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -233,6 +231,7 @@ public class TinaNonlinearControlsRow {
         }
       }
     });
+    lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     lbl.setText(pName);
     if (lbl.getPreferredSize().getWidth() > LBL_WIDTH) lbl.setToolTipText(pName);
     lbl.setSize(new Dimension(LBL_WIDTH, 22));

@@ -5131,17 +5131,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
           getFlameControls().fillFilterKernelCmb(filteringType);
 
-          switch (filteringType) {
-            case GLOBAL_SHARPENING:
-              data.filterKernelCmb.setSelectedItem(FilterKernelType.MITCHELL);
-              break;
-            case GLOBAL_SMOOTHING:
-              data.filterKernelCmb.setSelectedItem(FilterKernelType.SINEPOW10);
-              break;
-            default:
-              data.filterKernelCmb.setSelectedIndex(0);
-              break;
-          }
+          setDefaultFilterKernel(filteringType);
           noRefresh = false;
           spatialFilterKernelCmb_changed();
           flameControls.enableFilterUI();
@@ -5150,6 +5140,20 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           noRefresh = oldNoRefresh;
         }
       }
+    }
+  }
+
+  private void setDefaultFilterKernel(FilteringType filteringType) {
+    switch (filteringType) {
+      case GLOBAL_SHARPENING:
+        data.filterKernelCmb.setSelectedItem(FilterKernelType.MITCHELL);
+        break;
+      case GLOBAL_SMOOTHING:
+        data.filterKernelCmb.setSelectedItem(FilterKernelType.SINEPOW10);
+        break;
+      default:
+        data.filterKernelCmb.setSelectedIndex(0);
+        break;
     }
   }
 
@@ -5182,7 +5186,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void backgroundColorTypeCmb_reset() {
-    if(getCurrFlame()!=null) {
+    if (getCurrFlame() != null) {
       Flame newFlame = new Flame();
       getCurrFlame().setBgColorType(newFlame.getBgColorType());
       getCurrFlame().setBgColorRed(newFlame.getBgColorRed());
@@ -7335,19 +7339,19 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return flamePreviewHelper;
   }
 
-  public void affineCoordsViewTypeCmd_changed() {
-    // TODO Auto-generated method stub
-
-  }
-
   public void spatialFilterTypeCmb_reset() {
-    // TODO Auto-generated method stub
-
+    data.tinaFilterTypeCmb.setSelectedItem(new Flame().getSpatialFilteringType());
+    spatialFilterTypeCmb_changed();
   }
 
   public void spatialFilterKernelCmb_reset() {
-    // TODO Auto-generated method stub
-
+    FilteringType filteringType = (FilteringType) data.tinaFilterTypeCmb.getSelectedItem();
+    if (filteringType == null) {
+      filteringType = FilteringType.GLOBAL_SMOOTHING;
+    }
+    setDefaultFilterKernel(filteringType);
+    spatialFilterKernelCmb_changed();
+    flameControls.enableFilterUI();
   }
 
   public void paletteShiftREd_reset() {
@@ -7434,4 +7438,20 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     // TODO Auto-generated method stub
 
   }
+
+  public void layerDensityREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void layerWeightREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void affineCoordsViewTypeCmd_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
 }

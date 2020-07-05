@@ -4784,6 +4784,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1Lbl.setLocation(new Point(4, 26));
       nonlinearParams1Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar1Lbl = new JLabel();
+      nonlinearVar1Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar1Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -8640,6 +8641,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2Lbl.setSize(new Dimension(38, 22));
       nonlinearParams2Lbl.setLocation(new Point(4, 26));
       nonlinearVar2Lbl = new JLabel();
+      nonlinearVar2Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar2Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -8883,6 +8885,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3Lbl.setSize(new Dimension(38, 22));
       nonlinearParams3Lbl.setLocation(new Point(4, 26));
       nonlinearVar3Lbl = new JLabel();
+      nonlinearVar3Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar3Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -10019,6 +10022,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4Lbl.setSize(new Dimension(38, 22));
       nonlinearParams4Lbl.setLocation(new Point(4, 26));
       nonlinearVar4Lbl = new JLabel();
+      nonlinearVar4Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar4Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -10339,6 +10343,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5Lbl.setSize(new Dimension(38, 22));
       nonlinearParams5Lbl.setLocation(new Point(4, 26));
       nonlinearVar5Lbl = new JLabel();
+      nonlinearVar5Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar5Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -10582,6 +10587,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6Lbl.setSize(new Dimension(38, 22));
       nonlinearParams6Lbl.setLocation(new Point(4, 26));
       nonlinearVar6Lbl = new JLabel();
+      nonlinearVar6Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar6Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -10825,6 +10831,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7Lbl.setSize(new Dimension(38, 22));
       nonlinearParams7Lbl.setLocation(new Point(4, 26));
       nonlinearVar7Lbl = new JLabel();
+      nonlinearVar7Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar7Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -11069,6 +11076,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8Lbl.setSize(new Dimension(38, 22));
       nonlinearParams8Lbl.setLocation(new Point(4, 26));
       nonlinearVar8Lbl = new JLabel();
+      nonlinearVar8Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar8Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -11313,6 +11321,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9Lbl.setSize(new Dimension(38, 22));
       nonlinearParams9Lbl.setLocation(new Point(4, 26));
       nonlinearVar9Lbl = new JLabel();
+      nonlinearVar9Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar9Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -11557,6 +11566,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10Lbl.setSize(new Dimension(38, 22));
       nonlinearParams10Lbl.setLocation(new Point(4, 26));
       nonlinearVar10Lbl = new JLabel();
+      nonlinearVar10Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar10Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -11800,6 +11810,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11Lbl.setSize(new Dimension(38, 22));
       nonlinearParams11Lbl.setLocation(new Point(4, 26));
       nonlinearVar11Lbl = new JLabel();
+      nonlinearVar11Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar11Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -12044,6 +12055,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12Lbl.setSize(new Dimension(38, 22));
       nonlinearParams12Lbl.setLocation(new Point(4, 26));
       nonlinearVar12Lbl = new JLabel();
+      nonlinearVar12Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar12Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -15652,6 +15664,17 @@ public class MainEditorFrame extends JFrame {
       panel_75.add(layerAddBtn);
 
       JLabel lblDensity = new JLabel();
+      lblDensity.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.layerDensityREd_reset();
+          }
+        }
+      });
+
+      lblDensity.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblDensity.setText("Density");
       lblDensity.setName("lblDensity");
       lblDensity.setToolTipText("Layer density from 0 (invisible) to 1 (full density); at least one layer should have density 1");
@@ -15695,6 +15718,17 @@ public class MainEditorFrame extends JFrame {
       panel_75.add(layerDensityREd);
 
       JLabel lblWeight = new JLabel();
+      lblWeight.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.layerWeightREd_reset();
+          }
+        }
+      });
+
+      lblWeight.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblWeight.setText("Weight");
       lblWeight.setName("lblWeight");
       lblWeight.setToolTipText("Brightness of layer: 1 is normal, lower is darker, higher is lighter");
@@ -15942,6 +15976,17 @@ public class MainEditorFrame extends JFrame {
       motionBlurPanel.setLayout(null);
 
       JLabel lblBlurLength = new JLabel();
+      lblBlurLength.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().motionBlurLengthREd_reset();
+          }
+        }
+      });
+
+      lblBlurLength.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblBlurLength.setText("Blur length");
       lblBlurLength.setSize(new Dimension(94, 22));
       lblBlurLength.setPreferredSize(new Dimension(94, 22));
@@ -16044,6 +16089,17 @@ public class MainEditorFrame extends JFrame {
       motionBlurPanel.add(motionBlurTimeStepField);
 
       JLabel lblTimeStep = new JLabel();
+      lblTimeStep.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().motionBlurTimeStepREd_reset();
+          }
+        }
+      });
+
+      lblTimeStep.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblTimeStep.setText("Time step");
       lblTimeStep.setSize(new Dimension(94, 22));
       lblTimeStep.setPreferredSize(new Dimension(94, 22));
@@ -16054,6 +16110,17 @@ public class MainEditorFrame extends JFrame {
       motionBlurPanel.add(lblTimeStep);
 
       JLabel lblDecay = new JLabel();
+      lblDecay.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().motionBlurDecayREd_reset();
+          }
+        }
+      });
+
+      lblDecay.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblDecay.setText("Decay");
       lblDecay.setSize(new Dimension(94, 22));
       lblDecay.setPreferredSize(new Dimension(94, 22));
@@ -16137,6 +16204,17 @@ public class MainEditorFrame extends JFrame {
       motionBlurPanel.add(flameFPSField);
 
       JLabel lblFps = new JLabel();
+      lblFps.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().flameFPSField_reset();
+          }
+        }
+      });
+
+      lblFps.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblFps.setText("FPS");
       lblFps.setSize(new Dimension(94, 22));
       lblFps.setPreferredSize(new Dimension(94, 22));
@@ -16474,6 +16552,17 @@ public class MainEditorFrame extends JFrame {
       panel_34.add(postSymmetryTypeCmb);
 
       JLabel postSymmetryTypeLbl = new JLabel();
+      postSymmetryTypeLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().postSymmetryCmb_reset();
+          }
+        }
+      });
+
+      postSymmetryTypeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       postSymmetryTypeLbl.setText("Symmetry type");
       postSymmetryTypeLbl.setToolTipText("Type of post symmetry to perform");
       postSymmetryTypeLbl.setSize(new Dimension(94, 22));
@@ -16509,6 +16598,17 @@ public class MainEditorFrame extends JFrame {
       panel_34.add(postSymmetryDistanceREd);
 
       JLabel postSymmetryDistanceLbl = new JLabel();
+      postSymmetryDistanceLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().postSymmetryDistanceREd_reset();
+          }
+        }
+      });
+
+      postSymmetryDistanceLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       postSymmetryDistanceLbl.setName("postSymmetryDistanceLbl");
       postSymmetryDistanceLbl.setText("Distance");
       postSymmetryDistanceLbl.setToolTipText("Distance to move flame before applying symmetry");
@@ -16520,6 +16620,17 @@ public class MainEditorFrame extends JFrame {
       panel_34.add(postSymmetryDistanceLbl);
 
       JLabel postSymmetryRotationLbl = new JLabel();
+      postSymmetryRotationLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().postSymmetryRotationREd_reset();
+          }
+        }
+      });
+
+      postSymmetryRotationLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       postSymmetryRotationLbl.setName("postSymmetryRotationLbl");
       postSymmetryRotationLbl.setText("Rotation");
       postSymmetryRotationLbl.setToolTipText("Amount to rotate flame before applying symmetry");
@@ -16635,6 +16746,17 @@ public class MainEditorFrame extends JFrame {
       panel_34.add(postSymmetryOrderREd);
 
       JLabel postSymmetryOrderLbl = new JLabel();
+      postSymmetryOrderLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().postSymmetryOrderREd_reset();
+          }
+        }
+      });
+
+      postSymmetryOrderLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       postSymmetryOrderLbl.setName("postSymmetryOrderLbl");
       postSymmetryOrderLbl.setText("Symmetry order");
       postSymmetryOrderLbl.setToolTipText("Number of repetitions for point symmetry (including the original)");
@@ -16646,6 +16768,17 @@ public class MainEditorFrame extends JFrame {
       panel_34.add(postSymmetryOrderLbl);
 
       JLabel postSymmetryCentreXLbl = new JLabel();
+      postSymmetryCentreXLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().postSymmetryCentreXREd_reset();
+          }
+        }
+      });
+
+      postSymmetryCentreXLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       postSymmetryCentreXLbl.setName("postSymmetryCentreXLbl");
       postSymmetryCentreXLbl.setText("Centre X");
       postSymmetryCentreXLbl.setToolTipText("X coordinate of symmetry centre point");
@@ -16732,6 +16865,17 @@ public class MainEditorFrame extends JFrame {
       panel_34.add(postSymmetryCentreXSlider);
 
       JLabel postSymmetryCentreYLbl = new JLabel();
+      postSymmetryCentreYLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().postSymmetryCentreYREd_reset();
+          }
+        }
+      });
+
+      postSymmetryCentreYLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       postSymmetryCentreYLbl.setName("postSymmetryCentreYLbl");
       postSymmetryCentreYLbl.setText("Centre Y");
       postSymmetryCentreYLbl.setToolTipText("Y coordinate of symmetry centre point");
@@ -17552,6 +17696,17 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(channelMixerResetBtn);
 
       JLabel lblMode = new JLabel();
+      lblMode.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getChannelMixerControls().channelMixerModeCmb_reset();
+          }
+        }
+      });
+
+      lblMode.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblMode.setText("Mixer mode*");
       lblMode.setSize(new Dimension(20, 22));
       lblMode.setPreferredSize(new Dimension(24, 22));
@@ -17998,6 +18153,7 @@ public class MainEditorFrame extends JFrame {
       shadingBlurFadeLbl.setLocation(new Point(6, 30));
       shadingBlurFadeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingBlurRadiusLbl = new JLabel();
+      shadingBlurRadiusLbl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       shadingBlurRadiusLbl.setPreferredSize(new Dimension(94, 22));
       shadingBlurRadiusLbl.setText("Blur radius");
       shadingBlurRadiusLbl.setSize(new Dimension(94, 22));
@@ -18041,7 +18197,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      lblShape.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      lblShape.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       lblShape.setText("Shape");
       lblShape.setToolTipText("Shape of the bokeh");
       lblShape.setSize(new Dimension(94, 22));
@@ -18062,7 +18218,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      dofDOFScaleLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      dofDOFScaleLbl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       dofDOFScaleLbl.setText("Scale");
       dofDOFScaleLbl.setToolTipText("Relative size of the bokeh (size is also affected by DOF Amount)");
       dofDOFScaleLbl.setSize(new Dimension(94, 22));
@@ -18195,7 +18351,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      dofDOFAngleLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      dofDOFAngleLbl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       dofDOFAngleLbl.setText("Rotate");
       dofDOFAngleLbl.setToolTipText("Angle to rotate bokeh shapes");
       dofDOFAngleLbl.setSize(new Dimension(94, 22));
@@ -18242,7 +18398,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      dofDOFFadeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      dofDOFFadeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       dofDOFFadeLbl.setText("Fade");
       dofDOFFadeLbl.setToolTipText("Amount of bokeh fading (effect depends on the shape)");
       dofDOFFadeLbl.setSize(new Dimension(94, 22));
@@ -20592,6 +20748,17 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingSelectedLightCmb);
 
       JLabel tinaSolidRenderingLightAltitudeLbl = new JLabel();
+      tinaSolidRenderingLightAltitudeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      tinaSolidRenderingLightAltitudeLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingLightAltitudeREd_reset();
+          }
+        }
+      });
+
       tinaSolidRenderingLightAltitudeLbl.setText("Altitude*");
       tinaSolidRenderingLightAltitudeLbl.setToolTipText("Angle between the light and the -Z axis (-90 = +Y, 0 = -Z, 90 = -Y, 180 = +Z)");
       tinaSolidRenderingLightAltitudeLbl.setSize(new Dimension(68, 22));
@@ -20655,6 +20822,17 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightAltitudeSlider);
 
       JLabel tinaSolidRenderingLightAzimuthLbl = new JLabel();
+      tinaSolidRenderingLightAzimuthLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      tinaSolidRenderingLightAzimuthLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingLightAzimuthREd_reset();
+          }
+        }
+      });
+
       tinaSolidRenderingLightAzimuthLbl.setText("Azimuth*");
       tinaSolidRenderingLightAzimuthLbl.setToolTipText("Angle between the light and the YZ plane (-90 = -X to 90 = +X)");
       tinaSolidRenderingLightAzimuthLbl.setSize(new Dimension(68, 22));
@@ -20733,6 +20911,17 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightColorBtn);
 
       JLabel lblLightColor = new JLabel();
+      lblLightColor.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      lblLightColor.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingLightColorBtn_reset();
+          }
+        }
+      });
+
       lblLightColor.setText("Light color*");
       lblLightColor.setToolTipText("Color of this light");
       lblLightColor.setSize(new Dimension(88, 22));
@@ -20743,6 +20932,17 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingLightPnl.add(lblLightColor);
 
       JLabel tinaSolidRenderingLightIntensityLbl0 = new JLabel();
+      tinaSolidRenderingLightIntensityLbl0.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      tinaSolidRenderingLightIntensityLbl0.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingLightIntensityREd_reset();
+          }
+        }
+      });
+
       tinaSolidRenderingLightIntensityLbl0.setText("Light intensity*");
       tinaSolidRenderingLightIntensityLbl0.setToolTipText("Intensity of the light; affects both diffuse and specular reflections");
       tinaSolidRenderingLightIntensityLbl0.setSize(new Dimension(68, 22));
@@ -20835,6 +21035,17 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightCastShadowsCBx);
 
       JLabel tinaSolidRenderingShadowIntensityLbl0 = new JLabel();
+      tinaSolidRenderingShadowIntensityLbl0.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      tinaSolidRenderingShadowIntensityLbl0.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingShadowIntensityREd_reset();
+          }
+        }
+      });
+
       tinaSolidRenderingShadowIntensityLbl0.setText("Shadow intensity");
       tinaSolidRenderingShadowIntensityLbl0.setToolTipText("Intensity of shadows cast by this light; 0 for no shadow to 1 for full shadow");
       tinaSolidRenderingShadowIntensityLbl0.setSize(new Dimension(68, 22));
@@ -20966,6 +21177,17 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(tinaSolidRenderingMaterialSpecularColorBtn);
 
       JLabel lblSpecularColor = new JLabel();
+      lblSpecularColor.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingMaterialSpecularColorBtn_reset();
+          }
+        }
+      });
+
+      lblSpecularColor.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblSpecularColor.setText("Specular color*");
       lblSpecularColor.setToolTipText("Color of specular reflections");
       lblSpecularColor.setSize(new Dimension(88, 22));
@@ -20976,6 +21198,17 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(lblSpecularColor);
 
       JLabel tinaSolidRenderingMaterialSpecularSharpnessLbl = new JLabel();
+      tinaSolidRenderingMaterialSpecularSharpnessLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingMaterialSpecularSharpnessREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingMaterialSpecularSharpnessLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setToolTipText("Specular sharpness");
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setText("Spec size*");
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setToolTipText("Specular reflection size; larger values produce smaller reflections");
@@ -21131,6 +21364,17 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(tinaSolidRenderingMaterialDiffuseREd);
 
       JLabel tinaSolidRenderingMaterialDiffuseLbl = new JLabel();
+      tinaSolidRenderingMaterialDiffuseLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingMaterialDiffuseREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingMaterialDiffuseLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingMaterialDiffuseLbl.setText("Diffuse*");
       tinaSolidRenderingMaterialDiffuseLbl.setToolTipText("Amount of diffuse reflection (light reflected from a rough surface); color determined by light colors");
       tinaSolidRenderingMaterialDiffuseLbl.setSize(new Dimension(68, 22));
@@ -21163,6 +21407,17 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(tinaSolidRenderingMaterialDiffuseSlider);
 
       JLabel tinaSolidRenderingMaterialAmbientLbl = new JLabel();
+      tinaSolidRenderingMaterialAmbientLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingMaterialAmbientREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingMaterialAmbientLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingMaterialAmbientLbl.setText("Ambient*");
       tinaSolidRenderingMaterialAmbientLbl.setToolTipText("Amount of ambient light (provided by the flame coloring)");
       tinaSolidRenderingMaterialAmbientLbl.setSize(new Dimension(68, 22));
@@ -21226,6 +21481,17 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(tinaSolidRenderingMaterialAmbientSlider);
 
       JLabel tinaSolidRenderingMaterialSpecularLbl = new JLabel();
+      tinaSolidRenderingMaterialSpecularLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingMaterialSpecularREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingMaterialSpecularLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingMaterialSpecularLbl.setText("Specular*");
       tinaSolidRenderingMaterialSpecularLbl.setToolTipText("Amount of specular reflection (light reflected from a smooth surface); color determined by Specular color");
       tinaSolidRenderingMaterialSpecularLbl.setSize(new Dimension(68, 22));
@@ -21305,6 +21571,17 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(tinaSolidRenderingMaterialDiffuseResponseCmb);
 
       JLabel lblDiffuseResponse = new JLabel();
+      lblDiffuseResponse.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingMaterialDiffuseResponseCmb_reset();
+          }
+        }
+      });
+
+      lblDiffuseResponse.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblDiffuseResponse.setText("Diffuse response*");
       lblDiffuseResponse.setToolTipText("Controls how the material reflects diffuse light");
       lblDiffuseResponse.setSize(new Dimension(68, 22));
@@ -21320,6 +21597,17 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(getLblReflectionMap());
 
       JLabel tinaSolidRenderingMaterialReflectionMapIntensityLbl = new JLabel();
+      tinaSolidRenderingMaterialReflectionMapIntensityLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingMaterialReflectionMapIntensityREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingMaterialReflectionMapIntensityLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setText("Refl intensity*");
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setToolTipText("Amount of light emitted by the reflection map");
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setSize(new Dimension(68, 22));
@@ -21399,6 +21687,17 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(tinaSolidRenderingMaterialReflectionMappingCmb);
 
       JLabel lblReflectionMapping = new JLabel();
+      lblReflectionMapping.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingMaterialReflectionMappingCmb_reset();
+          }
+        }
+      });
+
+      lblReflectionMapping.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblReflectionMapping.setText("Refl mapping*");
       lblReflectionMapping.setToolTipText("The function used to map the image to the surface");
       lblReflectionMapping.setSize(new Dimension(68, 22));
@@ -21644,6 +21943,17 @@ public class MainEditorFrame extends JFrame {
   private JLabel getLblReflectionMap() {
     if (lblReflectionMap == null) {
       lblReflectionMap = new JLabel();
+      lblReflectionMap.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingMaterialRemoveReflMapBtn_reset();
+          }
+        }
+      });
+
+      lblReflectionMap.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblReflectionMap.setText("Reflection map");
       lblReflectionMap.setToolTipText("Allows mapping an image from a file onto the 3D surface");
       lblReflectionMap.setSize(new Dimension(94, 22));
@@ -21718,6 +22028,17 @@ public class MainEditorFrame extends JFrame {
       panel.add(tinaSolidRenderingEnableAOCBx);
 
       JLabel tinaSolidRenderingAOIntensityLbl = new JLabel();
+      tinaSolidRenderingAOIntensityLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingAOIntensityREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingAOIntensityLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingAOIntensityLbl.setText("Amb shadow intensity*");
       tinaSolidRenderingAOIntensityLbl.setToolTipText("Intensity of the ambient shadow effect");
       tinaSolidRenderingAOIntensityLbl.setSize(new Dimension(68, 22));
@@ -21782,6 +22103,17 @@ public class MainEditorFrame extends JFrame {
       panel.add(tinaSolidRenderingAOIntensitySlider);
 
       JLabel tinaSolidRenderingAOSearchRadiusLbl = new JLabel();
+      tinaSolidRenderingAOSearchRadiusLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingAOSearchRadiusREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingAOSearchRadiusLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingAOSearchRadiusLbl.setText("Search radius");
       tinaSolidRenderingAOSearchRadiusLbl.setToolTipText("Distance to search for ambient occlusions");
       tinaSolidRenderingAOSearchRadiusLbl.setSize(new Dimension(68, 22));
@@ -21845,6 +22177,17 @@ public class MainEditorFrame extends JFrame {
       panel.add(tinaSolidRenderingAOSearchRadiusSlider);
 
       JLabel tinaSolidRenderingAOBlurRadiusLbl = new JLabel();
+      tinaSolidRenderingAOBlurRadiusLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingAOBlurRadiusREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingAOBlurRadiusLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingAOBlurRadiusLbl.setText("Blur radius");
       tinaSolidRenderingAOBlurRadiusLbl.setToolTipText("Amount to blur ambient shadows (0 to make them unnaturally sharp)");
       tinaSolidRenderingAOBlurRadiusLbl.setSize(new Dimension(68, 22));
@@ -21908,6 +22251,17 @@ public class MainEditorFrame extends JFrame {
       panel.add(tinaSolidRenderingAOBlurRadiusSlider);
 
       JLabel tinaSolidRenderingAOFalloffLbl = new JLabel();
+      tinaSolidRenderingAOFalloffLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingAOFalloffREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingAOFalloffLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingAOFalloffLbl.setText("Falloff");
       tinaSolidRenderingAOFalloffLbl.setToolTipText("Ambient shadow falloff; higher values make shadows smaller");
       tinaSolidRenderingAOFalloffLbl.setSize(new Dimension(68, 22));
@@ -21972,6 +22326,17 @@ public class MainEditorFrame extends JFrame {
       panel.add(tinaSolidRenderingAOFalloffSlider);
 
       JLabel tinaSolidRenderingAORadiusSamplesLbl = new JLabel();
+      tinaSolidRenderingAORadiusSamplesLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingAORadiusSamplesREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingAORadiusSamplesLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingAORadiusSamplesLbl.setText("Radius samples");
       tinaSolidRenderingAORadiusSamplesLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingAORadiusSamplesLbl.setPreferredSize(new Dimension(94, 22));
@@ -22040,6 +22405,17 @@ public class MainEditorFrame extends JFrame {
       panel.add(tinaSolidRenderingAORadiusSamplesSlider);
 
       JLabel tinaSolidRenderingAOAzimuthSamplesLbl = new JLabel();
+      tinaSolidRenderingAOAzimuthSamplesLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingAOAzimuthSamplesREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingAOAzimuthSamplesLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingAOAzimuthSamplesLbl.setText("Azimuth samples");
       tinaSolidRenderingAOAzimuthSamplesLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingAOAzimuthSamplesLbl.setPreferredSize(new Dimension(94, 22));
@@ -22107,6 +22483,17 @@ public class MainEditorFrame extends JFrame {
       panel.add(tinaSolidRenderingAOAzimuthSamplesSlider);
 
       JLabel lblAffectDiffuse = new JLabel();
+      lblAffectDiffuse.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingAOAffectDiffuseREd_reset();
+          }
+        }
+      });
+
+      lblAffectDiffuse.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblAffectDiffuse.setToolTipText("Affect diffuse lighting component for more dramatic effects");
       lblAffectDiffuse.setText("Affect diffuse");
       lblAffectDiffuse.setSize(new Dimension(68, 22));
@@ -22390,6 +22777,17 @@ public class MainEditorFrame extends JFrame {
       panel_4.add(tinaSolidRenderingShadowSmoothRadiusREd);
 
       JLabel tinaSolidRenderingShadowSmoothRadiusLbl = new JLabel();
+      tinaSolidRenderingShadowSmoothRadiusLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingShadowSmoothRadiusREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingShadowSmoothRadiusLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingShadowSmoothRadiusLbl.setText("Smooth radius");
       tinaSolidRenderingShadowSmoothRadiusLbl.setToolTipText("Radius for smoothing hard shadows");
       tinaSolidRenderingShadowSmoothRadiusLbl.setSize(new Dimension(68, 22));
@@ -22438,6 +22836,17 @@ public class MainEditorFrame extends JFrame {
       panel_4.add(tinaSolidRenderingShadowTypeCmb);
 
       JLabel tinaSolidRenderingShadowTypeLbl = new JLabel();
+      tinaSolidRenderingShadowTypeLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingShadowTypeCmb_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingShadowTypeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingShadowTypeLbl.setText("Shadow type");
       tinaSolidRenderingShadowTypeLbl.setToolTipText("Type of hard shadow calculation; SMOOTH is best quality, but slow.");
       tinaSolidRenderingShadowTypeLbl.setSize(new Dimension(68, 22));
@@ -22449,6 +22858,17 @@ public class MainEditorFrame extends JFrame {
       panel_4.add(tinaSolidRenderingShadowTypeLbl);
 
       JLabel tinaSolidRenderingShadowmapSizeLbl = new JLabel();
+      tinaSolidRenderingShadowmapSizeLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingShadowmapSizeCmb_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingShadowmapSizeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingShadowmapSizeLbl.setText("Shadowmap size");
       tinaSolidRenderingShadowmapSizeLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingShadowmapSizeLbl.setPreferredSize(new Dimension(94, 22));
@@ -22475,6 +22895,17 @@ public class MainEditorFrame extends JFrame {
       panel_4.add(tinaSolidRenderingShadowmapSizeCmb);
 
       JLabel tinaSolidRenderingShadowmapBiasLbl = new JLabel();
+      tinaSolidRenderingShadowmapBiasLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingShadowmapBiasREd_reset();
+          }
+        }
+      });
+
+      tinaSolidRenderingShadowmapBiasLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSolidRenderingShadowmapBiasLbl.setText("Shadowmap bias");
       tinaSolidRenderingShadowmapBiasLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingShadowmapBiasLbl.setPreferredSize(new Dimension(94, 22));

@@ -2099,7 +2099,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   private void flameTextFieldReset(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
-    if (isNoRefresh() || pTextField==null || !pTextField.isEnabled() || getCurrFlame() == null) {
+    if (isNoRefresh() || pTextField == null || !pTextField.isEnabled() || getCurrFlame() == null) {
       return;
     }
     setNoRefresh(true);
@@ -2255,43 +2255,37 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void spatialOversamplingREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0, false);
+    owner.refreshFilterKernelPreviewImg();
   }
 
   public void filterRadiusREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
+    owner.refreshFilterKernelPreviewImg();
   }
 
   public void filterSharpnessREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.tinaFilterSharpnessSlider, data.tinaFilterSharpnessREd, "spatialFilterSharpness", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
   }
 
   public void filterLowDensityREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.tinaFilterLowDensitySlider, data.tinaFilterLowDensityREd, "spatialFilterLowDensity", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
   }
 
   public void xFormAntialiasAmountREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void xFormAntialiasRadiusREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void tinaOptiXDenoiserBlendField_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.tinaOptiXDenoiserBlendSlider, data.tinaOptiXDenoiserBlendField, "postOptiXDenoiserBlend", TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND, true);
   }
 
   public void postNoiseFilterThresholdREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, false);
   }
 
   public void paletteFrequencyREd_reset() {
@@ -2315,6 +2309,181 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void dofDOFFadeREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingAOIntensityREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingAOSearchRadiusREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingAOBlurRadiusREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingAOFalloffREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingAORadiusSamplesREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingAOAzimuthSamplesREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingAOAffectDiffuseREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingShadowTypeCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingShadowSmoothRadiusREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingShadowmapSizeCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingShadowmapBiasREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingMaterialDiffuseREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingMaterialAmbientREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingMaterialSpecularREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingMaterialSpecularSharpnessREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingMaterialDiffuseResponseCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingMaterialSpecularColorBtn_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingMaterialRemoveReflMapBtn_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingMaterialReflectionMappingCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingMaterialReflectionMapIntensityREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingLightAltitudeREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingLightAzimuthREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingLightColorBtn_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingLightIntensityREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingShadowIntensityREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void postSymmetryCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void postSymmetryDistanceREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void postSymmetryRotationREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void postSymmetryOrderREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void postSymmetryCentreXREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void postSymmetryCentreYREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void motionBlurLengthREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void motionBlurTimeStepREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void motionBlurDecayREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void flameFPSField_reset() {
     // TODO Auto-generated method stub
 
   }

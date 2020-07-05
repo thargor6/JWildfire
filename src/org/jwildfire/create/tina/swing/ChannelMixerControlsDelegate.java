@@ -245,4 +245,11 @@ public class ChannelMixerControlsDelegate {
     return errorHandler;
   }
 
+  public void channelMixerModeCmb_reset() {
+    if (!owner.refreshing && owner.getCurrFlame()!=null) {
+      data.channelMixerModeCmb.setSelectedItem(new Flame().getChannelMixerMode());
+      channelMixerModeCmb_changed();
+    }
+  }
+
 }
