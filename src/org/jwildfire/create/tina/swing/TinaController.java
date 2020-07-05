@@ -5181,6 +5181,35 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public void backgroundColorTypeCmb_reset() {
+    if(getCurrFlame()!=null) {
+      Flame newFlame = new Flame();
+      getCurrFlame().setBgColorType(newFlame.getBgColorType());
+      getCurrFlame().setBgColorRed(newFlame.getBgColorRed());
+      getCurrFlame().setBgColorGreen(newFlame.getBgColorGreen());
+      getCurrFlame().setBgColorBlue(newFlame.getBgColorBlue());
+      getCurrFlame().setBgColorCCRed(newFlame.getBgColorCCRed());
+      getCurrFlame().setBgColorCCGreen(newFlame.getBgColorCCGreen());
+      getCurrFlame().setBgColorCCBlue(newFlame.getBgColorCCBlue());
+      getCurrFlame().setBgColorLLRed(newFlame.getBgColorLLRed());
+      getCurrFlame().setBgColorLLGreen(newFlame.getBgColorLLGreen());
+      getCurrFlame().setBgColorLLBlue(newFlame.getBgColorLLBlue());
+      getCurrFlame().setBgColorLRRed(newFlame.getBgColorLRRed());
+      getCurrFlame().setBgColorLRGreen(newFlame.getBgColorLRGreen());
+      getCurrFlame().setBgColorLRBlue(newFlame.getBgColorLRBlue());
+      getCurrFlame().setBgColorURRed(newFlame.getBgColorURRed());
+      getCurrFlame().setBgColorURGreen(newFlame.getBgColorURGreen());
+      getCurrFlame().setBgColorURBlue(newFlame.getBgColorURBlue());
+      getCurrFlame().setBgColorULRed(newFlame.getBgColorULRed());
+      getCurrFlame().setBgColorULGreen(newFlame.getBgColorULGreen());
+      getCurrFlame().setBgColorULBlue(newFlame.getBgColorULBlue());
+      data.backgroundColorTypeCmb.setSelectedItem(getCurrFlame().getBgColorType());
+      getFlameControls().enableBGColorUI();
+      refreshBGColorIndicators();
+      refreshFlameImage(true, false, 1, true, true);
+    }
+  }
+
   public void quickMutateButton_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {

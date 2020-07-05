@@ -2162,118 +2162,96 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void cameraDOFREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.cameraDOFSlider, data.cameraDOFREd, "camDOF", TinaController.SLIDER_SCALE_DOF, false);
   }
 
   public void cameraDOFAreaREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.cameraDOFAreaSlider, data.cameraDOFAreaREd, "camDOFArea", TinaController.SLIDER_SCALE_DOF_AREA, false);
   }
 
   public void cameraDOFExponentREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.cameraDOFExponentSlider, data.cameraDOFExponentREd, "camDOFExponent", TinaController.SLIDER_SCALE_DOF_EXPONENT, false);
   }
 
   public void camZREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.camZSlider, data.camZREd, "camZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void focusXREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.focusXSlider, data.focusXREd, "focusX", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void focusYREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.focusYSlider, data.focusYREd, "focusY", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void focusZREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.focusZSlider, data.focusZREd, "focusZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void diminishZREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.dimishZSlider, data.dimishZREd, "dimishZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void dimishZColorBtn_reset() {
-    // TODO Auto-generated method stub
-
+    Flame newFlame = new Flame();
+    getCurrFlame().setDimishZRed(newFlame.getDimishZRed());
+    getCurrFlame().setDimishZGreen(newFlame.getDimishZGreen());
+    getCurrFlame().setDimishZBlue(newFlame.getDimishZBlue());
+    refreshDimishZColorIndicator();
+    owner.refreshFlameImage(true, false, 1, true, false);
   }
 
   public void dimZDistanceREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.dimZDistanceSlider, data.dimZDistanceREd, "dimZDistance", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void brightnessREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void lowDensityBrightnessREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void gammaREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true);
   }
 
   public void gammaThresholdREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, true);
   }
 
   public void contrastREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void balanceRedREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void balanceGreenREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void balanceBlueREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void whiteLevelREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0, true);
   }
 
   public void vibrancyREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void saturationREd_reset() {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void backgroundColorTypeCmb_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void foregroundOpacityREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, true);
   }
 
   public void spatialOversamplingREd_reset() {
