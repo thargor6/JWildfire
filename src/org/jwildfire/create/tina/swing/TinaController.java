@@ -7502,9 +7502,113 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     layerTextFieldReset(data.gradientColorMapVertScaleSlider, data.gradientColorMapVertScaleREd, "gradientMapVertScale", TinaController.SLIDER_SCALE_CENTRE);
   }
 
-  public void affineCoordsViewTypeCmd_changed() {
+  public void affineC00REd_reset() {
     // TODO Auto-generated method stub
 
   }
 
+  public void affineC01REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void affineC10REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void affineC20REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void affineC21REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void affineC11REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormColorTypeCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormColorREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormSymmetryREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormDrawModeCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormOpacityREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormMaterialREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormMaterialSpeedREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormModGammaREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormModGammaSpeedREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormModContrastREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormModContrastSpeedREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormModSaturationREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormModSaturationSpeedREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormModHueREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void xFormModHueSpeedREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void affineCoordsViewTypeCmd_changed() {
+    // TODO Auto-generated method stub
+
+  }
 }

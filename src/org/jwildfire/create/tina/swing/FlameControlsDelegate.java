@@ -2465,33 +2465,28 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void postSymmetryCmb_reset() {
-    // TODO Auto-generated method stub
-
+    data.postSymmetryTypeCmb.setSelectedItem(new Flame().getPostSymmetryType());
+    postSymmetryCmb_changed();
   }
 
   public void postSymmetryDistanceREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.postSymmetryDistanceSlider, data.postSymmetryDistanceREd, "postSymmetryDistance", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void postSymmetryRotationREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.postSymmetryRotationSlider, data.postSymmetryRotationREd, "postSymmetryRotation", 1.0, false);
   }
 
   public void postSymmetryOrderREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.postSymmetryOrderSlider, data.postSymmetryOrderREd, "postSymmetryOrder", 1.0, false);
   }
 
   public void postSymmetryCentreXREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.postSymmetryCentreXSlider, data.postSymmetryCentreXREd, "postSymmetryCentreX", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void postSymmetryCentreYREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.postSymmetryCentreYSlider, data.postSymmetryCentreYREd, "postSymmetryCentreY", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void motionBlurLengthREd_reset() {

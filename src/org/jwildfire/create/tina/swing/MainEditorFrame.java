@@ -1547,7 +1547,7 @@ public class MainEditorFrame extends JFrame {
       panel_1_1.setLayout(null);
 
       randomizeBtn = new JButton();
-      randomizeBtn.setBounds(185, 22, 213, 24);
+      randomizeBtn.setBounds(180, 24, 213, 24);
       randomizeBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_1_1.add(randomizeBtn);
       randomizeBtn.addActionListener(new ActionListener() {
@@ -1562,7 +1562,7 @@ public class MainEditorFrame extends JFrame {
       panel_1_1.add(getBokehBtn());
 
       JButton btnWfld = new JButton();
-      btnWfld.setBounds(185, 64, 213, 24);
+      btnWfld.setBounds(180, 66, 213, 24);
       panel_1_1.add(btnWfld);
       btnWfld.setToolTipText("Randomize all weighting-field-settings, either of the whole fractal or the selected transform");
       btnWfld.setText("Randomize weighting-fields");
@@ -1573,15 +1573,18 @@ public class MainEditorFrame extends JFrame {
 
       JPanel panel_8 = new JPanel();
       panel_8.setBorder(new TitledBorder(null, "Hints", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_8.setBounds(427, 6, 593, 142);
+      panel_8.setBounds(567, 6, 593, 142);
       panel_1_1.add(panel_8);
       panel_8.setLayout(new BorderLayout(0, 0));
 
+      JScrollPane scrollPane = new JScrollPane();
+      panel_8.add(scrollPane, BorderLayout.CENTER);
+
       randomizersHintPane = new JTextPane();
-      randomizersHintPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+      scrollPane.setViewportView(randomizersHintPane);
+      randomizersHintPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 12));
       randomizersHintPane.setEditable(false);
       randomizersHintPane.setBackground(SystemColor.menu);
-      panel_8.add(randomizersHintPane, BorderLayout.CENTER);
       btnWfld.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.weightMapRandomizeAllBtn_clicked(getWeightMapEditWholeFractalCBx().isSelected());
@@ -4150,6 +4153,17 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(xFormModGammaREd);
 
       JLabel label = new JLabel();
+      label.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormModGammaREd_reset();
+          }
+        }
+      });
+
+      label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       label.setToolTipText("Local change of gamma");
       label.setText("Gamma");
       label.setSize(new Dimension(64, 22));
@@ -4160,6 +4174,17 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(label);
 
       JLabel label_2 = new JLabel();
+      label_2.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormModGammaSpeedREd_reset();
+          }
+        }
+      });
+
+      label_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       label_2.setToolTipText("Blending of local gamma change");
       label_2.setText("Gamma Spd");
       label_2.setSize(new Dimension(64, 22));
@@ -4218,6 +4243,17 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(xFormModGammaSpeedREd);
 
       JLabel lblContrast = new JLabel();
+      lblContrast.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormModContrastREd_reset();
+          }
+        }
+      });
+
+      lblContrast.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblContrast.setToolTipText("Local contrast change (increase/decrease)");
       lblContrast.setText("Contrast");
       lblContrast.setSize(new Dimension(64, 22));
@@ -4278,6 +4314,17 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(xFormModContrastSlider);
 
       JLabel lblContrstSpd = new JLabel();
+      lblContrstSpd.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormModContrastSpeedREd_reset();
+          }
+        }
+      });
+
+      lblContrstSpd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblContrstSpd.setToolTipText("Blending of local contrast change");
       lblContrstSpd.setText("Contrst Spd");
       lblContrstSpd.setSize(new Dimension(64, 22));
@@ -4337,6 +4384,17 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(xFormModContrastSpeedSlider);
 
       JLabel lblSaturation = new JLabel();
+      lblSaturation.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormModSaturationREd_reset();
+          }
+        }
+      });
+
+      lblSaturation.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblSaturation.setToolTipText("Local modification of color saturation");
       lblSaturation.setText("Saturation");
       lblSaturation.setSize(new Dimension(64, 22));
@@ -4396,6 +4454,17 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(xFormModSaturationSlider);
 
       JLabel lblSaturatSpd = new JLabel();
+      lblSaturatSpd.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormModSaturationSpeedREd_reset();
+          }
+        }
+      });
+
+      lblSaturatSpd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblSaturatSpd.setToolTipText("Blending of local saturation change");
       lblSaturatSpd.setText("Saturat Spd");
       lblSaturatSpd.setSize(new Dimension(64, 22));
@@ -4513,6 +4582,17 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(xFormModHueREd);
 
       JLabel lblHue = new JLabel();
+      lblHue.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormModHueREd_reset();
+          }
+        }
+      });
+
+      lblHue.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblHue.setToolTipText("Local modification of hue");
       lblHue.setText("Hue");
       lblHue.setSize(new Dimension(64, 22));
@@ -4523,6 +4603,17 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(lblHue);
 
       JLabel lblHueSpd = new JLabel();
+      lblHueSpd.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormModHueSpeedREd_reset();
+          }
+        }
+      });
+
+      lblHueSpd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblHueSpd.setToolTipText("Blending of local hue change");
       lblHueSpd.setText("Hue Spd");
       lblHueSpd.setSize(new Dimension(64, 22));
@@ -4855,6 +4946,17 @@ public class MainEditorFrame extends JFrame {
   private JPanel getTinaTransformationColorPanel() {
     if (tinaTransformationColorPanel == null) {
       xFormDrawModeLbl = new JLabel();
+      xFormDrawModeLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormDrawModeCmb_reset();
+          }
+        }
+      });
+
+      xFormDrawModeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       xFormDrawModeLbl.setToolTipText("Whether to show (normal), hide, or partially show points with this transform");
       xFormDrawModeLbl.setPreferredSize(new Dimension(64, 22));
       xFormDrawModeLbl.setText("Draw mode");
@@ -4862,6 +4964,17 @@ public class MainEditorFrame extends JFrame {
       xFormDrawModeLbl.setLocation(new Point(6, 101));
       xFormDrawModeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormColorTypeLbl = new JLabel();
+      xFormColorTypeLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormColorTypeCmb_reset();
+          }
+        }
+      });
+
+      xFormColorTypeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       xFormColorTypeLbl.setToolTipText("How to color points with this transform");
       xFormColorTypeLbl.setPreferredSize(new Dimension(64, 22));
       xFormColorTypeLbl.setText("Coloring type");
@@ -4869,6 +4982,17 @@ public class MainEditorFrame extends JFrame {
       xFormColorTypeLbl.setLocation(new Point(6, 10));
       xFormColorTypeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormOpacityLbl = new JLabel();
+      xFormOpacityLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormOpacityREd_reset();
+          }
+        }
+      });
+
+      xFormOpacityLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       xFormOpacityLbl.setName("xFormOpacityLbl");
       xFormOpacityLbl.setPreferredSize(new Dimension(64, 22));
       xFormOpacityLbl.setText("Opacity");
@@ -4877,6 +5001,17 @@ public class MainEditorFrame extends JFrame {
       xFormOpacityLbl.setLocation(new Point(6, 127));
       xFormOpacityLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormSymmetryLbl = new JLabel();
+      xFormSymmetryLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormSymmetryREd_reset();
+          }
+        }
+      });
+
+      xFormSymmetryLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       xFormSymmetryLbl.setName("xFormSymmetryLbl");
       xFormSymmetryLbl.setToolTipText("How fast point color goes to specified color (-1 to go immediately, 0 to go halfway, 1 to not change color)");
       xFormSymmetryLbl.setPreferredSize(new Dimension(64, 22));
@@ -4885,6 +5020,17 @@ public class MainEditorFrame extends JFrame {
       xFormSymmetryLbl.setLocation(new Point(6, 73));
       xFormSymmetryLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormColorLbl = new JLabel();
+      xFormColorLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormColorREd_reset();
+          }
+        }
+      });
+
+      xFormColorLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       xFormColorLbl.setName("xFormColorLbl");
       xFormColorLbl.setPreferredSize(new Dimension(64, 22));
       xFormColorLbl.setText("Color");
@@ -4915,6 +5061,17 @@ public class MainEditorFrame extends JFrame {
       tinaColorChooserPaletteImgPanel.setLayout(new BorderLayout(0, 0));
 
       JLabel xFormMaterialLbl = new JLabel();
+      xFormMaterialLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormMaterialREd_reset();
+          }
+        }
+      });
+
+      xFormMaterialLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       xFormMaterialLbl.setText("Material");
       xFormMaterialLbl.setSize(new Dimension(49, 22));
       xFormMaterialLbl.setPreferredSize(new Dimension(64, 22));
@@ -4986,6 +5143,17 @@ public class MainEditorFrame extends JFrame {
       tinaMaterialChooserPaletteImgPanel.setLayout(new BorderLayout(0, 0));
 
       JLabel xFormMaterialSpeedLbl = new JLabel();
+      xFormMaterialSpeedLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormMaterialSpeedREd_reset();
+          }
+        }
+      });
+
+      xFormMaterialSpeedLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       xFormMaterialSpeedLbl.setToolTipText("Material speed");
       xFormMaterialSpeedLbl.setText("Mat Spd");
       xFormMaterialSpeedLbl.setSize(new Dimension(49, 22));
@@ -5081,11 +5249,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldTypeCmb);
 
       JLabel lblMapType = new JLabel();
+      lblMapType.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblMapType.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightingFieldTypeCmb_reset();
             }
           }
@@ -5102,11 +5272,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(lblMapType);
 
       weightingFieldColorMapFilenameLbl = new JLabel();
+      weightingFieldColorMapFilenameLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       weightingFieldColorMapFilenameLbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapColorMapFilename_reset();
             }
           }
@@ -5170,11 +5342,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldColorIntensityREd);
 
       JLabel lblColorIntensity = new JLabel();
+      lblColorIntensity.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblColorIntensity.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapColorIntensityREd_reset();
             }
           }
@@ -5190,11 +5364,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(lblColorIntensity);
 
       JLabel lblVariationIntensity = new JLabel();
+      lblVariationIntensity.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblVariationIntensity.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapVariationIntensityREd_reset();
             }
           }
@@ -5211,11 +5387,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(lblVariationIntensity);
 
       JLabel lblJitterIntensity = new JLabel();
+      lblJitterIntensity.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblJitterIntensity.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightingFieldJitterIntensityREd_reset();
             }
           }
@@ -5311,11 +5489,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldInputCmb);
 
       JLabel lblInput = new JLabel();
+      lblInput.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblInput.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapInputCmb_reset();
             }
           }
@@ -5362,11 +5542,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam01REd);
 
       weightingFieldParam01Lbl = new JLabel();
+      weightingFieldParam01Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       weightingFieldParam01Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapParam01REd_reset();
             }
           }
@@ -5383,11 +5565,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam01Lbl);
 
       weightingFieldParam02Lbl = new JLabel();
+      weightingFieldParam02Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       weightingFieldParam02Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapParam02REd_reset();
             }
           }
@@ -5461,11 +5645,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam05REd);
 
       weightingFieldParam05Lbl = new JLabel();
+      weightingFieldParam05Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       weightingFieldParam05Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapParam05REd_reset();
             }
           }
@@ -5481,11 +5667,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam05Lbl);
 
       weightingFieldParam06Lbl = new JLabel();
+      weightingFieldParam06Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       weightingFieldParam06Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapParam06REd_reset();
             }
           }
@@ -5559,11 +5747,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam03REd);
 
       weightingFieldParam03Lbl = new JLabel();
+      weightingFieldParam03Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       weightingFieldParam03Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapParam03REd_reset();
             }
           }
@@ -5579,11 +5769,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam03Lbl);
 
       weightingFieldParam04Lbl = new JLabel();
+      weightingFieldParam04Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       weightingFieldParam04Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapParam04Cmb_reset();
             }
           }
@@ -5616,11 +5808,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam04Cmb);
 
       weightingFieldParam07Lbl = new JLabel();
+      weightingFieldParam07Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       weightingFieldParam07Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapParam07REd_reset();
             }
           }
@@ -5636,11 +5830,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam07Lbl);
 
       weightingFieldParam08Lbl = new JLabel();
+      weightingFieldParam08Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       weightingFieldParam08Lbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightMapParam08Cmb_reset();
             }
           }
@@ -5766,11 +5962,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldVarParam1AmountREd);
 
       JLabel lblVarAmount = new JLabel();
+      lblVarAmount.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblVarAmount.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightingFieldVarParam1AmountREd_reset();
             }
           }
@@ -5804,11 +6002,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldVarParam1NameCmb);
 
       JLabel lblVarParam = new JLabel();
+      lblVarParam.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblVarParam.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightingFieldVarParam2AmountREd_reset();
             }
           }
@@ -5871,11 +6071,13 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldVarParam2NameCmb);
 
       JLabel lblVarParam_1 = new JLabel();
+      lblVarParam_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblVarParam_1.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             if (tinaController != null) {
+              tinaController.saveUndoPoint();
               tinaController.weightingFieldVarParam3AmountREd_reset();
             }
           }
@@ -7780,6 +7982,17 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC00Lbl() {
     if (affineC00Lbl == null) {
       affineC00Lbl = new JLabel();
+      affineC00Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.affineC00REd_reset();
+          }
+        }
+      });
+
+      affineC00Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       affineC00Lbl.setName("affineC00Lbl");
       affineC00Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC00Lbl.setText("X1");
@@ -7794,6 +8007,17 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC01Lbl() {
     if (affineC01Lbl == null) {
       affineC01Lbl = new JLabel();
+      affineC01Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.affineC01REd_reset();
+          }
+        }
+      });
+
+      affineC01Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       affineC01Lbl.setName("affineC01Lbl");
       affineC01Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC01Lbl.setText("X2");
@@ -7808,6 +8032,17 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC10Lbl() {
     if (affineC10Lbl == null) {
       affineC10Lbl = new JLabel();
+      affineC10Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.affineC10REd_reset();
+          }
+        }
+      });
+
+      affineC10Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       affineC10Lbl.setName("affineC10Lbl");
       affineC10Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC10Lbl.setText("Y1");
@@ -7822,6 +8057,17 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC11Lbl() {
     if (affineC11Lbl == null) {
       affineC11Lbl = new JLabel();
+      affineC11Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.affineC11REd_reset();
+          }
+        }
+      });
+
+      affineC11Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       affineC11Lbl.setName("affineC11Lbl");
       affineC11Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC11Lbl.setText("Y2");
@@ -7836,6 +8082,17 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC20Lbl() {
     if (affineC20Lbl == null) {
       affineC20Lbl = new JLabel();
+      affineC20Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.affineC20REd_reset();
+          }
+        }
+      });
+
+      affineC20Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       affineC20Lbl.setName("affineC20Lbl");
       affineC20Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC20Lbl.setText("O1");
@@ -7850,6 +8107,17 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC21Lbl() {
     if (affineC21Lbl == null) {
       affineC21Lbl = new JLabel();
+      affineC21Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.affineC21REd_reset();
+          }
+        }
+      });
+
+      affineC21Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       affineC21Lbl.setName("affineC21Lbl");
       affineC21Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC21Lbl.setText("O2");
@@ -17978,6 +18246,17 @@ public class MainEditorFrame extends JFrame {
       postBokehSettingsPnl.add(postBokehFilterKernelCmb);
 
       JLabel lblBokehFilterKernel = new JLabel();
+      lblBokehFilterKernel.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingPostBokehFilterKernelCmb_reset();
+          }
+        }
+      });
+
+      lblBokehFilterKernel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblBokehFilterKernel.setText("Bokeh filter kernel");
       lblBokehFilterKernel.setSize(new Dimension(94, 22));
       lblBokehFilterKernel.setPreferredSize(new Dimension(94, 22));
@@ -17987,6 +18266,17 @@ public class MainEditorFrame extends JFrame {
       postBokehSettingsPnl.add(lblBokehFilterKernel);
 
       JLabel lblBokehIntensity = new JLabel();
+      lblBokehIntensity.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingPostBokehSizeREd_reset();
+          }
+        }
+      });
+
+      lblBokehIntensity.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblBokehIntensity.setName("postBokehSizeLbl");
       lblBokehIntensity.setText("Bokeh size");
       lblBokehIntensity.setSize(new Dimension(94, 22));
@@ -18053,6 +18343,17 @@ public class MainEditorFrame extends JFrame {
       postBokehSettingsPnl.add(postBokehSizeSlider);
 
       JLabel label_2 = new JLabel();
+      label_2.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingPostBokehIntensityREd_reset();
+          }
+        }
+      });
+
+      label_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       label_2.setName("postBokehIntensityLbl");
       label_2.setText("Bokeh intensity");
       label_2.setSize(new Dimension(94, 22));
@@ -18147,19 +18448,51 @@ public class MainEditorFrame extends JFrame {
       tabbedPane_3.addTab("Post blur", null, panel_1, null);
       panel_1.setLayout(null);
       shadingBlurFadeLbl = new JLabel();
+      shadingBlurFadeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      shadingBlurFadeLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().postBlurFadeREd_reset();
+          }
+        }
+      });
+
       shadingBlurFadeLbl.setPreferredSize(new Dimension(94, 22));
       shadingBlurFadeLbl.setText("Blur fade");
       shadingBlurFadeLbl.setSize(new Dimension(94, 22));
       shadingBlurFadeLbl.setLocation(new Point(6, 30));
       shadingBlurFadeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingBlurRadiusLbl = new JLabel();
-      shadingBlurRadiusLbl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+      shadingBlurRadiusLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().postBlurRadiusREd_reset();
+          }
+        }
+      });
+
+      shadingBlurRadiusLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       shadingBlurRadiusLbl.setPreferredSize(new Dimension(94, 22));
       shadingBlurRadiusLbl.setText("Blur radius");
       shadingBlurRadiusLbl.setSize(new Dimension(94, 22));
       shadingBlurRadiusLbl.setLocation(new Point(6, 6));
       shadingBlurRadiusLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingBlurFallOffLbl = new JLabel();
+      shadingBlurFallOffLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      shadingBlurFallOffLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().postBlurFallOffREd_reset();
+          }
+        }
+      });
+
       shadingBlurFallOffLbl.setPreferredSize(new Dimension(94, 22));
       shadingBlurFallOffLbl.setText("Blur falloff");
       shadingBlurFallOffLbl.setSize(new Dimension(94, 22));
@@ -18197,7 +18530,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      lblShape.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+      lblShape.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblShape.setText("Shape");
       lblShape.setToolTipText("Shape of the bokeh");
       lblShape.setSize(new Dimension(94, 22));
@@ -18218,7 +18551,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      dofDOFScaleLbl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+      dofDOFScaleLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       dofDOFScaleLbl.setText("Scale");
       dofDOFScaleLbl.setToolTipText("Relative size of the bokeh (size is also affected by DOF Amount)");
       dofDOFScaleLbl.setSize(new Dimension(94, 22));
@@ -18351,7 +18684,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      dofDOFAngleLbl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+      dofDOFAngleLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       dofDOFAngleLbl.setText("Rotate");
       dofDOFAngleLbl.setToolTipText("Angle to rotate bokeh shapes");
       dofDOFAngleLbl.setSize(new Dimension(94, 22));
@@ -18398,7 +18731,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
 
-      dofDOFFadeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+      dofDOFFadeLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       dofDOFFadeLbl.setText("Fade");
       dofDOFFadeLbl.setToolTipText("Amount of bokeh fading (effect depends on the shape)");
       dofDOFFadeLbl.setSize(new Dimension(94, 22));
@@ -18505,6 +18838,17 @@ public class MainEditorFrame extends JFrame {
       bokehSettingsPnl.add(dofDOFParam1REd);
 
       dofDOFParam1Lbl = new JLabel();
+      dofDOFParam1Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().dofDOFParam1REd_reset();
+          }
+        }
+      });
+
+      dofDOFParam1Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       dofDOFParam1Lbl.setText("Param 1");
       dofDOFParam1Lbl.setSize(new Dimension(94, 22));
       dofDOFParam1Lbl.setPreferredSize(new Dimension(94, 22));
@@ -18574,6 +18918,17 @@ public class MainEditorFrame extends JFrame {
       bokehSettingsPnl.add(dofDOFParam3REd);
 
       dofDOFParam3Lbl = new JLabel();
+      dofDOFParam3Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().dofDOFParam3REd_reset();
+          }
+        }
+      });
+
+      dofDOFParam3Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       dofDOFParam3Lbl.setText("Param 3");
       dofDOFParam3Lbl.setSize(new Dimension(94, 22));
       dofDOFParam3Lbl.setPreferredSize(new Dimension(94, 22));
@@ -18584,6 +18939,17 @@ public class MainEditorFrame extends JFrame {
       bokehSettingsPnl.add(dofDOFParam3Lbl);
 
       dofDOFParam4Lbl = new JLabel();
+      dofDOFParam4Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().dofDOFParam4REd_reset();
+          }
+        }
+      });
+
+      dofDOFParam4Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       dofDOFParam4Lbl.setText("Param 4");
       dofDOFParam4Lbl.setSize(new Dimension(94, 22));
       dofDOFParam4Lbl.setPreferredSize(new Dimension(94, 22));
@@ -18712,6 +19078,17 @@ public class MainEditorFrame extends JFrame {
       bokehSettingsPnl.add(dofDOFParam5REd);
 
       dofDOFParam5Lbl = new JLabel();
+      dofDOFParam5Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().dofDOFParam5REd_reset();
+          }
+        }
+      });
+
+      dofDOFParam5Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       dofDOFParam5Lbl.setText("Param 5");
       dofDOFParam5Lbl.setSize(new Dimension(94, 22));
       dofDOFParam5Lbl.setPreferredSize(new Dimension(94, 22));
@@ -18747,6 +19124,17 @@ public class MainEditorFrame extends JFrame {
       bokehSettingsPnl.add(dofDOFParam5Slider);
 
       dofDOFParam6Lbl = new JLabel();
+      dofDOFParam6Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().dofDOFParam6REd_reset();
+          }
+        }
+      });
+
+      dofDOFParam6Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       dofDOFParam6Lbl.setText("Param 6");
       dofDOFParam6Lbl.setSize(new Dimension(94, 22));
       dofDOFParam6Lbl.setPreferredSize(new Dimension(94, 22));
@@ -18816,6 +19204,17 @@ public class MainEditorFrame extends JFrame {
       bokehSettingsPnl.add(dofDOFParam6Slider);
 
       dofDOFParam2Lbl = new JLabel();
+      dofDOFParam2Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().dofDOFParam2REd_reset();
+          }
+        }
+      });
+
+      dofDOFParam2Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       dofDOFParam2Lbl.setText("Param 2");
       dofDOFParam2Lbl.setSize(new Dimension(94, 22));
       dofDOFParam2Lbl.setPreferredSize(new Dimension(94, 22));
@@ -19003,7 +19402,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getBokehBtn() {
     if (bokehBtn == null) {
       bokehBtn = new JButton();
-      bokehBtn.setBounds(185, 106, 213, 24);
+      bokehBtn.setBounds(180, 108, 213, 24);
       bokehBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.bokehBtn_clicked();
@@ -23124,6 +23523,17 @@ public class MainEditorFrame extends JFrame {
       panel_5.add(tinaZBufferScaleREd);
 
       JLabel lblZbufferScale = new JLabel();
+      lblZbufferScale.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().zBufferScaleREd_reset();
+          }
+        }
+      });
+
+      lblZbufferScale.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblZbufferScale.setText("ZBuffer scale");
       lblZbufferScale.setSize(new Dimension(68, 22));
       lblZbufferScale.setPreferredSize(new Dimension(94, 22));
@@ -23179,6 +23589,17 @@ public class MainEditorFrame extends JFrame {
       panel_5.add(tinaZBufferBiasREd);
 
       JLabel lblZBufferBias = new JLabel();
+      lblZBufferBias.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().zBufferBiasREd_reset();
+          }
+        }
+      });
+
+      lblZBufferBias.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblZBufferBias.setText("ZBuffer bias");
       lblZBufferBias.setSize(new Dimension(68, 22));
       lblZBufferBias.setPreferredSize(new Dimension(94, 22));
@@ -23334,6 +23755,17 @@ public class MainEditorFrame extends JFrame {
   private JLabel getLblBokehBrightness() {
     if (lblBokehBrightness == null) {
       lblBokehBrightness = new JLabel();
+      lblBokehBrightness.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingPostBokehBrightnessREd_reset();
+          }
+        }
+      });
+
+      lblBokehBrightness.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblBokehBrightness.setName("postBokehBrightnessLbl");
       lblBokehBrightness.setText("Bokeh brightness");
       lblBokehBrightness.setSize(new Dimension(94, 22));
@@ -23375,6 +23807,17 @@ public class MainEditorFrame extends JFrame {
   private JLabel getLblBokehActivation() {
     if (lblBokehActivation == null) {
       lblBokehActivation = new JLabel();
+      lblBokehActivation.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().solidRenderingPostBokehActivationREd_reset();
+          }
+        }
+      });
+
+      lblBokehActivation.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblBokehActivation.setName("postBokehActivationLbl");
       lblBokehActivation.setText("Bokeh activation");
       lblBokehActivation.setSize(new Dimension(94, 22));
