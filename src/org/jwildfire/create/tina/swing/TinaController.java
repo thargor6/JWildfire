@@ -2121,11 +2121,49 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  private void paletteTextFieldReset(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || getCurrFlame() == null)
+      return;
+    noRefresh = true;
+    try {
+      pTextField.setValue(getFrameControlsUtil().getRawPropertyValue(new Flame().getFirstLayer().getPalette(), pProperty));
+      frameControlsUtil.valueChangedByTextField(getCurrLayer().getPalette(), pSlider, pTextField, pProperty, pSliderScale, 0.0);
+      try {
+        Class<?> cls = getCurrLayer().getPalette().getClass();
+        Field field = cls.getDeclaredField("modified");
+        field.setAccessible(true);
+        field.setBoolean(getCurrLayer().getPalette(), true);
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+      refreshPaletteImg();
+      refreshFlameImage(true, false, 1, true, false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
   private void layerTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     if (noRefresh || getCurrFlame() == null || getCurrLayer() == null)
       return;
     noRefresh = true;
     try {
+      frameControlsUtil.valueChangedByTextField(getCurrLayer(), pSlider, pTextField, pProperty, pSliderScale, 0.0);
+      refreshFlameImage(true, false, 1, true, false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void layerTextFieldReset(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || getCurrFlame() == null || getCurrLayer() == null)
+      return;
+    noRefresh = true;
+    try {
+      pTextField.setValue(getFrameControlsUtil().getRawPropertyValue(new Flame().getFirstLayer(), pProperty));
       frameControlsUtil.valueChangedByTextField(getCurrLayer(), pSlider, pTextField, pProperty, pSliderScale, 0.0);
       refreshFlameImage(true, false, 1, true, false);
     }
@@ -5810,9 +5848,47 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public void layerDensityREd_reset() {
+    if (!gridRefreshing && getCurrLayer() != null) {
+      data.layerDensityREd.setValue(getFrameControlsUtil().getRawPropertyValue(new Flame().getFirstLayer(), "density"));
+      saveUndoPoint();
+      frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerDensityREd, "density", 1.0, 0.0);
+      int row = data.layersTable.getSelectedRow();
+      boolean oldGridRefreshing = gridRefreshing;
+      gridRefreshing = true;
+      try {
+        refreshLayersTable();
+        data.layersTable.getSelectionModel().setSelectionInterval(row, row);
+      }
+      finally {
+        gridRefreshing = oldGridRefreshing;
+      }
+      refreshFlameImage(true, false, 1, true, false);
+    }
+  }
+
   public void layerWeightREd_changed() {
     if (!gridRefreshing && getCurrLayer() != null) {
       saveUndoPoint();
+      frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerWeightEd, "weight", 1.0, 0.0);
+      int row = data.layersTable.getSelectedRow();
+      boolean oldGridRefreshing = gridRefreshing;
+      gridRefreshing = true;
+      try {
+        refreshLayersTable();
+        data.layersTable.getSelectionModel().setSelectionInterval(row, row);
+      }
+      finally {
+        gridRefreshing = oldGridRefreshing;
+      }
+      refreshFlameImage(true, false, 1, true, false);
+    }
+  }
+
+  public void layerWeightREd_reset() {
+    if (!gridRefreshing && getCurrLayer() != null) {
+      saveUndoPoint();
+      data.layerWeightEd.setValue(getFrameControlsUtil().getRawPropertyValue(new Flame().getFirstLayer(), "weight"));
       frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerWeightEd, "weight", 1.0, 0.0);
       int row = data.layersTable.getSelectedRow();
       boolean oldGridRefreshing = gridRefreshing;
@@ -7354,99 +7430,76 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     flameControls.enableFilterUI();
   }
 
-  public void paletteShiftREd_reset() {
-    // TODO Auto-generated method stub
+  public void paletteFrequencyREd_reset() {
+    paletteTextFieldReset(data.paletteFrequencySlider, data.paletteFrequencyREd, "modFrequency", 1.0);
+  }
 
+  public void paletteShiftREd_reset() {
+    paletteTextFieldReset(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 100.0);
   }
 
   public void paletteSwapRGBREd_reset() {
-    // TODO Auto-generated method stub
-
+    paletteTextFieldReset(data.paletteSwapRGBSlider, data.paletteSwapRGBREd, "modSwapRGB", 1.0);
   }
 
   public void paletteBlurREd_reset() {
-    // TODO Auto-generated method stub
-
+    paletteTextFieldReset(data.paletteBlurSlider, data.paletteBlurREd, "modBlur", 1.0);
   }
 
   public void paletteRedREd_reset() {
-    // TODO Auto-generated method stub
-
+    paletteTextFieldReset(data.paletteRedSlider, data.paletteRedREd, "modRed", 1.0);
   }
 
   public void paletteGreenREd_reset() {
-    // TODO Auto-generated method stub
-
+    paletteTextFieldReset(data.paletteGreenSlider, data.paletteGreenREd, "modGreen", 1.0);
   }
 
   public void paletteBlueREd_reset() {
-    // TODO Auto-generated method stub
-
+    paletteTextFieldReset(data.paletteBlueSlider, data.paletteBlueREd, "modBlue", 1.0);
   }
 
   public void paletteHueREd_reset() {
-    // TODO Auto-generated method stub
-
+    paletteTextFieldReset(data.paletteHueSlider, data.paletteHueREd, "modHue", 1.0);
   }
 
   public void paletteSaturationREd_reset() {
-    // TODO Auto-generated method stub
-
+    paletteTextFieldReset(data.paletteSaturationSlider, data.paletteSaturationREd, "modSaturation", 1.0);
   }
 
   public void paletteContrastREd_reset() {
-    // TODO Auto-generated method stub
-
+    paletteTextFieldReset(data.paletteContrastSlider, data.paletteContrastREd, "modContrast", 1.0);
   }
 
   public void paletteGammaREd_reset() {
-    // TODO Auto-generated method stub
-
+    paletteTextFieldReset(data.paletteGammaSlider, data.paletteGammaREd, "modGamma", 1.0);
   }
 
   public void paletteBrightnessREd_reset() {
-    // TODO Auto-generated method stub
-
+    paletteTextFieldReset(data.paletteBrightnessSlider, data.paletteBrightnessREd, "modBrightness", 1.0);
   }
 
   public void gradientColorMapHorizOffsetREd_reset() {
-    // TODO Auto-generated method stub
-
+    layerTextFieldReset(data.gradientColorMapHorizOffsetSlider, data.gradientColorMapHorizOffsetREd, "gradientMapHorizOffset", TinaController.SLIDER_SCALE_CENTRE);
   }
 
   public void gradientColorMapHorizScaleREd_reset() {
-    // TODO Auto-generated method stub
-
+    layerTextFieldReset(data.gradientColorMapHorizScaleSlider, data.gradientColorMapHorizScaleREd, "gradientMapHorizScale", TinaController.SLIDER_SCALE_CENTRE);
   }
 
   public void gradientColorMapLocalColorAddREd_reset() {
-    // TODO Auto-generated method stub
-
+    layerTextFieldReset(data.gradientColorMapLocalColorAddSlider, data.gradientColorMapLocalColorAddREd, "gradientMapLocalColorAdd", TinaController.SLIDER_SCALE_CENTRE);
   }
 
   public void gradientColorMapLocalColorScaleREd_reset() {
-    // TODO Auto-generated method stub
-
+    layerTextFieldReset(data.gradientColorMapLocalColorScaleSlider, data.gradientColorMapLocalColorScaleREd, "gradientMapLocalColorScale", TinaController.SLIDER_SCALE_CENTRE);
   }
 
   public void gradientColorMapVertOffsetREd_reset() {
-    // TODO Auto-generated method stub
-
+    layerTextFieldReset(data.gradientColorMapVertOffsetSlider, data.gradientColorMapVertOffsetREd, "gradientMapVertOffset", TinaController.SLIDER_SCALE_CENTRE);
   }
 
   public void gradientColorMapVertScaleREd_reset() {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void layerDensityREd_reset() {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void layerWeightREd_reset() {
-    // TODO Auto-generated method stub
-
+    layerTextFieldReset(data.gradientColorMapVertScaleSlider, data.gradientColorMapVertScaleREd, "gradientMapVertScale", TinaController.SLIDER_SCALE_CENTRE);
   }
 
   public void affineCoordsViewTypeCmd_changed() {

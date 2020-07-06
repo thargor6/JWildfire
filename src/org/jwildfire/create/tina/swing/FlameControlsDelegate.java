@@ -2288,11 +2288,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameTextFieldReset(data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, false);
   }
 
-  public void paletteFrequencyREd_reset() {
-    // TODO Auto-generated method stub
-
-  }
-
   public void dofDOFShapeCmb_reset() {
     // TODO Auto-generated method stub
 

@@ -14409,7 +14409,7 @@ public class MainEditorFrame extends JFrame {
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
             tinaController.saveUndoPoint();
-            tinaController.getFlameControls().paletteFrequencyREd_reset();
+            tinaController.paletteFrequencyREd_reset();
           }
         }
       });
