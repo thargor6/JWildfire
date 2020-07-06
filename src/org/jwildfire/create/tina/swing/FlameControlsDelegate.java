@@ -1012,10 +1012,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void flameFPSField_changed() {
-    if (isNoRefresh() || getCurrFlame() == null) {
-      return;
-    }
-    getCurrFlame().setFps(data.flameFPSField.getIntValue());
+    flameTextFieldChanged(null, data.flameFPSField, "fps", 1.0, false);
   }
 
   public void motionBlurLengthSlider_changed(ChangeEvent e) {
@@ -2490,23 +2487,19 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void motionBlurLengthREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.motionBlurLengthSlider, data.motionBlurLengthField, "motionBlurLength", 1.0, false);
   }
 
   public void motionBlurTimeStepREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.motionBlurTimeStepSlider, data.motionBlurTimeStepField, "motionBlurTimeStep", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void motionBlurDecayREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.motionBlurDecaySlider, data.motionBlurDecayField, "motionBlurDecay", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void flameFPSField_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(null, data.flameFPSField, "fps", 1.0, false);
   }
 
   public void dofDOFShapeCmb_reset() {
