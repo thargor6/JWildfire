@@ -1408,19 +1408,19 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void postBlurFadeREd_changed() {
-    flameTextFieldChanged(data.postBlurFadeSlider, data.postBlurFadeREd, "postBlurFadeRadius", TinaController.SLIDER_SCALE_AMBIENT, false);
+    flameTextFieldChanged(data.postBlurFadeSlider, data.postBlurFadeREd, "postBlurFade", TinaController.SLIDER_SCALE_AMBIENT, false);
   }
 
   public void postBlurFadeSlider_changed() {
-    flameSliderChanged(data.postBlurFadeSlider, data.postBlurFadeREd, "postBlurFadeRadius", TinaController.SLIDER_SCALE_AMBIENT, false);
+    flameSliderChanged(data.postBlurFadeSlider, data.postBlurFadeREd, "postBlurFade", TinaController.SLIDER_SCALE_AMBIENT, false);
   }
 
   public void postBlurFallOffSlider_changed() {
-    flameTextFieldChanged(data.postBlurFallOffSlider, data.postBlurFallOffREd, "postBlurFallOffRadius", TinaController.SLIDER_SCALE_AMBIENT, false);
+    flameSliderChanged(data.postBlurFallOffSlider, data.postBlurFallOffREd, "postBlurFallOff", TinaController.SLIDER_SCALE_AMBIENT, false);
   }
 
   public void postBlurFallOffREd_changed() {
-    flameSliderChanged(data.postBlurFallOffSlider, data.postBlurFallOffREd, "postBlurFallOffRadius", TinaController.SLIDER_SCALE_AMBIENT, false);
+    flameTextFieldChanged(data.postBlurFallOffSlider, data.postBlurFallOffREd, "postBlurFallOff", TinaController.SLIDER_SCALE_AMBIENT, false);
   }
 
   public void solidRenderingCBx_changed() {
@@ -2530,6 +2530,86 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void dofDOFFadeREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dofDOFParam1REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dofDOFParam2REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dofDOFParam3REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dofDOFParam4REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dofDOFParam5REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void dofDOFParam6REd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingPostBokehIntensityREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingPostBokehSizeREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingPostBokehFilterKernelCmb_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingPostBokehBrightnessREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void solidRenderingPostBokehActivationREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void postBlurRadiusREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void postBlurFadeREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void postBlurFallOffREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void zBufferScaleREd_reset() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void zBufferBiasREd_reset() {
     // TODO Auto-generated method stub
 
   }
