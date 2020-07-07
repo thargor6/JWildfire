@@ -868,10 +868,20 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   private void enableBokehPanels() {
     if (getCurrFlame() != null) {
       SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
-      ((JTabbedPane) data.bokehSettingsPnl.getParent()).setEnabledAt(1, !settings.isSolidRenderingEnabled());
+      data.postBokehSettingsPnl.setEnabled(settings.isSolidRenderingEnabled());
       data.bokehSettingsPnl.setEnabled(!settings.isSolidRenderingEnabled());
-      ((JTabbedPane) data.bokehSettingsPnl.getParent()).setEnabledAt(2, settings.isSolidRenderingEnabled());
-      data.bokehSettingsPnl.setEnabled(settings.isSolidRenderingEnabled());
+      JTabbedPane parent = (JTabbedPane) data.bokehSettingsPnl.getParent();
+      // only the following sequence of commands seems to actually work, i.e.: both select the tab and display its contents
+      if(settings.isSolidRenderingEnabled() && parent.getSelectedIndex()==2) {
+        parent.setSelectedIndex(1);
+      }
+      else if(!settings.isSolidRenderingEnabled() && parent.getSelectedIndex()==1) {
+        parent.setSelectedIndex(2);
+      }
+      parent.setEnabledAt(1, !settings.isSolidRenderingEnabled());
+      parent.setEnabledAt(2, settings.isSolidRenderingEnabled());
+      parent.setSelectedIndex(0);
+      // end of sequence
     }
   }
 
@@ -2199,6 +2209,24 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
+  private void camDOFParamFieldReset(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
+    if (isNoRefresh() || pTextField == null || !pTextField.isEnabled() || getCurrFlame() == null) {
+      return;
+    }
+    setNoRefresh(true);
+    try {
+      Flame newFlame = new Flame();
+      newFlame.setCamDOFShape((DOFBlurShapeType) data.dofDOFShapeCmb.getSelectedItem());
+      newFlame.getCamDOFShape().getDOFBlurShape().setDefaultParams(newFlame);
+      pTextField.setValue(owner.getFrameControlsUtil().getRawPropertyValue(newFlame, pProperty));
+      owner.getFrameControlsUtil().valueChangedByTextField(getCurrFlame(), pSlider, pTextField, pProperty, pSliderScale, 0.0);
+      owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+  }
+
   public void cameraRollREd_reset() {
     flameTextFieldReset(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0, false);
   }
@@ -2503,103 +2531,85 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void dofDOFShapeCmb_reset() {
-    // TODO Auto-generated method stub
-
+    data.dofDOFShapeCmb.setSelectedItem(new Flame().getCamDOFShape());
+    dofDOFShapeCmb_changed();
   }
 
   public void dofDOFScaleREd_reset() {
-    // TODO Auto-generated method stub
-
+    camDOFParamFieldReset(data.dofDOFScaleSlider, data.dofDOFScaleREd, "camDOFScale", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFAngleREd_reset() {
-    // TODO Auto-generated method stub
-
+    camDOFParamFieldReset(data.dofDOFAngleSlider, data.dofDOFAngleREd, "camDOFAngle", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFFadeREd_reset() {
-    // TODO Auto-generated method stub
-
+    camDOFParamFieldReset(data.dofDOFFadeSlider, data.dofDOFFadeREd, "camDOFFade", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam1REd_reset() {
-    // TODO Auto-generated method stub
-
+    camDOFParamFieldReset(data.dofDOFParam1Slider, data.dofDOFParam1REd, "camDOFParam1", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam2REd_reset() {
-    // TODO Auto-generated method stub
-
+    camDOFParamFieldReset(data.dofDOFParam2Slider, data.dofDOFParam2REd, "camDOFParam2", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam3REd_reset() {
-    // TODO Auto-generated method stub
-
+    camDOFParamFieldReset(data.dofDOFParam3Slider, data.dofDOFParam3REd, "camDOFParam3", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam4REd_reset() {
-    // TODO Auto-generated method stub
-
+    camDOFParamFieldReset(data.dofDOFParam4Slider, data.dofDOFParam4REd, "camDOFParam4", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam5REd_reset() {
-    // TODO Auto-generated method stub
-
+    camDOFParamFieldReset(data.dofDOFParam5Slider, data.dofDOFParam5REd, "camDOFParam5", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam6REd_reset() {
-    // TODO Auto-generated method stub
-
+    camDOFParamFieldReset(data.dofDOFParam6Slider, data.dofDOFParam6REd, "camDOFParam6", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void solidRenderingPostBokehIntensityREd_reset() {
-    // TODO Auto-generated method stub
-
+    solidRenderingTextFieldReset(data.postBokehIntensitySlider, data.postBokehIntensityREd, "postBokehIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
   public void solidRenderingPostBokehSizeREd_reset() {
-    // TODO Auto-generated method stub
-
+    solidRenderingTextFieldReset(data.postBokehSizeSlider, data.postBokehSizeREd, "postBokehSize", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
   public void solidRenderingPostBokehFilterKernelCmb_reset() {
-    // TODO Auto-generated method stub
-
+    data.postBokehFilterKernelCmb.setSelectedItem(new Flame().getSolidRenderSettings().getPostBokehFilterKernel());
+    solidRenderingPostBokehFilterKernelCmb_changed();
   }
 
   public void solidRenderingPostBokehBrightnessREd_reset() {
-    // TODO Auto-generated method stub
-
+    solidRenderingTextFieldReset(data.postBokehBrightnessSlider, data.postBokehBrightnessREd, "postBokehBrightness", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
   public void solidRenderingPostBokehActivationREd_reset() {
-    // TODO Auto-generated method stub
-
+    solidRenderingTextFieldReset(data.postBokehActivationSlider, data.postBokehActivationREd, "postBokehActivation", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
   public void postBlurRadiusREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.postBlurRadiusSlider, data.postBlurRadiusREd, "postBlurRadius", 1.0, false);
   }
 
   public void postBlurFadeREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.postBlurFadeSlider, data.postBlurFadeREd, "postBlurFade", TinaController.SLIDER_SCALE_AMBIENT, false);
   }
 
   public void postBlurFallOffREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.postBlurFallOffSlider, data.postBlurFallOffREd, "postBlurFallOff", TinaController.SLIDER_SCALE_AMBIENT, false);
   }
 
   public void zBufferScaleREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.tinaZBufferScaleSlider, data.tinaZBufferScaleREd, "zBufferScale", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
   public void zBufferBiasREd_reset() {
-    // TODO Auto-generated method stub
-
+    flameTextFieldReset(data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
 }
