@@ -2190,6 +2190,25 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  protected void xFormTextFieldReset(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh) {
+      return;
+    }
+    XForm xForm = getCurrXForm();
+    if (xForm == null) {
+      return;
+    }
+    noRefresh = true;
+    try {
+      pTextField.setValue(getFrameControlsUtil().getRawPropertyValue(new XForm(), pProperty));
+      frameControlsUtil.valueChangedByTextField(xForm, pSlider, pTextField, pProperty, pSliderScale, 0.0);
+      refreshFlameImage(true, false, 1, true, false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
   public void loadFlameButton_actionPerformed(ActionEvent e) {
     try {
       JFileChooser chooser = new FlameFileChooser(prefs);
@@ -2883,11 +2902,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     refreshFlameImage(true, false, 1, true, false);
   }
 
-  public void addXForm() {
+  private XForm createNewXForm() {
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
     xForm.setWeight(0.5);
     xForm.setColorType(ColorType.DIFFUSION);
+    return xForm;
+  }
+
+  public void addXForm() {
+    XForm xForm = createNewXForm();
     saveUndoPoint();
     getCurrLayer().getXForms().add(xForm);
     gridRefreshing = true;
@@ -7503,108 +7527,133 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void affineC00REd_reset() {
-    // TODO Auto-generated method stub
-
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      data.affineC00REd.setValue(createNewXForm().getXYCoeff00());
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC00REd, frameControlsUtil.getAffinePropertyName(xForm, "00", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
+      transformationChanged(true);
+    }
   }
 
   public void affineC01REd_reset() {
-    // TODO Auto-generated method stub
-
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      data.affineC01REd.setValue(createNewXForm().getXYCoeff01());
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC01REd, frameControlsUtil.getAffinePropertyName(xForm, "01", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
+      transformationChanged(true);
+    }
   }
 
   public void affineC10REd_reset() {
-    // TODO Auto-generated method stub
-
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      data.affineC10REd.setValue(createNewXForm().getXYCoeff10());
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC10REd, frameControlsUtil.getAffinePropertyName(xForm, "10", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
+      transformationChanged(true);
+    }
   }
 
   public void affineC20REd_reset() {
-    // TODO Auto-generated method stub
-
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      data.affineC20REd.setValue(createNewXForm().getXYCoeff20());
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC20REd, frameControlsUtil.getAffinePropertyName(xForm, "20", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
+      transformationChanged(true);
+    }
   }
 
   public void affineC21REd_reset() {
-    // TODO Auto-generated method stub
-
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      data.affineC21REd.setValue(createNewXForm().getXYCoeff21());
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC21REd, frameControlsUtil.getAffinePropertyName(xForm, "21", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
+      transformationChanged(true);
+    }
   }
 
   public void affineC11REd_reset() {
-    // TODO Auto-generated method stub
-
+    XForm xForm = getCurrXForm();
+    if (xForm != null) {
+      data.affineC11REd.setValue(createNewXForm().getXYCoeff11());
+      frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC11REd, frameControlsUtil.getAffinePropertyName(xForm, "11", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
+      transformationChanged(true);
+    }
   }
 
   public void xFormColorTypeCmb_reset() {
-    // TODO Auto-generated method stub
-
+    data.xFormColorTypeCmb.setSelectedItem(createNewXForm().getColorType());
+    xFormColorTypeCmb_changed();
   }
 
   public void xFormColorREd_reset() {
-    // TODO Auto-generated method stub
-
+    switch((ColorType)data.xFormColorTypeCmb.getSelectedItem()) {
+      case TARGET: {
+        XForm xForm = getCurrXForm();
+        if(xForm!=null) {
+          XForm newXForm = createNewXForm();
+          undoManager.saveUndoPoint(getCurrFlame());
+          xForm.setTargetColor(newXForm.getTargetColor());
+          data.xFormTargetColorBtn.setBackground(xForm.getTargetColor().getColor());
+        }
+      }
+        break;
+      default:
+        xFormTextFieldReset(data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
+        break;
+    }
   }
 
   public void xFormSymmetryREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormSymmetrySlider, data.xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
   }
 
   public void xFormDrawModeCmb_reset() {
-    // TODO Auto-generated method stub
-
+    data.xFormDrawModeCmb.setSelectedItem(createNewXForm().getDrawMode());
+    xFormDrawModeCmb_changed();
   }
 
   public void xFormOpacityREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormOpacitySlider, data.xFormOpacityREd, "opacity", SLIDER_SCALE_COLOR);
   }
 
   public void xFormMaterialREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormMaterialSlider, data.xFormMaterialREd, "material", SLIDER_SCALE_COLOR);
   }
 
   public void xFormMaterialSpeedREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormMaterialSpeedSlider, data.xFormMaterialSpeedREd, "materialSpeed", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModGammaREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormModGammaSlider, data.xFormModGammaREd, "modGamma", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModGammaSpeedREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormModGammaSpeedSlider, data.xFormModGammaSpeedREd, "modGammaSpeed", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModContrastREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormModContrastSlider, data.xFormModContrastREd, "modContrast", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModContrastSpeedREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormModContrastSpeedSlider, data.xFormModContrastSpeedREd, "modContrastSpeed", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModSaturationREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormModSaturationSlider, data.xFormModSaturationREd, "modSaturation", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModSaturationSpeedREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormModSaturationSpeedSlider, data.xFormModSaturationSpeedREd, "modSaturationSpeed", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModHueREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormModHueSlider, data.xFormModHueREd, "modHue", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModHueSpeedREd_reset() {
-    // TODO Auto-generated method stub
-
+    xFormTextFieldReset(data.xFormModHueSpeedSlider, data.xFormModHueSpeedREd, "modHueSpeed", SLIDER_SCALE_COLOR);
   }
 
   public void affineCoordsViewTypeCmd_changed() {
