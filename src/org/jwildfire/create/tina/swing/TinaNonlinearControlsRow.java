@@ -16,30 +16,20 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JToggleButton;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.*;
 
 public class TinaNonlinearControlsRow {
   private TinaController tinaController;
@@ -63,8 +53,8 @@ public class TinaNonlinearControlsRow {
   private boolean noRefresh;
 
   public TinaNonlinearControlsRow(int pIndex, JPanel pRootPanel, JLabel pNonlinearVarLbl, JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JWFNumberField pNonlinearVarREd, JWFNumberField pNonlinearParamsREd,
-      JButton pNonlinearParamsLeftButton, JToggleButton pNonlinearParamsPreButton, JToggleButton pNonlinearParamsPostButton, JButton pNonlinearParamsUpButton,
-      JToggleButton pToggleParamsPnlButton) {
+                                  JButton pNonlinearParamsLeftButton, JToggleButton pNonlinearParamsPreButton, JToggleButton pNonlinearParamsPostButton, JButton pNonlinearParamsUpButton,
+                                  JToggleButton pToggleParamsPnlButton) {
     index = pIndex;
     rootPanel = pRootPanel;
     rootPnlBaseWidth = rootPanel.getPreferredSize().width;
@@ -148,8 +138,7 @@ public class TinaNonlinearControlsRow {
     for (JComponent comp : paramsPnlComponents) {
       try {
         rootPanel.remove(comp);
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
     }
@@ -227,7 +216,7 @@ public class TinaNonlinearControlsRow {
       @Override
       public void mouseClicked(MouseEvent e) {
         if (e.getClickCount() == 2) {
-          getTinaController().nonlinearResetVarParam(pIdx, pName);
+          getTinaController().getNonlinearControls().nonlinearResetVarParam(pIdx, pName);
         }
       }
     });
@@ -257,8 +246,7 @@ public class TinaNonlinearControlsRow {
       if (pParamValue instanceof Integer) {
         field.setOnlyIntegers(true);
         field.setValue((Integer) pParamValue);
-      }
-      else {
+      } else {
         field.setValue((Double) pParamValue);
       }
     }
@@ -277,12 +265,11 @@ public class TinaNonlinearControlsRow {
           if (fieldVal != null) {
             if (fieldVal instanceof Integer) {
               doubleVal = (Integer) fieldVal;
-            }
-            else {
+            } else {
               doubleVal = (Double) fieldVal;
             }
           }
-          tinaController.propertyPnlValueChanged(index, pParamName, doubleVal, field.isMouseAdjusting());
+          tinaController.getNonlinearControls().propertyPnlValueChanged(index, pParamName, doubleVal, field.isMouseAdjusting());
           refreshSliderWithoutRefresh(pParamName, doubleVal);
           refreshNonlinearParamsCmbWithoutRefresh(pParamName, doubleVal);
         }
@@ -301,8 +288,7 @@ public class TinaNonlinearControlsRow {
         refreshSliderLimits(slider, val);
         slider.setValue(val);
       }
-    }
-    finally {
+    } finally {
       setNoRefresh(oldNoRefresh);
     }
   }
@@ -315,13 +301,11 @@ public class TinaNonlinearControlsRow {
       if (field != null) {
         if (field.isOnlyIntegers()) {
           field.setValue(Tools.FTOI(pValue));
-        }
-        else {
+        } else {
           field.setValue(pValue);
         }
       }
-    }
-    finally {
+    } finally {
       setNoRefresh(oldNoRefresh);
     }
   }
@@ -336,16 +320,13 @@ public class TinaNonlinearControlsRow {
         try {
           if (nonlinearParamsREd.isOnlyIntegers()) {
             nonlinearParamsREd.setValue(Tools.FTOI(pValue));
-          }
-          else {
+          } else {
             nonlinearParamsREd.setValue(pValue);
           }
-        }
-        finally {
+        } finally {
           tinaController.cmbRefreshing = oldCtrlRefresh;
         }
-      }
-      finally {
+      } finally {
         setNoRefresh(oldNoRefresh);
       }
     }
@@ -365,8 +346,7 @@ public class TinaNonlinearControlsRow {
         val = iVal;
         min = val - 5;
         max = val + 5;
-      }
-      else {
+      } else {
         val = (Double) pParamValue;
         if (val < min + 1.0) {
           min = Tools.FTOI(val - 1.0);
@@ -391,7 +371,7 @@ public class TinaNonlinearControlsRow {
       public void stateChanged(javax.swing.event.ChangeEvent e) {
         if (!isNoRefresh()) {
           double sliderVal = (double) slider.getValue() / (double) SLIDER_SCALE;
-          tinaController.propertyPnlValueChanged(index, pParamName, sliderVal, slider.getValueIsAdjusting());
+          tinaController.getNonlinearControls().propertyPnlValueChanged(index, pParamName, sliderVal, slider.getValueIsAdjusting());
           refreshNumberFieldWithoutRefresh(pParamName, sliderVal);
           refreshNonlinearParamsCmbWithoutRefresh(pParamName, sliderVal);
         }
@@ -412,8 +392,7 @@ public class TinaNonlinearControlsRow {
         if (field != null) {
           if (field.isOnlyIntegers()) {
             field.setValue(Tools.FTOI(pValue));
-          }
-          else {
+          } else {
             field.setValue(pValue);
           }
         }
@@ -422,8 +401,7 @@ public class TinaNonlinearControlsRow {
           refreshSliderLimits(slider, val);
           slider.setValue(val);
         }
-      }
-      finally {
+      } finally {
         setNoRefresh(oldNoRefresh);
       }
     }
@@ -432,8 +410,7 @@ public class TinaNonlinearControlsRow {
   private void refreshSliderLimits(JSlider pSlider, int pValue) {
     if (pValue < pSlider.getMinimum() + 10) {
       pSlider.setMinimum(pValue - 100);
-    }
-    else if (pValue > pSlider.getMaximum() - 10) {
+    } else if (pValue > pSlider.getMaximum() - 10) {
       pSlider.setMaximum(pValue + 100);
     }
   }

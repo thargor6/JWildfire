@@ -4880,7 +4880,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(0);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(0);
           }
         }
       });
@@ -7546,7 +7546,7 @@ public class MainEditorFrame extends JFrame {
     for (int i = 0; i < variationControlsDelegates.length; i++) {
       variationControlsDelegates[i] = new VariationControlsDelegate(tinaController, tinaController.getData(), getRootPanel(), i);
     }
-    tinaController.setVariationControlsDelegates(variationControlsDelegates);
+    tinaController.getNonlinearControls().setVariationControlsDelegates(variationControlsDelegates);
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
@@ -8680,7 +8680,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(0);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(0);
           }
         }
       });
@@ -8699,7 +8699,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar1REd.setToolTipText("Variation amount");
       nonlinearVar1REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(0);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(0);
         }
       });
       nonlinearVar1REd.setValueStep(0.01);
@@ -8709,7 +8709,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar1REd.isMouseAdjusting() || nonlinearVar1REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(0);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(0);
           }
         }
       });
@@ -8737,7 +8737,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(0);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(0);
           }
         }
       });
@@ -8755,7 +8755,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1REd = new JWFNumberField();
       nonlinearParams1REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(0);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(0);
         }
       });
       nonlinearParams1REd.setValueStep(0.05);
@@ -8765,7 +8765,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams1REd.isMouseAdjusting() || nonlinearParams1REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(0);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(0);
           }
         }
       });
@@ -8832,7 +8832,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams1PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(0);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(0);
         }
       });
       nonlinearVar1Panel.add(nonlinearParams1PreButton);
@@ -8848,7 +8848,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams1PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(0);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(0);
         }
       });
       nonlinearVar1Panel.add(nonlinearParams1PostButton);
@@ -8864,7 +8864,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams1ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(0);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(0);
         }
       });
       nonlinearVar1Panel.add(nonlinearParams1ToggleParamsPnlButton);
@@ -8888,7 +8888,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams1LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(0);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(0);
         }
       });
     }
@@ -8914,7 +8914,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(1);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(1);
           }
         }
       });
@@ -8946,7 +8946,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams2PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(1);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(1);
         }
       });
       nonlinearVar2Panel.add(nonlinearParams2PreButton);
@@ -8962,7 +8962,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams2PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(1);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(1);
         }
       });
       nonlinearVar2Panel.add(nonlinearParams2PostButton);
@@ -8978,7 +8978,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams2UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(1);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(1);
         }
       });
       nonlinearVar2Panel.add(nonlinearParams2UpButton);
@@ -8994,7 +8994,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams2ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(1);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(1);
         }
       });
       nonlinearVar2Panel.add(nonlinearParams2ToggleParamsPnlButton);
@@ -9018,7 +9018,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar2Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(1);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(1);
           }
         }
       });
@@ -9037,7 +9037,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar2REd.setToolTipText("Variation amount");
       nonlinearVar2REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(1);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(1);
         }
       });
       nonlinearVar2REd.addChangeListener(new ChangeListener() {
@@ -9046,7 +9046,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar2REd.isMouseAdjusting() || nonlinearVar2REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(1);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(1);
           }
         }
       });
@@ -9075,7 +9075,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(1);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(1);
           }
         }
       });
@@ -9093,7 +9093,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2REd = new JWFNumberField();
       nonlinearParams2REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(1);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(1);
         }
       });
       nonlinearParams2REd.addChangeListener(new ChangeListener() {
@@ -9102,7 +9102,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams2REd.isMouseAdjusting() || nonlinearParams2REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(1);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(1);
           }
         }
       });
@@ -9132,7 +9132,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams2LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(1);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(1);
         }
       });
     }
@@ -9158,7 +9158,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(2);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(2);
           }
         }
       });
@@ -9191,7 +9191,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams3PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(2);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(2);
         }
       });
       nonlinearVar3Panel.add(nonlinearParams3PreButton);
@@ -9207,7 +9207,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams3PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(2);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(2);
         }
       });
       nonlinearVar3Panel.add(nonlinearParams3PostButton);
@@ -9223,7 +9223,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams3UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(2);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(2);
         }
       });
       nonlinearVar3Panel.add(nonlinearParams3UpButton);
@@ -9239,7 +9239,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams3ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(2);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(2);
         }
       });
       nonlinearVar3Panel.add(nonlinearParams3ToggleParamsPnlButton);
@@ -9263,7 +9263,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar3Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(2);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(2);
           }
         }
       });
@@ -9282,7 +9282,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar3REd.setToolTipText("Variation amount");
       nonlinearVar3REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(2);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(2);
         }
       });
       nonlinearVar3REd.addChangeListener(new ChangeListener() {
@@ -9291,7 +9291,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar3REd.isMouseAdjusting() || nonlinearVar3REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(2);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(2);
           }
         }
       });
@@ -9320,7 +9320,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(2);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(2);
           }
         }
       });
@@ -9338,7 +9338,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3REd = new JWFNumberField();
       nonlinearParams3REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(2);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(2);
         }
       });
       nonlinearParams3REd.setValueStep(0.05);
@@ -9348,7 +9348,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams3REd.isMouseAdjusting() || nonlinearParams3REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(2);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(2);
           }
         }
       });
@@ -9377,7 +9377,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams3LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(2);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(2);
         }
       });
     }
@@ -10295,7 +10295,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(3);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(3);
           }
         }
       });
@@ -10327,7 +10327,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams4PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(3);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(3);
         }
       });
       nonlinearVar4Panel.add(nonlinearParams4PreButton);
@@ -10343,7 +10343,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams4PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(3);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(3);
         }
       });
       nonlinearVar4Panel.add(nonlinearParams4PostButton);
@@ -10359,7 +10359,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams4UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(3);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(3);
         }
       });
       nonlinearVar4Panel.add(nonlinearParams4UpButton);
@@ -10375,7 +10375,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams4ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(3);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(3);
         }
       });
       nonlinearVar4Panel.add(nonlinearParams4ToggleParamsPnlButton);
@@ -10400,7 +10400,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar4Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(3);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(3);
           }
         }
       });
@@ -10419,7 +10419,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar4REd.setToolTipText("Variation amount");
       nonlinearVar4REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(3);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(3);
         }
       });
       nonlinearVar4REd.addChangeListener(new ChangeListener() {
@@ -10428,7 +10428,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar4REd.isMouseAdjusting() || nonlinearVar4REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(3);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(3);
           }
         }
       });
@@ -10457,7 +10457,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(3);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(3);
           }
         }
       });
@@ -10475,7 +10475,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4REd = new JWFNumberField();
       nonlinearParams4REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(3);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(3);
         }
       });
       nonlinearParams4REd.setValueStep(0.05);
@@ -10485,7 +10485,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams4REd.isMouseAdjusting() || nonlinearParams4REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(3);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(3);
           }
         }
       });
@@ -10514,7 +10514,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams4LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(3);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(3);
         }
       });
     }
@@ -10616,7 +10616,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(4);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(4);
           }
         }
       });
@@ -10648,7 +10648,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams5PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(4);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(4);
         }
       });
       nonlinearVar5Panel.add(nonlinearParams5PreButton);
@@ -10664,7 +10664,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams5PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(4);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(4);
         }
       });
       nonlinearVar5Panel.add(nonlinearParams5PostButton);
@@ -10680,7 +10680,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams5UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(4);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(4);
         }
       });
       nonlinearVar5Panel.add(nonlinearParams5UpButton);
@@ -10696,7 +10696,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams5ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(4);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(4);
         }
       });
       nonlinearVar5Panel.add(nonlinearParams5ToggleParamsPnlButton);
@@ -10720,7 +10720,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar5Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(4);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(4);
           }
         }
       });
@@ -10739,7 +10739,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar5REd.setToolTipText("Variation amount");
       nonlinearVar5REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(4);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(4);
         }
       });
       nonlinearVar5REd.addChangeListener(new ChangeListener() {
@@ -10748,7 +10748,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar5REd.isMouseAdjusting() || nonlinearVar5REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(4);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(4);
           }
         }
       });
@@ -10777,7 +10777,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(4);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(4);
           }
         }
       });
@@ -10795,7 +10795,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5REd = new JWFNumberField();
       nonlinearParams5REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(4);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(4);
         }
       });
       nonlinearParams5REd.setValueStep(0.05);
@@ -10805,7 +10805,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams5REd.isMouseAdjusting() || nonlinearParams5REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(4);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(4);
           }
         }
       });
@@ -10834,7 +10834,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams5LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(4);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(4);
         }
       });
     }
@@ -10860,7 +10860,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(5);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(5);
           }
         }
       });
@@ -10892,7 +10892,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams6PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(5);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(5);
         }
       });
       nonlinearVar6Panel.add(nonlinearParams6PreButton);
@@ -10908,7 +10908,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams6PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(5);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(5);
         }
       });
       nonlinearVar6Panel.add(nonlinearParams6PostButton);
@@ -10924,7 +10924,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams6UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(5);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(5);
         }
       });
       nonlinearVar6Panel.add(nonlinearParams6UpButton);
@@ -10940,7 +10940,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams6ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(5);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(5);
         }
       });
       nonlinearVar6Panel.add(nonlinearParams6ToggleParamsPnlButton);
@@ -10964,7 +10964,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar6Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(5);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(5);
           }
         }
       });
@@ -10983,7 +10983,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar6REd.setToolTipText("Variation amount");
       nonlinearVar6REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(5);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(5);
         }
       });
       nonlinearVar6REd.addChangeListener(new ChangeListener() {
@@ -10992,7 +10992,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar6REd.isMouseAdjusting() || nonlinearVar6REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(5);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(5);
           }
         }
       });
@@ -11021,7 +11021,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(5);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(5);
           }
         }
       });
@@ -11039,7 +11039,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6REd = new JWFNumberField();
       nonlinearParams6REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(5);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(5);
         }
       });
       nonlinearParams6REd.setValueStep(0.05);
@@ -11049,7 +11049,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams6REd.isMouseAdjusting() || nonlinearParams6REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(5);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(5);
           }
         }
       });
@@ -11078,7 +11078,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams6LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(5);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(5);
         }
       });
     }
@@ -11104,7 +11104,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(6);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(6);
           }
         }
       });
@@ -11136,7 +11136,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams7PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(6);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(6);
         }
       });
       nonlinearVar7Panel.add(nonlinearParams7PreButton);
@@ -11152,7 +11152,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams7PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(6);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(6);
         }
       });
       nonlinearVar7Panel.add(nonlinearParams7PostButton);
@@ -11168,7 +11168,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams7UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(6);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(6);
         }
       });
       nonlinearVar7Panel.add(nonlinearParams7UpButton);
@@ -11184,7 +11184,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams7ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(6);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(6);
         }
       });
       nonlinearVar7Panel.add(nonlinearParams7ToggleParamsPnlButton);
@@ -11209,7 +11209,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar7Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(6);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(6);
           }
         }
       });
@@ -11228,7 +11228,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar7REd.setToolTipText("Variation amount");
       nonlinearVar7REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(6);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(6);
         }
       });
       nonlinearVar7REd.addChangeListener(new ChangeListener() {
@@ -11237,7 +11237,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar7REd.isMouseAdjusting() || nonlinearVar7REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(6);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(6);
           }
         }
       });
@@ -11266,7 +11266,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(6);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(6);
           }
         }
       });
@@ -11284,7 +11284,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7REd = new JWFNumberField();
       nonlinearParams7REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(6);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(6);
         }
       });
       nonlinearParams7REd.setValueStep(0.05);
@@ -11294,7 +11294,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams7REd.isMouseAdjusting() || nonlinearParams7REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(6);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(6);
           }
         }
       });
@@ -11323,7 +11323,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams7LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(6);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(6);
         }
       });
     }
@@ -11349,7 +11349,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(7);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(7);
           }
         }
       });
@@ -11381,7 +11381,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams8PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(7);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(7);
         }
       });
       nonlinearVar8Panel.add(nonlinearParams8PreButton);
@@ -11397,7 +11397,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams8PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(7);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(7);
         }
       });
       nonlinearVar8Panel.add(nonlinearParams8PostButton);
@@ -11413,7 +11413,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams8UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(7);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(7);
         }
       });
       nonlinearVar8Panel.add(nonlinearParams8UpButton);
@@ -11429,7 +11429,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams8ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(7);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(7);
         }
       });
       nonlinearVar8Panel.add(nonlinearParams8ToggleParamsPnlButton);
@@ -11454,7 +11454,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar8Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(7);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(7);
           }
         }
       });
@@ -11473,7 +11473,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar8REd.setToolTipText("Variation amount");
       nonlinearVar8REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(7);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(7);
         }
       });
       nonlinearVar8REd.addChangeListener(new ChangeListener() {
@@ -11482,7 +11482,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar8REd.isMouseAdjusting() || nonlinearVar8REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(7);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(7);
           }
         }
       });
@@ -11511,7 +11511,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(7);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(7);
           }
         }
       });
@@ -11529,7 +11529,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8REd = new JWFNumberField();
       nonlinearParams8REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(7);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(7);
         }
       });
       nonlinearParams8REd.setValueStep(0.05);
@@ -11539,7 +11539,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams8REd.isMouseAdjusting() || nonlinearParams8REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(7);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(7);
           }
         }
       });
@@ -11568,7 +11568,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams8LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(7);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(7);
         }
       });
     }
@@ -11594,7 +11594,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(8);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(8);
           }
         }
       });
@@ -11626,7 +11626,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams9PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(8);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(8);
         }
       });
       nonlinearVar9Panel.add(nonlinearParams9PreButton);
@@ -11642,7 +11642,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams9PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(9);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(9);
         }
       });
       nonlinearVar9Panel.add(nonlinearParams9PostButton);
@@ -11658,7 +11658,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams9UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(8);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(8);
         }
       });
       nonlinearVar9Panel.add(nonlinearParams9UpButton);
@@ -11674,7 +11674,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams9ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(8);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(8);
         }
       });
       nonlinearVar9Panel.add(nonlinearParams9ToggleParamsPnlButton);
@@ -11699,7 +11699,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar9Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(8);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(8);
           }
         }
       });
@@ -11718,7 +11718,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar9REd.setToolTipText("Variation amount");
       nonlinearVar9REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(8);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(8);
         }
       });
       nonlinearVar9REd.addChangeListener(new ChangeListener() {
@@ -11727,7 +11727,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar9REd.isMouseAdjusting() || nonlinearVar9REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(8);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(8);
           }
         }
       });
@@ -11756,7 +11756,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(8);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(8);
           }
         }
       });
@@ -11774,7 +11774,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9REd = new JWFNumberField();
       nonlinearParams9REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(8);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(8);
         }
       });
       nonlinearParams9REd.setValueStep(0.05);
@@ -11784,7 +11784,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams9REd.isMouseAdjusting() || nonlinearParams9REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(8);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(8);
           }
         }
       });
@@ -11813,7 +11813,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams9LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(8);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(8);
         }
       });
     }
@@ -11839,7 +11839,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(9);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(9);
           }
         }
       });
@@ -11871,7 +11871,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams10PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(9);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(9);
         }
       });
       nonlinearVar10Panel.add(nonlinearParams10PreButton);
@@ -11887,7 +11887,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams10PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(9);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(9);
         }
       });
       nonlinearVar10Panel.add(nonlinearParams10PostButton);
@@ -11903,7 +11903,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams10UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(9);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(9);
         }
       });
       nonlinearVar10Panel.add(nonlinearParams10UpButton);
@@ -11919,7 +11919,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams10ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(9);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(9);
         }
       });
       nonlinearVar10Panel.add(nonlinearParams10ToggleParamsPnlButton);
@@ -11943,7 +11943,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar10Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(9);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(9);
           }
         }
       });
@@ -11962,7 +11962,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar10REd.setToolTipText("Variation amount");
       nonlinearVar10REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(9);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(9);
         }
       });
       nonlinearVar10REd.addChangeListener(new ChangeListener() {
@@ -11971,7 +11971,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar10REd.isMouseAdjusting() || nonlinearVar10REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(9);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(9);
           }
         }
       });
@@ -12000,7 +12000,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(9);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(9);
           }
         }
       });
@@ -12018,7 +12018,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10REd = new JWFNumberField();
       nonlinearParams10REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(9);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(9);
         }
       });
       nonlinearParams10REd.setValueStep(0.05);
@@ -12028,7 +12028,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams10REd.isMouseAdjusting() || nonlinearParams10REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(9);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(9);
           }
         }
       });
@@ -12057,7 +12057,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams10LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(9);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(9);
         }
       });
     }
@@ -12083,7 +12083,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(10);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(10);
           }
         }
       });
@@ -12115,7 +12115,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams11PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(10);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(10);
         }
       });
       nonlinearVar11Panel.add(nonlinearParams11PreButton);
@@ -12131,7 +12131,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams11PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(10);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(10);
         }
       });
       nonlinearVar11Panel.add(nonlinearParams11PostButton);
@@ -12147,7 +12147,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams11UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(10);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(10);
         }
       });
       nonlinearVar11Panel.add(nonlinearParams11UpButton);
@@ -12163,7 +12163,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams11ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(10);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(10);
         }
       });
       nonlinearVar11Panel.add(nonlinearParams11ToggleParamsPnlButton);
@@ -12188,7 +12188,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar11Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(10);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(10);
           }
         }
       });
@@ -12207,7 +12207,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar11REd.setToolTipText("Variation amount");
       nonlinearVar11REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(10);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(10);
         }
       });
       nonlinearVar11REd.addChangeListener(new ChangeListener() {
@@ -12216,7 +12216,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar11REd.isMouseAdjusting() || nonlinearVar11REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(10);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(10);
           }
         }
       });
@@ -12245,7 +12245,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(10);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(10);
           }
         }
       });
@@ -12263,7 +12263,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11REd = new JWFNumberField();
       nonlinearParams11REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(10);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(10);
         }
       });
       nonlinearParams11REd.setValueStep(0.05);
@@ -12273,7 +12273,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams11REd.isMouseAdjusting() || nonlinearParams11REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(10);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(10);
           }
         }
       });
@@ -12302,7 +12302,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams11LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(10);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(10);
         }
       });
     }
@@ -12328,7 +12328,7 @@ public class MainEditorFrame extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
           if (e.getClickCount() == 2) {
-            tinaController.nonlinearResetVarParams(11);
+            tinaController.getNonlinearControls().nonlinearResetVarParams(11);
           }
         }
       });
@@ -12360,7 +12360,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams12PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(11);
+          tinaController.getNonlinearControls().nonlinearParamsPreButtonClicked(11);
         }
       });
       nonlinearVar12Panel.add(nonlinearParams12PreButton);
@@ -12376,7 +12376,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams12PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPostButtonClicked(11);
+          tinaController.getNonlinearControls().nonlinearParamsPostButtonClicked(11);
         }
       });
       nonlinearVar12Panel.add(nonlinearParams12PostButton);
@@ -12392,7 +12392,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams12UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsUpButtonClicked(11);
+          tinaController.getNonlinearControls().nonlinearParamsUpButtonClicked(11);
         }
       });
       nonlinearVar12Panel.add(nonlinearParams12UpButton);
@@ -12408,7 +12408,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams12ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsToggleParamsPnlClicked(11);
+          tinaController.getNonlinearControls().nonlinearParamsToggleParamsPnlClicked(11);
         }
       });
       nonlinearVar12Panel.add(nonlinearParams12ToggleParamsPnlButton);
@@ -12432,7 +12432,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar12Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearVarCmbChanged(11);
+            tinaController.getNonlinearControls().nonlinearVarCmbChanged(11);
           }
         }
       });
@@ -12451,7 +12451,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar12REd.setToolTipText("Variation amount");
       nonlinearVar12REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearVarEditMotionCurve(11);
+          tinaController.getNonlinearControls().nonlinearVarEditMotionCurve(11);
         }
       });
       nonlinearVar12REd.addChangeListener(new ChangeListener() {
@@ -12460,7 +12460,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar12REd.isMouseAdjusting() || nonlinearVar12REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearVarREdChanged(11);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(11);
           }
         }
       });
@@ -12489,7 +12489,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            tinaController.nonlinearParamsCmbChanged(11);
+            tinaController.getNonlinearControls().nonlinearParamsCmbChanged(11);
           }
         }
       });
@@ -12507,7 +12507,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12REd = new JWFNumberField();
       nonlinearParams12REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.nonlinearParamsEditMotionCurve(11);
+          tinaController.getNonlinearControls().nonlinearParamsEditMotionCurve(11);
         }
       });
       nonlinearParams12REd.setValueStep(0.05);
@@ -12517,7 +12517,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams12REd.isMouseAdjusting() || nonlinearParams12REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.nonlinearParamsREdChanged(11);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(11);
           }
         }
       });
@@ -12546,7 +12546,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams12LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsLeftButtonClicked(11);
+          tinaController.getNonlinearControls().nonlinearParamsLeftButtonClicked(11);
         }
       });
     }
