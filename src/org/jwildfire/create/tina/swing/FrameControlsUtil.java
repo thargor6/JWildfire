@@ -31,6 +31,47 @@ public class FrameControlsUtil {
     this.ctrl = ctrl;
   }
 
+  public void updateControl(JSlider pSlider, JWFNumberField pTextField, String pProperty, Object pPropertyValue, MotionCurve pCurve, double pSliderScale) {
+    Object curveValue = null;
+    if (pPropertyValue != null && pCurve != null && pCurve.isEnabled()) {
+      if (pPropertyValue instanceof Double) {
+        curveValue = Double.valueOf(AnimationService.evalCurve(ctrl.getCurrFrame(), pCurve));
+      }
+      else if (pPropertyValue instanceof Integer) {
+        curveValue = Integer.valueOf(Tools.FTOI(AnimationService.evalCurve(ctrl.getCurrFrame(), pCurve)));
+      }
+    }
+
+    if (pTextField != null) {
+      if (pPropertyValue != null) {
+        if (pPropertyValue instanceof Double) {
+          pTextField.setText(Tools.doubleToString((Double)(curveValue!=null ? curveValue : pPropertyValue)));
+        } else if (pPropertyValue instanceof Integer) {
+          pTextField.setText(((Integer)curveValue!=null ? curveValue : pPropertyValue).toString());
+        } else {
+          pTextField.setText(pPropertyValue.toString());
+        }
+      } else {
+        pTextField.setText(null);
+      }
+    }
+    if (pSlider != null) {
+      if (pPropertyValue != null) {
+        if (pPropertyValue instanceof Double) {
+          pSlider.setValue(Tools.FTOI(((Double)(curveValue!=null ? curveValue : pPropertyValue)).doubleValue() * pSliderScale));
+        }
+        else if (pPropertyValue instanceof Integer) {
+          pSlider.setValue(Tools.FTOI(((Integer)(curveValue!=null ? curveValue : pPropertyValue)).intValue() * pSliderScale));
+        }
+        else {
+          pSlider.setValue(0);
+        }
+      } else {
+        pSlider.setValue(0);
+      }
+    }
+  }
+
   public void updateControl(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     double propertyValue = pTarget != null ? getEvaluatedPropertyValue(pTarget, pProperty) : 0.0;
     if (pTextField != null) {

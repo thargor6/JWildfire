@@ -204,15 +204,18 @@ public class NonlinearControlsDelegate {
           enableNonlinearControls(pRow, true);
         } else if (varFunc.getParameterNames().length > 0) {
           pRow.getNonlinearParamsCmb().setSelectedIndex(0);
-          Object val = varFunc.getParameterValues()[0];
+          Object paramValue = varFunc.getParameterValues()[0];
+          String paramName = varFunc.getParameterNames()[0];
           pRow.getNonlinearParamsREd().setOnlyIntegers(false);
-          if (val instanceof Double) {
-            pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
-          } else if (val instanceof Integer) {
+          if (paramValue instanceof Double) {
+            //pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+            owner.getFrameControlsUtil().updateControl(null, pRow.getNonlinearParamsREd(), paramName, paramValue, pVar.getMotionCurve(paramName), 1.0);
+          } else if (paramValue instanceof Integer) {
             pRow.getNonlinearParamsREd().setOnlyIntegers(true);
-            pRow.getNonlinearParamsREd().setText(val.toString());
+            //pRow.getNonlinearParamsREd().setText(val.toString());
+            owner.getFrameControlsUtil().updateControl(null, pRow.getNonlinearParamsREd(), paramName, paramValue, pVar.getMotionCurve(paramName), 1.0);
           } else {
-            pRow.getNonlinearParamsREd().setText(val.toString());
+            pRow.getNonlinearParamsREd().setText(paramValue.toString());
           }
           enableNonlinearControls(pRow, false);
         } else {
