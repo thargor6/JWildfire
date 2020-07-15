@@ -88,7 +88,6 @@ public class EDENInternalFrame extends JInternalFrame {
         jContentPane.add(getHSplitPane(), BorderLayout.CENTER);
       }
       catch (Throwable ex) {
-        // TODO
         //ex.printStackTrace();
       }
     }

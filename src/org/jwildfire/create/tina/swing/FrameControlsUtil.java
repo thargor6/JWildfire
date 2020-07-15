@@ -217,29 +217,33 @@ public class FrameControlsUtil {
         throw new IllegalStateException();
       }
       MotionCurve curve = getMotionCurve(pTarget, pProperty);
-      if (curve != null) {
-        int frame = ctrl.getCurrFrame();
-        // ensure that there is a keyframe at the first frame when we are somewhere in the middle of an animation,
-        // also activate the motion curve
-        if (frame > 1 && !curve.isEnabled()) {
-          curve.setEnabled(true);
-          if (!curve.hasKeyFrame(1)) {
-            curve.addKeyFrame(1, oldValue);
-          }
-        }
-        // add/modify the actual keyframe
-        {
-          int idx = curve.indexOfKeyFrame(frame);
-          if (idx >= 0) {
-            curve.getY()[idx] = propValue;
-          } else {
-            curve.addKeyFrame(frame, propValue);
-          }
-        }
-        curve.autoFitRange();
-      }
+      updateKeyFrame(propValue, oldValue, curve);
     } catch (Throwable ex) {
       ex.printStackTrace();
+    }
+  }
+
+  public void updateKeyFrame(double propValue, double oldValue, MotionCurve curve) {
+    if (curve != null) {
+      int frame = ctrl.getCurrFrame();
+      // ensure that there is a keyframe at the first frame when we are somewhere in the middle of an animation,
+      // also activate the motion curve
+      if (frame > 1 && !curve.isEnabled()) {
+        curve.setEnabled(true);
+        if (!curve.hasKeyFrame(1)) {
+          curve.addKeyFrame(1, oldValue);
+        }
+      }
+      // add/modify the actual keyframe
+      {
+        int idx = curve.indexOfKeyFrame(frame);
+        if (idx >= 0) {
+          curve.getY()[idx] = propValue;
+        } else {
+          curve.addKeyFrame(frame, propValue);
+        }
+      }
+      curve.autoFitRange();
     }
   }
 }

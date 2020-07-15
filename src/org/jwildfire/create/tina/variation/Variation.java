@@ -338,6 +338,12 @@ public class Variation implements Assignable<Variation>, Serializable {
     return curve;
   }
 
+  public void removeMotionCurve(String paramName) {
+    if(motionCurves.containsKey(paramName)) {
+      motionCurves.remove(paramName);
+    }
+  }
+
   public Map<String, MotionCurve> getClonedMotionCurves() {
     Map<String, MotionCurve> res = new HashMap<String, MotionCurve>();
     for (Entry<String, MotionCurve> curveToCopy : motionCurves.entrySet()) {

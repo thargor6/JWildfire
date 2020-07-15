@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -225,19 +225,16 @@ public class EDENController implements UserInterface {
 
   @Override
   public void taskStart(String arg0, int arg1, int arg2) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void taskStop() {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void taskUpdate(int arg0) {
-    // TODO Auto-generated method stub
 
   }
 

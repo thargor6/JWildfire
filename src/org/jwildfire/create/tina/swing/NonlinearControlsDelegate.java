@@ -119,7 +119,6 @@ public class NonlinearControlsDelegate {
   }
 
   public void refreshParamControls(TinaNonlinearControlsRow pRow, int pIdx, XForm pXForm, Variation pVar, boolean pSelectFirst) {
-
     if (pXForm == null || pVar == null) {
       pRow.getNonlinearVarCmb().setSelectedIndex(-1);
       pRow.getNonlinearVarREd().setText(null);
@@ -268,14 +267,17 @@ public class NonlinearControlsDelegate {
           if ((idx = var.getFunc().getParameterIndex(selected)) >= 0) {
             enableNonlinearControls(data.TinaNonlinearControlsRows[pIdx], false);
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setOnlyIntegers(false);
-            Object val = var.getFunc().getParameterValues()[idx];
-            if (val instanceof Double) {
-              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
-            } else if (val instanceof Integer) {
-              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(val.toString());
+            Object paramValue = var.getFunc().getParameterValues()[idx];
+            String paramName = var.getFunc().getParameterNames()[idx];
+            if (paramValue instanceof Double) {
+              // data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString((Double) paramValue));
+              owner.getFrameControlsUtil().updateControl(null, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(), paramName, paramValue, var.getMotionCurve(paramName), 1.0);
+            } else if (paramValue instanceof Integer) {
+              // data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(paramValue.toString());
+              owner.getFrameControlsUtil().updateControl(null, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(), paramName, paramValue, var.getMotionCurve(paramName), 1.0);
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setOnlyIntegers(true);
             } else {
-              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(val.toString());
+              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(paramValue.toString());
             }
           }
           // ressources
@@ -337,6 +339,10 @@ public class NonlinearControlsDelegate {
                     var.getFunc().setParameter(paramName, (Integer) paramValue);
                   } else if (paramValue instanceof Double) {
                     var.getFunc().setParameter(paramName, (Double) paramValue);
+                  }
+                  MotionCurve curve = var.getMotionCurve(paramName);
+                  if(curve!=null) {
+                    var.removeMotionCurve(paramName);
                   }
                 } catch (Exception ex) {
                   ex.printStackTrace();
@@ -482,14 +488,14 @@ public class NonlinearControlsDelegate {
     }
     owner.cmbRefreshing = true;
     try {
-      String selected = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+      String paramName = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
       XForm xForm = owner.getCurrXForm();
-      if (xForm != null && selected != null && selected.length() > 0) {
+      if (xForm != null && paramName != null && paramName.length() > 0) {
         owner.saveUndoPoint();
         if (pIdx < xForm.getVariationCount()) {
           final Variation var = xForm.getVariation(pIdx);
           int idx;
-          if ((idx = var.getFunc().getParameterIndex(selected)) >= 0) {
+          if ((idx = var.getFunc().getParameterIndex(paramName)) >= 0) {
             String valStr = data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().getText();
             if (valStr == null || valStr.length() == 0) {
               valStr = "0";
@@ -506,17 +512,34 @@ public class NonlinearControlsDelegate {
               }
             }
 
-            double val = Tools.stringToDouble(valStr) + pDelta;
-            var.getFunc().setParameter(selected, val);
-            if (var.getFunc().dynamicParameterExpansion(selected)) {
+            Object oldValue = var.getFunc().getParameter(paramName);
+            double oldValueAsDouble=0.0;
+            if(oldValue!=null) {
+              if(oldValue instanceof Double) {
+                oldValueAsDouble = ((Double)oldValue).doubleValue();
+              }
+              else if(oldValue instanceof Integer) {
+                oldValueAsDouble = ((Integer)oldValue).intValue();
+              }
+            }
+            double newValue = Tools.stringToDouble(valStr) + pDelta;
+            var.getFunc().setParameter(paramName, newValue);
+            MotionCurve curve = var.getMotionCurve(paramName);
+            if(curve==null) {
+              curve = var.createMotionCurve(paramName);
+            }
+            owner.getFrameControlsUtil().updateKeyFrame(newValue, oldValueAsDouble, curve);
+
+
+            if (var.getFunc().dynamicParameterExpansion(paramName)) {
               // if setting the parameter can change the total number of parameters,
               //    then refresh parameter UI (and reselect parameter that was changed)
               this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], pIdx, xForm, var, false);
-              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().setSelectedItem(selected);
+              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().setSelectedItem(paramName);
             }
-            data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
-            data.TinaNonlinearControlsRows[pIdx].refreshParamWithoutRefresh(selected, val);
-          } else if ((idx = var.getFunc().getRessourceIndex(selected)) >= 0) {
+            data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(newValue));
+            data.TinaNonlinearControlsRows[pIdx].refreshParamWithoutRefresh(paramName, newValue);
+          } else if ((idx = var.getFunc().getRessourceIndex(paramName)) >= 0) {
             final String rName = var.getFunc().getRessourceNames()[idx];
             RessourceType resType = var.getFunc().getRessourceType(rName);
             switch (resType) {

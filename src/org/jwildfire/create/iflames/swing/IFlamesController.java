@@ -602,7 +602,6 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   }
 
   public void enableControls() {
-    // TODO
     enableUndoControls();
     boolean hasFlame = getFlame() != null;
     IFlamesFunc iflames = getIFlamesFunc();
@@ -1218,7 +1217,6 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   }
 
   private void refreshImageFields() {
-    // TODO Auto-generated method stub
     IFlamesFunc iflame = getIFlamesFunc();
     if (iflame == null) {
       edgesNorthButton.setSelected(false);
@@ -1280,7 +1278,6 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   }
 
   private void refreshMotionFields() {
-    // TODO Auto-generated method stub
     IFlamesFunc iflame = getIFlamesFunc();
     if (iflame == null) {
       motionTimeField.setValue(0.0);
@@ -1307,7 +1304,6 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   }
 
   private void refreshBaseFlameFields() {
-    // TODO Auto-generated method stub
     IFlamesFunc iflame = getIFlamesFunc();
     if (iflame == null) {
       baseFlameSizeField.setValue(0.0);
