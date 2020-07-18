@@ -61,6 +61,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(MandelbrotRandomFlameGenerator.class);
     registerRandomFlameGenerator(PhoenixRandomFlameGenerator.class);
     registerRandomFlameGenerator(RaysRandomFlameGenerator.class);
+    registerRandomFlameGenerator(RunRandomScriptRandomFlameGenerator.class);
     registerRandomFlameGenerator(SimpleRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalSimpleRandomFlameGenerator.class);
     registerRandomFlameGenerator(Affine3DRandomFlameGenerator.class);

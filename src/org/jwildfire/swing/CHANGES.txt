@@ -12,7 +12,12 @@ V6.00 (xx.xx.2020)
  - easy revert-to-default-feature for most parameters: just double-click at the label in front of an field to revert the
    current-value to the default value. To see if a field supprots this feature, just hover with the mouse of the label.
    When the cursor turn into a hand-symbol, the field supports the feature. This function also respects motion-curves and can be undone.
-
+ - new "RunRandomScript"-random-flame-generator which executes randomly selected scripts from your script-library to generate random flames.
+   This makes the scripting-feature more visible to users who not already know much about it, and also creates a lot of beautiful new flames.
+   The random generator also adds symmetry and weight-fields, accordingly to your selection, on top of the script-generated flames,
+   but preserves the script-generated-colors (when any).
+   You can use the options tinaRandGenRunRandomScriptIncludedScripts and tinaRandGenRunRandomScriptExcludedScripts in the Preferences to
+   include or exclude specific scripts (or both).
  - changed some default settings in regard to flame-animations
  - numeric fields now also react to inputs of the mousewheel
  - added function to reset all motion curves

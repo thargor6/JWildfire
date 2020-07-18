@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,9 +21,8 @@ import java.io.File;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.script.swing.JWFScriptController.ScriptNode;
 
-public class JWFScriptUserNode extends DefaultMutableTreeNode implements ScriptNode {
+public class JWFScriptUserNode extends DefaultMutableTreeNode implements JWFScriptUtils.ScriptNode {
   private static final long serialVersionUID = 1L;
   private String caption;
   private final String filename;

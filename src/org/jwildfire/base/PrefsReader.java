@@ -169,7 +169,8 @@ public class PrefsReader {
         pPrefs.setTinaRandGenDualityPreferedVariation(getProperty(props, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION, pPrefs.getTinaRandGenDualityPreferedVariation()));
         pPrefs.setTinaRandGenDualityPreferedVariationProbability1(getDoubleProperty(props, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY1, pPrefs.getTinaRandGenDualityPreferedVariationProbability1()));
         pPrefs.setTinaRandGenDualityPreferedVariationProbability2(getDoubleProperty(props, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY2, pPrefs.getTinaRandGenDualityPreferedVariationProbability2()));
-
+        pPrefs.setTinaRandGenRunRandomScriptIncludedScripts(getProperty(props, Prefs.KEY_TINA_RANDOMBATCH_RUN_RANDOM_SCRIPT_INCLUDED_SCRIPTS, pPrefs.getTinaRandGenRunRandomScriptIncludedScripts()));
+        pPrefs.setTinaRandGenRunRandomScriptExcludedScripts(getProperty(props, Prefs.KEY_TINA_RANDOMBATCH_RUN_RANDOM_SCRIPT_EXCLUDED_SCRIPTS, pPrefs.getTinaRandGenRunRandomScriptExcludedScripts()));
         pPrefs.setTinaDefaultSpatialOversampling(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING, pPrefs.getTinaDefaultSpatialOversampling()));
         pPrefs.setTinaDefaultFilterVisualisationFlat(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT, pPrefs.isTinaDefaultFilterVisualisationFlat()));
         pPrefs.setTinaDefaultPostNoiseFilter(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_POST_NOISE_FILTER, pPrefs.isTinaDefaultPostNoiseFilter()));

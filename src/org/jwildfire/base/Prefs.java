@@ -102,6 +102,9 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION = "tina.random_batch.duality.prefered_variation";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY1 = "tina.random_batch.duality.prefered_variation_probability1";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY2 = "tina.random_batch.duality.prefered_variation_probability2";
+  static final String KEY_TINA_RANDOMBATCH_RUN_RANDOM_SCRIPT_INCLUDED_SCRIPTS = "tina.random_batch.run_random_script.included_scripts";
+  static final String KEY_TINA_RANDOMBATCH_RUN_RANDOM_SCRIPT_EXCLUDED_SCRIPTS = "tina.random_batch.run_random_script.exclude_scripts";
+
   static final String KEY_TINA_RANDOMMOVIEBATCH_SIZE = "tina.random_movie_batch.size";
   static final String KEY_TINA_RASTER_TYPE = "tina.raster_type";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_RED = "tina.random_batch.bg_color.red";
@@ -384,6 +387,11 @@ public class Prefs extends ManagedObject {
   private double tinaRandGenDualityPreferedVariationProbability1 = 0.33;
   @Property(description = "Probability to use one of the prefered variations in the 2nd transform by the \"Duality\"-random-flame generator.", category = PropertyCategory.TINA)
   private double tinaRandGenDualityPreferedVariationProbability2 = 0.25;
+
+  @Property(description = "Included scripts in the \"RunRandomScript\"-random-flame generator. Includes all scripts if empty. It is sufficient to only specify the beginng of the name. You may add multiple entries, they must be separated by comma. Requires restart of the program after change.", category = PropertyCategory.TINA)
+  private String tinaRandGenRunRandomScriptIncludedScripts = "";
+  @Property(description = "Excluded scripts from the \"RunRandomScript\"-random-flame generator. Excludes no script if empty. It is sufficient to only specify the beginng of the name. You may add multiple entries, they must be separated by comma. Requires restart of the program after change.", category = PropertyCategory.TINA)
+  private String tinaRandGenRunRandomScriptExcludedScripts = "";
 
   @Property(description = "Image-input-path for the \"Color map\"-random-flame-generator (is scanned recursively, so BEWARE)", category = PropertyCategory.TINA)
   private String tinaRandGenColorMapImagePath = null;
@@ -797,6 +805,9 @@ public class Prefs extends ManagedObject {
     tinaRandGenDualityPreferedVariation = pSrc.tinaRandGenDualityPreferedVariation;
     tinaRandGenDualityPreferedVariationProbability1 = pSrc.tinaRandGenDualityPreferedVariationProbability1;
     tinaRandGenDualityPreferedVariationProbability2 = pSrc.tinaRandGenDualityPreferedVariationProbability2;
+
+    tinaRandGenRunRandomScriptIncludedScripts = pSrc.tinaRandGenRunRandomScriptIncludedScripts;
+    tinaRandGenRunRandomScriptExcludedScripts = pSrc.tinaRandGenRunRandomScriptExcludedScripts;
 
     tinaEditorGuidesCenterPointColor = new Color(pSrc.tinaEditorGuidesCenterPointColor.getRed(), pSrc.tinaEditorGuidesCenterPointColor.getGreen(), pSrc.tinaEditorGuidesCenterPointColor.getBlue());
     tinaEditorGuidesRuleOfThirdsColor = new Color(pSrc.tinaEditorGuidesRuleOfThirdsColor.getRed(), pSrc.tinaEditorGuidesRuleOfThirdsColor.getGreen(), pSrc.tinaEditorGuidesRuleOfThirdsColor.getBlue());
@@ -1747,5 +1758,21 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultAnimationControlsEnabled(boolean tinaDefaultAnimationControlsEnabled) {
     this.tinaDefaultAnimationControlsEnabled = tinaDefaultAnimationControlsEnabled;
+  }
+
+  public String getTinaRandGenRunRandomScriptIncludedScripts() {
+    return tinaRandGenRunRandomScriptIncludedScripts;
+  }
+
+  public void setTinaRandGenRunRandomScriptIncludedScripts(String tinaRandGenRunRandomScriptIncludedScripts) {
+    this.tinaRandGenRunRandomScriptIncludedScripts = tinaRandGenRunRandomScriptIncludedScripts;
+  }
+
+  public String getTinaRandGenRunRandomScriptExcludedScripts() {
+    return tinaRandGenRunRandomScriptExcludedScripts;
+  }
+
+  public void setTinaRandGenRunRandomScriptExcludedScripts(String tinaRandGenRunRandomScriptExcludedScripts) {
+    this.tinaRandGenRunRandomScriptExcludedScripts = tinaRandGenRunRandomScriptExcludedScripts;
   }
 }

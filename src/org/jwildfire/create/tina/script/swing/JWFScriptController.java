@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2019s Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,8 +19,6 @@ package org.jwildfire.create.tina.script.swing;
 import org.jwildfire.base.MacroButton;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.DrawMode;
-import org.jwildfire.create.tina.base.ColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -29,8 +27,6 @@ import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
-import org.jwildfire.create.tina.io.Flam3GradientReader;
-import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.swing.ScriptEditDialog;
 import org.jwildfire.create.tina.swing.StandardDialogs;
@@ -49,8 +45,11 @@ import javax.swing.tree.TreePath;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -58,7 +57,7 @@ import java.util.zip.ZipInputStream;
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
-public class JWFScriptController {
+public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
   private String prevScriptDrawer;
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
@@ -107,7 +106,7 @@ public class JWFScriptController {
 
   public void onActivate() {
     if (!_firstActivated) {
-      initScriptLibrary();
+      JWFScriptUtils.initScriptLibrary(scriptTree, this);
       enableControls();
       _firstActivated = true;
     }
@@ -161,154 +160,11 @@ public class JWFScriptController {
     data.macroButtonDeleteBtn.setEnabled(row >= 0 && row < buttons.size());
   }
 
-  interface ScriptNode {
-    public String getScript() throws Exception;
-
-    public String getDescription() throws Exception;
-
-    public String getCaption();
-
-  }
-
-  private static class InvalidScriptFolderNode extends JWFScriptFolderNode {
-    private static final long serialVersionUID = 1L;
-
-    public InvalidScriptFolderNode() {
-      super("(user-script-path is empty, check the Prefs)", null, true);
-    }
-  }
-
-  private void initScriptLibrary() {
-    DefaultMutableTreeNode root = new DefaultMutableTreeNode("Script library", true);
-    // Internal scripts
-    {
-      String[] ressources = {
-              "Custom_Variation_Loader_GH",
-              "LoonieSplits DT",
-              "Buckballs by DT",
-              "M&M Flower DT",
-              "Add Random Final FX by MH and MO",
-              "Textured_Cylinders_Rev01_by_MH",
-              "Crackle_Styles_Chooser_Rev01_by_MH",
-              "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame",
-              "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Oily_Juliascope_Rev1", "Oily_Rev3",
-              "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3",
-
-              "Keep 'Em Separated and Framed BS", "Minkowscope-Painting-BS",
-
-              "UG-", "UG-Ran", "UG-Ran2", "UG-Ran2sym", "UG-Ran2symPersp", "UG-Ran2symPerspYax", "UG-RanRan", "UG-RanRanRan", "UG-Sym", "UG-Sym2",
-
-              "HB  0 Final 2 Galaxies", "HB 0 2 Galaxy Final Test", "HB 0 Final 2 Galaxies-cloudier", "HB 0 Final 2 Galaxiesv2",
-              "HB 0 Final 2 Gassv2", "HB 0 Single  Galaxy", "HB 1 planetoid", "HB 2  Gas Clouds", "HB 2  Gas CloudsRan",
-              "HB 2 Galaxies Gas Broad", "HB 2 Galaxies Gas Cluster", "HB 2 Galaxies Gas DoubleBroad", "HB 2 Galaxies Positive",
-              "HB 2 Galaxy Spirals Test", "HB 2 Moon Singularity", "HB 2 Moons Crater Test C", "HB 2 Moons Test Circ",
-              "HB 2 planetoid smooth", "HB 2 planetoids cloudy", "HB 2 planetoids", "HB 2moons-craters", "HB Galaxy 2 Gas Clouds",
-              "HB Galaxy1", "HB Galaxy1a", "HB Galaxy2moontest", "HB Moon Generator", "HB Moon Surface Generator", "  HB Moon Zoom Generator II",
-              "HB Planet Generator", "HB Single Galaxy",
-
-              "LU--Lumiere-", "LU--Lumiere-CurlyCross1", "LU--Lumiere-HyLog", "LU--Lumiere-POL", "LU-Choose-Lumiere-", "LU-ChooseJS-Lumiere-",
-              "LU-ChooseJS2-Lumiere-", "LU-Epi-Lumiere-", "LU-EpipluPAX-Lumiere-", "LU-Epiplus-Lumiere-",  "LU-Epipluspoly-Lumiere-",
-              "LU-JULF-Lumiere-", "LU-JULFLOW-Lumiere-", "LU-Mob-Lumiere-", "LU-RandFinal-Mirror-Lumiere-", "LU-Rays-Lumiere-",
-              "LU-SPHERE-3D-PIF-Mirror-Lumiere-", "LU-SPHEREPIF-Lumiere-", "LU-SPHEREPIF-Mirror-Lumiere-", "LU-SPHERF-Lumiere-", "LU-TanEpi-Lumiere-", "LU-TanF-Lumiere-",
-
-              "SX 00 I am Ace  in space", "SX 00 I am Ace  in space2", "SX 00 I am Ace  in space3", "SX 00 I am Julia in space pitch",
-              "SX 00 I am Julia in space", "SX 00 I am Julia", "SX 00 I am RanJulia in space", "SX 00 I am RanJulia",
-              "SX 0 I am Lovely", "SX 1 I am Peaceful", "SX 1 I am PeacefulRC", "SX 2 I make you think", "SX 3 I need printing",
-              "SX 4 I need love", "SX 5 I need patience", "SX 6 I need Tweaks", "SX 7 I make you wonder", "SX hole2Split",
-              "SX jispostz", "SX LoonieSplit", "SX octagon2Split", "SX rings2Split", "SX squarize2Split", "SX tancos2Split",
-
-              "Wedge_Sph_Marble",
-
-              "YU-", "YU--Choose", "YU--cot", "YU--coth", "YU--cothtest", "YU--csc",
-              "YU--csch", "YU--curl", "YU--curlZO", "YU--foci", "YU--ho", "YU--invpolar",
-              "YU--log", "YU--secant", "YU--spiralwing", "YU--tancos", "YU-Yugen"
-
-      };
-      List<String> resLst = Arrays.asList(ressources);
-      Collections.sort(resLst);
-      ressources = resLst.toArray(new String[]{});
-
-      // for the base path inside the jar file
-      RGBPaletteReader reader = new Flam3GradientReader();
-      DefaultMutableTreeNode defaultFolderNode = null;
-      for (String ressource : ressources) {
-        try {
-          String resFilename = "scripts/" + ressource + "." + Tools.FILEEXT_JWFSCRIPT;
-          InputStream is = reader.getClass().getResourceAsStream(resFilename);
-          if (is != null) {
-            is.close();
-            JWFScriptInternalNode node = new JWFScriptInternalNode(ressource, resFilename);
-
-            if (defaultFolderNode == null) {
-              defaultFolderNode = new JWFScriptFolderNode("Built-in scripts (read-only)", null, false);
-              root.add(defaultFolderNode);
-            }
-            defaultFolderNode.add(node);
-          }
-        } catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-    }
-
-    // External flames
-    {
-      String baseDrawer = prefs.getTinaJWFScriptPath();
-      if (baseDrawer == null || baseDrawer.equals("") || baseDrawer.equals(".") || baseDrawer.equals("/") || baseDrawer.equals("\\")) {
-        root.add(new InvalidScriptFolderNode());
-      } else {
-        DefaultMutableTreeNode parentNode = userScriptsRootNode = new JWFScriptFolderNode("Your scripts", baseDrawer, true);
-        root.add(parentNode);
-        scanUserScripts(baseDrawer, parentNode);
-      }
-    }
-    scriptTree.setRootVisible(false);
-    scriptTree.setModel(new DefaultTreeModel(root));
-  }
-
-  public void scanUserScripts(String path, DefaultMutableTreeNode pParentNode) {
-    File root = new File(path);
-    File[] list = root.listFiles();
-    if (list != null) {
-      try {
-        Arrays.sort(list, new Comparator<File>() {
-
-          @Override
-          public int compare(File o1, File o2) {
-            return o1.getName().compareTo(o2.getName());
-          }
-
-        });
-      } catch (Exception ex) {
-        // ex.printStackTrace();
-      }
-      for (File f : list) {
-        if (f.isDirectory()) {
-          DefaultMutableTreeNode newParentNode = new JWFScriptFolderNode(f.getName(), f.getAbsolutePath(), true);
-          pParentNode.add(newParentNode);
-          scanUserScripts(f.getAbsolutePath(), newParentNode);
-        } else {
-          String filename = f.getAbsolutePath();
-          String lcFilename = filename.toLowerCase();
-          if (lcFilename.length() != filename.length()) {
-            lcFilename = filename;
-          }
-          int pos = lcFilename.lastIndexOf("." + Tools.FILEEXT_JWFSCRIPT.toLowerCase());
-          if (pos > 0 && pos == filename.length() - Tools.FILEEXT_JWFSCRIPT.length() - 1) {
-            String caption = f.getName().substring(0, f.getName().length() - Tools.FILEEXT_JWFSCRIPT.length() - 1);
-            JWFScriptUserNode node = new JWFScriptUserNode(caption, filename);
-            pParentNode.add(node);
-          }
-        }
-      }
-    }
-  }
-
   public void scriptPropertiesTree_changed(TreeSelectionEvent e) {
     enableControls();
     DefaultMutableTreeNode selNode = getSelNode();
-    if (selNode != null && selNode instanceof ScriptNode) {
-      ScriptNode scriptNode = (ScriptNode) selNode;
+    if (selNode != null && selNode instanceof JWFScriptUtils.ScriptNode) {
+      JWFScriptUtils.ScriptNode scriptNode = (JWFScriptUtils.ScriptNode) selNode;
       try {
         scriptTextArea.setText(scriptNode.getScript());
         scriptTextArea.setCaretPosition(0);
@@ -324,7 +180,7 @@ public class JWFScriptController {
   }
 
   public void rescanBtn_clicked() {
-    initScriptLibrary();
+    JWFScriptUtils.initScriptLibrary(scriptTree, this);
   }
 
   public void scriptRunBtn_clicked() {
@@ -606,40 +462,40 @@ public class JWFScriptController {
     pSB.append("      xForm.setColor(" + Tools.doubleToString(pXForm.getColor()) + ");\n");
     pSB.append("      xForm.setColorSymmetry(" + Tools.doubleToString(pXForm.getColorSymmetry()) + ");\n");
     switch (pXForm.getDrawMode()) {
-    case NORMAL:
-      pSB.append("      xForm.setDrawMode(DrawMode.NORMAL);\n");
-      break;
-    case HIDDEN:
-      pSB.append("      xForm.setDrawMode(DrawMode.HIDDEN);\n");
-      break;
-    case OPAQUE:
-      pSB.append("      xForm.setDrawMode(DrawMode.OPAQUE);\n");
-      pSB.append("      xForm.setOpacity(" + Tools.doubleToString(pXForm.getOpacity()) + ");\n");
-      break;
+      case NORMAL:
+        pSB.append("      xForm.setDrawMode(DrawMode.NORMAL);\n");
+        break;
+      case HIDDEN:
+        pSB.append("      xForm.setDrawMode(DrawMode.HIDDEN);\n");
+        break;
+      case OPAQUE:
+        pSB.append("      xForm.setDrawMode(DrawMode.OPAQUE);\n");
+        pSB.append("      xForm.setOpacity(" + Tools.doubleToString(pXForm.getOpacity()) + ");\n");
+        break;
     }
     switch (pXForm.getColorType()) {
-    case NONE:
-      if (!pFinalXForm)
-        pSB.append("      xForm.setColorType(ColorType.NONE);\n");
-      break;
-    case DIFFUSION:
-      if (pFinalXForm) {
-        pSB.append("      xForm.setColorType(ColorType.DIFFUSION);\n");
-      }
-      break;
-    case TARGET:
-      pSB.append("      xForm.setColorType(ColorType.TARGET);\n");
-      RGBColor tc = pXForm.getTargetColor();
-      pSB.append("      xForm.setTargetColor(" + Tools.intToString(tc.getRed()) + "," + Tools.intToString(tc.getGreen()) + "," + Tools.intToString(tc.getBlue()) +");\n");
-      break;
-    case TARGETG:
-      pSB.append("      xForm.setColorType(ColorType.TARGETG);\n");
-      break;
-    case DISTANCE:
-      pSB.append("      xForm.setColorType(ColorType.DISTANCE);\n");
-      break;
-    case CYCLIC:
-      pSB.append("      xForm.setColorType(ColorType.CYCLIC);\n");
+      case NONE:
+        if (!pFinalXForm)
+          pSB.append("      xForm.setColorType(ColorType.NONE);\n");
+        break;
+      case DIFFUSION:
+        if (pFinalXForm) {
+          pSB.append("      xForm.setColorType(ColorType.DIFFUSION);\n");
+        }
+        break;
+      case TARGET:
+        pSB.append("      xForm.setColorType(ColorType.TARGET);\n");
+        RGBColor tc = pXForm.getTargetColor();
+        pSB.append("      xForm.setTargetColor(" + Tools.intToString(tc.getRed()) + "," + Tools.intToString(tc.getGreen()) + "," + Tools.intToString(tc.getBlue()) + ");\n");
+        break;
+      case TARGETG:
+        pSB.append("      xForm.setColorType(ColorType.TARGETG);\n");
+        break;
+      case DISTANCE:
+        pSB.append("      xForm.setColorType(ColorType.DISTANCE);\n");
+        break;
+      case CYCLIC:
+        pSB.append("      xForm.setColorType(ColorType.CYCLIC);\n");
     }
     pSB.append("      xForm.setMaterial(" + Tools.doubleToString(pXForm.getMaterial()) + ");\n");
     pSB.append("      xForm.setMaterialSpeed(" + Tools.doubleToString(pXForm.getMaterialSpeed()) + ");\n");
@@ -705,7 +561,7 @@ public class JWFScriptController {
       pSB.append("\n");
     }
 
-    if(pXForm.getWeightingFieldType()!=null && !WeightingFieldType.NONE.equals(pXForm.getWeightingFieldType())) {
+    if (pXForm.getWeightingFieldType() != null && !WeightingFieldType.NONE.equals(pXForm.getWeightingFieldType())) {
       pSB.append("      xForm.setWeightingFieldType(org.jwildfire.create.tina.base.weightingfield.WeightingFieldType." + pXForm.getWeightingFieldType().name() + ");\n");
       pSB.append("      xForm.setWeightingFieldInput(org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType." + pXForm.getWeightingFieldInput().name() + ");\n");
       pSB.append("      xForm.setWeightingFieldColorIntensity(" + Tools.doubleToString(pXForm.getWeightingFieldColorIntensity()) + ");\n");
@@ -837,8 +693,8 @@ public class JWFScriptController {
   public void duplicateScriptBtn_clicked() {
     try {
       DefaultMutableTreeNode selNode = getSelNode();
-      if (selNode != null && selNode instanceof ScriptNode) {
-        ScriptNode scriptNode = (ScriptNode) selNode;
+      if (selNode != null && selNode instanceof JWFScriptUtils.ScriptNode) {
+        JWFScriptUtils.ScriptNode scriptNode = (JWFScriptUtils.ScriptNode) selNode;
         String newName = StandardDialogs.promptForText(rootPanel, "Please enter a new name", scriptNode.getCaption());
         if (newName != null) {
           checkScriptName(newName);
@@ -923,7 +779,7 @@ public class JWFScriptController {
   public void addMacroButtonBtn_clicked() {
     try {
       DefaultMutableTreeNode selNode = getSelNode();
-      if (selNode != null && selNode instanceof ScriptNode) {
+      if (selNode != null && selNode instanceof JWFScriptUtils.ScriptNode) {
         String scriptFilename;
         String caption;
         boolean internal;
@@ -1154,27 +1010,25 @@ public class JWFScriptController {
 
         final String scriptExtension = ".jwfscript";
         final String gradientExtension = ".ugr";
-        int scriptCount=0;
-        List<String> importedScripts=new ArrayList<>();
+        int scriptCount = 0;
+        List<String> importedScripts = new ArrayList<>();
         for (String entryName : content.keySet()) {
           String extension;
-          if(entryName.endsWith(scriptExtension)) {
+          if (entryName.endsWith(scriptExtension)) {
             extension = scriptExtension;
-          }
-          else if(entryName.endsWith(gradientExtension)) {
+          } else if (entryName.endsWith(gradientExtension)) {
             extension = gradientExtension;
-          }
-          else {
+          } else {
             extension = null;
           }
-          if (extension!=null) {
-            String rawScriptName = entryName.substring(0, entryName.length() -(extension.length()));
+          if (extension != null) {
+            String rawScriptName = entryName.substring(0, entryName.length() - (extension.length()));
             String scriptName = rawScriptName;
-            if(scriptName.contains("\\")) {
-              scriptName = scriptName.substring(scriptName.lastIndexOf("\\")+1, scriptName.length());
+            if (scriptName.contains("\\")) {
+              scriptName = scriptName.substring(scriptName.lastIndexOf("\\") + 1, scriptName.length());
             }
-            if(scriptName.contains("/")) {
-              scriptName = scriptName.substring(scriptName.lastIndexOf("/")+1, scriptName.length());
+            if (scriptName.contains("/")) {
+              scriptName = scriptName.substring(scriptName.lastIndexOf("/") + 1, scriptName.length());
             }
             scriptCount++;
 
@@ -1184,7 +1038,7 @@ public class JWFScriptController {
             }
             File destinationFile = new File(baseDrawer, scriptName + extension);
             if (!destinationFile.exists() || JOptionPane.showConfirmDialog(null,
-                    "The destination-file \""+scriptName+extension+"\"already exists. Do you want to overwrite it?",
+                    "The destination-file \"" + scriptName + extension + "\"already exists. Do you want to overwrite it?",
                     "Warning",
                     JOptionPane.YES_NO_OPTION) == 0) {
               Tools.writeFile(destinationFile.getAbsolutePath(), content.get(rawScriptName + extension));
@@ -1198,21 +1052,20 @@ public class JWFScriptController {
           }
         }
 
-        if (scriptCount==0) {
+        if (scriptCount == 0) {
           throw new Exception("File \"" + filename + "\" does not contain a script-file with \"*" + scriptExtension + "\"-extension");
         }
-        if(!importedScripts.isEmpty()) {
-          initScriptLibrary();
+        if (!importedScripts.isEmpty()) {
+          JWFScriptUtils.initScriptLibrary(scriptTree, this);
           String msg;
-          if(importedScripts.size()==1) {
+          if (importedScripts.size() == 1) {
             msg = "The script \"" + importedScripts.get(0) + "\" was imported successfully";
-          }
-          else {
+          } else {
             String scriptsNames = importedScripts.stream().collect(Collectors.joining("\", \""));
-            if(scriptsNames.length()>64) {
-              scriptsNames = scriptsNames.substring(0, 64)+ "...";
+            if (scriptsNames.length() > 64) {
+              scriptsNames = scriptsNames.substring(0, 64) + "...";
             }
-            msg = importedScripts.size()+ " scripts \"" + scriptsNames + "\" where imported successfully";
+            msg = importedScripts.size() + " scripts \"" + scriptsNames + "\" where imported successfully";
           }
           JOptionPane.showMessageDialog(rootPanel, msg);
         }
@@ -1248,4 +1101,8 @@ public class JWFScriptController {
   }
 
 
+  @Override
+  public void accept(DefaultMutableTreeNode node) {
+    this.userScriptsRootNode = node;
+  }
 }

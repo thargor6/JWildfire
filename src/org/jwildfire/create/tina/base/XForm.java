@@ -1452,7 +1452,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   public EditPlane getEditPlane() {
     if (owner == null || owner.getOwner() == null) {
-      System.out.println("EditPlane NULL");
+      // System.out.println("EditPlane NULL");
+      // XForms created via scripts usually do not have an owner, so this is valid case, just supply one default value:
       return EditPlane.XY;
     }
     else {
