@@ -4827,36 +4827,6 @@ public class MainEditorFrame extends JFrame {
       affineRotateEditMotionCurveBtn.setBounds(0, 79, 22, 24);
       tinaAffineTransformationPanel.add(affineRotateEditMotionCurveBtn);
       tinaAffineTransformationPanel.add(getAffineScaleEditMotionCurveBtn());
-
-      JLabel lblViewAs = new JLabel();
-      lblViewAs.setText("View as");
-      lblViewAs.setSize(new Dimension(20, 22));
-      lblViewAs.setPreferredSize(new Dimension(24, 22));
-      lblViewAs.setName("affineC01Lbl");
-      lblViewAs.setLocation(new Point(0, 30));
-      lblViewAs.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblViewAs.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblViewAs.setBounds(52, 55, 76, 22);
-      tinaAffineTransformationPanel.add(lblViewAs);
-
-      affineCoordsViewTypeCmb = new JComboBox();
-      affineCoordsViewTypeCmb.setToolTipText("");
-      affineCoordsViewTypeCmb.setPreferredSize(new Dimension(130, 24));
-      affineCoordsViewTypeCmb.setMinimumSize(new Dimension(110, 24));
-      affineCoordsViewTypeCmb.setMaximumSize(new Dimension(32767, 24));
-      affineCoordsViewTypeCmb.setMaximumRowCount(48);
-      affineCoordsViewTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineCoordsViewTypeCmb.setBounds(131, 54, 154, 24);
-      affineCoordsViewTypeCmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
-            tinaController.saveUndoPoint();
-            tinaController.affineCoordsViewTypeCmd_changed();
-          }
-        }
-      });
-
-      tinaAffineTransformationPanel.add(affineCoordsViewTypeCmb);
     }
     return tinaAffineTransformationPanel;
   }
@@ -7312,7 +7282,6 @@ public class MainEditorFrame extends JFrame {
     initWeightMapTypeCmb(getWeightingFieldTypeCmb());
     initWeightMapInputTypeCmb(getWeightingFieldInputCmb());
     initRandomWeightingFieldGenCmb(getRandomWeightingFieldCmb());
-    initAffineCoordsViewTypeCmb(getAffineCoordsViewTypeCmb());
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -7414,7 +7383,7 @@ public class MainEditorFrame extends JFrame {
         getTinaTransformationsTable(),
         getAffineC00Lbl(), getAffineC01Lbl(), getAffineC10Lbl(), getAffineC11Lbl(), getAffineC00REd(),
         getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(),
-        getAffineCoordsViewTypeCmb(), getAffineRotateAmountREd(), getAffineScaleAmountREd(),
+        getAffineRotateAmountREd(), getAffineScaleAmountREd(),
         getAffineMoveHorizAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
         getTinaAddLinkedTransformationButton(),
@@ -7877,14 +7846,6 @@ public class MainEditorFrame extends JFrame {
       pCmb.addItem(name);
     }
     pCmb.setSelectedItem(RandomWeightingFieldGeneratorList.DEFAULT_GENERATOR_NAME);
-  }
-
-  private void initAffineCoordsViewTypeCmb(JComboBox pCmb) {
-    pCmb.removeAllItems();
-    pCmb.addItem(AffineCoordsViewType.DEFAULT);
-    pCmb.addItem(AffineCoordsViewType.CARTESIAN_COORDINATES);
-    pCmb.addItem(AffineCoordsViewType.POLAR_COORDINATES);
-    pCmb.setSelectedItem(AffineCoordsViewType.DEFAULT);
   }
 
   private void initRandomGenCmb(JComboBox pCmb) {
@@ -13256,7 +13217,6 @@ public class MainEditorFrame extends JFrame {
   private JButton gotoPrevKeyFrameButton;
   private JButton gotoNextKeyFrameButton;
   private JButton duplicateKeyFrameButton;
-  private JComboBox affineCoordsViewTypeCmb;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -24401,7 +24361,4 @@ public class MainEditorFrame extends JFrame {
     return duplicateKeyFrameButton;
   }
 
-  public JComboBox getAffineCoordsViewTypeCmb() {
-    return affineCoordsViewTypeCmb;
-  }
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -217,8 +217,6 @@ public class AnimationController {
     private boolean forceAbort;
     private final RenderMainFlameThreadFinishEvent finishEvent;
 
-    ImagePanel imagePanel = null;
-
     public PlayPreviewThread(RenderMainFlameThreadFinishEvent pFinishEvent) {
       finishEvent = pFinishEvent;
     }
@@ -229,14 +227,15 @@ public class AnimationController {
       try {
         tinaController.cancelBackgroundRender();
         FlamePanel flamePanel = tinaController.getFlamePreviewHelper().getFlamePanelProvider().getFlamePanel();
+        SimpleImage prevEditorImage = flamePanel.getImage().clone();
+        boolean prevNoControls = flamePanel.getConfig().isNoControls();
         final int prevFrame = keyframesFrameField.getIntValue();
-
-        double quality = Math.min(Math.max(0.1, prefs.getTinaRenderAnimPreviewQuality()), 5.0);
-        double previewSize = Math.min(Math.max(0.1, prefs.getTinaRenderAnimPreviewSize()), 1.0);
-
-        Container parentContainer = flamePanel.getParent();
-        // flamePanel.setVisible(false);
         try {
+          flamePanel.getConfig().setNoControls(true);
+
+          double quality = Math.min(Math.max(0.1, prefs.getTinaRenderAnimPreviewQuality()), 5.0);
+          double previewSize = Math.min(Math.max(0.1, prefs.getTinaRenderAnimPreviewSize()), 1.0);
+
           int frameCount = keyframesFrameCountField.getIntValue();
           int frameStart = 1;
 
@@ -249,22 +248,13 @@ public class AnimationController {
             keyframesFrameSlider.setValue(i);
 
             SimpleImage img = tinaController.getFlamePreviewHelper().renderAnimFrame(previewSize, quality);
-            if (imagePanel == null) {
-              int x = (flamePanel.getImageWidth() - img.getImageWidth()) / 2;
-              int y = (flamePanel.getImageHeight() - img.getImageHeight()) / 2;
-              imagePanel = new ImagePanel(img, x, y, img.getImageWidth());
-              imagePanel.setLocation(new Point(x, y));
-              imagePanel.setSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
-              imagePanel.setPreferredSize(new Dimension(img.getImageWidth(), img.getImageHeight()));
-              imagePanel.setBounds(x, y, img.getImageWidth(), img.getImageHeight());
-              parentContainer.add(imagePanel);
-              parentContainer.getParent().repaint();
-              imagePanel.repaint();
-            }
-            else {
-              imagePanel.setImage(img);
-              imagePanel.repaint();
-            }
+
+            flamePanel.setWithGuides(false);
+            flamePanel.setImage(img, 0,0, flamePanel.getWidth(), flamePanel.getHeight());
+            //flamePanel.setImage(img);
+            flamePanel.repaint();
+
+
             while (true) {
               long f1 = System.currentTimeMillis();
               if (f1 - f0 > 25) {
@@ -277,19 +267,15 @@ public class AnimationController {
           finished = true;
           //keyframesFrameField.setValue(keyframesFrameSlider.getValue());
           //keyframesFrameField.setValue(prevFrame);
-          keyframesFrameSlider.setValue(prevFrame);
           finishEvent.succeeded((t1 - t0) * 0.001);
         }
         finally {
-          try {
-            if (imagePanel != null) {
-              parentContainer.remove(imagePanel);
-            }
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-          flamePanel.setVisible(true);
+          flamePanel.getConfig().setNoControls(prevNoControls);
+          flamePanel.setImage(prevEditorImage);
+          flamePanel.invalidate();
+          flamePanel.validate();
+          keyframesFrameSlider.setValue(prevFrame);
+          //flamePanel.repaint();
         }
       }
       catch (Throwable ex) {
@@ -470,7 +456,7 @@ public class AnimationController {
           keyframesFrameSlider.setValue(dstFrame);
         }
         catch(Exception ex) {
-          StandardDialogs.message(rootPanel, "Please enter a vlid frame number (which is not equal to the current frame)");
+          StandardDialogs.message(rootPanel, "Please enter a valid frame number (which is not equal to the current frame)");
         }
       }
     }

@@ -130,7 +130,6 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.affineC11REd, !enabled);
     enableControl(data.affineC20REd, !enabled);
     enableControl(data.affineC21REd, !enabled);
-    enableControl(data.affineCoordsViewTypeCmb, !enabled);
     enableControl(data.affineRotateLeftButton, data.affineRotateEditMotionCurveBtn, getRotateMotionCurveProperty(), !enabled);
     enableControl(data.affineEnlargeButton, data.affineScaleEditMotionCurveBtn, getScaleMotionCurveProperty(), !enabled);
 

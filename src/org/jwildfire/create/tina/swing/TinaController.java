@@ -448,7 +448,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.affineC11REd = parameterObject.pAffineC11REd;
     data.affineC20REd = parameterObject.pAffineC20REd;
     data.affineC21REd = parameterObject.pAffineC21REd;
-    data.affineCoordsViewTypeCmb = parameterObject.affineCoordsViewTypeCmb;
     data.affineRotateAmountREd = parameterObject.pAffineRotateAmountREd;
     data.affineScaleAmountREd = parameterObject.pAffineScaleAmountREd;
     data.affineMoveHorizAmountREd = parameterObject.affineMoveHorizAmountREd;
@@ -1195,9 +1194,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       });
 
       flamePanel.setSelectedXForm(getCurrXForm());
-      centerPanel.add(flamePanel, BorderLayout.CENTER);
+      centerPanel.setLayout(null);
+      centerPanel.add(flamePanel /*, BorderLayout.CENTER*/);
       centerPanel.getParent().validate();
-      centerPanel.repaint();
+      centerPanel.getParent().repaint();
       flamePanel.requestFocusInWindow();
     }
     return flamePanel;
@@ -2754,7 +2754,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       boolean isPost = data.affineEditPostTransformButton.isSelected();
       applyCurrentXFormToWorkXForm(isPost);
-      XFormTransformService.globalTranslate(workXForm, amount, 0, isPost);
+      XFormTransformService.globalTranslate(workXForm, amount, 0, false);
       applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
@@ -2767,7 +2767,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       boolean isPost = data.affineEditPostTransformButton.isSelected();
       applyCurrentXFormToWorkXForm(isPost);
-      XFormTransformService.rotate(workXForm, -amount, isPost);
+      XFormTransformService.rotate(workXForm, -amount, false);
       applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
@@ -2780,7 +2780,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       boolean isPost = data.affineEditPostTransformButton.isSelected();
       applyCurrentXFormToWorkXForm(isPost);
-      XFormTransformService.globalTranslate(workXForm, -amount, 0, isPost);
+      XFormTransformService.globalTranslate(workXForm, -amount, 0, false);
       applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
@@ -2791,7 +2791,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     saveUndoPoint();
     boolean isPost = data.affineEditPostTransformButton.isSelected();
     applyCurrentXFormToWorkXForm(isPost);
-    XFormTransformService.flipHorizontal(workXForm, isPost);
+    XFormTransformService.flipHorizontal(workXForm, false);
     applyWorkXFormToCurrentXForm(isPost);
     transformationChanged(true);
   }
@@ -2801,7 +2801,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     saveUndoPoint();
     boolean isPost = data.affineEditPostTransformButton.isSelected();
     applyCurrentXFormToWorkXForm(isPost);
-    XFormTransformService.flipVertical(workXForm, isPost);
+    XFormTransformService.flipVertical(workXForm, false);
     applyWorkXFormToCurrentXForm(isPost);
     transformationChanged(true);
   }
@@ -2813,7 +2813,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       boolean isPost = data.affineEditPostTransformButton.isSelected();
       applyCurrentXFormToWorkXForm(isPost);
-      XFormTransformService.scale(workXForm, amount, data.affineScaleXButton.isSelected(), data.affineScaleYButton.isSelected(), isPost);
+      XFormTransformService.scale(workXForm, amount, data.affineScaleXButton.isSelected(), data.affineScaleYButton.isSelected(), false);
       applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
@@ -2826,7 +2826,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       boolean isPost = data.affineEditPostTransformButton.isSelected();
       applyCurrentXFormToWorkXForm(isPost);
-      XFormTransformService.scale(workXForm, amount, data.affineScaleXButton.isSelected(), data.affineScaleYButton.isSelected(), isPost);
+      XFormTransformService.scale(workXForm, amount, data.affineScaleXButton.isSelected(), data.affineScaleYButton.isSelected(), false);
       applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
@@ -2862,7 +2862,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       boolean isPost = data.affineEditPostTransformButton.isSelected();
       applyCurrentXFormToWorkXForm(isPost);
-      XFormTransformService.rotate(workXForm, amount, isPost);
+      XFormTransformService.rotate(workXForm, amount, false);
       applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
@@ -2875,7 +2875,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       boolean isPost = data.affineEditPostTransformButton.isSelected();
       applyCurrentXFormToWorkXForm(isPost);
-      XFormTransformService.globalTranslate(workXForm, 0, -amount, isPost);
+      XFormTransformService.globalTranslate(workXForm, 0, -amount, false);
       applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
@@ -2900,7 +2900,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       boolean isPost = data.affineEditPostTransformButton.isSelected();
       applyCurrentXFormToWorkXForm(isPost);
-      XFormTransformService.globalTranslate(workXForm, 0, amount, isPost);
+      XFormTransformService.globalTranslate(workXForm, 0, amount, false);
       applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
@@ -3526,7 +3526,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       boolean isPost = data.affineEditPostTransformButton.isSelected();
       applyCurrentXFormToWorkXForm(isPost);
-      XFormTransformService.reset(workXForm, isPost);
+      XFormTransformService.reset(workXForm, false);
       applyWorkXFormToCurrentXForm(isPost);
       transformationChanged(true);
     }
@@ -6604,11 +6604,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public NonlinearControlsDelegate getNonlinearControls() {
     return nonlinearControls;
-  }
-
-  public void affineCoordsViewTypeCmd_changed() {
-    // TODO Auto-generated method stub
-
   }
 
 }

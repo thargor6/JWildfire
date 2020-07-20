@@ -200,7 +200,6 @@ public class TinaControllerData {
   public JWFNumberField affineC11REd;
   public JWFNumberField affineC20REd;
   public JWFNumberField affineC21REd;
-  public JComboBox affineCoordsViewTypeCmb;
   public JWFNumberField affineRotateAmountREd;
   public JWFNumberField affineScaleAmountREd;
   public JWFNumberField affineMoveHorizAmountREd;
