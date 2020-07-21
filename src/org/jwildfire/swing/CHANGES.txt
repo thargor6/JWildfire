@@ -18,6 +18,12 @@ V6.00 (xx.xx.2020)
    but preserves the script-generated-colors (when any).
    You can use the options tinaRandGenRunRandomScriptIncludedScripts and tinaRandGenRunRandomScriptExcludedScripts in the Preferences to
    include or exclude specific scripts (or both).
+ - moved the old webspace to a secured site:
+     - https://jwildfire.overwhale.com is the JWildfire site
+     - https://jwildfire-forum.overwhale.com is the JWildfire-forum
+     - (https://mb3d.overwhale.com is the Mandelbulb3D site)
+     - (https://flamelet.overwhale.com is the Flamelet site)
+     - https://overwhale.com is my main  site
  - changed some default settings in regard to flame-animations
  - numeric fields now also react to inputs of the mousewheel
  - added function to reset all motion curves
