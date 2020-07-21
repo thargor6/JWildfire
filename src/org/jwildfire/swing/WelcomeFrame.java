@@ -36,7 +36,6 @@ import java.net.URI;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -73,7 +72,7 @@ public class WelcomeFrame extends JFrame {
     websiteButton.setDefaultCapable(false);
     websiteButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://www.andreas-maschke.com/");
+        browse("https://jwildfire.overwhale.com/");
       }
     });
     websiteButton.setForeground(SystemColor.control);
@@ -103,7 +102,7 @@ public class WelcomeFrame extends JFrame {
     youtubeVideosBtn.setDefaultCapable(false);
     youtubeVideosBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://www.andreas-maschke.de/java/JWildfireVariations200.html");
+        browse("https://jwildfire.overwhale.com/downloads/JWildfireVariations200.html");
       }
     });
     youtubeVideosBtn.setPreferredSize(new Dimension(128, 24));
@@ -117,8 +116,7 @@ public class WelcomeFrame extends JFrame {
     pdfTutorialsBtn.setDefaultCapable(false);
     pdfTutorialsBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        // "http://www.andreas-maschke.com/?page_id=875"
-        browse("http://wiki.jwildfire.org/");
+        browse("http://www.andreas-maschke.com/?page_id=875");
       }
     });
     pdfTutorialsBtn.setPreferredSize(new Dimension(128, 24));
@@ -132,7 +130,7 @@ public class WelcomeFrame extends JFrame {
     donationsBtn.setDefaultCapable(false);
     donationsBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://www.andreas-maschke.com/?page_id=1401");
+        browse("https://blog.overwhale.com/?page_id=1401");
       }
     });
     donationsBtn.setPreferredSize(new Dimension(128, 24));
@@ -146,7 +144,7 @@ public class WelcomeFrame extends JFrame {
     updatesBtn.setDefaultCapable(false);
     updatesBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://www.andreas-maschke.com/?page_id=351");
+        browse("https://blog.overwhale.com/?page_id=351");
       }
     });
     updatesBtn.setPreferredSize(new Dimension(128, 24));
@@ -160,7 +158,7 @@ public class WelcomeFrame extends JFrame {
     dravesBtn.setDefaultCapable(false);
     dravesBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://jwildfire.org/forum/");
+        browse("https://jwildfire-forum.overwhale.com");
       }
     });
     dravesBtn.setPreferredSize(new Dimension(128, 24));
