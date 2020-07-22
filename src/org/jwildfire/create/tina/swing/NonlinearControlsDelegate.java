@@ -437,7 +437,25 @@ public class NonlinearControlsDelegate {
       if (xForm != null) {
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
+          Object oldValue = var.getFunc().getParameter(pPropertyName);
+
+          double oldValueAsDouble=0.0;
+          if(oldValue!=null) {
+            if(oldValue instanceof Double) {
+              oldValueAsDouble = ((Double)oldValue).doubleValue();
+            }
+            else if(oldValue instanceof Integer) {
+              oldValueAsDouble = ((Integer)oldValue).intValue();
+            }
+          }
           var.getFunc().setParameter(pPropertyName, pPropertyValue);
+
+          MotionCurve curve = var.getMotionCurve(pPropertyName);
+          if(curve==null) {
+            curve = var.createMotionCurve(pPropertyName);
+          }
+          owner.getFrameControlsUtil().updateKeyFrame(pPropertyValue, oldValueAsDouble, curve);
+
           if (!pIsAdjusting && var.getFunc().dynamicParameterExpansion(pPropertyName)) {
             // if setting the parameter can change the total number of parameters,
             //    then refresh parameter UI
