@@ -31,7 +31,22 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -746,8 +761,8 @@ public class EasyMovieMakerFrame extends JFrame {
         }
       });
       swfAnimatorGenerateButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorGenerateButton.setText("Generate sequence");
-      swfAnimatorGenerateButton.setToolTipText("Generate a sequence; the type is defined by Output");
+      swfAnimatorGenerateButton.setText("Render frames/movie");
+      swfAnimatorGenerateButton.setToolTipText("Generate the output; the type is defined by Output");
       swfAnimatorGenerateButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorGenerateButton;
@@ -1008,7 +1023,7 @@ public class EasyMovieMakerFrame extends JFrame {
 
       JLabel lblOutput = new JLabel();
       lblOutput.setText("Output");
-      lblOutput.setToolTipText("<html>FLAMES: save sequence of (unrendered) flame files<br>" 
+      lblOutput.setToolTipText("<html>FLAMES: save sequence of (unrendered) flame files<br>"
           + "PNG_IMAGES: render sequence of PNG images (combine into a movie with a separate program)<br>"
           + "ANB: create PD Howler AnimBrush");
       lblOutput.setPreferredSize(new Dimension(94, 22));
@@ -1200,7 +1215,7 @@ public class EasyMovieMakerFrame extends JFrame {
     }
     return swfAnimatorRemoveAllFlamesButton;
   }
-  
+
   JCheckBox getSwfAnimatorCompatCBx() {
     if (swfAnimatorCompatCBx == null) {
       swfAnimatorCompatCBx = new JCheckBox();

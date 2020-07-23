@@ -359,12 +359,22 @@ public class AnimationService {
         return -1;
       }
       else {
+        int keyFrame = keyFrames.get(0);
         if(pForward) {
-          return keyFrames.stream().min(Comparator.comparing(Integer::intValue)).get();
+          for(int i=1;i<keyFrames.size();i++) {
+            if(keyFrames.get(i) < keyFrame) {
+              keyFrame = keyFrames.get(i);
+            }
+          }
         }
         else {
-          return keyFrames.stream().max(Comparator.comparing(Integer::intValue)).get();
+          for(int i=1;i<keyFrames.size();i++) {
+            if(keyFrames.get(i) > keyFrame) {
+              keyFrame = keyFrames.get(i);
+            }
+          }
         }
+        return keyFrame;
       }
     }
     catch (Throwable ex) {

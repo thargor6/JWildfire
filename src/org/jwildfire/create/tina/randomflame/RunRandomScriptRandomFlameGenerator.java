@@ -333,7 +333,7 @@ public class RunRandomScriptRandomFlameGenerator extends RandomFlameGenerator {
     return null;
   }
 
-  private void runScript(String scriptPath, String scriptText, Flame flame) throws Exception {
+  private void runScript(String scriptPath, String scriptText, final Flame flame) throws Exception {
       ScriptRunner scriptRunner = ScriptRunner.compile(scriptText);
       scriptRunner.setScriptPath(scriptPath);
       scriptRunner.run(new ScriptRunnerEnvironment() {
