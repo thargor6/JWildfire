@@ -908,6 +908,32 @@ public class VariationFuncList {
     registerVariationFunc(DC_WarpingFunc.class);    
     registerVariationFunc(DC_VortexFunc.class);  
     registerVariationFunc(VortexFunc.class);
+    
+    registerVariationFunc(Box3DFunc.class);   
+    registerVariationFunc(RoundBox3DFunc.class);  
+    registerVariationFunc(BoundingBox3DFunc.class);
+    
+    registerVariationFunc(Rhombus3DFunc.class);  
+    registerVariationFunc(Ellipsoid3DFunc.class);   
+    registerVariationFunc(Torus3DFunc.class);    
+    
+    registerVariationFunc(HexPrism3DFunc.class);    
+    registerVariationFunc(Cylinder3DFunc.class);    
+    registerVariationFunc(OrientedCylinder3DFunc.class);   
+    registerVariationFunc(OctogonPrism3DFunc.class);  
+    
+    registerVariationFunc(Pyramid3DFunc.class);       
+    registerVariationFunc(Octahedron3DFunc.class);
+    registerVariationFunc(SolidAngle3DFunc.class);
+    
+    registerVariationFunc(TriPrism3DFunc.class);     
+    registerVariationFunc(CappedTorus3DFunc.class);    
+    registerVariationFunc(CappedCone3DFunc.class);    
+    registerVariationFunc(OrientedCappedCone3DFunc.class);      
+    registerVariationFunc(Cone3DFunc.class);  
+    
+    registerVariationFunc(OrientedRoundCone3DFunc.class); 
+    registerVariationFunc(Capsule3DFunc.class); 
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
