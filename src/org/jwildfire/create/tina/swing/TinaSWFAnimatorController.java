@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -83,10 +83,7 @@ import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.image.SimpleImage;
-import org.jwildfire.swing.ANBFileFilter;
-import org.jwildfire.swing.ErrorHandler;
-import org.jwildfire.swing.ImageFileChooser;
-import org.jwildfire.swing.ImagePanel;
+import org.jwildfire.swing.*;
 import org.jwildfire.transform.ComposeTransformer;
 
 public class TinaSWFAnimatorController implements SWFAnimationRenderThreadController, FlameHolder {
@@ -719,6 +716,19 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       case ANB: {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileFilter(new ANBFileFilter());
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        return chooser;
+      }
+      case MP4: {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(new VideoFileFilter());
         if (prefs.getOutputImagePath() != null) {
           try {
             chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));

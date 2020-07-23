@@ -94,7 +94,7 @@ public class RenderMainFlameThread implements Runnable {
         finished = true;
         return;
       }
-      String fn = makeFrameName(outFile.getAbsolutePath(),i);
+      String fn = RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(),i, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight());
       if(!new File(fn).exists()) {
         renderMovieFrame(i);
       }
@@ -114,7 +114,7 @@ public class RenderMainFlameThread implements Runnable {
           finished = true;
           return;
         }
-        String fn = makeFrameName(outFile.getAbsolutePath(),i);
+        String fn = RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(),i, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight());
         SimpleImage img = new ImageReader().loadImage(fn);
         BufferedImage image = img.getBufferedImg();
         encoder.encodeImage(image);
@@ -132,7 +132,7 @@ public class RenderMainFlameThread implements Runnable {
         finished = true;
         return;
       }
-      File f = new File(makeFrameName(outFile.getAbsolutePath(), i));
+      File f = new File(RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(), i, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight()));
       try {
         if(!f.delete()) {
           f.deleteOnExit();
@@ -149,22 +149,6 @@ public class RenderMainFlameThread implements Runnable {
     finishEvent.succeeded((t1 - t0) * 0.001);
   }
 
-  private String makeFrameName(String moveFilename, int frame) {
-    String titleStr = flame.getName().trim().replace(" - ","_").replace(' ', '_').replace('\\','_').replace('/','_').replace(':','_');
-    if(titleStr.length()>30) {
-      titleStr=titleStr.substring(0,30);
-    }
-    String optionsStr = qualProfile.getQuality()+"_"+resProfile.getWidth()+"_"+resProfile.getHeight();
-    File basefn =new File(moveFilename.substring(0, moveFilename.lastIndexOf(".")));
-    File tmpFn;
-    if(basefn.getParentFile()!=null) {
-      tmpFn = new File(basefn.getParent(), "_"+basefn.getName()+"_"+optionsStr+"_"+titleStr);
-    }
-    else {
-      tmpFn = new File("_"+basefn.getAbsolutePath()+"_"+optionsStr+"_"+titleStr);
-    }
-    return String.format (tmpFn.getAbsolutePath() + "_%04d.png", frame);
-  }
 
   private void renderMovieFrame(int frame) throws Exception {
     Flame currFlame = flame.makeCopy();
@@ -183,7 +167,7 @@ public class RenderMainFlameThread implements Runnable {
     renderer = new FlameRenderer(currFlame, prefs, false, false);
     RenderedFlame res = renderer.renderFlame(info);
     if (!forceAbort) {
-      new ImageWriter().saveImage(res.getImage(), makeFrameName(outFile.getAbsolutePath(), frame));
+      new ImageWriter().saveImage(res.getImage(),  RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(), frame, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight()));
     }
   }
 

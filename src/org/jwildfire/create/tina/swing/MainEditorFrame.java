@@ -7796,6 +7796,7 @@ public class MainEditorFrame extends JFrame {
   private void initSequenceOutputType(JComboBox pCmb) {
     pCmb.addItem(SequenceOutputType.FLAMES);
     pCmb.addItem(SequenceOutputType.PNG_IMAGES);
+    pCmb.addItem(SequenceOutputType.MP4);
     pCmb.addItem(SequenceOutputType.ANB);
     pCmb.setSelectedItem(SequenceOutputType.FLAMES);
   }

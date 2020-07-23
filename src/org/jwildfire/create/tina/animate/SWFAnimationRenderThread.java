@@ -16,9 +16,15 @@
 */
 package org.jwildfire.create.tina.animate;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jcodec.api.awt.AWTSequenceEncoder;
+import org.jcodec.common.io.NIOUtils;
+import org.jcodec.common.io.SeekableByteChannel;
+import org.jcodec.common.model.Rational;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
@@ -27,8 +33,10 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.swing.RenderMovieUtil;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 
 public class SWFAnimationRenderThread implements Runnable {
@@ -42,7 +50,22 @@ public class SWFAnimationRenderThread implements Runnable {
   public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, FlameMovie pAnimation, String pOutputFilename) {
     controller = pController;
     flameMovie = pAnimation;
-    outputFilename = pOutputFilename;
+    switch(flameMovie.getSequenceOutputType()) {
+      case MP4:
+        if (!pOutputFilename.toLowerCase().endsWith("."+Tools.FILEEXT_MP4))
+          outputFilename = pOutputFilename + "." + Tools.FILEEXT_MP4;
+        else
+          outputFilename = pOutputFilename;
+        break;
+      case ANB:
+        if (!pOutputFilename.toLowerCase().endsWith("."+Tools.FILEEXT_ANB))
+          outputFilename = pOutputFilename + "." + Tools.FILEEXT_ANB;
+        else
+          outputFilename = pOutputFilename;
+        break;
+      default:
+        outputFilename = pOutputFilename;
+    }
   }
 
   @Override
@@ -52,7 +75,14 @@ public class SWFAnimationRenderThread implements Runnable {
         cancelSignalled = false;
         lastError = null;
         renderedImages.clear();
-        controller.getProgressUpdater().initProgress(flameMovie.getFrameCount());
+        int maxProgress;
+        if(flameMovie.getSequenceOutputType()==SequenceOutputType.MP4) {
+          maxProgress = flameMovie.getFrameCount() + flameMovie.getFrameCount() / 4;
+        }
+        else {
+          maxProgress = flameMovie.getFrameCount();
+        }
+        controller.getProgressUpdater().initProgress(maxProgress);
         int startFrame = 1;
         int endFrame = flameMovie.getFrameCount();
         for (int i = startFrame; i <= endFrame; i++) {
@@ -63,7 +93,7 @@ public class SWFAnimationRenderThread implements Runnable {
           processFlame(currFlame, i);
           controller.getProgressUpdater().updateProgress(i);
         }
-        finishSequence();
+        finishSequence(maxProgress);
       }
       catch (Throwable ex) {
         lastError = ex;
@@ -75,13 +105,62 @@ public class SWFAnimationRenderThread implements Runnable {
     }
   }
 
-  private void finishSequence() throws Exception {
+  private void finishSequence(int maxProgress) throws Exception {
     switch (flameMovie.getSequenceOutputType()) {
       case ANB:
         createANB();
         break;
+      case MP4:
+        createMP4(maxProgress);
+        break;
       default: // nothing to do
         break;
+    }
+  }
+
+  private String getMovieName() throws Exception {
+    Flame firstFlame = createFlame(1);
+    return "mv_"+firstFlame.getName();
+  }
+
+  private void createMP4(int maxProgress) throws Exception {
+    Flame firstFlame = createFlame(1);
+    SeekableByteChannel out = null;
+    int currProgress = flameMovie.getFrameCount();
+    try {
+      out = NIOUtils.writableFileChannel(outputFilename);
+      AWTSequenceEncoder encoder = new AWTSequenceEncoder(out, Rational.R(Tools.FTOI(flameMovie.getFramesPerSecond()), 1));
+      for(int i=1;i<flameMovie.getFrameCount();i++) {
+        if (cancelSignalled) {
+          return;
+        }
+        String fn = RenderMovieUtil.makeFrameName(outputFilename,i, getMovieName(), flameMovie.getQuality(), firstFlame.getWidth(), firstFlame.getHeight());
+        SimpleImage img = new ImageReader().loadImage(fn);
+        BufferedImage image = img.getBufferedImg();
+        encoder.encodeImage(image);
+        if(i%4==0) {
+          controller.getProgressUpdater().updateProgress(currProgress++);
+        }
+      }
+      encoder.finish();
+    } finally {
+      NIOUtils.closeQuietly(out);
+      controller.getProgressUpdater().updateProgress(maxProgress);
+    }
+
+    for(int i=1;i<flameMovie.getFrameCount();i++) {
+      if (cancelSignalled) {
+        return;
+      }
+      File f = new File(RenderMovieUtil.makeFrameName(outputFilename, i, getMovieName(), flameMovie.getQuality(), firstFlame.getWidth(), firstFlame.getHeight()));
+      try {
+        if(!f.delete()) {
+          f.deleteOnExit();
+        }
+      }
+      finally {
+        f.deleteOnExit();
+      }
     }
   }
 
@@ -181,17 +260,23 @@ public class SWFAnimationRenderThread implements Runnable {
         saveFlame(pCurrFlame, pFrame);
         break;
       case PNG_IMAGES:
-        saveImage(renderFlame(pCurrFlame), pFrame);
+        saveImage(renderFlame(pCurrFlame), pFrame, generateFilename(pFrame, Tools.FILEEXT_PNG));
         break;
       case ANB:
         pCurrFlame.setBGTransparency(true);
         renderedImages.add(renderFlame(pCurrFlame));
         break;
+      case MP4: {
+        String fn = RenderMovieUtil.makeFrameName(outputFilename, pFrame, getMovieName(), flameMovie.getQuality(), pCurrFlame.getWidth(), pCurrFlame.getHeight());
+        if (!new File(fn).exists()) {
+          saveImage(renderFlame(pCurrFlame), pFrame, fn);
+        }
+      }
+        break;
     }
   }
 
-  private void saveImage(SimpleImage pImage, int pFrame) throws Exception {
-    String filename = generateFilename(pFrame, Tools.FILEEXT_PNG);
+  private void saveImage(SimpleImage pImage, int pFrame, String filename) throws Exception {
     new ImageWriter().saveAsPNG(pImage, filename);
   }
 

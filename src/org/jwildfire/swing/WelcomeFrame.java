@@ -102,7 +102,8 @@ public class WelcomeFrame extends JFrame {
     youtubeVideosBtn.setDefaultCapable(false);
     youtubeVideosBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("https://jwildfire.overwhale.com/downloads/JWildfireVariations200.html");
+        // browse("https://jwildfire.overwhale.com/downloads/JWildfireVariations200.html");
+        browse("https://1drv.ms/x/s!AhabogcLehGXjHG9QNEcSPkfkkrq");
       }
     });
     youtubeVideosBtn.setPreferredSize(new Dimension(128, 24));
