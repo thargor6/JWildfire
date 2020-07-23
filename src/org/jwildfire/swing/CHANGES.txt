@@ -1,6 +1,6 @@
 V6.00 (xx.xx.2020)
  - dramatic improvement of responsiveness to changes in the UI (sliders, number fields, ...)
- - faster Undo and Randomizers as well (see below)
+    - faster Undo and Randomizers as well
  - automatic creation and updating of keyframes when changing flame-parameters at different frame-numbers, creating
    of flame-animations has never been easier
  - there are the following functions in the UI to deal with keyframes:
@@ -9,6 +9,8 @@ V6.00 (xx.xx.2020)
      -delete current keyframe (affects all motion curves which contain a corresponding keyframe)
      -duplicate current keyframe (affects all motion curves which contain a corresponding keyframe)
      -reset all motion curves/remove all keyframes
+ - direct mp4-output in the main-editor and Easy-Movie-Maker, so you can render small animations very quickly and without
+   involving any other software
  - easy revert-to-default-feature for most parameters: just double-click at the label in front of an field to revert the
    current-value to the default value. To see if a field supprots this feature, just hover with the mouse of the label.
    When the cursor turn into a hand-symbol, the field supports the feature. This function also respects motion-curves and can be undone.
@@ -40,7 +42,28 @@ V6.00 (xx.xx.2020)
      -vortex,
      -dc_vortex,
      -dc_warping by Jesus Sosa
- - Added a mode parameter to the elliptic variation to enable compatibility with the apo plugin; see http://jwildfire.org/forum/viewtopic.php?f=22&t=2681
+ - 20 new variations "SDF" for 3D blur objects, by Jesus Sosa
+     -box3D
+     -bbox3D
+     -rbox3D
+     -rhombus3D
+     -torus3D
+     -ellipsoid3D
+     -hexprism3D
+     -cylinder3D
+     -octogonprism3D
+     -ocylinder3D
+     -pyramid3D
+     -octahedron3D
+     -solidangle3D
+     -triprism3D
+     -cappedtorus3D
+     -cappedcone3D
+     -ocappedcone3D
+     -cone3D
+     -oroundcone3D
+     -capsule3D
+ - added a mode parameter to the elliptic variation to enable compatibility with the apo plugin; see http://jwildfire.org/forum/viewtopic.php?f=22&t=2681
    Also added a higher accuracy mode as described by Claude Heiland-Allen.
    All three modes will look the same for most flames, but the differences are important in some specialized cases, by Rick Sidwell
  - add polarplot variations to solid random flame generator, by Rick Sidwell
