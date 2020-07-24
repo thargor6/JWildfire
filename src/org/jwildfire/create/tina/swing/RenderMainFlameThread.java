@@ -127,19 +127,20 @@ public class RenderMainFlameThread implements Runnable {
       NIOUtils.closeQuietly(out);
     }
 
-    for(int i=1;i<flame.getFrameCount();i++) {
-      if (forceAbort) {
-        finished = true;
-        return;
-      }
-      File f = new File(RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(), i, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight()));
-      try {
-        if(!f.delete()) {
+    if(!Prefs.getPrefs().isTinaKeepTempMp4Frames()) {
+      for(int i=1;i<flame.getFrameCount();i++) {
+        if (forceAbort) {
+          finished = true;
+          return;
+        }
+        File f = new File(RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(), i, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight()));
+        try {
+          if (!f.delete()) {
+            f.deleteOnExit();
+          }
+        } finally {
           f.deleteOnExit();
         }
-      }
-      finally {
-        f.deleteOnExit();
       }
     }
 

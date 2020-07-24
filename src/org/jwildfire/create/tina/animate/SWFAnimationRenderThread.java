@@ -148,18 +148,20 @@ public class SWFAnimationRenderThread implements Runnable {
       controller.getProgressUpdater().updateProgress(maxProgress);
     }
 
-    for(int i=1;i<flameMovie.getFrameCount();i++) {
-      if (cancelSignalled) {
-        return;
-      }
-      File f = new File(RenderMovieUtil.makeFrameName(outputFilename, i, getMovieName(), flameMovie.getQuality(), firstFlame.getWidth(), firstFlame.getHeight()));
-      try {
-        if(!f.delete()) {
+    if(!Prefs.getPrefs().isTinaKeepTempMp4Frames()) {
+      for(int i=1;i<flameMovie.getFrameCount();i++) {
+        if (cancelSignalled) {
+          return;
+        }
+        File f = new File(RenderMovieUtil.makeFrameName(outputFilename, i, getMovieName(), flameMovie.getQuality(), firstFlame.getWidth(), firstFlame.getHeight()));
+        try {
+          if(!f.delete()) {
+            f.deleteOnExit();
+          }
+        }
+        finally {
           f.deleteOnExit();
         }
-      }
-      finally {
-        f.deleteOnExit();
       }
     }
   }

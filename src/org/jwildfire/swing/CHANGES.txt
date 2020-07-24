@@ -4,13 +4,14 @@ V6.00 (xx.xx.2020)
  - automatic creation and updating of keyframes when changing flame-parameters at different frame-numbers, creating
    of flame-animations has never been easier
  - there are the following functions in the UI to deal with keyframes:
-     -jump to previous keyframe (takes all keyframes of all motions curves into account and jumps to the closest keyframe)
-     -jump to next keyframe (same as before, but in the opposite direction)
-     -delete current keyframe (affects all motion curves which contain a corresponding keyframe)
-     -duplicate current keyframe (affects all motion curves which contain a corresponding keyframe)
-     -reset all motion curves/remove all keyframes
+     - jump to previous keyframe (takes all keyframes of all motions curves into account and jumps to the closest keyframe)
+     - jump to next keyframe (same as before, but in the opposite direction)
+     - delete current keyframe (affects all motion curves which contain a corresponding keyframe)
+     - duplicate current keyframe (affects all motion curves which contain a corresponding keyframe)
+     - reset all motion curves/remove all keyframes
  - direct mp4-output in the main-editor and Easy-Movie-Maker, so you can render small animations very quickly and without
    involving any other software
+     - new option "tina.keep_temp_mp4_frames" in the Preferences to specify if you want to keep the individual frames (and must delete them manually)
  - easy revert-to-default-feature for most parameters: just double-click at the label in front of an field to revert the
    current-value to the default value. To see if a field supprots this feature, just hover with the mouse of the label.
    When the cursor turn into a hand-symbol, the field supports the feature. This function also respects motion-curves and can be undone.

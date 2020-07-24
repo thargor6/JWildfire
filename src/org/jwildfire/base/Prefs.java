@@ -155,6 +155,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
   static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir.5";
+  static final String KEY_TINA_KEEP_TEMP_MP4_FRAMES = "tina.keep_temp_mp4_frames";
 
   static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
@@ -359,6 +360,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
   private boolean tinaOptimizedRenderingIR = true;
+
+  @Property(description = "Keep temporary single images (as *.png-files) when rendering mp4-animations. Occupies more disc space, but may simplify post-processing in other apps.", category = PropertyCategory.TINA)
+  private boolean tinaKeepTempMp4Frames = false;
 
   @Property(description = "User-defined mutation-sub-types for mutation-type USER1 in the MutaGen", category = PropertyCategory.TINA)
   private String tinaMutaGenMutationTypesUser1 = "ADD_TRANSFORM, CHANGE_WEIGHT, AFFINE, RANDOM_PARAMETER";
@@ -798,6 +802,7 @@ public class Prefs extends ManagedObject {
     tinaSVGPath = pSrc.tinaSVGPath;
     baseMathLibType = pSrc.baseMathLibType;
     tinaOptimizedRenderingIR = pSrc.tinaOptimizedRenderingIR;
+    tinaKeepTempMp4Frames = pSrc.tinaKeepTempMp4Frames;
     tinaMacroButtonsVertical = pSrc.tinaMacroButtonsVertical;
     tinaMacroToolbarHeight = pSrc.tinaMacroToolbarHeight;
     tinaFreeCacheInBatchRenderer = pSrc.tinaFreeCacheInBatchRenderer;
@@ -1226,6 +1231,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaOptimizedRenderingIR(boolean pTinaOptimizedRenderingIR) {
     tinaOptimizedRenderingIR = pTinaOptimizedRenderingIR;
+  }
+
+  public boolean isTinaKeepTempMp4Frames() {
+    return tinaKeepTempMp4Frames;
+  }
+
+  public void setTinaKeepTempMp4Frames(boolean tinaKeepTempMp4Frames) {
+    this.tinaKeepTempMp4Frames = tinaKeepTempMp4Frames;
   }
 
   public static Prefs newInstance() {
