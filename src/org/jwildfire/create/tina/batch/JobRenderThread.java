@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,10 +16,15 @@
 */
 package org.jwildfire.create.tina.batch;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 
+import org.jcodec.api.awt.AWTSequenceEncoder;
+import org.jcodec.common.io.NIOUtils;
+import org.jcodec.common.io.SeekableByteChannel;
+import org.jcodec.common.model.Rational;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
@@ -34,7 +39,10 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.swing.RenderMovieUtil;
 import org.jwildfire.create.tina.variation.RessourceManager;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 
 public class JobRenderThread implements Runnable {
@@ -79,12 +87,13 @@ public class JobRenderThread implements Runnable {
               width = resolutionProfile.getWidth();
               height = resolutionProfile.getHeight();
             }
+
             RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
             info.setRenderHDR(qualityProfile.isWithHDR());
             info.setRenderZBuffer(qualityProfile.isWithZBuffer());
             List<Flame> flames = new FlameReader(Prefs.getPrefs()).readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
-            String primaryFilename = job.getImageFilename(flame.getStereo3dMode());
+            String primaryFilename = job.getPrimaryFilename(flame.getStereo3dMode());
             double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
             double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
             flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
@@ -98,44 +107,11 @@ public class JobRenderThread implements Runnable {
                 controller.getJobProgressUpdater().updateProgress(1);
               }
               else {
-                if (useOpenCl) {
-                  String openClFlameFilename = Tools.trimFileExt(job.getFlameFilename()) + ".flam3";
-                  try {
-                    Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
-                    new FACLFlameWriter().writeFlame(newFlame, openClFlameFilename);
-                    long t0 = Calendar.getInstance().getTimeInMillis();
-                    FACLRenderResult openClRenderRes = FACLRenderTools.invokeFACLRender(openClFlameFilename, width, height, qualityProfile.getQuality());
-                    long t1 = Calendar.getInstance().getTimeInMillis();
-                    if (openClRenderRes.getReturnCode() != 0) {
-                      throw new Exception(openClRenderRes.getMessage());
-                    }
-                    else {
-                      job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
-                    }
-                  }
-                  finally {
-                    if (!new File(openClFlameFilename).delete()) {
-                      new File(openClFlameFilename).deleteOnExit();
-                    }
-                  }
+                if(!job.isRenderAsAnimation()) {
+                  renderSingleFrame(job, width, height, info, flame, primaryFilename, true);
                 }
                 else {
-                  flame.setSampleDensity(job.getCustomQuality() > 0 ? job.getCustomQuality() : qualityProfile.getQuality());
-                  renderer = new FlameRenderer(flame, Prefs.getPrefs(), flame.isBGTransparency(), false);
-                  renderer.setProgressUpdater(controller.getJobProgressUpdater());
-                  long t0 = Calendar.getInstance().getTimeInMillis();
-                  RenderedFlame res = renderer.renderFlame(info);
-                  if (!cancelSignalled) {
-                    long t1 = Calendar.getInstance().getTimeInMillis();
-                    job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
-                    new ImageWriter().saveImage(res.getImage(), primaryFilename);
-                    if (res.getHDRImage() != null) {
-                      new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(job.getImageFilename(flame.getStereo3dMode())));
-                    }
-                    if (res.getZBuffer() != null) {
-                      new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(job.getImageFilename(flame.getStereo3dMode()), flame.getZBufferFilename()));
-                    }
-                  }
+                  renderAnimation(job, width, height, info, flame, primaryFilename);
                 }
               }
               if (!cancelSignalled) {
@@ -145,29 +121,7 @@ public class JobRenderThread implements Runnable {
                 RessourceManager.clearAll();
                 System.gc();
               }
-              try {
-                {
-                  controller.refreshRenderBatchJobsTable();
-                  controller.getRenderBatchJobsTable().invalidate();
-                  controller.getRenderBatchJobsTable().validate();
-                  //                  Graphics g = controller.getRenderBatchJobsTable().getParent().getGraphics();
-                  //                  if (g != null) {
-                  //                    controller.getRenderBatchJobsTable().getParent().paint(g);
-                  //                  }
-                }
-                {
-                  controller.getTotalProgressBar().setValue(controller.getTotalProgressBar().getValue() + 1);
-                  controller.getTotalProgressBar().invalidate();
-                  controller.getTotalProgressBar().validate();
-                  //                  Graphics g = controller.getTotalProgressBar().getGraphics();
-                  //                  if (g != null) {
-                  //                    controller.getTotalProgressBar().paint(g);
-                  //                  }
-                }
-              }
-              catch (Throwable ex) {
-                // ex.printStackTrace();
-              }
+              updateProgressBar();
             }
             finally {
               flame.setSampleDensity(oldSampleDensity);
@@ -193,6 +147,143 @@ public class JobRenderThread implements Runnable {
     }
     finally {
       controller.onJobFinished();
+    }
+  }
+
+  private void renderSingleFrame(Job job, int width, int height, RenderInfo info, Flame flame, String primaryFilename, boolean updateProgress) throws Exception {
+    if (useOpenCl) {
+      String openClFlameFilename = Tools.trimFileExt(job.getFlameFilename()) + ".flam3";
+      try {
+        Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
+        new FACLFlameWriter().writeFlame(newFlame, openClFlameFilename);
+        long t0 = Calendar.getInstance().getTimeInMillis();
+        FACLRenderResult openClRenderRes = FACLRenderTools.invokeFACLRender(openClFlameFilename, width, height, qualityProfile.getQuality());
+        long t1 = Calendar.getInstance().getTimeInMillis();
+        if (openClRenderRes.getReturnCode() != 0) {
+          throw new Exception(openClRenderRes.getMessage());
+        }
+        else {
+          job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+        }
+      }
+      finally {
+        if (!new File(openClFlameFilename).delete()) {
+          new File(openClFlameFilename).deleteOnExit();
+        }
+      }
+    }
+    else {
+      flame.setSampleDensity(getSampleDensity(job));
+      renderer = new FlameRenderer(flame, Prefs.getPrefs(), flame.isBGTransparency(), false);
+      if(updateProgress) {
+        renderer.setProgressUpdater(controller.getJobProgressUpdater());
+      }
+      long t0 = Calendar.getInstance().getTimeInMillis();
+      RenderedFlame res = renderer.renderFlame(info);
+      if (!cancelSignalled) {
+        long t1 = Calendar.getInstance().getTimeInMillis();
+        job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+        new ImageWriter().saveImage(res.getImage(), primaryFilename);
+        if (res.getHDRImage() != null) {
+          new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(job.getPrimaryFilename(flame.getStereo3dMode())));
+        }
+        if (res.getZBuffer() != null) {
+          new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(job.getPrimaryFilename(flame.getStereo3dMode()), flame.getZBufferFilename()));
+        }
+      }
+    }
+  }
+
+  private double getSampleDensity(Job job) {
+    return job.getCustomQuality() > 0 ? job.getCustomQuality() : qualityProfile.getQuality();
+  }
+
+  private void renderAnimation(Job job, int width, int height, RenderInfo info, Flame flame, String primaryFilename) throws Exception {
+    controller.getJobProgressUpdater().initProgress(1);
+
+    int maxProgress = flame.getFrameCount() + flame.getFrameCount() / 4;
+    int progress = 1;
+    controller.getJobProgressUpdater().initProgress(maxProgress);
+
+    for(int i=1;i<flame.getFrameCount();i++) {
+      if (cancelSignalled) {
+        return;
+      }
+      String fn = RenderMovieUtil.makeFrameName(primaryFilename,i, flame.getName(), getSampleDensity(job), width, height);
+      if(!new File(fn).exists()) {
+        Flame currFlame = flame.makeCopy();
+        currFlame.setFrame(i);
+        renderSingleFrame(job, width, height, info, currFlame, fn, false);
+      }
+      controller.getJobProgressUpdater().updateProgress(progress++);
+    }
+    if(cancelSignalled) {
+      return;
+    }
+
+    SeekableByteChannel out = null;
+    try {
+      out = NIOUtils.writableFileChannel(primaryFilename);
+      AWTSequenceEncoder encoder = new AWTSequenceEncoder(out, Rational.R(flame.getFps(), 1));
+      for(int i=1;i<flame.getFrameCount();i++) {
+        if (cancelSignalled) {
+          return;
+        }
+        String fn = RenderMovieUtil.makeFrameName(primaryFilename,i, flame.getName(), getSampleDensity(job), width, height);
+        SimpleImage img = new ImageReader().loadImage(fn);
+        BufferedImage image = img.getBufferedImg();
+        encoder.encodeImage(image);
+        if(i%4 ==0) {
+          controller.getJobProgressUpdater().updateProgress(progress++);
+        }
+      }
+      encoder.finish();
+    } finally {
+      NIOUtils.closeQuietly(out);
+    }
+
+    if(!Prefs.getPrefs().isTinaKeepTempMp4Frames()) {
+      for(int i=1;i<flame.getFrameCount();i++) {
+        if (cancelSignalled) {
+          return;
+        }
+        File f = new File(RenderMovieUtil.makeFrameName(primaryFilename, i, flame.getName(), getSampleDensity(job), width, height));
+        try {
+          if (!f.delete()) {
+            f.deleteOnExit();
+          }
+        } finally {
+          f.deleteOnExit();
+        }
+      }
+    }
+
+    controller.getJobProgressUpdater().updateProgress(maxProgress);
+  }
+
+  private void updateProgressBar() {
+    try {
+      {
+        controller.refreshRenderBatchJobsTable();
+        controller.getRenderBatchJobsTable().invalidate();
+        controller.getRenderBatchJobsTable().validate();
+        //                  Graphics g = controller.getRenderBatchJobsTable().getParent().getGraphics();
+        //                  if (g != null) {
+        //                    controller.getRenderBatchJobsTable().getParent().paint(g);
+        //                  }
+      }
+      {
+        controller.getTotalProgressBar().setValue(controller.getTotalProgressBar().getValue() + 1);
+        controller.getTotalProgressBar().invalidate();
+        controller.getTotalProgressBar().validate();
+        //                  Graphics g = controller.getTotalProgressBar().getGraphics();
+        //                  if (g != null) {
+        //                    controller.getTotalProgressBar().paint(g);
+        //                  }
+      }
+    }
+    catch (Throwable ex) {
+      // ex.printStackTrace();
     }
   }
 

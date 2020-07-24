@@ -35,6 +35,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
@@ -241,9 +242,10 @@ public class BatchRendererController implements JobRenderThreadController {
     final int COL_FLAME = 0;
     final int COL_CUSTOM_SIZE = 1;
     final int COL_CUSTOM_QUALITY = 2;
-    final int COL_STATE = 3;
-    final int COL_ELAPSED = 4;
-    final int COL_LAST_ERROR = 5;
+    final int COL_RENDER_ANIMATION = 3;
+    final int COL_STATE = 4;
+    final int COL_ELAPSED = 5;
+    final int COL_LAST_ERROR = 6;
     data.renderBatchJobsTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -254,7 +256,7 @@ public class BatchRendererController implements JobRenderThreadController {
 
       @Override
       public int getColumnCount() {
-        return 6;
+        return 7;
       }
 
       @Override
@@ -266,6 +268,8 @@ public class BatchRendererController implements JobRenderThreadController {
             return "Custom size";
           case COL_CUSTOM_QUALITY:
             return "Custom quality";
+          case COL_RENDER_ANIMATION:
+            return "Render animation";
           case COL_STATE:
             return "State";
           case COL_ELAPSED:
@@ -286,7 +290,9 @@ public class BatchRendererController implements JobRenderThreadController {
             case COL_CUSTOM_SIZE:
               return job.getCustomWidth() > 0 || job.getCustomHeight() > 0 ? job.getCustomWidth() + "x" + job.getCustomHeight() : "";
             case COL_CUSTOM_QUALITY:
-              return job.getCustomQuality() > 0 ? Integer.valueOf(job.getCustomQuality()) : "";
+              return job.getCustomQuality() > MathLib.EPSILON ? Tools.doubleToString(job.getCustomQuality()) : "";
+            case COL_RENDER_ANIMATION:
+              return job.isRenderAsAnimation() ? "1": "";
             case COL_STATE:
               return job.isFinished() ? "ready" : "";
             case COL_ELAPSED:
@@ -300,7 +306,7 @@ public class BatchRendererController implements JobRenderThreadController {
 
       @Override
       public boolean isCellEditable(int row, int column) {
-        return column == COL_CUSTOM_SIZE || column == COL_CUSTOM_QUALITY;
+        return column == COL_CUSTOM_SIZE || column == COL_CUSTOM_QUALITY || column == COL_RENDER_ANIMATION;
       }
 
       @Override
@@ -315,13 +321,14 @@ public class BatchRendererController implements JobRenderThreadController {
                   job.setCustomQuality(0);
                 }
                 else {
-                  int quality = Integer.parseInt(valStr);
-                  if (quality < 16)
+                  double quality = Tools.stringToDouble(valStr);
+                  if (quality < 0.1)
                     throw new RuntimeException();
                   job.setCustomQuality(quality);
                 }
               }
               catch (Throwable ex) {
+                ex.printStackTrace();
                 errorHandler.handleError(new Exception("Invalid quality value <" + valStr + ">"));
               }
               break;
@@ -347,6 +354,9 @@ public class BatchRendererController implements JobRenderThreadController {
                 errorHandler.handleError(new Exception("Invalid size <" + valStr + ">, size must be specified in the format <width>x<height>, e.g. 1920x1080"));
               }
               break;
+            case COL_RENDER_ANIMATION:
+               job.setRenderAsAnimation("1".equals(valStr) || "yes".equalsIgnoreCase(valStr) || "true".equalsIgnoreCase(valStr));
+              break;
             default: // nothing to do
               break;
           }
@@ -359,6 +369,7 @@ public class BatchRendererController implements JobRenderThreadController {
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_FLAME).setWidth(120);
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_CUSTOM_QUALITY).setWidth(40);
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_CUSTOM_SIZE).setWidth(60);
+    data.renderBatchJobsTable.getColumnModel().getColumn(COL_RENDER_ANIMATION).setWidth(40);
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_STATE).setPreferredWidth(10);
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_ELAPSED).setWidth(10);
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_LAST_ERROR).setWidth(120);
@@ -486,7 +497,7 @@ public class BatchRendererController implements JobRenderThreadController {
       if (job != null) {
         List<Flame> flames = new FlameReader(Prefs.getPrefs()).readFlames(job.getFlameFilename());
         Flame flame = flames.get(0);
-        String primaryFilename = job.getImageFilename(flame.getStereo3dMode());
+        String primaryFilename = job.getPrimaryFilename(flame.getStereo3dMode());
         File imageFile = new File(primaryFilename);
         if (imageFile.exists()) {
           tinaController.getMainController().loadImage(imageFile.getAbsolutePath(), false);

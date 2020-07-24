@@ -9,8 +9,13 @@ V6.00 (xx.xx.2020)
      - delete current keyframe (affects all motion curves which contain a corresponding keyframe)
      - duplicate current keyframe (affects all motion curves which contain a corresponding keyframe)
      - reset all motion curves/remove all keyframes
- - direct mp4-output in the main-editor and Easy-Movie-Maker, so you can render small animations very quickly and without
-   involving any other software
+ - you may now create mp4-files directly from within JWildfire (without using any other tools). This feature is available
+   in the following places:
+     - main-editor (just use the "Render image/movie"-button as usual, but choose the extension ".mp4" as output.
+       In the file-dialog you may select "Supported movie files" in order to display only *.mp4-files.)
+     - Easy-Movie-Maker (new "MP4"-output-type)
+     - Batch renderer (after adding a file you need to set the value "Render animation" to 1 for each file you want to render as animation)
+   so you can render small animations very quickly and without involving any other software
      - new option "tina.keep_temp_mp4_frames" in the Preferences to specify if you want to keep the individual frames (and must delete them manually)
  - easy revert-to-default-feature for most parameters: just double-click at the label in front of an field to revert the
    current-value to the default value. To see if a field supprots this feature, just hover with the mouse of the label.

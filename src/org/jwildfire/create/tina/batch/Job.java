@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -26,7 +26,8 @@ public class Job {
   private String imageFilename;
   private int customWidth;
   private int customHeight;
-  private int customQuality;
+  private double customQuality;
+  private boolean renderAsAnimation;
 
   private Throwable lastError;
 
@@ -47,9 +48,9 @@ public class Job {
     return elapsedSeconds;
   }
 
-  public String getImageFilename(Stereo3dMode pStereo3dMode) {
+  public String getPrimaryFilename(Stereo3dMode pStereo3dMode) {
     if (imageFilename == null) {
-      String fileExt = Stereo3dMode.SIDE_BY_SIDE.equals(pStereo3dMode) ? Tools.FILEEXT_PNS : Tools.FILEEXT_PNG;
+      String fileExt = renderAsAnimation ? Tools.FILEEXT_MP4 : Stereo3dMode.SIDE_BY_SIDE.equals(pStereo3dMode) ? Tools.FILEEXT_PNS : Tools.FILEEXT_PNG;
       imageFilename = flameFilename + "." + fileExt;
       int p = flameFilename.lastIndexOf(".");
       if (p > 0) {
@@ -93,7 +94,7 @@ public class Job {
     return customHeight;
   }
 
-  public int getCustomQuality() {
+  public double getCustomQuality() {
     return customQuality;
   }
 
@@ -105,8 +106,16 @@ public class Job {
     customHeight = pCustomHeight;
   }
 
-  public void setCustomQuality(int pCustomQuality) {
+  public void setCustomQuality(double pCustomQuality) {
     customQuality = pCustomQuality;
   }
 
+  public boolean isRenderAsAnimation() {
+    return renderAsAnimation;
+  }
+
+  public void setRenderAsAnimation(boolean renderAsAnimation) {
+    this.renderAsAnimation = renderAsAnimation;
+    this.imageFilename = null;
+  }
 }
