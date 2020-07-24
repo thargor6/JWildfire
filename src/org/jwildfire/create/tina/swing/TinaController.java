@@ -1334,10 +1334,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void refreshUI() {
     gridRefreshing = true;
     try {
-      refreshLayersTable();
       int row = data.layersTable.getSelectedRow();
-      if (row < 0 && getCurrFlame() != null && getCurrFlame().getLayers().size() > 0) {
-        data.layersTable.getSelectionModel().setSelectionInterval(0, 0);
+      refreshLayersTable();
+      if (row < 0 || (getCurrFlame() != null && row >= getCurrFlame().getLayers().size())) {
+        if(getCurrFlame() != null && getCurrFlame().getLayers().size()>0) {
+          data.layersTable.getSelectionModel().setSelectionInterval(0, 0);
+        }
+      }
+      else {
+        data.layersTable.getSelectionModel().setSelectionInterval(row, row);
       }
     } finally {
       gridRefreshing = false;
