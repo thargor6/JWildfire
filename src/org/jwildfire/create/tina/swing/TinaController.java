@@ -3067,17 +3067,18 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
       loadFirstRandomFlame = false;
-      setCurrFlame(randomBatch.get(pIdx).getFlame(), false);
-      undoManager.initUndoStack(getCurrFlame());
+      Flame newFlame = randomBatch.get(pIdx).getFlame();
       {
         FlamePanel imgPanel = getFlamePanel();
         Rectangle bounds = imgPanel.getImageBounds();
-        double wScl = (double) bounds.width / (double) getCurrFlame().getWidth();
-        double hScl = (double) bounds.height / (double) getCurrFlame().getHeight();
-        getCurrFlame().setWidth(bounds.width);
-        getCurrFlame().setHeight(bounds.height);
-        getCurrFlame().setPixelsPerUnit((wScl + hScl) * 0.5 * getCurrFlame().getPixelsPerUnit());
+        double wScl = (double) bounds.width / (double) newFlame.getWidth();
+        double hScl = (double) bounds.height / (double) newFlame.getHeight();
+        newFlame.setWidth(bounds.width);
+        newFlame.setHeight(bounds.height);
+        newFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * newFlame.getPixelsPerUnit());
       }
+      setCurrFlame(newFlame, false);
+      undoManager.initUndoStack(getCurrFlame());
     }
   }
 

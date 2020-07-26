@@ -163,7 +163,9 @@ public class JobRenderThread implements Runnable {
           throw new Exception(openClRenderRes.getMessage());
         }
         else {
-          job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+          if(updateProgress) {
+            job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+          }
         }
       }
       finally {
@@ -181,8 +183,10 @@ public class JobRenderThread implements Runnable {
       long t0 = Calendar.getInstance().getTimeInMillis();
       RenderedFlame res = renderer.renderFlame(info);
       if (!cancelSignalled) {
-        long t1 = Calendar.getInstance().getTimeInMillis();
-        job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+        if(updateProgress) {
+          long t1 = Calendar.getInstance().getTimeInMillis();
+          job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+        }
         new ImageWriter().saveImage(res.getImage(), primaryFilename);
         if (res.getHDRImage() != null) {
           new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(job.getPrimaryFilename(flame.getStereo3dMode())));
@@ -199,6 +203,8 @@ public class JobRenderThread implements Runnable {
   }
 
   private void renderAnimation(Job job, int width, int height, RenderInfo info, Flame flame, String primaryFilename) throws Exception {
+    long t0 = Calendar.getInstance().getTimeInMillis();
+
     controller.getJobProgressUpdater().initProgress(1);
 
     int maxProgress = flame.getFrameCount() + flame.getFrameCount() / 4;
@@ -257,6 +263,9 @@ public class JobRenderThread implements Runnable {
         }
       }
     }
+
+    long t1 = Calendar.getInstance().getTimeInMillis();
+    job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
 
     controller.getJobProgressUpdater().updateProgress(maxProgress);
   }

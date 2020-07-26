@@ -21,15 +21,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.table.JTableHeader;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.swing.JWildfire;
@@ -237,6 +236,17 @@ public class BatchFlameRendererFrame extends JFrame {
           }
         }
       });
+
+      JTableHeader header = renderBatchJobsTable.getTableHeader();
+      header.addMouseListener(new MouseInputAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if(e.getClickCount()==2) {
+            tinaController.getBatchRendererController().renderBatchJobsTableHeaderClicked();
+          }
+        }
+      });
+
 
     }
     return renderBatchJobsTable;

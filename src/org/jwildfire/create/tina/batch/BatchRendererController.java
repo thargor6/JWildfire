@@ -237,15 +237,16 @@ public class BatchRendererController implements JobRenderThreadController {
     return data.renderBatchJobsTable;
   }
 
+  final int COL_FLAME = 0;
+  final int COL_CUSTOM_SIZE = 1;
+  final int COL_CUSTOM_QUALITY = 2;
+  final int COL_RENDER_ANIMATION = 3;
+  final int COL_STATE = 4;
+  final int COL_ELAPSED = 5;
+  final int COL_LAST_ERROR = 6;
+
   @Override
   public void refreshRenderBatchJobsTable() {
-    final int COL_FLAME = 0;
-    final int COL_CUSTOM_SIZE = 1;
-    final int COL_CUSTOM_QUALITY = 2;
-    final int COL_RENDER_ANIMATION = 3;
-    final int COL_STATE = 4;
-    final int COL_ELAPSED = 5;
-    final int COL_LAST_ERROR = 6;
     data.renderBatchJobsTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -398,6 +399,34 @@ public class BatchRendererController implements JobRenderThreadController {
       return batchRenderList.get(row);
     }
     return null;
+  }
+
+  public void renderBatchJobsTableHeaderClicked() {
+    int col = data.renderBatchJobsTable.getSelectedColumn();
+    int row = data.renderBatchJobsTable.getSelectedRow();
+    if(row>=0 && row<batchRenderList.size()) {
+      if(col==COL_RENDER_ANIMATION) {
+        boolean val = batchRenderList.get(row).isRenderAsAnimation();
+        for(int i=row+1; i<batchRenderList.size();i++) {
+          batchRenderList.get(i).setRenderAsAnimation(val);
+        }
+      }
+      else if(col==COL_CUSTOM_QUALITY) {
+        double val = batchRenderList.get(row).getCustomQuality();
+        for(int i=row+1; i<batchRenderList.size();i++) {
+          batchRenderList.get(i).setCustomQuality(val);
+        }
+      }
+      else if(col==COL_CUSTOM_SIZE) {
+        int w = batchRenderList.get(row).getCustomWidth();
+        int h = batchRenderList.get(row).getCustomHeight();
+        for(int i=row+1; i<batchRenderList.size();i++) {
+          batchRenderList.get(i).setCustomWidth(w);
+          batchRenderList.get(i).setCustomHeight(h);
+        }
+      }
+      refreshRenderBatchJobsTable();
+    }
   }
 
   private class BatchRenderPreviewFlameHolder implements FlameHolder {
