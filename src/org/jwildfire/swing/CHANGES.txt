@@ -82,6 +82,8 @@ V6.00 (xx.xx.2020)
  - fixed a bug regarding calculating the wrong pixels-per-unit-setting when importing a flame from the thumbnail-ribbon
 
 V5.60 (06.05.2020)
+ - support for NVidia’s NVidia’s OptiX denoiser as a powerful tool to cut down render times and improve image quality.
+   Please consult the comprehensive documentation inside the software (“Help -> OptiX denoiser”) for more information.
  - new commandline-tool to create and render random flames.
    Example: java -cp j-wildfire-5.60/lib/j-wildfire.jar org.jwildfire.cli.CreateRandomFlame -w 1200 -h 675 -q 80
  - new variations:

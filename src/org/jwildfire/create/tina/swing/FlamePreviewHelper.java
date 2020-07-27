@@ -192,7 +192,8 @@ public class FlamePreviewHelper implements IterationObserver {
 
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
-      Flame flame = flameHolder.getFlame();
+      Flame oriFlame = flameHolder.getFlame();
+      Flame flame = oriFlame!=null ? oriFlame.makeCopy() : null;
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
@@ -202,9 +203,17 @@ public class FlamePreviewHelper implements IterationObserver {
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+          double pixelsPerUnitScale = (wScl + hScl) * 0.5;
+          flame.setPixelsPerUnit(pixelsPerUnitScale * flame.getPixelsPerUnit());
+          if(flame.getPixelsPerUnitCurve().isEnabled()) {
+            flame.getPixelsPerUnitCurve().scale(1.0, pixelsPerUnitScale);
+          }
           flame.setWidth(info.getImageWidth());
           flame.setHeight(info.getImageHeight());
+          if(pMouseDown) {
+            flame.setMotionBlurLength(0);
+          }
+
           try {
             FlameRenderer renderer;
             if (pQuickRender) {
@@ -293,7 +302,6 @@ public class FlamePreviewHelper implements IterationObserver {
 
   public SimpleImage renderAnimFrame(double imageScale, double quality) {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
-    FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
     Rectangle panelBounds = imgPanel.getParentImageBounds();
 
@@ -302,16 +310,21 @@ public class FlamePreviewHelper implements IterationObserver {
 
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
-      Flame flame = flameHolder.getFlame()!=null ? flameHolder.getFlame().makeCopy() : null;
+      Flame oriFlame = flameHolder.getFlame();
+      Flame flame = oriFlame!=null ? oriFlame.makeCopy() : null;
       if (flame != null) {
         double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
         double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+        double pixelsPerUnitScale = (wScl + hScl) * 0.5;
+        flame.setPixelsPerUnit(pixelsPerUnitScale * flame.getPixelsPerUnit());
+        if(flame.getPixelsPerUnitCurve().isEnabled()) {
+          flame.getPixelsPerUnitCurve().scale(1.0, pixelsPerUnitScale);
+        }
         flame.setWidth(info.getImageWidth());
         flame.setHeight(info.getImageHeight());
         try {
           flame.setSampleDensity(quality);
-          flame.setSpatialOversampling(2);
+          flame.setSpatialOversampling(1);
           FlameRenderer renderer = new FlameRenderer(flame, prefs, isTransparencyEnabled(), false);
           RenderedFlame res = renderer.renderFlame(info);
           SimpleImage img = res.getImage();
@@ -351,14 +364,15 @@ public class FlamePreviewHelper implements IterationObserver {
       singleLayerFlame.getLayers().add(layerHolder.getLayer().makeCopy());
       singleLayerFlame.getFirstLayer().setVisible(true);
       singleLayerFlame.getFirstLayer().setWeight(1.0);
-      RenderInfo lInfo = new RenderInfo(width / 4 * renderScale, height / 4 * renderScale, RenderMode.PREVIEW);
+      RenderInfo lInfo = new RenderInfo(width / 8 * renderScale, height / 8 * renderScale, RenderMode.PREVIEW);
       double lWScl = (double) lInfo.getImageWidth() / (double) singleLayerFlame.getWidth();
       double lHScl = (double) lInfo.getImageHeight() / (double) singleLayerFlame.getHeight();
       singleLayerFlame.setPixelsPerUnit((lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.5);
       singleLayerFlame.setWidth(lInfo.getImageWidth());
       singleLayerFlame.setHeight(lInfo.getImageHeight());
-      singleLayerFlame.setSampleDensity(prefs.getTinaRenderRealtimeQuality() * 2.0 / 3.0);
+      singleLayerFlame.setSampleDensity(prefs.getTinaRenderRealtimeQuality() * 2.0 / 8.0);
       FlameRenderer lRenderer = new FlameRenderer(singleLayerFlame, prefs, false, false);
+
       RenderedFlame lRes = lRenderer.renderFlame(lInfo);
       SimpleImage layerImg = lRes.getImage();
 
@@ -457,7 +471,8 @@ public class FlamePreviewHelper implements IterationObserver {
     int height = bounds.height / renderScale;
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
-      Flame flame = flameHolder.getFlame();
+      Flame oriFlame = flameHolder.getFlame();
+      Flame flame = oriFlame!=null ? oriFlame.makeCopy() : null;
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
@@ -467,7 +482,11 @@ public class FlamePreviewHelper implements IterationObserver {
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+          double pixelsPerUnitScale = (wScl + hScl) * 0.5;
+          flame.setPixelsPerUnit(pixelsPerUnitScale * flame.getPixelsPerUnit());
+          if(flame.getPixelsPerUnitCurve().isEnabled()) {
+            flame.getPixelsPerUnitCurve().scale(1.0, pixelsPerUnitScale);
+          }
           flame.setWidth(info.getImageWidth());
           flame.setHeight(info.getImageHeight());
           try {
@@ -593,7 +612,11 @@ public class FlamePreviewHelper implements IterationObserver {
     RenderInfo info = new RenderInfo(panelBounds.width, panelBounds.height, RenderMode.PREVIEW);
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-    flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+    double pixelsPerUnitScale = (wScl + hScl) * 0.5;
+    flame.setPixelsPerUnit(pixelsPerUnitScale * flame.getPixelsPerUnit());
+    if(flame.getPixelsPerUnitCurve().isEnabled()) {
+      flame.getPixelsPerUnitCurve().scale(1.0, pixelsPerUnitScale);
+    }
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
     flame.setSampleDensity(10.0);

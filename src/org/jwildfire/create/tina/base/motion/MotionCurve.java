@@ -404,4 +404,11 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
       }
     }
   }
+
+  public void scale(double xScale, double yScale) {
+    for(int i=0;i<x.length;i++) {
+      x[i] = Tools.FTOI(xScale*x[i]);
+      y[i] = yScale * y[i];
+    }
+  }
 }

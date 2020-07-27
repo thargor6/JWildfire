@@ -1198,7 +1198,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   public boolean hasPreRenderMotionProperty() {
     return brightnessCurve.isEnabled() || contrastCurve.isEnabled() || gammaCurve.isEnabled() || gammaThresholdCurve.isEnabled() || 
         vibrancyCurve.isEnabled() || saturationCurve.isEnabled() || whiteLevelCurve.isEnabled() || lowDensityBrightnessCurve.isEnabled() ||
-            balanceRedCurve.isEnabled() || balanceGreenCurve.isEnabled() || balanceBlueCurve.isEnabled();
+            balanceRedCurve.isEnabled() || balanceGreenCurve.isEnabled() || balanceBlueCurve.isEnabled() ||
+            pixelsPerUnitCurve.isEnabled() || camZoomCurve.isEnabled();
   }
 
   public PostSymmetryType getPostSymmetryType() {
