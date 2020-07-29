@@ -1,6 +1,7 @@
 V6.00 (xx.xx.2020)
  - dramatic improvement of responsiveness to changes in the UI (sliders, number fields, ...)
     - faster Undo and Randomizers as well
+    - more "fluid" preview
  - automatic creation and updating of keyframes when changing flame-parameters at different frame-numbers, creating
    of flame-animations has never been easier
  - there are the following functions in the UI to deal with keyframes:

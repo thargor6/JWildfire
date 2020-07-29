@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -119,19 +120,29 @@ public class RunRandomScriptRandomFlameGenerator extends RandomFlameGenerator {
     flame.getFirstLayer().randomizeColors();
 
     ScriptEntry scriptEntry = getRandomScript();
-    try {
-      if (scriptEntry != null) {
+    if (scriptEntry != null) {
+      try {
         runScript(scriptEntry.getScriptPath(), scriptEntry.getScript(), flame);
+        flame.setName(getFlameName(flame, scriptEntry.getScriptPath()));
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        System.err.println("#############################SCRIPT################################");
+        System.err.println(scriptEntry.getScriptPath());
+        System.err.println("###################################################################");
+        // remove the script from the list in order to avoid to execute it again
+        getScripts().remove(scriptEntry);
       }
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      System.err.println("#############################SCRIPT################################");
-      System.err.println(scriptEntry.getScriptPath());
-      System.err.println("###################################################################");
-      // remove the script from the list in order to avoid to execute it again
-      getScripts().remove(scriptEntry);
     }
     return flame;
+  }
+
+  private String getFlameName(Flame flame, String scriptPath) {
+    String scriptName = new File(scriptPath).getName();
+    String fileExt = Tools.getFileExt(scriptName);
+    if(fileExt!=null && !fileExt.isEmpty()) {
+      scriptName = scriptName.substring(0, scriptName.length() - fileExt.length() - 1);
+    }
+    return getName() + "[" + scriptName + "]" + " - " + flame.hashCode();
   }
 
   @Override
