@@ -67,6 +67,9 @@ public class SigmoidFunc extends VariationFunc {
 
     pVarTP.x += vv * x;
     pVarTP.y += vv * y;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
