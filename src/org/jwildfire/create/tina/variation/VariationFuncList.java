@@ -935,6 +935,10 @@ public class VariationFuncList {
     registerVariationFunc(OrientedRoundCone3DFunc.class); 
     registerVariationFunc(Capsule3DFunc.class); 
 
+    registerVariationFunc(PostTrigFunc.class); 
+    registerVariationFunc(PostLogTile2Func.class);   
+	  
+
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
