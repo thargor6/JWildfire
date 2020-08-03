@@ -123,7 +123,7 @@ public class RunRandomScriptRandomFlameGenerator extends RandomFlameGenerator {
     if (scriptEntry != null) {
       try {
         runScript(scriptEntry.getScriptPath(), scriptEntry.getScript(), flame);
-        flame.setName(getFlameName(flame, scriptEntry.getScriptPath()));
+        flame.setName(getFlameName(flame, scriptEntry.getScriptPath(), scriptEntry.isUserScript()));
       } catch (Exception ex) {
         ex.printStackTrace();
         System.err.println("#############################SCRIPT################################");
@@ -136,13 +136,32 @@ public class RunRandomScriptRandomFlameGenerator extends RandomFlameGenerator {
     return flame;
   }
 
-  private String getFlameName(Flame flame, String scriptPath) {
+  private String getFlameName(Flame flame, String scriptPath, boolean isUserScript) {
     String scriptName = new File(scriptPath).getName();
     String fileExt = Tools.getFileExt(scriptName);
     if(fileExt!=null && !fileExt.isEmpty()) {
       scriptName = scriptName.substring(0, scriptName.length() - fileExt.length() - 1);
     }
-    return getName() + "[" + scriptName + "]" + " - " + flame.hashCode();
+
+    String scriptFolder;
+    if(isUserScript) {
+      String parentFolder = new File(scriptPath).getParentFile().getAbsolutePath();
+      if (new File(Prefs.getPrefs().getTinaJWFScriptPath()).getAbsolutePath().equals(parentFolder)) {
+        scriptFolder = null;
+      } else {
+        scriptFolder = new File(scriptPath).getParentFile().getName();
+      }
+    }
+    else {
+      scriptFolder = null;
+    }
+
+    if(scriptFolder==null) {
+      return getName() + "[" + scriptName + "]" + " - " + flame.hashCode();
+    }
+    else {
+      return getName() + "[" + scriptFolder + "/" + scriptName + "]" + " - " + flame.hashCode();
+    }
   }
 
   @Override
@@ -179,14 +198,20 @@ public class RunRandomScriptRandomFlameGenerator extends RandomFlameGenerator {
     private final JWFScriptUtils.ScriptNode node;
     private final String scriptPath;
     private String script;
+    private boolean userScript;
 
-    public ScriptEntry(JWFScriptUtils.ScriptNode node, String scriptPath) {
+    public ScriptEntry(JWFScriptUtils.ScriptNode node, String scriptPath, boolean userScript) {
       this.node = node;
       this.scriptPath = scriptPath;
+      this.userScript = userScript;
     }
 
     public String getScriptPath() {
       return scriptPath;
+    }
+
+    public boolean isUserScript() {
+      return userScript;
     }
 
     public String getScript() {
@@ -285,12 +310,12 @@ public class RunRandomScriptRandomFlameGenerator extends RandomFlameGenerator {
     if (node instanceof JWFScriptUserNode) {
       String scriptPath = ((JWFScriptUserNode) node).getFilename();
       if(isIncluded(scriptPath, included, excluded)) {
-        scripts.add(new ScriptEntry((JWFScriptUtils.ScriptNode) node, scriptPath));
+        scripts.add(new ScriptEntry((JWFScriptUtils.ScriptNode) node, scriptPath, true));
       }
     } else if (node instanceof JWFScriptInternalNode) {
       String scriptPath = ((JWFScriptInternalNode) node).getResFilename();
       if(isIncluded(scriptPath, included, excluded)) {
-        scripts.add(new ScriptEntry((JWFScriptUtils.ScriptNode) node, scriptPath));
+        scripts.add(new ScriptEntry((JWFScriptUtils.ScriptNode) node, scriptPath, false));
       }
     }
     if (node.getChildCount() >= 0) {
