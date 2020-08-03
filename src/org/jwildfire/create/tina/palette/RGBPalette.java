@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -257,11 +257,11 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   }
 
   private void transformColors() {
-    int startIdx = selectionProvider.getFrom();
-    int endIdx = selectionProvider.getTo();
+    int startIdx = Math.max(0, Math.min(transformedColors.length-1, selectionProvider.getFrom()));
+    int endIdx = Math.max(0, Math.min(transformedColors.length-1, selectionProvider.getTo()));
     if (modified) {
       for (int i = 0; i < transformedColors.length; i++) {
-        transformedColors[i] = null;
+        transformedColors[i] = new RGBColor();
       }
       for (int i = 0; i < PALETTE_SIZE; i++) {
         RGBColor color = getRawColor(i);
@@ -272,6 +272,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
         else if (idx >= PALETTE_SIZE) {
           idx -= PALETTE_SIZE;
         }
+        idx = Math.max(0, Math.min(transformedColors.length-1, idx));
         transformedColors[idx] = new RGBColor(color.getRed(), color.getGreen(), color.getBlue());
       }
       if (modFrequency > 1) {

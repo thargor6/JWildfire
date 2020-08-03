@@ -1,4 +1,4 @@
-V6.00 (xx.xx.2020)
+V6.00 (30.07.2020)
  - dramatic improvement of responsiveness to changes in the UI (sliders, number fields, ...)
     - faster Undo and Randomizers as well
     - more "fluid" preview
@@ -49,6 +49,8 @@ V6.00 (xx.xx.2020)
      -vortex,
      -dc_vortex,
      -dc_warping by Jesus Sosa
+     -post_trig,
+     -post_log_tile2 by Whittaker Courtney
  - 20 new variations "SDF" for 3D blur objects, by Jesus Sosa
      -box3D
      -bbox3D
