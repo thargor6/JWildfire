@@ -98,6 +98,16 @@ public class AnimationController {
     keyframesFrameLbl.setVisible(enabled);
     keyframesFrameCountLbl.setVisible(enabled);
     motionCurvePlayPreviewButton.setVisible(enabled);
+    updateKeyframesFrameSliderAppearance();
+  }
+
+  private void updateKeyframesFrameSliderAppearance() {
+    try {
+      keyframesFrameSlider.setPaintTicks(keyframesFrameCountField.getIntValue() < 600);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   private void adjustFrameControls(int frame) {
@@ -205,6 +215,7 @@ public class AnimationController {
         if (tinaController.getCurrFlame() != null) {
           tinaController.getCurrFlame().setFrameCount(frameCount);
         }
+        updateKeyframesFrameSliderAppearance();
       }
       finally {
         tinaController.setNoRefresh(oldNoRefresh);
@@ -237,7 +248,7 @@ public class AnimationController {
           double previewSize = Math.min(Math.max(0.1, prefs.getTinaRenderAnimPreviewSize()), 1.0);
 
           int frameCount = keyframesFrameCountField.getIntValue();
-          int frameStart = 1;
+          int frameStart = Math.max(getCurrFrame(), 1);
 
           long t0 = System.currentTimeMillis();
           for (int i = frameStart; i <= frameCount; i++) {
