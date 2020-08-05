@@ -62,6 +62,7 @@ import org.jwildfire.create.tina.script.ui.ScriptParamsForm;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
+import org.jwildfire.create.tina.swing.flamepanel.XFormControlsHolder;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.RessourceManager;
@@ -92,7 +93,7 @@ import java.util.List;
 import java.util.Properties;
 
 public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider,
-        DetachedPreviewProvider, FlamePanelProvider, RandomBatchHolder, RenderProgressBarHolder {
+        DetachedPreviewProvider, FlamePanelProvider, RandomBatchHolder, RenderProgressBarHolder, XFormControlsHolder {
 
   static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
   static final double SLIDER_SCALE_CENTRE = 5000.0;
@@ -1046,7 +1047,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       int height = centerPanel.getParent().getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getParent().getWidth(), this, this, frameControlsUtil);
+      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getParent().getWidth(), this, this, frameControlsUtil, this);
       flamePanel.getConfig().setWithColoredTransforms(prefs.isTinaEditorControlsWithColor());
       flamePanel.getConfig().setProgressivePreview(prefs.isTinaEditorProgressivePreview());
       flamePanel.setFlamePanelTriangleMode(prefs.getTinaEditorControlsStyle());
@@ -1196,8 +1197,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       flamePanel.setSelectedXForm(getCurrXForm());
       centerPanel.setLayout(null);
       centerPanel.add(flamePanel /*, BorderLayout.CENTER*/);
+      centerPanel.invalidate();
       centerPanel.getParent().validate();
-      centerPanel.getParent().repaint();
+      centerPanel.repaint();
       flamePanel.requestFocusInWindow();
     }
     return flamePanel;
@@ -2852,12 +2854,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private void applyWorkXFormToCurrentXForm(boolean usePost) {
     XForm selectedXForm = getCurrXForm();
-    frameControlsUtil.setAffineProperty(selectedXForm, "00", usePost, workXForm.getCoeff00());
-    frameControlsUtil.setAffineProperty(selectedXForm, "01", usePost, workXForm.getCoeff01());
-    frameControlsUtil.setAffineProperty(selectedXForm, "10", usePost, workXForm.getCoeff10());
-    frameControlsUtil.setAffineProperty(selectedXForm, "11", usePost, workXForm.getCoeff11());
-    frameControlsUtil.setAffineProperty(selectedXForm, "20", usePost, workXForm.getCoeff20());
-    frameControlsUtil.setAffineProperty(selectedXForm, "21", usePost, workXForm.getCoeff21());
+    frameControlsUtil.setAffineProperty(getC00Control(), selectedXForm, "00", usePost, workXForm.getCoeff00());
+    frameControlsUtil.setAffineProperty(getC01Control(), selectedXForm, "01", usePost, workXForm.getCoeff01());
+    frameControlsUtil.setAffineProperty(getC10Control(), selectedXForm, "10", usePost, workXForm.getCoeff10());
+    frameControlsUtil.setAffineProperty(getC11Control(), selectedXForm, "11", usePost, workXForm.getCoeff11());
+    frameControlsUtil.setAffineProperty(getC20Control(), selectedXForm, "20", usePost, workXForm.getCoeff20());
+    frameControlsUtil.setAffineProperty(getC21Control(), selectedXForm, "21", usePost, workXForm.getCoeff21());
   }
 
   public void xForm_rotateLeft() {
@@ -6610,6 +6612,36 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public NonlinearControlsDelegate getNonlinearControls() {
     return nonlinearControls;
+  }
+
+  @Override
+  public JWFNumberField getC00Control() {
+    return data.affineC00REd;
+  }
+
+  @Override
+  public JWFNumberField getC01Control() {
+    return data.affineC01REd;
+  }
+
+  @Override
+  public JWFNumberField getC10Control() {
+    return data.affineC10REd;
+  }
+
+  @Override
+  public JWFNumberField getC11Control() {
+    return data.affineC11REd;
+  }
+
+  @Override
+  public JWFNumberField getC20Control() {
+    return data.affineC20REd;
+  }
+
+  @Override
+  public JWFNumberField getC21Control() {
+    return data.affineC21REd;
   }
 
 }

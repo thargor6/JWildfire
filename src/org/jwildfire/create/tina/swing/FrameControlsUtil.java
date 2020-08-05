@@ -118,8 +118,10 @@ public class FrameControlsUtil {
     return getEvaluatedPropertyValue(xform, getAffinePropertyName(xform, property, isPostTransform));
   }
 
-  public void setAffineProperty(XForm xform, String property, boolean isPostTransform, double value) {
-    applyValueChange(xform, getAffinePropertyName(xform, property, isPostTransform), value);
+  public void setAffineProperty(JWFNumberField textField, XForm xform, String property, boolean isPostTransform, double value) {
+    String propertyName = getAffinePropertyName(xform, property, isPostTransform);
+    applyValueChange(xform, propertyName, value);
+    updateTextFieldAppearence(textField, xform, propertyName);
     xform.notifyCoeffChange();
   }
 
@@ -187,6 +189,7 @@ public class FrameControlsUtil {
       pTextField.setText(Tools.doubleToString(propValue));
     }
     applyValueChange(pTarget, pProperty, propValue);
+    updateTextFieldAppearence(pTextField, pTarget, pProperty);
   }
 
   public void valueChangedByTextField(Object pTarget, JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, double pDeltaValue) {
@@ -195,6 +198,14 @@ public class FrameControlsUtil {
       pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
     }
     applyValueChange(pTarget, pProperty, propValue);
+    updateTextFieldAppearence(pTextField, pTarget, pProperty);
+  }
+
+  private void updateTextFieldAppearence(JWFNumberField pTextField, Object pTarget, String pProperty) {
+    if(pTextField!=null && pTarget!=null && pProperty!=null) {
+      MotionCurve curve = getMotionCurve(pTarget, pProperty);
+      pTextField.setHasCurve(curve!=null && curve.isEnabled());
+    }
   }
 
   public void applyValueChange(Object pTarget, String pProperty, double propValue) {

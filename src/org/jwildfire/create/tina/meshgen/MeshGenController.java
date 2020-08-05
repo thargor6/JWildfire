@@ -388,7 +388,7 @@ public class MeshGenController {
       int height = pRootPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, pRootPanel.getWidth(), pFlameHolder, null, null);
+      flamePanel = new FlamePanel(prefs, img, 0, 0, pRootPanel.getWidth(), pFlameHolder, null, null, null);
       flamePanel.setRenderWidth(renderWidthREd.getIntValue());
       flamePanel.setRenderHeight(renderHeightREd.getIntValue());
       flamePanel.setFocusable(true);

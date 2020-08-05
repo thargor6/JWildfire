@@ -471,7 +471,7 @@ public class BatchRendererController implements JobRenderThreadController {
       int height = Math.max(data.batchPreviewRootPanel.getHeight(), 32);
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      batchPreviewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.batchPreviewRootPanel.getWidth(), getBatchRenderPreviewFlameHolder(), null, null);
+      batchPreviewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.batchPreviewRootPanel.getWidth(), getBatchRenderPreviewFlameHolder(), null, null, null);
       ResolutionProfile resProfile = getBatchRenderResolutionProfile();
       batchPreviewFlamePanel.setRenderWidth(resProfile.getWidth());
       batchPreviewFlamePanel.setRenderHeight(resProfile.getHeight());

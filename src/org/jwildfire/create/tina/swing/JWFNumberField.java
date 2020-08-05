@@ -91,7 +91,7 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     motionCurveBtn.setText("");
     motionCurveBtn.setToolTipText("Create/edit a motion curve");
     motionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 8));
-    motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
+    motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2-empty.png")));
 
     add(motionCurveBtn, BorderLayout.WEST);
     /*
@@ -459,7 +459,7 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
       if (pHasCurve)
         motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2a.png")));
       else
-        motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
+        motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2-empty.png")));
     }
     /*
     if (spinnerField != null) {

@@ -812,7 +812,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       int height = swfAnimatorPreviewRootPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, swfAnimatorPreviewRootPanel.getWidth(), this, null, null);
+      flamePanel = new FlamePanel(prefs, img, 0, 0, swfAnimatorPreviewRootPanel.getWidth(), this, null, null, null);
       ResolutionProfile resProfile = getResolutionProfile();
       flamePanel.setRenderWidth(resProfile.getWidth());
       flamePanel.setRenderHeight(resProfile.getHeight());

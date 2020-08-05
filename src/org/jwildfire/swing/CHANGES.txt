@@ -33,6 +33,7 @@ V6.00 (30.07.2020)
      - (https://mb3d.overwhale.com is the Mandelbulb3D site)
      - (https://flamelet.overwhale.com is the Flamelet site)
      - https://overwhale.com is my main  site
+ - made it more visible, when a motion curve/key-frame is associated with a certain flame-parameter
  - changed some default settings in regard to flame-animations
  - numeric fields now also react to inputs of the mousewheel
  - added function to reset all motion curves

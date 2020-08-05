@@ -463,7 +463,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       int height = centerPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getWidth(), this, null, null);
+      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getWidth(), this, null, null, null);
       flamePanel.getConfig().setWithColoredTransforms(prefs.isTinaEditorControlsWithColor());
       flamePanel.setFlamePanelTriangleMode(prefs.getTinaEditorControlsStyle());
       flamePanel.getConfig().setProgressivePreview(prefs.isTinaEditorProgressivePreview());
@@ -1157,7 +1157,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       int height = baseFlamePreviewRootPnl.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      baseFlamePreviewPanel = new FlamePanel(prefs, img, 0, 0, baseFlamePreviewRootPnl.getWidth(), this, null, null);
+      baseFlamePreviewPanel = new FlamePanel(prefs, img, 0, 0, baseFlamePreviewRootPnl.getWidth(), this, null, null, null);
       ResolutionProfile resProfile = getResolutionProfile();
       baseFlamePreviewPanel.setRenderWidth(resProfile.getWidth());
       baseFlamePreviewPanel.setRenderHeight(resProfile.getHeight());

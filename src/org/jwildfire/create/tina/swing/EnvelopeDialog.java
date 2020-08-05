@@ -1137,7 +1137,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       int height = getPreviewRootPanel().getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(Prefs.getPrefs(), img, 0, 0, getPreviewRootPanel().getWidth(), this, null, null);
+      flamePanel = new FlamePanel(Prefs.getPrefs(), img, 0, 0, getPreviewRootPanel().getWidth(), this, null, null, null);
       flamePanel.setRenderWidth(800);
       flamePanel.setRenderHeight(600);
       flamePanel.setFocusable(true);

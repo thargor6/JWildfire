@@ -242,7 +242,7 @@ public class QuiltRendererController implements FlameHolder {
       int height = Math.max(data.quiltRendererPreviewRootPanel.getHeight(), 32);
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      previewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.quiltRendererPreviewRootPanel.getWidth(), this, null, null);
+      previewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.quiltRendererPreviewRootPanel.getWidth(), this, null, null, null);
       previewFlamePanel.setRenderWidth(data.quiltRendererRenderWidthEdit.getIntValue());
       previewFlamePanel.setRenderHeight(data.quiltRendererRenderHeightEdit.getIntValue());
       previewFlamePanel.setDrawTriangles(false);

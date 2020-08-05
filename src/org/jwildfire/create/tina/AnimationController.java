@@ -249,6 +249,9 @@ public class AnimationController {
 
           int frameCount = keyframesFrameCountField.getIntValue();
           int frameStart = Math.max(getCurrFrame(), 1);
+          if(frameStart==frameCount) {
+            frameStart = 1;
+          }
 
           long t0 = System.currentTimeMillis();
           for (int i = frameStart; i <= frameCount; i++) {
@@ -285,8 +288,8 @@ public class AnimationController {
           flamePanel.setImage(prevEditorImage);
           flamePanel.invalidate();
           flamePanel.validate();
+          flamePanel.repaint();
           keyframesFrameSlider.setValue(prevFrame);
-          //flamePanel.repaint();
         }
       }
       catch (Throwable ex) {
