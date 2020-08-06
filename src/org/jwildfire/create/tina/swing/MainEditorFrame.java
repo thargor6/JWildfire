@@ -4822,11 +4822,10 @@ public class MainEditorFrame extends JFrame {
       affineRotateEditMotionCurveBtn.setText("");
       affineRotateEditMotionCurveBtn.setSize(new Dimension(70, 24));
       affineRotateEditMotionCurveBtn.setPreferredSize(new Dimension(55, 24));
-      affineRotateEditMotionCurveBtn.setLocation(new Point(0, 57));
+      affineRotateEditMotionCurveBtn.setLocation(new Point(0, 56));
       affineRotateEditMotionCurveBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineRotateEditMotionCurveBtn.setBounds(0, 79, 22, 24);
+      affineRotateEditMotionCurveBtn.setBounds(0, 56, 22, 24);
       tinaAffineTransformationPanel.add(affineRotateEditMotionCurveBtn);
-      tinaAffineTransformationPanel.add(getAffineScaleEditMotionCurveBtn());
     }
     return tinaAffineTransformationPanel;
   }
@@ -17779,9 +17778,10 @@ public class MainEditorFrame extends JFrame {
       affineScaleEditMotionCurveBtn.setText("");
       affineScaleEditMotionCurveBtn.setSize(new Dimension(70, 24));
       affineScaleEditMotionCurveBtn.setPreferredSize(new Dimension(55, 24));
-      affineScaleEditMotionCurveBtn.setLocation(new Point(0, 57));
+      affineScaleEditMotionCurveBtn.setLocation(new Point(0, 56));
       affineScaleEditMotionCurveBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineScaleEditMotionCurveBtn.setBounds(92, 79, 22, 24);
+      affineScaleEditMotionCurveBtn.setBounds(92, 56, 22, 24);
+      tinaAffineTransformationPanel.add(affineScaleEditMotionCurveBtn);
     }
     return affineScaleEditMotionCurveBtn;
   }
