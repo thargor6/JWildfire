@@ -54,7 +54,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
 
-  static final String KEY_TINA_FONTSCALE = "tina.general.font_scale";
+  static final String KEY_TINA_FONTSCALE = "tina.general.font_scale.1";
 
   static final String KEY_TINA_PRESERVE_FREE_CPUS = "tina.render.preserve_free_cpus";
   static final String KEY_TINA_PROFILE_RESOLUTION_COUNT = "tina.profile.resolution.count";

@@ -1416,8 +1416,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     refreshRandomBatchButton();
     enableControls();
     if (loadFirstRandomFlame) {
-      importFromRandomBatch(0);
-      scrollThumbnailsToTop();
+      SwingUtilities.invokeLater(new Runnable() {
+         @Override
+         public void run() {
+           importFromRandomBatch(0);
+           scrollThumbnailsToTop();
+         }
+       }
+      );
     }
   }
 
