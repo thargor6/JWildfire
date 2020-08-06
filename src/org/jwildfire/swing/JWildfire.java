@@ -23,7 +23,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -47,6 +49,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import jdk.nashorn.internal.parser.DateParser;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.WindowPrefs;
@@ -289,9 +292,8 @@ public class JWildfire extends JApplet {
             RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME), true);
             RandomWeightingFieldGenerator randWeightingFieldGen = RandomWeightingFieldGeneratorList.getRandomWeightingFieldGeneratorInstance(RandomWeightingFieldGeneratorList.DEFAULT_GENERATOR_NAME, true);
 
-            tinaController.createRandomBatch(Prefs.getPrefs().getTinaInitialRandomBatchSize(), randGen, randSymmGen, randGradientGen, randWeightingFieldGen, RandomBatchQuality.LOW);
-
             MainEditorFrame tinaInternalFrame = getJFrame(MainEditorFrame.class);
+
             tinaInternalFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
               public void componentResized(java.awt.event.ComponentEvent e) {
                 triggerRefreshFlameImage();
@@ -301,6 +303,9 @@ public class JWildfire extends JApplet {
             if (!tinaInternalFrame.isVisible()) {
               tinaInternalFrame.setVisible(true);
             }
+
+            tinaController.createRandomBatch(Prefs.getPrefs().getTinaInitialRandomBatchSize(), randGen, randSymmGen, randGradientGen, randWeightingFieldGen, RandomBatchQuality.LOW);
+
           } catch (Exception ex) {
             ex.printStackTrace();
           }
@@ -327,7 +332,7 @@ public class JWildfire extends JApplet {
         cancelSignalled.set(false);
         for (int i = 0; i < 40 && !cancelSignalled.get(); i++) {
           try {
-            TimeUnit.MILLISECONDS.sleep(5);
+            TimeUnit.MILLISECONDS.sleep(1);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
@@ -355,6 +360,12 @@ public class JWildfire extends JApplet {
   void triggerRefreshFlameImage() {
     if(resizeRefreshFlameImageThread!=null) {
       resizeRefreshFlameImageThread.signalCancel();
+      try {
+        TimeUnit.MILLISECONDS.sleep(1);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      resizeRefreshFlameImageThread = null;
     }
     resizeRefreshFlameImageThread = new RefreshFlameImageThread();
     new Thread(resizeRefreshFlameImageThread).start();

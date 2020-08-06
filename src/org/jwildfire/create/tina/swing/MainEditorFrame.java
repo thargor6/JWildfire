@@ -6315,7 +6315,8 @@ public class MainEditorFrame extends JFrame {
       tinaPaletteSubTabbedPane = new JTabbedPane();
       tinaPaletteSubTabbedPane.setTabPlacement(JTabbedPane.LEFT);
       tinaPaletteSubTabbedPane.setAutoscrolls(true);
-      tinaPaletteSubTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      // don't scale font here
+      tinaPaletteSubTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaPaletteSubTabbedPane.addTab("Gradient Library", null, getGradientLibraryPanel(), null);
       tinaPaletteSubTabbedPane.addTab("Create new", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
       tinaPaletteSubTabbedPane.addTab("Curve editor", null, getGradientCurveEditorPanel(), "Edit the color-components of current gradient in a graphic way");
@@ -10111,10 +10112,11 @@ public class MainEditorFrame extends JFrame {
         }
       });
       motionCurveEditModeButton.setToolTipText("Activate animation controls in order to create animated flames");
-      motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionEditingMode.gif")));
+      //motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionEditingMode.gif")));
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 36));
       motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      //motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
+      motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
+      //motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/videocut.png")));
     }
     return centerWestPanel;
   }
