@@ -27,6 +27,7 @@ V6.00 (30.07.2020)
    but preserves the script-generated-colors (when any).
    You can use the options tinaRandGenRunRandomScriptIncludedScripts and tinaRandGenRunRandomScriptExcludedScripts in the Preferences to
    include or exclude specific scripts (or both).
+ - new dark "JWildfire"-theme (based on Nimbus) which is now the default
  - moved the old webspace to a secured site:
      - https://jwildfire.overwhale.com is the JWildfire site
      - https://jwildfire-forum.overwhale.com is the JWildfire-forum

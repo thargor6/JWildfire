@@ -39,8 +39,8 @@ public class Prefs extends ManagedObject {
   // DON'T forget to update the assign() method after adding new properties!!!
   static final String PREFS_FILE = "j-wildfire.properties";
 
-  static final String KEY_GENERAL_LOOK_AND_FEEL = "general.look_and_feel";
-  static final String KEY_GENERAL_LOOK_AND_FEEL_THEME = "general.look_and_feel.theme";
+  static final String KEY_GENERAL_LOOK_AND_FEEL = "general.look_and_feel.2";
+  static final String KEY_GENERAL_LOOK_AND_FEEL_THEME = "general.look_and_feel.theme.2";
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
@@ -484,7 +484,7 @@ public class Prefs extends ManagedObject {
   }
 
   private LookAndFeelType lookAndFeelType = Tools.OSType.MAC.equals(Tools.getOSType()) ? LookAndFeelType.SYSTEM : LookAndFeelType.NIMBUS;
-  private String lookAndFeelTheme = "";
+  private String lookAndFeelTheme = Tools.OSType.MAC.equals(Tools.getOSType()) ? "" : "JWildfire";
 
   @Property(description = "Default number of frames for a movie", category = PropertyCategory.TINA)
   private int tinaRenderMovieFrames = 90;

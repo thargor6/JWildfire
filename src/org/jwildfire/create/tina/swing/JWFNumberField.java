@@ -456,14 +456,12 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
 
   public void setHasCurve(boolean pHasCurve) {
     if (motionCurveBtn != null) {
-      if (pHasCurve)
+      if (pHasCurve) {
         motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2a.png")));
-      else
+      }
+      else {
         motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2-empty.png")));
+      }
     }
-    /*
-    if (spinnerField != null) {
-      spinnerField.setVisible(!pHasCurve);
-    }*/
   }
 }

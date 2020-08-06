@@ -1424,7 +1424,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void initRandomizerHintsPanel(JTextPane hintPane) {
     hintPane.setContentType("text/html");
     try {
-      Font f = new Font(Font.SANS_SERIF, 3, 10);
+      Font f = Prefs.getPrefs().getFont(Font.DIALOG, Font.PLAIN, 12);
       hintPane.setFont(f);
 
       InputStream is = this.getClass().getResourceAsStream("randomizers.html");
