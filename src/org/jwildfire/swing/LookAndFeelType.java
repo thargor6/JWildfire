@@ -88,12 +88,11 @@ public enum LookAndFeelType {
         // javax.swing.UIManager.put( "nimbusSelectedText", new Color( 255, 255, 255) );
         // javax.swing.UIManager.put( "nimbusSelectionBackground", new Color( 104, 93, 156) );
         // javax.swing.UIManager.put( "text", new Color( 230, 230, 230) );
-        javax.swing.UIManager.put( "control", new Color( 116, 116, 116) );
-        javax.swing.UIManager.put( "info", new Color(116,116,116) );
-        //javax.swing.UIManager.put( "nimbusBase", new Color( 18, 30, 49) );
-        javax.swing.UIManager.put( "nimbusBase", new Color( 23, 37, 61) );
+        javax.swing.UIManager.put( "control", new Color( 42, 42, 42) );
+        javax.swing.UIManager.put( "info", new Color(42,42,42) );
+        javax.swing.UIManager.put( "nimbusBase", new Color( 18, 30, 49) );
         javax.swing.UIManager.put( "nimbusAlertYellow", new Color( 248, 187, 0) );
-        javax.swing.UIManager.put( "nimbusDisabledText", new Color( 116, 116, 116) );
+        javax.swing.UIManager.put( "nimbusDisabledText", new Color( 42, 42, 42) );
         javax.swing.UIManager.put( "nimbusFocus", new Color(115,164,209) );
         javax.swing.UIManager.put( "nimbusGreen", new Color(176,179,50) );
         javax.swing.UIManager.put( "nimbusInfoBlue", new Color( 66, 139, 221) );
@@ -102,7 +101,8 @@ public enum LookAndFeelType {
         javax.swing.UIManager.put( "nimbusRed", new Color(169,46,34) );
         javax.swing.UIManager.put( "nimbusSelectedText", new Color( 255, 255, 255) );
         javax.swing.UIManager.put( "nimbusSelectionBackground", new Color( 126, 18, 0) );
-        javax.swing.UIManager.put( "text", new Color( 230, 230, 230) );
+        javax.swing.UIManager.put( "text", new Color( 242, 242, 242) );
+        javax.swing.UIManager.put( "nimbusBlueGrey", new Color( 73,76,83) );
       }
       else {
         // Default Nimbus colors
@@ -121,6 +121,7 @@ public enum LookAndFeelType {
         javax.swing.UIManager.put("nimbusSelectedText", new Color(255, 255, 255));
         javax.swing.UIManager.put("nimbusSelectionBackground", new Color(57, 105, 138));
         javax.swing.UIManager.put("text", new Color(0, 0, 0));
+        javax.swing.UIManager.put( "nimbusBlueGrey", new Color( 146,151,161) );
       }
     }
   },
