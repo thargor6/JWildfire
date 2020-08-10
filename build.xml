@@ -149,8 +149,8 @@
     <copy todir="${dist.dir}/lib/x86">
        <fileset file="${src.dir}/../lib/x86/*.txt" />
     </copy>    
-    <copy todir="${dist.dir}/lib/Denoiser_v2.4">
-       <fileset file="${src.dir}/../Denoiser_v2.4/**" />
+    <copy todir="${dist.dir}/lib/Denoiser">
+       <fileset file="${src.dir}/../Denoiser/**" />
     </copy>    
    	<zip destfile="${dist.name}">
       <zipfileset dir="${dist.dir}/" excludes="start_*" />

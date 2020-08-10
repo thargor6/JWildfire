@@ -97,6 +97,7 @@ public class NonlinearControlsDelegate {
             curve = var.createMotionCurve(propertyname);
           }
           variationControlsDelegates[pIdx].editMotionCurve(curve, initialValue, propertyname, "variation property \"" + propertyname + "\"");
+          data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setHasCurve(curve != null && curve.isEnabled());
           // Doesnt work after changing parameter -> now enable it always
           // variationControlsDelegates[pIdx].enableControl(data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(), curve, false);
           owner.refreshFlameImage(true, false, 1, true, false);
@@ -279,6 +280,10 @@ public class NonlinearControlsDelegate {
             } else {
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(paramValue.toString());
             }
+            {
+              MotionCurve curve = var.getMotionCurve(paramName);
+              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setHasCurve(curve != null && curve.isEnabled());
+            }
           }
           // ressources
           else if ((idx = var.getFunc().getRessourceIndex(selected)) >= 0) {
@@ -456,6 +461,13 @@ public class NonlinearControlsDelegate {
           }
           owner.getFrameControlsUtil().updateKeyFrame(pPropertyValue, oldValueAsDouble, curve);
 
+          {
+            String selected = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+            if (pPropertyName.equals(selected)) {
+              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setHasCurve(curve != null && curve.isEnabled());
+            }
+          }
+
           if (!pIsAdjusting && var.getFunc().dynamicParameterExpansion(pPropertyName)) {
             // if setting the parameter can change the total number of parameters,
             //    then refresh parameter UI
@@ -547,7 +559,7 @@ public class NonlinearControlsDelegate {
               curve = var.createMotionCurve(paramName);
             }
             owner.getFrameControlsUtil().updateKeyFrame(newValue, oldValueAsDouble, curve);
-
+            data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setHasCurve(curve!=null && curve.isEnabled());
 
             if (var.getFunc().dynamicParameterExpansion(paramName)) {
               // if setting the parameter can change the total number of parameters,

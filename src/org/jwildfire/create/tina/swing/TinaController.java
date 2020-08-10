@@ -52,7 +52,7 @@ import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGenera
 import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGeneratorList;
 import org.jwildfire.create.tina.render.*;
 import org.jwildfire.create.tina.render.filter.*;
-import org.jwildfire.create.tina.render.optix.OptixCmdLineDenoiser;
+import org.jwildfire.create.tina.render.denoiser.OptixCmdLineDenoiser;
 import org.jwildfire.create.tina.script.ScriptParam;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
@@ -1419,6 +1419,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       SwingUtilities.invokeLater(new Runnable() {
          @Override
          public void run() {
+           updateThumbnails();
            importFromRandomBatch(0);
            scrollThumbnailsToTop();
          }
@@ -2950,12 +2951,20 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
           if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-            importFromRandomBatch(idx);
+            SwingUtilities.invokeLater(new Runnable() {
+
+              @Override
+              public void run() {
+                importFromRandomBatch(idx);
+              }
+            });
           }
         }
       });
       batchPanel.add(imgPanel);
     }
+    batchPanel.invalidate();
+    batchPanel.validate();
     data.randomBatchScrollPane = new JScrollPane(batchPanel);
     data.randomBatchScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     data.randomBatchScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -2963,6 +2972,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.randomBatchPanel.add(data.randomBatchScrollPane, BorderLayout.CENTER);
     data.randomBatchPanel.invalidate();
     data.randomBatchPanel.validate();
+    batchPanel.repaint();
   }
 
   public int getScrollThumbnailsPosition() {
