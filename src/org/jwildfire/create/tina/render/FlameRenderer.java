@@ -51,7 +51,7 @@ import org.jwildfire.create.tina.render.image.RenderImageSimpleScaledThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleThread;
 import org.jwildfire.create.tina.render.image.RenderImageThread;
 import org.jwildfire.create.tina.render.image.RenderZBufferThread;
-import org.jwildfire.create.tina.render.optix.OptixCmdLineDenoiser;
+import org.jwildfire.create.tina.render.denoiser.OptixCmdLineDenoiser;
 import org.jwildfire.create.tina.render.postdof.PostDOFBuffer;
 import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -557,7 +557,7 @@ public class FlameRenderer {
       postFilterImage(pImage);
     }
     if (flame.isPostOptiXDenoiser() && flame.getPostOptiXDenoiserBlend() < 1.0 + MathLib.EPSILON &&
-            OptixCmdLineDenoiser.isAvailable() &&
+            OptixCmdLineDenoiser.isAvailableStatic() &&
             !preview && (renderInfo.getRenderMode() == RenderMode.PRODUCTION || renderInfo.getRenderMode() == RenderMode.INTERACTIVE)) {
       applyPostOptiXDenoiser(pImage);
     }

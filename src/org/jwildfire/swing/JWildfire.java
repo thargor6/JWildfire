@@ -318,6 +318,19 @@ public class JWildfire extends JApplet {
 
       }
     });
+
+
+    try {
+      if (new Date().after(new SimpleDateFormat("dd/MM/yyyy").parse("12/08/2020"))) {
+        StandardDialogs.message(this, "This version has timed out. Please check for  a newer version");
+        System.exit(0);
+      }
+    }
+    catch(Exception ex) {
+      ex.printStackTrace();
+      System.exit(1);
+    }
+
   }
 
 

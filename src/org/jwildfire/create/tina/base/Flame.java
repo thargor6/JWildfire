@@ -38,7 +38,7 @@ import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
-import org.jwildfire.create.tina.render.optix.OptixCmdLineDenoiser;
+import org.jwildfire.create.tina.render.denoiser.OptixCmdLineDenoiser;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
 public class Flame implements Assignable<Flame>, Serializable {
@@ -352,7 +352,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     postNoiseFilterThreshold = Prefs.getPrefs().getTinaDefaultPostNoiseFilterThreshold();
     antialiasAmount = Prefs.getPrefs().getTinaDefaultAntialiasingAmount();
     antialiasRadius = Prefs.getPrefs().getTinaDefaultAntialiasingRadius();
-    postOptiXDenoiser = Prefs.getPrefs().isTinaDefaultPostOptiXDenoiser() && OptixCmdLineDenoiser.isAvailable();
+    postOptiXDenoiser = Prefs.getPrefs().isTinaDefaultPostOptiXDenoiser() && OptixCmdLineDenoiser.isAvailableStatic();
     postOptiXDenoiserBlend = Prefs.getPrefs().getTinaDefaultPostOptiXDenoiserBlend();
   }
 
@@ -1650,7 +1650,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     setSpatialFilterRadius(prefs.getTinaDefaultSpatialFilterRadius());
     setSpatialOversampling(getSolidRenderSettings().isSolidRenderingEnabled() ? DFLT_SOLID_SPATIAL_OVERSAMPLING : prefs.getTinaDefaultSpatialOversampling());
     setPostNoiseFilter(prefs.isTinaDefaultPostNoiseFilter());
-    setPostOptiXDenoiser(prefs.isTinaDefaultPostOptiXDenoiser() && OptixCmdLineDenoiser.isAvailable());
+    setPostOptiXDenoiser(prefs.isTinaDefaultPostOptiXDenoiser() && OptixCmdLineDenoiser.isAvailableStatic());
     setPostOptiXDenoiserBlend(prefs.getTinaDefaultPostOptiXDenoiserBlend());
   }
 

@@ -113,7 +113,7 @@ import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
-import org.jwildfire.create.tina.render.optix.OptixCmdLineDenoiser;
+import org.jwildfire.create.tina.render.denoiser.OptixCmdLineDenoiser;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -7681,7 +7681,7 @@ public class MainEditorFrame extends JFrame {
       tinaController.initRandomizerHintsPanel(getRandomizersHintPane());
 
       try {
-        enableOptixControls(OptixCmdLineDenoiser.isAvailable());
+        enableOptixControls(OptixCmdLineDenoiser.isAvailableStatic());
       }
       catch (Throwable ex) {
         enableOptixControls(false);
@@ -18175,6 +18175,7 @@ public class MainEditorFrame extends JFrame {
   private JTabbedPane getTabbedPane_3() {
     if (tabbedPane_3 == null) {
       tabbedPane_3 = new JTabbedPane(JTabbedPane.TOP);
+      tabbedPane_3.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tabbedPane_3.addTab("DOF", null, tinaDOFPanel, null);
       tabbedPane_3.addTab("Bokeh", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/distributions-parsix_linux.png")), getBokehSettingsPnl(), null);
 
@@ -21054,6 +21055,7 @@ public class MainEditorFrame extends JFrame {
   private JTabbedPane getTinaSolidRenderingPane() {
     if (tinaSolidRenderingPane == null) {
       tinaSolidRenderingPane = new JTabbedPane(JTabbedPane.TOP);
+      tinaSolidRenderingPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       tinaSolidRenderingPane.addTab("Ambient shadows", null, getPanel(), null);
       tinaSolidRenderingPane.addTab("Hard shadows", null, getPanel_4(), null);
