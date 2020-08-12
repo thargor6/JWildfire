@@ -27,6 +27,8 @@ import org.jwildfire.image.SimpleImage;
 public class ImagePanel extends JPanel {
   private static final long serialVersionUID = 1L;
   private SimpleImage simpleImage;
+  // a modified version of simpleImage on top of it, is automatically erased when simpleImage is changed
+  private SimpleImage derivedImage;
   private int x, y, width, height;
 
   public ImagePanel(SimpleImage pSimpleImage, int pX, int pY, int pWidth) {
@@ -42,7 +44,7 @@ public class ImagePanel extends JPanel {
         RenderingHints.VALUE_RENDER_QUALITY);
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
-    g.drawImage(simpleImage.getBufferedImg(), x, y, width, height, this);
+    g.drawImage(derivedImage!=null ? derivedImage.getBufferedImg() : simpleImage.getBufferedImg(), x, y, width, height, this);
   }
 
   @Override
@@ -56,6 +58,10 @@ public class ImagePanel extends JPanel {
     setImage(img, 0, 0, img.getImageWidth());
   }
 
+  public void setDerivedImage(SimpleImage pSimpleImage) {
+    derivedImage = pSimpleImage;
+  }
+
   protected SimpleImage preProcessImage(SimpleImage pSimpleImage) {
     return pSimpleImage;
   }
@@ -63,6 +69,7 @@ public class ImagePanel extends JPanel {
   public void replaceImage(SimpleImage pSimpleImage) {
     SimpleImage img = preProcessImage(pSimpleImage);
     simpleImage.setBufferedImage(img.getBufferedImg(), simpleImage.getImageWidth(), simpleImage.getImageHeight());
+    clearDerivedImage();
   }
 
   public void setImage(SimpleImage pSimpleImage, int pX, int pY, int pWidth) {
@@ -72,6 +79,11 @@ public class ImagePanel extends JPanel {
     width = pWidth;
     height = simpleImage.getScaledHeight(width);
     setBounds(x, y, width, height);
+    clearDerivedImage();
+  }
+
+  private void clearDerivedImage() {
+    derivedImage = null;
   }
 
   public void setImage(SimpleImage pSimpleImage, int pX, int pY, int pWidth, int pHeight) {
@@ -81,6 +93,7 @@ public class ImagePanel extends JPanel {
     width = pWidth;
     height = pHeight;
     setBounds(x, y, width, height);
+    clearDerivedImage();
   }
 
   public int getImageWidth() {

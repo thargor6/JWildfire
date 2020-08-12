@@ -76,10 +76,6 @@ FACLRender/*.res
 FACLRender/*.pdb
 FACLRender/FA*
 
-xDenoiser
-xDenoiser_v1.3
-xDenoiser_v2.4
-
 /bin/
 /build/
 TODO.txt

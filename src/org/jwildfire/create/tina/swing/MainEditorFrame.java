@@ -3270,7 +3270,6 @@ public class MainEditorFrame extends JFrame {
       tinaOptixDenoiseButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/nvidia.png")));
       tinaOptixDenoiseButton.setMnemonic(KeyEvent.VK_O);
       tinaOptixDenoiseButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      tinaOptixDenoiseButton.setToolTipText("OptiX denoiser applied to the current preview. To achieve better results, perform a full preview render before.");
       tinaOptixDenoiseButton.setPreferredSize(new Dimension(42, 24));
       tinaOptixDenoiseButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {

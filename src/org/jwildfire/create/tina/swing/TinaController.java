@@ -6100,7 +6100,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       AIPostDenoiserType denoiser = AIPostDenoiserFactory.getBestAvailableDenoiserType((AIPostDenoiserType) data.tinaAIPostDenoiserCmb.getSelectedItem());
       if (img != null && !AIPostDenoiserType.NONE.equals(denoiser)) {
         AIPostDenoiserFactory.getDenoiserInstance((AIPostDenoiserType) data.tinaAIPostDenoiserCmb.getSelectedItem()).addDenoisePreviewToImage(img, getCurrFlame().getPostOptiXDenoiserBlend());
-        flamePreviewHelper.setImage(img);
+        flamePreviewHelper.setDerivedImage(img);
         flamePreviewHelper.forceRepaint();
       }
     }

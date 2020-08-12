@@ -528,6 +528,11 @@ public class FlamePreviewHelper implements IterationObserver {
     imgPanel.setImage(pImage);
   }
 
+  public void setDerivedImage(SimpleImage pImage) {
+    FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
+    imgPanel.setDerivedImage(pImage);
+  }
+
   public void forceRepaint() {
     try {
       flamePanelProvider.getFlamePanel().paint(flamePanelProvider.getFlamePanel().getGraphics());

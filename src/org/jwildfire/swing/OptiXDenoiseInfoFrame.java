@@ -46,7 +46,7 @@ public class OptiXDenoiseInfoFrame extends JFrame {
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT, JWildfire.DEFAULT_WINDOW_TOP));
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setTitle("GPU rendering");
+    this.setTitle("NVidia OptiX Denoiser");
     this.setVisible(false);
     this.setResizable(true);
     this.setContentPane(getJContentPane());

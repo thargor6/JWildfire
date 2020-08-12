@@ -684,11 +684,13 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       switch (denoiserType) {
         case OPTIX:
           data.tinaOptixDenoiseButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/nvidia.png")));
+          data.tinaOptixDenoiseButton.setToolTipText("OptiX denoiser applied to the current preview. To achieve better results, perform a full preview render before.");
           data.tinaOptixDenoiseButton.setVisible(true);
           enableControl(data.tinaOptiXDenoiserBlendField, false);
           break;
         case OIDN:
-          data.tinaOptixDenoiseButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/intel.png")));
+          data.tinaOptixDenoiseButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/OIDN.png")));
+          data.tinaOptixDenoiseButton.setToolTipText("OIDN denoiser applied to the current preview. To achieve better results, perform a full preview render before.");
           data.tinaOptixDenoiseButton.setVisible(true);
           enableControl(data.tinaOptiXDenoiserBlendField, true);
           break;
