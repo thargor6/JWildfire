@@ -1,4 +1,4 @@
-V6.00 (30.07.2020)
+V6.00 (13.08.2020)
  - dramatic improvement of responsiveness to changes in the UI (sliders, number fields, ...)
     - faster Undo and Randomizers as well
     - more "fluid" preview
@@ -28,6 +28,13 @@ V6.00 (30.07.2020)
    You can use the options tinaRandGenRunRandomScriptIncludedScripts and tinaRandGenRunRandomScriptExcludedScripts in the Preferences to
    include or exclude specific scripts (or both).
  - new dark "JWildfire"-theme (based on Nimbus) which is now the default
+ - support for Intel’s OIDN denoiser as a powerful tool to cut down render times and improve image quality (works simular to NVidia's OptiX,
+   but does not requiere a GPU from NVidia)
+   Please consult the comprehensive documentation inside the software (“Help -> Supported AI-Post-Denoiser -> Intel's OIDN Denoiser") for more information.
+   HINT: Per default an AI-Post-Denoiser is turned off for new flames, so you maybe will miss the "NVidia-button" from version 5.60.
+   This button is only displayed when you have a denoiser selected under the "Anti-Aliasing/Filter"-tab. You may chose a default denoiser
+   in the Preferences (to get the button back for new created flames).
+
  - moved the old webspace to a secured site:
      - https://jwildfire.overwhale.com is the JWildfire site
      - https://jwildfire-forum.overwhale.com is the JWildfire-forum

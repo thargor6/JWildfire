@@ -23,9 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -49,7 +47,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import jdk.nashorn.internal.parser.DateParser;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.WindowPrefs;
@@ -125,7 +122,7 @@ public class JWildfire extends JApplet {
     helpInternalFrames.add(new DefaultJFrameHolder<>(WelcomeFrame.class, this, WindowPrefs.WINDOW_WELCOME, "Welcome to " + Tools.APP_TITLE));
     helpInternalFrames.add(new DefaultJFrameHolder<>(ListOfChangesFrame.class, this, WindowPrefs.WINDOW_LIST_OF_CHANGES, "List of changes"));
     helpInternalFrames.add(new DefaultJFrameHolder<>(GPURenderInfoFrame.class, this, WindowPrefs.WINDOW_GPU_RENDERING, "GPU rendering"));
-    helpInternalFrames.add(new DefaultJFrameHolder<>(OptiXDenoiseInfoFrame.class, this, WindowPrefs.WINDOW_OPTIX_DENOISER_INFO, "OptiX denoiser"));
+    helpInternalFrames.add(new DefaultJFrameHolder<>(AIPostDenoiserInfoFrame.class, this, WindowPrefs.WINDOW_AI_POST_DENOISER_INFO, "Supported AI-Post-Denoisers"));
     helpInternalFrames.add(new DefaultJFrameHolder<>(TipOfTheDayFrame.class, this, WindowPrefs.WINDOW_TIPOFTHEDAY, "Tip of the day"));
   }
 
@@ -196,7 +193,13 @@ public class JWildfire extends JApplet {
         ex.printStackTrace();
       }
       try {
-        getJFrame(OptiXDenoiseInfoFrame.class).initChangesPane();
+        getJFrame(AIPostDenoiserInfoFrame.class).initOptiXInfoPane();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+      try {
+        getJFrame(AIPostDenoiserInfoFrame.class).initOIDNInfoPane();
       }
       catch (Exception ex) {
         ex.printStackTrace();
@@ -319,7 +322,7 @@ public class JWildfire extends JApplet {
       }
     });
 
-
+/*
     try {
       if (new Date().after(new SimpleDateFormat("dd/MM/yyyy").parse("12/08/2020"))) {
         StandardDialogs.message(this, "This version has timed out. Please check for  a newer version");
@@ -330,7 +333,7 @@ public class JWildfire extends JApplet {
       ex.printStackTrace();
       System.exit(1);
     }
-
+*/
   }
 
 
