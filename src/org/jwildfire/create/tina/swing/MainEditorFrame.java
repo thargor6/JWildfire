@@ -110,10 +110,12 @@ import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGenerator;
 import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGeneratorList;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
+import org.jwildfire.create.tina.render.denoiser.OptixCmdLineAIPostDenoiser;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
-import org.jwildfire.create.tina.render.denoiser.OptixCmdLineDenoiser;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -7282,6 +7284,7 @@ public class MainEditorFrame extends JFrame {
     initWeightMapTypeCmb(getWeightingFieldTypeCmb());
     initWeightMapInputTypeCmb(getWeightingFieldInputCmb());
     initRandomWeightingFieldGenCmb(getRandomWeightingFieldCmb());
+    initAIPostDenoiserCmb(getTinaAIDenoiserCmb());
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -7501,7 +7504,7 @@ public class MainEditorFrame extends JFrame {
         getWeightingFieldParam01REd(), getWeightingFieldParam01Lbl(), getWeightingFieldParam02REd(), getWeightingFieldParam02Lbl(), getWeightingFieldParam03REd(), getWeightingFieldParam03Lbl(),
         getWeightingFieldParam04Cmb(), getWeightingFieldParam04Lbl(), getWeightingFieldParam05REd(), getWeightingFieldParam05Lbl(), getWeightingFieldParam06REd(), getWeightingFieldParam06Lbl(),
         getWeightingFieldParam07REd(), getWeightingFieldParam07Lbl(), getWeightingFieldParam08Cmb(), getWeightingFieldParam08Lbl(), getWeightingFieldPreviewImgRootPanel(),
-        getTinaOptiXDenoiserCheckBox(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider());
+        getTinaAIDenoiserCmb(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider(), getTinaOptixDenoiseButton());
 
     tinaController = new TinaController(params);
 
@@ -7680,13 +7683,6 @@ public class MainEditorFrame extends JFrame {
 
       tinaController.initRandomizerHintsPanel(getRandomizersHintPane());
 
-      try {
-        enableOptixControls(OptixCmdLineDenoiser.isAvailableStatic());
-      }
-      catch (Throwable ex) {
-        enableOptixControls(false);
-      }
-
       getMotionCurveEditModeButton().setSelected(pPrefs.isTinaDefaultAnimationControlsEnabled());
 
     }
@@ -7694,15 +7690,6 @@ public class MainEditorFrame extends JFrame {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
     }
     return tinaController;
-  }
-
-  private void enableOptixControls(boolean enabled) {
-    getLabel_3().setVisible(enabled);
-    getTinaOptixDenoiseButton().setVisible(enabled);
-    getTinaOptiXDenoiserCheckBox().setVisible(enabled);
-    getTinaOptiXDenoiserBlendField().setVisible(enabled);
-    getTinaOptiXDenoiserBlendSlider().setVisible(enabled);
-    getLblOptiXBlend().setVisible(enabled);
   }
 
   private void initWeightMapTypeCmb(JComboBox pCmb) {
@@ -7847,6 +7834,18 @@ public class MainEditorFrame extends JFrame {
       pCmb.addItem(name);
     }
     pCmb.setSelectedItem(RandomWeightingFieldGeneratorList.DEFAULT_GENERATOR_NAME);
+  }
+
+  private void initAIPostDenoiserCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    if(AIPostDenoiserFactory.isAvailable(AIPostDenoiserType.OPTIX)) {
+      pCmb.addItem(AIPostDenoiserType.OPTIX);
+    }
+    if(AIPostDenoiserFactory.isAvailable(AIPostDenoiserType.OIDN)) {
+      pCmb.addItem(AIPostDenoiserType.OIDN);
+    }
+    pCmb.addItem(AIPostDenoiserType.NONE);
+    pCmb.setSelectedItem(AIPostDenoiserFactory.getBestAvailableDenoiserType(AIPostDenoiserType.OPTIX));
   }
 
   private void initRandomGenCmb(JComboBox pCmb) {
@@ -12983,7 +12982,6 @@ public class MainEditorFrame extends JFrame {
   private JCheckBox tinaPostNoiseFilterCheckBox;
   private JWFNumberField tinaPostNoiseThresholdField;
   private JSlider tinaPostNoiseThresholdSlider;
-  private JCheckBox tinaOptiXDenoiserCheckBox;
   private JWFNumberField tinaOptiXDenoiserBlendField;
   private JSlider tinaOptiXDenoiserBlendSlider;
   private JLabel lblOptiXBlend;
@@ -13219,6 +13217,8 @@ public class MainEditorFrame extends JFrame {
   private JButton gotoPrevKeyFrameButton;
   private JButton gotoNextKeyFrameButton;
   private JButton duplicateKeyFrameButton;
+  private JComboBox tinaAIDenoiserCmb;
+  private JLabel lblPostDenoiser;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -14091,19 +14091,6 @@ public class MainEditorFrame extends JFrame {
       filterKernelFlatPreviewBtn.setBounds(449, 114, 107, 24);
       antialiasPanel.add(filterKernelFlatPreviewBtn);
 
-      tinaOptiXDenoiserCheckBox = new JCheckBox("OptiX Denoiser");
-      tinaOptiXDenoiserCheckBox.setToolTipText("Apply NVidia's OptiX AI-Accelerated Denoiser in order to reduce noise. This is a rather heavy operation, so it is only applied when saving a final image.");
-      tinaOptiXDenoiserCheckBox.setBounds(674, 54, 169, 18);
-      tinaOptiXDenoiserCheckBox.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().tinaOptiXDenoiserCheckBox_changed();
-          }
-        }
-      });
-      tinaOptiXDenoiserCheckBox.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      antialiasPanel.add(tinaOptiXDenoiserCheckBox);
-
       tinaOptiXDenoiserBlendField = new JWFNumberField();
       tinaOptiXDenoiserBlendField.setMouseSpeed(0.1);
       tinaOptiXDenoiserBlendField.setValueStep(0.05);
@@ -14118,7 +14105,7 @@ public class MainEditorFrame extends JFrame {
       tinaOptiXDenoiserBlendField.setHasMaxValue(true);
       tinaOptiXDenoiserBlendField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaOptiXDenoiserBlendField.setEditable(true);
-      tinaOptiXDenoiserBlendField.setBounds(674, 75, 100, 24);
+      tinaOptiXDenoiserBlendField.setBounds(675, 75, 100, 24);
       tinaOptiXDenoiserBlendField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -14163,7 +14150,7 @@ public class MainEditorFrame extends JFrame {
       tinaOptiXDenoiserBlendSlider.setName("tinaOptiXDenoiserBlendSlider");
       tinaOptiXDenoiserBlendSlider.setLocation(new Point(686, 2));
       tinaOptiXDenoiserBlendSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaOptiXDenoiserBlendSlider.setBounds(776, 75, 220, 24);
+      tinaOptiXDenoiserBlendSlider.setBounds(777, 75, 220, 24);
       tinaOptiXDenoiserBlendSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -14466,6 +14453,8 @@ public class MainEditorFrame extends JFrame {
         }
       });
       antialiasPanel.add(tinaFilterLowDensitySlider);
+      antialiasPanel.add(getTinaAIDenoiserCmb());
+      antialiasPanel.add(getLblPostDenoiser());
     }
     return antialiasPanel;
   }
@@ -20649,10 +20638,6 @@ public class MainEditorFrame extends JFrame {
     return tinaPostNoiseThresholdSlider;
   }
 
-  public JCheckBox getTinaOptiXDenoiserCheckBox() {
-    return tinaOptiXDenoiserCheckBox;
-  }
-
   public JWFNumberField getTinaOptiXDenoiserBlendField() {
     return tinaOptiXDenoiserBlendField;
   }
@@ -24366,4 +24351,47 @@ public class MainEditorFrame extends JFrame {
     return duplicateKeyFrameButton;
   }
 
+  private JComboBox getTinaAIDenoiserCmb() {
+    if (tinaAIDenoiserCmb == null) {
+      tinaAIDenoiserCmb = new JComboBox();
+      tinaAIDenoiserCmb.setSize(new Dimension(125, 22));
+      tinaAIDenoiserCmb.setPreferredSize(new Dimension(125, 22));
+      tinaAIDenoiserCmb.setLocation(new Point(100, 4));
+      tinaAIDenoiserCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaAIDenoiserCmb.setBounds(675, 51, 322, 24);
+      tinaAIDenoiserCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().aiDenoiserCmb_changed();
+          }
+        }
+      });
+
+    }
+    return tinaAIDenoiserCmb;
+  }
+
+  private JLabel getLblPostDenoiser() {
+    if (lblPostDenoiser == null) {
+      lblPostDenoiser = new JLabel();
+      lblPostDenoiser.setToolTipText("Select the kind of external denoiser, applied to the final image. The usage of such filters may cut down render times dramatically and can boost quality a lot");
+      lblPostDenoiser.setText("AI-based denoiser");
+      lblPostDenoiser.setSize(new Dimension(94, 22));
+      lblPostDenoiser.setPreferredSize(new Dimension(94, 22));
+      lblPostDenoiser.setLocation(new Point(488, 2));
+      lblPostDenoiser.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPostDenoiser.setBounds(565, 51, 107, 22);
+      lblPostDenoiser.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().aiDenoiserCmb_reset();
+          }
+        }
+      });
+
+    }
+    return lblPostDenoiser;
+  }
 } //  @jve:decl-index=0:visual-constraint="10,10"

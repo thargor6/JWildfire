@@ -44,6 +44,8 @@ import org.jwildfire.create.tina.base.raster.RasterPointCloud;
 import org.jwildfire.create.tina.base.raster.RasterPointCloud.PCPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.render.image.PostFilterImageThread;
 import org.jwildfire.create.tina.render.image.RenderHDRImageThread;
@@ -51,7 +53,7 @@ import org.jwildfire.create.tina.render.image.RenderImageSimpleScaledThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleThread;
 import org.jwildfire.create.tina.render.image.RenderImageThread;
 import org.jwildfire.create.tina.render.image.RenderZBufferThread;
-import org.jwildfire.create.tina.render.denoiser.OptixCmdLineDenoiser;
+import org.jwildfire.create.tina.render.denoiser.OptixCmdLineAIPostDenoiser;
 import org.jwildfire.create.tina.render.postdof.PostDOFBuffer;
 import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -556,17 +558,19 @@ public class FlameRenderer {
     if (flame.isPostNoiseFilter() && flame.getPostNoiseFilterThreshold() > MathLib.EPSILON) {
       postFilterImage(pImage);
     }
-    if (flame.isPostOptiXDenoiser() && flame.getPostOptiXDenoiserBlend() < 1.0 + MathLib.EPSILON &&
-            OptixCmdLineDenoiser.isAvailableStatic() &&
-            !preview && (renderInfo.getRenderMode() == RenderMode.PRODUCTION || renderInfo.getRenderMode() == RenderMode.INTERACTIVE)) {
-      applyPostOptiXDenoiser(pImage);
+
+    AIPostDenoiserType postDenoiser = AIPostDenoiserFactory.getBestAvailableDenoiserType(flame.getAiPostDenoiser());
+    if(!AIPostDenoiserType.NONE.equals(postDenoiser) &&
+       !(AIPostDenoiserType.OPTIX.equals(postDenoiser) && flame.getPostOptiXDenoiserBlend() >= 1.0) &&
+       !preview && (renderInfo.getRenderMode() == RenderMode.PRODUCTION || renderInfo.getRenderMode() == RenderMode.INTERACTIVE)) {
+      applyAIPostDenoiser(pImage, postDenoiser);
     }
     renderHDRImage(pHDRImage);
     renderZBuffer(pZBufferImg);
   }
 
-  private void applyPostOptiXDenoiser(SimpleImage pImage) {
-    SimpleImage denoisedImg = new OptixCmdLineDenoiser().denoise(pImage, flame.getPostOptiXDenoiserBlend());
+  private void applyAIPostDenoiser(SimpleImage pImage, AIPostDenoiserType postDenoiser) {
+    SimpleImage denoisedImg =  AIPostDenoiserFactory.getDenoiserInstance(postDenoiser).denoise(pImage, flame.getPostOptiXDenoiserBlend());
     if(pImage.getImageWidth()!=denoisedImg.getImageWidth() || pImage.getImageHeight()!=denoisedImg.getImageHeight()) {
       throw new RuntimeException("Images sizes do not match");
     }

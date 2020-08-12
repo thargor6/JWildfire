@@ -36,6 +36,9 @@ import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.base.weightingfield.*;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiser;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
@@ -67,6 +70,7 @@ public class AbstractFlameReader {
   public static final String ATTR_SPATIAL_OVERSAMPLE = "oversample";
   public static final String ATTR_POST_NOISE_FILTER = "post_noise_filter";
   public static final String ATTR_POST_NOISE_FILTER_THRESHOLD = "post_noise_filter_threshold";
+  public static final String ATTR_AI_POST_DENOISER = "ai_post_denoiser";
   public static final String ATTR_POST_OPTIX_DENOISER = "post_optix_denoiser";
   public static final String ATTR_POST_OPTIX_DENOISER_BLEND = "post_optix_denoiser_blend";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
@@ -331,7 +335,15 @@ public class AbstractFlameReader {
       pFlame.setPostNoiseFilterThreshold(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_POST_OPTIX_DENOISER)) != null) {
-      pFlame.setPostOptiXDenoiser(Integer.parseInt(hs) == 1);
+      pFlame.setAiPostDenoiser(AIPostDenoiserFactory.getBestAvailableDenoiserType(AIPostDenoiserType.OPTIX));
+    }
+    if ((hs = atts.get(ATTR_AI_POST_DENOISER)) != null) {
+      try {
+        pFlame.setAiPostDenoiser(AIPostDenoiserFactory.getBestAvailableDenoiserType(AIPostDenoiserType.valueOf(hs)));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     if ((hs = atts.get(ATTR_POST_OPTIX_DENOISER_BLEND)) != null) {
       pFlame.setPostOptiXDenoiserBlend(Double.parseDouble(hs));

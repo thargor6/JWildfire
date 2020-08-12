@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.create.tina.base.raster.RasterCreator;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.EditorDoubleClickActionType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
@@ -176,7 +177,12 @@ public class PrefsReader {
         pPrefs.setTinaDefaultFilterVisualisationFlat(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT, pPrefs.isTinaDefaultFilterVisualisationFlat()));
         pPrefs.setTinaDefaultPostNoiseFilter(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_POST_NOISE_FILTER, pPrefs.isTinaDefaultPostNoiseFilter()));
         pPrefs.setTinaDefaultPostNoiseFilterThreshold(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD, pPrefs.getTinaDefaultPostNoiseFilterThreshold()));
-        pPrefs.setTinaDefaultPostOptiXDenoiser(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_POST_OPTIX_DENOISER, pPrefs.isTinaDefaultPostOptiXDenoiser()));
+        try {
+          pPrefs.setTinaDefaultAIPostDenoiser(AIPostDenoiserType.valueOf(getProperty(props, Prefs.KEY_TINA_DEFAULT_AI_POST_DENOISER, pPrefs.getTinaDefaultAIPostDenoiser().toString())));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
         pPrefs.setTinaDefaultPostOptiXDenoiserBlend(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_POST_OPTIX_DENOISER_BLEND, pPrefs.getTinaDefaultPostOptiXDenoiserBlend()));
 
         pPrefs.setTinaDefaultForegroundOpacity(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_FOREGROUND_OPACITY, pPrefs.getTinaDefaultForegroundOpacity()));

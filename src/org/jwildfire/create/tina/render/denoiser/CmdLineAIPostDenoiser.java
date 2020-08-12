@@ -1,6 +1,5 @@
 package org.jwildfire.create.tina.render.denoiser;
 
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
@@ -19,49 +18,45 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public abstract class CmdLineDenoiser {
+public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
   private final String FILE_EXT = "_denoise";
   private final String DENOISER_PATH = "Denoiser";
 
+  @Override
   public SimpleImage denoise(SimpleImage img, double blend) {
-    if (isAvailable()) {
+    try {
+      File tmpFile = File.createTempFile("jwf", ".png");
       try {
-        File tmpFile = File.createTempFile("jwf", ".png");
+        String inputFilename = tmpFile.getAbsolutePath();
+        new ImageWriter().saveImage(img, inputFilename);
+        String outputFilename = denoise(inputFilename, blend);
         try {
-          String inputFilename = tmpFile.getAbsolutePath();
-          new ImageWriter().saveImage(img, inputFilename);
-          String outputFilename = denoise(inputFilename, blend);
-          try {
-            SimpleImage denoisedImage = new ImageReader(new JPanel()).loadImage(outputFilename);
-            if(denoisedImage.getImageWidth()>img.getImageWidth() || denoisedImage.getImageHeight() > denoisedImage.getImageHeight()) {
-              CropTransformer crop=new CropTransformer();
-              crop.setLeft(0);
-              crop.setWidth(img.getImageWidth());
-              crop.setTop(0);
-              crop.setHeight(img.getImageHeight());
-              crop.transformImage(denoisedImage);
-            }
-            return denoisedImage;
-          } finally {
-            try {
-              new File(outputFilename).delete();
-            } catch (Exception ex) {
-              new File(outputFilename).deleteOnExit();
-            }
+          SimpleImage denoisedImage = new ImageReader(new JPanel()).loadImage(outputFilename);
+          if(denoisedImage.getImageWidth()>img.getImageWidth() || denoisedImage.getImageHeight() > denoisedImage.getImageHeight()) {
+            CropTransformer crop=new CropTransformer();
+            crop.setLeft(0);
+            crop.setWidth(img.getImageWidth());
+            crop.setTop(0);
+            crop.setHeight(img.getImageHeight());
+            crop.transformImage(denoisedImage);
           }
+          return denoisedImage;
         } finally {
           try {
-            tmpFile.delete();
+            new File(outputFilename).delete();
           } catch (Exception ex) {
-            tmpFile.deleteOnExit();
+            new File(outputFilename).deleteOnExit();
           }
         }
-      } catch (Exception ex) {
-        throw new RuntimeException(ex);
+      } finally {
+        try {
+          tmpFile.delete();
+        } catch (Exception ex) {
+          tmpFile.deleteOnExit();
+        }
       }
-    } else {
-      // fallback: denoiser not available
-      return img;
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
     }
   }
 
@@ -114,12 +109,14 @@ public abstract class CmdLineDenoiser {
 
   protected abstract String[] getDenoiserCmd(String denoiserPath, String inputFilename, String outputFilename, double blend);
 
+  protected abstract Color getIndicatorColor();
 
-    public void addDenoisePreviewToImage(SimpleImage img, double blend) {
+  @Override
+  public void addDenoisePreviewToImage(SimpleImage img, double blend) {
     SimpleImage denoisedImage = denoise(img, blend);
     int wHalve = img.getImageWidth() / 3;
     RectangleTransformer rect = new RectangleTransformer();
-    rect.setColor(new Color(118, 185, 0));
+    rect.setColor(getIndicatorColor());
     rect.setTop(0);
     rect.setHeight(img.getImageHeight());
     rect.setLeft(wHalve);
@@ -142,6 +139,7 @@ public abstract class CmdLineDenoiser {
     compose.transformImage(img);
   }
 
+  @Override
   public boolean performSelfTests() {
     try {
       SimpleImage img = new SimpleImage(64, 64);
@@ -185,5 +183,4 @@ public abstract class CmdLineDenoiser {
     }
   }
 
-  protected abstract boolean isAvailable();
 }

@@ -656,9 +656,10 @@ public class TinaControllerParameter {
   public JCheckBox tinaPostNoiseFilterCheckBox;
   public JWFNumberField tinaPostNoiseThresholdField;
   public JSlider tinaPostNoiseThresholdSlider;
-  public JCheckBox tinaOptiXDenoiserCheckBox;
+  public JComboBox tinaAIPostDenoiserCmb;
   public JWFNumberField tinaOptiXDenoiserBlendField;
   public JSlider tinaOptiXDenoiserBlendSlider;
+  public JButton tinaOptixDenoiseButton;
   public JWFNumberField foregroundOpacityField;
   public JSlider foregroundOpacitySlider;
   public JComboBox meshGenOutputTypeCmb;
@@ -1456,7 +1457,7 @@ public class TinaControllerParameter {
     JComboBox weightingFieldParam04Cmb, JLabel weightingFieldParam04Lbl, JWFNumberField weightingFieldParam05REd,JLabel weightingFieldParam05Lbl,
     JWFNumberField weightingFieldParam06REd, JLabel weightingFieldParam06Lbl, JWFNumberField weightingFieldParam07REd, JLabel weightingFieldParam07Lbl,
     JComboBox weightingFieldParam08Cmb, JLabel weightingFieldParam08Lbl, JPanel weightingFieldPreviewImgRootPanel,
-    JCheckBox tinaOptiXDenoiserCheckBox, JWFNumberField tinaOptiXDenoiserBlendField, JSlider tinaOptiXDenoiserBlendSlider) {
+    JComboBox tinaAIPostDenoiserCmb, JWFNumberField tinaOptiXDenoiserBlendField, JSlider tinaOptiXDenoiserBlendSlider, JButton tinaOptixDenoiseButton) {
       this.weightingFieldTypeCmb = weightingFieldTypeCmb;
       this.weightingFieldInputCmb = weightingFieldInputCmb;
       this.weightingFieldColorIntensityREd = weightingFieldColorIntensityREd;
@@ -1488,9 +1489,10 @@ public class TinaControllerParameter {
       this.weightingFieldParam08Cmb = weightingFieldParam08Cmb;
       this.weightingFieldParam08Lbl = weightingFieldParam08Lbl;
       this.weightingFieldPreviewImgRootPanel = weightingFieldPreviewImgRootPanel;
-      this.tinaOptiXDenoiserCheckBox = tinaOptiXDenoiserCheckBox;
+      this.tinaAIPostDenoiserCmb = tinaAIPostDenoiserCmb;
       this.tinaOptiXDenoiserBlendField = tinaOptiXDenoiserBlendField;
       this.tinaOptiXDenoiserBlendSlider = tinaOptiXDenoiserBlendSlider;
+      this.tinaOptixDenoiseButton = tinaOptixDenoiseButton;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

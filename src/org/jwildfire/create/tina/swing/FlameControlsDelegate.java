@@ -21,13 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 
 import org.jwildfire.base.Prefs;
@@ -50,6 +44,8 @@ import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.randomgradient.AllRandomGradientGenerator;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
@@ -678,9 +674,31 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSpatialOversamplingREd, false);
     enableControl(data.tinaPostNoiseFilterCheckBox, false);
     enableControl(data.tinaPostNoiseThresholdField, !data.tinaPostNoiseFilterCheckBox.isSelected());
-    enableControl(data.tinaOptiXDenoiserCheckBox, false);
-    //enableControl(data.tinaOptiXDenoiserBlendField, !data.tinaOptiXDenoiserCheckBox.isSelected());
-    enableControl(data.tinaOptiXDenoiserBlendField, false);
+    enableControl(data.tinaAIPostDenoiserCmb, false);
+
+    {
+      AIPostDenoiserType denoiserType = (AIPostDenoiserType) data.tinaAIPostDenoiserCmb.getSelectedItem();
+      if (denoiserType == null) {
+        denoiserType = AIPostDenoiserType.NONE;
+      }
+      switch (denoiserType) {
+        case OPTIX:
+          data.tinaOptixDenoiseButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/nvidia.png")));
+          data.tinaOptixDenoiseButton.setVisible(true);
+          enableControl(data.tinaOptiXDenoiserBlendField, false);
+          break;
+        case OIDN:
+          data.tinaOptixDenoiseButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/intel.png")));
+          data.tinaOptixDenoiseButton.setVisible(true);
+          enableControl(data.tinaOptiXDenoiserBlendField, true);
+          break;
+        case NONE:
+        default:
+          enableControl(data.tinaOptiXDenoiserBlendField, true);
+          data.tinaOptixDenoiseButton.setVisible(false);
+          break;
+      }
+    }
   }
 
   public void refreshFlameValues() {
@@ -726,7 +744,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0);
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
       data.tinaPostNoiseFilterCheckBox.setSelected(getCurrFlame().isPostNoiseFilter());
-      data.tinaOptiXDenoiserCheckBox.setSelected(getCurrFlame().isPostOptiXDenoiser());
+      data.tinaAIPostDenoiserCmb.setSelectedItem(getCurrFlame().getAiPostDenoiser());
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaOptiXDenoiserBlendSlider, data.tinaOptiXDenoiserBlendField, "postOptiXDenoiserBlend", TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND);
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
@@ -872,10 +890,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.bokehSettingsPnl.setEnabled(!settings.isSolidRenderingEnabled());
       JTabbedPane parent = (JTabbedPane) data.bokehSettingsPnl.getParent();
       // only the following sequence of commands seems to actually work, i.e.: both select the tab and display its contents
-      if(settings.isSolidRenderingEnabled() && parent.getSelectedIndex()==2) {
+      if (settings.isSolidRenderingEnabled() && parent.getSelectedIndex() == 2) {
         parent.setSelectedIndex(1);
       }
-      else if(!settings.isSolidRenderingEnabled() && parent.getSelectedIndex()==1) {
+      else if (!settings.isSolidRenderingEnabled() && parent.getSelectedIndex() == 1) {
         parent.setSelectedIndex(2);
       }
       parent.setEnabledAt(1, !settings.isSolidRenderingEnabled());
@@ -1326,18 +1344,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.saveUndoPoint();
         flame.setPostNoiseFilter(data.tinaPostNoiseFilterCheckBox.isSelected());
         enableControls();
-      }
-    }
-  }
-
-  public void tinaOptiXDenoiserCheckBox_changed() {
-    if (!isNoRefresh()) {
-      Flame flame = getCurrFlame();
-      if (flame != null) {
-        owner.saveUndoPoint();
-        flame.setPostOptiXDenoiser(data.tinaOptiXDenoiserCheckBox.isSelected());
-        enableControls();
-        // owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
@@ -2610,6 +2616,23 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void zBufferBiasREd_reset() {
     flameTextFieldReset(data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void aiDenoiserCmb_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setAiPostDenoiser((AIPostDenoiserType) data.tinaAIPostDenoiserCmb.getSelectedItem());
+        enableFilterUI();
+        // owner.refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void aiDenoiserCmb_reset() {
+    data.tinaAIPostDenoiserCmb.setSelectedItem(AIPostDenoiserFactory.getBestAvailableDenoiserType(Prefs.getPrefs().getTinaDefaultAIPostDenoiser()));
+    enableFilterUI();
   }
 
 }

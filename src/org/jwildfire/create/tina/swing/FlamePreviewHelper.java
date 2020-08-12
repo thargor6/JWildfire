@@ -39,6 +39,7 @@ import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderThreads;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.create.tina.variation.RessourceManager;
@@ -199,7 +200,7 @@ public class FlamePreviewHelper implements IterationObserver {
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
         boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
-        boolean oldPostOptiXDenoiser = flame.isPostOptiXDenoiser();
+        AIPostDenoiserType oldAIPostDenoiser = flame.getAiPostDenoiser();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -293,7 +294,7 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSampleDensity(oldSampleDensity);
           flame.setSpatialOversampling(oldSpatialOversampling);
           flame.setPostNoiseFilter(oldPostNoiseFilter);
-          flame.setPostOptiXDenoiser(oldPostOptiXDenoiser);
+          flame.setAiPostDenoiser(oldAIPostDenoiser);
         }
       }
     }
@@ -478,7 +479,7 @@ public class FlamePreviewHelper implements IterationObserver {
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
         boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
-        boolean oldPostOptiXDenoiser = flame.isPostOptiXDenoiser();
+        AIPostDenoiserType oldAIPostDenoiser = flame.getAiPostDenoiser();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -515,7 +516,7 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSpatialOversampling(oldSpatialOversampling);
           flame.setPostNoiseFilter(oldPostNoiseFilter);
-          flame.setPostOptiXDenoiser(oldPostOptiXDenoiser);
+          flame.setAiPostDenoiser(oldAIPostDenoiser);
         }
       }
     }

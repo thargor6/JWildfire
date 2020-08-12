@@ -27,6 +27,8 @@ import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.raster.RasterCreator;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiser;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.EditorDoubleClickActionType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
@@ -134,7 +136,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.5";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
-  static final String KEY_TINA_DEFAULT_POST_OPTIX_DENOISER = "tina.default.post_optix_denoiser";
+  static final String KEY_TINA_DEFAULT_AI_POST_DENOISER = "tina.default.ai_post_denoiser";
   static final String KEY_TINA_DEFAULT_POST_OPTIX_DENOISER_BLEND = "tina.default.post_optix_denoiser_blend";
 
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
@@ -162,7 +164,6 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_FREE_CACHE_IN_BATCH_RENDERER = "tina.free_cache_in_batch_renderer";
 
   public static final String KEY_TINA_EXCLUDED_VARIATIONS = "tina.excluded_variations";
-  public static final String KEY_TINA_LSYSTEM_MAXLENGTH = "tina.lsystem.maxlength";
 
   public static final String KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS = "tina.create_default_macrobuttons.6";
   public static final String KEY_TINA_VERTICAL_MACRO_BUTTONS = "tina.macro_buttons.vertical";
@@ -322,8 +323,8 @@ public class Prefs extends ManagedObject {
   @Property(description = "Default threshold-setting for the post-noise-filter", category = PropertyCategory.TINA)
   private double tinaDefaultPostNoiseFilterThreshold = 0.35;
 
-  @Property(description = "Default setting for applying the OptiX denoiser by NVidia to rendered images (only when available on your platform)", category = PropertyCategory.TINA)
-  private boolean tinaDefaultPostOptiXDenoiser = false;
+  @Property(description = "Default setting for applying an AI-based denoiser to rendered final images (not all options are available on all platformss, in this case a fallback takes place)", category = PropertyCategory.TINA, editorClass = AIPostDenoiserTypeEditor.class)
+  private AIPostDenoiserType tinaDefaultAIPostDenoiser = AIPostDenoiserType.OPTIX;
 
   @Property(description = "Default blend-setting for the OptiX denoiser by NVidia in the range 0.0 .. 1.0 (0.0 = denoised image, 1.0 = raw image, use values in between to mix between the images)", category = PropertyCategory.TINA)
   private double tinaDefaultPostOptiXDenoiserBlend = 0.11111;
@@ -482,6 +483,14 @@ public class Prefs extends ManagedObject {
       setAvailableValues(FilterKernelType.values());
     }
   }
+
+  public static class AIPostDenoiserTypeEditor extends ComboBoxPropertyEditor {
+    public AIPostDenoiserTypeEditor() {
+      super();
+      setAvailableValues(new AIPostDenoiserType[] { AIPostDenoiserType.OPTIX, AIPostDenoiserType.OIDN, AIPostDenoiserType.NONE });
+    }
+  }
+
 
   private LookAndFeelType lookAndFeelType = Tools.OSType.MAC.equals(Tools.getOSType()) ? LookAndFeelType.SYSTEM : LookAndFeelType.NIMBUS;
   private String lookAndFeelTheme = Tools.OSType.MAC.equals(Tools.getOSType()) ? "" : "JWildfire";
@@ -841,7 +850,7 @@ public class Prefs extends ManagedObject {
     tinaDefaultForegroundOpacity = pSrc.tinaDefaultForegroundOpacity;
     tinaDefaultPostNoiseFilter = pSrc.tinaDefaultPostNoiseFilter;
     tinaDefaultPostNoiseFilterThreshold = pSrc.tinaDefaultPostNoiseFilterThreshold;
-    tinaDefaultPostOptiXDenoiser = pSrc.tinaDefaultPostOptiXDenoiser;
+    tinaDefaultAIPostDenoiser = pSrc.tinaDefaultAIPostDenoiser;
     tinaDefaultPostOptiXDenoiserBlend = pSrc.tinaDefaultPostOptiXDenoiserBlend;
 
     tinaAdvancedCodeEditor = pSrc.tinaAdvancedCodeEditor;
@@ -1539,12 +1548,12 @@ public class Prefs extends ManagedObject {
     tinaDefaultPostNoiseFilterThreshold = pTinaDefaultPostNoiseFilterThreshold;
   }
 
-  public boolean isTinaDefaultPostOptiXDenoiser() {
-    return tinaDefaultPostOptiXDenoiser;
+  public AIPostDenoiserType getTinaDefaultAIPostDenoiser() {
+    return tinaDefaultAIPostDenoiser;
   }
 
-  public void setTinaDefaultPostOptiXDenoiser(boolean tinaDefaultPostOptiXDenoiser) {
-    this.tinaDefaultPostOptiXDenoiser = tinaDefaultPostOptiXDenoiser;
+  public void setTinaDefaultAIPostDenoiser(AIPostDenoiserType tinaDefaultAIPostDenoiser) {
+    this.tinaDefaultAIPostDenoiser = tinaDefaultAIPostDenoiser;
   }
 
   public double getTinaDefaultPostOptiXDenoiserBlend() {

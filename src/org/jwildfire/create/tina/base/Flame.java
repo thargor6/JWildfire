@@ -35,10 +35,12 @@ import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
-import org.jwildfire.create.tina.render.denoiser.OptixCmdLineDenoiser;
+import org.jwildfire.create.tina.render.denoiser.OptixCmdLineAIPostDenoiser;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
 public class Flame implements Assignable<Flame>, Serializable {
@@ -145,7 +147,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private boolean bgTransparency;
   private boolean postNoiseFilter;
   private double postNoiseFilterThreshold;
-  private boolean postOptiXDenoiser;
+  private AIPostDenoiserType aiPostDenoiser;
   private double postOptiXDenoiserBlend;
 
   private double foregroundOpacity;
@@ -352,7 +354,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     postNoiseFilterThreshold = Prefs.getPrefs().getTinaDefaultPostNoiseFilterThreshold();
     antialiasAmount = Prefs.getPrefs().getTinaDefaultAntialiasingAmount();
     antialiasRadius = Prefs.getPrefs().getTinaDefaultAntialiasingRadius();
-    postOptiXDenoiser = Prefs.getPrefs().isTinaDefaultPostOptiXDenoiser() && OptixCmdLineDenoiser.isAvailableStatic();
+    aiPostDenoiser = AIPostDenoiserFactory.getBestAvailableDenoiserType(Prefs.getPrefs().getTinaDefaultAIPostDenoiser());
     postOptiXDenoiserBlend = Prefs.getPrefs().getTinaDefaultPostOptiXDenoiserBlend();
   }
 
@@ -833,7 +835,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     spatialOversampling = pFlame.spatialOversampling;
     postNoiseFilter = pFlame.postNoiseFilter;
     postNoiseFilterThreshold = pFlame.postNoiseFilterThreshold;
-    postOptiXDenoiser = pFlame.postOptiXDenoiser;
+    aiPostDenoiser = pFlame.aiPostDenoiser;
     postOptiXDenoiserBlend = pFlame.postOptiXDenoiserBlend;
     foregroundOpacity = pFlame.foregroundOpacity;
     foregroundOpacityCurve.assign(pFlame.foregroundOpacityCurve);
@@ -918,7 +920,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
         (camDOFShape != pFlame.camDOFShape) || (spatialOversampling != pFlame.spatialOversampling) ||
         (postNoiseFilter != pFlame.postNoiseFilter) || (fabs(postNoiseFilterThreshold - pFlame.postNoiseFilterThreshold) > EPSILON) ||
-        (postOptiXDenoiser != pFlame.postOptiXDenoiser) || (fabs(postOptiXDenoiserBlend - pFlame.postOptiXDenoiserBlend) > EPSILON) ||
+        (aiPostDenoiser != pFlame.aiPostDenoiser) || (fabs(postOptiXDenoiserBlend - pFlame.postOptiXDenoiserBlend) > EPSILON) ||
         (fabs(foregroundOpacity - pFlame.foregroundOpacity) > EPSILON) || !foregroundOpacityCurve.isEqual(pFlame.foregroundOpacityCurve) ||
         (fabs(camDOFScale - pFlame.camDOFScale) > EPSILON) || !camDOFScaleCurve.isEqual(pFlame.camDOFScaleCurve) ||
         (fabs(camDOFAngle - pFlame.camDOFAngle) > EPSILON) || !camDOFAngleCurve.isEqual(pFlame.camDOFAngleCurve) ||
@@ -1642,7 +1644,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     setSpatialFilterRadius(0.0);
     setSpatialOversampling(1);
     setPostNoiseFilter(false);
-    setPostOptiXDenoiser(false);
+    setAiPostDenoiser(AIPostDenoiserType.NONE);
   }
 
   public void applyDefaultOversamplingSettings() {
@@ -1650,7 +1652,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     setSpatialFilterRadius(prefs.getTinaDefaultSpatialFilterRadius());
     setSpatialOversampling(getSolidRenderSettings().isSolidRenderingEnabled() ? DFLT_SOLID_SPATIAL_OVERSAMPLING : prefs.getTinaDefaultSpatialOversampling());
     setPostNoiseFilter(prefs.isTinaDefaultPostNoiseFilter());
-    setPostOptiXDenoiser(prefs.isTinaDefaultPostOptiXDenoiser() && OptixCmdLineDenoiser.isAvailableStatic());
+    setAiPostDenoiser(AIPostDenoiserFactory.getBestAvailableDenoiserType(Prefs.getPrefs().getTinaDefaultAIPostDenoiser()));
     setPostOptiXDenoiserBlend(prefs.getTinaDefaultPostOptiXDenoiserBlend());
   }
 
@@ -1670,12 +1672,12 @@ public class Flame implements Assignable<Flame>, Serializable {
     postNoiseFilterThreshold = pPostNoiseFilterThreshold;
   }
 
-  public boolean isPostOptiXDenoiser() {
-    return postOptiXDenoiser;
+  public AIPostDenoiserType getAiPostDenoiser() {
+    return aiPostDenoiser;
   }
 
-  public void setPostOptiXDenoiser(boolean postOptiXDenoiser) {
-    this.postOptiXDenoiser = postOptiXDenoiser;
+  public void setAiPostDenoiser(AIPostDenoiserType aiPostDenoiser) {
+    this.aiPostDenoiser = aiPostDenoiser;
   }
 
   public double getPostOptiXDenoiserBlend() {
