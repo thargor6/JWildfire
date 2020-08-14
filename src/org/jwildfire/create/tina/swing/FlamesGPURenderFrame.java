@@ -28,7 +28,18 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
@@ -132,6 +143,7 @@ public class FlamesGPURenderFrame extends JFrame {
   private JPanel panel;
   private JButton interactiveSaveZBufferButton;
   private JLabel lblGpuRenderInfo;
+  private JCheckBox aiPostDenoiserDisableCheckbox;
 
   private JPanel getInteractiveNorthPanel() {
     if (interactiveNorthPanel == null) {
@@ -329,7 +341,7 @@ public class FlamesGPURenderFrame extends JFrame {
       interactiveResolutionProfileCmb.setMinimumSize(new Dimension(100, 24));
       interactiveResolutionProfileCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getGpuRendererCtrl() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getGpuRendererCtrl() != null) {
             tinaController.getGpuRendererCtrl().resolutionProfile_changed();
           }
         }
@@ -348,7 +360,7 @@ public class FlamesGPURenderFrame extends JFrame {
       interactiveQualityProfileCmb.setMinimumSize(new Dimension(100, 24));
       interactiveQualityProfileCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getGpuRendererCtrl() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getGpuRendererCtrl() != null) {
             tinaController.getGpuRendererCtrl().qualityProfile_changed();
           }
         }
@@ -420,9 +432,10 @@ public class FlamesGPURenderFrame extends JFrame {
   private JPanel getPanel_28() {
     if (panel_28 == null) {
       panel_28 = new JPanel();
+      panel_28.setPreferredSize(new Dimension(300, 10));
       panel_28.setBorder(new EmptyBorder(0, 6, 0, 6));
-      panel_28.setMaximumSize(new Dimension(250, 32767));
-      panel_28.setMinimumSize(new Dimension(200, 10));
+      panel_28.setMaximumSize(new Dimension(300, 32767));
+      panel_28.setMinimumSize(new Dimension(300, 10));
       panel_28.setLayout(new BoxLayout(panel_28, BoxLayout.Y_AXIS));
       panel_28.add(getPanel_36());
       panel_28.add(getPanel_29());
@@ -437,6 +450,7 @@ public class FlamesGPURenderFrame extends JFrame {
       panel_29.setLayout(new BoxLayout(panel_29, BoxLayout.X_AXIS));
       panel_29.add(getLabel_1());
       panel_29.add(getInteractiveResolutionProfileCmb());
+      panel_29.add(getAiPostDenoiserDisableCheckbox());
     }
     return panel_29;
   }
@@ -619,5 +633,19 @@ public class FlamesGPURenderFrame extends JFrame {
 
   public JLabel getLblGpuRenderInfo() {
     return lblGpuRenderInfo;
+  }
+
+  protected JCheckBox getAiPostDenoiserDisableCheckbox() {
+    if (aiPostDenoiserDisableCheckbox == null) {
+      aiPostDenoiserDisableCheckbox = new JCheckBox("Denoiser OFF");
+      aiPostDenoiserDisableCheckbox.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      aiPostDenoiserDisableCheckbox.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getGpuRendererCtrl().changeRenderSizeButton_clicked();
+        }
+      });
+      aiPostDenoiserDisableCheckbox.setToolTipText("Disable AI-Post-Denoiser, in case it is enabled in the flame-parameters");
+    }
+    return aiPostDenoiserDisableCheckbox;
   }
 }

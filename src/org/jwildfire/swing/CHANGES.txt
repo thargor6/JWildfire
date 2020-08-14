@@ -39,6 +39,8 @@ V6.00 (13.08.2020)
      - https://overwhale.com is my main  site
  - made it more visible, when a motion curve/key-frame is associated with a certain flame-parameter
  - Batch-rendering now also supports AI-Post-Denoiser together with GPU-rendering (FACLRender)
+ - GPU-rendering in the GPU-render-window also respects the AI-Post-Denoiser from the imported flame
+    - added a new option to turn the denoiser off in order to be able to see the raw result from the GPU renderer
  - changed some default settings in regard to flame-animations
  - numeric fields now also react to inputs of the mousewheel
  - added function to reset all motion curves
@@ -91,6 +93,7 @@ V6.00 (13.08.2020)
  - fixed a bug preventing changing parameters "Blur fade" and "Blur falloff" on the "DOF/Bokeh -> Post blur" -tab
  - fixed a bug regarding calculating the wrong pixels-per-unit-setting when importing a flame from the thumbnail-ribbon
  - fixed bug that the Quilt Renderer did not delete the temporary segments after merging thme into the final images
+ - fixed a bug causing the GPU-renderer called twice the same time when changing resolution- or quality-profile in the GPU-renderer-window
 
 V5.60 (06.05.2020)
  - support for NVidia’s NVidia’s OptiX denoiser as a powerful tool to cut down render times and improve image quality.
