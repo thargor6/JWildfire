@@ -133,7 +133,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.5";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
-  static final String KEY_TINA_DEFAULT_AI_POST_DENOISER = "tina.default.ai_post_denoiser.1";
+  static final String KEY_TINA_DEFAULT_AI_POST_DENOISER = "tina.default.ai_post_denoiser.2";
   static final String KEY_TINA_DEFAULT_POST_OPTIX_DENOISER_BLEND = "tina.default.post_optix_denoiser_blend";
 
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
@@ -321,7 +321,7 @@ public class Prefs extends ManagedObject {
   private double tinaDefaultPostNoiseFilterThreshold = 0.35;
 
   @Property(description = "Default setting for applying an AI-based denoiser to rendered final images (not all options are available on all platformss, in this case a fallback takes place)", category = PropertyCategory.TINA, editorClass = AIPostDenoiserTypeEditor.class)
-  private AIPostDenoiserType tinaDefaultAIPostDenoiser = AIPostDenoiserType.NONE;
+  private AIPostDenoiserType tinaDefaultAIPostDenoiser = AIPostDenoiserType.OPTIX;
 
   @Property(description = "Default blend-setting for the OptiX denoiser by NVidia in the range 0.0 .. 1.0 (0.0 = denoised image, 1.0 = raw image, use values in between to mix between the images)", category = PropertyCategory.TINA)
   private double tinaDefaultPostOptiXDenoiserBlend = 0.11111;
@@ -1651,7 +1651,8 @@ public class Prefs extends ManagedObject {
   }
 
   public Font getFont(String pName, int pStyle, int pSize) {
-    int scaledSize = (int) (pSize * tinaFontScale);
+    double scale = Math.max(Math.min(tinaFontScale, 1.3), 1.0);
+    int scaledSize = (int) (pSize * scale);
     if (scaledSize < 8) {
       scaledSize = 8;
     } else if (scaledSize > 64) {

@@ -4,6 +4,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
@@ -144,14 +145,12 @@ public class QuiltFlameRenderer {
       new ImageWriter().saveImage(img, filename);
       finalImageMerged = true;
       // delete segments
-/*
       for (int y = 0; y < ySegmentationLevel; y++) {
         for (int x = 0; x < xSegmentationLevel; x++) {
           String segmentFilename = getSegmentFilename(filename, destWidth, destHeight, xSegmentationLevel, ySegmentationLevel, qualityLevel, x, y);
           new File(segmentFilename).delete();
         }
       }
-*/
     } catch (Exception ex) {
       throw new RuntimeException(ex);
     }
@@ -164,6 +163,7 @@ public class QuiltFlameRenderer {
     clone.setPixelsPerUnit((wScl + hScl) * 0.5 * clone.getPixelsPerUnit());
     clone.setWidth(destWidth);
     clone.setHeight(destHeight);
+    clone.setAiPostDenoiser(AIPostDenoiserType.NONE);
     return clone;
   }
 

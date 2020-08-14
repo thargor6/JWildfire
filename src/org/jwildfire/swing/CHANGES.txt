@@ -31,10 +31,6 @@ V6.00 (13.08.2020)
  - support for Intel’s OIDN denoiser as a powerful tool to cut down render times and improve image quality (works simular to NVidia's OptiX,
    but does not requiere a GPU from NVidia)
    Please consult the comprehensive documentation inside the software (“Help -> Supported AI-Post-Denoiser -> Intel's OIDN Denoiser") for more information.
-   HINT: Per default an AI-Post-Denoiser is turned off for new flames, so you maybe will miss the "NVidia-button" from version 5.60.
-   This button is only displayed when you have a denoiser selected under the "Anti-Aliasing/Filter"-tab. You may chose a default denoiser
-   in the Preferences (to get the button back for new created flames).
-
  - moved the old webspace to a secured site:
      - https://jwildfire.overwhale.com is the JWildfire site
      - https://jwildfire-forum.overwhale.com is the JWildfire-forum
@@ -52,6 +48,7 @@ V6.00 (13.08.2020)
  - added motion curves for the following flame-parameters: balancingRed/Green/Blue, lowDensityBrightness and foregroundOpacity
  - added new property "tinaDefaultFrameCount" to the Preferences, here you can change the default number of frames for a flame-animation,
    created in the main editor
+ - the Quilt-Renderer does ignore the setting of the AI-Post-Denoiser (e.g. OptiX). The current way to denoise such images is to manually denoise the final image
  - new variations:
      -glitchy1 by Brad Stefanov, Rick Sidwell, dark-beam and bezo97
      -pixel_flow by bezo97
@@ -92,6 +89,7 @@ V6.00 (13.08.2020)
  - removed the (barely understood) "Mirror translations"-button at the Affine-transforms-tab
  - fixed a bug preventing changing parameters "Blur fade" and "Blur falloff" on the "DOF/Bokeh -> Post blur" -tab
  - fixed a bug regarding calculating the wrong pixels-per-unit-setting when importing a flame from the thumbnail-ribbon
+ - fixed bug that the Quilt Renderer did not delete the temporary segments after merging thme into the final images
 
 V5.60 (06.05.2020)
  - support for NVidia’s NVidia’s OptiX denoiser as a powerful tool to cut down render times and improve image quality.

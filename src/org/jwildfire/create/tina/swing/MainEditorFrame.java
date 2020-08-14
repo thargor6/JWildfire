@@ -5205,7 +5205,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldTypeCmb.setSize(new Dimension(125, 22));
       weightingFieldTypeCmb.setPreferredSize(new Dimension(125, 22));
       weightingFieldTypeCmb.setLocation(new Point(100, 4));
-      weightingFieldTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldTypeCmb.setBounds(92, 2, 150, 24);
       weightingFieldTypeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -5237,7 +5237,7 @@ public class MainEditorFrame extends JFrame {
       lblMapType.setSize(new Dimension(94, 22));
       lblMapType.setPreferredSize(new Dimension(94, 22));
       lblMapType.setLocation(new Point(4, 4));
-      lblMapType.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMapType.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblMapType.setBounds(4, 2, 90, 22);
       tinaWeightMapPanel.add(lblMapType);
 
@@ -5260,7 +5260,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldColorMapFilenameLbl.setSize(new Dimension(94, 22));
       weightingFieldColorMapFilenameLbl.setPreferredSize(new Dimension(94, 22));
       weightingFieldColorMapFilenameLbl.setLocation(new Point(4, 4));
-      weightingFieldColorMapFilenameLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldColorMapFilenameLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldColorMapFilenameLbl.setBounds(4, 244, 90, 22);
       tinaWeightMapPanel.add(weightingFieldColorMapFilenameLbl);
 
@@ -5268,7 +5268,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldColorMapFilenameBtn.setToolTipText("Select an image to use as a weighting field");
       weightingFieldColorMapFilenameBtn.setText("Select image...");
       weightingFieldColorMapFilenameBtn.setPreferredSize(new Dimension(190, 24));
-      weightingFieldColorMapFilenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldColorMapFilenameBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldColorMapFilenameBtn.setBounds(92, 244, 116, 24);
       weightingFieldColorMapFilenameBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -5294,7 +5294,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldColorIntensityREd.setMinValue(-3.0);
       weightingFieldColorIntensityREd.setMaxValue(3.0);
       weightingFieldColorIntensityREd.setLocation(new Point(70, 21));
-      weightingFieldColorIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldColorIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldColorIntensityREd.setBounds(248, 48, 70, 22);
       weightingFieldColorIntensityREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5329,7 +5329,7 @@ public class MainEditorFrame extends JFrame {
       lblColorIntensity.setSize(new Dimension(64, 22));
       lblColorIntensity.setPreferredSize(new Dimension(64, 22));
       lblColorIntensity.setLocation(new Point(6, 21));
-      lblColorIntensity.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblColorIntensity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblColorIntensity.setBounds(165, 49, 90, 22);
       tinaWeightMapPanel.add(lblColorIntensity);
 
@@ -5352,7 +5352,7 @@ public class MainEditorFrame extends JFrame {
       lblVariationIntensity.setSize(new Dimension(64, 22));
       lblVariationIntensity.setPreferredSize(new Dimension(64, 22));
       lblVariationIntensity.setLocation(new Point(6, 47));
-      lblVariationIntensity.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblVariationIntensity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblVariationIntensity.setBounds(4, 48, 90, 22);
       tinaWeightMapPanel.add(lblVariationIntensity);
 
@@ -5375,7 +5375,7 @@ public class MainEditorFrame extends JFrame {
       lblJitterIntensity.setSize(new Dimension(64, 22));
       lblJitterIntensity.setPreferredSize(new Dimension(64, 22));
       lblJitterIntensity.setLocation(new Point(6, 47));
-      lblJitterIntensity.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblJitterIntensity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblJitterIntensity.setBounds(4, 133, 90, 22);
       tinaWeightMapPanel.add(lblJitterIntensity);
 
@@ -5393,7 +5393,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVariationAmountsREd.setMinValue(-1.0);
       weightingFieldVariationAmountsREd.setMaxValue(1.0);
       weightingFieldVariationAmountsREd.setLocation(new Point(70, 47));
-      weightingFieldVariationAmountsREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldVariationAmountsREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldVariationAmountsREd.setBounds(92, 48, 70, 22);
       weightingFieldVariationAmountsREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5424,7 +5424,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldJitterIntensityREd.setMinValue(-1.0);
       weightingFieldJitterIntensityREd.setMaxValue(1.0);
       weightingFieldJitterIntensityREd.setLocation(new Point(70, 47));
-      weightingFieldJitterIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldJitterIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldJitterIntensityREd.setBounds(92, 133, 70, 22);
       weightingFieldJitterIntensityREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5445,7 +5445,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldInputCmb.setSize(new Dimension(125, 22));
       weightingFieldInputCmb.setPreferredSize(new Dimension(125, 22));
       weightingFieldInputCmb.setLocation(new Point(100, 4));
-      weightingFieldInputCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldInputCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldInputCmb.setBounds(92, 25, 150, 24);
       weightingFieldInputCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -5477,7 +5477,7 @@ public class MainEditorFrame extends JFrame {
       lblInput.setSize(new Dimension(94, 22));
       lblInput.setPreferredSize(new Dimension(94, 22));
       lblInput.setLocation(new Point(4, 4));
-      lblInput.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblInput.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblInput.setBounds(4, 25, 90, 22);
       tinaWeightMapPanel.add(lblInput);
 
@@ -5494,7 +5494,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam01REd.setMinValue(-3.0);
       weightingFieldParam01REd.setMaxValue(3.0);
       weightingFieldParam01REd.setLocation(new Point(70, 21));
-      weightingFieldParam01REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldParam01REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldParam01REd.setBounds(92, 162, 70, 22);
       weightingFieldParam01REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5530,7 +5530,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam01Lbl.setSize(new Dimension(64, 22));
       weightingFieldParam01Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam01Lbl.setLocation(new Point(6, 21));
-      weightingFieldParam01Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldParam01Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldParam01Lbl.setBounds(4, 162, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam01Lbl);
 
@@ -5552,7 +5552,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam02Lbl.setSize(new Dimension(64, 22));
       weightingFieldParam02Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam02Lbl.setLocation(new Point(6, 47));
-      weightingFieldParam02Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldParam02Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldParam02Lbl.setBounds(4, 182, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam02Lbl);
 
@@ -5569,7 +5569,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam02REd.setMinValue(-1.0);
       weightingFieldParam02REd.setMaxValue(1.0);
       weightingFieldParam02REd.setLocation(new Point(70, 47));
-      weightingFieldParam02REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldParam02REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldParam02REd.setBounds(92, 182, 70, 22);
       weightingFieldParam02REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5598,7 +5598,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam05REd.setMinValue(-3.0);
       weightingFieldParam05REd.setMaxValue(3.0);
       weightingFieldParam05REd.setLocation(new Point(70, 21));
-      weightingFieldParam05REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldParam05REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldParam05REd.setBounds(248, 162, 70, 22);
       weightingFieldParam05REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5632,7 +5632,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam05Lbl.setSize(new Dimension(64, 22));
       weightingFieldParam05Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam05Lbl.setLocation(new Point(6, 21));
-      weightingFieldParam05Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldParam05Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldParam05Lbl.setBounds(164, 162, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam05Lbl);
 
@@ -5654,7 +5654,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam06Lbl.setSize(new Dimension(64, 22));
       weightingFieldParam06Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam06Lbl.setLocation(new Point(6, 47));
-      weightingFieldParam06Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldParam06Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldParam06Lbl.setBounds(165, 182, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam06Lbl);
 
@@ -5671,7 +5671,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam06REd.setMinValue(-1.0);
       weightingFieldParam06REd.setMaxValue(1.0);
       weightingFieldParam06REd.setLocation(new Point(70, 47));
-      weightingFieldParam06REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldParam06REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldParam06REd.setBounds(248, 182, 70, 22);
       weightingFieldParam06REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5700,7 +5700,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam03REd.setMinValue(-3.0);
       weightingFieldParam03REd.setMaxValue(3.0);
       weightingFieldParam03REd.setLocation(new Point(70, 21));
-      weightingFieldParam03REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldParam03REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldParam03REd.setBounds(92, 202, 70, 22);
       weightingFieldParam03REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5734,7 +5734,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam03Lbl.setSize(new Dimension(64, 22));
       weightingFieldParam03Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam03Lbl.setLocation(new Point(6, 21));
-      weightingFieldParam03Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldParam03Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldParam03Lbl.setBounds(4, 202, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam03Lbl);
 
@@ -5756,7 +5756,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam04Lbl.setSize(new Dimension(64, 22));
       weightingFieldParam04Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam04Lbl.setLocation(new Point(6, 47));
-      weightingFieldParam04Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldParam04Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldParam04Lbl.setBounds(4, 222, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam04Lbl);
 
@@ -5764,7 +5764,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam04Cmb.setSize(new Dimension(55, 22));
       weightingFieldParam04Cmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldParam04Cmb.setLocation(new Point(70, 47));
-      weightingFieldParam04Cmb.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldParam04Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldParam04Cmb.setBounds(92, 222, 70, 22);
       weightingFieldParam04Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -5795,7 +5795,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam07Lbl.setSize(new Dimension(64, 22));
       weightingFieldParam07Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam07Lbl.setLocation(new Point(6, 21));
-      weightingFieldParam07Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldParam07Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldParam07Lbl.setBounds(165, 202, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam07Lbl);
 
@@ -5817,7 +5817,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam08Lbl.setSize(new Dimension(64, 22));
       weightingFieldParam08Lbl.setPreferredSize(new Dimension(64, 22));
       weightingFieldParam08Lbl.setLocation(new Point(6, 47));
-      weightingFieldParam08Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldParam08Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldParam08Lbl.setBounds(165, 222, 90, 22);
       tinaWeightMapPanel.add(weightingFieldParam08Lbl);
 
@@ -5834,7 +5834,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam07REd.setMinValue(-3.0);
       weightingFieldParam07REd.setMaxValue(3.0);
       weightingFieldParam07REd.setLocation(new Point(70, 21));
-      weightingFieldParam07REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldParam07REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldParam07REd.setBounds(248, 202, 70, 22);
       weightingFieldParam07REd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5854,7 +5854,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam08Cmb.setSize(new Dimension(55, 22));
       weightingFieldParam08Cmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldParam08Cmb.setLocation(new Point(70, 47));
-      weightingFieldParam08Cmb.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldParam08Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldParam08Cmb.setBounds(248, 222, 70, 22);
       weightingFieldParam08Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -5877,7 +5877,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldRandomizeAllBtn.setToolTipText("Randomize all weightmap-settings, either of the whole fractal or the selected transform");
       weightingFieldRandomizeAllBtn.setText("Randomize all");
       weightingFieldRandomizeAllBtn.setPreferredSize(new Dimension(104, 24));
-      weightingFieldRandomizeAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldRandomizeAllBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldRandomizeAllBtn.setBounds(0, 275, 104, 24);
       tinaWeightMapPanel.add(weightingFieldRandomizeAllBtn);
 
@@ -5890,7 +5890,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldResetAllBtn.setToolTipText("Reset weight-map-settings, either of the whole fractal or the selected transform");
       weightingFieldResetAllBtn.setText("Reset all");
       weightingFieldResetAllBtn.setPreferredSize(new Dimension(190, 24));
-      weightingFieldResetAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldResetAllBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldResetAllBtn.setBounds(107, 275, 104, 24);
       tinaWeightMapPanel.add(weightingFieldResetAllBtn);
 
@@ -5914,7 +5914,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam1AmountREd.setMinValue(-1.0);
       weightingFieldVarParam1AmountREd.setMaxValue(1.0);
       weightingFieldVarParam1AmountREd.setLocation(new Point(70, 47));
-      weightingFieldVarParam1AmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldVarParam1AmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam1AmountREd.setBounds(92, 69, 70, 22);
       weightingFieldVarParam1AmountREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5950,7 +5950,7 @@ public class MainEditorFrame extends JFrame {
       lblVarAmount.setSize(new Dimension(64, 22));
       lblVarAmount.setPreferredSize(new Dimension(64, 22));
       lblVarAmount.setLocation(new Point(6, 47));
-      lblVarAmount.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblVarAmount.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblVarAmount.setBounds(4, 69, 90, 22);
       tinaWeightMapPanel.add(lblVarAmount);
 
@@ -5958,7 +5958,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam1NameCmb.setSize(new Dimension(55, 22));
       weightingFieldVarParam1NameCmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldVarParam1NameCmb.setLocation(new Point(70, 47));
-      weightingFieldVarParam1NameCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldVarParam1NameCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam1NameCmb.setBounds(165, 69, 153, 22);
       weightingFieldVarParam1NameCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -5990,7 +5990,7 @@ public class MainEditorFrame extends JFrame {
       lblVarParam.setSize(new Dimension(64, 22));
       lblVarParam.setPreferredSize(new Dimension(64, 22));
       lblVarParam.setLocation(new Point(6, 47));
-      lblVarParam.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblVarParam.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblVarParam.setBounds(4, 91, 90, 22);
       tinaWeightMapPanel.add(lblVarParam);
 
@@ -6008,7 +6008,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam2AmountREd.setMinValue(-1.0);
       weightingFieldVarParam2AmountREd.setMaxValue(1.0);
       weightingFieldVarParam2AmountREd.setLocation(new Point(70, 47));
-      weightingFieldVarParam2AmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldVarParam2AmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam2AmountREd.setBounds(92, 91, 70, 22);
       weightingFieldVarParam2AmountREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -6028,7 +6028,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam2NameCmb.setSize(new Dimension(55, 22));
       weightingFieldVarParam2NameCmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldVarParam2NameCmb.setLocation(new Point(70, 47));
-      weightingFieldVarParam2NameCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldVarParam2NameCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam2NameCmb.setBounds(165, 91, 153, 22);
       weightingFieldVarParam2NameCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -6058,7 +6058,7 @@ public class MainEditorFrame extends JFrame {
       lblVarParam_1.setSize(new Dimension(64, 22));
       lblVarParam_1.setPreferredSize(new Dimension(64, 22));
       lblVarParam_1.setLocation(new Point(6, 47));
-      lblVarParam_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblVarParam_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblVarParam_1.setBounds(4, 113, 90, 22);
       tinaWeightMapPanel.add(lblVarParam_1);
 
@@ -6076,7 +6076,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam3AmountREd.setMinValue(-1.0);
       weightingFieldVarParam3AmountREd.setMaxValue(1.0);
       weightingFieldVarParam3AmountREd.setLocation(new Point(70, 47));
-      weightingFieldVarParam3AmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldVarParam3AmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam3AmountREd.setBounds(92, 113, 70, 22);
       weightingFieldVarParam3AmountREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -6096,7 +6096,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam3NameCmb.setSize(new Dimension(55, 22));
       weightingFieldVarParam3NameCmb.setPreferredSize(new Dimension(55, 22));
       weightingFieldVarParam3NameCmb.setLocation(new Point(70, 47));
-      weightingFieldVarParam3NameCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightingFieldVarParam3NameCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam3NameCmb.setBounds(165, 113, 153, 22);
       weightingFieldVarParam3NameCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -14361,7 +14361,7 @@ public class MainEditorFrame extends JFrame {
       tinaFilterSharpnessSlider.setMinimum(0);
       tinaFilterSharpnessSlider.setMaximum(1000);
       tinaFilterSharpnessSlider.setLocation(new Point(686, 2));
-      tinaFilterSharpnessSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaFilterSharpnessSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaFilterSharpnessSlider.setBounds(217, 100, 220, 24);
       tinaFilterSharpnessSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -14436,7 +14436,7 @@ public class MainEditorFrame extends JFrame {
       tinaFilterLowDensitySlider.setMinimum(0);
       tinaFilterLowDensitySlider.setMaximum(20);
       tinaFilterLowDensitySlider.setLocation(new Point(686, 2));
-      tinaFilterLowDensitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaFilterLowDensitySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaFilterLowDensitySlider.setBounds(217, 125, 220, 24);
       tinaFilterLowDensitySlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -16528,7 +16528,7 @@ public class MainEditorFrame extends JFrame {
       gotoPrevKeyFrameButton.setToolTipText("Goto previous keyframe");
       gotoPrevKeyFrameButton.setText("");
       gotoPrevKeyFrameButton.setPreferredSize(new Dimension(55, 24));
-      gotoPrevKeyFrameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      gotoPrevKeyFrameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gotoPrevKeyFrameButton.setBounds(247, 2, 32, 24);
       gotoPrevKeyFrameButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-seek-backward-7g.png")));
       gotoPrevKeyFrameButton.addActionListener(new ActionListener() {
@@ -16550,7 +16550,7 @@ public class MainEditorFrame extends JFrame {
       gotoNextKeyFrameButton.setToolTipText("Goto next keyframe");
       gotoNextKeyFrameButton.setText("");
       gotoNextKeyFrameButton.setPreferredSize(new Dimension(55, 24));
-      gotoNextKeyFrameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      gotoNextKeyFrameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gotoNextKeyFrameButton.setBounds(279, 2, 32, 24);
       gotoNextKeyFrameButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/media-seek-forward-7g.png")));
       gotoNextKeyFrameButton.addActionListener(new ActionListener() {
@@ -16572,7 +16572,7 @@ public class MainEditorFrame extends JFrame {
       duplicateKeyFrameButton.setToolTipText("Duplicate keyframe");
       duplicateKeyFrameButton.setText("");
       duplicateKeyFrameButton.setPreferredSize(new Dimension(55, 24));
-      duplicateKeyFrameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      duplicateKeyFrameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       duplicateKeyFrameButton.setBounds(314, 2, 32, 24);
       duplicateKeyFrameButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/edit-copy-3.png")));
       duplicateKeyFrameButton.addActionListener(new ActionListener() {
@@ -24208,7 +24208,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldColorMapFilenameInfoLbl.setSize(new Dimension(94, 22));
       weightingFieldColorMapFilenameInfoLbl.setPreferredSize(new Dimension(94, 22));
       weightingFieldColorMapFilenameInfoLbl.setLocation(new Point(4, 4));
-      weightingFieldColorMapFilenameInfoLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightingFieldColorMapFilenameInfoLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       weightingFieldColorMapFilenameInfoLbl.setBounds(214, 244, 106, 22);
     }
     return weightingFieldColorMapFilenameInfoLbl;
@@ -24319,7 +24319,7 @@ public class MainEditorFrame extends JFrame {
       deleteKeyFrameButton.setToolTipText("Delete keyframe");
       deleteKeyFrameButton.setText("");
       deleteKeyFrameButton.setPreferredSize(new Dimension(55, 24));
-      deleteKeyFrameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      deleteKeyFrameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       deleteKeyFrameButton.setBounds(346, 2, 32, 24);
       deleteKeyFrameButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/removecommentg.png")));
       deleteKeyFrameButton.addActionListener(new ActionListener() {
@@ -24356,7 +24356,7 @@ public class MainEditorFrame extends JFrame {
       tinaAIDenoiserCmb.setSize(new Dimension(125, 22));
       tinaAIDenoiserCmb.setPreferredSize(new Dimension(125, 22));
       tinaAIDenoiserCmb.setLocation(new Point(100, 4));
-      tinaAIDenoiserCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaAIDenoiserCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaAIDenoiserCmb.setBounds(675, 51, 322, 24);
       tinaAIDenoiserCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -24378,7 +24378,7 @@ public class MainEditorFrame extends JFrame {
       lblPostDenoiser.setSize(new Dimension(94, 22));
       lblPostDenoiser.setPreferredSize(new Dimension(94, 22));
       lblPostDenoiser.setLocation(new Point(488, 2));
-      lblPostDenoiser.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPostDenoiser.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblPostDenoiser.setBounds(565, 51, 107, 22);
       lblPostDenoiser.addMouseListener(new MouseAdapter() {
         @Override

@@ -52,8 +52,8 @@ If you look into this folder, you should see a file FACLRender.exe
 tinaFACLRenderPath and enter the path to folder which contains the FACLRender.exe.
 In this example, enter "D:\Program Files\FACLRender"
 4. Press the "Save and Close"-button and exit JWildfire
-5. Start JWildfire again, now you should see a new "GPURender"-button in the Navigator-window
-as well as new entry "Fractal flames: GPU render"-entry in the main Window-menu.
+5. Start JWildfire again, now you should see a new entry "Fractal flames: GPU render"
+in the main Window-menu (see section 3.).
 
 2.1 Self-Test
 To test the GPU-rendering itself (and to simplify further troubleshooting), please invoke

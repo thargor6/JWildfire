@@ -97,7 +97,7 @@ public class AIPostDenoiserInfoFrame extends JFrame {
     if (optiXInfoPane == null) {
       optiXInfoPane = new JTextPane();
       optiXInfoPane.setBackground(SystemColor.menu);
-      optiXInfoPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
+      optiXInfoPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 16));
       optiXInfoPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {
           if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
@@ -179,7 +179,7 @@ public class AIPostDenoiserInfoFrame extends JFrame {
   private JTextPane getOidnInfoPane() {
     if (oidnInfoPane == null) {
       oidnInfoPane = new JTextPane();
-      oidnInfoPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
+      oidnInfoPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 16));
       oidnInfoPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {
           if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {

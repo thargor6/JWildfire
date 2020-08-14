@@ -152,7 +152,7 @@ public class JobRenderThread implements Runnable {
 
   private void renderSingleFrame(Job job, int width, int height, RenderInfo info, Flame flame, String primaryFilename, boolean updateProgress) throws Exception {
     if (useOpenCl) {
-      String openClFlameFilename = Tools.trimFileExt(job.getFlameFilename()) + ".flam3";
+      String openClFlameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
       try {
         Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
         new FACLFlameWriter().writeFlame(newFlame, openClFlameFilename);

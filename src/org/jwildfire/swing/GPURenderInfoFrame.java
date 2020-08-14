@@ -89,7 +89,7 @@ public class GPURenderInfoFrame extends JFrame {
     if (changesPane == null) {
       changesPane = new JTextPane();
       changesPane.setBackground(SystemColor.menu);
-      changesPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
+      changesPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 16));
       changesPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {
           if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {

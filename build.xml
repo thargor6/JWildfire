@@ -142,7 +142,6 @@
        <fileset file="README!!!.txt" />
        <fileset file="README_LINUX.txt" />
        <fileset file="README_SUPPORT.txt" />
-       <fileset file="README_LEAP_MOTION_SUPPORT.txt" />
        <fileset file="Delphi/JWildfire.exe" />
     </copy>    
     <copy todir="${dist.dir}/lib/x64">
