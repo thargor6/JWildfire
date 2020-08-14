@@ -20,6 +20,7 @@ import org.jwildfire.image.SimpleImage;
 
 public interface AIPostDenoiser {
   SimpleImage denoise(SimpleImage img, double blend);
+  String denoise(String inputFilename, double blend);
   void addDenoisePreviewToImage(SimpleImage img, double blend);
   boolean performSelfTests();
 }

@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.render.denoiser;
 
+import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.image.SimpleImage;
+
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,5 +77,25 @@ public class AIPostDenoiserFactory {
     return AIPostDenoiserType.NONE;
   }
 
+  public static void denoiseImage(String filename, AIPostDenoiserType denoiserType, double denoiserBlend) {
+    AIPostDenoiserType postDenoiser = AIPostDenoiserFactory.getBestAvailableDenoiserType(denoiserType);
+    if(!AIPostDenoiserType.NONE.equals(postDenoiser)) {
+      String outputFilename = AIPostDenoiserFactory.getDenoiserInstance(postDenoiser).denoise(filename, denoiserBlend);
+      File outputFile = new File(outputFilename);
+      if(outputFile.exists()) {
+        File inputFile = new File(filename);
+        inputFile.delete();
+        if(inputFile.exists()) {
+          throw new RuntimeException("Could not delete file <" + filename +">");
+        }
+        if(!outputFile.renameTo(inputFile)) {
+          throw new RuntimeException("Could not rename file <" + outputFilename +"> to <" + filename + ">");
+        }
+      }
+      else {
+        throw new RuntimeException("Denoising failed");
+      }
+    }
+  }
 }
 

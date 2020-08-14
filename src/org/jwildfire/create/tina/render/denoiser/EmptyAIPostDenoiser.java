@@ -31,6 +31,12 @@ public class EmptyAIPostDenoiser implements AIPostDenoiser {
   }
 
   @Override
+  public String denoise(String inputFilename, double blend) {
+    // EMPTY
+    return null;
+  }
+
+  @Override
   public boolean performSelfTests() {
     return true;
   }

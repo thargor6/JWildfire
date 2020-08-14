@@ -38,6 +38,7 @@ V6.00 (13.08.2020)
      - (https://flamelet.overwhale.com is the Flamelet site)
      - https://overwhale.com is my main  site
  - made it more visible, when a motion curve/key-frame is associated with a certain flame-parameter
+ - Batch-rendering now also supports AI-Post-Denoiser together with GPU-rendering (FACLRender)
  - changed some default settings in regard to flame-animations
  - numeric fields now also react to inputs of the mousewheel
  - added function to reset all motion curves

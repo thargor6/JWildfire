@@ -39,6 +39,8 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.swing.RenderMovieUtil;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
@@ -163,6 +165,10 @@ public class JobRenderThread implements Runnable {
           throw new Exception(openClRenderRes.getMessage());
         }
         else {
+          if(!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser())) {
+            AIPostDenoiserFactory.denoiseImage(primaryFilename, newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend() );
+            t1 = Calendar.getInstance().getTimeInMillis();
+          }
           if(updateProgress) {
             job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
           }

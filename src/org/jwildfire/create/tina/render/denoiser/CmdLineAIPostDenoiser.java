@@ -60,6 +60,7 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
     }
   }
 
+  @Override
   public String denoise(String inputFilename, double blend) {
     try {
       String outputFilename;

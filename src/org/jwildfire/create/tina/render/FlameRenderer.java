@@ -570,7 +570,7 @@ public class FlameRenderer {
   }
 
   private void applyAIPostDenoiser(SimpleImage pImage, AIPostDenoiserType postDenoiser) {
-    SimpleImage denoisedImg =  AIPostDenoiserFactory.getDenoiserInstance(postDenoiser).denoise(pImage, flame.getPostOptiXDenoiserBlend());
+    SimpleImage denoisedImg = AIPostDenoiserFactory.getDenoiserInstance(postDenoiser).denoise(pImage, flame.getPostOptiXDenoiserBlend());
     if(pImage.getImageWidth()!=denoisedImg.getImageWidth() || pImage.getImageHeight()!=denoisedImg.getImageHeight()) {
       throw new RuntimeException("Images sizes do not match");
     }
