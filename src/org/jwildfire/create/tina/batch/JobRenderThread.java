@@ -166,7 +166,7 @@ public class JobRenderThread implements Runnable {
         }
         else {
           if(!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser())) {
-            AIPostDenoiserFactory.denoiseImage(primaryFilename, newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend() );
+            AIPostDenoiserFactory.denoiseImage(openClRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend() );
             t1 = Calendar.getInstance().getTimeInMillis();
           }
           if(updateProgress) {

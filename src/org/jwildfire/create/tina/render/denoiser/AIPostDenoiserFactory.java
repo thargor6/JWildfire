@@ -77,7 +77,7 @@ public class AIPostDenoiserFactory {
     return AIPostDenoiserType.NONE;
   }
 
-  public static void denoiseImage(String filename, AIPostDenoiserType denoiserType, double denoiserBlend) {
+  public static boolean denoiseImage(String filename, AIPostDenoiserType denoiserType, double denoiserBlend) {
     AIPostDenoiserType postDenoiser = AIPostDenoiserFactory.getBestAvailableDenoiserType(denoiserType);
     if(!AIPostDenoiserType.NONE.equals(postDenoiser)) {
       String outputFilename = AIPostDenoiserFactory.getDenoiserInstance(postDenoiser).denoise(filename, denoiserBlend);
@@ -91,11 +91,14 @@ public class AIPostDenoiserFactory {
         if(!outputFile.renameTo(inputFile)) {
           throw new RuntimeException("Could not rename file <" + outputFilename +"> to <" + filename + ">");
         }
+
+        return true;
       }
       else {
         throw new RuntimeException("Denoising failed");
       }
     }
+    return false;
   }
 }
 

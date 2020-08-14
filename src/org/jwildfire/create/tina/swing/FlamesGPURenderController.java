@@ -24,19 +24,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
+import java.util.Calendar;
 import java.util.List;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JToggleButton;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
@@ -48,6 +39,9 @@ import org.jwildfire.create.tina.faclrender.FACLRenderResult;
 import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiser;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
@@ -85,6 +79,7 @@ public class FlamesGPURenderController {
   private final JLabel gpuRenderInfoLbl;
   private final Icon loaderIcon;
   private JLabel loaderLabel;
+  private JCheckBox aiPostDenoiserDisableCheckbox;
   private State state = State.IDLE;
 
   public FlamesGPURenderController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
@@ -92,7 +87,7 @@ public class FlamesGPURenderController {
       JButton pSaveFlameButton, JButton pToEditorButton, JPanel pImagePanel, JTextArea pStatsTextArea,
       JToggleButton pHalveSizeButton, JToggleButton pQuarterSizeButton, JToggleButton pFullSizeButton,
       JComboBox pInteractiveResolutionProfileCmb, JComboBox pInteractiveQualityProfileCmb, JLabel pGpuRenderInfoLbl,
-      JPanel pProgressPanel, JButton pFromEditorButton) {
+      JPanel pProgressPanel, JButton pFromEditorButton, JCheckBox pAiPostDenoiserDisableCheckbox) {
 
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
@@ -110,6 +105,7 @@ public class FlamesGPURenderController {
     fromEditorButton = pFromEditorButton;
     gpuRenderInfoLbl = pGpuRenderInfoLbl;
     progressPanel = pProgressPanel;
+    aiPostDenoiserDisableCheckbox = pAiPostDenoiserDisableCheckbox;
 
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     interactiveQualityProfileCmb = pInteractiveQualityProfileCmb;
@@ -286,7 +282,6 @@ public class FlamesGPURenderController {
         height /= 2;
       }
       setState(State.RENDERING);
-
       GPURenderThread renderThread = new GPURenderThread(width, height, qualityProfile.getQuality());
       new Thread(renderThread).start();
     }
@@ -321,6 +316,15 @@ public class FlamesGPURenderController {
               if (renderResult.getReturnCode() == 0) {
                 if (renderResult.getMessage() != null) {
                   statsTextArea.setText(renderResult.getMessage() + "\n");
+                }
+                if(!aiPostDenoiserDisableCheckbox.isSelected() && !AIPostDenoiserType.NONE.equals(getCurrFlame().getAiPostDenoiser())) {
+                  long dt0 = System.currentTimeMillis();
+                  if(AIPostDenoiserFactory.denoiseImage(renderResult.getOutputFilename(), getCurrFlame().getAiPostDenoiser(), getCurrFlame().getPostOptiXDenoiserBlend())) {
+                    long dt1 = System.currentTimeMillis();
+                    t1 = dt1;
+                    statsTextArea.append("\n\n" +
+                            "AI-Post-Denoiser: " + Tools.doubleToString((dt1 - dt0) / 1000.0) + "s");
+                  }
                 }
                 SimpleImage img = new ImageReader().loadImage(renderResult.getOutputFilename());
                 if (img.getImageWidth() == image.getImageWidth() && img.getImageHeight() == image.getImageHeight()) {

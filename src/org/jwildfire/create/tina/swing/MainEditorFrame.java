@@ -7626,7 +7626,7 @@ public class MainEditorFrame extends JFrame {
           gpuRendererFrame.getInteractiveHalveSizeButton(), gpuRendererFrame.getInteractiveQuarterSizeButton(),
           gpuRendererFrame.getInteractiveFullSizeButton(), gpuRendererFrame.getInteractiveResolutionProfileCmb(),
           gpuRendererFrame.getInteractiveQualityProfileCmb(), gpuRendererFrame.getLblGpuRenderInfo(), gpuRendererFrame.getPanel_32(),
-          gpuRendererFrame.getInteractiveLoadFlameFromMainButton()));
+          gpuRendererFrame.getInteractiveLoadFlameFromMainButton(), gpuRendererFrame.getAiPostDenoiserDisableCheckbox()));
       tinaController.getGpuRendererCtrl().enableControls();
 
       JComboBox[] globalScriptCmbArray = {
