@@ -16,15 +16,10 @@
 */
 package org.jwildfire.create.tina.animate;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jcodec.api.awt.AWTSequenceEncoder;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.io.SeekableByteChannel;
 import org.jcodec.common.model.Rational;
+import org.jcodec.javase.api.awt.AWTSequenceEncoder;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
@@ -39,6 +34,11 @@ import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SWFAnimationRenderThread implements Runnable {
   private final SWFAnimationRenderThreadController controller;
   private final String outputFilename;
@@ -50,15 +50,15 @@ public class SWFAnimationRenderThread implements Runnable {
   public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, FlameMovie pAnimation, String pOutputFilename) {
     controller = pController;
     flameMovie = pAnimation;
-    switch(flameMovie.getSequenceOutputType()) {
+    switch (flameMovie.getSequenceOutputType()) {
       case MP4:
-        if (!pOutputFilename.toLowerCase().endsWith("."+Tools.FILEEXT_MP4))
+        if (!pOutputFilename.toLowerCase().endsWith("." + Tools.FILEEXT_MP4))
           outputFilename = pOutputFilename + "." + Tools.FILEEXT_MP4;
         else
           outputFilename = pOutputFilename;
         break;
       case ANB:
-        if (!pOutputFilename.toLowerCase().endsWith("."+Tools.FILEEXT_ANB))
+        if (!pOutputFilename.toLowerCase().endsWith("." + Tools.FILEEXT_ANB))
           outputFilename = pOutputFilename + "." + Tools.FILEEXT_ANB;
         else
           outputFilename = pOutputFilename;
@@ -76,10 +76,9 @@ public class SWFAnimationRenderThread implements Runnable {
         lastError = null;
         renderedImages.clear();
         int maxProgress;
-        if(flameMovie.getSequenceOutputType()==SequenceOutputType.MP4) {
+        if (flameMovie.getSequenceOutputType() == SequenceOutputType.MP4) {
           maxProgress = flameMovie.getFrameCount() + flameMovie.getFrameCount() / 4;
-        }
-        else {
+        } else {
           maxProgress = flameMovie.getFrameCount();
         }
         controller.getProgressUpdater().initProgress(maxProgress);
@@ -94,13 +93,11 @@ public class SWFAnimationRenderThread implements Runnable {
           controller.getProgressUpdater().updateProgress(i);
         }
         finishSequence(maxProgress);
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         lastError = ex;
         throw new RuntimeException(ex);
       }
-    }
-    finally {
+    } finally {
       controller.onRenderFinished();
     }
   }
@@ -120,7 +117,7 @@ public class SWFAnimationRenderThread implements Runnable {
 
   private String getMovieName() throws Exception {
     Flame firstFlame = createFlame(1);
-    return "mv_"+firstFlame.getName();
+    return "mv_" + firstFlame.getName();
   }
 
   private void createMP4(int maxProgress) throws Exception {
@@ -130,15 +127,14 @@ public class SWFAnimationRenderThread implements Runnable {
     try {
       out = NIOUtils.writableFileChannel(outputFilename);
       AWTSequenceEncoder encoder = new AWTSequenceEncoder(out, Rational.R(Tools.FTOI(flameMovie.getFramesPerSecond()), 1));
-      for(int i=1;i<flameMovie.getFrameCount();i++) {
+      for (int i = 1; i < flameMovie.getFrameCount(); i++) {
         if (cancelSignalled) {
           return;
         }
-        String fn = RenderMovieUtil.makeFrameName(outputFilename,i, getMovieName(), flameMovie.getQuality(), firstFlame.getWidth(), firstFlame.getHeight());
-        SimpleImage img = new ImageReader().loadImage(fn);
-        BufferedImage image = img.getBufferedImg();
+        String fn = RenderMovieUtil.makeFrameName(outputFilename, i, getMovieName(), flameMovie.getQuality(), firstFlame.getWidth(), firstFlame.getHeight());
+        BufferedImage image = new ImageReader().loadBufferedRGBImage(fn);
         encoder.encodeImage(image);
-        if(i%4==0) {
+        if (i % 4 == 0) {
           controller.getProgressUpdater().updateProgress(currProgress++);
         }
       }
@@ -148,18 +144,17 @@ public class SWFAnimationRenderThread implements Runnable {
       controller.getProgressUpdater().updateProgress(maxProgress);
     }
 
-    if(!Prefs.getPrefs().isTinaKeepTempMp4Frames()) {
-      for(int i=1;i<flameMovie.getFrameCount();i++) {
+    if (!Prefs.getPrefs().isTinaKeepTempMp4Frames()) {
+      for (int i = 1; i < flameMovie.getFrameCount(); i++) {
         if (cancelSignalled) {
           return;
         }
         File f = new File(RenderMovieUtil.makeFrameName(outputFilename, i, getMovieName(), flameMovie.getQuality(), firstFlame.getWidth(), firstFlame.getHeight()));
         try {
-          if(!f.delete()) {
+          if (!f.delete()) {
             f.deleteOnExit();
           }
-        }
-        finally {
+        } finally {
           f.deleteOnExit();
         }
       }
@@ -185,7 +180,7 @@ public class SWFAnimationRenderThread implements Runnable {
     buffer[offset++] = 'N';
     buffer[offset++] = 'B';
     buffer[offset++] = 'R';
-    buffer[offset++] = (byte) (width );
+    buffer[offset++] = (byte) (width);
     buffer[offset++] = (byte) (width >> 8);
     buffer[offset++] = (byte) (width >> 16);
     buffer[offset++] = (byte) (width >> 24);
@@ -274,7 +269,7 @@ public class SWFAnimationRenderThread implements Runnable {
           saveImage(renderFlame(pCurrFlame), pFrame, fn);
         }
       }
-        break;
+      break;
     }
   }
 

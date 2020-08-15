@@ -16,15 +16,10 @@
 */
 package org.jwildfire.create.tina.batch;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.Calendar;
-import java.util.List;
-
-import org.jcodec.api.awt.AWTSequenceEncoder;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.io.SeekableByteChannel;
 import org.jcodec.common.model.Rational;
+import org.jcodec.javase.api.awt.AWTSequenceEncoder;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
@@ -46,6 +41,11 @@ import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Calendar;
+import java.util.List;
 
 public class JobRenderThread implements Runnable {
   private final List<Job> activeJobList;
@@ -84,8 +84,7 @@ public class JobRenderThread implements Runnable {
             if (job.getCustomWidth() > 0 && job.getCustomHeight() > 0) {
               width = job.getCustomWidth();
               height = job.getCustomHeight();
-            }
-            else {
+            } else {
               width = resolutionProfile.getWidth();
               height = resolutionProfile.getHeight();
             }
@@ -107,12 +106,10 @@ public class JobRenderThread implements Runnable {
               if (!doOverwriteExisting && new File(primaryFilename).exists()) {
                 controller.getJobProgressUpdater().initProgress(1);
                 controller.getJobProgressUpdater().updateProgress(1);
-              }
-              else {
-                if(!job.isRenderAsAnimation()) {
+              } else {
+                if (!job.isRenderAsAnimation()) {
                   renderSingleFrame(job, width, height, info, flame, primaryFilename, true);
-                }
-                else {
+                } else {
                   renderAnimation(job, width, height, info, flame, primaryFilename);
                 }
               }
@@ -124,13 +121,11 @@ public class JobRenderThread implements Runnable {
                 System.gc();
               }
               updateProgressBar();
-            }
-            finally {
+            } finally {
               flame.setSampleDensity(oldSampleDensity);
               flame.setSpatialFilterRadius(oldFilterRadius);
             }
-          }
-          catch (Throwable ex) {
+          } catch (Throwable ex) {
             job.setLastError(ex);
             // ex.printStackTrace();
           }
@@ -138,16 +133,13 @@ public class JobRenderThread implements Runnable {
         try {
           controller.getTotalProgressBar().setValue(controller.getTotalProgressBar().getMaximum());
           controller.getJobProgressBar().setValue(0);
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
           // ex.printStackTrace();
         }
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         throw new RuntimeException(ex);
       }
-    }
-    finally {
+    } finally {
       controller.onJobFinished();
     }
   }
@@ -163,33 +155,30 @@ public class JobRenderThread implements Runnable {
         long t1 = Calendar.getInstance().getTimeInMillis();
         if (openClRenderRes.getReturnCode() != 0) {
           throw new Exception(openClRenderRes.getMessage());
-        }
-        else {
-          if(!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser())) {
-            AIPostDenoiserFactory.denoiseImage(openClRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend() );
+        } else {
+          if (!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser())) {
+            AIPostDenoiserFactory.denoiseImage(openClRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend());
             t1 = Calendar.getInstance().getTimeInMillis();
           }
-          if(updateProgress) {
+          if (updateProgress) {
             job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
           }
         }
-      }
-      finally {
+      } finally {
         if (!new File(openClFlameFilename).delete()) {
           new File(openClFlameFilename).deleteOnExit();
         }
       }
-    }
-    else {
+    } else {
       flame.setSampleDensity(getSampleDensity(job));
       renderer = new FlameRenderer(flame, Prefs.getPrefs(), flame.isBGTransparency(), false);
-      if(updateProgress) {
+      if (updateProgress) {
         renderer.setProgressUpdater(controller.getJobProgressUpdater());
       }
       long t0 = Calendar.getInstance().getTimeInMillis();
       RenderedFlame res = renderer.renderFlame(info);
       if (!cancelSignalled) {
-        if(updateProgress) {
+        if (updateProgress) {
           long t1 = Calendar.getInstance().getTimeInMillis();
           job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
         }
@@ -217,19 +206,19 @@ public class JobRenderThread implements Runnable {
     int progress = 1;
     controller.getJobProgressUpdater().initProgress(maxProgress);
 
-    for(int i=1;i<flame.getFrameCount();i++) {
+    for (int i = 1; i < flame.getFrameCount(); i++) {
       if (cancelSignalled) {
         return;
       }
-      String fn = RenderMovieUtil.makeFrameName(primaryFilename,i, flame.getName(), getSampleDensity(job), width, height);
-      if(!new File(fn).exists()) {
+      String fn = RenderMovieUtil.makeFrameName(primaryFilename, i, flame.getName(), getSampleDensity(job), width, height);
+      if (!new File(fn).exists()) {
         Flame currFlame = flame.makeCopy();
         currFlame.setFrame(i);
         renderSingleFrame(job, width, height, info, currFlame, fn, false);
       }
       controller.getJobProgressUpdater().updateProgress(progress++);
     }
-    if(cancelSignalled) {
+    if (cancelSignalled) {
       return;
     }
 
@@ -237,15 +226,14 @@ public class JobRenderThread implements Runnable {
     try {
       out = NIOUtils.writableFileChannel(primaryFilename);
       AWTSequenceEncoder encoder = new AWTSequenceEncoder(out, Rational.R(flame.getFps(), 1));
-      for(int i=1;i<flame.getFrameCount();i++) {
+      for (int i = 1; i < flame.getFrameCount(); i++) {
         if (cancelSignalled) {
           return;
         }
-        String fn = RenderMovieUtil.makeFrameName(primaryFilename,i, flame.getName(), getSampleDensity(job), width, height);
-        SimpleImage img = new ImageReader().loadImage(fn);
-        BufferedImage image = img.getBufferedImg();
+        String fn = RenderMovieUtil.makeFrameName(primaryFilename, i, flame.getName(), getSampleDensity(job), width, height);
+        BufferedImage image = new ImageReader().loadBufferedRGBImage(fn);
         encoder.encodeImage(image);
-        if(i%4 ==0) {
+        if (i % 4 == 0) {
           controller.getJobProgressUpdater().updateProgress(progress++);
         }
       }
@@ -254,8 +242,8 @@ public class JobRenderThread implements Runnable {
       NIOUtils.closeQuietly(out);
     }
 
-    if(!Prefs.getPrefs().isTinaKeepTempMp4Frames()) {
-      for(int i=1;i<flame.getFrameCount();i++) {
+    if (!Prefs.getPrefs().isTinaKeepTempMp4Frames()) {
+      for (int i = 1; i < flame.getFrameCount(); i++) {
         if (cancelSignalled) {
           return;
         }
@@ -296,8 +284,7 @@ public class JobRenderThread implements Runnable {
         //                    controller.getTotalProgressBar().paint(g);
         //                  }
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       // ex.printStackTrace();
     }
   }
@@ -307,8 +294,7 @@ public class JobRenderThread implements Runnable {
     if (cancelSignalled && renderer != null) {
       try {
         renderer.cancel();
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
     }

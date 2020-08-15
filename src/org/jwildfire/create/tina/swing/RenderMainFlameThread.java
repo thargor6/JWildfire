@@ -16,29 +16,23 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.Calendar;
-
-import org.jcodec.api.awt.AWTSequenceEncoder;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.io.SeekableByteChannel;
 import org.jcodec.common.model.Rational;
+import org.jcodec.javase.api.awt.AWTSequenceEncoder;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.FlameWriter;
-import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.ProgressUpdater;
-import org.jwildfire.create.tina.render.RenderInfo;
-import org.jwildfire.create.tina.render.RenderMode;
-import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.image.SimpleImage;
+import org.jwildfire.create.tina.render.*;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Calendar;
 
 public class RenderMainFlameThread implements Runnable {
   private final Prefs prefs;
@@ -66,14 +60,12 @@ public class RenderMainFlameThread implements Runnable {
   public void run() {
     finished = forceAbort = false;
     try {
-      if(Tools.isMovieFile(outFile.getAbsolutePath())) {
+      if (Tools.isMovieFile(outFile.getAbsolutePath())) {
         renderMovie();
-      }
-      else {
+      } else {
         renderSingleFrame();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       finished = true;
       finishEvent.failed(ex);
     }
@@ -81,26 +73,26 @@ public class RenderMainFlameThread implements Runnable {
 
   private void renderMovie() throws Exception {
     long t0 = Calendar.getInstance().getTimeInMillis();
-    if(flame.getFrameCount()<1) {
-      throw new Exception("Invalif frame count <" + flame.getFrameCount()+">");
+    if (flame.getFrameCount() < 1) {
+      throw new Exception("Invalif frame count <" + flame.getFrameCount() + ">");
     }
 
-    int totalProgress = flame.getFrameCount()+flame.getFrameCount()/4;
+    int totalProgress = flame.getFrameCount() + flame.getFrameCount() / 4;
     progressUpdater.initProgress(totalProgress);
-    int step=1;
+    int step = 1;
 
-    for(int i=1;i<flame.getFrameCount();i++) {
+    for (int i = 1; i < flame.getFrameCount(); i++) {
       if (forceAbort) {
         finished = true;
         return;
       }
-      String fn = RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(),i, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight());
-      if(!new File(fn).exists()) {
+      String fn = RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(), i, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight());
+      if (!new File(fn).exists()) {
         renderMovieFrame(i);
       }
       progressUpdater.updateProgress(step++);
     }
-    if(forceAbort) {
+    if (forceAbort) {
       finished = true;
       return;
     }
@@ -109,16 +101,15 @@ public class RenderMainFlameThread implements Runnable {
     try {
       out = NIOUtils.writableFileChannel(outFile.getAbsolutePath());
       AWTSequenceEncoder encoder = new AWTSequenceEncoder(out, Rational.R(flame.getFps(), 1));
-      for(int i=1;i<flame.getFrameCount();i++) {
+      for (int i = 1; i < flame.getFrameCount(); i++) {
         if (forceAbort) {
           finished = true;
           return;
         }
-        String fn = RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(),i, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight());
-        SimpleImage img = new ImageReader().loadImage(fn);
-        BufferedImage image = img.getBufferedImg();
+        String fn = RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(), i, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight());
+        BufferedImage image = new ImageReader().loadBufferedRGBImage(fn);
         encoder.encodeImage(image);
-        if(i%4==0) {
+        if (i % 4 == 0) {
           progressUpdater.updateProgress(step++);
         }
       }
@@ -127,8 +118,8 @@ public class RenderMainFlameThread implements Runnable {
       NIOUtils.closeQuietly(out);
     }
 
-    if(!Prefs.getPrefs().isTinaKeepTempMp4Frames()) {
-      for(int i=1;i<flame.getFrameCount();i++) {
+    if (!Prefs.getPrefs().isTinaKeepTempMp4Frames()) {
+      for (int i = 1; i < flame.getFrameCount(); i++) {
         if (forceAbort) {
           finished = true;
           return;
@@ -168,7 +159,7 @@ public class RenderMainFlameThread implements Runnable {
     renderer = new FlameRenderer(currFlame, prefs, false, false);
     RenderedFlame res = renderer.renderFlame(info);
     if (!forceAbort) {
-      new ImageWriter().saveImage(res.getImage(),  RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(), frame, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight()));
+      new ImageWriter().saveImage(res.getImage(), RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(), frame, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight()));
     }
   }
 

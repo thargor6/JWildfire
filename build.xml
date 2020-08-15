@@ -90,8 +90,8 @@
       <zipfileset src="lib/jsyntaxpane-1.1.5.jar"/>
       <zipfileset src="lib/vecmath-1.5.1.jar"/>
       <zipfileset src="lib/commons-cli-1.4.jar"/>
-      <zipfileset src="lib/jcodec-0.2.5.jar"/>
-      <zipfileset src="lib/jcodec-javase-0.2.5.jar"/>
+      <zipfileset src="lib/jcodec-0.2.6-SNAPSHOT.jar.jar"/>
+      <zipfileset src="lib/jcodec-javase-0.2.6-SNAPSHOT.jar.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
       <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
 	  <zipfileset src="lib/j-wildfire-lib.jar"/>
