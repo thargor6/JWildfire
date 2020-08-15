@@ -31,6 +31,8 @@ V6.00 (13.08.2020)
  - support for Intel’s OIDN denoiser as a powerful tool to cut down render times and improve image quality (works simular to NVidia's OptiX,
    but does not requiere a GPU from NVidia)
    Please consult the comprehensive documentation inside the software (“Help -> Supported AI-Post-Denoiser -> Intel's OIDN Denoiser") for more information.
+ - new function (at the "Anti-Aliasing / Filter"-tab) to apply an AI-Post-Denoiser to a single image (e. g. a previously rendered fractal or photo).
+   When using this function, the currently active AI-Post-Denoiser-settings are applied.
  - moved the old webspace to a secured site:
      - https://jwildfire.overwhale.com is the JWildfire site
      - https://jwildfire-forum.overwhale.com is the JWildfire-forum

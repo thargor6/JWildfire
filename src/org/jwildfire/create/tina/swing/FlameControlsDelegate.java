@@ -21,11 +21,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.Flame;
@@ -44,6 +52,7 @@ import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.randomgradient.AllRandomGradientGenerator;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
+import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
@@ -686,18 +695,21 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
           data.tinaOptixDenoiseButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/nvidia.png")));
           data.tinaOptixDenoiseButton.setToolTipText("OptiX denoiser applied to the current preview. To achieve better results, perform a full preview render before.");
           data.tinaOptixDenoiseButton.setVisible(true);
+          data.tinaAIPostDenoiseExternalImageBtn.setVisible(true);
           enableControl(data.tinaOptiXDenoiserBlendField, false);
           break;
         case OIDN:
           data.tinaOptixDenoiseButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/OIDN.png")));
           data.tinaOptixDenoiseButton.setToolTipText("OIDN denoiser applied to the current preview. To achieve better results, perform a full preview render before.");
           data.tinaOptixDenoiseButton.setVisible(true);
+          data.tinaAIPostDenoiseExternalImageBtn.setVisible(true);
           enableControl(data.tinaOptiXDenoiserBlendField, true);
           break;
         case NONE:
         default:
           enableControl(data.tinaOptiXDenoiserBlendField, true);
           data.tinaOptixDenoiseButton.setVisible(false);
+          data.tinaAIPostDenoiseExternalImageBtn.setVisible(false);
           break;
       }
     }
@@ -2635,6 +2647,53 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   public void aiDenoiserCmb_reset() {
     data.tinaAIPostDenoiserCmb.setSelectedItem(AIPostDenoiserFactory.getBestAvailableDenoiserType(Prefs.getPrefs().getTinaDefaultAIPostDenoiser()));
     enableFilterUI();
+  }
+
+  public void tinaAIPostDenoiseExternalImageBtn_clicked() {
+    JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+    if (Prefs.getPrefs().getInputImagePath() != null) {
+      try {
+        if (getCurrFlame().getBGImageFilename().length() > 0) {
+          chooser.setSelectedFile(new File(getCurrFlame().getBGImageFilename()));
+        }
+        else {
+          chooser.setCurrentDirectory(new File(Prefs.getPrefs().getInputImagePath()));
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
+      File file = chooser.getSelectedFile();
+      try {
+        String filename = file.getAbsolutePath();
+        WFImage inputImage = RessourceManager.getImage(filename);
+        if (inputImage.getImageWidth() < 16 || inputImage.getImageHeight() < 16 || !(inputImage instanceof SimpleImage)) {
+          throw new Exception("Invalid image");
+        }
+        Prefs.getPrefs().setLastInputImageFile(file);
+
+        AIPostDenoiserType postDenoiser = AIPostDenoiserFactory.getBestAvailableDenoiserType((AIPostDenoiserType) data.tinaAIPostDenoiserCmb.getSelectedItem());
+        if(!AIPostDenoiserType.NONE.equals(postDenoiser)) {
+          double blend = data.tinaOptiXDenoiserBlendField.getDoubleValue();
+          SimpleImage denoisedImg = AIPostDenoiserFactory.getDenoiserInstance(postDenoiser).denoise((SimpleImage) inputImage, blend);
+          String bufferName = file.getName();
+          String fileExt = Tools.getFileExt(bufferName);
+          if(fileExt!=null && fileExt.length()>0) {
+            bufferName = bufferName.substring(0, bufferName.length() - fileExt.length() - 1);
+          }
+          bufferName += "_"+postDenoiser.toString();
+          if(AIPostDenoiserType.OPTIX.equals(postDenoiser) && blend > MathLib.EPSILON) {
+            bufferName+="_"+Tools.doubleToString(blend);
+          }
+          owner.mainController.addImage(denoisedImg, bufferName);
+        }
+      }
+      catch (Throwable ex) {
+        owner.errorHandler.handleError(ex);
+      }
+    }
   }
 
 }

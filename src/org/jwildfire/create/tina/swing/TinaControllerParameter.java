@@ -660,6 +660,7 @@ public class TinaControllerParameter {
   public JWFNumberField tinaOptiXDenoiserBlendField;
   public JSlider tinaOptiXDenoiserBlendSlider;
   public JButton tinaOptixDenoiseButton;
+  public JButton tinaAIPostDenoiseExternalImageBtn;
   public JWFNumberField foregroundOpacityField;
   public JSlider foregroundOpacitySlider;
   public JComboBox meshGenOutputTypeCmb;
@@ -1457,7 +1458,8 @@ public class TinaControllerParameter {
     JComboBox weightingFieldParam04Cmb, JLabel weightingFieldParam04Lbl, JWFNumberField weightingFieldParam05REd,JLabel weightingFieldParam05Lbl,
     JWFNumberField weightingFieldParam06REd, JLabel weightingFieldParam06Lbl, JWFNumberField weightingFieldParam07REd, JLabel weightingFieldParam07Lbl,
     JComboBox weightingFieldParam08Cmb, JLabel weightingFieldParam08Lbl, JPanel weightingFieldPreviewImgRootPanel,
-    JComboBox tinaAIPostDenoiserCmb, JWFNumberField tinaOptiXDenoiserBlendField, JSlider tinaOptiXDenoiserBlendSlider, JButton tinaOptixDenoiseButton) {
+    JComboBox tinaAIPostDenoiserCmb, JWFNumberField tinaOptiXDenoiserBlendField, JSlider tinaOptiXDenoiserBlendSlider, JButton tinaOptixDenoiseButton,
+    JButton tinaAIPostDenoiseExternalImageBtn) {
       this.weightingFieldTypeCmb = weightingFieldTypeCmb;
       this.weightingFieldInputCmb = weightingFieldInputCmb;
       this.weightingFieldColorIntensityREd = weightingFieldColorIntensityREd;
@@ -1493,6 +1495,7 @@ public class TinaControllerParameter {
       this.tinaOptiXDenoiserBlendField = tinaOptiXDenoiserBlendField;
       this.tinaOptiXDenoiserBlendSlider = tinaOptiXDenoiserBlendSlider;
       this.tinaOptixDenoiseButton = tinaOptixDenoiseButton;
+      this.tinaAIPostDenoiseExternalImageBtn = tinaAIPostDenoiseExternalImageBtn;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

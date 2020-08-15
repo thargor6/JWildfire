@@ -112,7 +112,6 @@ import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGenera
 import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
-import org.jwildfire.create.tina.render.denoiser.OptixCmdLineAIPostDenoiser;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
@@ -7503,7 +7502,8 @@ public class MainEditorFrame extends JFrame {
         getWeightingFieldParam01REd(), getWeightingFieldParam01Lbl(), getWeightingFieldParam02REd(), getWeightingFieldParam02Lbl(), getWeightingFieldParam03REd(), getWeightingFieldParam03Lbl(),
         getWeightingFieldParam04Cmb(), getWeightingFieldParam04Lbl(), getWeightingFieldParam05REd(), getWeightingFieldParam05Lbl(), getWeightingFieldParam06REd(), getWeightingFieldParam06Lbl(),
         getWeightingFieldParam07REd(), getWeightingFieldParam07Lbl(), getWeightingFieldParam08Cmb(), getWeightingFieldParam08Lbl(), getWeightingFieldPreviewImgRootPanel(),
-        getTinaAIDenoiserCmb(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider(), getTinaOptixDenoiseButton());
+        getTinaAIDenoiserCmb(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider(), getTinaOptixDenoiseButton(),
+        getTinaAIPostDenoiseExternalImageBtn());
 
     tinaController = new TinaController(params);
 
@@ -7837,10 +7837,10 @@ public class MainEditorFrame extends JFrame {
 
   private void initAIPostDenoiserCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
-    if(AIPostDenoiserFactory.isAvailable(AIPostDenoiserType.OPTIX)) {
+    if (AIPostDenoiserFactory.isAvailable(AIPostDenoiserType.OPTIX)) {
       pCmb.addItem(AIPostDenoiserType.OPTIX);
     }
-    if(AIPostDenoiserFactory.isAvailable(AIPostDenoiserType.OIDN)) {
+    if (AIPostDenoiserFactory.isAvailable(AIPostDenoiserType.OIDN)) {
       pCmb.addItem(AIPostDenoiserType.OIDN);
     }
     pCmb.addItem(AIPostDenoiserType.NONE);
@@ -13218,6 +13218,7 @@ public class MainEditorFrame extends JFrame {
   private JButton duplicateKeyFrameButton;
   private JComboBox tinaAIDenoiserCmb;
   private JLabel lblPostDenoiser;
+  private JButton tinaAIPostDenoiseExternalImageBtn;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -13987,7 +13988,7 @@ public class MainEditorFrame extends JFrame {
       resetAntialiasOptionsButton.setMaximumSize(new Dimension(32000, 24));
       resetAntialiasOptionsButton.setIconTextGap(2);
       resetAntialiasOptionsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      resetAntialiasOptionsButton.setBounds(1018, 6, 100, 24);
+      resetAntialiasOptionsButton.setBounds(1012, 4, 123, 24);
       resetAntialiasOptionsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       antialiasPanel.add(resetAntialiasOptionsButton);
 
@@ -14454,6 +14455,23 @@ public class MainEditorFrame extends JFrame {
       antialiasPanel.add(tinaFilterLowDensitySlider);
       antialiasPanel.add(getTinaAIDenoiserCmb());
       antialiasPanel.add(getLblPostDenoiser());
+
+      tinaAIPostDenoiseExternalImageBtn = new JButton();
+      tinaAIPostDenoiseExternalImageBtn.setToolTipText("Select an external image on which to apply the current AI-Post-Denoiser-settings");
+      tinaAIPostDenoiseExternalImageBtn.setText("Denoise img...");
+      tinaAIPostDenoiseExternalImageBtn.setPreferredSize(new Dimension(190, 24));
+      tinaAIPostDenoiseExternalImageBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      tinaAIPostDenoiseExternalImageBtn.setBounds(1012, 52, 123, 24);
+      tinaAIPostDenoiseExternalImageBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/view-preview.png")));
+      tinaAIPostDenoiseExternalImageBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().tinaAIPostDenoiseExternalImageBtn_clicked();
+          }
+        }
+      });
+
+      antialiasPanel.add(tinaAIPostDenoiseExternalImageBtn);
     }
     return antialiasPanel;
   }
@@ -24392,5 +24410,9 @@ public class MainEditorFrame extends JFrame {
 
     }
     return lblPostDenoiser;
+  }
+
+  public JButton getTinaAIPostDenoiseExternalImageBtn() {
+    return tinaAIPostDenoiseExternalImageBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

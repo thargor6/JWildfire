@@ -707,10 +707,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaOptiXDenoiserBlendField = parameterObject.tinaOptiXDenoiserBlendField;
     data.tinaOptiXDenoiserBlendSlider = parameterObject.tinaOptiXDenoiserBlendSlider;
     data.tinaOptixDenoiseButton = parameterObject.tinaOptixDenoiseButton;
-
-     data.foregroundOpacityField = parameterObject.foregroundOpacityField;
+    data.tinaAIPostDenoiseExternalImageBtn = parameterObject.tinaAIPostDenoiseExternalImageBtn;
+    data.foregroundOpacityField = parameterObject.foregroundOpacityField;
     data.foregroundOpacitySlider = parameterObject.foregroundOpacitySlider;
-
     data.solidRenderingToggleBtn = parameterObject.solidRenderingToggleBtn;
     data.tinaSolidRenderingEnableAOCBx = parameterObject.tinaSolidRenderingEnableAOCBx;
     data.tinaSolidRenderingAOIntensityREd = parameterObject.tinaSolidRenderingAOIntensityREd;

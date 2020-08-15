@@ -126,6 +126,13 @@ public class MainController {
     return buffer;
   }
 
+  public Buffer addImage(SimpleImage denoisedImg, String name) {
+    Buffer buffer = scriptProcessor.addImage(denoisedImg, name);
+    addEvents(buffer);
+    refreshWindowMenu();
+    return buffer;
+  }
+
   public void loadMovie(String pFilename) {
     try {
       Desktop.getDesktop().open(new File(pFilename));
@@ -614,4 +621,5 @@ public class MainController {
       }
     }
   }
+
 }

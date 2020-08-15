@@ -131,6 +131,7 @@ public class TinaControllerData {
   public JWFNumberField tinaOptiXDenoiserBlendField;
   public JSlider tinaOptiXDenoiserBlendSlider;
   public JButton tinaOptixDenoiseButton;
+  public JButton tinaAIPostDenoiseExternalImageBtn;
   public JWFNumberField gammaThresholdREd;
   public JSlider gammaThresholdSlider;
   public JCheckBox bgTransparencyCBx;
