@@ -1,5 +1,6 @@
 package org.jwildfire.create.tina.render.denoiser;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
@@ -32,8 +33,8 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
         String outputFilename = denoise(inputFilename, blend);
         try {
           SimpleImage denoisedImage = new ImageReader(new JPanel()).loadImage(outputFilename);
-          if(denoisedImage.getImageWidth()>img.getImageWidth() || denoisedImage.getImageHeight() > denoisedImage.getImageHeight()) {
-            CropTransformer crop=new CropTransformer();
+          if (denoisedImage.getImageWidth() > img.getImageWidth() || denoisedImage.getImageHeight() > denoisedImage.getImageHeight()) {
+            CropTransformer crop = new CropTransformer();
             crop.setLeft(0);
             crop.setWidth(img.getImageWidth());
             crop.setTop(0);
@@ -73,17 +74,17 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
       String encodedCodeSource = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
       String codeSource = URLDecoder.decode(encodedCodeSource, StandardCharsets.UTF_8.toString());
 
-      if(codeSource.toLowerCase().endsWith(".jar")) {
-        for(int i=codeSource.length()-1; i>=0; i--) {
-          if(codeSource.charAt(i)=='/' || codeSource.charAt(i)=='\\') {
+      if (codeSource.toLowerCase().endsWith(".jar")) {
+        for (int i = codeSource.length() - 1; i >= 0; i--) {
+          if (codeSource.charAt(i) == '/' || codeSource.charAt(i) == '\\') {
             codeSource = codeSource.substring(0, i);
             break;
           }
         }
       }
 
-      String denoiserPath=new File( codeSource, DENOISER_PATH).getAbsolutePath();
-      String[] denoiserCmd = getDenoiserCmd( denoiserPath, inputFilename, outputFilename, blend);
+      String denoiserPath = new File(codeSource, DENOISER_PATH).getAbsolutePath();
+      String[] denoiserCmd = getDenoiserCmd(denoiserPath, inputFilename, outputFilename, blend);
       System.out.println("Executing command:");
       System.out.println(String.join(" ", denoiserCmd));
 
@@ -93,7 +94,7 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
       try {
         Process process = builder.start();
         try (InputStream in = process.getInputStream(); Scanner scanner = new Scanner(in)) {
-          while(scanner.hasNextLine()) {
+          while (scanner.hasNextLine()) {
             System.out.println(scanner.useDelimiter("\\Z").next());
           }
         }
@@ -125,16 +126,16 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
     rect.setThickness(2);
     rect.transformImage(img);
 
-    CropTransformer crop=new CropTransformer();
-    crop.setLeft(wHalve+2);
-    crop.setWidth(img.getImageWidth()-crop.getLeft());
+    CropTransformer crop = new CropTransformer();
+    crop.setLeft(wHalve + 2);
+    crop.setWidth(img.getImageWidth() - crop.getLeft());
     crop.setTop(0);
     crop.setHeight(img.getImageHeight());
     crop.transformImage(denoisedImage);
 
     ComposeTransformer compose = new ComposeTransformer();
     compose.setForegroundImage(denoisedImage);
-    compose.setLeft(wHalve+2);
+    compose.setLeft(wHalve + 2);
     compose.setHAlign(ComposeTransformer.HAlignment.OFF);
     compose.setVAlign(ComposeTransformer.VAlignment.TOP);
     compose.transformImage(img);
@@ -142,6 +143,9 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
 
   @Override
   public boolean performSelfTests() {
+    if (!Tools.OSType.WINDOWS.equals(Tools.getOSType())) {
+      return false;
+    }
     try {
       SimpleImage img = new SimpleImage(64, 64);
       GradientCreator gradientCreator = new GradientCreator();
@@ -154,12 +158,12 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
         String outputFilename = denoise(inputFilename, 0.0);
         try {
           SimpleImage denoisedImage = new ImageReader(new JPanel()).loadImage(outputFilename);
-          if(denoisedImage.getImageWidth()!=img.getImageWidth() || denoisedImage.getImageHeight()!=img.getImageHeight()) {
+          if (denoisedImage.getImageWidth() != img.getImageWidth() || denoisedImage.getImageHeight() != img.getImageHeight()) {
             throw new RuntimeException("Image sizes do not match");
           }
           int x = img.getImageWidth() / 2;
           int y = img.getImageHeight() / 2;
-          if(denoisedImage.getRValue(x,y) <= 0 || denoisedImage.getGValue(x,y) <= 0 || denoisedImage.getBValue(x,y) <= 0) {
+          if (denoisedImage.getRValue(x, y) <= 0 || denoisedImage.getGValue(x, y) <= 0 || denoisedImage.getBValue(x, y) <= 0) {
             throw new RuntimeException("Colors do not match");
           }
         } finally {
@@ -177,8 +181,7 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
         }
       }
       return true;
-    }
-    catch(Throwable ex) {
+    } catch (Throwable ex) {
       ex.printStackTrace(System.out);
       return false;
     }

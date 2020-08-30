@@ -1451,7 +1451,9 @@ public class MainEditorFrame extends JFrame {
       tinaSouthTabbedPane.addTab("Channel mixer ", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/color-fill.png")), getChannelMixerPanel(), null);
 
       JPanel panel_1 = new JPanel();
-      tinaSouthTabbedPane.addTab("Leap Motion", null, panel_1, null);
+      if (Prefs.getPrefs().isTinaEnableLeapMotionTab()) {
+        tinaSouthTabbedPane.addTab("Leap Motion", null, panel_1, null);
+      }
       panel_1.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_2 = new JPanel();

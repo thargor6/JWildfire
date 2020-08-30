@@ -38,8 +38,8 @@ public class Prefs extends ManagedObject {
   // DON'T forget to update the assign() method after adding new properties!!!
   static final String PREFS_FILE = "j-wildfire.properties";
 
-  static final String KEY_GENERAL_LOOK_AND_FEEL = "general.look_and_feel.2";
-  static final String KEY_GENERAL_LOOK_AND_FEEL_THEME = "general.look_and_feel.theme.2";
+  static final String KEY_GENERAL_LOOK_AND_FEEL = "general.look_and_feel.3";
+  static final String KEY_GENERAL_LOOK_AND_FEEL_THEME = "general.look_and_feel.theme.3";
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
@@ -147,6 +147,8 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_DEFAULT_FRAME_COUNT = "tina.default.frame_count";
 
   static final String KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS = "tina.initially_expand_nonlinear_params";
+  static final String KEY_TINA_ENABLE_LEAP_MOTION_TAB = "tina.enable_leap_motion_tab";
+
   static final String KEY_TINA_FACLRENDER_PATH = "tina.faclrender_path";
   static final String KEY_TINA_FACLRENDER_OPTS = "tina.faclrender_opts";
 
@@ -245,6 +247,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Path to the external GPU renderer, currently only Windows-plattforms are supported. The software searches this path at program-start for a file called \"FACLRender.exe\", only when this file exists, the GPU-rendering-window is displayed, a change of this property requires a program-restart.", category = PropertyCategory.TINA)
   private String tinaFACLRenderPath = null;
+
+  @Property(description = "Enable the \"Leap Motion\"-tab (because this feature is very rarely used, it is hidden by default. Requires restart of the application after change.)", category = PropertyCategory.TINA)
+  private boolean tinaEnableLeapMotionTab = false;
 
   @Property(description = "Commandline-options added when invokling the external GPU-renderer. Refer to the documentation or sourcecode for more information.", category = PropertyCategory.TINA)
   private String tinaFACLRenderOptions = "-nde";
@@ -489,8 +494,10 @@ public class Prefs extends ManagedObject {
   }
 
 
-  private LookAndFeelType lookAndFeelType = Tools.OSType.MAC.equals(Tools.getOSType()) ? LookAndFeelType.SYSTEM : LookAndFeelType.NIMBUS;
-  private String lookAndFeelTheme = Tools.OSType.MAC.equals(Tools.getOSType()) ? "" : "JWildfire";
+  // private LookAndFeelType lookAndFeelType = Tools.OSType.MAC.equals(Tools.getOSType()) ? LookAndFeelType.SYSTEM : LookAndFeelType.NIMBUS;
+  // private String lookAndFeelTheme = Tools.OSType.MAC.equals(Tools.getOSType()) ? "" : "JWildfire";
+  private LookAndFeelType lookAndFeelType = LookAndFeelType.NIMBUS;
+  private String lookAndFeelTheme = "JWildfire";
 
   @Property(description = "Default number of frames for a movie", category = PropertyCategory.TINA)
   private int tinaRenderMovieFrames = 90;
@@ -861,6 +868,7 @@ public class Prefs extends ManagedObject {
     lastTip = pSrc.lastTip;
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
     tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
+    tinaEnableLeapMotionTab = pSrc.tinaEnableLeapMotionTab;
     tinaFACLRenderPath = pSrc.tinaFACLRenderPath;
     tinaFACLRenderOptions = pSrc.tinaFACLRenderOptions;
 
@@ -1791,4 +1799,13 @@ public class Prefs extends ManagedObject {
   public void setTinaRandGenRunRandomScriptExcludedScripts(String tinaRandGenRunRandomScriptExcludedScripts) {
     this.tinaRandGenRunRandomScriptExcludedScripts = tinaRandGenRunRandomScriptExcludedScripts;
   }
+
+  public boolean isTinaEnableLeapMotionTab() {
+    return tinaEnableLeapMotionTab;
+  }
+
+  public void setTinaEnableLeapMotionTab(boolean tinaEnableLeapMotionTab) {
+    this.tinaEnableLeapMotionTab = tinaEnableLeapMotionTab;
+  }
+
 }
