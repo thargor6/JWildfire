@@ -51,15 +51,11 @@ jres/*
 
 SizeofUtil.java
 
-lib/colt*
+lib/colt-1.2.0-source.zip
+lib/colt-1.2.0.tar.gz
 lib/jcodec*
-lib/jep*
-lib/jl*
-lib/JOCL*
-lib/JTatt*
-lib/jtrans*
 lib/sunflow*old*
-lib/svg*
+lib/svgSalamander-tiny.jar
 
 src/demos/*
 
@@ -82,4 +78,3 @@ TODO.txt
 
 .idea/*
 out/*
-JWildfire.iml

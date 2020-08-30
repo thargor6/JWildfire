@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="1.8 (2)" jdkType="JavaSDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="janino" level="project" />
+    <orderEntry type="library" name="LeapJava" level="project" />
+    <orderEntry type="library" name="jl1.0.1" level="project" />
+    <orderEntry type="library" name="svgSalamander" level="project" />
+    <orderEntry type="library" name="oobj-loader" level="project" />
+    <orderEntry type="library" name="jtransforms-2.4" level="project" />
+    <orderEntry type="library" name="JTattoo-1.6.10" level="project" />
+    <orderEntry type="library" name="jep-2.4.1" level="project" />
+    <orderEntry type="library" name="colt-1.2.0" level="project" />
+    <orderEntry type="library" name="JOCL-0.1.9" level="project" />
+    <orderEntry type="library" name="jsyntaxpane-1.1.5" level="project" />
+    <orderEntry type="library" name="quickhull3d.1.4" level="project" />
+    <orderEntry type="library" name="joml-1.9.12" level="project" />
+    <orderEntry type="library" name="pngdecoder-1.0" level="project" />
+    <orderEntry type="library" name="lwjgl-glfw-natives-windows" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/vecmath-1.5.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/commons-cli-1.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jcodec-0.2.6-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jcodec-javase-0.2.6-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/j-wildfire-lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+  </component>
+</module>
