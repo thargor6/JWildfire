@@ -141,7 +141,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius.1";
   static final String KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT = "tina.default.filter_visualisation_flat";
 
-  public static final String KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION = "tina.editor.default.double_click_action";
+  public static final String KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION = "tina.editor.default.double_click_action.2";
   public static final String KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL = "tina.default.fade_to_white_level";
   public static final String KEY_TINA_DEFAULT_FPS = "tina.default.fps.2";
   public static final String KEY_TINA_DEFAULT_FRAME_COUNT = "tina.default.frame_count";
@@ -347,7 +347,7 @@ public class Prefs extends ManagedObject {
   private FlamePanelControlStyle tinaEditorControlsStyle = FlamePanelControlStyle.TRIANGLE;
 
   @Property(description = "Action which is performed when you double-click at the editor-panel", category = PropertyCategory.TINA, editorClass = EditorDoubleClickActionTypeEditor.class)
-  private EditorDoubleClickActionType tinaEditorDoubleClickAction = EditorDoubleClickActionType.SWITCH_TRIANGLE_CAM_EDIT;
+  private EditorDoubleClickActionType tinaEditorDoubleClickAction = EditorDoubleClickActionType.NONE;
 
   @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
   private double tinaEditorGridSize = 0.5;

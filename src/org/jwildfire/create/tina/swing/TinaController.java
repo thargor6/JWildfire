@@ -3520,11 +3520,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  private boolean hasDoubleClickAction() {
+    return prefs.getTinaEditorDoubleClickAction()!=null && EditorDoubleClickActionType.NONE==prefs.getTinaEditorDoubleClickAction();
+  }
+
   private void flamePanel_mouseClicked(MouseEvent e) {
-    if (e.getClickCount() == 2) {
+    if (e.getClickCount() == 2 && hasDoubleClickAction()) {
       flamePanel_doubleClicked();
     }
-    else if (e.getClickCount() == 1) {
+    else if (e.getClickCount() == 1 || !hasDoubleClickAction()) {
       Flame flame = getCurrFlame();
       Layer layer = getCurrLayer();
       if (flame != null && flamePanel != null) {
