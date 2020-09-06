@@ -1090,10 +1090,8 @@ public class LsystemFunc extends VariationFunc {
       step = pValue;
     else if (PARAM_ANGLE.equalsIgnoreCase(pName))
       angle = pValue;
-    else if (PARAM_PRESETID.equalsIgnoreCase(pName)) {
+    else if (PARAM_PRESETID.equalsIgnoreCase(pName))
       presetId = (int) pValue;
-    } else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
-      line_thickness = pValue;
     else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
       show_lines_param = (int) pValue;
     else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
