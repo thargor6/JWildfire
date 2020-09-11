@@ -1,6 +1,7 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -25,10 +26,11 @@ public class LsystemFunc extends VariationFunc {
   private static final String PARAM_LINE_THICKNESS = "line_thickness";
   private static final String PARAM_SHOW_POINTS = "show_points_param";
   private static final String PARAM_POINT_THICKNESS = "point_thickness_param";
+  private static final String PARAM_COLOR_MODE = "color_mode";
 
   private static final String RESSOURCE_GRAMMAR = "grammar";
 
-  private static final String[] paramNames = {PARAM_ITERS, PARAM_STEP, PARAM_ANGLE, PARAM_PRESETID, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS, PARAM_SHOW_POINTS, PARAM_POINT_THICKNESS};
+  private static final String[] paramNames = {PARAM_ITERS, PARAM_STEP, PARAM_ANGLE, PARAM_PRESETID, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS, PARAM_SHOW_POINTS, PARAM_POINT_THICKNESS, PARAM_COLOR_MODE};
   private static final String[] ressourceNames = {RESSOURCE_GRAMMAR};
 
   String string = new String(
@@ -65,6 +67,7 @@ public class LsystemFunc extends VariationFunc {
   private int show_points_param = 0;
   private double point_thickness_param = 3.0;
   private double point_thickness;
+  private int color_mode = 0;
 
   private double line_fraction, point_fraction;
   private double line_threshold, point_threshold;
@@ -575,9 +578,11 @@ public class LsystemFunc extends VariationFunc {
     private double tx, ty; // turtle is at (x, y)
     private double tangle; // facing this many degrees counterclockwise from the x-axis
     private double step;
+    private double color;
 
     private DynamicArray xpoints = new DynamicArray();
     private DynamicArray ypoints = new DynamicArray();
+    private DynamicArray cpoints = new DynamicArray();
 
     private int idx;
 
@@ -592,9 +597,11 @@ public class LsystemFunc extends VariationFunc {
 
       tangle = turtle.tangle;
       step = turtle.step;
+      color = turtle.color;
 
       xpoints = turtle.xpoints;
       ypoints = turtle.ypoints;
+      cpoints = turtle.cpoints;
     }
 
     public Turtle(double x0, double y0, double a0, double b0) {
@@ -602,6 +609,7 @@ public class LsystemFunc extends VariationFunc {
       ty = y0;
       tangle = a0;
       setStep(b0);
+      setColor(0);
       clearPoints();
     }
 
@@ -611,6 +619,14 @@ public class LsystemFunc extends VariationFunc {
 
     public double getStep() {
       return this.step;
+    }
+    
+    public void setColor(double color) {
+      this.color = color;
+    }
+    
+    public double getColor() {
+      return this.color;
     }
 
     // rotate orientation delta degrees counterclockwise
@@ -645,9 +661,11 @@ public class LsystemFunc extends VariationFunc {
 
       xpoints.add(oldx);
       ypoints.add(oldy);
+      cpoints.add(color);
 
       xpoints.add(tx);
       ypoints.add(ty);
+      cpoints.add(color);
       //	      System.out.println("x1,y1 - x2,y2 >" + oldx +" , " + oldy+ " - " + tx +" , "+ty);
 
     }
@@ -655,6 +673,7 @@ public class LsystemFunc extends VariationFunc {
     public void getPoint(DoublePoint2D result) {
       result.x = xpoints.get(idx);
       result.y = ypoints.get(idx);
+      result.c = cpoints.get(idx);
       idx++;
       if (idx >= xpoints.size())
         idx = 0;
@@ -663,6 +682,7 @@ public class LsystemFunc extends VariationFunc {
     public void clearPoints() {
       xpoints.clear();
       ypoints.clear();
+      cpoints.clear();
       idx = 0;
     }
   }
@@ -670,6 +690,7 @@ public class LsystemFunc extends VariationFunc {
   private class DoublePoint2D {
     public double x;
     public double y;
+    public double c;
   }
 
   private class Render {
@@ -707,7 +728,7 @@ public class LsystemFunc extends VariationFunc {
     public void setAngle(double angle) {
       this.render_angle = angle;
     }
-
+    
     public String getString() {
       return theString;
     }
@@ -838,12 +859,17 @@ public class LsystemFunc extends VariationFunc {
           case '>':
           case 'C':
             sub_line = theString.substring(i + 1, theString.length());
-            // pattern=Pattern.compile("[\\d]*[\\.]?[\\d]*");
             pattern = Pattern.compile("[0-9]*\\.?[0-9]*");
             matcher = pattern.matcher(sub_line);
             if (matcher.find()) {
-              //  String sAngle=matcher.group();
-              //  Double vAngle=Double.parseDouble(sAngle);	
+              String sColor=matcher.group();
+              Double vColor=Double.parseDouble(sColor) / 256.0;
+              if (character == '<')
+                currentTurtle.setColor(currentTurtle.getColor() + vColor);
+              else if (character == '>')
+                currentTurtle.setColor(currentTurtle.getColor() - vColor);
+              else
+                currentTurtle.setColor(vColor);
               i = i + matcher.end() + 1;
             }
             break;
@@ -863,7 +889,7 @@ public class LsystemFunc extends VariationFunc {
   private DoublePoint2D endpoint1 = new DoublePoint2D();
   private DoublePoint2D endpoint2 = new DoublePoint2D();
 
-  public DoublePoint2D plotLine(FlameTransformationContext pContext, double x1, double y1, double x2, double y2) {
+  public DoublePoint2D plotLine(FlameTransformationContext pContext, double x1, double y1, double x2, double y2, double color) {
     double ydiff = y2 - y1;
     double xdiff = x2 - x1;
     double m;
@@ -898,10 +924,11 @@ public class LsystemFunc extends VariationFunc {
     DoublePoint2D value = new DoublePoint2D();
     value.x = xout;
     value.y = yout;
+    value.c = color;
     return value;
   }
 
-  public DoublePoint2D plotPoint(FlameTransformationContext pContext, double x1, double y1) {
+  public DoublePoint2D plotPoint(FlameTransformationContext pContext, double x1, double y1, double color) {
     double xout = 0, yout = 0;
     double xoffset = 0, yoffset = 0;
     // draw endpoints
@@ -921,6 +948,7 @@ public class LsystemFunc extends VariationFunc {
     DoublePoint2D value = new DoublePoint2D();
     value.x = xout;
     value.y = yout;
+    value.c = color;
     return value;
   }
 
@@ -1009,6 +1037,7 @@ public class LsystemFunc extends VariationFunc {
     double y1 = 0.0;
     double x2 = 0.0;
     double y2 = 0.0;
+    double c = 0.0;
 
     DoublePoint2D out = new DoublePoint2D();
     Turtle turtle = canvas.getTurtle();
@@ -1016,23 +1045,26 @@ public class LsystemFunc extends VariationFunc {
     turtle.getPoint(endpoint1);
     x1 = endpoint1.x;
     y1 = endpoint1.y;
+    c = endpoint1.c;
 
     turtle.getPoint(endpoint2);
     x2 = endpoint2.x;
     y2 = endpoint2.y;
-
+    
     double rnd = pContext.random();
 
     if (rnd < line_threshold)
-      out = plotLine(pContext, x1, y1, x2, y2);
+      out = plotLine(pContext, x1, y1, x2, y2, c);
     else if (rnd <= point_threshold)
-      out = plotPoint(pContext, x1, y1);
+      out = plotPoint(pContext, x1, y1, c);
 
     pVarTP.x += pAmount * out.x;
     pVarTP.y += pAmount * out.y;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
+    if (color_mode != 0)
+      pVarTP.color = out.c;
   }
 
   public String getGrammarId() throws Exception {
@@ -1079,7 +1111,7 @@ public class LsystemFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{Iters, step, angle, presetId, show_lines_param, line_thickness_param, show_points_param, point_thickness_param};
+    return new Object[]{Iters, step, angle, presetId, show_lines_param, line_thickness_param, show_points_param, point_thickness_param, color_mode};
   }
 
   @Override
@@ -1100,6 +1132,8 @@ public class LsystemFunc extends VariationFunc {
       show_points_param = (int) pValue;
     else if (PARAM_POINT_THICKNESS.equalsIgnoreCase(pName))
       point_thickness_param = pValue;
+    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName))
+      color_mode = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
       throw new IllegalArgumentException(pName);
   }

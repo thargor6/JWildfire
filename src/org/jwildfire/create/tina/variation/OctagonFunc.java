@@ -21,60 +21,122 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
+import org.jwildfire.base.Tools;
+
 public class OctagonFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
   private static final String PARAM_Z = "z";
-  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z};
+  private static final String PARAM_MODE = "mode";
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z, PARAM_MODE};
 
   private double x = 0.0;
   private double y = 0.0;
   private double z = 0.0;
+  private int mode = 1;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* octagon from FracFx, http://fracfx.deviantart.com/art/FracFx-Plugin-Pack-171806681 */
-    double r = pAmount / ((sqr(pAffineTP.x * pAffineTP.x) + sqr(pAffineTP.z) + sqr(pAffineTP.y * pAffineTP.y) + sqr(pAffineTP.z)) + SMALL_EPSILON);
-    if (r < 2.0) {
-      pVarTP.x += pAffineTP.x * r;
-      pVarTP.y += pAffineTP.y * r;
-      pVarTP.z += pAffineTP.z * r;
-    } else {
-      pVarTP.x += pAmount * pAffineTP.x;
-      pVarTP.y += pAmount * pAffineTP.y;
-      if (pContext.isPreserveZCoordinate()) {
-        pVarTP.z += pAmount * pAffineTP.z;
+    double r = sqr(sqr(pAffineTP.x)) + sqr(sqr(pAffineTP.y)) + 2 * sqr(pAffineTP.z);
+    if (r == 0.0) r = SMALL_EPSILON;
+    double t = fabs(pAffineTP.x) + fabs(pAffineTP.y) + 2 * sqrt((mode > 1) ? fabs(pAffineTP.z) :  pAffineTP.z);
+    if (t == 0.0) t = SMALL_EPSILON;
+    
+    double m = 1.0;
+    boolean splits = false;
+    
+    switch (mode) {
+    case 0:
+      if (r <= pAmount / 2.0) {
+        m = 1.0 + 1.0 / t;
+        splits = true;
+      } else {
+        m = 1.0 / r;
+        splits = false;
       }
-    }
-    double t = pAmount / ((sqrt(pAffineTP.x * pAffineTP.x) + sqrt(pAffineTP.z) + sqrt(pAffineTP.y * pAffineTP.y) + sqrt(pAffineTP.z)) + SMALL_EPSILON);
-    if (r >= 0) {
-      pVarTP.x += pAffineTP.x * t;
-      pVarTP.y += pAffineTP.y * t;
-      pVarTP.z += pAffineTP.z * t;
-    } else {
-      pVarTP.x += pAmount * pAffineTP.x;
-      pVarTP.y += pAmount * pAffineTP.y;
-      if (pContext.isPreserveZCoordinate()) {
-        pVarTP.z += pAmount * pAffineTP.z;
+      break;
+    case 1:
+      if (r <= pAmount / 2.0) {
+        m = 1.0 + 1.0 / t;
+        splits = true;
+      } else if (pAmount >= 0) {
+        m = 1.0 / r + 1.0 / t;
+        splits = true;
+      } else {
+        m = 1.0 + 1.0 / r;
+        splits = true;
       }
-
+      break;
+    case 2:
+      if (r <= pAmount / 2.0) {
+        m = 1.0 + 1.0 / t;
+        splits = true;
+      } else {
+        m = 1.0 + 1.0 / r;
+        splits = false;
+      }
+      break;
+    case 3:
+      if (r <= pAmount / 2.0) {
+        m = 1.0 / t;
+        splits = true;
+      } else {
+        m = 1.0 / r;
+        splits = false;
+      }
+      break;
+    case 4:
+      if (r <= pAmount / 2.0) {
+        m = 1.0 / r;
+        splits = true;
+      } else {
+        m = 1.0 / r;
+        splits = false;
+      }
+      break;
+    case 5:
+      if (t <= pAmount / 2.0) {
+        m = 1.0 / t;
+        splits = true;
+      } else {
+        m = 1.0 / r;
+        splits = false;
+      }
+      break;
+    case 6:
+      if (t <= pAmount / 2.0) {
+        m = 1.0 + 1.0 / t;
+        splits = true;
+      } else {
+        m = 1.0 + 1.0 / r;
+        splits = false;
+      }
+      break;
     }
-    if (pAffineTP.x >= 0.0)
-      pVarTP.x += pAmount * (pAffineTP.x + this.x);
-    else
-      pVarTP.x += pAmount * (pAffineTP.x - this.x);
+    
+    pVarTP.x += pAmount * m * pAffineTP.x;
+    pVarTP.y += pAmount * m * pAffineTP.y;
+    pVarTP.z += pAmount * m * pAffineTP.z;
 
-    if (pAffineTP.y >= 0.0)
-      pVarTP.y += pAmount * (pAffineTP.y + this.y);
-    else
-      pVarTP.y += pAmount * (pAffineTP.y - this.y);
-
-    if (pAffineTP.z >= 0.0)
-      pVarTP.z += pAmount * (pAffineTP.z + this.z);
-    else
-      pVarTP.z += pAmount * (pAffineTP.z - this.z);
+    if (splits) {
+      if (pAffineTP.x >= 0.0)
+        pVarTP.x += pAmount * (pAffineTP.x + this.x);
+      else
+        pVarTP.x += pAmount * (pAffineTP.x - this.x);
+  
+      if (pAffineTP.y >= 0.0)
+        pVarTP.y += pAmount * (pAffineTP.y + this.y);
+      else
+        pVarTP.y += pAmount * (pAffineTP.y - this.y);
+  
+      if (pAffineTP.z >= 0.0)
+        pVarTP.z += pAmount * (pAffineTP.z + this.z);
+      else
+        pVarTP.z += pAmount * (pAffineTP.z - this.z);
+    }
   }
 
   @Override
@@ -84,7 +146,7 @@ public class OctagonFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{x, y, z};
+    return new Object[]{x, y, z, mode};
   }
 
   @Override
@@ -95,6 +157,8 @@ public class OctagonFunc extends VariationFunc {
       y = pValue;
     else if (PARAM_Z.equalsIgnoreCase(pName))
       z = pValue;
+    else if (PARAM_MODE.equalsIgnoreCase(pName))
+      mode = limitIntVal(Tools.FTOI(pValue), 0, 6);
     else
       throw new IllegalArgumentException(pName);
   }
@@ -102,6 +166,11 @@ public class OctagonFunc extends VariationFunc {
   @Override
   public String getName() {
     return "octagon";
+  }
+
+  @Override
+  public String[] getParameterAlternativeNames() {
+    return new String[]{"octa_x", "octa_y", "octa_z", "octa_mode"};
   }
 
 }
