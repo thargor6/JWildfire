@@ -16,15 +16,7 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -2209,8 +2201,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void loadFlameButton_actionPerformed(ActionEvent e) {
-    try {
+  private File selectFlameFileForOpen() {
+    if(Tools.OSType.MAC == Tools.getOSType()) {
+      FileDialog fd = new FileDialog(mainEditorFrame, "FileDialog - Choose a file.");
+      fd.setMode(FileDialog.LOAD);
+      fd.setModal(true);
+      fd.setVisible(true);
+      if(fd.getFiles()!=null && fd.getFiles().length>0) {
+        return fd.getFiles()[0];
+      }
+    }
+    else {
       JFileChooser chooser = new FlameFileChooser(prefs);
       if (prefs.getInputFlamePath() != null) {
         try {
@@ -2222,9 +2223,23 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
       if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
+        prefs.setLastInputFlameFile(file);
+        return file;
+      }
+    }
+    return null;
+  }
+
+  public void loadFlameButton_actionPerformed(ActionEvent e) {
+
+
+
+
+    try {
+      File file = selectFlameFileForOpen();
+      if (file!=null) {
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
-        prefs.setLastInputFlameFile(file);
         if (data.layerAppendBtn.isSelected() && getCurrFlame() != null) {
           if (appendToFlame(flame)) {
             refreshUI();
@@ -2388,20 +2403,40 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     paletteSliderChanged(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 100.0);
   }
 
+  private File selectFlameFileForWrite()  {
+    if(Tools.OSType.MAC == Tools.getOSType()) {
+      FileDialog fd = new FileDialog(mainEditorFrame, "FileDialog - Choose a file.");
+      fd.setMode(FileDialog.SAVE);
+      fd.setModal(true);
+      fd.setVisible(true);
+      if(fd.getFiles()!=null && fd.getFiles().length>0) {
+        return fd.getFiles()[0];
+      }
+    }
+    else {
+    JFileChooser chooser = new FlameFileChooser(prefs);
+    if (prefs.getOutputFlamePath() != null) {
+      try {
+        chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+      if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        prefs.setLastOutputFlameFile(file);
+        return file;
+      }
+    }
+    return null;
+  }
+
   public void saveFlameButton_actionPerformed(ActionEvent e) {
     try {
       if (getCurrFlame() != null) {
-        JFileChooser chooser = new FlameFileChooser(prefs);
-        if (prefs.getOutputFlamePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-          File file = chooser.getSelectedFile();
+        File file = selectFlameFileForWrite();
+        if (file!=null) {
           String filename = file.getAbsolutePath();
           if (!filename.endsWith("." + Tools.FILEEXT_FLAME)) {
             filename += "." + Tools.FILEEXT_FLAME;
@@ -2409,7 +2444,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           new FlameWriter().writeFlame(generateExportFlame(getCurrFlame()), filename);
           getCurrFlame().setLastFilename(file.getName());
           messageHelper.showStatusMessage(getCurrFlame(), "flame saved to disc");
-          prefs.setLastOutputFlameFile(file);
         }
       }
     }

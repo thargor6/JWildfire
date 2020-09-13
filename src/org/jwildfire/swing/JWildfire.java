@@ -947,7 +947,7 @@ public class JWildfire extends JApplet {
   private JMenuItem getExitMenuItem() {
     if (exitMenuItem == null) {
       exitMenuItem = new JMenuItem();
-      exitMenuItem.setText("Exit");
+      exitMenuItem.setText("Quit JWildfire");
       exitMenuItem.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           closeApp();
@@ -1072,7 +1072,7 @@ public class JWildfire extends JApplet {
 
   private void closeApp() {
     String ObjButtons[] = { "Yes", "No" };
-    int PromptResult = JOptionPane.showOptionDialog(null, "Are you sure you want to exit?", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+    int PromptResult = JOptionPane.showOptionDialog(null, "Are you sure you want to quit JWildfire?", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
     if (PromptResult != JOptionPane.YES_OPTION) {
       return;
     }
