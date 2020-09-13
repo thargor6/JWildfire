@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -975,19 +975,8 @@ public class EnvelopeDlgController {
 
   public void importMP3() {
     try {
-      Prefs prefs = Prefs.getPrefs();
-      JFileChooser chooser = new SoundFileChooser(prefs);
-      if (prefs.getInputSoundFilePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputSoundFilePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(envelopePanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        prefs.setLastInputSoundFile(file);
+      File file = FileDialogTools.selectSoundFileForOpen(new java.awt.Frame(), envelopePanel);
+      if (file!=null) {
         mp3Data = new EnvelopeMP3Data(file.getAbsolutePath());
         mp3SettingsChanged();
         enableControls();

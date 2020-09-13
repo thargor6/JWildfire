@@ -1,28 +1,44 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2020 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
+import org.jwildfire.base.Prefs;
+import org.jwildfire.base.QualityProfile;
+import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.*;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.io.FlameMovieReader;
+import org.jwildfire.create.tina.io.FlameMovieWriter;
+import org.jwildfire.create.tina.io.FlameReader;
+import org.jwildfire.create.tina.randommovie.RandomMovieGenerator;
+import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
+import org.jwildfire.create.tina.render.*;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.swing.ErrorHandler;
+import org.jwildfire.swing.ImagePanel;
+import org.jwildfire.transform.ComposeTransformer;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -31,60 +47,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import org.jwildfire.base.Prefs;
-import org.jwildfire.base.QualityProfile;
-import org.jwildfire.base.ResolutionProfile;
-import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.animate.AnimationService;
-import org.jwildfire.create.tina.animate.FlameMorphType;
-import org.jwildfire.create.tina.animate.FlameMovie;
-import org.jwildfire.create.tina.animate.FlameMoviePart;
-import org.jwildfire.create.tina.animate.GlobalScript;
-import org.jwildfire.create.tina.animate.GlobalScriptType;
-import org.jwildfire.create.tina.animate.SWFAnimationRenderThread;
-import org.jwildfire.create.tina.animate.SWFAnimationRenderThreadController;
-import org.jwildfire.create.tina.animate.SequenceOutputType;
-import org.jwildfire.create.tina.animate.XFormScript;
-import org.jwildfire.create.tina.animate.XFormScriptType;
-import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.motion.MotionCurve;
-import org.jwildfire.create.tina.io.FlameMovieReader;
-import org.jwildfire.create.tina.io.FlameMovieWriter;
-import org.jwildfire.create.tina.io.FlameReader;
-import org.jwildfire.create.tina.randommovie.RandomMovieGenerator;
-import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
-import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.ProgressUpdater;
-import org.jwildfire.create.tina.render.RenderInfo;
-import org.jwildfire.create.tina.render.RenderMode;
-import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
-import org.jwildfire.image.SimpleImage;
-import org.jwildfire.swing.*;
-import org.jwildfire.transform.ComposeTransformer;
+import java.util.*;
 
 public class TinaSWFAnimatorController implements SWFAnimationRenderThreadController, FlameHolder {
   public static final int PAGE_INDEX = 4;
@@ -152,49 +116,79 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     public JWFNumberField getField() {
       return field;
     }
-
   }
 
   private Map<String, MotionCurveEditInfo> curves = new HashMap<String, MotionCurveEditInfo>();
 
-  public TinaSWFAnimatorController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
-      JComboBox[] pSWFAnimatorGlobalScriptCmbArray, JWFNumberField[] pSWFAnimatorGlobalScriptREdArray,
-      JComboBox[] pSWFAnimatorXFormScriptCmbArray, JWFNumberField[] pSWFAnimatorXFormScriptREdArray,
-      JWFNumberField pSWFAnimatorFramesREd, JWFNumberField pSWFAnimatorFramesPerSecondREd,
-      JButton pSWFAnimatorGenerateButton, JComboBox pSWFAnimatorResolutionProfileCmb,
+  public TinaSWFAnimatorController(
+      TinaController pParentCtrl,
+      ErrorHandler pErrorHandler,
+      Prefs pPrefs,
+      JComboBox[] pSWFAnimatorGlobalScriptCmbArray,
+      JWFNumberField[] pSWFAnimatorGlobalScriptREdArray,
+      JComboBox[] pSWFAnimatorXFormScriptCmbArray,
+      JWFNumberField[] pSWFAnimatorXFormScriptREdArray,
+      JWFNumberField pSWFAnimatorFramesREd,
+      JWFNumberField pSWFAnimatorFramesPerSecondREd,
+      JButton pSWFAnimatorGenerateButton,
+      JComboBox pSWFAnimatorResolutionProfileCmb,
       JButton pSWFAnimatorLoadFlameFromMainButton,
-      JButton pSWFAnimatorLoadFlameFromClipboardButton, JButton pSWFAnimatorLoadFlameButton,
-      JProgressBar pSWFAnimatorProgressBar, JButton pSWFAnimatorCancelButton,
+      JButton pSWFAnimatorLoadFlameFromClipboardButton,
+      JButton pSWFAnimatorLoadFlameButton,
+      JProgressBar pSWFAnimatorProgressBar,
+      JButton pSWFAnimatorCancelButton,
       ProgressUpdater pRenderProgressUpdater,
-      JPanel pSWFAnimatorPreviewRootPanel, JSlider pSWFAnimatorFrameSlider,
-      JWFNumberField pSWFAnimatorFrameREd, JPanel pSWFAnimatorFlamesPanel, ButtonGroup pSWFAnimatorFlamesButtonGroup,
-      JButton pSWFAnimatorMoveUpButton, JButton pSWFAnimatorMoveDownButton,
-      JButton pSWFAnimatorRemoveFlameButton, JButton pSWFAnimatorRemoveAllFlamesButton, JButton pSWFAnimatorMovieFromClipboardButton,
-      JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton,
-      JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton, JWFNumberField pSwfAnimatorMotionBlurLengthREd,
-      JWFNumberField pSwfAnimatorMotionBlurTimeStepREd, JPanel pRandomMoviePanel, JComboBox pSWFAnimatorQualityProfileCmb,
-      JComboBox pSWFAnimatorOutputTypeCmb, JCheckBox pSWFAnimatorCompatCBx) {
+      JPanel pSWFAnimatorPreviewRootPanel,
+      JSlider pSWFAnimatorFrameSlider,
+      JWFNumberField pSWFAnimatorFrameREd,
+      JPanel pSWFAnimatorFlamesPanel,
+      ButtonGroup pSWFAnimatorFlamesButtonGroup,
+      JButton pSWFAnimatorMoveUpButton,
+      JButton pSWFAnimatorMoveDownButton,
+      JButton pSWFAnimatorRemoveFlameButton,
+      JButton pSWFAnimatorRemoveAllFlamesButton,
+      JButton pSWFAnimatorMovieFromClipboardButton,
+      JButton pSWFAnimatorMovieFromDiskButton,
+      JButton pSWFAnimatorMovieToClipboardButton,
+      JButton pSWFAnimatorMovieToDiskButton,
+      JButton pSWFAnimatorFrameToEditorBtn,
+      JButton pSWFAnimatorPlayButton,
+      JWFNumberField pSwfAnimatorMotionBlurLengthREd,
+      JWFNumberField pSwfAnimatorMotionBlurTimeStepREd,
+      JPanel pRandomMoviePanel,
+      JComboBox pSWFAnimatorQualityProfileCmb,
+      JComboBox pSWFAnimatorOutputTypeCmb,
+      JCheckBox pSWFAnimatorCompatCBx) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
       prefs = pPrefs;
       currMovie = new FlameMovie(pPrefs);
-      //      currMovie.getGlobalScripts()[0] = new GlobalScript(GlobalScriptType.ROTATE_PITCH, 1.0);
+      //      currMovie.getGlobalScripts()[0] = new GlobalScript(GlobalScriptType.ROTATE_PITCH,
+      // 1.0);
       errorHandler = pErrorHandler;
       randomBatchPanel = pRandomMoviePanel;
 
       globalScripts = new ArrayList<ScriptContainer>();
       for (int i = 0; i < pSWFAnimatorGlobalScriptCmbArray.length; i++) {
-        ScriptContainer container = new ScriptContainer(pSWFAnimatorGlobalScriptCmbArray[i], pSWFAnimatorGlobalScriptREdArray[i]);
+        ScriptContainer container =
+            new ScriptContainer(
+                pSWFAnimatorGlobalScriptCmbArray[i], pSWFAnimatorGlobalScriptREdArray[i]);
         globalScripts.add(container);
-        curves.put("globalScript" + (i + 1), new MotionCurveEditInfo(container.getMotionCurve(), container.getScriptREd()));
+        curves.put(
+            "globalScript" + (i + 1),
+            new MotionCurveEditInfo(container.getMotionCurve(), container.getScriptREd()));
       }
 
       xFormScripts = new ArrayList<ScriptContainer>();
       for (int i = 0; i < pSWFAnimatorXFormScriptCmbArray.length; i++) {
-        ScriptContainer container = new ScriptContainer(pSWFAnimatorXFormScriptCmbArray[i], pSWFAnimatorXFormScriptREdArray[i]);
+        ScriptContainer container =
+            new ScriptContainer(
+                pSWFAnimatorXFormScriptCmbArray[i], pSWFAnimatorXFormScriptREdArray[i]);
         xFormScripts.add(container);
-        curves.put("xFormScript" + (i + 1), new MotionCurveEditInfo(container.getMotionCurve(), container.getScriptREd()));
+        curves.put(
+            "xFormScript" + (i + 1),
+            new MotionCurveEditInfo(container.getMotionCurve(), container.getScriptREd()));
       }
 
       swfAnimatorFramesREd = pSWFAnimatorFramesREd;
@@ -237,12 +231,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFrameREd.setValue(1);
       swfAnimatorMotionBlurLengthREd.setValue(32);
       swfAnimatorMotionBlurTimeStepREd.setValue(0.01);
-      motionControlsDelegate = new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootPanel());
+      motionControlsDelegate =
+          new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootPanel());
 
       randomBatch.add(0, new MovieThumbnail(currMovie, null));
       updateThumbnails();
-    }
-    finally {
+    } finally {
       noRefresh = false;
     }
   }
@@ -296,8 +290,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         addFlame(newFlame);
         enableControls();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -312,8 +305,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
       frameCount = 120;
       frameMorphCount = 60;
-    }
-    else {
+    } else {
       FlameMoviePart prevPart = currMovie.getParts().get(currMovie.getParts().size() - 1);
       frameCount = prevPart.getFrameCount();
       frameMorphCount = prevPart.getFrameMorphCount();
@@ -354,8 +346,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       int oldFrameCount = 0;
       try {
         oldFrameCount = swfAnimatorFramesREd.getIntValue();
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         oldFrameCount = frameCount;
       }
 
@@ -366,8 +357,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         swfAnimatorFrameREd.setValue(frameCount);
         previewFlameImage();
       }
-    }
-    finally {
+    } finally {
       noRefresh = false;
     }
   }
@@ -420,17 +410,19 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       framesField.setFont(new Font("Dialog", Font.PLAIN, 10));
       framesField.setMinValue(1.0);
       framesField.setBounds(xOff + BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH, FIELD_HEIGHT);
-      framesField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          framesFieldChanged(framesField, pPart);
-        }
-      });
+      framesField.addChangeListener(
+          new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+              framesFieldChanged(framesField, pPart);
+            }
+          });
       panel.add(framesField);
     }
     yOff += FIELD_HEIGHT;
     {
       JLabel framesMorphLbl = new JLabel("Morph (frames)");
-      framesMorphLbl.setToolTipText("Number of frames to change this flame to the next; 0 for sudden change");
+      framesMorphLbl.setToolTipText(
+          "Number of frames to change this flame to the next; 0 for sudden change");
       framesMorphLbl.setBounds(xOff + BORDER_SIZE, yOff, LABEL_WIDTH, LABEL_HEIGHT);
       panel.add(framesMorphLbl);
       final JWFNumberField framesMorphField = new JWFNumberField();
@@ -440,11 +432,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       framesMorphField.setFont(new Font("Dialog", Font.PLAIN, 10));
       framesMorphField.setValue(pPart.getFrameMorphCount());
       framesMorphField.setBounds(xOff + BORDER_SIZE + LABEL_WIDTH, yOff, FIELD_WIDTH, FIELD_HEIGHT);
-      framesMorphField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          framesMorphFieldChanged(framesMorphField, pPart);
-        }
-      });
+      framesMorphField.addChangeListener(
+          new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+              framesMorphFieldChanged(framesMorphField, pPart);
+            }
+          });
       panel.add(framesMorphField);
     }
 
@@ -455,13 +448,15 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       morphTypeLbl.setBounds(xOff + BORDER_SIZE, yOff, LABEL_WIDTH, LABEL_HEIGHT);
       panel.add(morphTypeLbl);
       final JComboBox morphTypeCmb = new JComboBox();
-      morphTypeCmb.setToolTipText("<html>FADE: fade in the next flame and fade out this one<br>"
-          + "MORPH: try to change the settings from this flame to those of the next one</html>");
-      morphTypeCmb.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          morpthTypeChanged(morphTypeCmb, pPart);
-        }
-      });
+      morphTypeCmb.setToolTipText(
+          "<html>FADE: fade in the next flame and fade out this one<br>"
+              + "MORPH: try to change the settings from this flame to those of the next one</html>");
+      morphTypeCmb.addItemListener(
+          new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+              morpthTypeChanged(morphTypeCmb, pPart);
+            }
+          });
       morphTypeCmb.setSize(new Dimension(125, 22));
       morphTypeCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
       boolean oldNoRefresh = noRefresh;
@@ -469,8 +464,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         noRefresh = true;
         morphTypeCmb.addItem(FlameMorphType.FADE);
         morphTypeCmb.addItem(FlameMorphType.MORPH);
-      }
-      finally {
+      } finally {
         noRefresh = oldNoRefresh;
       }
 
@@ -486,11 +480,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       editButton.setBounds(btnOff, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
       editButton.setFont(new Font("Dialog", Font.BOLD, 10));
       editButton.setToolTipText("Edit flame in editor");
-      editButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          editPartBtn_clicked(pPart);
-        }
-      });
+      editButton.addActionListener(
+          new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              editPartBtn_clicked(pPart);
+            }
+          });
       panel.add(editButton);
       btnOff += BUTTON_WIDTH + 1;
     }
@@ -499,11 +494,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       replaceButton.setBounds(btnOff, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
       replaceButton.setFont(new Font("Dialog", Font.BOLD, 10));
       replaceButton.setToolTipText("Replace flame with flame from editor");
-      replaceButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          replacePartBtn_clicked(pPart);
-        }
-      });
+      replaceButton.addActionListener(
+          new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              replacePartBtn_clicked(pPart);
+            }
+          });
       panel.add(replaceButton);
       btnOff += BUTTON_WIDTH + 1;
     }
@@ -512,11 +508,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       delButton.setBounds(btnOff, yOff, BUTTON_WIDTH, FIELD_HEIGHT);
       delButton.setFont(new Font("Dialog", Font.BOLD, 10));
       delButton.setToolTipText("Remove flame from movie");
-      delButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          deletePartBtn_clicked(pPart);
-        }
-      });
+      delButton.addActionListener(
+          new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              deletePartBtn_clicked(pPart);
+            }
+          });
       panel.add(delButton);
       btnOff += BUTTON_WIDTH + 1;
     }
@@ -526,11 +523,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       selectButton = new JRadioButton("");
       selectButton.setBounds(btnOff, yOff, FIELD_WIDTH + 1, FIELD_HEIGHT);
       selectButton.setFont(new Font("Dialog", Font.PLAIN, 10));
-      selectButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          enableControls();
-        }
-      });
+      selectButton.addActionListener(
+          new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              enableControls();
+            }
+          });
       selectButton.setSelected(flamePartRadioButtonList.size() == 0);
       panel.add(selectButton);
       swfAnimatorFlamesButtonGroup.add(selectButton);
@@ -543,7 +541,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorFlamesPanel.getParent().validate();
   }
 
-  private SimpleImage createPartPreview(final FlameMoviePart pPart, int imageWidth, int imageHeight) {
+  private SimpleImage createPartPreview(
+      final FlameMoviePart pPart, int imageWidth, int imageHeight) {
     RenderInfo info = new RenderInfo(imageWidth, imageHeight, RenderMode.PREVIEW);
     Flame flame = pPart.getFlame().makeCopy();
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -596,8 +595,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       Transferable clipData = clipboard.getContents(clipboard);
       if (clipData != null) {
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-          String xml = (String) (clipData.getTransferData(
-              DataFlavor.stringFlavor));
+          String xml = (String) (clipData.getTransferData(DataFlavor.stringFlavor));
           List<Flame> flames = new FlameReader(prefs).readFlamesfromXML(xml);
           if (flames.size() > 0) {
             newFlame = flames.get(0);
@@ -606,38 +604,27 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
       if (newFlame == null) {
         throw new Exception("There is currently no valid flame in the clipboard");
-      }
-      else {
+      } else {
         addFlame(newFlame);
         enableControls();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
 
   public void loadFlameButton_clicked() {
     try {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(swfAnimatorPreviewRootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectFlameFileForOpen(parentCtrl.getMainEditorFrame(), flamePanel, null);
+      if (file != null) {
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame newFlame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         addFlame(newFlame);
         enableControls();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -651,14 +638,18 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private GlobalScript getGlobalScriptFromUI(JComboBox pCmb, JWFNumberField pField) {
     GlobalScriptType scriptType = (GlobalScriptType) pCmb.getSelectedItem();
-    GlobalScript res = new GlobalScript(scriptType != null ? scriptType : GlobalScriptType.NONE, pField.getDoubleValue());
+    GlobalScript res =
+        new GlobalScript(
+            scriptType != null ? scriptType : GlobalScriptType.NONE, pField.getDoubleValue());
     res.getAmplitudeCurve().assign(curves.get(pField.getMotionPropertyName()).getCurve());
     return res;
   }
 
   private XFormScript getXFormScriptFromUI(JComboBox pCmb, JWFNumberField pField) {
     XFormScriptType scriptType = (XFormScriptType) pCmb.getSelectedItem();
-    XFormScript res = new XFormScript(scriptType != null ? scriptType : XFormScriptType.NONE, pField.getDoubleValue());
+    XFormScript res =
+        new XFormScript(
+            scriptType != null ? scriptType : XFormScriptType.NONE, pField.getDoubleValue());
     res.getAmplitudeCurve().assign(curves.get(pField.getMotionPropertyName()).getCurve());
     return res;
   }
@@ -671,11 +662,13 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
     for (int i = 0; i < globalScripts.size(); i++) {
       ScriptContainer container = globalScripts.get(i);
-      currMovie.getGlobalScripts()[i] = getGlobalScriptFromUI(container.getScriptCmb(), container.getScriptREd());
+      currMovie.getGlobalScripts()[i] =
+          getGlobalScriptFromUI(container.getScriptCmb(), container.getScriptREd());
     }
     for (int i = 0; i < xFormScripts.size(); i++) {
       ScriptContainer container = xFormScripts.get(i);
-      currMovie.getxFormScripts()[i] = getXFormScriptFromUI(container.getScriptCmb(), container.getScriptREd());
+      currMovie.getxFormScripts()[i] =
+          getXFormScriptFromUI(container.getScriptCmb(), container.getScriptREd());
     }
 
     currMovie.setFrameWidth(frameWidth);
@@ -684,85 +677,45 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     currMovie.setFramesPerSecond(framesPerSecond);
     currMovie.setMotionBlurLength(swfAnimatorMotionBlurLengthREd.getIntValue());
     currMovie.setMotionBlurTimeStep(swfAnimatorMotionBlurTimeStepREd.getDoubleValue());
-    currMovie.setSequenceOutputType((SequenceOutputType) swfAnimatorOutputTypeCmb.getSelectedItem());
+    currMovie.setSequenceOutputType(
+        (SequenceOutputType) swfAnimatorOutputTypeCmb.getSelectedItem());
   }
 
   public void generateButton_clicked() {
     try {
-      JFileChooser chooser = createOutputFileChooser();
-      if (chooser.showSaveDialog(swfAnimatorPreviewRootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file = selectOutputFile();
+      if (file != null) {
         prefs.setLastOutputMovieFlamesFile(file);
         updateMovieFields();
         renderThread = new SWFAnimationRenderThread(this, currMovie, file.getAbsolutePath());
         try {
           enableControls();
           new Thread(renderThread).start();
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
           renderThread = null;
           throw ex;
         }
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
       enableControls();
     }
   }
 
-  private JFileChooser createOutputFileChooser() {
+  private File selectOutputFile() {
     switch (currMovie.getSequenceOutputType()) {
-      case ANB: {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileFilter(new ANBFileFilter());
-        if (prefs.getOutputImagePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        return chooser;
-      }
-      case MP4: {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileFilter(new VideoFileFilter());
-        if (prefs.getOutputImagePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        return chooser;
-      }
-      case PNG_IMAGES: {
-        JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-        if (prefs.getOutputImagePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        return chooser;
-      }
-      default: {
-        JFileChooser chooser = new FlameFileChooser(prefs);
-        if (prefs.getMovieFlamesPath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getMovieFlamesPath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        return chooser;
-      }
+      case ANB:
+        return FileDialogTools.selectAnbFileForSave(
+            parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+      case MP4:
+        return FileDialogTools.selectMp4FileForSave(
+            parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+      case PNG_IMAGES:
+        return FileDialogTools.selectImageFileForSave(
+            parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel, Tools.FILEEXT_PNG);
+      default:
+        return FileDialogTools.selectFlameSequenceFileForSave(
+            parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
     }
   }
 
@@ -812,7 +765,9 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       int height = swfAnimatorPreviewRootPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, swfAnimatorPreviewRootPanel.getWidth(), this, null, null, null);
+      flamePanel =
+          new FlamePanel(
+              prefs, img, 0, 0, swfAnimatorPreviewRootPanel.getWidth(), this, null, null, null);
       ResolutionProfile resProfile = getResolutionProfile();
       flamePanel.setRenderWidth(resProfile.getWidth());
       flamePanel.setRenderHeight(resProfile.getHeight());
@@ -861,21 +816,18 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
               renderer.setProgressUpdater(null);
               flame.setSampleDensity(1.0);
               flame.setSpatialFilterRadius(0.0);
-            }
-            else {
+            } else {
               renderer.setProgressUpdater(renderProgressUpdater);
               flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
             }
             RenderedFlame res = renderer.renderFlame(info);
             imgPanel.setImage(res.getImage());
-          }
-          finally {
+          } finally {
             flame.setSpatialFilterRadius(oldSpatialFilterRadius);
             flame.setSampleDensity(oldSampleDensity);
           }
         }
-      }
-      else {
+      } else {
         imgPanel.setImage(new SimpleImage(width, height));
       }
       swfAnimatorPreviewRootPanel.repaint();
@@ -897,8 +849,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       noRefresh = true;
       try {
         swfAnimatorFrameREd.setValue(frame);
-      }
-      finally {
+      } finally {
         noRefresh = oldNoRefresh;
       }
 
@@ -910,12 +861,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
       List<GlobalScript> editedGlobalScripts = new ArrayList<GlobalScript>();
       for (ScriptContainer container : globalScripts) {
-        editedGlobalScripts.add(getGlobalScriptFromUI(container.getScriptCmb(), container.getScriptREd()));
+        editedGlobalScripts.add(
+            getGlobalScriptFromUI(container.getScriptCmb(), container.getScriptREd()));
       }
 
       List<XFormScript> editedXFormScripts = new ArrayList<XFormScript>();
       for (ScriptContainer container : xFormScripts) {
-        editedXFormScripts.add(getXFormScriptFromUI(container.getScriptCmb(), container.getScriptREd()));
+        editedXFormScripts.add(
+            getXFormScriptFromUI(container.getScriptCmb(), container.getScriptREd()));
       }
 
       try {
@@ -930,13 +883,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         res.setMotionBlurLength(motionBlurLength);
         res.setMotionBlurTimeStep(motionBlurTimeStep);
         return res;
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         ex.printStackTrace();
         return null;
       }
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -953,8 +904,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   public void swfAnimatorFrameREd_changed() {
-    if (noRefresh)
-      return;
+    if (noRefresh) return;
     boolean oldNoRefresh = noRefresh;
     try {
       noRefresh = true;
@@ -963,16 +913,13 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       if (frame < 1) {
         swfAnimatorFrameSlider.setValue(1);
         swfAnimatorFrameREd.setValue(1);
-      }
-      else if (frame > frameCount) {
+      } else if (frame > frameCount) {
         swfAnimatorFrameSlider.setValue(frameCount);
         swfAnimatorFrameREd.setValue(frameCount);
-      }
-      else {
+      } else {
         swfAnimatorFrameSlider.setValue(frame);
       }
-    }
-    finally {
+    } finally {
       noRefresh = oldNoRefresh;
     }
   }
@@ -986,8 +933,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
       pPart.setFrameCount(frameCount);
       refreshFrameCount();
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -998,14 +944,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       if (framesMorphCount < 0) {
         framesMorphCount = 0;
         pMorphFramesField.setValue(framesMorphCount);
-      }
-      else if (framesMorphCount > pPart.getFrameCount()) {
+      } else if (framesMorphCount > pPart.getFrameCount()) {
         framesMorphCount = pPart.getFrameCount();
         pMorphFramesField.setValue(framesMorphCount);
       }
       pPart.setFrameMorphCount(framesMorphCount);
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1019,8 +963,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       previewFlameImage();
       clearCurrentPreview();
       updateThumbnails();
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1039,8 +982,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private int getSelectedFlameRadioButtonIndex() {
     for (int i = 0; i < flamePartRadioButtonList.size(); i++) {
-      if (flamePartRadioButtonList.get(i).isSelected())
-        return i;
+      if (flamePartRadioButtonList.get(i).isSelected()) return i;
     }
     return -1;
   }
@@ -1091,14 +1033,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorFlamesPanel.repaint();
     swfAnimatorFlamesPanel.getParent().invalidate();
     swfAnimatorFlamesPanel.getParent().validate();
-    
+
     refreshFrameCount();
     previewFlameImage();
     enableControls();
     clearCurrentPreview();
     updateThumbnails();
   }
-  
+
   public void compatCBx_changed() {
     currMovie.setCompat(swfAnimatorCompatCBx.isSelected());
     previewFlameImage();
@@ -1113,8 +1055,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       Transferable clipData = clipboard.getContents(clipboard);
       if (clipData != null) {
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-          String xml = (String) (clipData.getTransferData(
-              DataFlavor.stringFlavor));
+          String xml = (String) (clipData.getTransferData(DataFlavor.stringFlavor));
           FlameMovie movie = new FlameMovieReader(prefs).readMovieFromXML(xml);
           if (movie != null) {
             randomBatch.add(0, new MovieThumbnail(movie, null));
@@ -1125,8 +1066,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           previewFlameImage();
         }
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1137,29 +1077,32 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFramesPerSecondREd.setValue(currMovie.getFramesPerSecond());
       for (int i = 0; i < globalScripts.size(); i++) {
         ScriptContainer container = globalScripts.get(i);
-        setGlobalScriptToUI(currMovie.getGlobalScripts()[i], container.getScriptCmb(), container.getScriptREd());
+        setGlobalScriptToUI(
+            currMovie.getGlobalScripts()[i], container.getScriptCmb(), container.getScriptREd());
       }
       for (int i = 0; i < xFormScripts.size(); i++) {
         ScriptContainer container = xFormScripts.get(i);
-        setXFormScriptToUI(currMovie.getxFormScripts()[i], container.getScriptCmb(), container.getScriptREd());
+        setXFormScriptToUI(
+            currMovie.getxFormScripts()[i], container.getScriptCmb(), container.getScriptREd());
       }
       {
         ResolutionProfile fittingProfile = null;
         ResolutionProfile doubleProfile = null;
         for (int i = 0; i < swfAnimatorResolutionProfileCmb.getItemCount(); i++) {
-          ResolutionProfile profile = (ResolutionProfile) swfAnimatorResolutionProfileCmb.getItemAt(i);
-          if (profile.getWidth() == currMovie.getFrameWidth() && profile.getHeight() == currMovie.getFrameHeight()) {
+          ResolutionProfile profile =
+              (ResolutionProfile) swfAnimatorResolutionProfileCmb.getItemAt(i);
+          if (profile.getWidth() == currMovie.getFrameWidth()
+              && profile.getHeight() == currMovie.getFrameHeight()) {
             fittingProfile = profile;
             break;
-          }
-          else if ((profile.getWidth() / 2) == currMovie.getFrameWidth() && (profile.getHeight() / 2) == currMovie.getFrameHeight()) {
+          } else if ((profile.getWidth() / 2) == currMovie.getFrameWidth()
+              && (profile.getHeight() / 2) == currMovie.getFrameHeight()) {
             doubleProfile = profile;
           }
         }
         if (fittingProfile != null) {
           swfAnimatorResolutionProfileCmb.setSelectedItem(fittingProfile);
-        }
-        else if (doubleProfile != null) {
+        } else if (doubleProfile != null) {
           swfAnimatorResolutionProfileCmb.setSelectedItem(doubleProfile);
         }
       }
@@ -1169,8 +1112,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           QualityProfile profile = (QualityProfile) swfAnimatorQualityProfileCmb.getItemAt(i);
           if (qualityProfile == null) {
             qualityProfile = profile;
-          }
-          else if (profile.getQuality() == currMovie.getQuality()) {
+          } else if (profile.getQuality() == currMovie.getQuality()) {
             qualityProfile = profile;
             break;
           }
@@ -1179,7 +1121,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           swfAnimatorQualityProfileCmb.setSelectedItem(qualityProfile);
         }
       }
-      
+
       swfAnimatorOutputTypeCmb.setSelectedItem(currMovie.getSequenceOutputType());
 
       for (JPanel panel : flamePartPanelList) {
@@ -1206,51 +1148,53 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       }
 
       enableControls();
-    }
-    finally {
+    } finally {
       noRefresh = false;
     }
   }
 
-  private void setXFormScriptToUI(XFormScript pScript, JComboBox pCmb, JWFNumberField pAmountField) {
+  private void setXFormScriptToUI(
+      XFormScript pScript, JComboBox pCmb, JWFNumberField pAmountField) {
     if (pScript != null) {
-      pCmb.setSelectedItem(pScript.getScriptType() != null ? pScript.getScriptType() : XFormScriptType.NONE);
+      pCmb.setSelectedItem(
+          pScript.getScriptType() != null ? pScript.getScriptType() : XFormScriptType.NONE);
       pAmountField.setValue(pScript.getAmplitude());
-      curves.get(pAmountField.getMotionPropertyName()).getCurve().assign(pScript.getAmplitudeCurve());
-    }
-    else {
+      curves
+          .get(pAmountField.getMotionPropertyName())
+          .getCurve()
+          .assign(pScript.getAmplitudeCurve());
+    } else {
       pCmb.setSelectedItem(XFormScriptType.NONE);
       pAmountField.setValue(1.0);
     }
-    new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootPanel()).enableControl(pAmountField, false);
+    new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootPanel())
+        .enableControl(pAmountField, false);
   }
 
-  private void setGlobalScriptToUI(GlobalScript pScript, JComboBox pCmb, JWFNumberField pAmountField) {
+  private void setGlobalScriptToUI(
+      GlobalScript pScript, JComboBox pCmb, JWFNumberField pAmountField) {
     if (pScript != null) {
-      pCmb.setSelectedItem(pScript.getScriptType() != null ? pScript.getScriptType() : GlobalScriptType.NONE);
+      pCmb.setSelectedItem(
+          pScript.getScriptType() != null ? pScript.getScriptType() : GlobalScriptType.NONE);
       pAmountField.setValue(pScript.getAmplitude());
-      curves.get(pAmountField.getMotionPropertyName()).getCurve().assign(pScript.getAmplitudeCurve());
-    }
-    else {
+      curves
+          .get(pAmountField.getMotionPropertyName())
+          .getCurve()
+          .assign(pScript.getAmplitudeCurve());
+    } else {
       pCmb.setSelectedItem(GlobalScriptType.NONE);
       pAmountField.setValue(1.0);
     }
-    new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootPanel()).enableControl(pAmountField, false);
+    new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootPanel())
+        .enableControl(pAmountField, false);
   }
 
   public void movieFromDiscButton_clicked() {
     try {
-      JFileChooser chooser = new JWFMovieFileChooser(prefs);
-      if (prefs.getInputJWFMoviePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputJWFMoviePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(swfAnimatorFlamesPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectJWFRenderFileForOpen(
+              parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+      if (file != null) {
         FlameMovie movie = new FlameMovieReader(prefs).readMovie(file.getAbsolutePath());
         if (movie != null) {
           randomBatch.add(0, new MovieThumbnail(movie, null));
@@ -1260,8 +1204,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         refreshControls();
         previewFlameImage();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1273,32 +1216,21 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       String xml = new FlameMovieWriter().getMovieXML(currMovie);
       StringSelection data = new StringSelection(xml);
       clipboard.setContents(data, data);
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
-
   }
 
   public void movieToDiscButton_clicked() {
     updateMovieFields();
     try {
-      JFileChooser chooser = new JWFMovieFileChooser(prefs);
-      if (prefs.getOutputJWFMoviePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getOutputJWFMoviePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showSaveDialog(swfAnimatorFlamesPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectJWFRenderFileForSave(
+              parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+      if (file != null) {
         new FlameMovieWriter().writeFlame(currMovie, file.getAbsolutePath());
-        prefs.setLastOutputJWFMovieFile(file);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1378,8 +1310,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         long t1 = Calendar.getInstance().getTimeInMillis();
         finished = true;
         finishEvent.succeeded((t1 - t0) * 0.001);
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         finished = true;
         finishEvent.failed(ex);
       }
@@ -1392,7 +1323,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     public void setForceAbort() {
       forceAbort = true;
     }
-
   }
 
   private PlayMovieThread playMovieThread = null;
@@ -1407,42 +1337,40 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       while (playMovieThread.isFinished()) {
         try {
           Thread.sleep(10);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
           e.printStackTrace();
         }
       }
       playMovieThread = null;
       enablePlayMovieControls();
-    }
-    else {
+    } else {
       updateMovieFields();
       final int oldFrame = swfAnimatorFrameSlider.getValue();
 
-      RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
+      RenderMainFlameThreadFinishEvent finishEvent =
+          new RenderMainFlameThreadFinishEvent() {
 
-        @Override
-        public void succeeded(double pElapsedTime) {
-          try {
-          }
-          catch (Throwable ex) {
-            errorHandler.handleError(ex);
-          }
-          playMovieThread = null;
-          enablePlayMovieControls();
-          swfAnimatorFrameSlider.setValue(oldFrame);
-          previewFlameImage();
-        }
+            @Override
+            public void succeeded(double pElapsedTime) {
+              try {
+              } catch (Throwable ex) {
+                errorHandler.handleError(ex);
+              }
+              playMovieThread = null;
+              enablePlayMovieControls();
+              swfAnimatorFrameSlider.setValue(oldFrame);
+              previewFlameImage();
+            }
 
-        @Override
-        public void failed(Throwable exception) {
-          errorHandler.handleError(exception);
-          playMovieThread = null;
-          enablePlayMovieControls();
-          swfAnimatorFrameSlider.setValue(oldFrame);
-          previewFlameImage();
-        }
-      };
+            @Override
+            public void failed(Throwable exception) {
+              errorHandler.handleError(exception);
+              playMovieThread = null;
+              enablePlayMovieControls();
+              swfAnimatorFrameSlider.setValue(oldFrame);
+              previewFlameImage();
+            }
+          };
 
       playMovieThread = new PlayMovieThread(finishEvent);
       enablePlayMovieControls();
@@ -1452,7 +1380,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private class MotionControlsDelegate extends AbstractControlsDelegate {
 
-    public MotionControlsDelegate(TinaController pOwner, TinaControllerData pData, JPanel pRootPanel) {
+    public MotionControlsDelegate(
+        TinaController pOwner, TinaControllerData pData, JPanel pRootPanel) {
       super(pOwner, pData, pRootPanel, false);
     }
 
@@ -1475,7 +1404,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     public boolean isEnabled() {
       return true;
     }
-
   }
 
   public void editGlobalMotionCurve(JWFNumberField pSender) {
@@ -1508,8 +1436,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           int frame = (int) ((double) movie.getFrameCount() / ((double) IMG_COUNT + 1) * i + 0.5);
           Flame morphedFlame = movie.getFlame(frame);
           renderFlame = movie.createAnimatedFlame(morphedFlame, frame);
-        }
-        else {
+        } else {
           renderFlame = new Flame();
         }
 
@@ -1580,18 +1507,21 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       randomBatch.get(i).setImgPanel(imgPanel);
       final int idx = i;
       addRemoveButton(imgPanel, idx);
-      imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent e) {
-          if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-            importFromRandomBatch(idx);
-          }
-        }
-      });
+      imgPanel.addMouseListener(
+          new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+              if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
+                importFromRandomBatch(idx);
+              }
+            }
+          });
       batchPanel.add(imgPanel);
     }
     randomBatchScrollPane = new JScrollPane(batchPanel);
-    randomBatchScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-    randomBatchScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    randomBatchScrollPane.setVerticalScrollBarPolicy(
+        ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    randomBatchScrollPane.setHorizontalScrollBarPolicy(
+        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
     randomBatchPanel.add(randomBatchScrollPane, BorderLayout.CENTER);
     randomBatchPanel.validate();
@@ -1605,12 +1535,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     btn.setMinimumSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
     btn.setMaximumSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
     btn.setPreferredSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
-    btn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/removeThumbnail.gif")));
-    btn.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent e) {
-        removeThumbnail(pIdx);
-      }
-    });
+    btn.setIcon(
+        new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/removeThumbnail.gif")));
+    btn.addActionListener(
+        new java.awt.event.ActionListener() {
+          public void actionPerformed(java.awt.event.ActionEvent e) {
+            removeThumbnail(pIdx);
+          }
+        });
 
     pImgPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, BORDER, BORDER));
     pImgPanel.add(btn);
@@ -1628,12 +1560,12 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         }
       }
       if (pIdx == currMovieIdx) {
-        throw new Exception("Sorry, the currently selected movie can't be deleted from the movie-ribbon");
+        throw new Exception(
+            "Sorry, the currently selected movie can't be deleted from the movie-ribbon");
       }
       randomBatch.remove(pIdx);
       updateThumbnails();
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1655,7 +1587,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : imgCount);
     renderProgressUpdater.initProgress(maxCount);
-    RandomMovieGenerator randGen = RandomMovieGeneratorList.getRandomMovieGeneratorInstance(pGeneratorname, true);
+    RandomMovieGenerator randGen =
+        RandomMovieGeneratorList.getRandomMovieGeneratorInstance(pGeneratorname, true);
     for (int i = 0; i < maxCount; i++) {
       MovieThumbnail thumbnail;
       thumbnail = new MovieThumbnail(randGen.createMovie(prefs), null);
@@ -1663,13 +1596,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.INSERT) {
         randomBatch.add(0, thumbnail);
         imgList.add(0, img);
-      }
-      else {
+      } else {
         randomBatch.add(thumbnail);
         imgList.add(img);
       }
       renderProgressUpdater.updateProgress(i + 1);
-
     }
     updateThumbnails();
     return true;
@@ -1697,7 +1628,6 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     public MotionCurve getMotionCurve() {
       return motionCurve;
     }
-
   }
 
   public void renderFlameImage() {
@@ -1717,5 +1647,4 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     clearCurrentPreview();
     updateThumbnails();
   }
-
 }

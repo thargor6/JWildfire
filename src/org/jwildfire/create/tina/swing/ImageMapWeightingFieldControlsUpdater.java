@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -23,14 +23,13 @@ import org.jwildfire.create.tina.base.weightingfield.ImageMapWeightingField;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
-import org.jwildfire.swing.ImageFileChooser;
 
-import javax.swing.*;
 import java.io.File;
 
 public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControlsUpdater {
 
-  public ImageMapWeightingFieldControlsUpdater(TinaController controller, TinaWeightingFieldControllerData controls) {
+  public ImageMapWeightingFieldControlsUpdater(
+      TinaController controller, TinaWeightingFieldControllerData controls) {
     super(controller, controls);
   }
 
@@ -38,26 +37,19 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
   public void weightingFieldColorMapFilenameBtn_clicked() {
     XForm xForm = controller.getCurrXForm();
     if (xForm != null && controls.weightingFieldInputCmb.getSelectedItem() != null) {
-      JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-      if (Prefs.getPrefs().getInputImagePath() != null) {
-        try {
-          if (xForm.getWeightingFieldColorMapFilename()!=null && xForm.getWeightingFieldColorMapFilename().length() > 0) {
-            chooser.setSelectedFile(new File(xForm.getWeightingFieldColorMapFilename()));
-          }
-          else {
-            chooser.setCurrentDirectory(new File(Prefs.getPrefs().getInputImagePath()));
-          }
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(controller.getFlamePanel()) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectImageFileForOpen(
+              controller.getMainEditorFrame(),
+              controller.centerPanel,
+              Tools.FILEEXT_PNG,
+              xForm.getWeightingFieldColorMapFilename());
+      if (file != null) {
         try {
           String filename = file.getAbsolutePath();
           WFImage img = RessourceManager.getImage(filename);
-          if (img.getImageWidth() < 2 || img.getImageHeight() < 2 || !(img instanceof SimpleImage)) {
+          if (img.getImageWidth() < 2
+              || img.getImageHeight() < 2
+              || !(img instanceof SimpleImage)) {
             throw new Exception("Invalid image");
           }
           Prefs.getPrefs().setLastInputImageFile(file);
@@ -67,8 +59,7 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
           updateControls(xForm);
           controller.refreshFlameImage(true, false, 1, true, false);
           refreshFieldPreviewImage(controller.getCurrXForm());
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
           controller.errorHandler.handleError(ex);
         }
       }
@@ -82,23 +73,31 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
 
     controls.weightingFieldParam01REd.setHasMinValue(false);
     controls.weightingFieldParam01REd.setOnlyIntegers(false);
-    controls.weightingFieldParam01REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapXCentre()));
+    controls.weightingFieldParam01REd.setText(
+        Tools.doubleToString(xform.getWeightingFieldColorMapXCentre()));
 
     controls.weightingFieldParam05REd.setHasMinValue(false);
     controls.weightingFieldParam05REd.setOnlyIntegers(false);
-    controls.weightingFieldParam05REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapYCentre()));
+    controls.weightingFieldParam05REd.setText(
+        Tools.doubleToString(xform.getWeightingFieldColorMapYCentre()));
 
     controls.weightingFieldParam02REd.setHasMinValue(false);
     controls.weightingFieldParam02REd.setOnlyIntegers(false);
-    controls.weightingFieldParam02REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapXSize()));
+    controls.weightingFieldParam02REd.setText(
+        Tools.doubleToString(xform.getWeightingFieldColorMapXSize()));
 
     controls.weightingFieldParam06REd.setHasMinValue(false);
     controls.weightingFieldParam06REd.setOnlyIntegers(false);
-    controls.weightingFieldParam06REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapYSize()));
+    controls.weightingFieldParam06REd.setText(
+        Tools.doubleToString(xform.getWeightingFieldColorMapYSize()));
   }
 
   private void updateColorMapFilenameInfoLbl(XForm xform) {
-    controls.weightingFieldColorMapFilenameInfoLbl.setText(xform.getWeightingFieldColorMapFilename() != null && xform.getWeightingFieldColorMapFilename().length() > 0 ? new File(xform.getWeightingFieldColorMapFilename()).getName() : ImageMapWeightingField.DFLT_IMAGE_FILE_NAME);
+    controls.weightingFieldColorMapFilenameInfoLbl.setText(
+        xform.getWeightingFieldColorMapFilename() != null
+                && xform.getWeightingFieldColorMapFilename().length() > 0
+            ? new File(xform.getWeightingFieldColorMapFilename()).getName()
+            : ImageMapWeightingField.DFLT_IMAGE_FILE_NAME);
   }
 
   @Override
@@ -151,13 +150,15 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
 
   @Override
   public void weightingFieldParam01REd_changed() {
-    controller.xFormTextFieldChanged(null, controls.weightingFieldParam01REd, "weightingFieldColorMapXCentre", 1.0);
+    controller.xFormTextFieldChanged(
+        null, controls.weightingFieldParam01REd, "weightingFieldColorMapXCentre", 1.0);
     refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
   @Override
   public void weightingFieldParam02REd_changed() {
-    controller.xFormTextFieldChanged(null, controls.weightingFieldParam02REd, "weightingFieldColorMapXSize", 1.0);
+    controller.xFormTextFieldChanged(
+        null, controls.weightingFieldParam02REd, "weightingFieldColorMapXSize", 1.0);
     refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
@@ -173,13 +174,15 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
 
   @Override
   public void weightingFieldParam05REd_changed() {
-    controller.xFormTextFieldChanged(null, controls.weightingFieldParam05REd, "weightingFieldColorMapYCentre", 1.0);
+    controller.xFormTextFieldChanged(
+        null, controls.weightingFieldParam05REd, "weightingFieldColorMapYCentre", 1.0);
     refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
   @Override
   public void weightingFieldParam06REd_changed() {
-    controller.xFormTextFieldChanged(null, controls.weightingFieldParam06REd, "weightingFieldColorMapYSize", 1.0);
+    controller.xFormTextFieldChanged(
+        null, controls.weightingFieldParam06REd, "weightingFieldColorMapYSize", 1.0);
     refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
@@ -199,7 +202,8 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
     if (xForm != null) {
       controller.saveUndoPoint();
       xForm.setWeightingFieldColorMapXCentre(new XForm().getWeightingFieldColorMapXCentre());
-      controls.weightingFieldParam01REd.setText(Tools.doubleToString(xForm.getWeightingFieldColorMapXCentre()));
+      controls.weightingFieldParam01REd.setText(
+          Tools.doubleToString(xForm.getWeightingFieldColorMapXCentre()));
       controller.refreshFlameImage(true, false, 1, true, false);
       refreshFieldPreviewImage(xForm);
     }
@@ -211,7 +215,8 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
     if (xForm != null) {
       controller.saveUndoPoint();
       xForm.setWeightingFieldColorMapXSize(new XForm().getWeightingFieldColorMapXSize());
-      controls.weightingFieldParam02REd.setText(Tools.doubleToString(xForm.getWeightingFieldColorMapXSize()));
+      controls.weightingFieldParam02REd.setText(
+          Tools.doubleToString(xForm.getWeightingFieldColorMapXSize()));
       controller.refreshFlameImage(true, false, 1, true, false);
       refreshFieldPreviewImage(xForm);
     }
@@ -228,7 +233,8 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
     if (xForm != null) {
       controller.saveUndoPoint();
       xForm.setWeightingFieldColorMapYCentre(new XForm().getWeightingFieldColorMapYCentre());
-      controls.weightingFieldParam05REd.setText(Tools.doubleToString(xForm.getWeightingFieldColorMapYCentre()));
+      controls.weightingFieldParam05REd.setText(
+          Tools.doubleToString(xForm.getWeightingFieldColorMapYCentre()));
       controller.refreshFlameImage(true, false, 1, true, false);
       refreshFieldPreviewImage(xForm);
     }
@@ -240,7 +246,8 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
     if (xForm != null) {
       controller.saveUndoPoint();
       xForm.setWeightingFieldColorMapYSize(new XForm().getWeightingFieldColorMapYSize());
-      controls.weightingFieldParam06REd.setText(Tools.doubleToString(xForm.getWeightingFieldColorMapYSize()));
+      controls.weightingFieldParam06REd.setText(
+          Tools.doubleToString(xForm.getWeightingFieldColorMapYSize()));
       controller.refreshFlameImage(true, false, 1, true, false);
       refreshFieldPreviewImage(xForm);
     }

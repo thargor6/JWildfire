@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,32 +16,6 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JToggleButton;
-import javax.swing.ScrollPaneConstants;
-
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
@@ -56,19 +30,25 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGeneratorList;
-import org.jwildfire.create.tina.render.AbstractRenderThread;
-import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.IterationObserver;
-import org.jwildfire.create.tina.render.RenderInfo;
-import org.jwildfire.create.tina.render.RenderMode;
-import org.jwildfire.create.tina.render.RenderThreads;
-import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.render.ResumedFlameRender;
+import org.jwildfire.create.tina.render.*;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
-import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 public class TinaInteractiveRendererController implements IterationObserver {
   private enum State {
@@ -276,20 +256,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   public void loadFlameButton_clicked() {
     try {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file = FileDialogTools.selectFlameFileForOpen(parentCtrl.getMainEditorFrame(), imageRootPanel, null);
+      if (file!=null) {
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame newFlame = flames.get(0);
-        prefs.setLastInputFlameFile(file);
         currFlame = newFlame;
         importFlame(newFlame);
       }
@@ -434,17 +404,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
     try {
       pauseRenderThreads();
       try {
-        JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-        if (prefs.getOutputImagePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
-          File file = chooser.getSelectedFile();
+        File file = FileDialogTools.selectImageFileForSave(parentCtrl.getMainEditorFrame(), imageRootPanel, Tools.FILEEXT_PNG);
+        if (file!=null) {
           double zBufferScale = Double.parseDouble(
               JOptionPane.showInputDialog(imageRootPanel,
                   "Enter ZBuffer-Scale", currFlame.getZBufferScale()));
@@ -472,18 +433,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
     try {
       pauseRenderThreads();
       try {
-        JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-        if (prefs.getOutputImagePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
-          File file = chooser.getSelectedFile();
-          prefs.setLastOutputImageFile(file);
+        File file = FileDialogTools.selectImageFileForSave(parentCtrl.getMainEditorFrame(), imageRootPanel, Tools.FILEEXT_PNG);
+        if (file!=null) {
           RenderedFlame res = renderer.finishRenderFlame(displayUpdater.getSampleCount());
           new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
           if (res.getHDRImage() != null) {
@@ -674,17 +625,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
     try {
       Flame currFlame = getCurrFlame();
       if (currFlame != null) {
-        JFileChooser chooser = new FlameFileChooser(prefs);
-        if (prefs.getOutputFlamePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
-          File file = chooser.getSelectedFile();
+        File file = FileDialogTools.selectFlameFileForSave(parentCtrl.getMainEditorFrame(), imageRootPanel);
+        if (file!=null) {
           new FlameWriter().writeFlame(currFlame, file.getAbsolutePath());
           prefs.setLastOutputFlameFile(file);
         }
@@ -815,18 +757,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   public void resumeBtn_clicked() {
     try {
-      JFileChooser chooser = new JWFRenderFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
+      File file = FileDialogTools.selectJWFRenderFileForOpen(parentCtrl.getMainEditorFrame(), imageRootPanel);
+      if (file!=null) {
         cancelRender();
-        File file = chooser.getSelectedFile();
         Flame newFlame = new Flame();
         FlameRenderer newRenderer = new FlameRenderer(newFlame, prefs, newFlame.isBGTransparency(), false);
 
@@ -931,18 +864,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   public void pauseBtn_clicked() {
     if (state == State.RENDER) {
       try {
-        JFileChooser chooser = new JWFRenderFileChooser(prefs);
-        if (prefs.getOutputFlamePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
-          File file = chooser.getSelectedFile();
-          prefs.setLastOutputFlameFile(file);
+        File file = FileDialogTools.selectJWFRenderFileForSave(parentCtrl.getMainEditorFrame(), imageRootPanel);
+        if (file!=null) {
           renderer.saveState(file.getAbsolutePath(), threads.getRenderThreads(), displayUpdater.getSampleCount(), System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
         }
       }

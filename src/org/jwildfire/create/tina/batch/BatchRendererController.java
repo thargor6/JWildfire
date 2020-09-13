@@ -1,35 +1,20 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2020 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.batch;
-
-import java.awt.BorderLayout;
-import java.awt.Rectangle;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTable;
-import javax.swing.JToggleButton;
-import javax.swing.table.DefaultTableModel;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
@@ -39,19 +24,18 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
-import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.ProgressUpdater;
-import org.jwildfire.create.tina.render.RenderInfo;
-import org.jwildfire.create.tina.render.RenderMode;
-import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.swing.FlameFileChooser;
-import org.jwildfire.create.tina.swing.FlameHolder;
-import org.jwildfire.create.tina.swing.StandardDialogs;
-import org.jwildfire.create.tina.swing.TinaController;
-import org.jwildfire.create.tina.swing.TinaControllerData;
+import org.jwildfire.create.tina.render.*;
+import org.jwildfire.create.tina.swing.*;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BatchRendererController implements JobRenderThreadController {
   private final TinaController tinaController;
@@ -66,8 +50,16 @@ public class BatchRendererController implements JobRenderThreadController {
   private final JButton batchRenderShowImageBtn;
   private final JToggleButton enableOpenClBtn;
 
-  public BatchRendererController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, TinaControllerData pData, ProgressUpdater pJobProgressUpdater,
-      JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn, JToggleButton pEnableOpenClBtn) {
+  public BatchRendererController(
+      TinaController pTinaController,
+      ErrorHandler pErrorHandler,
+      Prefs pPrefs,
+      JPanel pRootPanel,
+      TinaControllerData pData,
+      ProgressUpdater pJobProgressUpdater,
+      JCheckBox pBatchRenderOverrideCBx,
+      JButton pBatchRenderShowImageBtn,
+      JToggleButton pEnableOpenClBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -98,7 +90,14 @@ public class BatchRendererController implements JobRenderThreadController {
       }
     }
     if (activeJobList.size() > 0) {
-      jobRenderThread = new JobRenderThread(this, activeJobList, (ResolutionProfile) data.batchResolutionProfileCmb.getSelectedItem(), (QualityProfile) data.batchQualityProfileCmb.getSelectedItem(), batchRenderOverrideCBx.isSelected(), enableOpenClBtn.isSelected());
+      jobRenderThread =
+          new JobRenderThread(
+              this,
+              activeJobList,
+              (ResolutionProfile) data.batchResolutionProfileCmb.getSelectedItem(),
+              (QualityProfile) data.batchQualityProfileCmb.getSelectedItem(),
+              batchRenderOverrideCBx.isSelected(),
+              enableOpenClBtn.isSelected());
       new Thread(jobRenderThread).start();
     }
     enableJobRenderControls();
@@ -147,27 +146,18 @@ public class BatchRendererController implements JobRenderThreadController {
       return;
     }
     try {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
+      List<File> files =
+          FileDialogTools.selectFlameFilesForOpen(tinaController.getMainEditorFrame(), rootPanel);
       int jobCount = batchRenderList.size();
-      chooser.setMultiSelectionEnabled(true);
-      if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-        for (File file : chooser.getSelectedFiles()) {
+      if (files != null && !files.isEmpty()) {
+        for (File file : files) {
           addFlameToBatchRenderer(file.getPath(), false);
         }
       }
       if (jobCount != batchRenderList.size()) {
         refreshRenderBatchJobsTable();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -198,8 +188,7 @@ public class BatchRendererController implements JobRenderThreadController {
     if (row < 0 && batchRenderList.size() > 0) {
       row = 0;
       data.renderBatchJobsTable.getSelectionModel().setSelectionInterval(row, row);
-    }
-    else if (row > 0 && row < batchRenderList.size()) {
+    } else if (row > 0 && row < batchRenderList.size()) {
       Job t = batchRenderList.get(row - 1);
       batchRenderList.set(row - 1, batchRenderList.get(row));
       batchRenderList.set(row, t);
@@ -216,8 +205,7 @@ public class BatchRendererController implements JobRenderThreadController {
     if (row < 0 && batchRenderList.size() > 0) {
       row = 0;
       data.renderBatchJobsTable.getSelectionModel().setSelectionInterval(row, row);
-    }
-    else if (row >= 0 && row < batchRenderList.size() - 1) {
+    } else if (row >= 0 && row < batchRenderList.size() - 1) {
       Job t = batchRenderList.get(row + 1);
       batchRenderList.set(row + 1, batchRenderList.get(row));
       batchRenderList.set(row, t);
@@ -247,125 +235,133 @@ public class BatchRendererController implements JobRenderThreadController {
 
   @Override
   public void refreshRenderBatchJobsTable() {
-    data.renderBatchJobsTable.setModel(new DefaultTableModel() {
-      private static final long serialVersionUID = 1L;
+    data.renderBatchJobsTable.setModel(
+        new DefaultTableModel() {
+          private static final long serialVersionUID = 1L;
 
-      @Override
-      public int getRowCount() {
-        return batchRenderList.size();
-      }
-
-      @Override
-      public int getColumnCount() {
-        return 7;
-      }
-
-      @Override
-      public String getColumnName(int columnIndex) {
-        switch (columnIndex) {
-          case COL_FLAME:
-            return "Flame";
-          case COL_CUSTOM_SIZE:
-            return "Custom size";
-          case COL_CUSTOM_QUALITY:
-            return "Custom quality";
-          case COL_RENDER_ANIMATION:
-            return "Render animation";
-          case COL_STATE:
-            return "State";
-          case COL_ELAPSED:
-            return "Elapsed time (seconds)";
-          case COL_LAST_ERROR:
-            return "Last error";
-        }
-        return null;
-      }
-
-      @Override
-      public Object getValueAt(int rowIndex, int columnIndex) {
-        Job job = rowIndex < batchRenderList.size() ? batchRenderList.get(rowIndex) : null;
-        if (job != null) {
-          switch (columnIndex) {
-            case COL_FLAME:
-              return new File(job.getFlameFilename()).getName();
-            case COL_CUSTOM_SIZE:
-              return job.getCustomWidth() > 0 || job.getCustomHeight() > 0 ? job.getCustomWidth() + "x" + job.getCustomHeight() : "";
-            case COL_CUSTOM_QUALITY:
-              return job.getCustomQuality() > MathLib.EPSILON ? Tools.doubleToString(job.getCustomQuality()) : "";
-            case COL_RENDER_ANIMATION:
-              return job.isRenderAsAnimation() ? "1": "";
-            case COL_STATE:
-              return job.isFinished() ? "ready" : "";
-            case COL_ELAPSED:
-              return job.isFinished() ? Tools.doubleToString(job.getElapsedSeconds()) : "";
-            case COL_LAST_ERROR:
-              return job.getLastErrorMsg();
+          @Override
+          public int getRowCount() {
+            return batchRenderList.size();
           }
-        }
-        return null;
-      }
 
-      @Override
-      public boolean isCellEditable(int row, int column) {
-        return column == COL_CUSTOM_SIZE || column == COL_CUSTOM_QUALITY || column == COL_RENDER_ANIMATION;
-      }
-
-      @Override
-      public void setValueAt(Object aValue, int row, int column) {
-        Job job = getCurrJob();
-        if (job != null) {
-          String valStr = (String) aValue;
-          switch (column) {
-            case COL_CUSTOM_QUALITY:
-              try {
-                if (valStr == null || valStr.trim().length() == 0) {
-                  job.setCustomQuality(0);
-                }
-                else {
-                  double quality = Tools.stringToDouble(valStr);
-                  if (quality < 0.1)
-                    throw new RuntimeException();
-                  job.setCustomQuality(quality);
-                }
-              }
-              catch (Throwable ex) {
-                ex.printStackTrace();
-                errorHandler.handleError(new Exception("Invalid quality value <" + valStr + ">"));
-              }
-              break;
-            case COL_CUSTOM_SIZE:
-              try {
-                if (valStr == null || valStr.trim().length() == 0) {
-                  job.setCustomWidth(0);
-                  job.setCustomHeight(0);
-                }
-                else {
-                  int p = valStr.toLowerCase().indexOf("x");
-                  if (p < 0)
-                    throw new RuntimeException();
-                  int width = Integer.parseInt(valStr.substring(0, p).trim());
-                  int height = Integer.parseInt(valStr.substring(p + 1, valStr.length()).trim());
-                  if (width < 16 || height < 16)
-                    throw new RuntimeException();
-                  job.setCustomWidth(width);
-                  job.setCustomHeight(height);
-                }
-              }
-              catch (Throwable ex) {
-                errorHandler.handleError(new Exception("Invalid size <" + valStr + ">, size must be specified in the format <width>x<height>, e.g. 1920x1080"));
-              }
-              break;
-            case COL_RENDER_ANIMATION:
-               job.setRenderAsAnimation("1".equals(valStr) || "yes".equalsIgnoreCase(valStr) || "true".equalsIgnoreCase(valStr));
-              break;
-            default: // nothing to do
-              break;
+          @Override
+          public int getColumnCount() {
+            return 7;
           }
-        }
-        super.setValueAt(aValue, row, column);
-      }
 
-    });
+          @Override
+          public String getColumnName(int columnIndex) {
+            switch (columnIndex) {
+              case COL_FLAME:
+                return "Flame";
+              case COL_CUSTOM_SIZE:
+                return "Custom size";
+              case COL_CUSTOM_QUALITY:
+                return "Custom quality";
+              case COL_RENDER_ANIMATION:
+                return "Render animation";
+              case COL_STATE:
+                return "State";
+              case COL_ELAPSED:
+                return "Elapsed time (seconds)";
+              case COL_LAST_ERROR:
+                return "Last error";
+            }
+            return null;
+          }
+
+          @Override
+          public Object getValueAt(int rowIndex, int columnIndex) {
+            Job job = rowIndex < batchRenderList.size() ? batchRenderList.get(rowIndex) : null;
+            if (job != null) {
+              switch (columnIndex) {
+                case COL_FLAME:
+                  return new File(job.getFlameFilename()).getName();
+                case COL_CUSTOM_SIZE:
+                  return job.getCustomWidth() > 0 || job.getCustomHeight() > 0
+                      ? job.getCustomWidth() + "x" + job.getCustomHeight()
+                      : "";
+                case COL_CUSTOM_QUALITY:
+                  return job.getCustomQuality() > MathLib.EPSILON
+                      ? Tools.doubleToString(job.getCustomQuality())
+                      : "";
+                case COL_RENDER_ANIMATION:
+                  return job.isRenderAsAnimation() ? "1" : "";
+                case COL_STATE:
+                  return job.isFinished() ? "ready" : "";
+                case COL_ELAPSED:
+                  return job.isFinished() ? Tools.doubleToString(job.getElapsedSeconds()) : "";
+                case COL_LAST_ERROR:
+                  return job.getLastErrorMsg();
+              }
+            }
+            return null;
+          }
+
+          @Override
+          public boolean isCellEditable(int row, int column) {
+            return column == COL_CUSTOM_SIZE
+                || column == COL_CUSTOM_QUALITY
+                || column == COL_RENDER_ANIMATION;
+          }
+
+          @Override
+          public void setValueAt(Object aValue, int row, int column) {
+            Job job = getCurrJob();
+            if (job != null) {
+              String valStr = (String) aValue;
+              switch (column) {
+                case COL_CUSTOM_QUALITY:
+                  try {
+                    if (valStr == null || valStr.trim().length() == 0) {
+                      job.setCustomQuality(0);
+                    } else {
+                      double quality = Tools.stringToDouble(valStr);
+                      if (quality < 0.1) throw new RuntimeException();
+                      job.setCustomQuality(quality);
+                    }
+                  } catch (Throwable ex) {
+                    ex.printStackTrace();
+                    errorHandler.handleError(
+                        new Exception("Invalid quality value <" + valStr + ">"));
+                  }
+                  break;
+                case COL_CUSTOM_SIZE:
+                  try {
+                    if (valStr == null || valStr.trim().length() == 0) {
+                      job.setCustomWidth(0);
+                      job.setCustomHeight(0);
+                    } else {
+                      int p = valStr.toLowerCase().indexOf("x");
+                      if (p < 0) throw new RuntimeException();
+                      int width = Integer.parseInt(valStr.substring(0, p).trim());
+                      int height =
+                          Integer.parseInt(valStr.substring(p + 1, valStr.length()).trim());
+                      if (width < 16 || height < 16) throw new RuntimeException();
+                      job.setCustomWidth(width);
+                      job.setCustomHeight(height);
+                    }
+                  } catch (Throwable ex) {
+                    errorHandler.handleError(
+                        new Exception(
+                            "Invalid size <"
+                                + valStr
+                                + ">, size must be specified in the format <width>x<height>, e.g. 1920x1080"));
+                  }
+                  break;
+                case COL_RENDER_ANIMATION:
+                  job.setRenderAsAnimation(
+                      "1".equals(valStr)
+                          || "yes".equalsIgnoreCase(valStr)
+                          || "true".equalsIgnoreCase(valStr));
+                  break;
+                default: // nothing to do
+                  break;
+              }
+            }
+            super.setValueAt(aValue, row, column);
+          }
+        });
     data.renderBatchJobsTable.getTableHeader().setFont(data.transformationsTable.getFont());
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_FLAME).setWidth(120);
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_CUSTOM_QUALITY).setWidth(40);
@@ -374,8 +370,7 @@ public class BatchRendererController implements JobRenderThreadController {
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_STATE).setPreferredWidth(10);
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_ELAPSED).setWidth(10);
     data.renderBatchJobsTable.getColumnModel().getColumn(COL_LAST_ERROR).setWidth(120);
-    if (batchRenderList.size() > 0)
-      data.renderBatchJobsTable.setRowSelectionInterval(0, 0);
+    if (batchRenderList.size() > 0) data.renderBatchJobsTable.setRowSelectionInterval(0, 0);
   }
 
   @Override
@@ -404,23 +399,21 @@ public class BatchRendererController implements JobRenderThreadController {
   public void renderBatchJobsTableHeaderClicked() {
     int col = data.renderBatchJobsTable.getSelectedColumn();
     int row = data.renderBatchJobsTable.getSelectedRow();
-    if(row>=0 && row<batchRenderList.size()) {
-      if(col==COL_RENDER_ANIMATION) {
+    if (row >= 0 && row < batchRenderList.size()) {
+      if (col == COL_RENDER_ANIMATION) {
         boolean val = batchRenderList.get(row).isRenderAsAnimation();
-        for(int i=row+1; i<batchRenderList.size();i++) {
+        for (int i = row + 1; i < batchRenderList.size(); i++) {
           batchRenderList.get(i).setRenderAsAnimation(val);
         }
-      }
-      else if(col==COL_CUSTOM_QUALITY) {
+      } else if (col == COL_CUSTOM_QUALITY) {
         double val = batchRenderList.get(row).getCustomQuality();
-        for(int i=row+1; i<batchRenderList.size();i++) {
+        for (int i = row + 1; i < batchRenderList.size(); i++) {
           batchRenderList.get(i).setCustomQuality(val);
         }
-      }
-      else if(col==COL_CUSTOM_SIZE) {
+      } else if (col == COL_CUSTOM_SIZE) {
         int w = batchRenderList.get(row).getCustomWidth();
         int h = batchRenderList.get(row).getCustomHeight();
-        for(int i=row+1; i<batchRenderList.size();i++) {
+        for (int i = row + 1; i < batchRenderList.size(); i++) {
           batchRenderList.get(i).setCustomWidth(w);
           batchRenderList.get(i).setCustomHeight(h);
         }
@@ -439,13 +432,11 @@ public class BatchRendererController implements JobRenderThreadController {
           List<Flame> flames = new FlameReader(prefs).readFlames(job.getFlameFilename());
           return flames.size() > 0 ? flames.get(0) : null;
         }
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
       return null;
     }
-
   }
 
   private BatchRenderPreviewFlameHolder batchRenderPreviewFlameHolder = null;
@@ -471,7 +462,17 @@ public class BatchRendererController implements JobRenderThreadController {
       int height = Math.max(data.batchPreviewRootPanel.getHeight(), 32);
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      batchPreviewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.batchPreviewRootPanel.getWidth(), getBatchRenderPreviewFlameHolder(), null, null, null);
+      batchPreviewFlamePanel =
+          new FlamePanel(
+              prefs,
+              img,
+              0,
+              0,
+              data.batchPreviewRootPanel.getWidth(),
+              getBatchRenderPreviewFlameHolder(),
+              null,
+              null,
+              null);
       ResolutionProfile resProfile = getBatchRenderResolutionProfile();
       batchPreviewFlamePanel.setRenderWidth(resProfile.getWidth());
       batchPreviewFlamePanel.setRenderHeight(resProfile.getHeight());
@@ -498,13 +499,13 @@ public class BatchRendererController implements JobRenderThreadController {
         flame.setWidth(info.getImageWidth());
         flame.setHeight(info.getImageHeight());
 
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);
+        FlameRenderer renderer =
+            new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);
         flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
         flame.setSpatialFilterRadius(0.0);
         RenderedFlame res = renderer.renderFlame(info);
         imgPanel.setImage(res.getImage());
-      }
-      else {
+      } else {
         imgPanel.setImage(new SimpleImage(width, height));
       }
     }
@@ -530,18 +531,17 @@ public class BatchRendererController implements JobRenderThreadController {
         File imageFile = new File(primaryFilename);
         if (imageFile.exists()) {
           tinaController.getMainController().loadImage(imageFile.getAbsolutePath(), false);
-        }
-        else {
+        } else {
           StandardDialogs.message(rootPanel, "No rendered image found");
         }
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
 
-  public void importFlame(String pFilename, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile) {
+  public void importFlame(
+      String pFilename, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile) {
     Job job = new Job();
     job.setFlameFilename(pFilename);
     if (pResolutionProfile != null) {

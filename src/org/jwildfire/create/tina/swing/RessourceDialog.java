@@ -1,51 +1,35 @@
 /*
-  JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2020 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Window;
+import jsyntaxpane.DefaultSyntaxKit;
+import jsyntaxpane.util.Configuration;
+import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
+import org.jwildfire.swing.ErrorHandler;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.LookAndFeel;
-import javax.swing.UIManager;
-
-import jsyntaxpane.DefaultSyntaxKit;
-import jsyntaxpane.util.Configuration;
-
-import org.jwildfire.base.Prefs;
-import org.jwildfire.base.Tools;
-import org.jwildfire.swing.ErrorHandler;
 
 public class RessourceDialog extends JDialog {
 
@@ -78,25 +62,27 @@ public class RessourceDialog extends JDialog {
   private boolean confirmed = false;
   private ContentType contentType = ContentType.TEXT;
   private final Prefs prefs;
+  private final Frame frame;
   private final ErrorHandler errorHandler;
   private final List<RessourceValidation> validations = new ArrayList<RessourceValidation>();
 
-  /**
-   * @param owner
-   */
-  public RessourceDialog(Window owner, Prefs prefs, ErrorHandler errorHandler) {
+  /** @param owner */
+  public RessourceDialog(Frame frame, Window owner, Prefs prefs, ErrorHandler errorHandler) {
     super(owner);
+    this.frame = frame;
     this.prefs = prefs;
     this.errorHandler = errorHandler;
     initialize();
     Rectangle rootBounds = owner.getBounds();
     Dimension size = getSize();
-    setLocation(rootBounds.x + (rootBounds.width - size.width) / 2, rootBounds.y + (rootBounds.height - size.height) / 2);
+    setLocation(
+        rootBounds.x + (rootBounds.width - size.width) / 2,
+        rootBounds.y + (rootBounds.height - size.height) / 2);
   }
 
   /**
    * This method initializes this
-   * 
+   *
    * @return void
    */
   private void initialize() {
@@ -106,7 +92,7 @@ public class RessourceDialog extends JDialog {
 
   /**
    * This method initializes jContentPane
-   * 
+   *
    * @return javax.swing.JPanel
    */
   private JPanel getJContentPane() {
@@ -121,9 +107,9 @@ public class RessourceDialog extends JDialog {
   }
 
   /**
-   * This method initializes bottomPanel	
-   * 	
-   * @return javax.swing.JPanel	
+   * This method initializes bottomPanel
+   *
+   * @return javax.swing.JPanel
    */
   private JPanel getBottomPanel() {
     if (bottomPanel == null) {
@@ -134,11 +120,12 @@ public class RessourceDialog extends JDialog {
       bottomPanel.add(getCancelButton(), null);
 
       JButton openFileBtn = new JButton();
-      openFileBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          openFile();
-        }
-      });
+      openFileBtn.addActionListener(
+          new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              openFile();
+            }
+          });
       openFileBtn.setText("Open file...");
       openFileBtn.setSize(new Dimension(125, 24));
       openFileBtn.setSelected(true);
@@ -154,35 +141,22 @@ public class RessourceDialog extends JDialog {
 
   protected void openFile() {
     try {
-      JFileChooser chooser = new JFileChooser();
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          if (contentType == ContentType.JAVA)
-            chooser.setCurrentDirectory(new File(prefs.getTinaCustomVariationsPath()));
-          else
-            chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()).getParentFile());
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file = FileDialogTools.selectRessourceForOpen(frame, centerPanel, contentType);
+      if (file != null) {
         String content = Tools.readUTF8Textfile(file.getAbsolutePath());
         editorTextArea.setText(content);
         editorTextArea.setSelectionStart(0);
         editorTextArea.setSelectionEnd(0);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
 
   /**
-   * This method initializes topPanel	
-   * 	
-   * @return javax.swing.JPanel	
+   * This method initializes topPanel
+   *
+   * @return javax.swing.JPanel
    */
   private JPanel getTopPanel() {
     if (topPanel == null) {
@@ -194,9 +168,9 @@ public class RessourceDialog extends JDialog {
   }
 
   /**
-   * This method initializes centerPanel	
-   * 	
-   * @return javax.swing.JPanel	
+   * This method initializes centerPanel
+   *
+   * @return javax.swing.JPanel
    */
   private JPanel getCenterPanel() {
     if (centerPanel == null) {
@@ -209,9 +183,9 @@ public class RessourceDialog extends JDialog {
   }
 
   /**
-   * This method initializes okButton	
-   * 	
-   * @return javax.swing.JButton	
+   * This method initializes okButton
+   *
+   * @return javax.swing.JButton
    */
   private JButton getOkButton() {
     if (okButton == null) {
@@ -223,28 +197,28 @@ public class RessourceDialog extends JDialog {
       okButton.setLocation(new Point(327, 8));
       okButton.setSelected(true);
       okButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      okButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          try {
-            for (RessourceValidation validation : validations) {
-              validation.validate();
+      okButton.addActionListener(
+          new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              try {
+                for (RessourceValidation validation : validations) {
+                  validation.validate();
+                }
+                confirmed = true;
+                setVisible(false);
+              } catch (Throwable ex) {
+                errorHandler.handleError(ex);
+              }
             }
-            confirmed = true;
-            setVisible(false);
-          }
-          catch (Throwable ex) {
-            errorHandler.handleError(ex);
-          }
-        }
-      });
+          });
     }
     return okButton;
   }
 
   /**
-   * This method initializes cancelButton	
-   * 	
-   * @return javax.swing.JButton	
+   * This method initializes cancelButton
+   *
+   * @return javax.swing.JButton
    */
   private JButton getCancelButton() {
     if (cancelButton == null) {
@@ -255,20 +229,21 @@ public class RessourceDialog extends JDialog {
       cancelButton.setSize(new Dimension(125, 24));
       cancelButton.setLocation(new Point(457, 8));
       cancelButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      cancelButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          confirmed = false;
-          setVisible(false);
-        }
-      });
+      cancelButton.addActionListener(
+          new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              confirmed = false;
+              setVisible(false);
+            }
+          });
     }
     return cancelButton;
   }
 
   /**
-   * This method initializes editrScrollPane	
-   * 	
-   * @return javax.swing.JScrollPane	
+   * This method initializes editrScrollPane
+   *
+   * @return javax.swing.JScrollPane
    */
   private JScrollPane getEditrScrollPane() {
     if (editrScrollPane == null) {
@@ -279,34 +254,39 @@ public class RessourceDialog extends JDialog {
   }
 
   /**
-   * This method initializes editorTextArea	
-   * 	
-   * @return javax.swing.JTextArea	
+   * This method initializes editorTextArea
+   *
+   * @return javax.swing.JTextArea
    */
   private JEditorPane getEditorTextArea() {
     if (editorTextArea == null) {
       if (Prefs.getPrefs().isTinaAdvancedCodeEditor()) {
         try {
           DefaultSyntaxKit.initKit();
-          // setting JSyntaxPane font, see comment in org.jwildfire.create.tina.swing.ScriptEditDialog for explanation
+          // setting JSyntaxPane font, see comment in
+          // org.jwildfire.create.tina.swing.ScriptEditDialog for explanation
           Configuration config = DefaultSyntaxKit.getConfig(DefaultSyntaxKit.class);
-          config.put("DefaultFont","monospaced " + Integer.toString(Prefs.getPrefs().getTinaAdvancedCodeEditorFontSize()));
-        }
-        catch (Exception ex) {
+          config.put(
+              "DefaultFont",
+              "monospaced "
+                  + Integer.toString(Prefs.getPrefs().getTinaAdvancedCodeEditorFontSize()));
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
       editorTextArea = new JEditorPane();
-      // if using advanced editor color fix, and one of JWildfire's dark look and feels (HiFi or Noire), 
-      //   override look and feel to set scriptEditor background to white, 
+      // if using advanced editor color fix, and one of JWildfire's dark look and feels (HiFi or
+      // Noire),
+      //   override look and feel to set scriptEditor background to white,
       //   to work better with JSyntaxPane text colors
       LookAndFeel laf = UIManager.getLookAndFeel();
       String laf_name = laf.getName();
-      boolean using_dark_theme = laf_name.equalsIgnoreCase("HiFi") || laf_name.equalsIgnoreCase("Noire");
-      if (using_dark_theme && 
-              Prefs.getPrefs().isTinaAdvancedCodeEditor() && 
-              Prefs.getPrefs().isTinaAdvancedCodeEditorColorFix()) {
-          editorTextArea.setBackground(Color.white);
+      boolean using_dark_theme =
+          laf_name.equalsIgnoreCase("HiFi") || laf_name.equalsIgnoreCase("Noire");
+      if (using_dark_theme
+          && Prefs.getPrefs().isTinaAdvancedCodeEditor()
+          && Prefs.getPrefs().isTinaAdvancedCodeEditorColorFix()) {
+        editorTextArea.setBackground(Color.white);
       }
       editorTextArea.setText("");
     }
@@ -320,8 +300,7 @@ public class RessourceDialog extends JDialog {
   public void setRessourceValue(ContentType pContentType, String pRessourceValue) {
     try {
       editorTextArea.setContentType(pContentType.getContentType());
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
     editorTextArea.setText(pRessourceValue);

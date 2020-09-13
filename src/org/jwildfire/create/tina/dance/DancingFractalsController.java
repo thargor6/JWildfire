@@ -1,50 +1,22 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2020 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.dance;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyEditor;
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.TreePath;
-
+import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.audio.JLayerInterface;
@@ -54,11 +26,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.dance.action.ActionRecorder;
 import org.jwildfire.create.tina.dance.action.PostRecordFlameGenerator;
 import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
-import org.jwildfire.create.tina.dance.motion.Motion;
-import org.jwildfire.create.tina.dance.motion.MotionCreator;
-import org.jwildfire.create.tina.dance.motion.MotionCreatorType;
-import org.jwildfire.create.tina.dance.motion.MotionLink;
-import org.jwildfire.create.tina.dance.motion.MotionType;
+import org.jwildfire.create.tina.dance.motion.*;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.JWFDanceReader;
 import org.jwildfire.create.tina.io.JWFDanceWriter;
@@ -72,15 +40,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.swing.FlameFileChooser;
-import org.jwildfire.create.tina.swing.FlameHolder;
-import org.jwildfire.create.tina.swing.JWFDanceFileChooser;
-import org.jwildfire.create.tina.swing.JWFNumberField;
-import org.jwildfire.create.tina.swing.RandomBatchQuality;
-import org.jwildfire.create.tina.swing.SoundFileChooser;
-import org.jwildfire.create.tina.swing.StandardDialogs;
-import org.jwildfire.create.tina.swing.TinaController;
-import org.jwildfire.create.tina.swing.MainEditorFrame;
+import org.jwildfire.create.tina.swing.*;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.image.SimpleImage;
@@ -93,7 +53,22 @@ import org.jwildfire.transform.TextTransformer.HAlignment;
 import org.jwildfire.transform.TextTransformer.Mode;
 import org.jwildfire.transform.TextTransformer.VAlignment;
 
-import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyEditor;
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DancingFractalsController {
   public static final int PAGE_INDEX = 5;
@@ -155,15 +130,49 @@ public class DancingFractalsController {
   private final FlamePropertiesTreeService flamePropertiesTreeService;
   private JLayerInterface jLayer = new JLayerInterface();
 
-  public DancingFractalsController(TinaController pParent, ErrorHandler pErrorHandler, JPanel pRootPanel, JPanel pRealtimeFlamePnl, JPanel pRealtimeGraph1Pnl,
-      JButton pLoadSoundBtn, JButton pAddFromClipboardBtn, JButton pAddFromEditorBtn, JButton pAddFromDiscBtn, JWFNumberField pRandomCountIEd,
-      JButton pGenRandFlamesBtn, JComboBox pRandomGenCmb, JPanel pPoolFlamePreviewPnl, JSlider pBorderSizeSlider,
-      JButton pFlameToEditorBtn, JButton pDeleteFlameBtn, JTextField pFramesPerSecondIEd, JTextField pMorphFrameCountIEd,
-      JButton pStartShowButton, JButton pStopShowButton, JCheckBox pDoRecordCBx, JComboBox pFlamesCmb, JCheckBox pDrawTrianglesCbx, JCheckBox pDrawFFTCbx, JCheckBox pDrawFPSCbx, JTree pFlamePropertiesTree,
-      JPanel pMotionPropertyRootPnl, JTable pMotionTable, JComboBox pAddMotionCmb, JButton pAddMotionBtn, JButton pDeleteMotionBtn,
-      JButton pLinkMotionBtn, JButton pUnlinkMotionBtn, JComboBox pCreateMotionsCmb, JButton pClearMotionsBtn,
-      JButton pLoadProjectBtn, JButton pSaveProjectBtn, JTable pMotionLinksTable, JButton pReplaceFlameFromEditorBtn, JButton pRenameFlameBtn,
-      JButton pRenameMotionBtn, JCheckBox pMutedCbx) {
+  public DancingFractalsController(
+      TinaController pParent,
+      ErrorHandler pErrorHandler,
+      JPanel pRootPanel,
+      JPanel pRealtimeFlamePnl,
+      JPanel pRealtimeGraph1Pnl,
+      JButton pLoadSoundBtn,
+      JButton pAddFromClipboardBtn,
+      JButton pAddFromEditorBtn,
+      JButton pAddFromDiscBtn,
+      JWFNumberField pRandomCountIEd,
+      JButton pGenRandFlamesBtn,
+      JComboBox pRandomGenCmb,
+      JPanel pPoolFlamePreviewPnl,
+      JSlider pBorderSizeSlider,
+      JButton pFlameToEditorBtn,
+      JButton pDeleteFlameBtn,
+      JTextField pFramesPerSecondIEd,
+      JTextField pMorphFrameCountIEd,
+      JButton pStartShowButton,
+      JButton pStopShowButton,
+      JCheckBox pDoRecordCBx,
+      JComboBox pFlamesCmb,
+      JCheckBox pDrawTrianglesCbx,
+      JCheckBox pDrawFFTCbx,
+      JCheckBox pDrawFPSCbx,
+      JTree pFlamePropertiesTree,
+      JPanel pMotionPropertyRootPnl,
+      JTable pMotionTable,
+      JComboBox pAddMotionCmb,
+      JButton pAddMotionBtn,
+      JButton pDeleteMotionBtn,
+      JButton pLinkMotionBtn,
+      JButton pUnlinkMotionBtn,
+      JComboBox pCreateMotionsCmb,
+      JButton pClearMotionsBtn,
+      JButton pLoadProjectBtn,
+      JButton pSaveProjectBtn,
+      JTable pMotionLinksTable,
+      JButton pReplaceFlameFromEditorBtn,
+      JButton pRenameFlameBtn,
+      JButton pRenameMotionBtn,
+      JCheckBox pMutedCbx) {
     flamePropertiesTreeService = new FlamePropertiesTreeService();
 
     rootPanel = pRootPanel;
@@ -226,15 +235,16 @@ public class DancingFractalsController {
   }
 
   private FlamePanel getFlamePanel() {
-    if (flamePanel == null) {  // flameRootPanel can't be null !?
+    if (flamePanel == null) { // flameRootPanel can't be null !?
       int borderWidth = flameRootPanel.getBorder().getBorderInsets(flameRootPanel).left;
       int width = flameRootPanel.getWidth() - borderWidth;
       int height = flameRootPanel.getHeight() - borderWidth;
-      if (width < 16 || height < 16)
-        return null;
+      if (width < 16 || height < 16) return null;
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, flameRootPanel.getWidth() - borderWidth, null, null, null, null);
+      flamePanel =
+          new FlamePanel(
+              prefs, img, 0, 0, flameRootPanel.getWidth() - borderWidth, null, null, null, null);
       flamePanel.setRenderWidth(640);
       flamePanel.setRenderHeight(480);
       flameRootPanel.add(flamePanel, BorderLayout.CENTER);
@@ -251,7 +261,9 @@ public class DancingFractalsController {
       int height = poolFlamePreviewPnl.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      poolFlamePreviewFlamePanel = new FlamePanel(prefs, img, 0, 0, poolFlamePreviewPnl.getWidth(), poolFlameHolder, null, null, null);
+      poolFlamePreviewFlamePanel =
+          new FlamePanel(
+              prefs, img, 0, 0, poolFlamePreviewPnl.getWidth(), poolFlameHolder, null, null, null);
       poolFlamePreviewFlamePanel.setRenderWidth(640);
       poolFlamePreviewFlamePanel.setRenderHeight(480);
       poolFlamePreviewFlamePanel.setDrawTriangles(false);
@@ -276,10 +288,10 @@ public class DancingFractalsController {
     return graph1Panel;
   }
 
-  public void refreshFlameImage(Flame flame, boolean pDrawTriangles, double pFPS, long pFrame, boolean pDrawFPS) {
+  public void refreshFlameImage(
+      Flame flame, boolean pDrawTriangles, double pFPS, long pFrame, boolean pDrawFPS) {
     FlamePanel imgPanel = getFlamePanel();
-    if (imgPanel == null)
-      return;
+    if (imgPanel == null) return;
     Rectangle bounds = imgPanel.getImageBounds();
     int width = bounds.width;
     int height = bounds.height;
@@ -303,7 +315,12 @@ public class DancingFractalsController {
           SimpleImage img = res.getImage();
           if (pDrawFPS) {
             TextTransformer txt = new TextTransformer();
-            txt.setText1("fps: " + Tools.doubleToString(pFPS) + ", time: " + Tools.doubleToString(pFrame / 1000.0) + "s");
+            txt.setText1(
+                "fps: "
+                    + Tools.doubleToString(pFPS)
+                    + ", time: "
+                    + Tools.doubleToString(pFrame / 1000.0)
+                    + "s");
             txt.setAntialiasing(false);
             txt.setColor(Color.LIGHT_GRAY);
             txt.setMode(Mode.NORMAL);
@@ -315,18 +332,15 @@ public class DancingFractalsController {
             txt.transformImage(img);
           }
           imgPanel.setImage(img);
-        }
-        finally {
+        } finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSampleDensity(oldSampleDensity);
         }
       }
-    }
-    else {
+    } else {
       try {
         imgPanel.setImage(new SimpleImage(width, height));
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
     }
@@ -335,8 +349,7 @@ public class DancingFractalsController {
 
   public void refreshPoolPreviewFlameImage(Flame flame) {
     FlamePanel imgPanel = getPoolPreviewFlamePanel();
-    if (imgPanel == null)
-      return;
+    if (imgPanel == null) return;
     Rectangle bounds = imgPanel.getImageBounds();
     int width = bounds.width;
     int height = bounds.height;
@@ -354,12 +367,10 @@ public class DancingFractalsController {
         renderer.setProgressUpdater(null);
         RenderedFlame res = renderer.renderFlame(info);
         imgPanel.setImage(res.getImage());
-      }
-      else {
+      } else {
         imgPanel.setImage(new SimpleImage(width, height));
       }
-    }
-    else {
+    } else {
       imgPanel.setImage(new SimpleImage(width, height));
     }
     poolFlamePreviewPnl.repaint();
@@ -367,8 +378,7 @@ public class DancingFractalsController {
 
   public void startShow() {
     try {
-      if (project.getFlames().size() == 0)
-        throw new Exception("No flames to animate");
+      if (project.getFlames().size() == 0) throw new Exception("No flames to animate");
       jLayer.stop();
       if (project.getSoundFilename() != null && project.getSoundFilename().length() > 0) {
         jLayer.play(project.getSoundFilename());
@@ -376,8 +386,7 @@ public class DancingFractalsController {
       startRender();
       running = true;
       enableControls();
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -392,7 +401,11 @@ public class DancingFractalsController {
 
   public void startRender() throws Exception {
     stopRender();
-    Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < project.getFlames().size() ? project.getFlames().get(flamesCmb.getSelectedIndex()) : null;
+    Flame selFlame =
+        flamesCmb.getSelectedIndex() >= 0
+                && flamesCmb.getSelectedIndex() < project.getFlames().size()
+            ? project.getFlames().get(flamesCmb.getSelectedIndex())
+            : null;
     renderThread = new RealtimeAnimRenderThread(this, project);
     renderThread.getFlameStack().addFlame(selFlame, 0, project.getMotions(selFlame));
     actionRecorder = new ActionRecorder(renderThread);
@@ -414,19 +427,12 @@ public class DancingFractalsController {
       }
       renderThread.setForceAbort(true);
       if (doRecordCBx.isSelected()) {
-        JFileChooser chooser = new FlameFileChooser(prefs);
-        if (prefs.getOutputFlamePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
-          File file = chooser.getSelectedFile();
-          prefs.setLastOutputFlameFile(file);
-          PostRecordFlameGenerator generator = new PostRecordFlameGenerator(Prefs.getPrefs(), project, actionRecorder, renderThread, project.getFFT());
+        File file =
+            FileDialogTools.selectFlameFileForSave(parentCtrl.getMainEditorFrame(), flamePanel);
+        if (file != null) {
+          PostRecordFlameGenerator generator =
+              new PostRecordFlameGenerator(
+                  Prefs.getPrefs(), project, actionRecorder, renderThread, project.getFFT());
           generator.createRecordedFlameFiles(file.getAbsolutePath());
         }
       }
@@ -442,40 +448,43 @@ public class DancingFractalsController {
       int count = (int) ((Double) randomCountIEd.getValue() + 0.5);
       for (int i = 0; i < count; i++) {
 
-        RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomGenCmb.getSelectedItem(), true);
+        RandomFlameGenerator randGen =
+            RandomFlameGeneratorList.getRandomFlameGeneratorInstance(
+                (String) randomGenCmb.getSelectedItem(), true);
         int palettePoints = 3 + Tools.randomInt(68);
         boolean fadePaletteColors = Math.random() > 0.33;
         boolean uniformSize = Math.random() > 0.75;
-        RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.NONE, RandomGradientGeneratorList.DEFAULT, RandomWeightingFieldGeneratorList.NONE, palettePoints, fadePaletteColors, uniformSize, RandomBatchQuality.NORMAL);
+        RandomFlameGeneratorSampler sampler =
+            new RandomFlameGeneratorSampler(
+                IMG_WIDTH,
+                IMG_HEIGHT,
+                prefs,
+                randGen,
+                RandomSymmetryGeneratorList.NONE,
+                RandomGradientGeneratorList.DEFAULT,
+                RandomWeightingFieldGeneratorList.NONE,
+                palettePoints,
+                fadePaletteColors,
+                uniformSize,
+                RandomBatchQuality.NORMAL);
         project.getFlames().add(validateDancingFlame(sampler.createSample().getFlame()));
       }
       refreshProjectFlames();
       enableControls();
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
 
   public void loadSoundButton_clicked() {
     try {
-      JFileChooser chooser = new SoundFileChooser(prefs);
-      if (prefs.getInputSoundFilePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputSoundFilePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        prefs.setLastInputSoundFile(file);
+      File file =
+          FileDialogTools.selectSoundFileForOpen(parentCtrl.getMainEditorFrame(), flamePanel);
+      if (file != null) {
         project.setSoundFilename(jLayer, file.getAbsolutePath());
         enableControls();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -487,8 +496,7 @@ public class DancingFractalsController {
       refreshFlamesCmb();
       flamePropertiesTreeService.refreshFlamePropertiesTree(flamePropertiesTree, project);
       refreshMotionTable();
-    }
-    finally {
+    } finally {
       refreshing = oldRefreshing;
     }
   }
@@ -497,54 +505,57 @@ public class DancingFractalsController {
     final int COL_MOTION = 0;
     final int COL_START_FRAME = 1;
     final int COL_END_FRAME = 2;
-    motionTable.setModel(new DefaultTableModel() {
-      private static final long serialVersionUID = 1L;
+    motionTable.setModel(
+        new DefaultTableModel() {
+          private static final long serialVersionUID = 1L;
 
-      @Override
-      public int getRowCount() {
-        return project.getMotions().size();
-      }
-
-      @Override
-      public int getColumnCount() {
-        return 3;
-      }
-
-      @Override
-      public String getColumnName(int columnIndex) {
-        switch (columnIndex) {
-          case COL_MOTION:
-            return "Motion";
-          case COL_START_FRAME:
-            return "Start";
-          case COL_END_FRAME:
-            return "End";
-        }
-        return null;
-      }
-
-      @Override
-      public Object getValueAt(int rowIndex, int columnIndex) {
-        Motion motion = rowIndex < project.getMotions().size() ? project.getMotions().get(rowIndex) : null;
-        if (motion != null) {
-          switch (columnIndex) {
-            case COL_MOTION:
-              return motion.getDisplayLabel();
-            case COL_START_FRAME:
-              return (motion.getStartFrame() != null) ? String.valueOf(motion.getStartFrame()) : "";
-            case COL_END_FRAME:
-              return (motion.getEndFrame() != null) ? String.valueOf(motion.getEndFrame()) : "";
+          @Override
+          public int getRowCount() {
+            return project.getMotions().size();
           }
-        }
-        return null;
-      }
 
-      @Override
-      public boolean isCellEditable(int row, int column) {
-        return false;
-      }
+          @Override
+          public int getColumnCount() {
+            return 3;
+          }
 
-    });
+          @Override
+          public String getColumnName(int columnIndex) {
+            switch (columnIndex) {
+              case COL_MOTION:
+                return "Motion";
+              case COL_START_FRAME:
+                return "Start";
+              case COL_END_FRAME:
+                return "End";
+            }
+            return null;
+          }
+
+          @Override
+          public Object getValueAt(int rowIndex, int columnIndex) {
+            Motion motion =
+                rowIndex < project.getMotions().size() ? project.getMotions().get(rowIndex) : null;
+            if (motion != null) {
+              switch (columnIndex) {
+                case COL_MOTION:
+                  return motion.getDisplayLabel();
+                case COL_START_FRAME:
+                  return (motion.getStartFrame() != null)
+                      ? String.valueOf(motion.getStartFrame())
+                      : "";
+                case COL_END_FRAME:
+                  return (motion.getEndFrame() != null) ? String.valueOf(motion.getEndFrame()) : "";
+              }
+            }
+            return null;
+          }
+
+          @Override
+          public boolean isCellEditable(int row, int column) {
+            return false;
+          }
+        });
     motionTable.getTableHeader().setFont(motionTable.getFont());
     motionTable.getColumnModel().getColumn(COL_MOTION).setWidth(120);
     motionTable.getColumnModel().getColumn(COL_START_FRAME).setPreferredWidth(10);
@@ -555,61 +566,72 @@ public class DancingFractalsController {
     final int COL_FLAME = 0;
     final int COL_PROPERTY = 1;
     final Motion currMotion = getSelectedMotion();
-    motionLinksTable.setModel(new DefaultTableModel() {
-      private static final long serialVersionUID = 1L;
+    motionLinksTable.setModel(
+        new DefaultTableModel() {
+          private static final long serialVersionUID = 1L;
 
-      @Override
-      public int getRowCount() {
-        return currMotion != null ? currMotion.getMotionLinks().size() : 0;
-      }
-
-      @Override
-      public int getColumnCount() {
-        return 2;
-      }
-
-      @Override
-      public String getColumnName(int columnIndex) {
-        switch (columnIndex) {
-          case COL_FLAME:
-            return "Flame";
-          case COL_PROPERTY:
-            return "Property";
-        }
-        return null;
-      }
-
-      @Override
-      public Object getValueAt(int rowIndex, int columnIndex) {
-        MotionLink motionLink = rowIndex < currMotion.getMotionLinks().size() ? currMotion.getMotionLinks().get(rowIndex) : null;
-        if (motionLink != null) {
-          switch (columnIndex) {
-            case COL_FLAME:
-              return flamePropertiesTreeService.getFlameCaption(motionLink.getProperyPath().getFlame());
-            case COL_PROPERTY:
-              return motionLink.getProperyPath().getPath();
+          @Override
+          public int getRowCount() {
+            return currMotion != null ? currMotion.getMotionLinks().size() : 0;
           }
-        }
-        return null;
-      }
 
-      @Override
-      public boolean isCellEditable(int row, int column) {
-        return false;
-      }
+          @Override
+          public int getColumnCount() {
+            return 2;
+          }
 
-    });
+          @Override
+          public String getColumnName(int columnIndex) {
+            switch (columnIndex) {
+              case COL_FLAME:
+                return "Flame";
+              case COL_PROPERTY:
+                return "Property";
+            }
+            return null;
+          }
+
+          @Override
+          public Object getValueAt(int rowIndex, int columnIndex) {
+            MotionLink motionLink =
+                rowIndex < currMotion.getMotionLinks().size()
+                    ? currMotion.getMotionLinks().get(rowIndex)
+                    : null;
+            if (motionLink != null) {
+              switch (columnIndex) {
+                case COL_FLAME:
+                  return flamePropertiesTreeService.getFlameCaption(
+                      motionLink.getProperyPath().getFlame());
+                case COL_PROPERTY:
+                  return motionLink.getProperyPath().getPath();
+              }
+            }
+            return null;
+          }
+
+          @Override
+          public boolean isCellEditable(int row, int column) {
+            return false;
+          }
+        });
     motionLinksTable.getTableHeader().setFont(motionLinksTable.getFont());
     motionLinksTable.getColumnModel().getColumn(COL_FLAME).setWidth(80);
     motionLinksTable.getColumnModel().getColumn(COL_PROPERTY).setPreferredWidth(120);
   }
 
   private Motion getSelectedMotion() {
-    return motionTable.getSelectedRow() >= 0 && motionTable.getSelectedRow() < project.getMotions().size() ? project.getMotions().get(motionTable.getSelectedRow()) : null;
+    return motionTable.getSelectedRow() >= 0
+            && motionTable.getSelectedRow() < project.getMotions().size()
+        ? project.getMotions().get(motionTable.getSelectedRow())
+        : null;
   }
 
   private void refreshFlamesCmb() {
-    Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < project.getFlames().size() ? project.getFlames().get(flamesCmb.getSelectedIndex()) : null;
+    Flame selFlame =
+        flamesCmb.getSelectedIndex() >= 0
+                && flamesCmb.getSelectedIndex() < project.getFlames().size()
+            ? project.getFlames().get(flamesCmb.getSelectedIndex())
+            : null;
     int newSelIdx = -1;
     flamesCmb.removeAllItems();
     for (int i = 0; i < project.getFlames().size(); i++) {
@@ -619,7 +641,8 @@ public class DancingFractalsController {
       }
       flamesCmb.addItem(flamePropertiesTreeService.getFlameCaption(flame));
     }
-    flamesCmb.setSelectedIndex(newSelIdx >= 0 ? newSelIdx : project.getFlames().size() > 0 ? 0 : -1);
+    flamesCmb.setSelectedIndex(
+        newSelIdx >= 0 ? newSelIdx : project.getFlames().size() > 0 ? 0 : -1);
   }
 
   public void loadFlameFromClipboardButton_clicked() {
@@ -629,41 +652,30 @@ public class DancingFractalsController {
       Transferable clipData = clipboard.getContents(clipboard);
       if (clipData != null) {
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-          String xml = (String) (clipData.getTransferData(
-              DataFlavor.stringFlavor));
+          String xml = (String) (clipData.getTransferData(DataFlavor.stringFlavor));
           newFlames = new FlameReader(prefs).readFlamesfromXML(xml);
         }
       }
       if (newFlames == null || newFlames.size() < 1) {
         throw new Exception("There is currently no valid flame in the clipboard");
-      }
-      else {
+      } else {
         for (Flame newFlame : newFlames) {
           project.getFlames().add(validateDancingFlame(newFlame));
         }
         refreshProjectFlames();
         enableControls();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
 
   public void loadFlameButton_clicked() {
     try {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      chooser.setMultiSelectionEnabled(true);
-      if (chooser.showOpenDialog(poolFlamePreviewPnl) == JFileChooser.APPROVE_OPTION) {
-        for (File file : chooser.getSelectedFiles()) {
+      List<File> files =
+          FileDialogTools.selectFlameFilesForOpen(parentCtrl.getMainEditorFrame(), flamePanel);
+      if (files != null && !files.isEmpty()) {
+        for (File file : files) {
           List<Flame> newFlames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
           prefs.setLastInputFlameFile(file);
           if (newFlames != null && newFlames.size() > 0) {
@@ -675,8 +687,7 @@ public class DancingFractalsController {
         refreshProjectFlames();
         enableControls();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -726,8 +737,7 @@ public class DancingFractalsController {
       stopRender();
       running = false;
       enableControls();
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -760,17 +770,22 @@ public class DancingFractalsController {
 
     deleteMotionBtn.setEnabled(!running && selMotion != null);
     renameMotionBtn.setEnabled(deleteMotionBtn.isEnabled());
-    boolean plainPropertySelected = flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree);
+    boolean plainPropertySelected =
+        flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree);
     {
       boolean linkMotionEnabled = false;
       if (!running && selMotion != null && selMotion.getParent() == null) {
         if (plainPropertySelected) {
-          FlamePropertyPath selPath = flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
+          FlamePropertyPath selPath =
+              flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
           linkMotionEnabled = !selMotion.hasLink(selPath);
         }
       }
       linkMotionBtn.setEnabled(linkMotionEnabled);
-      unlinkMotionBtn.setEnabled(selMotion != null && motionLinksTable.getSelectedRow() >= 0 && motionLinksTable.getSelectedRow() < selMotion.getMotionLinks().size());
+      unlinkMotionBtn.setEnabled(
+          selMotion != null
+              && motionLinksTable.getSelectedRow() >= 0
+              && motionLinksTable.getSelectedRow() < selMotion.getMotionLinks().size());
     }
 
     createMotionsCmb.setEnabled(!running);
@@ -803,12 +818,17 @@ public class DancingFractalsController {
 
   public void flameCmb_changed() {
     if (!refreshing && renderThread != null) {
-      Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < project.getFlames().size() ? project.getFlames().get(flamesCmb.getSelectedIndex()) : null;
+      Flame selFlame =
+          flamesCmb.getSelectedIndex() >= 0
+                  && flamesCmb.getSelectedIndex() < project.getFlames().size()
+              ? project.getFlames().get(flamesCmb.getSelectedIndex())
+              : null;
       if (selFlame != null) {
         int morphFrameCount = Integer.parseInt(morphFrameCountIEd.getText());
-        renderThread.getFlameStack().addFlame(selFlame, morphFrameCount, project.getMotions(selFlame));
-        if (actionRecorder != null)
-          actionRecorder.recordFlameChange(selFlame, morphFrameCount);
+        renderThread
+            .getFlameStack()
+            .addFlame(selFlame, morphFrameCount, project.getMotions(selFlame));
+        if (actionRecorder != null) actionRecorder.recordFlameChange(selFlame, morphFrameCount);
       }
     }
   }
@@ -827,7 +847,6 @@ public class DancingFractalsController {
       }
       return null;
     }
-
   }
 
   public void flamePropertiesTree_changed(TreeSelectionEvent e) {
@@ -857,16 +876,14 @@ public class DancingFractalsController {
         refreshing = true;
         try {
           refreshMotionTable();
-        }
-        finally {
+        } finally {
           refreshing = oldRefreshing;
         }
 
         int selectRow = project.getMotions().size() - 1;
         motionTable.getSelectionModel().setSelectionInterval(selectRow, selectRow);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -888,7 +905,9 @@ public class DancingFractalsController {
         motionPropertyRootPnl.remove(motionPropertyPnl);
         motionPropertyPnl = null;
       }
-      if (project.getMotions().size() > 0 && motionTable.getSelectedRow() >= 0 && motionTable.getSelectedRow() < project.getMotions().size()) {
+      if (project.getMotions().size() > 0
+          && motionTable.getSelectedRow() >= 0
+          && motionTable.getSelectedRow() < project.getMotions().size()) {
         Motion motion = project.getMotions().get(motionTable.getSelectedRow());
 
         @SuppressWarnings("rawtypes")
@@ -899,24 +918,23 @@ public class DancingFractalsController {
 
         motionPropertyPnl.setDescriptionVisible(false);
 
-        PropertyChangeListener listener = new PropertyChangeListener() {
-          public void propertyChange(PropertyChangeEvent evt) {
-            refreshing = true;
-            try {
-              int oldSel = motionTable.getSelectedRow();
-              refreshMotionTable();
-              motionTable.getSelectionModel().setSelectionInterval(oldSel, oldSel);
-              enableControls();
-            }
-            finally {
-              refreshing = false;
-            }
-          }
-        };
+        PropertyChangeListener listener =
+            new PropertyChangeListener() {
+              public void propertyChange(PropertyChangeEvent evt) {
+                refreshing = true;
+                try {
+                  int oldSel = motionTable.getSelectedRow();
+                  refreshMotionTable();
+                  motionTable.getSelectionModel().setSelectionInterval(oldSel, oldSel);
+                  enableControls();
+                } finally {
+                  refreshing = false;
+                }
+              }
+            };
         motionPropertyPnl.addPropertySheetChangeListener(listener);
 
-        motionPropertyRootPnl.add(motionPropertyPnl,
-            BorderLayout.CENTER);
+        motionPropertyRootPnl.add(motionPropertyPnl, BorderLayout.CENTER);
         enableControls();
       }
     }
@@ -927,8 +945,10 @@ public class DancingFractalsController {
 
   public void linkMotionBtn_clicked() {
     Motion currMotion = getSelectedMotion();
-    if (currMotion != null && flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree)) {
-      FlamePropertyPath propertyPath = flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
+    if (currMotion != null
+        && flamePropertiesTreeService.isPlainPropertySelected(flamePropertiesTree)) {
+      FlamePropertyPath propertyPath =
+          flamePropertiesTreeService.getSelectedPropertyPath(flamePropertiesTree);
       currMotion.getMotionLinks().add(new MotionLink(propertyPath));
       refreshMotionLinksTable();
       int selectRow = currMotion.getMotionLinks().size() - 1;
@@ -983,53 +1003,34 @@ public class DancingFractalsController {
         creator.createMotions(project);
         refreshMotionTable();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
 
   public void dancingFlamesLoadProjectBtn_clicked() {
     try {
-      JFileChooser chooser = new JWFDanceFileChooser(prefs);
-      if (prefs.getInputJWFMoviePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputJWFMoviePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(poolFlamePreviewPnl) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectJWFDanceFileForOpen(parentCtrl.getMainEditorFrame(), flamePanel);
+      if (file != null) {
         project = new JWFDanceReader().readProject(file.getAbsolutePath());
         refreshProjectFlames();
         enableControls();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
 
   public void dancingFlamesSaveProjectBtn_clicked() {
     try {
-      JFileChooser chooser = new JWFDanceFileChooser(prefs);
-      if (prefs.getOutputJWFMoviePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getOutputJWFMoviePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showSaveDialog(poolFlamePreviewPnl) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectJWFDanceFileForSave(parentCtrl.getMainEditorFrame(), flamePanel);
+      if (file != null) {
         new JWFDanceWriter().writeProject(project, file.getAbsolutePath());
         prefs.setLastOutputJWFMovieFile(file);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1065,12 +1066,10 @@ public class DancingFractalsController {
         refreshProjectFlames();
         if (project.getFlames().size() == 0) {
           flamePropertiesTree_changed(null);
-        }
-        else {
+        } else {
           try {
             flamePropertiesTree.setSelectionRow(idx);
-          }
-          catch (Exception ex) {
+          } catch (Exception ex) {
 
           }
         }
@@ -1084,31 +1083,31 @@ public class DancingFractalsController {
       Flame flame = poolFlameHolder.getFlame();
       if (flame != null) {
         int idx = flamePropertiesTree.getSelectionRows()[0];
-        String s = StandardDialogs.promptForText(rootPanel, "Please enter the new title:", flame.getName());
+        String s =
+            StandardDialogs.promptForText(
+                rootPanel, "Please enter the new title:", flame.getName());
         if (s != null) {
           for (Flame tFlame : project.getFlames()) {
             if (!tFlame.isEqual(flame) && s.equals(tFlame.getName())) {
-              throw new RuntimeException("A different flame with the name \"" + s + "\" alread exists");
+              throw new RuntimeException(
+                  "A different flame with the name \"" + s + "\" alread exists");
             }
           }
           flame.setName(s);
           refreshProjectFlames();
           if (project.getFlames().size() == 0) {
             flamePropertiesTree_changed(null);
-          }
-          else {
+          } else {
             try {
               flamePropertiesTree.setSelectionRow(idx);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
 
             }
           }
           enableControls();
         }
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1117,7 +1116,9 @@ public class DancingFractalsController {
     int row = motionTable.getSelectedRow();
     if (row >= 0 && row < project.getMotions().size()) {
       Motion motion = project.getMotions().get(row);
-      String s = StandardDialogs.promptForText(rootPanel, "Please enter the new title:", motion.getDisplayLabel());
+      String s =
+          StandardDialogs.promptForText(
+              rootPanel, "Please enter the new title:", motion.getDisplayLabel());
       if (s != null) {
         motion.setCaption(s);
         refreshMotionTable();
@@ -1138,5 +1139,4 @@ public class DancingFractalsController {
       jLayer.setMuted(mutedCbx.isSelected());
     }
   }
-
 }

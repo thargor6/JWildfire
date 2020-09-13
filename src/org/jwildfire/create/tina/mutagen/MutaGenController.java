@@ -1,48 +1,20 @@
 /*
-  JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2020 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.mutagen;
-
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextPane;
-import javax.swing.KeyStroke;
-import javax.swing.border.LineBorder;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -57,13 +29,25 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.swing.FlameFileChooser;
+import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.MainEditorFrame;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 public class MutaGenController {
   public static final int PAGE_INDEX = 2;
@@ -87,8 +71,8 @@ public class MutaGenController {
   private final JTextPane hintPane;
 
   private ImagePanel imagePanels[][];
-  private final static int MUTA_ROWS = 5;
-  private final static int MUTA_COLS = 5;
+  private static final int MUTA_ROWS = 5;
+  private static final int MUTA_COLS = 5;
   private final List<MutationSet> mutationList = new ArrayList<MutationSet>();
   private int selectedGenerationIdx = -1;
   private int selRow = -1, selCol = -1;
@@ -135,14 +119,27 @@ public class MutaGenController {
     public Flame getBaseFlame() {
       return baseFlame;
     }
-
   }
 
-  public MutaGenController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JPanel pFlamePanels[],
-      JButton pLoadFlameFromEditorBtn, JButton pLoadFlameFromFileBtn,
-      JProgressBar pProgressBar, JWFNumberField pAmountREd, JComboBox<MutationType> pHorizontalTrend1Cmb, JComboBox<MutationType> pHorizontalTrend2Cmb,
-      JComboBox<MutationType> pVerticalTrend1Cmb, JComboBox<MutationType> pVerticalTrend2Cmb, JButton pBackButton, JButton pForwardButton, JTextPane pHintPane,
-      JButton pSaveFlameToEditorBtn, JButton pSaveFlameToFileBtn) {
+  public MutaGenController(
+      TinaController pTinaController,
+      ErrorHandler pErrorHandler,
+      Prefs pPrefs,
+      JPanel pRootPanel,
+      JPanel pFlamePanels[],
+      JButton pLoadFlameFromEditorBtn,
+      JButton pLoadFlameFromFileBtn,
+      JProgressBar pProgressBar,
+      JWFNumberField pAmountREd,
+      JComboBox<MutationType> pHorizontalTrend1Cmb,
+      JComboBox<MutationType> pHorizontalTrend2Cmb,
+      JComboBox<MutationType> pVerticalTrend1Cmb,
+      JComboBox<MutationType> pVerticalTrend2Cmb,
+      JButton pBackButton,
+      JButton pForwardButton,
+      JTextPane pHintPane,
+      JButton pSaveFlameToEditorBtn,
+      JButton pSaveFlameToFileBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     flamePanels = pFlamePanels;
@@ -193,8 +190,7 @@ public class MutaGenController {
     MutationType initialValue;
     try {
       initialValue = MutationType.valueOf(pInitialValue.trim().toUpperCase());
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       initialValue = MutationType.ALL;
     }
     pCmb.setSelectedItem(initialValue);
@@ -213,14 +209,19 @@ public class MutaGenController {
     double amount = (Double) amountREd.getValue();
     if (amount < EPSILON) {
       return pBaseFlame.makeCopy();
-    }
-    else if (amount > 1.0 - EPSILON) {
+    } else if (amount > 1.0 - EPSILON) {
       return pFlame.makeCopy();
-    }
-    else {
+    } else {
       int morphFrames = 1000;
       int morphFrame = Tools.FTOI(morphFrames * amount);
-      return FlameMorphService.morphFlames(prefs, FlameMorphType.MORPH, pBaseFlame.makeCopy(), pFlame.makeCopy(), morphFrame, morphFrames, false);
+      return FlameMorphService.morphFlames(
+          prefs,
+          FlameMorphType.MORPH,
+          pBaseFlame.makeCopy(),
+          pFlame.makeCopy(),
+          morphFrame,
+          morphFrames,
+          false);
     }
   }
 
@@ -229,8 +230,7 @@ public class MutaGenController {
     final SimpleImage img;
     if (pFlame != null && pImageWidth > 16 && pImageHeight > 16) {
       img = executeRenderThread(pFlame, pImageWidth, pImageHeight, pWithTimeout);
-    }
-    else {
+    } else {
       img = new SimpleImage(pImageWidth, pImageHeight);
     }
     return img;
@@ -264,8 +264,7 @@ public class MutaGenController {
         renderer = new FlameRenderer(flame, prefs, false, false);
         RenderedFlame res = renderer.renderFlame(info);
         renderResult = res.getImage();
-      }
-      finally {
+      } finally {
         done = true;
       }
     }
@@ -283,10 +282,10 @@ public class MutaGenController {
         renderer.signalCancel();
       }
     }
-
   }
 
-  private SimpleImage executeRenderThread(Flame pFlame, int pImageWidth, int pImageHeight, boolean pWithTimeout) {
+  private SimpleImage executeRenderThread(
+      Flame pFlame, int pImageWidth, int pImageHeight, boolean pWithTimeout) {
     Flame flame = pFlame.makeCopy();
     flame.applyFastOversamplingSettings();
 
@@ -297,8 +296,7 @@ public class MutaGenController {
     while (!thread.isDone()) {
       try {
         Thread.sleep(1);
-      }
-      catch (InterruptedException ex) {
+      } catch (InterruptedException ex) {
         throw new RuntimeException(ex);
       }
       long t1 = System.currentTimeMillis();
@@ -317,34 +315,58 @@ public class MutaGenController {
         final int cols = MUTA_COLS;
         final int BORDER_SIZE = 0;
 
-        ((JPanel) flamePanels[0].getParent()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(37, 0), "selectLeftCellAction");
-        ((JPanel) flamePanels[0].getParent()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(39, 0), "selectRightCellAction");
-        ((JPanel) flamePanels[0].getParent()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(38, 0), "selectTopCellAction");
-        ((JPanel) flamePanels[0].getParent()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(40, 0), "selectBottomCellAction");
-        ((JPanel) flamePanels[0].getParent()).getActionMap().put("selectLeftCellAction", new AbstractAction() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            selectLeftCell();
-          }
-        });
-        ((JPanel) flamePanels[0].getParent()).getActionMap().put("selectRightCellAction", new AbstractAction() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            selectRightCell();
-          }
-        });
-        ((JPanel) flamePanels[0].getParent()).getActionMap().put("selectTopCellAction", new AbstractAction() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            selectUpperCell();
-          }
-        });
-        ((JPanel) flamePanels[0].getParent()).getActionMap().put("selectBottomCellAction", new AbstractAction() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            selectLowerCell();
-          }
-        });
+        ((JPanel) flamePanels[0].getParent())
+            .getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(37, 0), "selectLeftCellAction");
+        ((JPanel) flamePanels[0].getParent())
+            .getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(39, 0), "selectRightCellAction");
+        ((JPanel) flamePanels[0].getParent())
+            .getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(38, 0), "selectTopCellAction");
+        ((JPanel) flamePanels[0].getParent())
+            .getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(40, 0), "selectBottomCellAction");
+        ((JPanel) flamePanels[0].getParent())
+            .getActionMap()
+            .put(
+                "selectLeftCellAction",
+                new AbstractAction() {
+                  @Override
+                  public void actionPerformed(ActionEvent e) {
+                    selectLeftCell();
+                  }
+                });
+        ((JPanel) flamePanels[0].getParent())
+            .getActionMap()
+            .put(
+                "selectRightCellAction",
+                new AbstractAction() {
+                  @Override
+                  public void actionPerformed(ActionEvent e) {
+                    selectRightCell();
+                  }
+                });
+        ((JPanel) flamePanels[0].getParent())
+            .getActionMap()
+            .put(
+                "selectTopCellAction",
+                new AbstractAction() {
+                  @Override
+                  public void actionPerformed(ActionEvent e) {
+                    selectUpperCell();
+                  }
+                });
+        ((JPanel) flamePanels[0].getParent())
+            .getActionMap()
+            .put(
+                "selectBottomCellAction",
+                new AbstractAction() {
+                  @Override
+                  public void actionPerformed(ActionEvent e) {
+                    selectLowerCell();
+                  }
+                });
 
         imagePanels = new ImagePanel[rows][cols];
         int idx = 0;
@@ -352,7 +374,8 @@ public class MutaGenController {
           for (int j = 0; j < cols; j++) {
             JPanel panel = flamePanels[idx++];
             Dimension size = panel.getSize();
-            SimpleImage img = new SimpleImage(Tools.FTOI(size.getWidth()), Tools.FTOI(size.getHeight()));
+            SimpleImage img =
+                new SimpleImage(Tools.FTOI(size.getWidth()), Tools.FTOI(size.getHeight()));
             final ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
             imagePanels[i][j] = imgPanel;
             imgPanel.setImage(img);
@@ -361,28 +384,27 @@ public class MutaGenController {
             final int row = i;
             final int col = j;
 
-            imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            imgPanel.addMouseListener(
+                new java.awt.event.MouseAdapter() {
 
-              @Override
-              public void mouseClicked(java.awt.event.MouseEvent e) {
-                if (e.getClickCount() == 2 || e.getButton() == MouseEvent.BUTTON3) {
-                  mutate(row, col);
-                }
-                else if (e.getClickCount() == 1 && e.getButton() == MouseEvent.BUTTON2) {
-                  export(row, col);
-                }
-              }
+                  @Override
+                  public void mouseClicked(java.awt.event.MouseEvent e) {
+                    if (e.getClickCount() == 2 || e.getButton() == MouseEvent.BUTTON3) {
+                      mutate(row, col);
+                    } else if (e.getClickCount() == 1 && e.getButton() == MouseEvent.BUTTON2) {
+                      export(row, col);
+                    }
+                  }
 
-              @Override
-              public void mousePressed(MouseEvent e) {
-                selectCell(row, col);
-              }
-            });
+                  @Override
+                  public void mousePressed(MouseEvent e) {
+                    selectCell(row, col);
+                  }
+                });
             panel.add(imgPanel);
           }
         }
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         imagePanels = null;
         errorHandler.handleError(ex);
       }
@@ -392,8 +414,7 @@ public class MutaGenController {
   protected void selectLeftCell() {
     if (selCol < 0 || selRow < 0) {
       selectCell(0, 0);
-    }
-    else {
+    } else {
       selCol--;
       if (selCol < 0) {
         selCol = 0;
@@ -405,8 +426,7 @@ public class MutaGenController {
   protected void selectRightCell() {
     if (selCol < 0 || selRow < 0) {
       selectCell(0, 0);
-    }
-    else {
+    } else {
       selCol++;
       if (selCol >= MUTA_COLS) {
         selCol = MUTA_COLS - 1;
@@ -418,8 +438,7 @@ public class MutaGenController {
   protected void selectUpperCell() {
     if (selCol < 0 || selRow < 0) {
       selectCell(0, 0);
-    }
-    else {
+    } else {
       selRow--;
       if (selRow < 0) {
         selRow = 0;
@@ -431,8 +450,7 @@ public class MutaGenController {
   protected void selectLowerCell() {
     if (selCol < 0 || selRow < 0) {
       selectCell(0, 0);
-    }
-    else {
+    } else {
       selRow++;
       if (selRow >= MUTA_ROWS) {
         selRow = MUTA_ROWS - 1;
@@ -450,7 +468,8 @@ public class MutaGenController {
       for (int j = 0; j < 5; j++) {
         ImagePanel pnl = imagePanels[i][j];
         boolean sel = i == pRow && j == pCol;
-        ((JPanel) pnl.getParent()).setBorder(new LineBorder(sel ? selColor : deSelColor, sel ? 5 : 1));
+        ((JPanel) pnl.getParent())
+            .setBorder(new LineBorder(sel ? selColor : deSelColor, sel ? 5 : 1));
       }
     }
     selRow = pRow;
@@ -474,11 +493,9 @@ public class MutaGenController {
         if (g != null) {
           rootPanel.getParent().paint(g);
         }
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         ex.printStackTrace();
       }
-
     }
   }
 
@@ -512,7 +529,8 @@ public class MutaGenController {
         int centreY = cols / 2;
 
         SimpleImage baseFlameImg = renderFlame(baseFlame.makeCopy(), probeSize, false);
-        SimpleImage simplifiedBaseFlameImg = RandomFlameGeneratorSampler.createSimplifiedRefImage(baseFlameImg);
+        SimpleImage simplifiedBaseFlameImg =
+            RandomFlameGeneratorSampler.createSimplifiedRefImage(baseFlameImg);
 
         int step = 0;
         for (int i = 0; i < rows; i++) {
@@ -534,22 +552,25 @@ public class MutaGenController {
                 List<MutationType> mutationTypes = createMutationTypes(x, y);
                 modifyFlame(currMutation, x, y, mutationTypes);
                 renderedImg = renderFlame(currMutation.makeCopy(), probeSize, true);
-                double coverage = renderedImg != null ? RandomFlameGeneratorSampler.calculateCoverage(renderedImg, 0, 0, 0, true) : INVALID_COVERAGE;
+                double coverage =
+                    renderedImg != null
+                        ? RandomFlameGeneratorSampler.calculateCoverage(renderedImg, 0, 0, 0, true)
+                        : INVALID_COVERAGE;
                 if (coverage > MIN_RENDER_COVERAGE) {
-                  coverage = RandomFlameGeneratorSampler.calculateDiffCoverage(renderedImg, simplifiedBaseFlameImg);
+                  coverage =
+                      RandomFlameGeneratorSampler.calculateDiffCoverage(
+                          renderedImg, simplifiedBaseFlameImg);
                 }
                 if (coverage > MIN_DIFF_COVERAGE) {
                   mutations.add(currMutation);
                   if (doMorph) {
                     Flame morphed = createWeightedFlame(baseFlame, currMutation);
                     renderedImg = renderFlame(morphed, renderSize, false);
-                  }
-                  else {
+                  } else {
                     renderedImg = renderFlame(currMutation, renderSize, false);
                   }
                   break;
-                }
-                else if (coverage > bestCoverage) {
+                } else if (coverage > bestCoverage) {
                   bestCoverage = coverage;
                   bestMutation = currMutation;
                 }
@@ -562,15 +583,13 @@ public class MutaGenController {
                   if (doMorph) {
                     Flame morphed = createWeightedFlame(baseFlame, bestMutation);
                     renderedImg = renderFlame(morphed, renderSize, false);
-                  }
-                  else {
+                  } else {
                     renderedImg = renderFlame(bestMutation, renderSize, false);
                   }
                   break;
                 }
               }
-            }
-            else {
+            } else {
               mutations.add(baseFlame.makeCopy());
               renderedImg = renderFlame(baseFlame.makeCopy(), renderSize, false);
             }
@@ -585,8 +604,7 @@ public class MutaGenController {
               if (g != null) {
                 pnl.paint(g);
               }
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
               ex.printStackTrace();
             }
           }
@@ -597,8 +615,7 @@ public class MutaGenController {
         enableControls();
       }
 
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -617,8 +634,7 @@ public class MutaGenController {
       if (pY == 1 || pY == -1) {
         mutations.add(vertType1);
       }
-    }
-    else {
+    } else {
       if (pY == 1 || pY == -1) {
         mutations.add(vertType1);
       }
@@ -635,8 +651,7 @@ public class MutaGenController {
         mutations.add(vertType1);
         mutations.add(vertType2);
       }
-    }
-    else {
+    } else {
       if (pY == 2 || pY == -2) {
         mutations.add(vertType1);
         mutations.add(vertType2);
@@ -668,8 +683,7 @@ public class MutaGenController {
       if (g != null) {
         progressBar.paint(g);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       ex.printStackTrace();
     }
   }
@@ -684,8 +698,7 @@ public class MutaGenController {
       if (g != null) {
         progressBar.paint(g);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       ex.printStackTrace();
     }
   }
@@ -698,26 +711,16 @@ public class MutaGenController {
 
   public void loadFlameFromFileBtn_clicked() {
     try {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectFlameFileForOpen(tinaController.getMainEditorFrame(), rootPanel, null);
+      if (file != null) {
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
-        prefs.setLastInputFlameFile(file);
         if (flame != null) {
           importFlame(flame);
         }
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -757,8 +760,7 @@ public class MutaGenController {
           if (g != null) {
             pnl.paint(g);
           }
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
           ex.printStackTrace();
         }
       }
@@ -786,49 +788,54 @@ public class MutaGenController {
       hintPane.setText(content.toString());
       hintPane.setSelectionStart(0);
       hintPane.setSelectionEnd(0);
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
 
   private void enableControls() {
     backButton.setEnabled(selectedGenerationIdx > 0 && selectedGenerationIdx < mutationList.size());
-    forwardButton.setEnabled(selectedGenerationIdx >= 0 && selectedGenerationIdx < mutationList.size() - 1);
-    saveFlameToEditorBtn.setEnabled(selRow >= 0 && selCol >= 0 && selectedGenerationIdx >= 0 && selectedGenerationIdx < mutationList.size());
-    saveFlameToFileBtn.setEnabled(selRow >= 0 && selCol >= 0 && selectedGenerationIdx >= 0 && selectedGenerationIdx < mutationList.size());
+    forwardButton.setEnabled(
+        selectedGenerationIdx >= 0 && selectedGenerationIdx < mutationList.size() - 1);
+    saveFlameToEditorBtn.setEnabled(
+        selRow >= 0
+            && selCol >= 0
+            && selectedGenerationIdx >= 0
+            && selectedGenerationIdx < mutationList.size());
+    saveFlameToFileBtn.setEnabled(
+        selRow >= 0
+            && selCol >= 0
+            && selectedGenerationIdx >= 0
+            && selectedGenerationIdx < mutationList.size());
   }
 
   public void exportFlameBtn_clicked() {
-    if (selectedGenerationIdx >= 0 && selectedGenerationIdx < mutationList.size() && selRow >= 0 && selCol >= 0) {
+    if (selectedGenerationIdx >= 0
+        && selectedGenerationIdx < mutationList.size()
+        && selRow >= 0
+        && selCol >= 0) {
       export(selRow, selCol);
     }
   }
 
   public void saveFlameBtn_clicked() {
-    if (selectedGenerationIdx >= 0 && selectedGenerationIdx < mutationList.size() && selRow >= 0 && selCol >= 0) {
+    if (selectedGenerationIdx >= 0
+        && selectedGenerationIdx < mutationList.size()
+        && selRow >= 0
+        && selCol >= 0) {
       MutationSet selectedSet = mutationList.get(selectedGenerationIdx);
       Flame currFlame = selectedSet.getFlame(selRow, selCol);
       try {
         if (currFlame != null) {
-          JFileChooser chooser = new FlameFileChooser(prefs);
-          if (prefs.getOutputFlamePath() != null) {
-            try {
-              chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
-            }
-            catch (Exception ex) {
-              ex.printStackTrace();
-            }
-          }
-          if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
+          File file =
+              FileDialogTools.selectFlameFileForSave(
+                  tinaController.getMainEditorFrame(), rootPanel);
+          if (file != null) {
             new FlameWriter().writeFlame(currFlame, file.getAbsolutePath());
             currFlame.setLastFilename(file.getName());
-            prefs.setLastOutputFlameFile(file);
           }
         }
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         errorHandler.handleError(ex);
       }
     }

@@ -1,33 +1,20 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2016 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.swing;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.io.File;
-import java.util.Calendar;
-import java.util.List;
-
-import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
@@ -39,19 +26,27 @@ import org.jwildfire.create.tina.faclrender.FACLRenderResult;
 import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
-import org.jwildfire.create.tina.render.denoiser.AIPostDenoiser;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
-import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.util.List;
 
 public class FlamesGPURenderController {
   private enum State {
-    RENDERING, IDLE
+    RENDERING,
+    IDLE
   }
 
   private final TinaController parentCtrl;
@@ -82,12 +77,27 @@ public class FlamesGPURenderController {
   private JCheckBox aiPostDenoiserDisableCheckbox;
   private State state = State.IDLE;
 
-  public FlamesGPURenderController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
-      JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pToClipboardButton, JButton pSaveImageButton,
-      JButton pSaveFlameButton, JButton pToEditorButton, JPanel pImagePanel, JTextArea pStatsTextArea,
-      JToggleButton pHalveSizeButton, JToggleButton pQuarterSizeButton, JToggleButton pFullSizeButton,
-      JComboBox pInteractiveResolutionProfileCmb, JComboBox pInteractiveQualityProfileCmb, JLabel pGpuRenderInfoLbl,
-      JPanel pProgressPanel, JButton pFromEditorButton, JCheckBox pAiPostDenoiserDisableCheckbox) {
+  public FlamesGPURenderController(
+      TinaController pParentCtrl,
+      ErrorHandler pErrorHandler,
+      Prefs pPrefs,
+      JButton pLoadFlameButton,
+      JButton pFromClipboardButton,
+      JButton pToClipboardButton,
+      JButton pSaveImageButton,
+      JButton pSaveFlameButton,
+      JButton pToEditorButton,
+      JPanel pImagePanel,
+      JTextArea pStatsTextArea,
+      JToggleButton pHalveSizeButton,
+      JToggleButton pQuarterSizeButton,
+      JToggleButton pFullSizeButton,
+      JComboBox pInteractiveResolutionProfileCmb,
+      JComboBox pInteractiveQualityProfileCmb,
+      JLabel pGpuRenderInfoLbl,
+      JPanel pProgressPanel,
+      JButton pFromEditorButton,
+      JCheckBox pAiPostDenoiserDisableCheckbox) {
 
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
@@ -113,7 +123,9 @@ public class FlamesGPURenderController {
     // interactiveResolutionProfileCmb must be already filled here!
     refreshImagePanel();
     statsTextArea = pStatsTextArea;
-    loaderIcon = new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/ajax-loader.gif"));
+    loaderIcon =
+        new ImageIcon(
+            MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/ajax-loader.gif"));
     enableControls();
   }
 
@@ -144,21 +156,24 @@ public class FlamesGPURenderController {
     if (quarterSizeButton.isSelected()) {
       width /= 4;
       height /= 4;
-    }
-    else if (halveSizeButton.isSelected()) {
+    } else if (halveSizeButton.isSelected()) {
       width /= 2;
       height /= 2;
     }
     image = new SimpleImage(width, height);
     image.getBufferedImg().setAccelerationPriority(1.0f);
-    image.fillBackground(prefs.getTinaRandomBatchBGColorRed(), prefs.getTinaRandomBatchBGColorGreen(), prefs.getTinaRandomBatchBGColorBlue());
+    image.fillBackground(
+        prefs.getTinaRandomBatchBGColorRed(),
+        prefs.getTinaRandomBatchBGColorGreen(),
+        prefs.getTinaRandomBatchBGColorBlue());
     ImagePanel imagePanel = new ImagePanel(image, 0, 0, image.getImageWidth());
     imagePanel.setSize(image.getImageWidth(), image.getImageHeight());
     imagePanel.setPreferredSize(new Dimension(image.getImageWidth(), image.getImageHeight()));
 
     imageScrollPane = new JScrollPane(imagePanel);
     imageScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-    imageScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    imageScrollPane.setHorizontalScrollBarPolicy(
+        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
     imageRootPanel.add(imageScrollPane, BorderLayout.CENTER);
 
@@ -189,8 +204,7 @@ public class FlamesGPURenderController {
       Transferable clipData = clipboard.getContents(clipboard);
       if (clipData != null) {
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-          String xml = (String) (clipData.getTransferData(
-              DataFlavor.stringFlavor));
+          String xml = (String) (clipData.getTransferData(DataFlavor.stringFlavor));
           List<Flame> flames = new FlameReader(prefs).readFlamesfromXML(xml);
           if (flames.size() > 0) {
             newFlame = flames.get(0);
@@ -199,16 +213,14 @@ public class FlamesGPURenderController {
       }
       if (newFlame == null) {
         throw new Exception("There is currently no valid flame in the clipboard");
-      }
-      else {
+      } else {
         currFlame = newFlame;
         enableControls();
         setupProfiles(currFlame);
         renderFlame();
         enableControls();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -219,10 +231,8 @@ public class FlamesGPURenderController {
         ResolutionProfile profile = null;
         for (int i = 0; i < interactiveResolutionProfileCmb.getItemCount(); i++) {
           profile = (ResolutionProfile) interactiveResolutionProfileCmb.getItemAt(i);
-          if (pFlame.getResolutionProfile().equals(profile.toString()))
-            break;
-          else
-            profile = null;
+          if (pFlame.getResolutionProfile().equals(profile.toString())) break;
+          else profile = null;
         }
         if (profile != null) {
           interactiveResolutionProfileCmb.setSelectedItem(profile);
@@ -233,24 +243,16 @@ public class FlamesGPURenderController {
 
   public void loadFlameButton_clicked() {
     try {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectFlameFileForOpen(
+              parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel, null);
+      if (file != null) {
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame newFlame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         importFlame(newFlame);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -276,16 +278,15 @@ public class FlamesGPURenderController {
       if (quarterSizeButton.isSelected()) {
         width /= 4;
         height /= 4;
-      }
-      else if (halveSizeButton.isSelected()) {
+      } else if (halveSizeButton.isSelected()) {
         width /= 2;
         height /= 2;
       }
       setState(State.RENDERING);
-      GPURenderThread renderThread = new GPURenderThread(width, height, qualityProfile.getQuality());
+      GPURenderThread renderThread =
+          new GPURenderThread(width, height, qualityProfile.getQuality());
       new Thread(renderThread).start();
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -306,43 +307,62 @@ public class FlamesGPURenderController {
       failed = false;
       try {
         try {
-          File tmpFile = File.createTempFile(System.currentTimeMillis() + "_" + Thread.currentThread().getId(), ".flam3");
+          File tmpFile =
+              File.createTempFile(
+                  System.currentTimeMillis() + "_" + Thread.currentThread().getId(), ".flam3");
           try {
             new FACLFlameWriter().writeFlame(getCurrFlame(), tmpFile.getAbsolutePath());
             long t0 = System.currentTimeMillis();
-            FACLRenderResult renderResult = FACLRenderTools.invokeFACLRender(tmpFile.getAbsolutePath(), width, height, quality);
+            FACLRenderResult renderResult =
+                FACLRenderTools.invokeFACLRender(tmpFile.getAbsolutePath(), width, height, quality);
             long t1 = System.currentTimeMillis();
             try {
               if (renderResult.getReturnCode() == 0) {
                 if (renderResult.getMessage() != null) {
                   statsTextArea.setText(renderResult.getMessage() + "\n");
                 }
-                if(!aiPostDenoiserDisableCheckbox.isSelected() && !AIPostDenoiserType.NONE.equals(getCurrFlame().getAiPostDenoiser())) {
+                if (!aiPostDenoiserDisableCheckbox.isSelected()
+                    && !AIPostDenoiserType.NONE.equals(getCurrFlame().getAiPostDenoiser())) {
                   long dt0 = System.currentTimeMillis();
-                  if(AIPostDenoiserFactory.denoiseImage(renderResult.getOutputFilename(), getCurrFlame().getAiPostDenoiser(), getCurrFlame().getPostOptiXDenoiserBlend())) {
+                  if (AIPostDenoiserFactory.denoiseImage(
+                      renderResult.getOutputFilename(),
+                      getCurrFlame().getAiPostDenoiser(),
+                      getCurrFlame().getPostOptiXDenoiserBlend())) {
                     long dt1 = System.currentTimeMillis();
                     t1 = dt1;
-                    statsTextArea.append("\n\n" +
-                            "AI-Post-Denoiser: " + Tools.doubleToString((dt1 - dt0) / 1000.0) + "s");
+                    statsTextArea.append(
+                        "\n\n"
+                            + "AI-Post-Denoiser: "
+                            + Tools.doubleToString((dt1 - dt0) / 1000.0)
+                            + "s");
                   }
                 }
                 SimpleImage img = new ImageReader().loadImage(renderResult.getOutputFilename());
-                if (img.getImageWidth() == image.getImageWidth() && img.getImageHeight() == image.getImageHeight()) {
-                  image.setBufferedImage(img.getBufferedImg(), img.getImageWidth(), img.getImageHeight());
+                if (img.getImageWidth() == image.getImageWidth()
+                    && img.getImageHeight() == image.getImageHeight()) {
+                  image.setBufferedImage(
+                      img.getBufferedImg(), img.getImageWidth(), img.getImageHeight());
                   imageRootPanel.repaint();
-                  gpuRenderInfoLbl.setText("Elapsed: " + Tools.doubleToString((t1 - t0) / 1000.0) + "s");
+                  gpuRenderInfoLbl.setText(
+                      "Elapsed: " + Tools.doubleToString((t1 - t0) / 1000.0) + "s");
+                } else {
+                  throw new Exception(
+                      "Invalid image size <"
+                          + img.getImageWidth()
+                          + "x"
+                          + img.getImageHeight()
+                          + ">");
                 }
-                else {
-                  throw new Exception("Invalid image size <" + img.getImageWidth() + "x" + img.getImageHeight() + ">");
-                }
+              } else {
+                statsTextArea.setText(
+                    (renderResult.getMessage() != null ? renderResult.getMessage() : "")
+                        + "\n\n"
+                        + (renderResult.getCommand() != null ? renderResult.getCommand() : ""));
               }
-              else {
-                statsTextArea.setText((renderResult.getMessage() != null ? renderResult.getMessage() : "") + "\n\n" + (renderResult.getCommand() != null ? renderResult.getCommand() : ""));
-              }
-            }
-            finally {
+            } finally {
               try {
-                if (renderResult.getOutputFilename() != null && !renderResult.getOutputFilename().isEmpty()) {
+                if (renderResult.getOutputFilename() != null
+                    && !renderResult.getOutputFilename().isEmpty()) {
                   File f = new File(renderResult.getOutputFilename());
                   if (f.exists()) {
                     if (!f.delete()) {
@@ -350,24 +370,20 @@ public class FlamesGPURenderController {
                     }
                   }
                 }
-              }
-              catch (Exception innerError) {
+              } catch (Exception innerError) {
                 innerError.printStackTrace();
               }
             }
-          }
-          finally {
+          } finally {
             if (!tmpFile.delete()) {
               tmpFile.deleteOnExit();
             }
           }
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
           failed = true;
           error = ex;
         }
-      }
-      finally {
+      } finally {
         setState(State.IDLE);
         if (failed) {
           statsTextArea.setText(Tools.getStacktrace(error));
@@ -378,27 +394,25 @@ public class FlamesGPURenderController {
 
   public void saveImageButton_clicked() {
     try {
-      JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-      if (prefs.getOutputImagePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectImageFileForSave(
+              parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel, Tools.FILEEXT_PNG);
+      if (file != null) {
         new ImageWriter().saveImage(image, file.getAbsolutePath());
         if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
-          new FlameWriter().writeFlame(getCurrFlame(), file.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(file.getName()) + ".flame");
+          new FlameWriter()
+              .writeFlame(
+                  getCurrFlame(),
+                  file.getParentFile().getAbsolutePath()
+                      + File.separator
+                      + Tools.trimFileExt(file.getName())
+                      + ".flame");
         }
         //        if (autoLoadImageCBx.isSelected()) {
         parentCtrl.mainController.loadImage(file.getAbsolutePath(), false);
         //        }
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -410,16 +424,16 @@ public class FlamesGPURenderController {
   private void clearScreen() {
     try {
       int scrollX = (image.getImageWidth() - (int) imageRootPanel.getBounds().getWidth()) / 2;
-      if (scrollX > 0)
-        imageScrollPane.getHorizontalScrollBar().setValue(scrollX);
+      if (scrollX > 0) imageScrollPane.getHorizontalScrollBar().setValue(scrollX);
       int scrollY = (image.getImageHeight() - (int) imageRootPanel.getBounds().getHeight()) / 2;
-      if (scrollY > 0)
-        imageScrollPane.getVerticalScrollBar().setValue(scrollY);
-    }
-    catch (Exception ex) {
+      if (scrollY > 0) imageScrollPane.getVerticalScrollBar().setValue(scrollY);
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
-    image.fillBackground(prefs.getTinaRandomBatchBGColorRed(), prefs.getTinaRandomBatchBGColorGreen(), prefs.getTinaRandomBatchBGColorBlue());
+    image.fillBackground(
+        prefs.getTinaRandomBatchBGColorRed(),
+        prefs.getTinaRandomBatchBGColorGreen(),
+        prefs.getTinaRandomBatchBGColorBlue());
     imageRootPanel.repaint();
   }
 
@@ -427,23 +441,15 @@ public class FlamesGPURenderController {
     try {
       Flame currFlame = getCurrFlame();
       if (currFlame != null) {
-        JFileChooser chooser = new FlameFileChooser(prefs);
-        if (prefs.getOutputFlamePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
-          File file = chooser.getSelectedFile();
+        File file =
+            FileDialogTools.selectFlameFileForSave(
+                parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+        if (file != null) {
           new FlameWriter().writeFlame(currFlame, file.getAbsolutePath());
           prefs.setLastOutputFlameFile(file);
         }
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -457,8 +463,7 @@ public class FlamesGPURenderController {
         StringSelection data = new StringSelection(xml);
         clipboard.setContents(data, data);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -469,8 +474,7 @@ public class FlamesGPURenderController {
       halveSizeButton.setSelected(true);
       quarterSizeButton.setSelected(false);
       fullSizeButton.setSelected(false);
-    }
-    finally {
+    } finally {
       refreshing = false;
     }
     changeRenderSizeButton_clicked();
@@ -482,8 +486,7 @@ public class FlamesGPURenderController {
       halveSizeButton.setSelected(false);
       quarterSizeButton.setSelected(true);
       fullSizeButton.setSelected(false);
-    }
-    finally {
+    } finally {
       refreshing = false;
     }
     changeRenderSizeButton_clicked();
@@ -495,8 +498,7 @@ public class FlamesGPURenderController {
       halveSizeButton.setSelected(false);
       quarterSizeButton.setSelected(false);
       fullSizeButton.setSelected(true);
-    }
-    finally {
+    } finally {
       refreshing = false;
     }
     changeRenderSizeButton_clicked();
@@ -510,8 +512,7 @@ public class FlamesGPURenderController {
         refreshImagePanel();
         renderFlame();
         enableControls();
-      }
-      finally {
+      } finally {
         refreshing = oldRefreshing;
       }
     }
@@ -534,8 +535,7 @@ public class FlamesGPURenderController {
         renderFlame();
         enableControls();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -546,8 +546,7 @@ public class FlamesGPURenderController {
       if (currFlame != null) {
         parentCtrl.importFlame(currFlame, true);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -564,8 +563,7 @@ public class FlamesGPURenderController {
     enableControls();
     if (state == State.RENDERING) {
       showLoaderLabel(true);
-    }
-    else {
+    } else {
       showLoaderLabel(false);
     }
   }
@@ -578,8 +576,7 @@ public class FlamesGPURenderController {
       }
       loaderLabel = new JLabel(loaderIcon);
       progressPanel.add(loaderLabel, BorderLayout.CENTER);
-    }
-    else {
+    } else {
       if (loaderLabel != null) {
         progressPanel.remove(loaderLabel);
         loaderLabel = null;
@@ -589,5 +586,4 @@ public class FlamesGPURenderController {
     progressPanel.validate();
     progressPanel.repaint();
   }
-
 }

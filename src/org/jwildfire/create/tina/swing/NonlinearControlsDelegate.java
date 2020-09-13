@@ -26,7 +26,6 @@ import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
-import org.jwildfire.swing.ImageFileChooser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,21 +40,24 @@ public class NonlinearControlsDelegate {
   private JPanel nonlinearParamsPanel;
   private int nonlinearParamsPanelBaseWidth, nonlinearParamsPanelBaseHeight;
 
-
-  public NonlinearControlsDelegate(TinaController owner, VariationControlsDelegate[] variationControlsDelegates) {
+  public NonlinearControlsDelegate(
+      TinaController owner, VariationControlsDelegate[] variationControlsDelegates) {
     this.owner = owner;
     this.data = owner.data;
     this.variationControlsDelegates = variationControlsDelegates;
   }
 
-  public void setVariationControlsDelegates(VariationControlsDelegate[] pVariationControlsDelegates) {
+  public void setVariationControlsDelegates(
+      VariationControlsDelegate[] pVariationControlsDelegates) {
     variationControlsDelegates = pVariationControlsDelegates;
   }
 
   public void initPanels() {
     for (int i = 0; i < data.TinaNonlinearControlsRows.length; i++) {
       initNonlinearControls(data.TinaNonlinearControlsRows[i]);
-      data.TinaNonlinearControlsRows[i].getToggleParamsPnlButton().setSelected(Prefs.getPrefs().isTinaDefaultExpandNonlinearParams());
+      data.TinaNonlinearControlsRows[i]
+          .getToggleParamsPnlButton()
+          .setSelected(Prefs.getPrefs().isTinaDefaultExpandNonlinearParams());
     }
     nonlinearParamsPanel = (JPanel) data.TinaNonlinearControlsRows[0].getRootPanel().getParent();
     nonlinearParamsPanelBaseWidth = nonlinearParamsPanel.getPreferredSize().width;
@@ -76,7 +78,8 @@ public class NonlinearControlsDelegate {
   }
 
   public void nonlinearParamsEditMotionCurve(int pIdx) {
-    String propertyname = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+    String propertyname =
+        (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
     XForm xForm = owner.getCurrXForm();
     if (xForm != null && propertyname != null && propertyname.length() > 0) {
       if (pIdx < xForm.getVariationCount()) {
@@ -96,8 +99,11 @@ public class NonlinearControlsDelegate {
           if (curve == null) {
             curve = var.createMotionCurve(propertyname);
           }
-          variationControlsDelegates[pIdx].editMotionCurve(curve, initialValue, propertyname, "variation property \"" + propertyname + "\"");
-          data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setHasCurve(curve != null && curve.isEnabled());
+          variationControlsDelegates[pIdx].editMotionCurve(
+              curve, initialValue, propertyname, "variation property \"" + propertyname + "\"");
+          data.TinaNonlinearControlsRows[pIdx]
+              .getNonlinearParamsREd()
+              .setHasCurve(curve != null && curve.isEnabled());
           // Doesnt work after changing parameter -> now enable it always
           // variationControlsDelegates[pIdx].enableControl(data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(), curve, false);
           owner.refreshFlameImage(true, false, 1, true, false);
@@ -113,13 +119,15 @@ public class NonlinearControlsDelegate {
         String propertyName = "amount";
         owner.saveUndoPoint();
         variationControlsDelegates[pIdx].editMotionCurve(propertyName, "variation amount");
-        variationControlsDelegates[pIdx].enableControl(data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd(), propertyName, false);
+        variationControlsDelegates[pIdx].enableControl(
+            data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd(), propertyName, false);
         owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
 
-  public void refreshParamControls(TinaNonlinearControlsRow pRow, int pIdx, XForm pXForm, Variation pVar, boolean pSelectFirst) {
+  public void refreshParamControls(
+      TinaNonlinearControlsRow pRow, int pIdx, XForm pXForm, Variation pVar, boolean pSelectFirst) {
     if (pXForm == null || pVar == null) {
       pRow.getNonlinearVarCmb().setSelectedIndex(-1);
       pRow.getNonlinearVarREd().setText(null);
@@ -141,9 +149,11 @@ public class NonlinearControlsDelegate {
       VariationFunc varFunc = pVar.getFunc();
 
       pRow.getNonlinearParamsPreButton().setEnabled(true);
-      pRow.getNonlinearParamsPreButton().setSelected(pVar.getPriority() < 0 || pVar.getPriority() == 2);
+      pRow.getNonlinearParamsPreButton()
+          .setSelected(pVar.getPriority() < 0 || pVar.getPriority() == 2);
       pRow.getNonlinearParamsPostButton().setEnabled(true);
-      pRow.getNonlinearParamsPostButton().setSelected(pVar.getPriority() > 0 || pVar.getPriority() == -2);
+      pRow.getNonlinearParamsPostButton()
+          .setSelected(pVar.getPriority() > 0 || pVar.getPriority() == -2);
       if (pRow.getNonlinearParamsUpButton() != null) {
         pRow.getNonlinearParamsUpButton().setEnabled(true);
       }
@@ -170,8 +180,10 @@ public class NonlinearControlsDelegate {
           pRow.getNonlinearVarLbl().setFont(new Font(attributes));
         }
       }
-      //pRow.getNonlinearVarREd().setText(Tools.doubleToString(pVar.getAmount()));
-      owner.getFrameControlsUtil().updateControl(pVar, null, pRow.getNonlinearVarREd(), "amount", 1.0);
+      // pRow.getNonlinearVarREd().setText(Tools.doubleToString(pVar.getAmount()));
+      owner
+          .getFrameControlsUtil()
+          .updateControl(pVar, null, pRow.getNonlinearVarREd(), "amount", 1.0);
 
       pRow.getNonlinearParamsCmb().removeAllItems();
       // ressources
@@ -208,12 +220,28 @@ public class NonlinearControlsDelegate {
           String paramName = varFunc.getParameterNames()[0];
           pRow.getNonlinearParamsREd().setOnlyIntegers(false);
           if (paramValue instanceof Double) {
-            //pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
-            owner.getFrameControlsUtil().updateControl(null, pRow.getNonlinearParamsREd(), paramName, paramValue, pVar.getMotionCurve(paramName), 1.0);
+            // pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+            owner
+                .getFrameControlsUtil()
+                .updateControl(
+                    null,
+                    pRow.getNonlinearParamsREd(),
+                    paramName,
+                    paramValue,
+                    pVar.getMotionCurve(paramName),
+                    1.0);
           } else if (paramValue instanceof Integer) {
             pRow.getNonlinearParamsREd().setOnlyIntegers(true);
-            //pRow.getNonlinearParamsREd().setText(val.toString());
-            owner.getFrameControlsUtil().updateControl(null, pRow.getNonlinearParamsREd(), paramName, paramValue, pVar.getMotionCurve(paramName), 1.0);
+            // pRow.getNonlinearParamsREd().setText(val.toString());
+            owner
+                .getFrameControlsUtil()
+                .updateControl(
+                    null,
+                    pRow.getNonlinearParamsREd(),
+                    paramName,
+                    paramValue,
+                    pVar.getMotionCurve(paramName),
+                    1.0);
           } else {
             pRow.getNonlinearParamsREd().setText(paramValue.toString());
           }
@@ -235,7 +263,8 @@ public class NonlinearControlsDelegate {
     for (int i = 0; i < data.TinaNonlinearControlsRows.length; i++)
       newHeight += data.TinaNonlinearControlsRows[i].getExtraPanelSize();
     if (newHeight != currHeight) {
-      nonlinearParamsPanel.setPreferredSize(new Dimension(nonlinearParamsPanelBaseWidth, newHeight));
+      nonlinearParamsPanel.setPreferredSize(
+          new Dimension(nonlinearParamsPanelBaseWidth, newHeight));
 
       nonlinearParamsPanel.invalidate();
       nonlinearParamsPanel.validate();
@@ -258,7 +287,8 @@ public class NonlinearControlsDelegate {
     }
     owner.cmbRefreshing = true;
     try {
-      String selected = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+      String selected =
+          (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
       XForm xForm = owner.getCurrXForm();
       if (xForm != null && selected != null && selected.length() > 0) {
         if (pIdx < xForm.getVariationCount()) {
@@ -272,17 +302,37 @@ public class NonlinearControlsDelegate {
             String paramName = var.getFunc().getParameterNames()[idx];
             if (paramValue instanceof Double) {
               // data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString((Double) paramValue));
-              owner.getFrameControlsUtil().updateControl(null, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(), paramName, paramValue, var.getMotionCurve(paramName), 1.0);
+              owner
+                  .getFrameControlsUtil()
+                  .updateControl(
+                      null,
+                      data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(),
+                      paramName,
+                      paramValue,
+                      var.getMotionCurve(paramName),
+                      1.0);
             } else if (paramValue instanceof Integer) {
               // data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(paramValue.toString());
-              owner.getFrameControlsUtil().updateControl(null, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(), paramName, paramValue, var.getMotionCurve(paramName), 1.0);
+              owner
+                  .getFrameControlsUtil()
+                  .updateControl(
+                      null,
+                      data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(),
+                      paramName,
+                      paramValue,
+                      var.getMotionCurve(paramName),
+                      1.0);
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setOnlyIntegers(true);
             } else {
-              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(paramValue.toString());
+              data.TinaNonlinearControlsRows[pIdx]
+                  .getNonlinearParamsREd()
+                  .setText(paramValue.toString());
             }
             {
               MotionCurve curve = var.getMotionCurve(paramName);
-              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setHasCurve(curve != null && curve.isEnabled());
+              data.TinaNonlinearControlsRows[pIdx]
+                  .getNonlinearParamsREd()
+                  .setHasCurve(curve != null && curve.isEnabled());
             }
           }
           // ressources
@@ -332,9 +382,13 @@ public class NonlinearControlsDelegate {
       if (xForm != null) {
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
-          if (var != null && var.getFunc().getParameterNames().length > 0 || (var.getFunc().getRessourceNames() != null && var.getFunc().getRessourceNames().length > 0)) {
+          if (var != null && var.getFunc().getParameterNames().length > 0
+              || (var.getFunc().getRessourceNames() != null
+                  && var.getFunc().getRessourceNames().length > 0)) {
             owner.saveUndoPoint();
-            String fName = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
+            String fName =
+                (String)
+                    data.TinaNonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
             VariationFunc tmpFunc = VariationFuncList.getVariationFuncInstance(fName);
             for (String paramName : var.getFunc().getParameterNames()) {
               if (pParamname == null || pParamname.equals(paramName)) {
@@ -346,7 +400,7 @@ public class NonlinearControlsDelegate {
                     var.getFunc().setParameter(paramName, (Double) paramValue);
                   }
                   MotionCurve curve = var.getMotionCurve(paramName);
-                  if(curve!=null) {
+                  if (curve != null) {
                     var.removeMotionCurve(paramName);
                   }
                 } catch (Exception ex) {
@@ -391,7 +445,8 @@ public class NonlinearControlsDelegate {
       XForm xForm = owner.getCurrXForm();
       if (xForm != null) {
         owner.saveUndoPoint();
-        String fName = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
+        String fName =
+            (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
         Variation var;
         if (pIdx < xForm.getVariationCount()) {
           var = xForm.getVariation(pIdx);
@@ -432,7 +487,8 @@ public class NonlinearControlsDelegate {
     nonlinearVarREdChanged(pIdx, 0.0);
   }
 
-  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue, boolean pIsAdjusting) {
+  public void propertyPnlValueChanged(
+      int pIdx, String pPropertyName, double pPropertyValue, boolean pIsAdjusting) {
     if (owner.cmbRefreshing) {
       return;
     }
@@ -444,27 +500,30 @@ public class NonlinearControlsDelegate {
           Variation var = xForm.getVariation(pIdx);
           Object oldValue = var.getFunc().getParameter(pPropertyName);
 
-          double oldValueAsDouble=0.0;
-          if(oldValue!=null) {
-            if(oldValue instanceof Double) {
-              oldValueAsDouble = ((Double)oldValue).doubleValue();
-            }
-            else if(oldValue instanceof Integer) {
-              oldValueAsDouble = ((Integer)oldValue).intValue();
+          double oldValueAsDouble = 0.0;
+          if (oldValue != null) {
+            if (oldValue instanceof Double) {
+              oldValueAsDouble = ((Double) oldValue).doubleValue();
+            } else if (oldValue instanceof Integer) {
+              oldValueAsDouble = ((Integer) oldValue).intValue();
             }
           }
           var.getFunc().setParameter(pPropertyName, pPropertyValue);
 
           MotionCurve curve = var.getMotionCurve(pPropertyName);
-          if(curve==null) {
+          if (curve == null) {
             curve = var.createMotionCurve(pPropertyName);
           }
           owner.getFrameControlsUtil().updateKeyFrame(pPropertyValue, oldValueAsDouble, curve);
 
           {
-            String selected = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+            String selected =
+                (String)
+                    data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
             if (pPropertyName.equals(selected)) {
-              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setHasCurve(curve != null && curve.isEnabled());
+              data.TinaNonlinearControlsRows[pIdx]
+                  .getNonlinearParamsREd()
+                  .setHasCurve(curve != null && curve.isEnabled());
             }
           }
 
@@ -499,7 +558,15 @@ public class NonlinearControlsDelegate {
           var.setAmount(Tools.stringToDouble(varStr) + pDelta);
           data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd().setText(Tools.doubleToString(var.getAmount()));
           */
-          owner.getFrameControlsUtil().valueChangedByTextField(var, null, data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd(), "amount", 1.0, pDelta);
+          owner
+              .getFrameControlsUtil()
+              .valueChangedByTextField(
+                  var,
+                  null,
+                  data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd(),
+                  "amount",
+                  1.0,
+                  pDelta);
           owner.refreshFlameImage(true, false, 1, true, false);
         }
       }
@@ -518,7 +585,8 @@ public class NonlinearControlsDelegate {
     }
     owner.cmbRefreshing = true;
     try {
-      String paramName = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
+      String paramName =
+          (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
       XForm xForm = owner.getCurrXForm();
       if (xForm != null && paramName != null && paramName.length() > 0) {
         owner.saveUndoPoint();
@@ -543,221 +611,202 @@ public class NonlinearControlsDelegate {
             }
 
             Object oldValue = var.getFunc().getParameter(paramName);
-            double oldValueAsDouble=0.0;
-            if(oldValue!=null) {
-              if(oldValue instanceof Double) {
-                oldValueAsDouble = ((Double)oldValue).doubleValue();
-              }
-              else if(oldValue instanceof Integer) {
-                oldValueAsDouble = ((Integer)oldValue).intValue();
+            double oldValueAsDouble = 0.0;
+            if (oldValue != null) {
+              if (oldValue instanceof Double) {
+                oldValueAsDouble = ((Double) oldValue).doubleValue();
+              } else if (oldValue instanceof Integer) {
+                oldValueAsDouble = ((Integer) oldValue).intValue();
               }
             }
             double newValue = Tools.stringToDouble(valStr) + pDelta;
             var.getFunc().setParameter(paramName, newValue);
             MotionCurve curve = var.getMotionCurve(paramName);
-            if(curve==null) {
+            if (curve == null) {
               curve = var.createMotionCurve(paramName);
             }
             owner.getFrameControlsUtil().updateKeyFrame(newValue, oldValueAsDouble, curve);
-            data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setHasCurve(curve!=null && curve.isEnabled());
+            data.TinaNonlinearControlsRows[pIdx]
+                .getNonlinearParamsREd()
+                .setHasCurve(curve != null && curve.isEnabled());
 
             if (var.getFunc().dynamicParameterExpansion(paramName)) {
               // if setting the parameter can change the total number of parameters,
               //    then refresh parameter UI (and reselect parameter that was changed)
-              this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], pIdx, xForm, var, false);
-              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().setSelectedItem(paramName);
+              this.refreshParamControls(
+                  data.TinaNonlinearControlsRows[pIdx], pIdx, xForm, var, false);
+              data.TinaNonlinearControlsRows[pIdx]
+                  .getNonlinearParamsCmb()
+                  .setSelectedItem(paramName);
             }
-            data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(newValue));
+            data.TinaNonlinearControlsRows[pIdx]
+                .getNonlinearParamsREd()
+                .setText(Tools.doubleToString(newValue));
             data.TinaNonlinearControlsRows[pIdx].refreshParamWithoutRefresh(paramName, newValue);
           } else if ((idx = var.getFunc().getRessourceIndex(paramName)) >= 0) {
             final String rName = var.getFunc().getRessourceNames()[idx];
             RessourceType resType = var.getFunc().getRessourceType(rName);
             switch (resType) {
-              case FONT_NAME: {
-                String oldFontname = null;
+              case FONT_NAME:
                 {
-                  byte val[] = var.getFunc().getRessourceValues()[idx];
-                  if (val != null) {
-                    oldFontname = new String(val);
-                  }
-                }
-                Font oldFont = new Font(oldFontname != null ? oldFontname : "Arial", Font.PLAIN, 24);
-                Font selectedFont = JFontChooser.showDialog(owner.centerPanel, "Choose font", oldFont);
-                if (selectedFont != null) {
-                  String valStr = selectedFont.getFontName();
-                  byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
-                  var.getFunc().setRessource(rName, valByteArray);
-                }
-              }
-              break;
-              case IMAGE_FILENAME: {
-                String oldFilename = null;
-                {
-                  byte val[] = var.getFunc().getRessourceValues()[idx];
-                  if (val != null) {
-                    oldFilename = new String(val);
-                  }
-                }
-                JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-                if (oldFilename != null && oldFilename.length() > 0) {
-                  try {
-                    chooser.setCurrentDirectory(new File(oldFilename).getAbsoluteFile().getParentFile());
-                    chooser.setSelectedFile(new File(oldFilename));
-                  } catch (Exception ex) {
-                    ex.printStackTrace();
-                  }
-                } else {
-                  if (Prefs.getPrefs().getInputImagePath() != null) {
-                    try {
-                      chooser.setCurrentDirectory(new File(Prefs.getPrefs().getInputImagePath()));
-                    } catch (Exception ex) {
-                      ex.printStackTrace();
+                  String oldFontname = null;
+                  {
+                    byte val[] = var.getFunc().getRessourceValues()[idx];
+                    if (val != null) {
+                      oldFontname = new String(val);
                     }
                   }
-                }
-                if (chooser.showOpenDialog(owner.centerPanel) == JFileChooser.APPROVE_OPTION) {
-                  File file = chooser.getSelectedFile();
-                  String valStr = file.getAbsolutePath();
-                  byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
-                  var.getFunc().setRessource(rName, valByteArray);
-                }
-              }
-              break;
-              case FLAME_FILENAME: {
-                String oldFilename = null;
-                {
-                  byte val[] = var.getFunc().getRessourceValues()[idx];
-                  if (val != null) {
-                    oldFilename = new String(val);
-                  }
-                }
-                JFileChooser chooser = new FlameFileChooser(Prefs.getPrefs());
-                if (oldFilename != null && oldFilename.length() > 0) {
-                  try {
-                    chooser.setCurrentDirectory(new File(oldFilename).getAbsoluteFile().getParentFile());
-                    chooser.setSelectedFile(new File(oldFilename));
-                  } catch (Exception ex) {
-                    ex.printStackTrace();
-                  }
-                } else {
-                  if (Prefs.getPrefs().getInputImagePath() != null) {
-                    try {
-                      chooser.setCurrentDirectory(new File(Prefs.getPrefs().getInputFlamePath()));
-                    } catch (Exception ex) {
-                      ex.printStackTrace();
-                    }
-                  }
-                }
-                if (chooser.showOpenDialog(owner.centerPanel) == JFileChooser.APPROVE_OPTION) {
-                  File file = chooser.getSelectedFile();
-                  String valStr = file.getAbsolutePath();
-                  byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
-                  var.getFunc().setRessource(rName, valByteArray);
-                }
-              }
-              break;
-              case IMAGE_FILE: {
-                JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-                if (Prefs.getPrefs().getInputImagePath() != null) {
-                  try {
-                    chooser.setCurrentDirectory(new File(Prefs.getPrefs().getInputImagePath()));
-                  } catch (Exception ex) {
-                    ex.printStackTrace();
-                  }
-                }
-                if (chooser.showOpenDialog(owner.centerPanel) == JFileChooser.APPROVE_OPTION) {
-                  try {
-                    File file = chooser.getSelectedFile();
-                    byte[] imgData = Tools.readFile(file.getAbsolutePath());
-                    var.getFunc().setRessource(rName, imgData);
-                  } catch (Exception ex) {
-                    owner.errorHandler.handleError(ex);
-                  }
-                }
-              }
-              break;
-              case SVG_FILE: {
-                JFileChooser chooser = new SvgFileChooser(Prefs.getPrefs());
-                if (Prefs.getPrefs().getTinaSVGPath() != null) {
-                  try {
-                    chooser.setCurrentDirectory(new File(Prefs.getPrefs().getTinaSVGPath()));
-                  } catch (Exception ex) {
-                    ex.printStackTrace();
-                  }
-                }
-                if (chooser.showOpenDialog(owner.centerPanel) == JFileChooser.APPROVE_OPTION) {
-                  try {
-                    File file = chooser.getSelectedFile();
-                    String svg = Tools.readUTF8Textfile(file.getAbsolutePath());
-                    byte[] valByteArray = svg.getBytes();
-                    var.getFunc().setRessource(rName, valByteArray);
-                  } catch (Exception ex) {
-                    owner.errorHandler.handleError(ex);
-                  }
-                }
-              }
-              break;
-              case OBJ_MESH: {
-                JFileChooser chooser = new MeshFileChooser(Prefs.getPrefs());
-                if (Prefs.getPrefs().getTinaMeshPath() != null) {
-                  try {
-                    chooser.setCurrentDirectory(new File(Prefs.getPrefs().getTinaMeshPath()));
-                  } catch (Exception ex) {
-                    ex.printStackTrace();
-                  }
-                }
-                if (chooser.showOpenDialog(owner.centerPanel) == JFileChooser.APPROVE_OPTION) {
-                  try {
-                    File file = chooser.getSelectedFile();
-                    var.getFunc().setRessource(rName, file.getAbsolutePath().getBytes());
-                  } catch (Exception ex) {
-                    owner.errorHandler.handleError(ex);
-                  }
-                }
-              }
-              break;
-              default: {
-                final RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(owner.centerPanel), Prefs.getPrefs(), owner.errorHandler);
-                dlg.setRessourceName(rName);
-                byte val[] = var.getFunc().getRessourceValues()[idx];
-                RessourceType type = var.getFunc().getRessourceType(rName);
-                RessourceDialog.ContentType ct = type == RessourceType.JAVA_CODE ? RessourceDialog.ContentType.JAVA : RessourceDialog.ContentType.TEXT;
-                if (val != null) {
-                  dlg.setRessourceValue(ct, new String(val));
-                }
-                dlg.addValidation(new RessourceValidation() {
-                  @Override
-                  public void validate() {
-                    String valStr = dlg.getRessourceValue();
+                  Font oldFont =
+                      new Font(oldFontname != null ? oldFontname : "Arial", Font.PLAIN, 24);
+                  Font selectedFont =
+                      JFontChooser.showDialog(owner.centerPanel, "Choose font", oldFont);
+                  if (selectedFont != null) {
+                    String valStr = selectedFont.getFontName();
                     byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
-                    byte[] oldValue = var.getFunc().getRessource(rName);
+                    var.getFunc().setRessource(rName, valByteArray);
+                  }
+                }
+                break;
+              case IMAGE_FILENAME:
+                {
+                  String oldFilename = null;
+                  {
+                    byte val[] = var.getFunc().getRessourceValues()[idx];
+                    if (val != null) {
+                      oldFilename = new String(val);
+                    }
+                  }
+                  File file =
+                      FileDialogTools.selectImageFileForOpen(
+                          owner.getMainEditorFrame(),
+                          owner.centerPanel,
+                          Tools.FILEEXT_PNG,
+                          oldFilename);
+                  if (file != null) {
+                    String valStr = file.getAbsolutePath();
+                    byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
+                    var.getFunc().setRessource(rName, valByteArray);
+                  }
+                }
+                break;
+              case FLAME_FILENAME:
+                {
+                  String oldFilename = null;
+                  {
+                    byte val[] = var.getFunc().getRessourceValues()[idx];
+                    if (val != null) {
+                      oldFilename = new String(val);
+                    }
+                  }
+                  File file =
+                      FileDialogTools.selectFlameFileForOpen(
+                          owner.getMainEditorFrame(), owner.centerPanel, oldFilename);
+                  if (file != null) {
+                    String valStr = file.getAbsolutePath();
+                    byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
+                    var.getFunc().setRessource(rName, valByteArray);
+                  }
+                }
+                break;
+              case IMAGE_FILE:
+                {
+                  File file =
+                      FileDialogTools.selectImageFileForOpen(
+                          owner.getMainEditorFrame(), owner.centerPanel, Tools.FILEEXT_PNG, null);
+                  if (file != null) {
                     try {
+                      byte[] imgData = Tools.readFile(file.getAbsolutePath());
+                      var.getFunc().setRessource(rName, imgData);
+                    } catch (Exception ex) {
+                      owner.errorHandler.handleError(ex);
+                    }
+                  }
+                }
+                break;
+              case SVG_FILE:
+                {
+                  File file =
+                      FileDialogTools.selectSvgFileForOpen(
+                          owner.getMainEditorFrame(), owner.centerPanel);
+                  if (file != null) {
+                    try {
+                      String svg = Tools.readUTF8Textfile(file.getAbsolutePath());
+                      byte[] valByteArray = svg.getBytes();
                       var.getFunc().setRessource(rName, valByteArray);
-                      var.getFunc().validate();
-                    } catch (Throwable ex) {
-                      var.getFunc().setRessource(rName, oldValue);
-                      throw new RuntimeException(ex);
+                    } catch (Exception ex) {
+                      owner.errorHandler.handleError(ex);
                     }
-                  }
-                });
-
-                dlg.setModal(true);
-                dlg.setVisible(true);
-
-                if (dlg.isConfirmed()) {
-                  try {
-                    String valStr = dlg.getRessourceValue();
-                    byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
-                    var.getFunc().setRessource(rName, valByteArray);
-                    if (var.getFunc().ressourceCanModifyParams(rName)) {
-                      // forcing refresh of params UI in case setting resource changes available params or param values
-                      this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], pIdx, xForm, var, true);
-                    }
-                  } catch (Throwable ex) {
-                    owner.errorHandler.handleError(ex);
                   }
                 }
-              }
+                break;
+              case OBJ_MESH:
+                {
+                  File file =
+                      FileDialogTools.selectMeshFileForOpen(
+                          owner.getMainEditorFrame(), owner.centerPanel);
+                  if (file != null) {
+                    try {
+                      var.getFunc().setRessource(rName, file.getAbsolutePath().getBytes());
+                    } catch (Exception ex) {
+                      owner.errorHandler.handleError(ex);
+                    }
+                  }
+                }
+                break;
+              default:
+                {
+                  final RessourceDialog dlg =
+                      new RessourceDialog(
+                          owner.getMainEditorFrame(),
+                          SwingUtilities.getWindowAncestor(owner.centerPanel),
+                          Prefs.getPrefs(),
+                          owner.errorHandler);
+                  dlg.setRessourceName(rName);
+                  byte val[] = var.getFunc().getRessourceValues()[idx];
+                  RessourceType type = var.getFunc().getRessourceType(rName);
+                  RessourceDialog.ContentType ct =
+                      type == RessourceType.JAVA_CODE
+                          ? RessourceDialog.ContentType.JAVA
+                          : RessourceDialog.ContentType.TEXT;
+                  if (val != null) {
+                    dlg.setRessourceValue(ct, new String(val));
+                  }
+                  dlg.addValidation(
+                      new RessourceValidation() {
+                        @Override
+                        public void validate() {
+                          String valStr = dlg.getRessourceValue();
+                          byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
+                          byte[] oldValue = var.getFunc().getRessource(rName);
+                          try {
+                            var.getFunc().setRessource(rName, valByteArray);
+                            var.getFunc().validate();
+                          } catch (Throwable ex) {
+                            var.getFunc().setRessource(rName, oldValue);
+                            throw new RuntimeException(ex);
+                          }
+                        }
+                      });
+
+                  dlg.setModal(true);
+                  dlg.setVisible(true);
+
+                  if (dlg.isConfirmed()) {
+                    try {
+                      String valStr = dlg.getRessourceValue();
+                      byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
+                      var.getFunc().setRessource(rName, valByteArray);
+                      if (var.getFunc().ressourceCanModifyParams(rName)) {
+                        // forcing refresh of params UI in case setting resource changes available
+                        // params or param values
+                        this.refreshParamControls(
+                            data.TinaNonlinearControlsRows[pIdx], pIdx, xForm, var, true);
+                      }
+                    } catch (Throwable ex) {
+                      owner.errorHandler.handleError(ex);
+                    }
+                  }
+                }
             }
           }
           owner.refreshFlameImage(true, false, 1, true, false);
@@ -784,12 +833,18 @@ public class NonlinearControlsDelegate {
     XForm xForm = owner.getCurrXForm();
     if (xForm != null && pIdx < xForm.getVariationCount())
       fpriority = xForm.getVariation(pIdx).getFunc().getPriority();
-    else
-      fpriority = 0;
-    if ((fpriority == 2 || fpriority == -2) && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected()) {
-      nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? fpriority : 1);
+    else fpriority = 0;
+    if ((fpriority == 2 || fpriority == -2)
+        && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected()) {
+      nonlinearParamsPriorityChanged(
+          pIdx,
+          data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected()
+              ? fpriority
+              : 1);
     } else {
-      nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? -1 : 0);
+      nonlinearParamsPriorityChanged(
+          pIdx,
+          data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? -1 : 0);
     }
   }
 
@@ -798,12 +853,18 @@ public class NonlinearControlsDelegate {
     XForm xForm = owner.getCurrXForm();
     if (xForm != null && pIdx < xForm.getVariationCount())
       fpriority = xForm.getVariation(pIdx).getFunc().getPriority();
-    else
-      fpriority = 0;
-    if ((fpriority == 2 || fpriority == -2) && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected()) {
-      nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? fpriority : -1);
+    else fpriority = 0;
+    if ((fpriority == 2 || fpriority == -2)
+        && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected()) {
+      nonlinearParamsPriorityChanged(
+          pIdx,
+          data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected()
+              ? fpriority
+              : -1);
     } else {
-      nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? 1 : 0);
+      nonlinearParamsPriorityChanged(
+          pIdx,
+          data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? 1 : 0);
     }
   }
 
@@ -829,12 +890,16 @@ public class NonlinearControlsDelegate {
       XForm xForm = owner.getCurrXForm();
       if (xForm != null && pIdx > 0 && pIdx < xForm.getVariationCount()) {
         owner.saveUndoPoint();
-        boolean prevExpanded = data.TinaNonlinearControlsRows[pIdx - 1].getToggleParamsPnlButton().isSelected();
-        boolean selExpanded = data.TinaNonlinearControlsRows[pIdx].getToggleParamsPnlButton().isSelected();
+        boolean prevExpanded =
+            data.TinaNonlinearControlsRows[pIdx - 1].getToggleParamsPnlButton().isSelected();
+        boolean selExpanded =
+            data.TinaNonlinearControlsRows[pIdx].getToggleParamsPnlButton().isSelected();
 
         xForm.getVariations().add(pIdx - 1, xForm.getVariations().get(pIdx));
         xForm.getVariations().remove(pIdx + 1);
-        data.TinaNonlinearControlsRows[pIdx - 1].getToggleParamsPnlButton().setSelected(selExpanded);
+        data.TinaNonlinearControlsRows[pIdx - 1]
+            .getToggleParamsPnlButton()
+            .setSelected(selExpanded);
         data.TinaNonlinearControlsRows[pIdx].getToggleParamsPnlButton().setSelected(prevExpanded);
 
         owner.refreshXFormUI(xForm);
@@ -872,5 +937,4 @@ public class NonlinearControlsDelegate {
       owner.cmbRefreshing = false;
     }
   }
-
 }

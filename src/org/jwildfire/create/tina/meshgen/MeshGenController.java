@@ -1,47 +1,20 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2020 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.meshgen;
-
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JSlider;
-import javax.swing.JTextPane;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -64,22 +37,26 @@ import org.jwildfire.create.tina.meshgen.render.MeshGenRenderThread;
 import org.jwildfire.create.tina.meshgen.render.RenderPointCloudThread;
 import org.jwildfire.create.tina.meshgen.render.RenderSlicesThread;
 import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.ProgressUpdater;
-import org.jwildfire.create.tina.render.RenderInfo;
-import org.jwildfire.create.tina.render.RenderMode;
-import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.render.*;
 import org.jwildfire.create.tina.swing.*;
-import org.jwildfire.create.tina.swing.MainEditorFrame;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.variation.InternalSliceRangeIndicatorWFFunc;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.swing.ErrorHandler;
-import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
-import org.jwildfire.swing.PointCloudOutputFileChooser;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MeshGenController {
   private static final double Z_SCALE = 10000.0;
@@ -162,25 +139,74 @@ public class MeshGenController {
   private String currSequencePattern;
   private ImagePanel previewPanel;
 
-  public MeshGenController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
-      JButton pFromEditorBtn, JButton pFromClipboardBtn, JButton pLoadFlameBtn, JWFNumberField pSliceCountREd,
-      JWFNumberField pSlicesPerRenderREd, JWFNumberField pRenderWidthREd, JWFNumberField pRenderHeightREd,
-      JWFNumberField pRenderQualityREd, JProgressBar pRenderSequenceProgressbar, JButton pGenerateBtn, JPanel pTopViewRootPnl,
-      JPanel pFrontViewRootPnl, JPanel pPerspectiveViewRootPnl, JTextPane pHintPane, JWFNumberField pCentreXREd,
-      JSlider pCentreXSlider, JWFNumberField pCentreYREd, JSlider pCentreYSlider, JWFNumberField pZoomREd,
-      JSlider pZoomSlider, JWFNumberField pZMinREd, JSlider pZMinSlider, JWFNumberField pZMaxREd,
-      JSlider pZMaxSlider, JWFNumberField pMeshGenCellSizeREd, JButton pTopViewRenderBtn, JButton pFrontViewRenderBtn, JButton pPerspectiveViewRenderBtn,
-      JButton pTopViewToEditorBtn, JButton pLoadSequenceBtn, JWFNumberField pSequenceWidthREd, JWFNumberField pSequenceHeightREd,
-      JWFNumberField pSequenceSlicesREd, JWFNumberField pSequenceDownSampleREd, JWFNumberField pSequenceFilterRadiusREd,
-      JProgressBar pGenerateMeshProgressbar, JButton pGenerateMeshBtn, JButton pSequenceFromRendererBtn,
-      JWFNumberField pSequenceThresholdREd, JLabel pSequenceLbl, JPanel pPreviewRootPanel, JCheckBox pAutoPreviewCBx,
-      JButton pPreviewImportLastGeneratedMeshBtn, JButton pPreviewImportFromFileBtn, JButton pClearPreviewBtn,
-      JWFNumberField pPreviewPositionXREd, JWFNumberField pPreviewPositionYREd,
-      JWFNumberField pPreviewSizeREd, JWFNumberField pPreviewScaleZREd, JWFNumberField pPreviewRotateAlphaREd,
-      JWFNumberField pPreviewRotateBetaREd, JWFNumberField pPreviewPointsREd, JWFNumberField pPreviewPolygonsREd,
-      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn, JComboBox pPreFilter1Cmb, JComboBox pPreFilter2Cmb,
-      JWFNumberField pImageStepREd, JComboBox pOutputTypeCmb, JCheckBox pMeshGenTaubinSmoothCbx, JWFNumberField pMeshGenSmoothPassesREd,
-      JWFNumberField pMeshGenSmoothLambdaREd, JWFNumberField pMeshGenSmoothMuREd) {
+  public MeshGenController(
+      TinaController pTinaController,
+      ErrorHandler pErrorHandler,
+      Prefs pPrefs,
+      JPanel pRootPanel,
+      JButton pFromEditorBtn,
+      JButton pFromClipboardBtn,
+      JButton pLoadFlameBtn,
+      JWFNumberField pSliceCountREd,
+      JWFNumberField pSlicesPerRenderREd,
+      JWFNumberField pRenderWidthREd,
+      JWFNumberField pRenderHeightREd,
+      JWFNumberField pRenderQualityREd,
+      JProgressBar pRenderSequenceProgressbar,
+      JButton pGenerateBtn,
+      JPanel pTopViewRootPnl,
+      JPanel pFrontViewRootPnl,
+      JPanel pPerspectiveViewRootPnl,
+      JTextPane pHintPane,
+      JWFNumberField pCentreXREd,
+      JSlider pCentreXSlider,
+      JWFNumberField pCentreYREd,
+      JSlider pCentreYSlider,
+      JWFNumberField pZoomREd,
+      JSlider pZoomSlider,
+      JWFNumberField pZMinREd,
+      JSlider pZMinSlider,
+      JWFNumberField pZMaxREd,
+      JSlider pZMaxSlider,
+      JWFNumberField pMeshGenCellSizeREd,
+      JButton pTopViewRenderBtn,
+      JButton pFrontViewRenderBtn,
+      JButton pPerspectiveViewRenderBtn,
+      JButton pTopViewToEditorBtn,
+      JButton pLoadSequenceBtn,
+      JWFNumberField pSequenceWidthREd,
+      JWFNumberField pSequenceHeightREd,
+      JWFNumberField pSequenceSlicesREd,
+      JWFNumberField pSequenceDownSampleREd,
+      JWFNumberField pSequenceFilterRadiusREd,
+      JProgressBar pGenerateMeshProgressbar,
+      JButton pGenerateMeshBtn,
+      JButton pSequenceFromRendererBtn,
+      JWFNumberField pSequenceThresholdREd,
+      JLabel pSequenceLbl,
+      JPanel pPreviewRootPanel,
+      JCheckBox pAutoPreviewCBx,
+      JButton pPreviewImportLastGeneratedMeshBtn,
+      JButton pPreviewImportFromFileBtn,
+      JButton pClearPreviewBtn,
+      JWFNumberField pPreviewPositionXREd,
+      JWFNumberField pPreviewPositionYREd,
+      JWFNumberField pPreviewSizeREd,
+      JWFNumberField pPreviewScaleZREd,
+      JWFNumberField pPreviewRotateAlphaREd,
+      JWFNumberField pPreviewRotateBetaREd,
+      JWFNumberField pPreviewPointsREd,
+      JWFNumberField pPreviewPolygonsREd,
+      JButton pRefreshPreviewBtn,
+      JButton pPreviewSunflowExportBtn,
+      JComboBox pPreFilter1Cmb,
+      JComboBox pPreFilter2Cmb,
+      JWFNumberField pImageStepREd,
+      JComboBox pOutputTypeCmb,
+      JCheckBox pMeshGenTaubinSmoothCbx,
+      JWFNumberField pMeshGenSmoothPassesREd,
+      JWFNumberField pMeshGenSmoothLambdaREd,
+      JWFNumberField pMeshGenSmoothMuREd) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -302,8 +328,7 @@ public class MeshGenController {
       setCentreYValue(0.0);
       setZoomValue(1.0);
       setMaxOctreeCellSizeValue(RasterPointCloud.DFLT_MAX_OCTREE_CELL_SIZE);
-    }
-    finally {
+    } finally {
       refreshing = false;
     }
   }
@@ -328,8 +353,7 @@ public class MeshGenController {
       hintPane.setText(content.toString());
       hintPane.setSelectionStart(0);
       hintPane.setSelectionEnd(0);
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
@@ -358,21 +382,18 @@ public class MeshGenController {
               renderer.setProgressUpdater(null);
               flame.setSampleDensity(3.0);
               flame.setSpatialFilterRadius(0.0);
-            }
-            else {
+            } else {
               renderer.setProgressUpdater(renderSequenceProgressUpdater);
               flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
             }
             RenderedFlame res = renderer.renderFlame(info);
             imgPanel.setImage(res.getImage());
-          }
-          finally {
+          } finally {
             flame.setSpatialFilterRadius(oldSpatialFilterRadius);
             flame.setSampleDensity(oldSampleDensity);
           }
         }
-      }
-      else {
+      } else {
         imgPanel.setImage(new SimpleImage(width, height));
       }
       pRootPanel.repaint();
@@ -388,7 +409,8 @@ public class MeshGenController {
       int height = pRootPanel.getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, pRootPanel.getWidth(), pFlameHolder, null, null, null);
+      flamePanel =
+          new FlamePanel(prefs, img, 0, 0, pRootPanel.getWidth(), pFlameHolder, null, null, null);
       flamePanel.setRenderWidth(renderWidthREd.getIntValue());
       flamePanel.setRenderHeight(renderHeightREd.getIntValue());
       flamePanel.setFocusable(true);
@@ -436,11 +458,16 @@ public class MeshGenController {
         xform.addVariation(1.0, new Linear3DFunc());
         xform.addVariation(1.0, sliceVar);
         pFlame.getFirstLayer().getFinalXForms().add(xform);
+      } else {
+        pFlame
+            .getFirstLayer()
+            .getFinalXForms()
+            .get(pFlame.getFirstLayer().getFinalXForms().size() - 1)
+            .addVariation(1.0, sliceVar);
       }
-      else {
-        pFlame.getFirstLayer().getFinalXForms().get(pFlame.getFirstLayer().getFinalXForms().size() - 1).addVariation(1.0, sliceVar);
-      }
-      sliceVar.setParameter("thickness", (zmaxREd.getDoubleValue() - zminREd.getDoubleValue()) / sliceCountREd.getDoubleValue());
+      sliceVar.setParameter(
+          "thickness",
+          (zmaxREd.getDoubleValue() - zminREd.getDoubleValue()) / sliceCountREd.getDoubleValue());
       sliceVar.setParameter("position_1", zminREd.getDoubleValue());
       sliceVar.setParameter("dc_red_1", 2450);
       sliceVar.setParameter("dc_green_1", 250);
@@ -453,45 +480,46 @@ public class MeshGenController {
     }
   }
 
-  private FlameHolder topViewFlameHolder = new PreviewFlameHolder() {
+  private FlameHolder topViewFlameHolder =
+      new PreviewFlameHolder() {
 
-    @Override
-    protected Flame createPreviewFlame(Flame pBaseFlame) {
-      Flame res = pBaseFlame.makeCopy();
-      setGradient(res);
-      addSliceVariation(res, false);
-      return res;
-    }
+        @Override
+        protected Flame createPreviewFlame(Flame pBaseFlame) {
+          Flame res = pBaseFlame.makeCopy();
+          setGradient(res);
+          addSliceVariation(res, false);
+          return res;
+        }
+      };
 
-  };
+  private FlameHolder frontViewFlameHolder =
+      new PreviewFlameHolder() {
 
-  private FlameHolder frontViewFlameHolder = new PreviewFlameHolder() {
+        @Override
+        protected Flame createPreviewFlame(Flame pBaseFlame) {
+          Flame res = pBaseFlame.makeCopy();
+          addSliceVariation(res, true);
+          setGradient(res);
+          res.setCamPitch(90.0);
+          return res;
+        }
+      };
 
-    @Override
-    protected Flame createPreviewFlame(Flame pBaseFlame) {
-      Flame res = pBaseFlame.makeCopy();
-      addSliceVariation(res, true);
-      setGradient(res);
-      res.setCamPitch(90.0);
-      return res;
-    }
+  private FlameHolder perspectiveViewFlameHolder =
+      new PreviewFlameHolder() {
 
-  };
-
-  private FlameHolder perspectiveViewFlameHolder = new PreviewFlameHolder() {
-
-    @Override
-    protected Flame createPreviewFlame(Flame pBaseFlame) {
-      Flame res = pBaseFlame.makeCopy();
-      setGradient(res);
-      res.setCamPitch(60.0);
-      res.setCamYaw(30.0);
-      res.setCamBank(0.0);
-      res.setCamPerspective(0.20);
-      addSliceVariation(res, false);
-      return res;
-    }
-  };
+        @Override
+        protected Flame createPreviewFlame(Flame pBaseFlame) {
+          Flame res = pBaseFlame.makeCopy();
+          setGradient(res);
+          res.setCamPitch(60.0);
+          res.setCamYaw(30.0);
+          res.setCamBank(0.0);
+          res.setCamPerspective(0.20);
+          addSliceVariation(res, false);
+          return res;
+        }
+      };
 
   private void refreshAllPreviews(boolean pQuickRender) {
     refreshFlameImage(pQuickRender, topViewRootPnl, topViewFlameHolder);
@@ -505,8 +533,7 @@ public class MeshGenController {
       if (newFlame != null) {
         importFlame(newFlame);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -518,8 +545,7 @@ public class MeshGenController {
       Transferable clipData = clipboard.getContents(clipboard);
       if (clipData != null) {
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-          String xml = (String) (clipData.getTransferData(
-              DataFlavor.stringFlavor));
+          String xml = (String) (clipData.getTransferData(DataFlavor.stringFlavor));
           List<Flame> flames = new FlameReader(prefs).readFlamesfromXML(xml);
           if (flames.size() > 0) {
             newFlame = flames.get(0);
@@ -528,43 +554,34 @@ public class MeshGenController {
       }
       if (newFlame == null) {
         throw new Exception("There is currently no valid flame in the clipboard");
-      }
-      else {
+      } else {
         importFlame(newFlame);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
 
   public void loadFlameButton_clicked() {
     try {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectFlameFileForOpen(
+              tinaController.getMainEditorFrame(), previewRootPanel, null);
+      if (file != null) {
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame newFlame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         importFlame(newFlame);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
 
   public void importFlame(Flame pNewFlame) {
     if (pNewFlame.getLayers().size() > 1) {
-      throw new RuntimeException("Only flames with one layer are supported. But you could create a mesh of each layer separately and then use all those objects in your 3d-package");
+      throw new RuntimeException(
+          "Only flames with one layer are supported. But you could create a mesh of each layer separately and then use all those objects in your 3d-package");
     }
     currStrippedOrigFlame = stripFlame(pNewFlame);
     currBaseFlame = createBaseFlame(currStrippedOrigFlame);
@@ -576,8 +593,7 @@ public class MeshGenController {
       setZMinValue(0.0);
       setZMaxValue(1.0);
       setMaxOctreeCellSizeValue(RasterPointCloud.DFLT_MAX_OCTREE_CELL_SIZE);
-    }
-    finally {
+    } finally {
       refreshing = false;
     }
     enableControls();
@@ -671,8 +687,7 @@ public class MeshGenController {
       refreshing = true;
       try {
         setCentreXValue(currBaseFlame.getCentreX());
-      }
-      finally {
+      } finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
@@ -685,8 +700,7 @@ public class MeshGenController {
       refreshing = true;
       try {
         setCentreXValue(currBaseFlame.getCentreX());
-      }
-      finally {
+      } finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
@@ -699,8 +713,7 @@ public class MeshGenController {
       refreshing = true;
       try {
         setCentreYValue(currBaseFlame.getCentreY());
-      }
-      finally {
+      } finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
@@ -713,8 +726,7 @@ public class MeshGenController {
       refreshing = true;
       try {
         setCentreYValue(currBaseFlame.getCentreY());
-      }
-      finally {
+      } finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
@@ -727,8 +739,7 @@ public class MeshGenController {
       refreshing = true;
       try {
         setZoomValue(currBaseFlame.getCamZoom());
-      }
-      finally {
+      } finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
@@ -741,8 +752,7 @@ public class MeshGenController {
       refreshing = true;
       try {
         setZoomValue(currBaseFlame.getCamZoom());
-      }
-      finally {
+      } finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
@@ -754,8 +764,7 @@ public class MeshGenController {
       refreshing = true;
       try {
         setZMinValue(zminREd.getDoubleValue());
-      }
-      finally {
+      } finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
@@ -767,8 +776,7 @@ public class MeshGenController {
       refreshing = true;
       try {
         setZMinValue((double) zminSlider.getValue() / (double) Z_SCALE);
-      }
-      finally {
+      } finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
@@ -780,8 +788,7 @@ public class MeshGenController {
       refreshing = true;
       try {
         setZMaxValue(zmaxREd.getDoubleValue());
-      }
-      finally {
+      } finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
@@ -793,8 +800,7 @@ public class MeshGenController {
       refreshing = true;
       try {
         setZMaxValue((double) zmaxSlider.getValue() / (double) Z_SCALE);
-      }
-      finally {
+      } finally {
         refreshing = false;
       }
       refreshAllPreviews(true);
@@ -895,99 +901,107 @@ public class MeshGenController {
       while (renderSlicesThread.isFinished()) {
         try {
           Thread.sleep(10);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
           e.printStackTrace();
         }
       }
       renderSlicesThread = null;
       enableControls();
-    }
-    else if (currBaseFlame != null) {
+    } else if (currBaseFlame != null) {
       try {
-        JFileChooser chooser;
+        File file;
         if (isPointCloudMode()) {
-          chooser = new PointCloudOutputFileChooser(Tools.FILEEXT_PLY);
-          if (prefs.getTinaMeshPath() != null) {
-            try {
-              chooser.setCurrentDirectory(new File(prefs.getTinaMeshPath()));
-            }
-            catch (Exception ex) {
-              ex.printStackTrace();
-            }
-          }
+          file =
+              FileDialogTools.selectPointCloudFileForSave(
+                  tinaController.getMainEditorFrame(), previewRootPanel, Tools.FILEEXT_PLY);
+        } else {
+          file =
+              FileDialogTools.selectImageFileForSave(
+                  tinaController.getMainEditorFrame(), previewRootPanel, Tools.FILEEXT_PNG);
         }
-        else {
-          chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-          if (prefs.getOutputImagePath() != null) {
-            try {
-              chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-            }
-            catch (Exception ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-        if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-          final File file = chooser.getSelectedFile();
+        if (file != null) {
           prefs.setLastOutputImageFile(file);
 
-          MeshGenGenerateThreadFinishEvent finishEvent = new MeshGenGenerateThreadFinishEvent() {
+          MeshGenGenerateThreadFinishEvent finishEvent =
+              new MeshGenGenerateThreadFinishEvent() {
 
-            @Override
-            public void succeeded(double pElapsedTime) {
-              try {
-                tinaController.getMessageHelper().showStatusMessage(currBaseFlame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
-              }
-              catch (Throwable ex) {
-                errorHandler.handleError(ex);
-              }
-              renderSlicesThread = null;
-              enableControls();
-            }
+                @Override
+                public void succeeded(double pElapsedTime) {
+                  try {
+                    tinaController
+                        .getMessageHelper()
+                        .showStatusMessage(
+                            currBaseFlame,
+                            "render time: " + Tools.doubleToString(pElapsedTime) + "s");
+                  } catch (Throwable ex) {
+                    errorHandler.handleError(ex);
+                  }
+                  renderSlicesThread = null;
+                  enableControls();
+                }
 
-            @Override
-            public void failed(Throwable exception) {
-              errorHandler.handleError(exception);
-              renderSlicesThread = null;
-              enableControls();
-            }
-
-          };
+                @Override
+                public void failed(Throwable exception) {
+                  errorHandler.handleError(exception);
+                  renderSlicesThread = null;
+                  enableControls();
+                }
+              };
           Flame flame = currBaseFlame.makeCopy();
 
           switch (getOutputType()) {
-            case VOXELSTACK: {
-              String outfilenamePattern = SequenceFilenameGen.createFilenamePattern(file);
+            case VOXELSTACK:
+              {
+                String outfilenamePattern = SequenceFilenameGen.createFilenamePattern(file);
 
-              Flame grayFlame = flame.makeCopy();
-              RGBPalette gradient = new RGBPalette();
-              for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
-                gradient.setColor(i, 225, 225, 225);
+                Flame grayFlame = flame.makeCopy();
+                RGBPalette gradient = new RGBPalette();
+                for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
+                  gradient.setColor(i, 225, 225, 225);
+                }
+                grayFlame.getFirstLayer().setPalette(gradient);
+
+                renderSlicesThread =
+                    new RenderSlicesThread(
+                        prefs,
+                        grayFlame,
+                        outfilenamePattern,
+                        finishEvent,
+                        renderSequenceProgressUpdater,
+                        renderWidthREd.getIntValue(),
+                        renderHeightREd.getIntValue(),
+                        sliceCountREd.getIntValue(),
+                        slicesPerRenderREd.getIntValue(),
+                        renderQualityREd.getIntValue(),
+                        zminREd.getDoubleValue(),
+                        zmaxREd.getDoubleValue());
+
+                lastRenderedSequenceOutFilePattern = outfilenamePattern;
+                break;
               }
-              grayFlame.getFirstLayer().setPalette(gradient);
-
-              renderSlicesThread = new RenderSlicesThread(
-                  prefs, grayFlame, outfilenamePattern, finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
-                  sliceCountREd.getIntValue(), slicesPerRenderREd.getIntValue(), renderQualityREd.getIntValue(), zminREd.getDoubleValue(),
-                  zmaxREd.getDoubleValue());
-
-              lastRenderedSequenceOutFilePattern = outfilenamePattern;
-              break;
-            }
-            case POINTCLOUD: {
-              renderSlicesThread = new RenderPointCloudThread(
-                  prefs, flame, file.getAbsolutePath(), finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
-                  renderQualityREd.getIntValue(), zminREd.getDoubleValue(), zmaxREd.getDoubleValue(), meshGenCellSizeREd.getDoubleValue());
-              break;
-            }
+            case POINTCLOUD:
+              {
+                renderSlicesThread =
+                    new RenderPointCloudThread(
+                        prefs,
+                        flame,
+                        file.getAbsolutePath(),
+                        finishEvent,
+                        renderSequenceProgressUpdater,
+                        renderWidthREd.getIntValue(),
+                        renderHeightREd.getIntValue(),
+                        renderQualityREd.getIntValue(),
+                        zminREd.getDoubleValue(),
+                        zmaxREd.getDoubleValue(),
+                        meshGenCellSizeREd.getDoubleValue());
+                break;
+              }
           }
 
           enableControls();
           new Thread(renderSlicesThread).start();
         }
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         errorHandler.handleError(ex);
       }
     }
@@ -1012,18 +1026,10 @@ public class MeshGenController {
   }
 
   public void loadSequenceButton_clicked() {
-    JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-    if (prefs.getInputImagePath() != null) {
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
-    if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-      File file = chooser.getSelectedFile();
-      prefs.setLastInputImageFile(file);
+    File file =
+        FileDialogTools.selectImageFileForOpen(
+            tinaController.getMainEditorFrame(), previewRootPanel, Tools.FILEEXT_PNG, null);
+    if (file != null) {
       importSequence(SequenceFilenameGen.guessFilenamePattern(file));
     }
   }
@@ -1040,8 +1046,7 @@ public class MeshGenController {
         }
         if (new File(filename).exists()) {
           count++;
-        }
-        else {
+        } else {
           break;
         }
         lastFilename = filename;
@@ -1056,11 +1061,8 @@ public class MeshGenController {
           setCurrSequencePattern(pFilenamePattern);
         }
         enableControls();
-      }
-      else
-        throw new Exception("An image sequence has to contain at least one image");
-    }
-    catch (Exception ex) {
+      } else throw new Exception("An image sequence has to contain at least one image");
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1071,71 +1073,76 @@ public class MeshGenController {
       while (generateMeshThread.isFinished()) {
         try {
           Thread.sleep(10);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
           e.printStackTrace();
         }
       }
       generateMeshThread = null;
       enableControls();
-    }
-    else if (sequenceSlicesREd.getIntValue() > 0) {
+    } else if (sequenceSlicesREd.getIntValue() > 0) {
       try {
-        JFileChooser chooser = new MeshFileChooser(prefs);
-        if (prefs.getTinaMeshPath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getTinaMeshPath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-          final File outFile = chooser.getSelectedFile();
+        File outFile =
+            FileDialogTools.selectMeshFileForSave(
+                tinaController.getMainEditorFrame(), previewRootPanel);
+        if (outFile != null) {
           prefs.setLastMeshFile(outFile);
 
-          MeshGenGenerateThreadFinishEvent finishEvent = new MeshGenGenerateThreadFinishEvent() {
+          MeshGenGenerateThreadFinishEvent finishEvent =
+              new MeshGenGenerateThreadFinishEvent() {
 
-            @Override
-            public void succeeded(double pElapsedTime) {
-              try {
-                tinaController.getMessageHelper().showStatusMessage("Mesh creation time: " + Tools.doubleToString(pElapsedTime) + "s");
-              }
-              catch (Throwable ex) {
-                errorHandler.handleError(ex);
-              }
-              lastGeneratedMeshFilename = outFile.getAbsolutePath();
-              if (autoPreviewCBx.isEnabled()) {
-                currPreviewMesh = new MeshPair(generateMeshThread.getMesh());
-                refreshPreviewMeshInfo();
-              }
-              generateMeshThread = null;
-              System.gc();
-              enableControls();
-              if (autoPreviewCBx.isEnabled()) {
-                refreshPreview(false);
-              }
-            }
+                @Override
+                public void succeeded(double pElapsedTime) {
+                  try {
+                    tinaController
+                        .getMessageHelper()
+                        .showStatusMessage(
+                            "Mesh creation time: " + Tools.doubleToString(pElapsedTime) + "s");
+                  } catch (Throwable ex) {
+                    errorHandler.handleError(ex);
+                  }
+                  lastGeneratedMeshFilename = outFile.getAbsolutePath();
+                  if (autoPreviewCBx.isEnabled()) {
+                    currPreviewMesh = new MeshPair(generateMeshThread.getMesh());
+                    refreshPreviewMeshInfo();
+                  }
+                  generateMeshThread = null;
+                  System.gc();
+                  enableControls();
+                  if (autoPreviewCBx.isEnabled()) {
+                    refreshPreview(false);
+                  }
+                }
 
-            @Override
-            public void failed(Throwable exception) {
-              errorHandler.handleError(exception);
-              generateMeshThread = null;
-              enableControls();
-            }
+                @Override
+                public void failed(Throwable exception) {
+                  errorHandler.handleError(exception);
+                  generateMeshThread = null;
+                  enableControls();
+                }
+              };
 
-          };
-
-          generateMeshThread = new GenerateMeshThread(outFile.getAbsolutePath(), finishEvent, generateMeshProgressUpdater,
-              getCurrSequencePattern(), sequenceSlicesREd.getIntValue(), imageStepREd.getIntValue(), sequenceThresholdREd.getIntValue(), sequenceFilterRadiusREd.getDoubleValue(),
-              sequenceDownSampleREd.getIntValue(), true, getPreFilterList(), meshGenTaubinSmoothCbx.isSelected(), meshGenSmoothPassesREd.getIntValue(),
-              meshGenSmoothLambdaREd.getDoubleValue(), meshGenSmoothMuREd.getDoubleValue());
+          generateMeshThread =
+              new GenerateMeshThread(
+                  outFile.getAbsolutePath(),
+                  finishEvent,
+                  generateMeshProgressUpdater,
+                  getCurrSequencePattern(),
+                  sequenceSlicesREd.getIntValue(),
+                  imageStepREd.getIntValue(),
+                  sequenceThresholdREd.getIntValue(),
+                  sequenceFilterRadiusREd.getDoubleValue(),
+                  sequenceDownSampleREd.getIntValue(),
+                  true,
+                  getPreFilterList(),
+                  meshGenTaubinSmoothCbx.isSelected(),
+                  meshGenSmoothPassesREd.getIntValue(),
+                  meshGenSmoothLambdaREd.getDoubleValue(),
+                  meshGenSmoothMuREd.getDoubleValue());
 
           enableControls();
           new Thread(generateMeshThread).start();
         }
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         errorHandler.handleError(ex);
       }
     }
@@ -1156,8 +1163,7 @@ public class MeshGenController {
     currSequencePattern = pPattern;
     if (pPattern == null) {
       sequenceLbl.setText("(none)");
-    }
-    else {
+    } else {
       sequenceLbl.setText(new File(currSequencePattern).getName());
     }
   }
@@ -1194,10 +1200,16 @@ public class MeshGenController {
       return new SimpleImage(pWidth, pHeight);
     }
     Mesh mesh = pFastPreview ? currPreviewMesh.getReducedMesh() : currPreviewMesh.getMesh();
-    return MeshPreviewRenderer.renderMesh(mesh, pWidth, pHeight,
-        previewPositionXREd.getDoubleValue(), previewPositionYREd.getDoubleValue(),
-        previewSizeREd.getDoubleValue(), previewScaleZREd.getDoubleValue(),
-        previewRotateAlphaREd.getDoubleValue(), previewRotateBetaREd.getDoubleValue());
+    return MeshPreviewRenderer.renderMesh(
+        mesh,
+        pWidth,
+        pHeight,
+        previewPositionXREd.getDoubleValue(),
+        previewPositionYREd.getDoubleValue(),
+        previewSizeREd.getDoubleValue(),
+        previewScaleZREd.getDoubleValue(),
+        previewRotateAlphaREd.getDoubleValue(),
+        previewRotateBetaREd.getDoubleValue());
   }
 
   public void previewSize_changed(boolean pMouseAdjusting) {
@@ -1226,21 +1238,13 @@ public class MeshGenController {
 
   public void loadPreviewMeshBtn_clicked() {
     try {
-      JFileChooser chooser = new MeshFileChooser(prefs);
-      if (prefs.getTinaMeshPath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getTinaMeshPath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectMeshFileForOpen(
+              tinaController.getMainEditorFrame(), previewRootPanel);
+      if (file != null) {
         importPreviewMesh(file.getAbsolutePath());
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1256,8 +1260,7 @@ public class MeshGenController {
   public void importLastGeneratedMeshIntoPreviewBtn_clicked() {
     try {
       importPreviewMesh(lastGeneratedMeshFilename);
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1274,8 +1277,7 @@ public class MeshGenController {
     if (currPreviewMesh == null) {
       previewPointsREd.setValue(0);
       previewPolygonsREd.setValue(0);
-    }
-    else {
+    } else {
       previewPointsREd.setValue(currPreviewMesh.getMesh().getVertices().size());
       previewPolygonsREd.setValue(currPreviewMesh.getMesh().getFaces().size());
     }
@@ -1291,8 +1293,7 @@ public class MeshGenController {
       if (prefs.getSunflowScenePath() != null) {
         try {
           chooser.setCurrentDirectory(new File(prefs.getSunflowScenePath()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
@@ -1300,8 +1301,7 @@ public class MeshGenController {
         File file = chooser.getSelectedFile();
         exportMeshToSunflow(currPreviewMesh.getMesh(), file.getAbsolutePath());
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1310,16 +1310,24 @@ public class MeshGenController {
     try {
       long t0 = System.currentTimeMillis();
       SunflowSceneBuilder scene = ExampleScenes.getExampleScene1();
-      scene.addLegacyMesh()
+      scene
+          .addLegacyMesh()
           .withMesh(pMesh)
           .withName("generated mesh")
           .withShader(ExampleScenes.SHADER_SHINY);
       Tools.writeUTF8Textfile(pFilename, scene.getProduct());
       long t1 = System.currentTimeMillis();
       double elapsedTime = (t1 - t0) / 1000.0;
-      tinaController.getMessageHelper().showStatusMessage(currBaseFlame, "Scene \"" + new File(pFilename).getName() + "\" exported, elapsed time: " + Tools.doubleToString(elapsedTime) + "s");
-    }
-    catch (Exception ex) {
+      tinaController
+          .getMessageHelper()
+          .showStatusMessage(
+              currBaseFlame,
+              "Scene \""
+                  + new File(pFilename).getName()
+                  + "\" exported, elapsed time: "
+                  + Tools.doubleToString(elapsedTime)
+                  + "s");
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -1335,5 +1343,4 @@ public class MeshGenController {
   public void taubinSmoothCbx_clicked() {
     enableControls();
   }
-
 }

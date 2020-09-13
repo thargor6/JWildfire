@@ -1,33 +1,26 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2020 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.swing;
 
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.*;
-
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Preset;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.ImageCreator;
+import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 import org.jwildfire.io.SunFlowWriter;
@@ -36,6 +29,13 @@ import org.jwildfire.script.Action;
 import org.jwildfire.script.ActionList;
 import org.jwildfire.swing.Buffer.BufferType;
 import org.jwildfire.transform.Transformer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class MainController {
   private final JFrame mainFrame;
@@ -75,15 +75,15 @@ public class MainController {
 
   private JFileChooser getScriptJFileChooser() {
     if (jScriptFileChooser == null) {
-      jScriptFileChooser = new DefaultFileChooser() {
-        private static final long serialVersionUID = 1L;
+      jScriptFileChooser =
+          new DefaultFileChooser() {
+            private static final long serialVersionUID = 1L;
 
-        @Override
-        protected String getDefaultExtension() {
-          return Tools.FILEEXT_JFX;
-        }
-
-      };
+            @Override
+            protected String getDefaultExtension() {
+              return Tools.FILEEXT_JFX;
+            }
+          };
       jScriptFileChooser.addChoosableFileFilter(new ScriptFileFilter());
       jScriptFileChooser.setAcceptAllFileFilterUsed(false);
     }
@@ -91,13 +91,20 @@ public class MainController {
   }
 
   public MainController(
-      Prefs pPrefs, ErrorHandler pErrorHandler,
-      JFrame pMainFrame, JMenu pWindowMenu,
-      JComboBox pTransformerInputCmb, JComboBox pTransformerPresetCmb,
-      JComboBox pCreatorsPresetCmb, JDialog pShowMessageDlg,
-      JTextArea pShowMessageDlgTextArea, JTable pActionTable,
-      JTextArea pScriptActionTextArea, JSlider pScriptFrameSlider,
-      JTextField pScriptFramesREd, JTextField pScriptFrameREd,
+      Prefs pPrefs,
+      ErrorHandler pErrorHandler,
+      JFrame pMainFrame,
+      JMenu pWindowMenu,
+      JComboBox pTransformerInputCmb,
+      JComboBox pTransformerPresetCmb,
+      JComboBox pCreatorsPresetCmb,
+      JDialog pShowMessageDlg,
+      JTextArea pShowMessageDlgTextArea,
+      JTable pActionTable,
+      JTextArea pScriptActionTextArea,
+      JSlider pScriptFrameSlider,
+      JTextField pScriptFramesREd,
+      JTextField pScriptFrameREd,
       EnvelopeController pEnvelopeController,
       int pDesignedWindowCount) {
     designedWindowCount = pDesignedWindowCount;
@@ -116,11 +123,9 @@ public class MainController {
     scriptProcessor.setAddBuffersToDesktop(true);
   }
 
-  public Buffer loadImage(String pFilename, boolean pRecordAction)
-      throws Exception {
+  public Buffer loadImage(String pFilename, boolean pRecordAction) throws Exception {
     Buffer buffer = scriptProcessor.loadImage(pFilename);
-    if (pRecordAction)
-      actionList.addLoadImageAction(pFilename);
+    if (pRecordAction) actionList.addLoadImageAction(pFilename);
     addEvents(buffer);
     refreshWindowMenu();
     return buffer;
@@ -142,22 +147,12 @@ public class MainController {
   }
 
   public Buffer loadImage(boolean pRecordAction) throws Exception {
-    JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-    if (prefs.getInputImagePath() != null) {
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
-    if (chooser.showOpenDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
-      File file = chooser.getSelectedFile();
+    File file =
+        FileDialogTools.selectImageFileForOpen(mainFrame, windowMenu, Tools.FILEEXT_PNG, null);
+    if (file != null) {
       prefs.setLastInputImageFile(file);
       return loadImage(file.getAbsolutePath(), pRecordAction);
-    }
-    else
-      return null;
+    } else return null;
   }
 
   public void selectTransformer(String pName) {
@@ -167,28 +162,30 @@ public class MainController {
     }
   }
 
-  public void executeTransformer(String pInputName, boolean pStoreMesh3D,
-      String pOutputName, String pOutput3DName, boolean pRecordAction) {
+  public void executeTransformer(
+      String pInputName,
+      boolean pStoreMesh3D,
+      String pOutputName,
+      String pOutput3DName,
+      boolean pRecordAction) {
     executing = true;
     try {
-      ScriptProcessor.TransformResult buffers = scriptProcessor
-          .executeTransformer(pInputName, pStoreMesh3D, pOutputName,
-              pOutput3DName, pRecordAction);
-      if (buffers.getOutBuffer() != null)
-        addEvents(buffers.getOutBuffer());
-      if (buffers.getOutHDRBuffer() != null)
-        addEvents(buffers.getOutHDRBuffer());
-      if (buffers.getOutBuffer3D() != null)
-        addEvents(buffers.getOutBuffer3D());
+      ScriptProcessor.TransformResult buffers =
+          scriptProcessor.executeTransformer(
+              pInputName, pStoreMesh3D, pOutputName, pOutput3DName, pRecordAction);
+      if (buffers.getOutBuffer() != null) addEvents(buffers.getOutBuffer());
+      if (buffers.getOutHDRBuffer() != null) addEvents(buffers.getOutHDRBuffer());
+      if (buffers.getOutBuffer3D() != null) addEvents(buffers.getOutBuffer3D());
       if (pRecordAction)
         actionList.addExecuteTransformerAction(
             scriptProcessor.getTransformer(),
-            buffers.getInBuffer(), buffers.getOutBuffer(), buffers.getOutHDRBuffer(),
+            buffers.getInBuffer(),
+            buffers.getOutBuffer(),
+            buffers.getOutHDRBuffer(),
             buffers.getOutBuffer3D());
       refreshWindowMenu();
       mainFrame.repaint();
-    }
-    finally {
+    } finally {
       executing = false;
     }
   }
@@ -198,35 +195,30 @@ public class MainController {
   }
 
   public void selectCreator(String pName) {
-    if (!executing)
-      scriptProcessor.selectCreator(pName);
+    if (!executing) scriptProcessor.selectCreator(pName);
   }
 
   public ImageCreator getCreator() {
     return scriptProcessor.getCreator();
   }
 
-  public Buffer executeCreator(int pWidth, int pHeight, String pOutputName,
-      boolean pRecordAction) {
+  public Buffer executeCreator(int pWidth, int pHeight, String pOutputName, boolean pRecordAction) {
     executing = true;
     try {
-      Buffer buffer = scriptProcessor.executeCreator(pWidth, pHeight,
-          pOutputName, pRecordAction);
+      Buffer buffer = scriptProcessor.executeCreator(pWidth, pHeight, pOutputName, pRecordAction);
       addEvents(buffer);
       refreshWindowMenu();
       if (pRecordAction)
         actionList.addExecuteImageCreatorAction(
             scriptProcessor.getCreator(), buffer, pWidth, pHeight);
       return buffer;
-    }
-    finally {
+    } finally {
       executing = false;
     }
   }
 
   public void selectLoader(String pName) {
-    if (!executing)
-      scriptProcessor.selectLoader(pName);
+    if (!executing) scriptProcessor.selectLoader(pName);
   }
 
   public ImageLoader getLoader() {
@@ -236,67 +228,48 @@ public class MainController {
   public Buffer executeLoader(String pOutputName, boolean pRecordAction) {
     executing = true;
     try {
-      Buffer buffer = scriptProcessor.executeLoader(pOutputName,
-          pRecordAction);
+      Buffer buffer = scriptProcessor.executeLoader(pOutputName, pRecordAction);
       addEvents(buffer);
       refreshWindowMenu();
       if (pRecordAction)
-        actionList.addExecuteImageLoaderAction(
-            scriptProcessor.getLoader(), buffer);
+        actionList.addExecuteImageLoaderAction(scriptProcessor.getLoader(), buffer);
       return buffer;
-    }
-    finally {
+    } finally {
       executing = false;
     }
   }
 
   private void addEvents(Buffer pBuffer) {
     JFrame frame = pBuffer.getFrame();
-    frame.addWindowListener(new WindowAdapter() {
-      public void windowClosed(
-          WindowEvent e) {
-        JFrame frame = (JFrame) e.getSource();
-        BufferList bufferList = getBufferList();
-        for (Buffer buffer : bufferList) {
-          if (frame == buffer.getFrame()) {
-            bufferList.remove(buffer);
-            actionList.removeBuffer(buffer, getBufferList());
-            buffer.flush();
-            refreshWindowMenu();
-            break;
+    frame.addWindowListener(
+        new WindowAdapter() {
+          public void windowClosed(WindowEvent e) {
+            JFrame frame = (JFrame) e.getSource();
+            BufferList bufferList = getBufferList();
+            for (Buffer buffer : bufferList) {
+              if (frame == buffer.getFrame()) {
+                bufferList.remove(buffer);
+                actionList.removeBuffer(buffer, getBufferList());
+                buffer.flush();
+                refreshWindowMenu();
+                break;
+              }
+            }
           }
-        }
-      }
-    });
+        });
   }
 
   public void saveImage(Buffer buffer) throws Exception {
     if (buffer != null) {
-      JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-      if (prefs.getOutputImagePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showSaveDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        prefs.setLastOutputImageFile(file);
+      File file = FileDialogTools.selectImageFileForSave(mainFrame, windowMenu, Tools.FILEEXT_PNG);
+      if (file != null) {
         if (buffer.getBufferType() == BufferType.IMAGE) {
-          new ImageWriter().saveImage(buffer.getImage(),
-              file.getAbsolutePath());
-        }
-        else if (buffer.getBufferType() == BufferType.HDR_IMAGE) {
-          new ImageWriter().saveImage(buffer.getHDRImage(),
-              file.getAbsolutePath());
-        }
-        else if (buffer.getBufferType() == BufferType.MESH3D) {
+          new ImageWriter().saveImage(buffer.getImage(), file.getAbsolutePath());
+        } else if (buffer.getBufferType() == BufferType.HDR_IMAGE) {
+          new ImageWriter().saveImage(buffer.getHDRImage(), file.getAbsolutePath());
+        } else if (buffer.getBufferType() == BufferType.MESH3D) {
           new SunFlowWriter().saveMesh(buffer.getMesh3D(), file.getAbsolutePath());
-
-        }
-        else {
+        } else {
           showMessage("Not supported");
           return;
         }
@@ -318,11 +291,12 @@ public class MainController {
         Buffer buffer = buffers.get(i);
         JMenuItem menuItem = new JMenuItem();
         menuItem.setText(buffer.getName());
-        menuItem.addActionListener(new java.awt.event.ActionListener() {
-          public void actionPerformed(java.awt.event.ActionEvent e) {
-            windowMenuItem_actionPerformed(e);
-          }
-        });
+        menuItem.addActionListener(
+            new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent e) {
+                windowMenuItem_actionPerformed(e);
+              }
+            });
         windowMenu.add(menuItem);
       }
     }
@@ -342,8 +316,7 @@ public class MainController {
           break;
         }
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       handleError(ex);
     }
   }
@@ -358,24 +331,19 @@ public class MainController {
           transformerInputCmb.addItem(buffer.getName());
       }
     }
-    if (transformerInputCmb.getItemCount() == 1)
-      transformerInputCmb.setSelectedIndex(0);
-    else if (selItem != null)
-      transformerInputCmb.setSelectedItem(selItem);
+    if (transformerInputCmb.getItemCount() == 1) transformerInputCmb.setSelectedIndex(0);
+    else if (selItem != null) transformerInputCmb.setSelectedItem(selItem);
   }
 
   private String lastInitBuffer = null;
 
   public void setTransformerInput(String pName) {
-    if (executing)
-      return;
+    if (executing) return;
     Transformer transformer = scriptProcessor.getTransformer();
-    if ((transformer != null)
-        && ((lastInitBuffer == null) || !lastInitBuffer.equals(pName))) {
+    if ((transformer != null) && ((lastInitBuffer == null) || !lastInitBuffer.equals(pName))) {
       lastInitBuffer = pName;
       Buffer buffer = getBufferList().bufferByName(pName);
-      if ((buffer != null)
-          && (buffer.getBufferType() == BufferType.IMAGE)) {
+      if ((buffer != null) && (buffer.getBufferType() == BufferType.IMAGE)) {
         transformer.initDefaultParams(buffer.getImage());
         currTransformerPropertyPanel.writeToObject(transformer);
       }
@@ -388,8 +356,7 @@ public class MainController {
     int dHeight = mainFrame.getHeight();
     int wWidth = showMessageDlg.getWidth();
     int wHeight = showMessageDlg.getHeight();
-    showMessageDlg.setLocation(dPos.x + (dWidth - wWidth) / 2, dPos.y
-        + (dHeight - wHeight) / 2);
+    showMessageDlg.setLocation(dPos.x + (dWidth - wWidth) / 2, dPos.y + (dHeight - wHeight) / 2);
     showMessageDlgTextArea.setText(pMessage);
     showMessageDlgTextArea.select(0, 0);
     showMessageDlg.setVisible(true);
@@ -412,24 +379,22 @@ public class MainController {
   public boolean closeAll() {
     String msg = "Do you really want to close all buffers?";
     String title = msg;
-    if (JOptionPane.showConfirmDialog(mainFrame, msg, title,
-        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+    if (JOptionPane.showConfirmDialog(mainFrame, msg, title, JOptionPane.YES_NO_OPTION)
+        == JOptionPane.YES_OPTION) {
       clearAllBuffers();
       refreshWindowMenu();
       actionList.clear();
       mainFrame.repaint();
       return true;
-    }
-    else
-      return false;
+    } else return false;
   }
 
   public boolean clearScript() {
     if (actionList.size() > 0) {
       String msg = "Do you really want to clear the current script?";
       String title = msg;
-      if (JOptionPane.showConfirmDialog(mainFrame, msg, title,
-          JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+      if (JOptionPane.showConfirmDialog(mainFrame, msg, title, JOptionPane.YES_NO_OPTION)
+          == JOptionPane.YES_OPTION) {
         actionList.clear();
         return true;
       }
@@ -443,16 +408,14 @@ public class MainController {
       if (prefs.getOutputScriptPath() != null) {
         try {
           chooser.setCurrentDirectory(new File(prefs.getOutputScriptPath()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
       if (chooser.showSaveDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         prefs.setLastOutputScriptFile(file);
-        String filename = Tools.forceFileExt(file.getAbsolutePath(),
-            Tools.FILEEXT_JFX);
+        String filename = Tools.forceFileExt(file.getAbsolutePath(), Tools.FILEEXT_JFX);
         actionList.saveToFile(filename);
       }
     }
@@ -462,8 +425,8 @@ public class MainController {
     if (actionList.size() > 0) {
       String msg = "Do you really want to clear all buffers and replay the current script?";
       String title = msg;
-      if (JOptionPane.showConfirmDialog(mainFrame, msg, title,
-          JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+      if (JOptionPane.showConfirmDialog(mainFrame, msg, title, JOptionPane.YES_NO_OPTION)
+          == JOptionPane.YES_OPTION) {
         clearAllBuffers();
         refreshWindowMenu();
         // dummy image just to call the init-method of transformers
@@ -475,8 +438,8 @@ public class MainController {
             case EXECUTE_CREATOR:
               selectCreator(action.getParameter());
               action.setProperties(getCreator(), getBufferList());
-              executeCreator(action.getWidth(), action.getHeight(),
-                  action.getOutputBuffer(), false);
+              executeCreator(
+                  action.getWidth(), action.getHeight(), action.getOutputBuffer(), false);
               break;
             case EXECUTE_LOADER:
               selectLoader(action.getParameter());
@@ -485,21 +448,22 @@ public class MainController {
               break;
             case EXECUTE_TRANSFORMER:
               selectTransformer(action.getParameter());
-              if (paramInitImg == null)
-                paramInitImg = new SimpleImage(320, 256);
+              if (paramInitImg == null) paramInitImg = new SimpleImage(320, 256);
               getTransformer().initDefaultParams(paramInitImg);
               action.setProperties(getTransformer(), getBufferList());
-              executeTransformer(action.getInputBuffer(),
+              executeTransformer(
+                  action.getInputBuffer(),
                   action.getOutputBuffer3D() != null,
                   action.getOutputBuffer(),
-                  action.getOutputBuffer3D(), false);
+                  action.getOutputBuffer3D(),
+                  false);
               break;
-            case LOAD_IMAGE: {
-              Buffer buffer = loadImage(action.getParameter(), false);
-              if (action.getOutputBuffer() != null
-                  && action.getOutputBuffer().length() > 0)
-                buffer.setName(action.getOutputBuffer());
-            }
+            case LOAD_IMAGE:
+              {
+                Buffer buffer = loadImage(action.getParameter(), false);
+                if (action.getOutputBuffer() != null && action.getOutputBuffer().length() > 0)
+                  buffer.setName(action.getOutputBuffer());
+              }
               break;
           }
           mainFrame.repaint();
@@ -512,14 +476,13 @@ public class MainController {
     String msg = "Do you really want to clear all buffers and the current script?";
     String title = msg;
     if (((getBufferList().size() == 0) && (actionList.size() == 0))
-        || (JOptionPane.showConfirmDialog(mainFrame, msg, title,
-            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)) {
+        || (JOptionPane.showConfirmDialog(mainFrame, msg, title, JOptionPane.YES_NO_OPTION)
+            == JOptionPane.YES_OPTION)) {
       JFileChooser chooser = getScriptJFileChooser();
       if (prefs.getInputScriptPath() != null) {
         try {
           chooser.setCurrentDirectory(new File(prefs.getInputScriptPath()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
@@ -530,8 +493,7 @@ public class MainController {
           clearAllBuffers();
           actionList.clear();
           actionList.loadFromFile(file.getAbsolutePath());
-        }
-        finally {
+        } finally {
           refreshWindowMenu();
           mainFrame.repaint();
         }
@@ -613,13 +575,11 @@ public class MainController {
       if (buffer.getFrame() == frame) {
         try {
           saveImage(buffer);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
           errorHandler.handleError(ex);
         }
         break;
       }
     }
   }
-
 }

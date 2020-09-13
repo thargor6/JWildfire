@@ -16,66 +16,14 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTable;
-import javax.swing.JTextPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-
-import org.jwildfire.base.MacroButton;
-import org.jwildfire.base.Prefs;
-import org.jwildfire.base.QualityProfile;
-import org.jwildfire.base.ResolutionProfile;
-import org.jwildfire.base.Tools;
+import com.l2fprod.common.beans.editor.FilePropertyEditor;
+import com.l2fprod.common.util.ResourceManager;
+import org.jwildfire.base.*;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.iflames.swing.JFrameFlameMessageHelper;
 import org.jwildfire.create.tina.AnimationController;
 import org.jwildfire.create.tina.GradientController;
-import org.jwildfire.create.tina.base.BGColorType;
-import org.jwildfire.create.tina.base.ColorType;
-import org.jwildfire.create.tina.base.DrawMode;
-import org.jwildfire.create.tina.base.EditPlane;
-import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.Stereo3dMode;
-import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.*;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.batch.BatchRendererController;
 import org.jwildfire.create.tina.browser.FlameBrowserController;
@@ -91,13 +39,7 @@ import org.jwildfire.create.tina.mutagen.BokehMutation;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.mutagen.MutationType;
 import org.jwildfire.create.tina.mutagen.WeightingFieldMutation;
-import org.jwildfire.create.tina.palette.DefaultGradientSelectionProvider;
-import org.jwildfire.create.tina.palette.GradientSelectionProvider;
-import org.jwildfire.create.tina.palette.MedianCutQuantizer;
-import org.jwildfire.create.tina.palette.RGBColor;
-import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
-import org.jwildfire.create.tina.palette.SimilarGradientCreator;
+import org.jwildfire.create.tina.palette.*;
 import org.jwildfire.create.tina.quilt.QuiltRendererController;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -108,19 +50,10 @@ import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGenerator;
 import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGeneratorList;
-import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.ProgressUpdater;
-import org.jwildfire.create.tina.render.RenderInfo;
-import org.jwildfire.create.tina.render.RenderMode;
-import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.render.*;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
-import org.jwildfire.create.tina.render.denoiser.OptixCmdLineAIPostDenoiser;
-import org.jwildfire.create.tina.render.filter.FilterKernelType;
-import org.jwildfire.create.tina.render.filter.FilterKernelVisualisation3dRenderer;
-import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationFlatRenderer;
-import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationRenderer;
-import org.jwildfire.create.tina.render.filter.FilteringType;
+import org.jwildfire.create.tina.render.filter.*;
 import org.jwildfire.create.tina.script.ScriptParam;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
@@ -138,19 +71,30 @@ import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.swing.ErrorHandler;
-import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.MainController;
-import org.jwildfire.swing.RenderOutputFileChooser;
 import org.jwildfire.transform.TextTransformer;
 import org.jwildfire.transform.TextTransformer.FontStyle;
 import org.jwildfire.transform.TextTransformer.HAlignment;
 import org.jwildfire.transform.TextTransformer.Mode;
 import org.jwildfire.transform.TextTransformer.VAlignment;
 
-import com.l2fprod.common.beans.editor.FilePropertyEditor;
-import com.l2fprod.common.util.ResourceManager;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.*;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider,
     DetachedPreviewProvider, FlamePanelProvider, RandomBatchHolder, RenderProgressBarHolder, XFormControlsHolder {
@@ -2201,42 +2145,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  private File selectFlameFileForOpen() {
-    if(Tools.OSType.MAC == Tools.getOSType()) {
-      FileDialog fd = new FileDialog(mainEditorFrame, "FileDialog - Choose a file.");
-      fd.setMode(FileDialog.LOAD);
-      fd.setModal(true);
-      fd.setVisible(true);
-      if(fd.getFiles()!=null && fd.getFiles().length>0) {
-        return fd.getFiles()[0];
-      }
-    }
-    else {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        prefs.setLastInputFlameFile(file);
-        return file;
-      }
-    }
-    return null;
-  }
-
   public void loadFlameButton_actionPerformed(ActionEvent e) {
-
-
-
-
     try {
-      File file = selectFlameFileForOpen();
+      File file = FileDialogTools.selectFlameFileForOpen(mainEditorFrame, centerPanel,  null);
       if (file!=null) {
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
@@ -2306,20 +2217,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void grabPaletteFromFlameButton_actionPerformed(ActionEvent e) {
-    JFileChooser chooser = new FlameFileChooser(prefs);
-    if (prefs.getInputFlamePath() != null) {
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
-    if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-      File file = chooser.getSelectedFile();
+    File file = FileDialogTools.selectFlameFileForOpen(mainEditorFrame, centerPanel, null);
+    if (file!=null) {
       List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
       Flame flame = flames.get(0);
-      prefs.setLastInputFlameFile(file);
       RGBPalette palette = flame.getFirstLayer().getPalette();
       data.paletteKeyFrames = null;
       saveUndoPoint();
@@ -2403,39 +2304,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     paletteSliderChanged(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 100.0);
   }
 
-  private File selectFlameFileForWrite()  {
-    if(Tools.OSType.MAC == Tools.getOSType()) {
-      FileDialog fd = new FileDialog(mainEditorFrame, "FileDialog - Choose a file.");
-      fd.setMode(FileDialog.SAVE);
-      fd.setModal(true);
-      fd.setVisible(true);
-      if(fd.getFiles()!=null && fd.getFiles().length>0) {
-        return fd.getFiles()[0];
-      }
-    }
-    else {
-    JFileChooser chooser = new FlameFileChooser(prefs);
-    if (prefs.getOutputFlamePath() != null) {
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
-      if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        prefs.setLastOutputFlameFile(file);
-        return file;
-      }
-    }
-    return null;
-  }
 
   public void saveFlameButton_actionPerformed(ActionEvent e) {
     try {
       if (getCurrFlame() != null) {
-        File file = selectFlameFileForWrite();
+        File file = FileDialogTools.selectFlameFileForSave(mainEditorFrame, centerPanel);
         if (file!=null) {
           String filename = file.getAbsolutePath();
           if (!filename.endsWith("." + Tools.FILEEXT_FLAME)) {
@@ -4348,20 +4221,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void grabPaletteFromImageButton_actionPerformed(ActionEvent e) {
-    JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-    if (prefs.getInputImagePath() != null) {
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
-    if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-      File file = chooser.getSelectedFile();
+    File file = FileDialogTools.selectImageFileForOpen(mainEditorFrame, centerPanel, Tools.FILEEXT_PNG, null);
+    if (file!=null) {
       try {
         SimpleImage img = new ImageReader(centerPanel).loadImage(file.getAbsolutePath());
-        prefs.setLastInputImageFile(file);
         RGBPalette palette = new MedianCutQuantizer().createPalette(img);
         data.paletteKeyFrames = null;
         saveUndoPoint();
@@ -4378,25 +4241,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void selectImageForGradientButton_actionPerformed(ActionEvent e) {
-    JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-    if (prefs.getInputImagePath() != null) {
-      try {
-        chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
-    if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-      File file = chooser.getSelectedFile();
+    File file = FileDialogTools.selectImageFileForOpen(mainEditorFrame, centerPanel, Tools.FILEEXT_PNG, null);
+    if (file!=null) {
       try {
         String filename = file.getAbsolutePath();
         WFImage img = RessourceManager.getImage(filename);
         if (img.getImageWidth() < 16 || img.getImageHeight() < 16 || !(img instanceof SimpleImage)) {
           throw new Exception("Invalid gradient map");
         }
-        prefs.setLastInputImageFile(file);
-
         saveUndoPoint();
         getCurrLayer().setGradientMapFilename(filename);
         setLastGradient(getCurrLayer().getPalette());
@@ -4509,20 +4361,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     else if (getCurrFlame() != null) {
       try {
         String dfltFileExt = Stereo3dMode.SIDE_BY_SIDE.equals(getCurrFlame().getStereo3dMode()) ? Tools.FILEEXT_PNS : Tools.FILEEXT_PNG;
-        JFileChooser chooser = new RenderOutputFileChooser(dfltFileExt);
-        if (prefs.getOutputImagePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+        File file = FileDialogTools.selectRenderFileForSave(mainEditorFrame, centerPanel, dfltFileExt);
+        if (file!=null) {
           QualityProfile qualProfile = getQualityProfile();
           ResolutionProfile resProfile = getResolutionProfile();
           final Flame flame = getCurrFlame();
-          final File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
 
           RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
@@ -6029,30 +5872,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void selectImageForBackgroundButton_actionPerformed(ActionEvent e) {
-    JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-    if (prefs.getInputImagePath() != null) {
-      try {
-        if (getCurrFlame().getBGImageFilename().length() > 0) {
-          chooser.setSelectedFile(new File(getCurrFlame().getBGImageFilename()));
-        }
-        else {
-          chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
-        }
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
-    if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-      File file = chooser.getSelectedFile();
+    File file = FileDialogTools.selectImageFileForOpen(mainEditorFrame, centerPanel, Tools.FILEEXT_PNG, getCurrFlame().getBGImageFilename());
+    if (file!=null) {
       try {
         String filename = file.getAbsolutePath();
         WFImage img = RessourceManager.getImage(filename);
         if (img.getImageWidth() < 2 || img.getImageHeight() < 2 || !(img instanceof SimpleImage)) {
           throw new Exception("Invalid background image");
         }
-        prefs.setLastInputImageFile(file);
-
         saveUndoPoint();
         getCurrFlame().setBGImageFilename(filename);
         refreshFlameImage(true, false, 1, true, true);
@@ -6397,31 +6224,20 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
       }
       if (!flames.isEmpty()) {
-        JFileChooser chooser = new FlameFileChooser(prefs);
-        if (prefs.getOutputFlamePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-          File file = chooser.getSelectedFile();
+        File file = FileDialogTools.selectFlameFileForSave(mainEditorFrame, centerPanel);
+        if (file!=null) {
           String filename = file.getAbsolutePath();
           if (!filename.endsWith("." + Tools.FILEEXT_FLAME)) {
             filename += "." + Tools.FILEEXT_FLAME;
           }
           new FlameWriter().writeFlames(flames, filename);
           messageHelper.showStatusMessage(getCurrFlame(), flames.size() + " " + (flames.size() > 1 ? "flames" : "flame") + " saved to disc");
-          prefs.setLastOutputFlameFile(file);
         }
       }
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
-
   }
 
   public void toggleThumbnailSelectionAll() {
@@ -6939,4 +6755,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return data.affineC21REd;
   }
 
+  public MainEditorFrame getMainEditorFrame() {
+    return mainEditorFrame;
+  }
 }

@@ -13432,7 +13432,7 @@ public class MainEditorFrame extends JFrame {
       importScriptBtn.setMaximumSize(new Dimension(116, 12));
       importScriptBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getJwfScriptController().importSchriptsBtn_clicked();
+          tinaController.getJwfScriptController().importScriptsBtn_clicked();
         }
       });
       panel_2.add(importScriptBtn);

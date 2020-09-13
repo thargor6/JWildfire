@@ -1,28 +1,20 @@
+/*
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2020 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
+  License, or (at your option) any later version.
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software;
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina;
-
-import java.awt.Component;
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.tree.*;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Layer;
@@ -32,15 +24,24 @@ import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.io.UniversalPaletteReader;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
-import org.jwildfire.create.tina.swing.MapFileChooser;
+import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.tree.*;
+import java.awt.*;
+import java.io.File;
+import java.io.InputStream;
+import java.util.List;
+import java.util.*;
+
 public class GradientController {
-  private final static int GRADIENT_THUMB_WIDTH = 200;
-  private final static int GRADIENT_THUMB_HEIGHT = 18;
+  private static final int GRADIENT_THUMB_WIDTH = 200;
+  private static final int GRADIENT_THUMB_HEIGHT = 18;
 
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
@@ -57,8 +58,17 @@ public class GradientController {
   private GradientUserNode userGradientsRootNode;
   private boolean cmbRefreshing;
 
-  public GradientController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pGradientLibTree, JPanel pGradientLibraryPanel,
-      JButton pRescanBtn, JButton pNewFolderBtn, JButton pRenameFolderBtn, JList pGradientsList) {
+  public GradientController(
+      TinaController pTinaController,
+      ErrorHandler pErrorHandler,
+      Prefs pPrefs,
+      JPanel pRootPanel,
+      JTree pGradientLibTree,
+      JPanel pGradientLibraryPanel,
+      JButton pRescanBtn,
+      JButton pNewFolderBtn,
+      JButton pRenameFolderBtn,
+      JList pGradientsList) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -107,7 +117,9 @@ public class GradientController {
       if (thumbnails == null) {
         thumbnails = new ArrayList<SimpleImage>();
         for (RGBPalette palette : gradientLibraryList) {
-          thumbnails.add(new RGBPaletteRenderer().renderHorizPalette(palette, GRADIENT_THUMB_WIDTH, GRADIENT_THUMB_HEIGHT));
+          thumbnails.add(
+              new RGBPaletteRenderer()
+                  .renderHorizPalette(palette, GRADIENT_THUMB_WIDTH, GRADIENT_THUMB_HEIGHT));
         }
       }
       return thumbnails;
@@ -116,7 +128,6 @@ public class GradientController {
     public String getCaption() {
       return (String) getUserObject();
     }
-
   }
 
   private static class GradientInternalNode extends AbstractGradientNode {
@@ -130,7 +141,6 @@ public class GradientController {
     public GradientInternalNode(String pCaption) {
       super(pCaption);
     }
-
   }
 
   private static class GradientUserNode extends AbstractGradientNode {
@@ -168,7 +178,6 @@ public class GradientController {
     public String getAbsolutePath() {
       return new File(path, (String) getUserObject()).getAbsolutePath();
     }
-
   }
 
   private static class InvalidGradientFolderNode extends DefaultMutableTreeNode {
@@ -184,10 +193,10 @@ public class GradientController {
     GradientInternalNode initialSelNode = null;
     // Internal gradients
     {
-      String[] ressources = { "flam3-palettes.xml" };
+      String[] ressources = {"flam3-palettes.xml"};
       List<String> resLst = Arrays.asList(ressources);
       Collections.sort(resLst);
-      ressources = resLst.toArray(new String[]{});
+      ressources = resLst.toArray(new String[] {});
 
       // for the base path inside the jar file
       RGBPaletteReader reader = new Flam3GradientReader();
@@ -201,7 +210,8 @@ public class GradientController {
               GradientInternalNode node = new GradientInternalNode(ressource);
               node.getGradientLibraryList().addAll(palettes);
               if (defaultFolderNode == null) {
-                defaultFolderNode = new DefaultMutableTreeNode("Built-in gradients (read-only)", true);
+                defaultFolderNode =
+                    new DefaultMutableTreeNode("Built-in gradients (read-only)", true);
                 root.add(defaultFolderNode);
               }
               defaultFolderNode.add(node);
@@ -210,8 +220,7 @@ public class GradientController {
               }
             }
           }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
@@ -220,11 +229,15 @@ public class GradientController {
     // External flames
     {
       String baseDrawer = prefs.getTinaGradientPath();
-      if (baseDrawer == null || baseDrawer.equals("") || baseDrawer.equals(".") || baseDrawer.equals("/") || baseDrawer.equals("\\")) {
+      if (baseDrawer == null
+          || baseDrawer.equals("")
+          || baseDrawer.equals(".")
+          || baseDrawer.equals("/")
+          || baseDrawer.equals("\\")) {
         root.add(new InvalidGradientFolderNode());
-      }
-      else {
-        GradientUserNode parentNode = userGradientsRootNode = new GradientUserNode("Your gradients", null);
+      } else {
+        GradientUserNode parentNode =
+            userGradientsRootNode = new GradientUserNode("Your gradients", null);
         root.add(parentNode);
         scanUserGradients(baseDrawer, parentNode);
       }
@@ -233,16 +246,15 @@ public class GradientController {
     gradientLibTree.setModel(new DefaultTreeModel(root));
     if (initialSelNode != null) {
       try {
-        TreeNode[] nodes = ((DefaultTreeModel) gradientLibTree.getModel()).getPathToRoot(initialSelNode);
+        TreeNode[] nodes =
+            ((DefaultTreeModel) gradientLibTree.getModel()).getPathToRoot(initialSelNode);
         TreePath path = new TreePath(nodes);
         gradientLibTree.setSelectionPath(path);
         gradientTree_changed(null);
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
     }
-
   }
 
   public void scanUserGradients(String path, GradientUserNode pParentNode) {
@@ -250,33 +262,32 @@ public class GradientController {
     File[] list = root.listFiles();
     if (list != null) {
       try {
-        Arrays.sort(list, new Comparator<File>() {
+        Arrays.sort(
+            list,
+            new Comparator<File>() {
 
-          @Override
-          public int compare(File o1, File o2) {
-            return o1.getName().compareTo(o2.getName());
-          }
-
-        });
-      }
-      catch (Exception ex) {
+              @Override
+              public int compare(File o1, File o2) {
+                return o1.getName().compareTo(o2.getName());
+              }
+            });
+      } catch (Exception ex) {
         // ex.printStackTrace();
       }
       List<String> filenames = new ArrayList<String>();
       for (File f : list) {
         if (f.isDirectory()) {
-          GradientUserNode newParentNode = new GradientUserNode(f.getName(), f.getParentFile().getAbsolutePath());
+          GradientUserNode newParentNode =
+              new GradientUserNode(f.getName(), f.getParentFile().getAbsolutePath());
           pParentNode.add(newParentNode);
           scanUserGradients(f.getAbsolutePath(), newParentNode);
-        }
-        else {
+        } else {
           filenames.add(f.getAbsolutePath());
         }
       }
       try {
         readGradients(pParentNode, filenames);
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
     }
@@ -315,7 +326,6 @@ public class GradientController {
     public String toString() {
       return caption;
     }
-
   }
 
   private static class GradientRenderer extends DefaultListCellRenderer {
@@ -323,17 +333,10 @@ public class GradientController {
 
     private Map<GradientNode, ImageIcon> iconCache = new HashMap<GradientNode, ImageIcon>();
 
-    public Component getListCellRendererComponent(JList list,
-        Object value,
-        int index,
-        boolean isSelected,
-        boolean hasFocus) {
+    public Component getListCellRendererComponent(
+        JList list, Object value, int index, boolean isSelected, boolean hasFocus) {
       JLabel label =
-          (JLabel) super.getListCellRendererComponent(list,
-              value,
-              index,
-              isSelected,
-              hasFocus);
+          (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, hasFocus);
       GradientNode node = (GradientNode) value;
       ImageIcon icon = iconCache.get(node);
       if (icon == null) {
@@ -345,7 +348,8 @@ public class GradientController {
     }
   }
 
-  public void updateGradientThumbnails(final AbstractGradientNode pNode, List<SimpleImage> pImages, List<RGBPalette> pGradientList) {
+  public void updateGradientThumbnails(
+      final AbstractGradientNode pNode, List<SimpleImage> pImages, List<RGBPalette> pGradientList) {
     Vector<GradientNode> listData = new Vector<GradientNode>();
     for (int i = 0; i < pImages.size(); i++) {
       GradientNode node = new GradientNode(pGradientList.get(i).toString(), pImages.get(i));
@@ -358,12 +362,16 @@ public class GradientController {
   public void gradientLibraryGradientChanged() {
     AbstractGradientNode selNode;
     if (!cmbRefreshing && (selNode = getSelGradientNode()) != null) {
-      if (tinaController.getCurrFlame() != null && gradientsList.getSelectedIndex() >= 0 && gradientsList.getSelectedIndex() < selNode.getGradientLibraryList().size()) {
+      if (tinaController.getCurrFlame() != null
+          && gradientsList.getSelectedIndex() >= 0
+          && gradientsList.getSelectedIndex() < selNode.getGradientLibraryList().size()) {
         tinaController.saveUndoPoint();
-        RGBPalette palette = selNode.getGradientLibraryList().get(gradientsList.getSelectedIndex()).makeCopy();
+        RGBPalette palette =
+            selNode.getGradientLibraryList().get(gradientsList.getSelectedIndex()).makeCopy();
         tinaController.getCurrLayer().setPalette(palette);
         tinaController.setLastGradient(palette);
-        tinaController.registerToEditor(tinaController.getCurrFlame(), tinaController.getCurrLayer());
+        tinaController.registerToEditor(
+            tinaController.getCurrFlame(), tinaController.getCurrLayer());
         tinaController.refreshPaletteUI(palette);
         tinaController.refreshFlameImage(true, false, 1, true, false);
       }
@@ -383,7 +391,9 @@ public class GradientController {
 
   private AbstractGradientNode getSelGradientNode() {
     DefaultMutableTreeNode selNode = getSelNode();
-    return selNode != null && selNode instanceof AbstractGradientNode ? (AbstractGradientNode) selNode : null;
+    return selNode != null && selNode instanceof AbstractGradientNode
+        ? (AbstractGradientNode) selNode
+        : null;
   }
 
   public void selectRandomGradient() {
@@ -400,12 +410,10 @@ public class GradientController {
             }
           }
         }
-      }
-      else {
+      } else {
         throw new Exception("Please selected a non-empty gradient folder first");
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -417,13 +425,12 @@ public class GradientController {
       DefaultMutableTreeNode selNode = getSelNode();
       if (selNode != null && selNode instanceof AbstractGradientNode) {
         AbstractGradientNode gradientNode = (AbstractGradientNode) selNode;
-        updateGradientThumbnails(gradientNode, gradientNode.getThumbnails(), gradientNode.getGradientLibraryList());
-      }
-      else {
+        updateGradientThumbnails(
+            gradientNode, gradientNode.getThumbnails(), gradientNode.getGradientLibraryList());
+      } else {
         gradientsList.setListData(new Vector<GradientNode>());
       }
-    }
-    finally {
+    } finally {
       cmbRefreshing = false;
     }
   }
@@ -437,15 +444,15 @@ public class GradientController {
     TreeModel model = gradientLibTree.getModel();
     DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
     GradientUserNode userNode = findFolderNode(root, folder);
-    if(userNode!=null) {
+    if (userNode != null) {
       userNode.clear();
       scanUserGradients(folder.getAbsolutePath(), userNode);
       {
         Object[] pathComponents = new Object[userNode.getLevel()];
         TreeNode currNode = userNode;
-        int d=userNode.getLevel()-1;
-        while(d>=0) {
-          pathComponents[d--]=currNode;
+        int d = userNode.getLevel() - 1;
+        while (d >= 0) {
+          pathComponents[d--] = currNode;
           currNode = currNode.getParent();
         }
         TreePath path = new TreePath(pathComponents);
@@ -458,19 +465,21 @@ public class GradientController {
   }
 
   private GradientUserNode findFolderNode(TreeNode parent, File searchFolder) {
-    if(parent instanceof GradientUserNode) {
-      GradientUserNode userNode = (GradientUserNode)parent;
-      if(userNode.getAbsolutePath().equals(searchFolder.getAbsolutePath())) {
+    if (parent instanceof GradientUserNode) {
+      GradientUserNode userNode = (GradientUserNode) parent;
+      if (userNode.getAbsolutePath().equals(searchFolder.getAbsolutePath())) {
         return userNode;
-      }
-      else if(userNode.isRoot() && new File(prefs.getTinaGradientPath()).getAbsolutePath().equals(searchFolder.getAbsolutePath())) {
+      } else if (userNode.isRoot()
+          && new File(prefs.getTinaGradientPath())
+              .getAbsolutePath()
+              .equals(searchFolder.getAbsolutePath())) {
         return userNode;
       }
     }
-    for(int i=0;i<parent.getChildCount();i++) {
+    for (int i = 0; i < parent.getChildCount(); i++) {
       TreeNode child = parent.getChildAt(i);
       GradientUserNode userNode = findFolderNode(child, searchFolder);
-      if(userNode!=null) {
+      if (userNode != null) {
         return userNode;
       }
     }
@@ -482,21 +491,24 @@ public class GradientController {
       DefaultMutableTreeNode selNode = getSelNode();
       if (selNode != null && selNode instanceof GradientUserNode) {
         GradientUserNode gradientNode = (GradientUserNode) selNode;
-        String newName = StandardDialogs.promptForText(rootPanel, "Please enter the name of the new sub-folder", "");
+        String newName =
+            StandardDialogs.promptForText(
+                rootPanel, "Please enter the name of the new sub-folder", "");
         if (newName != null) {
           checkFolderName(newName);
           File newDir;
           if (gradientNode == userGradientsRootNode) {
             newDir = new File(new File(prefs.getTinaGradientPath()).getAbsolutePath(), newName);
-          }
-          else {
+          } else {
             newDir = new File(gradientNode.getAbsolutePath(), newName);
           }
 
           if (!newDir.mkdir()) {
-            throw new RuntimeException("The directory <" + newDir.getAbsolutePath() + "> could not be created");
+            throw new RuntimeException(
+                "The directory <" + newDir.getAbsolutePath() + "> could not be created");
           }
-          GradientUserNode newNode = new GradientUserNode(newDir.getName(), newDir.getParentFile().getAbsolutePath());
+          GradientUserNode newNode =
+              new GradientUserNode(newDir.getName(), newDir.getParentFile().getAbsolutePath());
           selNode.add(newNode);
 
           gradientLibTree.getParent().invalidate();
@@ -505,8 +517,7 @@ public class GradientController {
           gradientLibTree.updateUI();
         }
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -514,9 +525,13 @@ public class GradientController {
   public void renameFolderBtn_clicked() {
     try {
       DefaultMutableTreeNode selNode = getSelNode();
-      if (selNode != null && selNode instanceof GradientUserNode && selNode != userGradientsRootNode) {
+      if (selNode != null
+          && selNode instanceof GradientUserNode
+          && selNode != userGradientsRootNode) {
         GradientUserNode gradientNode = (GradientUserNode) selNode;
-        String newName = StandardDialogs.promptForText(rootPanel, "Please enter a new name", gradientNode.getCaption());
+        String newName =
+            StandardDialogs.promptForText(
+                rootPanel, "Please enter a new name", gradientNode.getCaption());
         if (newName != null) {
           checkFolderName(newName);
           gradientNode.rename(newName);
@@ -526,14 +541,16 @@ public class GradientController {
           gradientLibTree.updateUI();
         }
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
 
   private void checkFolderName(String pName) throws Exception {
-    if (pName.length() == 0 || pName.indexOf("/") >= 0 || pName.indexOf("\\") >= 0 || pName.indexOf(".") >= 0) {
+    if (pName.length() == 0
+        || pName.indexOf("/") >= 0
+        || pName.indexOf("\\") >= 0
+        || pName.indexOf(".") >= 0) {
       throw new Exception("<" + pName + "> is not a valid script name");
     }
   }
@@ -542,37 +559,22 @@ public class GradientController {
     try {
       Layer layer = tinaController.getCurrLayer();
       if (layer != null) {
-        JFileChooser chooser = new MapFileChooser(prefs);
-        if (previousGradientPath != null) {
-          try {
-            chooser.setCurrentDirectory(new File(previousGradientPath));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        else if (prefs.getTinaGradientPath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getTinaGradientPath()));
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-        if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-          File file = chooser.getSelectedFile();
+        File file =
+            FileDialogTools.selectMapFileForSave(
+                tinaController.getMainEditorFrame(), rootPanel, previousGradientPath);
+        if (file != null) {
           RGBPalette gradient = layer.getPalette().makeCopy();
           gradient.setFlam3Name(file.getName());
           new MapGradientWriter().writeGradient(gradient, file.getAbsolutePath());
           previousGradientPath = file.getParent();
-          tinaController.getMessageHelper().showStatusMessage(gradient, "gradient saved to library");
+          tinaController
+              .getMessageHelper()
+              .showStatusMessage(gradient, "gradient saved to library");
           rescan(file.getParentFile());
         }
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
-
 }

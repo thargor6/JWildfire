@@ -1,35 +1,26 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2020 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.quilt;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.io.File;
-import java.util.List;
-
-import javax.swing.*;
-
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.*;
-import org.jwildfire.create.tina.swing.FlameFileChooser;
+import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.create.tina.swing.FlameHolder;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaControllerData;
@@ -37,6 +28,14 @@ import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.transform.RectangleTransformer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.util.List;
 
 public class QuiltRendererController implements FlameHolder {
   private final TinaController tinaController;
@@ -46,7 +45,12 @@ public class QuiltRendererController implements FlameHolder {
   private FlamePanel previewFlamePanel;
   private Flame currFlame;
 
-  public QuiltRendererController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, TinaControllerData pData) {
+  public QuiltRendererController(
+      TinaController pTinaController,
+      ErrorHandler pErrorHandler,
+      Prefs pPrefs,
+      JPanel pRootPanel,
+      TinaControllerData pData) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -62,8 +66,12 @@ public class QuiltRendererController implements FlameHolder {
   }
 
   public void recalcSizes() {
-    data.quiltRendererSegmentWidthEdit.setValue(data.quiltRendererRenderWidthEdit.getIntValue()/data.quiltRendererXSegmentationLevelEdit.getIntValue());
-    data.quiltRendererSegmentHeightEdit.setValue(data.quiltRendererRenderHeightEdit.getIntValue()/data.quiltRendererYSegmentationLevelEdit.getIntValue());
+    data.quiltRendererSegmentWidthEdit.setValue(
+        data.quiltRendererRenderWidthEdit.getIntValue()
+            / data.quiltRendererXSegmentationLevelEdit.getIntValue());
+    data.quiltRendererSegmentHeightEdit.setValue(
+        data.quiltRendererRenderHeightEdit.getIntValue()
+            / data.quiltRendererYSegmentationLevelEdit.getIntValue());
     refreshPreviewImage();
   }
 
@@ -110,8 +118,7 @@ public class QuiltRendererController implements FlameHolder {
         progressBar.setMaximum(pMaxSteps);
         progressBar.invalidate();
         progressBar.validate();
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         // empty
       }
     }
@@ -125,11 +132,10 @@ public class QuiltRendererController implements FlameHolder {
         RepaintManager manager = RepaintManager.currentManager(progressBar);
         manager.markCompletelyDirty(progressBar);
         manager.paintDirtyRegions();
-        if(refreshPreview) {
+        if (refreshPreview) {
           refreshPreviewImage();
         }
-      }
-      catch (Throwable ex) {
+      } catch (Throwable ex) {
         // empty
       }
     }
@@ -155,9 +161,11 @@ public class QuiltRendererController implements FlameHolder {
           int destWidth = controller.data.quiltRendererRenderWidthEdit.getIntValue();
           int destHeight = controller.data.quiltRendererRenderHeightEdit.getIntValue();
           double quality = controller.data.quiltRendererQualityEdit.getDoubleValue();
-          int xSegmentationLevel = controller.data.quiltRendererXSegmentationLevelEdit.getIntValue();
-          int ySegmentationLevel = controller.data.quiltRendererYSegmentationLevelEdit.getIntValue();
-          int qualityLevel = (int)(quality+0.5); // only used for the filename
+          int xSegmentationLevel =
+              controller.data.quiltRendererXSegmentationLevelEdit.getIntValue();
+          int ySegmentationLevel =
+              controller.data.quiltRendererYSegmentationLevelEdit.getIntValue();
+          int qualityLevel = (int) (quality + 0.5); // only used for the filename
           String outputFilename = controller.data.quiltRendererOutputFilenameEdit.getText();
 
           double wScl = (double) destWidth / (double) flame.getWidth();
@@ -166,13 +174,20 @@ public class QuiltRendererController implements FlameHolder {
           flame.setWidth(destWidth);
           flame.setHeight(destHeight);
           flame.setSampleDensity(quality);
-          renderer.renderFlame(flame, destWidth, destHeight, xSegmentationLevel, ySegmentationLevel, qualityLevel, outputFilename, new ProgressUpdater(data.quiltRendererTotalProgressBar, true), new ProgressUpdater(data.quiltRendererSegmentProgressBar, false));
-        }
-        catch (Throwable ex) {
+          renderer.renderFlame(
+              flame,
+              destWidth,
+              destHeight,
+              xSegmentationLevel,
+              ySegmentationLevel,
+              qualityLevel,
+              outputFilename,
+              new ProgressUpdater(data.quiltRendererTotalProgressBar, true),
+              new ProgressUpdater(data.quiltRendererSegmentProgressBar, false));
+        } catch (Throwable ex) {
           throw new RuntimeException(ex);
         }
-      }
-      finally {
+      } finally {
         done = true;
         controller.onRenderFinished();
       }
@@ -183,11 +198,11 @@ public class QuiltRendererController implements FlameHolder {
     }
 
     public boolean imageWasCreated() {
-      return renderer!=null && renderer.finalImageWasMerged();
+      return renderer != null && renderer.finalImageWasMerged();
     }
 
     public Throwable getRenderException() {
-      return renderer!=null ? renderer.getRenderException() : null;
+      return renderer != null ? renderer.getRenderException() : null;
     }
 
     public void cancel() {
@@ -195,22 +210,23 @@ public class QuiltRendererController implements FlameHolder {
       if (cancelSignalled && renderer != null) {
         try {
           renderer.cancel();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
     }
-
   }
 
   private void onRenderFinished() {
-    if(currRenderThread!=null) {
-      if(currRenderThread.getRenderException()!=null) {
+    if (currRenderThread != null) {
+      if (currRenderThread.getRenderException() != null) {
         errorHandler.handleError(currRenderThread.getRenderException());
-      }
-      else if(currRenderThread.imageWasCreated()) {
-        JOptionPane.showMessageDialog(data.quiltRendererPreviewRootPanel, "Final image \"" + data.quiltRendererOutputFilenameEdit.getText() + "\" was successfully saved");
+      } else if (currRenderThread.imageWasCreated()) {
+        JOptionPane.showMessageDialog(
+            data.quiltRendererPreviewRootPanel,
+            "Final image \""
+                + data.quiltRendererOutputFilenameEdit.getText()
+                + "\" was successfully saved");
       }
     }
     currRenderThread = null;
@@ -222,12 +238,10 @@ public class QuiltRendererController implements FlameHolder {
       try {
         currRenderThread.cancel();
         currRenderThread = null;
-      }
-      catch(Exception ex) {
+      } catch (Exception ex) {
         //
       }
-    }
-    else {
+    } else {
       currRenderThread = new QuiltRenderThread(this);
       Thread thread = new Thread(currRenderThread);
       thread.setPriority(Thread.MIN_PRIORITY);
@@ -242,7 +256,17 @@ public class QuiltRendererController implements FlameHolder {
       int height = Math.max(data.quiltRendererPreviewRootPanel.getHeight(), 32);
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      previewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.quiltRendererPreviewRootPanel.getWidth(), this, null, null, null);
+      previewFlamePanel =
+          new FlamePanel(
+              prefs,
+              img,
+              0,
+              0,
+              data.quiltRendererPreviewRootPanel.getWidth(),
+              this,
+              null,
+              null,
+              null);
       previewFlamePanel.setRenderWidth(data.quiltRendererRenderWidthEdit.getIntValue());
       previewFlamePanel.setRenderHeight(data.quiltRendererRenderHeightEdit.getIntValue());
       previewFlamePanel.setDrawTriangles(false);
@@ -254,11 +278,10 @@ public class QuiltRendererController implements FlameHolder {
   }
 
   public void enableControls() {
-    boolean isRendering = currRenderThread != null  && !currRenderThread.isDone();
-    if(isRendering) {
+    boolean isRendering = currRenderThread != null && !currRenderThread.isDone();
+    if (isRendering) {
       data.quiltRendererRenderButton.setText("Cancel");
-    }
-    else {
+    } else {
       data.quiltRendererRenderButton.setText("Render");
     }
     data.quiltRendererSegmentWidthEdit.setEnabled(false);
@@ -286,26 +309,17 @@ public class QuiltRendererController implements FlameHolder {
 
   public void openFlameButton_clicked() {
     try {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(data.quiltRendererPreviewRootPanel) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+      File file =
+          FileDialogTools.selectFlameFileForOpen(
+              tinaController.getMainEditorFrame(), previewFlamePanel, null);
+      if (file != null) {
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
-        prefs.setLastInputFlameFile(file);
         currFlame = flame;
         refreshOutputFilename();
         refreshUI();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -318,8 +332,7 @@ public class QuiltRendererController implements FlameHolder {
         refreshOutputFilename();
         refreshUI();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -331,8 +344,7 @@ public class QuiltRendererController implements FlameHolder {
       Transferable clipData = clipboard.getContents(clipboard);
       if (clipData != null) {
         if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-          String xml = (String) (clipData.getTransferData(
-                  DataFlavor.stringFlavor));
+          String xml = (String) (clipData.getTransferData(DataFlavor.stringFlavor));
           List<Flame> flames = new FlameReader(prefs).readFlamesfromXML(xml);
           if (flames.size() > 0) {
             newFlame = flames.get(0);
@@ -341,14 +353,12 @@ public class QuiltRendererController implements FlameHolder {
       }
       if (newFlame == null) {
         throw new Exception("There is currently no valid flame in the clipboard");
-      }
-      else {
+      } else {
         currFlame = newFlame;
         refreshOutputFilename();
         refreshUI();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -356,7 +366,7 @@ public class QuiltRendererController implements FlameHolder {
   private void refreshOutputFilename() {
     int extension = 0;
     String pathname = null;
-    while(pathname==null) {
+    while (pathname == null) {
       String flamename = currFlame != null ? currFlame.getName() : null;
       if (flamename != null) {
         flamename = flamename.replaceAll("[ \\/:]", "");
@@ -365,7 +375,7 @@ public class QuiltRendererController implements FlameHolder {
         flamename = "quilt";
       }
 
-      String imagename = (extension++>0 ? flamename +"_"+extension : flamename) + ".png";
+      String imagename = (extension++ > 0 ? flamename + "_" + extension : flamename) + ".png";
 
       String folder = prefs.getOutputImagePath();
       if (folder == null || folder.isEmpty()) {
@@ -373,8 +383,8 @@ public class QuiltRendererController implements FlameHolder {
       } else {
         pathname = new File(folder, imagename).getAbsolutePath();
       }
-      if(new File(pathname).exists()) {
-        pathname=null;
+      if (new File(pathname).exists()) {
+        pathname = null;
       }
     }
     data.quiltRendererOutputFilenameEdit.setText(pathname);
@@ -388,8 +398,8 @@ public class QuiltRendererController implements FlameHolder {
     Rectangle bounds = imgPanel.getImageBounds();
     int width = bounds.width;
     int height = bounds.height;
-    Flame flame = (getFlame()!=null ? getFlame().makeCopy(): null);
-    if (flame!=null && width >= 16 && height >= 16) {
+    Flame flame = (getFlame() != null ? getFlame().makeCopy() : null);
+    if (flame != null && width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       if (flame != null) {
         double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -398,7 +408,8 @@ public class QuiltRendererController implements FlameHolder {
         flame.setWidth(info.getImageWidth());
         flame.setHeight(info.getImageHeight());
 
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);
+        FlameRenderer renderer =
+            new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);
         flame.setSampleDensity(Math.min(prefs.getTinaRenderRealtimeQuality(), 5.0));
 
         flame.setSpatialFilterRadius(0.0);
@@ -407,8 +418,7 @@ public class QuiltRendererController implements FlameHolder {
         SimpleImage image = res.getImage();
         addSegmentBorders(image);
         imgPanel.setImage(image);
-      }
-      else {
+      } else {
         imgPanel.setImage(new SimpleImage(width, height));
       }
     }
@@ -423,25 +433,33 @@ public class QuiltRendererController implements FlameHolder {
     String filename = data.quiltRendererOutputFilenameEdit.getText();
     int destWidth = data.quiltRendererRenderWidthEdit.getIntValue();
     int destHeight = data.quiltRendererRenderHeightEdit.getIntValue();
-    int qualityLevel = (int)(data.quiltRendererQualityEdit.getDoubleValue()+0.5);
+    int qualityLevel = (int) (data.quiltRendererQualityEdit.getDoubleValue() + 0.5);
 
     QuiltFlameRenderer renderer = new QuiltFlameRenderer();
 
     int spentHeight = 0;
-    for(int i=0;i<ySegmentationLevel;i++) {
-      int height = (int)((double)image.getImageHeight()/(double)ySegmentationLevel + 0.5);
+    for (int i = 0; i < ySegmentationLevel; i++) {
+      int height = (int) ((double) image.getImageHeight() / (double) ySegmentationLevel + 0.5);
       int spentWidth = 0;
-      for(int j=0;j<xSegmentationLevel;j++) {
-        int width = (int)((double)image.getImageWidth()/(double)xSegmentationLevel + 0.5);
+      for (int j = 0; j < xSegmentationLevel; j++) {
+        int width = (int) ((double) image.getImageWidth() / (double) xSegmentationLevel + 0.5);
 
-        String segmentFilename = renderer.getSegmentFilename(filename, destWidth, destHeight, xSegmentationLevel, ySegmentationLevel, qualityLevel, j, i);
+        String segmentFilename =
+            renderer.getSegmentFilename(
+                filename,
+                destWidth,
+                destHeight,
+                xSegmentationLevel,
+                ySegmentationLevel,
+                qualityLevel,
+                j,
+                i);
         boolean isRendered = new File(segmentFilename).exists();
 
-        if(isRendered) {
+        if (isRendered) {
           rect.setColor(new Color(128, 255, 32));
           rect.setThickness(7);
-        }
-        else {
+        } else {
           rect.setColor(new Color(255, 128, 32));
           rect.setThickness(5);
         }
@@ -449,7 +467,8 @@ public class QuiltRendererController implements FlameHolder {
         rect.setLeft(spentWidth);
         rect.setTop(spentHeight);
         rect.setWidth(j < xSegmentationLevel - 1 ? width + 1 : image.getImageWidth() - spentWidth);
-        rect.setHeight(i < ySegmentationLevel - 1 ? height + 1: image.getImageHeight() - spentHeight );
+        rect.setHeight(
+            i < ySegmentationLevel - 1 ? height + 1 : image.getImageHeight() - spentHeight);
         rect.transformImage(image);
         spentWidth += width;
       }
@@ -461,5 +480,4 @@ public class QuiltRendererController implements FlameHolder {
   public Flame getFlame() {
     return currFlame;
   }
-
 }

@@ -974,7 +974,7 @@ public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
     }
   }
 
-  public void importSchriptsBtn_clicked() {
+  public void importScriptsBtn_clicked() {
     try {
 
       JFileChooser fileChooser = new JFileChooser();

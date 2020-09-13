@@ -1,40 +1,26 @@
+/*
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2020 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
+  License, or (at your option) any later version.
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software;
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.browser;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.FlameReader;
-import org.jwildfire.create.tina.swing.MainEditorFrame;
-import org.jwildfire.create.tina.swing.MeshGenInternalFrame;
-import org.jwildfire.create.tina.swing.StandardDialogs;
-import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.swing.*;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
@@ -43,6 +29,21 @@ import org.jwildfire.transform.TextTransformer.FontStyle;
 import org.jwildfire.transform.TextTransformer.HAlignment;
 import org.jwildfire.transform.TextTransformer.Mode;
 import org.jwildfire.transform.TextTransformer.VAlignment;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class FlameBrowserController {
   private final TinaController tinaController;
@@ -63,9 +64,22 @@ public class FlameBrowserController {
   private String currRootDrawer;
   private File lastCopyToDrawer = null;
 
-  public FlameBrowserController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pFlamesTree, JPanel pImagesPnl,
-      JButton pRefreshBtn, JButton pChangeFolderBtn, JButton pToEditorBtn, JButton pToBatchRendererBtn, JButton pDeleteBtn, JButton pRenameBtn,
-      JButton pCopyToBtn, JButton pMoveToBtn, JButton pToMeshGenBtn) {
+  public FlameBrowserController(
+      TinaController pTinaController,
+      ErrorHandler pErrorHandler,
+      Prefs pPrefs,
+      JPanel pRootPanel,
+      JTree pFlamesTree,
+      JPanel pImagesPnl,
+      JButton pRefreshBtn,
+      JButton pChangeFolderBtn,
+      JButton pToEditorBtn,
+      JButton pToBatchRendererBtn,
+      JButton pDeleteBtn,
+      JButton pRenameBtn,
+      JButton pCopyToBtn,
+      JButton pMoveToBtn,
+      JButton pToMeshGenBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -124,8 +138,7 @@ public class FlameBrowserController {
       flatFlameNodes.sortNodes();
       addFlatNodesToTree();
       enableControls();
-    }
-    finally {
+    } finally {
       refreshing = false;
     }
   }
@@ -137,12 +150,16 @@ public class FlameBrowserController {
     List<Date> distinctMonths = flatFlameNodes.getDistinctMonths();
     for (Date month : distinctMonths) {
       List<FlameFlatNode> monthNodes = flatFlameNodes.getMonthNodes(month);
-      FlamesTreeNode monthFolder = new FlamesTreeNode(monthDateFormat.format(month) + " (" + monthNodes.size() + ")", true, monthNodes);
+      FlamesTreeNode monthFolder =
+          new FlamesTreeNode(
+              monthDateFormat.format(month) + " (" + monthNodes.size() + ")", true, monthNodes);
       root.add(monthFolder);
       List<Date> distinctDays = flatFlameNodes.getDistinctDays(month);
       for (Date day : distinctDays) {
         List<FlameFlatNode> dayNodes = flatFlameNodes.getDayNodes(day);
-        FlamesTreeNode dayFolder = new FlamesTreeNode(dayDateFormat.format(day) + " (" + dayNodes.size() + ")", true, dayNodes);
+        FlamesTreeNode dayFolder =
+            new FlamesTreeNode(
+                dayDateFormat.format(day) + " (" + dayNodes.size() + ")", true, dayNodes);
         monthFolder.add(dayFolder);
         for (FlameFlatNode flameNode : dayNodes) {
           FlamesTreeNode leafNode = new FlamesTreeNode(flameNode.getCaption(), true, dayNodes);
@@ -200,8 +217,7 @@ public class FlameBrowserController {
           idx++;
         }
         selectCell(idx);
-      }
-      else {
+      } else {
         clearImages();
         if (selNode != null) {
           showImages(selNode.getFlames());
@@ -234,7 +250,8 @@ public class FlameBrowserController {
     }
 
     int pnlWidth = 2 * OUTER_BORDER + (cols - 1) * INNER_BORDER + cols * IMG_WIDTH;
-    int pnlHeight = 2 * OUTER_BORDER + (rows - 1) * INNER_BORDER + rows * (IMG_HEIGHT + LABEL_HEIGHT);
+    int pnlHeight =
+        2 * OUTER_BORDER + (rows - 1) * INNER_BORDER + rows * (IMG_HEIGHT + LABEL_HEIGHT);
 
     imgRootPanel = new JPanel();
     imgRootPanel.setLayout(null);
@@ -259,8 +276,7 @@ public class FlameBrowserController {
             img.fillBackground(0, 0, 0);
             imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
             jobInfoLst.add(new RenderJobInfo(imgPanel, node, IMG_WIDTH, IMG_HEIGHT, x, y));
-          }
-          else {
+          } else {
             imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
           }
           imgPanel.setImage(img);
@@ -270,23 +286,23 @@ public class FlameBrowserController {
 
           final int pnlIdx = pnlList.size() - 1;
 
-          imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+          imgPanel.addMouseListener(
+              new java.awt.event.MouseAdapter() {
 
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-              if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-                nodeToEditor(node);
-              }
-            }
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                  if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
+                    nodeToEditor(node);
+                  }
+                }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-              selectCell(pnlIdx);
-            }
-
-          });
+                @Override
+                public void mousePressed(MouseEvent e) {
+                  selectCell(pnlIdx);
+                }
+              });
           imgRootPanel.add(imgPanel);
-          // label with description 
+          // label with description
           JLabel label = new JLabel();
           label.setText(node.getCaption());
           label.setSize(new Dimension(IMG_WIDTH, LABEL_HEIGHT));
@@ -299,8 +315,7 @@ public class FlameBrowserController {
           lblList.add(label);
           //
           x += IMG_WIDTH + INNER_BORDER;
-        }
-        else {
+        } else {
           break;
         }
       }
@@ -316,7 +331,6 @@ public class FlameBrowserController {
     if (jobInfoLst.size() > 0) {
       startRenderThread(jobInfoLst);
     }
-
   }
 
   protected void selectCell(int pIndex) {
@@ -347,8 +361,7 @@ public class FlameBrowserController {
       while (!thread.isDone()) {
         try {
           Thread.sleep(3);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
           e.printStackTrace();
         }
       }
@@ -386,19 +399,17 @@ public class FlameBrowserController {
       if (node != null) {
         nodeToEditor(node);
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
 
   public void changeFolderBtn_clicked() {
-    JFileChooser chooser = new JFileChooser();
-    chooser = new JFileChooser();
-    chooser.setDialogTitle("Specify flame-directory to scan");
-    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-      currRootDrawer = chooser.getSelectedFile().getAbsolutePath();
+    String newDrawer =
+        FileDialogTools.selectDirectory(
+            tinaController.getMainEditorFrame(), rootPanel, "Specify flame-directory to scan");
+    if (newDrawer != null && !newDrawer.isEmpty()) {
+      currRootDrawer = newDrawer;
       enableControls();
       refreshBtn_clicked();
     }
@@ -416,22 +427,24 @@ public class FlameBrowserController {
     FlameFlatNode node = getSelectedFlame();
     if (node != null) {
       try {
-        JFileChooser chooser = new JFileChooser();
-        chooser = new JFileChooser();
-        chooser.setDialogTitle("Specify destination-directory");
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         File srcFile = new File(node.getFilename());
-
-        File preselected = lastCopyToDrawer != null ? new File(lastCopyToDrawer, srcFile.getName()) : new File(srcFile.getName());
-        chooser.setSelectedFile(preselected);
-        if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
-          lastCopyToDrawer = chooser.getSelectedFile().getParentFile();
-          File dstFile = chooser.getSelectedFile();
+        File preselected =
+            lastCopyToDrawer != null
+                ? new File(lastCopyToDrawer, srcFile.getName())
+                : new File(srcFile.getName());
+        File chosenFile =
+            FileDialogTools.selectFileForOpen(
+                tinaController.getMainEditorFrame(),
+                rootPanel,
+                "Specify destination-directory",
+                preselected.getAbsolutePath());
+        if (chosenFile != null) {
+          lastCopyToDrawer = chosenFile.getParentFile();
+          File dstFile = chosenFile;
           if (bMove) {
             Files.move(srcFile.toPath(), dstFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             node.setRemoved(true);
-          }
-          else {
+          } else {
             Files.copy(srcFile.toPath(), dstFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
           }
 
@@ -454,8 +467,7 @@ public class FlameBrowserController {
 
           enableControls();
         }
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         errorHandler.handleError(ex);
       }
     }
@@ -465,7 +477,8 @@ public class FlameBrowserController {
     FlameFlatNode node = getSelectedFlame();
     if (node != null) {
       try {
-        if (StandardDialogs.confirm(rootPanel, "Do you really want to permanently delete this flame?")) {
+        if (StandardDialogs.confirm(
+            rootPanel, "Do you really want to permanently delete this flame?")) {
           File file = new File(node.getFilename());
           if (!file.delete()) {
             throw new Exception("Could not delete file");
@@ -489,8 +502,7 @@ public class FlameBrowserController {
           pnl.invalidate();
           pnl.repaint();
         }
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         errorHandler.handleError(ex);
       }
     }
@@ -515,8 +527,7 @@ public class FlameBrowserController {
           JLabel lbl = lblList.get(selectedPnl);
           lbl.setText(node.getCaption());
         }
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         errorHandler.handleError(ex);
       }
     }
@@ -539,8 +550,7 @@ public class FlameBrowserController {
         String filename = node.getFilename();
         tinaController.getBatchRendererController().addFlameToBatchRenderer(filename, true);
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -555,8 +565,7 @@ public class FlameBrowserController {
           tinaController.getDesktop().showJFrame(MeshGenInternalFrame.class);
         }
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
