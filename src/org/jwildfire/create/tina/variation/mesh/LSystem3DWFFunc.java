@@ -60,6 +60,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   protected static final String PARAM_OFFSETX = "offset_x";
   protected static final String PARAM_OFFSETY = "offset_y";
   protected static final String PARAM_OFFSETZ = "offset_z";
+  protected static final String PARAM_COLOR_MODE = "color_mode";
 
   protected static final String PARAM_SUBDIV_LEVEL = "subdiv_level";
   protected static final String PARAM_SUBDIV_SMOOTH_PASSES = "subdiv_smooth_passes";
@@ -72,17 +73,18 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
   protected static final String PARAM_RECEIVE_ONLY_SHADOWS = "receive_only_shadows";
 
-  private static final String[] paramNames = {PARAM_PRESETID, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS};
+  private static final String[] paramNames = {PARAM_PRESETID, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_COLOR_MODE, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS};
 
   private String grammar = null;
 
   int presetId = (int) (Math.random() * 21.0 + 1.0);
+  int color_mode = 0;
 
   private static final String[] ressourceNames = {RESSOURCE_GRAMMAR};
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{presetId, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows};
+    return new Object[]{presetId, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, color_mode, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows};
   }
 
   @Override
@@ -116,6 +118,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       offsetY = pValue;
     else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
       offsetZ = pValue;
+    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName))
+      color_mode = limitIntVal(Tools.FTOI(pValue), 0, 2);
     else if (PARAM_SUBDIV_LEVEL.equalsIgnoreCase(pName))
       subdiv_level = limitIntVal(Tools.FTOI(pValue), 0, 6);
     else if (PARAM_SUBDIV_SMOOTH_PASSES.equalsIgnoreCase(pName))
@@ -152,6 +156,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       grammar = pValue != null ? new String(pValue) : "";
 
       lsystem3D ls = new lsystem3D();
+      ls.color_mode = color_mode;
       if (ls.readGrammar(grammar) == 0) {
         ls.expand();
         ls.L_draw();
@@ -418,6 +423,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     public int col = 2;
     public int lev = 1;
     public int last_col = 0;
+    public int color_mode = 0;
     public int muts = 0;
     public double ang = (double) 45.0;
     public double thick = (double) 100.0;
@@ -742,7 +748,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         }
         closed_form = false;
       }
-        System.out.println("Axiom              : " + object_s);
+      //  System.out.println("Axiom              : " + object_s);
       // Add default rules
 
       rule.add("+=+");
@@ -1510,14 +1516,31 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           int v1 = nvert[poly_store[t][0] - 1];
           int v2 = nvert[poly_store[t][1] - 1];
           int v3 = nvert[poly_store[t][2] - 1];
-          mesh.addFace(v1, v2, v3);
+          if (color_mode == 0)
+            mesh.addFace(v1, v2, v3);
+          else if (color_mode == 1) 
+            mesh.addColoredFace(v1,  v2,  v3, (double) color / (double) max_colors);
+          else {
+            if (color >= max_colors) color = max_colors - 1;
+            mesh.addColoredFace(v1,  v2,  v3, color_store[color][_x], color_store[color][_y], color_store[color][_z]);
+          }
           //                   faces.add(new face(vert_count+ poly_store[t][0],vert_count+ poly_store[t][1],vert_count+ poly_store[t][2]));
         } else {
           int v1 = nvert[poly_store[t][0] - 1];
           int v2 = nvert[poly_store[t][1] - 1];
           int v3 = nvert[poly_store[t][2] - 1];
           int v4 = nvert[poly_store[t][3] - 1];
-          mesh.addFace(v1, v2, v3, v4);
+          if (color_mode == 0)
+            mesh.addFace(v1, v2, v3, v4);
+          else if (color_mode == 1) 
+            mesh.addColoredFace(v1,  v2,  v3, v4, (double) color / (double) max_colors);
+          else {
+            if (color >= max_colors) color = max_colors - 1;
+            double r = Math.floor(color_store[color][_x] * 256.0);
+            double g = Math.floor(color_store[color][_y] * 256.0);
+            double b = Math.floor(color_store[color][_z] * 256.0);
+            mesh.addColoredFace(v1,  v2,  v3, v4, r, g, b);
+          }
           //  					mesh.addFace(vert_count + poly_store[t][0] - 1,vert_count + poly_store[t][1] - 1,vert_count +poly_store[t][2] - 1, vert_count+ poly_store[t][3] - 1);
           //                    faces.add(new face(vert_count + poly_store[t][0] - 1,vert_count + poly_store[t][1] - 1,vert_count +poly_store[t][2] - 1, vert_count+ poly_store[t][3] - 1));
         }
