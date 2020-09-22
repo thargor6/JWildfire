@@ -148,6 +148,66 @@ public class SimpleMesh {
     f2.v3 = p4;
     faces.add(f2);
   }
+  
+  public void addColoredFace(int p1, int p2, int p3, double c) {
+    FaceWithColor f = new FaceWithColor();
+    f.v1 = p1;
+    f.v2 = p2;
+    f.v3 = p3;
+    f.rgbColor = false;
+    f.redColor = c;
+    faces.add(f);
+  }
+
+  public void addColoredFace(int p1, int p2, int p3, double r, double g, double b) {
+    FaceWithColor f = new FaceWithColor();
+    f.v1 = p1;
+    f.v2 = p2;
+    f.v3 = p3;
+    f.rgbColor = true;
+    f.redColor = r;
+    f.greenColor = g;
+    f.blueColor = b;
+    faces.add(f);
+  }
+
+  public void addColoredFace(int p1, int p2, int p3, int p4, double c) {
+    FaceWithColor f1 = new FaceWithColor();
+    f1.v1 = p1;
+    f1.v2 = p2;
+    f1.v3 = p3;
+    faces.add(f1);
+    f1.rgbColor = false;
+    f1.redColor = c;
+    FaceWithColor f2 = new FaceWithColor();
+    f2.v1 = p1;
+    f2.v2 = p3;
+    f2.v3 = p4;
+    f2.rgbColor = false;
+    f2.redColor = c;
+    faces.add(f2);
+  }
+
+  public void addColoredFace(int p1, int p2, int p3, int p4, double r, double g, double b) {
+    FaceWithColor f1 = new FaceWithColor();
+    f1.v1 = p1;
+    f1.v2 = p2;
+    f1.v3 = p3;
+    faces.add(f1);
+    f1.rgbColor = true;
+    f1.redColor = r;
+    f1.greenColor = g;
+    f1.blueColor = b;
+    FaceWithColor f2 = new FaceWithColor();
+    f2.v1 = p1;
+    f2.v2 = p3;
+    f2.v3 = p4;
+    f2.rgbColor = true;
+    f2.redColor = r;
+    f2.greenColor = g;
+    f2.blueColor = b;
+    faces.add(f2);
+  }
 
   public int getFaceCount() {
     return faces.size();

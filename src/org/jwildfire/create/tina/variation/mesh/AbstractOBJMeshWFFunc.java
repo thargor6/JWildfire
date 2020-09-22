@@ -146,6 +146,18 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
       pVarTP.x += pAmount * dx;
       pVarTP.y += pAmount * dy;
       pVarTP.z += pAmount * dz;
+      
+      if (f instanceof FaceWithColor) {
+        if (((FaceWithColor) f).rgbColor) {
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = ((FaceWithColor) f).redColor;
+          pVarTP.greenColor = ((FaceWithColor) f).greenColor;
+          pVarTP.blueColor = ((FaceWithColor) f).blueColor;
+        } else {
+          pVarTP.color = ((FaceWithColor) f).redColor;
+        }
+      }
+
     }
     if (receive_only_shadows == 1) {
       pVarTP.receiveOnlyShadows = true;
