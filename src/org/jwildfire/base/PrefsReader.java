@@ -393,11 +393,11 @@ public class PrefsReader {
       pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 1920, 1080));
     }
     if (pPrefs.getQualityProfiles().size() == 0) {
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very low quality", 100, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Low quality", 200, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Medium quality", 300, true, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(true, "High quality", 500, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very high quality", 1000, true, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very low quality", 50, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Low quality", 100, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Medium quality", 200, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(true, "High quality", 320, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very high quality", 500, true, false));
     }
   }
 

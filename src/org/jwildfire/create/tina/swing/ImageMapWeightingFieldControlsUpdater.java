@@ -40,7 +40,7 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
       File file =
           FileDialogTools.selectImageFileForOpen(
               controller.getMainEditorFrame(),
-              controller.centerPanel,
+              controller.getCenterPanel(),
               Tools.FILEEXT_PNG,
               xForm.getWeightingFieldColorMapFilename());
       if (file != null) {

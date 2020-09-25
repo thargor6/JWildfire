@@ -92,6 +92,7 @@ public class BatchRendererController implements JobRenderThreadController {
     if (activeJobList.size() > 0) {
       jobRenderThread =
           new JobRenderThread(
+                  tinaController,
               this,
               activeJobList,
               (ResolutionProfile) data.batchResolutionProfileCmb.getSelectedItem(),

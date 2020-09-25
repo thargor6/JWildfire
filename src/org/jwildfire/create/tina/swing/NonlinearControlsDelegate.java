@@ -659,7 +659,7 @@ public class NonlinearControlsDelegate {
                   Font oldFont =
                       new Font(oldFontname != null ? oldFontname : "Arial", Font.PLAIN, 24);
                   Font selectedFont =
-                      JFontChooser.showDialog(owner.centerPanel, "Choose font", oldFont);
+                      JFontChooser.showDialog(owner.getCenterPanel(), "Choose font", oldFont);
                   if (selectedFont != null) {
                     String valStr = selectedFont.getFontName();
                     byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
@@ -679,7 +679,7 @@ public class NonlinearControlsDelegate {
                   File file =
                       FileDialogTools.selectImageFileForOpen(
                           owner.getMainEditorFrame(),
-                          owner.centerPanel,
+                          owner.getCenterPanel(),
                           Tools.FILEEXT_PNG,
                           oldFilename);
                   if (file != null) {
@@ -700,7 +700,7 @@ public class NonlinearControlsDelegate {
                   }
                   File file =
                       FileDialogTools.selectFlameFileForOpen(
-                          owner.getMainEditorFrame(), owner.centerPanel, oldFilename);
+                          owner.getMainEditorFrame(), owner.getCenterPanel(), oldFilename);
                   if (file != null) {
                     String valStr = file.getAbsolutePath();
                     byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
@@ -712,7 +712,7 @@ public class NonlinearControlsDelegate {
                 {
                   File file =
                       FileDialogTools.selectImageFileForOpen(
-                          owner.getMainEditorFrame(), owner.centerPanel, Tools.FILEEXT_PNG, null);
+                          owner.getMainEditorFrame(), owner.getCenterPanel(), Tools.FILEEXT_PNG, null);
                   if (file != null) {
                     try {
                       byte[] imgData = Tools.readFile(file.getAbsolutePath());
@@ -727,7 +727,7 @@ public class NonlinearControlsDelegate {
                 {
                   File file =
                       FileDialogTools.selectSvgFileForOpen(
-                          owner.getMainEditorFrame(), owner.centerPanel);
+                          owner.getMainEditorFrame(), owner.getCenterPanel());
                   if (file != null) {
                     try {
                       String svg = Tools.readUTF8Textfile(file.getAbsolutePath());
@@ -743,7 +743,7 @@ public class NonlinearControlsDelegate {
                 {
                   File file =
                       FileDialogTools.selectMeshFileForOpen(
-                          owner.getMainEditorFrame(), owner.centerPanel);
+                          owner.getMainEditorFrame(), owner.getCenterPanel());
                   if (file != null) {
                     try {
                       var.getFunc().setRessource(rName, file.getAbsolutePath().getBytes());
@@ -758,7 +758,7 @@ public class NonlinearControlsDelegate {
                   final RessourceDialog dlg =
                       new RessourceDialog(
                           owner.getMainEditorFrame(),
-                          SwingUtilities.getWindowAncestor(owner.centerPanel),
+                          SwingUtilities.getWindowAncestor(owner.getCenterPanel()),
                           Prefs.getPrefs(),
                           owner.errorHandler);
                   dlg.setRessourceName(rName);

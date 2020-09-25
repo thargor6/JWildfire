@@ -407,7 +407,7 @@ public class FlameBrowserController {
   public void changeFolderBtn_clicked() {
     String newDrawer =
         FileDialogTools.selectDirectory(
-            tinaController.getMainEditorFrame(), rootPanel, "Specify flame-directory to scan");
+            tinaController.getMainEditorFrame(), rootPanel, "Specify flame-directory to scan", null);
     if (newDrawer != null && !newDrawer.isEmpty()) {
       currRootDrawer = newDrawer;
       enableControls();

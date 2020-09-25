@@ -1,5 +1,32 @@
-V6.01 (16.08.2020)
+V6.02 (15.09.2020)
+ - fixed a bug regarding FileDialogs under macOS Catalina
+ - added color support for lsystem3D_js by Rick Sidwell:
+     New parameter color_mode:
+       0 for normal color (default for compatibility); c drawing commands are ignored.
+       1 for direct color; c drawing commands set the gradient index for coloring; color directives are ignored.
+       2 for rgb color; c drawing commands use the colors set by the color directives.
+
+V6.01 (15.09.2020)
+ - I worked the last three weeks on a dedicated macOS build which can be distributed
+   through the App Store.
+   Hopefully, this will make it much easier to install updates for Mac users.
+   This really needed a lot of tweaking (I'm feeling 1 year older now, lol),
+   because all the packaging and code-signing steps must be performed manually.
+   This is because JWildfire is not made using Xcode, which simplifies such stuff a lot.
+   So, I'm really glad, that it works now! :-)
+   To support the future of this build and to make it possible to extend tests on the
+   Mac platform, I decided to make the app not free. Instead, you have to pay about
+   10 bucks (once), all future updates will be free.
+   You can still use the completely free (*.jar-based) build (or build by yourself),
+   of course. But this  will require more manuell steps to install the software.
+ - changed most file-dialogs to appear as native dialogs on macOS. Only this seems
+   (currently) to make it possible to exit the macOS-sandbox (It also looks better,
+   but lacks some features of the JWildfire-dialogs).
  - new option "tinaEnableLeapMotionTab" to enable the rarely used "Leap Motion"-tab, which is now disabled by default
+ - changed the default double-click-behaviour of the main editor to NONE (can be changed in the Preferences)
+ - Added mode parameter to octagon variation, by Rick Sidwell
+ - Added color support for lsystem_js, by Rick Sidwell
+ - Fixed bug with show_lines in lsystem_js
 
 V6.00 (16.08.2020)
  - dramatic improvement of responsiveness to changes in the UI (sliders, number fields, ...)
@@ -31,9 +58,9 @@ V6.00 (16.08.2020)
    You can use the options tinaRandGenRunRandomScriptIncludedScripts and tinaRandGenRunRandomScriptExcludedScripts in the Preferences to
    include or exclude specific scripts (or both).
  - new dark "JWildfire"-theme (based on Nimbus) which is now the default
- - support for Intel’s OIDN denoiser as a powerful tool to cut down render times and improve image quality (works simular to NVidia's OptiX,
+ - support for Intelï¿½s OIDN denoiser as a powerful tool to cut down render times and improve image quality (works simular to NVidia's OptiX,
    but does not requiere a GPU from NVidia)
-   Please consult the comprehensive documentation inside the software (“Help -> Supported AI-Post-Denoiser -> Intel's OIDN Denoiser") for more information.
+   Please consult the comprehensive documentation inside the software (ï¿½Help -> Supported AI-Post-Denoiser -> Intel's OIDN Denoiser") for more information.
  - new function (at the "Anti-Aliasing / Filter"-tab) to apply an AI-Post-Denoiser to a single image (e. g. a previously rendered fractal).
    When using this function, the currently active AI-Post-Denoiser-settings are applied.
  - moved the old webspace to a secured site:
@@ -101,8 +128,8 @@ V6.00 (16.08.2020)
  - fixed a bug causing the GPU-renderer called twice the same time when changing resolution- or quality-profile in the GPU-renderer-window
 
 V5.60 (06.05.2020)
- - support for NVidia’s NVidia’s OptiX denoiser as a powerful tool to cut down render times and improve image quality.
-   Please consult the comprehensive documentation inside the software (“Help -> OptiX denoiser”) for more information.
+ - support for NVidiaï¿½s NVidiaï¿½s OptiX denoiser as a powerful tool to cut down render times and improve image quality.
+   Please consult the comprehensive documentation inside the software (ï¿½Help -> OptiX denoiserï¿½) for more information.
  - new commandline-tool to create and render random flames.
    Example: java -cp j-wildfire-5.60/lib/j-wildfire.jar org.jwildfire.cli.CreateRandomFlame -w 1200 -h 675 -q 80
  - new variations:

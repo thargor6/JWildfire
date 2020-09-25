@@ -245,7 +245,7 @@ public class FlamesGPURenderController {
     try {
       File file =
           FileDialogTools.selectFlameFileForOpen(
-              parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel, null);
+              parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), null);
       if (file != null) {
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame newFlame = flames.get(0);
@@ -396,7 +396,7 @@ public class FlamesGPURenderController {
     try {
       File file =
           FileDialogTools.selectImageFileForSave(
-              parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel, Tools.FILEEXT_PNG);
+              parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), Tools.FILEEXT_PNG);
       if (file != null) {
         new ImageWriter().saveImage(image, file.getAbsolutePath());
         if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
@@ -443,7 +443,7 @@ public class FlamesGPURenderController {
       if (currFlame != null) {
         File file =
             FileDialogTools.selectFlameFileForSave(
-                parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+                parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel());
         if (file != null) {
           new FlameWriter().writeFlame(currFlame, file.getAbsolutePath());
           prefs.setLastOutputFlameFile(file);

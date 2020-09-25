@@ -143,7 +143,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private final MainEditorFrame mainEditorFrame;
   private final String tinaFrameTitle;
-  final JPanel centerPanel;
+  private final JPanel centerPanel;
   private final FlameMessageHelper messageHelper;
 
   private final FlamePreviewHelper flamePreviewHelper;
@@ -4315,6 +4315,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     try {
       if (getCurrFlame() != null) {
         String filename = qsaveFilenameGen.generateNextFilename();
+        FileDialogTools.ensureFileAccess(mainEditorFrame, centerPanel, filename);
         new FlameWriter().writeFlame(generateExportFlame(getCurrFlame()), filename);
         messageHelper.showStatusMessage(getCurrFlame(), "quicksave <" + new File(filename).getName() + "> saved");
       }
@@ -6117,6 +6118,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       Flame flame = getCurrFlame();
       if (flame != null) {
         String filename = qsaveFilenameGen.generateNextFilename();
+        FileDialogTools.ensureFileAccess(mainEditorFrame, centerPanel,filename);
         new FlameWriter().writeFlame(generateExportFlame(flame), filename);
         batchRendererController.importFlame(filename, getResolutionProfile(), getQualityProfile());
         messageHelper.showStatusMessage(getCurrFlame(), "sent as file <" + new File(filename).getName() + "> to batch-renderer");
@@ -6757,5 +6759,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public MainEditorFrame getMainEditorFrame() {
     return mainEditorFrame;
+  }
+
+  public JPanel getCenterPanel() {
+    return centerPanel;
   }
 }

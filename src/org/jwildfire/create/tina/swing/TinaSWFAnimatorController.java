@@ -706,16 +706,16 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     switch (currMovie.getSequenceOutputType()) {
       case ANB:
         return FileDialogTools.selectAnbFileForSave(
-            parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+            parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel());
       case MP4:
         return FileDialogTools.selectMp4FileForSave(
-            parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+            parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel());
       case PNG_IMAGES:
         return FileDialogTools.selectImageFileForSave(
-            parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel, Tools.FILEEXT_PNG);
+            parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), Tools.FILEEXT_PNG);
       default:
         return FileDialogTools.selectFlameSequenceFileForSave(
-            parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+            parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel());
     }
   }
 
@@ -1193,7 +1193,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     try {
       File file =
           FileDialogTools.selectJWFRenderFileForOpen(
-              parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+              parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel());
       if (file != null) {
         FlameMovie movie = new FlameMovieReader(prefs).readMovie(file.getAbsolutePath());
         if (movie != null) {
@@ -1226,7 +1226,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     try {
       File file =
           FileDialogTools.selectJWFRenderFileForSave(
-              parentCtrl.getMainEditorFrame(), parentCtrl.centerPanel);
+              parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel());
       if (file != null) {
         new FlameMovieWriter().writeFlame(currMovie, file.getAbsolutePath());
       }

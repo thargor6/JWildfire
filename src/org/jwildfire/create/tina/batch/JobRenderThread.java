@@ -36,7 +36,9 @@ import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
+import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.create.tina.swing.RenderMovieUtil;
+import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
@@ -48,6 +50,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class JobRenderThread implements Runnable {
+  private final TinaController parentCtrl;
   private final List<Job> activeJobList;
   private final JobRenderThreadController controller;
   private final QualityProfile qualityProfile;
@@ -57,7 +60,8 @@ public class JobRenderThread implements Runnable {
   private FlameRenderer renderer;
   private final boolean useOpenCl;
 
-  public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, boolean pDoOverwriteExisting, boolean pUseOpenCl) {
+  public JobRenderThread(TinaController pParentCtrl, JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, boolean pDoOverwriteExisting, boolean pUseOpenCl) {
+    parentCtrl = pParentCtrl;
     controller = pController;
     activeJobList = pActiveJobList;
     resolutionProfile = pResolutionProfile;
@@ -149,6 +153,7 @@ public class JobRenderThread implements Runnable {
       String openClFlameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
       try {
         Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
+        FileDialogTools.ensureFileAccess(parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), openClFlameFilename);
         new FACLFlameWriter().writeFlame(newFlame, openClFlameFilename);
         long t0 = Calendar.getInstance().getTimeInMillis();
         FACLRenderResult openClRenderRes = FACLRenderTools.invokeFACLRender(openClFlameFilename, width, height, qualityProfile.getQuality());
@@ -182,6 +187,7 @@ public class JobRenderThread implements Runnable {
           long t1 = Calendar.getInstance().getTimeInMillis();
           job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
         }
+        FileDialogTools.ensureFileAccess(parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), primaryFilename);
         new ImageWriter().saveImage(res.getImage(), primaryFilename);
         if (res.getHDRImage() != null) {
           new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(job.getPrimaryFilename(flame.getStereo3dMode())));
