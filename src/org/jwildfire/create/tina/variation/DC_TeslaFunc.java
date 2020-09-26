@@ -31,9 +31,7 @@ public class DC_TeslaFunc  extends DC_BaseFunc {
 
 
 	private static final String PARAM_LEVELS = "levels";
-	private static final String PARAM_THICKNESS = "thicknes";
 	private static final String PARAM_STYLE = "style";
-	private static final String PARAM_SHIFT = "shift";
 	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_ZOOM = "zoom";
@@ -41,9 +39,7 @@ public class DC_TeslaFunc  extends DC_BaseFunc {
 
 
 	int levels=20;
-	double thickness=1000.;
 	double style=10.0;
-	double shift=1.5;
 	private int seed = 10000;
 	double time=0.0;
 	double zoom=4.0;
@@ -53,7 +49,7 @@ public class DC_TeslaFunc  extends DC_BaseFunc {
  	long last_time=System.currentTimeMillis();
  	long elapsed_time=0;
 	
-	private static final String[] additionalParamNames = { PARAM_LEVELS ,PARAM_THICKNESS,PARAM_STYLE,PARAM_SHIFT,PARAM_SEED,PARAM_TIME,PARAM_ZOOM};
+	private static final String[] additionalParamNames = { PARAM_LEVELS,PARAM_STYLE,PARAM_SEED,PARAM_TIME,PARAM_ZOOM};
 
 
 public	double field21( vec3 p, double s) {
@@ -99,7 +95,7 @@ public	double field21( vec3 p, double s) {
 
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return joinArrays(new Object[] { levels,thickness,style,shift,seed,time,zoom},super.getParameterValues());
+		return joinArrays(new Object[] { levels,style,seed,time,zoom},super.getParameterValues());
 	}
 
 
@@ -109,17 +105,9 @@ public	double field21( vec3 p, double s) {
 			
 			levels = (int)Tools.limitValue(pValue, 1 , 25);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_THICKNESS)) {
-			
-			thickness = (int)Tools.limitValue(pValue, -1500. , 1500.);
-		}
 		else if (pName.equalsIgnoreCase(PARAM_STYLE)) {
 			
 			style = Tools.limitValue(pValue, 5. , 100.);
-		}
-		else if (pName.equalsIgnoreCase(PARAM_SHIFT)) {
-			
-			shift = Tools.limitValue(pValue, -100. , 100.);
 		}
 		else if (PARAM_SEED.equalsIgnoreCase(pName)) 
 		{	   seed =  (int) pValue;

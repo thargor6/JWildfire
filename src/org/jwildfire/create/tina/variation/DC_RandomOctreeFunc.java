@@ -3,6 +3,7 @@ package org.jwildfire.create.tina.variation;
 import java.util.Random;
 
 import org.jwildfire.base.Tools;
+import static org.jwildfire.base.mathlib.MathLib.fmod;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -47,6 +48,8 @@ public class DC_RandomOctreeFunc  extends DC_BaseFunc {
 	int steps=10;
 	double mouseX=0.0;  // 0-1
 	double mouseY=0.0;  // 0-1
+	double rlr = 0.0;
+	double rud = 0.0;
 	int grid=0;
 	int borders=1;
 	int blackborders=1;
@@ -359,7 +362,7 @@ public class DC_RandomOctreeFunc  extends DC_BaseFunc {
 	}
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return joinArrays(new Object[] { seed, time,steps,mouseX,mouseY,grid,borders,blackborders},super.getParameterValues());
+		return joinArrays(new Object[] { seed, time,steps,rlr,rud,grid,borders,blackborders},super.getParameterValues());
 	}
 
 	public void setParameter(String pName, double pValue) {
@@ -378,10 +381,12 @@ public class DC_RandomOctreeFunc  extends DC_BaseFunc {
 			steps =(int)Tools.limitValue(pValue, 3 , 100);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_RLR)) {
-			mouseX =Tools.limitValue(pValue, 0.0 , 1.0);
+		    rlr = pValue;
+			mouseX = fmod(rlr, 1.0);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_RUD)) {
-			mouseY=Tools.limitValue(pValue, 0.0 , 1.0);
+            rud = pValue;
+            mouseY = fmod(rud, 1.0);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_DRAWGRID)) {
 			grid=(int) Tools.limitValue(pValue, 0 , 1);

@@ -42,9 +42,9 @@ public class DC_MandalaFunc  extends DC_BaseFunc {
 	double mX=0.025;
     double mY=-0.001245675;
     double scale=2.;
-    double sides=12.;
-    double multiply=1.5;
-    double loops=64.;
+    int sides=12;
+    int multiply=1;
+    int loops=64;
     
     int iR=0;
     int iG=0;
@@ -81,16 +81,16 @@ public class DC_MandalaFunc  extends DC_BaseFunc {
      	uv.x = (5.5-scale)*(xp);
      	uv.y = (5.5-scale)*( yp );
      		      	
-    	double k = Math.PI / Math.floor(sides);
+    	double k = Math.PI / (double) sides;
       	vec2 s = G.Kscope(uv,k);
       	vec2 t = G.Kscope(s,k);
       	double v = G.dot(t,s);
     	vec2 u = G.mix(s,t,Math.cos(v));
     	
-    	if (multiply>0.001)
+    	if (multiply>0)
     	{
           vec2 t1=new vec2(u.y,u.x);
-          vec2 t2=G.mod(t1,Math.floor(multiply));
+          vec2 t2=G.mod(t1,(double) multiply);
           vec2 t3=new vec2(-u.x,-u.y);
           vec2 t4=new vec2(u.y,u.x);
           vec2 t5=t4.plus(G.mod(t2,t3));
@@ -98,7 +98,7 @@ public class DC_MandalaFunc  extends DC_BaseFunc {
     	}
       	vec3 p = new vec3 (u, mX*v);
       	for (int l = 0; l < 73; l++) {
-      		if ((double)l > Math.floor(loops))
+      		if ((double)l > loops)
       		{ 
       		  break;
       	    }
@@ -215,13 +215,13 @@ public class DC_MandalaFunc  extends DC_BaseFunc {
 			scale= pValue;
 		} 
 		else if (pName.equalsIgnoreCase(PARAM_SIDES)) {
-			sides= pValue;
+			sides= (int) pValue;
 		} 
 		else if (pName.equalsIgnoreCase(PARAM_MULTIPLY)) {
-			multiply= pValue;
+			multiply= (int) pValue;
 		} 
 		else if (pName.equalsIgnoreCase(PARAM_LOOPS)) {
-			loops= pValue;
+			loops= (int) pValue;
 		} 
 		else if (pName.equalsIgnoreCase(PARAM_IR)) {
 			iR= (int)Tools.limitValue(pValue, 0 , 1);

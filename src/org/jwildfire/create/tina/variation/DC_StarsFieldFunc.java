@@ -42,7 +42,7 @@ public class DC_StarsFieldFunc  extends DC_BaseFunc {
 
 	double time=0.0;
     double zdistance=2.0;
-    double glow=2.0;
+    double glow=1.0;
 
 	  
 		Random randomize=new Random(seed);
