@@ -937,6 +937,8 @@ public class VariationFuncList {
 
     registerVariationFunc(PostTrigFunc.class); 
     registerVariationFunc(PostLogTile2Func.class);   
+    
+    registerVariationFunc(Glitchy2Func.class);	  
 	  
 
     resolvedAliasMap = new HashMap<>();
