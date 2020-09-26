@@ -47,11 +47,11 @@ public class ColorScaleWFFunc extends VariationFunc {
     if (reset_z > 0) {
       pVarTP.z = dz;
     } else {
-			if (sides > 0) {
-				pVarTP.z += dz * pContext.random();
-			} else {
-				pVarTP.z += dz;
-			}
+	if (sides > 0) {
+		pVarTP.z += dz * pContext.random();
+	} else {
+		pVarTP.z += dz;
+	}
     }
   }
 
@@ -77,8 +77,8 @@ public class ColorScaleWFFunc extends VariationFunc {
       offset_z = pValue;
     else if (PARAM_RESETZ.equalsIgnoreCase(pName))
       reset_z = pValue;
-		else if (PARAM_SIDES.equalsIgnoreCase(pName))
-			sides = pValue;    
+    else if (PARAM_SIDES.equalsIgnoreCase(pName))
+      sides = pValue;    
     else
       throw new IllegalArgumentException(pName);
   }
