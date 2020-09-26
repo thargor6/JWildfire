@@ -27,14 +27,16 @@ public class PostColorScaleWFFunc extends VariationFunc {
   private static final String PARAM_SCALEZ = "scale_z";
   private static final String PARAM_OFFSETZ = "offset_z";
   private static final String PARAM_RESETZ = "reset_z";
+  private static final String PARAM_SIDES = "sides";
 
-  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETZ, PARAM_RESETZ};
+  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETZ, PARAM_RESETZ, PARAM_SIDES};
 
   private double scale_x = 0.0;
   private double scale_y = 0.0;
   private double scale_z = 0.5;
   private double offset_z = 0.0;
   private double reset_z = 0.0;
+  private double sides = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -44,7 +46,11 @@ public class PostColorScaleWFFunc extends VariationFunc {
     if (reset_z > 0) {
       pVarTP.z = dz;
     } else {
-      pVarTP.z += dz;
+			if (sides > 0) {
+				pVarTP.z += dz * pContext.random();
+			} else {
+				pVarTP.z += dz;
+			}
     }
   }
 
@@ -55,7 +61,7 @@ public class PostColorScaleWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{scale_x, scale_y, scale_z, offset_z, reset_z};
+    return new Object[]{scale_x, scale_y, scale_z, offset_z, reset_z, sides };
   }
 
   @Override
@@ -70,6 +76,8 @@ public class PostColorScaleWFFunc extends VariationFunc {
       offset_z = pValue;
     else if (PARAM_RESETZ.equalsIgnoreCase(pName))
       reset_z = pValue;
+		else if (PARAM_SIDES.equalsIgnoreCase(pName))
+			sides = pValue;   
     else
       throw new IllegalArgumentException(pName);
   }
