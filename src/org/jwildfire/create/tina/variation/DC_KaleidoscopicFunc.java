@@ -45,7 +45,7 @@ public class DC_KaleidoscopicFunc  extends DC_BaseFunc {
     int  sides=8;
     double zoom=1.0;
     double p1=0.0;
-    int radial=0;
+    int radial=1;
 
 
 	Random randomize=new Random(seed);

@@ -45,7 +45,7 @@ public class DC_QuadtreeFunc  extends DC_BaseFunc {
 
 
 
-	double zoom=.50;
+	double zoom=1.;
 	private int seed = 10000;
 	double time=0.0;
 	double width=1000.0;

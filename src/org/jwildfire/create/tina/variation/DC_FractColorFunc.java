@@ -111,8 +111,7 @@ public class DC_FractColorFunc  extends DC_BaseFunc {
 		       
 		}
 	    else if (pName.equalsIgnoreCase(PARAM_TIME)) {
-		       LocalTime now = LocalTime.now(ZoneId.systemDefault());
-		       time=(double)now.toSecondOfDay();
+            time = pValue;
 		}
 		else if (pName.equalsIgnoreCase(PARAM_XPAR)) {
 			x_par =Tools.limitValue(pValue, 0. , 1.);

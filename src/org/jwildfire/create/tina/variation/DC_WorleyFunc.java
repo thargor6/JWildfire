@@ -24,7 +24,7 @@ import js.glsl.vec4;
 public class DC_WorleyFunc  extends DC_BaseFunc {
 
 	/*
-	 * Variation : dc_cairotiles
+	 * Variation : dc_worley
 	 * Autor: Jesus Sosa
 	 * Date: February 13, 2019
 	 * Reference 
@@ -37,27 +37,18 @@ public class DC_WorleyFunc  extends DC_BaseFunc {
 
 
 	private static final String PARAM_ZOOM = "zoom";
-	private static final String PARAM_SEED = "seed";
-	private static final String PARAM_TIME = "time";
-
-
+	private static final String PARAM_PATTERN = "pattern";
+    private static final String PARAM_DISTORT = "distort";
 
 	double zoom=7.0;
-	private int seed = 10000;
-	double time=0.0;
-
-
-	Random randomize=new Random(seed);
+	double pattern = 70.0;
+	double distort = 1.0;
 	
- 	long last_time=System.currentTimeMillis();
- 	long elapsed_time=0;
-	
-
-	private static final String[] additionalParamNames = { PARAM_ZOOM,PARAM_SEED,PARAM_TIME};
+	private static final String[] additionalParamNames = { PARAM_ZOOM, PARAM_PATTERN, PARAM_DISTORT};
 
 	vec2 H(vec2 n)
 	{
-	    return G.fract( new vec2(1,12.34).plus(1e4 * sin( n.x+n.y/.7)  ) ).multiply(.7).plus(.3);
+	    return G.fract( new vec2(1,12.34).plus(1e4 * sin( n.x+n.y/(pattern*.01))  ) ).multiply(distort*0.75).plus(.3);
 	}
 
 	public vec3 getRGBColor(double xp,double yp)
@@ -120,25 +111,19 @@ public class DC_WorleyFunc  extends DC_BaseFunc {
 
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return joinArrays(new Object[] { zoom,seed,time},super.getParameterValues());
+		return joinArrays(new Object[] { zoom, pattern, distort },super.getParameterValues());
 	}
 
 	public void setParameter(String pName, double pValue) {
 		if (pName.equalsIgnoreCase(PARAM_ZOOM)) {
 			zoom = Tools.limitValue(pValue, 0.1 , 50.0);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_SEED)) {
-			   seed =   (int)Tools.limitValue(pValue, 0 , 10000);
-		       randomize=new Random(seed);
-		          long current_time = System.currentTimeMillis();
-		          elapsed_time += (current_time - last_time);
-		          last_time = current_time;
-		          time = (double) (elapsed_time / 1000.0);
+		else if (pName.equalsIgnoreCase(PARAM_PATTERN)) {
+		  pattern = Tools.limitValue(pValue, 0.1 , 100.0);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_TIME)) {
-			time = pValue;
+		else if (pName.equalsIgnoreCase(PARAM_DISTORT)) {
+		  distort = Tools.limitValue(pValue, 0.0 , 1.0);
 		}
-
 		else
 			super.setParameter(pName, pValue);
 	}
