@@ -30,51 +30,52 @@ import java.util.List;
 import java.util.Set;
 
 public class FileDialogTools {
-  private static Set<String> visitedFolders = new HashSet<>();
+  private static final Set<String> visitedFolders = new HashSet<>();
 
   private static String getFolderPath(File file) {
-    if(file.isDirectory()) {
+    if (file.isDirectory()) {
       return file.getAbsolutePath();
-    }
-    else {
-      return file.getParentFile()!=null ? file.getParentFile().getAbsolutePath() : "";
+    } else {
+      return file.getParentFile() != null ? file.getParentFile().getAbsolutePath() : "";
     }
   }
 
   private static void addToVisitedFolders(File file) {
     String path = getFolderPath(file);
-    if(!visitedFolders.contains(path)) {
-      visitedFolders.add(path);
-    }
+    visitedFolders.add(path);
   }
 
   public static void ensureFileAccess(Frame frame, Component parent, String path) {
     ensureFileAccess(frame, parent, new File(path));
   }
 
-    public static void ensureFileAccess(Frame frame, Component parent, File file) {
-        if (Tools.OSType.MAC == Tools.getOSType()) {
-            String path = getFolderPath(file);
-            if (!visitedFolders.contains(path)) {
-                int i = 0;
-                int maxTries = 3;
-                while (i < maxTries) {
-                    StandardDialogs.message(parent, "Please select the folder <" + path + "> in the following dialog in order to obtain write access to it");
-                    String selectPath = selectDirectory(frame, parent, "Please select the folder <" + path + ">", path);
-                    if (selectPath != null) {
-                        String selectedFolderPath = getFolderPath(new File(selectPath));
-                        visitedFolders.add(selectedFolderPath);
-                        if(selectedFolderPath.equals(path)) {
-                            break;
-                        }
-                        else {
-                            i++;
-                        }
-                    }
-                }
+  public static void ensureFileAccess(Frame frame, Component parent, File file) {
+    if (Tools.OSType.MAC == Tools.getOSType()) {
+      String path = getFolderPath(file);
+      if (!visitedFolders.contains(path)) {
+        int i = 0;
+        int maxTries = 3;
+        while (i < maxTries) {
+          StandardDialogs.message(
+              parent,
+              "Please select the folder <"
+                  + path
+                  + "> in the following dialog in order to obtain write access to it");
+          String selectPath =
+              selectDirectory(frame, parent, "Please select the folder <" + path + ">", path);
+          if (selectPath != null) {
+            String selectedFolderPath = getFolderPath(new File(selectPath));
+            visitedFolders.add(selectedFolderPath);
+            if (selectedFolderPath.equals(path)) {
+              break;
+            } else {
+              i++;
             }
+          }
         }
+      }
     }
+  }
 
   public static File selectFlameFileForOpen(
       Frame frame, Component centerPanel, String defaultFilename) {
@@ -105,7 +106,7 @@ public class FileDialogTools {
       fileDialog.setModal(true);
       fileDialog.setVisible(true);
       if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_FLAME});
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_FLAME});
         Prefs.getPrefs().setLastInputFlameFile(file);
         return file;
       }
@@ -136,19 +137,19 @@ public class FileDialogTools {
 
   // append the first given file-extension if the file has not any of the given file-extensions
   private static File enforceFileExt(File file, String[] extensions) {
-    if(file==null || extensions==null || extensions.length==0) {
+    if (file == null || extensions == null || extensions.length == 0) {
       throw new IllegalArgumentException();
     }
     String name = file.getName();
     String currFileExt = Tools.getFileExt(name);
-    for(String ext:extensions) {
-      if(ext!=null && ext.length()>0 && ext.equals(currFileExt)) {
+    for (String ext : extensions) {
+      if (ext != null && ext.length() > 0 && ext.equals(currFileExt)) {
         return file;
       }
     }
-    for(String ext:extensions) {
-      if(ext!=null && ext.length()>0) {
-        return new File(file.getParent(), name + '.'+ ext);
+    for (String ext : extensions) {
+      if (ext != null && ext.length() > 0) {
+        return new File(file.getParent(), name + '.' + ext);
       }
     }
     return file;
@@ -174,9 +175,8 @@ public class FileDialogTools {
       fileDialog.setFile(createFileNamePreset(Tools.FILEEXT_FLAME));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_FLAME});
+      if(openSaveDialog(centerPanel, fileDialog, Tools.FILEEXT_FLAME))  {
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_FLAME});
         Prefs.getPrefs().setLastOutputFlameFile(file);
         return file;
       }
@@ -198,11 +198,30 @@ public class FileDialogTools {
     return null;
   }
 
-  private static String createFileNamePreset(String fileExt) {
-    if(fileExt!=null && fileExt.length()>0) {
-      return "Untitled" + "." + fileExt;
+  private static boolean openSaveDialog(Component parent, FileDialog fileDialog, String fileExt) {
+    fileDialog.setVisible(true);
+    if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
+      if(fileDialog.getFilenameFilter()!=null) {
+        if(!fileDialog.getFilenameFilter().accept(fileDialog.getFiles()[0].getParentFile(), fileDialog.getFiles()[0].getName())) {
+          StandardDialogs.message(
+                  parent,
+                  "Please specify a filename including a file-extension, e.g. \"" + createFileNamePreset(fileExt) +"\"");
+          return false;
+        }
+        else {
+          return true;
+        }
+      } else {
+        return true;
+      }
     }
-    else {
+    return false;
+  }
+
+  private static String createFileNamePreset(String fileExt) {
+    if (fileExt != null && fileExt.length() > 0) {
+      return "Untitled" + "." + fileExt;
+    } else {
       return "Untitled";
     }
   }
@@ -234,9 +253,8 @@ public class FileDialogTools {
       fileDialog.setFile(createFileNamePreset(Tools.FILEEXT_MAP));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_MAP});
+      if(openSaveDialog(centerPanel, fileDialog, Tools.FILEEXT_MAP))  {
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_MAP});
         return file;
       }
     } else {
@@ -323,7 +341,9 @@ public class FileDialogTools {
       fileDialog.setModal(true);
       fileDialog.setVisible(true);
       if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_MP3, Tools.FILEEXT_WAV});
+        File file =
+            enforceFileExt(
+                fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_MP3, Tools.FILEEXT_WAV});
         Prefs.getPrefs().setLastInputSoundFile(file);
         return file;
       }
@@ -418,7 +438,7 @@ public class FileDialogTools {
       fileDialog.setModal(true);
       fileDialog.setVisible(true);
       if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_JWFDANCE});
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_JWFDANCE});
         Prefs.getPrefs().setLastInputSoundFile(file);
         return file;
       }
@@ -460,9 +480,8 @@ public class FileDialogTools {
       fileDialog.setFile(createFileNamePreset(Tools.FILEEXT_JWFDANCE));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_JWFDANCE});
+      if(openSaveDialog(centerPanel, fileDialog, Tools.FILEEXT_JWFDANCE))  {
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_JWFDANCE});
         Prefs.getPrefs().setLastOutputJWFMovieFile(file);
         return file;
       }
@@ -514,7 +533,19 @@ public class FileDialogTools {
       fileDialog.setModal(true);
       fileDialog.setVisible(true);
       if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{defaultExtension, Tools.FILEEXT_PNG, Tools.FILEEXT_PNS, Tools.FILEEXT_JPEG, Tools.FILEEXT_JPG, Tools.FILEEXT_HDR, Tools.FILEEXT_GIF, Tools.FILEEXT_JPS});
+        File file =
+            enforceFileExt(
+                fileDialog.getFiles()[0],
+                new String[] {
+                  defaultExtension,
+                  Tools.FILEEXT_PNG,
+                  Tools.FILEEXT_PNS,
+                  Tools.FILEEXT_JPEG,
+                  Tools.FILEEXT_JPG,
+                  Tools.FILEEXT_HDR,
+                  Tools.FILEEXT_GIF,
+                  Tools.FILEEXT_JPS
+                });
         Prefs.getPrefs().setLastInputImageFile(file);
         return file;
       }
@@ -562,12 +593,29 @@ public class FileDialogTools {
           ex.printStackTrace();
         }
       }
-      fileDialog.setFile(createFileNamePreset(defaultExtension!=null && defaultExtension.length()>0 ? defaultExtension: Tools.FILEEXT_PNG));
+      fileDialog.setFile(
+          createFileNamePreset(
+              defaultExtension != null && defaultExtension.length() > 0
+                  ? defaultExtension
+                  : Tools.FILEEXT_PNG));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{defaultExtension, Tools.FILEEXT_PNG, Tools.FILEEXT_PNS, Tools.FILEEXT_JPEG, Tools.FILEEXT_JPG, Tools.FILEEXT_HDR, Tools.FILEEXT_GIF, Tools.FILEEXT_JPS});
+      if(openSaveDialog(centerPanel, fileDialog, defaultExtension != null && defaultExtension.length() > 0
+              ? defaultExtension
+              : Tools.FILEEXT_PNG))  {
+        File file =
+            enforceFileExt(
+                fileDialog.getFiles()[0],
+                new String[] {
+                  defaultExtension,
+                  Tools.FILEEXT_PNG,
+                  Tools.FILEEXT_PNS,
+                  Tools.FILEEXT_JPEG,
+                  Tools.FILEEXT_JPG,
+                  Tools.FILEEXT_HDR,
+                  Tools.FILEEXT_GIF,
+                  Tools.FILEEXT_JPS
+                });
         Prefs.getPrefs().setLastOutputImageFile(file);
         return file;
       }
@@ -607,12 +655,20 @@ public class FileDialogTools {
           ex.printStackTrace();
         }
       }
-      fileDialog.setFile(createFileNamePreset(defaultExtension!=null && defaultExtension.length()>0 ? defaultExtension: Tools.FILEEXT_OBJ));
+      fileDialog.setFile(
+          createFileNamePreset(
+              defaultExtension != null && defaultExtension.length() > 0
+                  ? defaultExtension
+                  : Tools.FILEEXT_OBJ));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{defaultExtension, Tools.FILEEXT_OBJ, Tools.FILEEXT_PLY});
+      if(openSaveDialog(centerPanel, fileDialog, defaultExtension != null && defaultExtension.length() > 0
+              ? defaultExtension
+              : Tools.FILEEXT_OBJ))  {
+        File file =
+            enforceFileExt(
+                fileDialog.getFiles()[0],
+                new String[] {defaultExtension, Tools.FILEEXT_OBJ, Tools.FILEEXT_PLY});
         Prefs.getPrefs().setLastMeshFile(file);
         return file;
       }
@@ -651,12 +707,11 @@ public class FileDialogTools {
           ex.printStackTrace();
         }
       }
-      fileDialog.setFile(createFileNamePreset( Tools.FILEEXT_OBJ));
+      fileDialog.setFile(createFileNamePreset(Tools.FILEEXT_OBJ));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_OBJ});
+      if(openSaveDialog(centerPanel, fileDialog, Tools.FILEEXT_OBJ))  {
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_OBJ});
         Prefs.getPrefs().setLastMeshFile(file);
         return file;
       }
@@ -699,7 +754,7 @@ public class FileDialogTools {
       fileDialog.setModal(true);
       fileDialog.setVisible(true);
       if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_OBJ});
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_OBJ});
         Prefs.getPrefs().setLastMeshFile(file);
         return file;
       }
@@ -742,7 +797,7 @@ public class FileDialogTools {
       fileDialog.setModal(true);
       fileDialog.setVisible(true);
       if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_SVG});
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_SVG});
         return file;
       }
     } else {
@@ -762,7 +817,8 @@ public class FileDialogTools {
     return null;
   }
 
-  public static String selectDirectory(Frame frame, Component centerPanel, String caption, String directory) {
+  public static String selectDirectory(
+      Frame frame, Component centerPanel, String caption, String directory) {
     if (Tools.OSType.MAC == Tools.getOSType()) {
       String oldProp = System.getProperty("apple.awt.fileDialogForDirectories");
       try {
@@ -770,7 +826,7 @@ public class FileDialogTools {
         FileDialog fileDialog = new FileDialog(frame, caption);
         fileDialog.setModal(true);
         fileDialog.setVisible(true);
-        if(directory!=null && !directory.isEmpty()) {
+        if (directory != null && !directory.isEmpty()) {
           try {
             fileDialog.setDirectory(directory);
           } catch (Exception ex) {
@@ -783,14 +839,15 @@ public class FileDialogTools {
           return file.getAbsolutePath();
         }
       } finally {
-        System.setProperty("apple.awt.fileDialogForDirectories", (oldProp != null) ? oldProp : "false");
+        System.setProperty(
+            "apple.awt.fileDialogForDirectories", (oldProp != null) ? oldProp : "false");
       }
     } else {
       JFileChooser chooser = new JFileChooser();
       chooser = new JFileChooser();
       chooser.setDialogTitle(caption);
       chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-      if(directory!=null && !directory.isEmpty()) {
+      if (directory != null && !directory.isEmpty()) {
         try {
           chooser.setCurrentDirectory(new File(directory));
         } catch (Exception ex) {
@@ -859,12 +916,12 @@ public class FileDialogTools {
           ex.printStackTrace();
         }
       }
-      fileDialog.setFile(createFileNamePreset( Tools.FILEEXT_JWFRENDER));
+      fileDialog.setFile(createFileNamePreset(Tools.FILEEXT_JWFRENDER));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_JWFRENDER});
+      if(openSaveDialog(centerPanel, fileDialog, Tools.FILEEXT_JWFRENDER))  {
+        File file =
+            enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_JWFRENDER});
         Prefs.getPrefs().setLastOutputFlameFile(file);
         return file;
       }
@@ -907,7 +964,8 @@ public class FileDialogTools {
       fileDialog.setModal(true);
       fileDialog.setVisible(true);
       if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_JWFRENDER});
+        File file =
+            enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_JWFRENDER});
         Prefs.getPrefs().setLastInputFlameFile(file);
         return file;
       }
@@ -948,12 +1006,26 @@ public class FileDialogTools {
           ex.printStackTrace();
         }
       }
-      fileDialog.setFile(createFileNamePreset(defaultExtension!=null && defaultExtension.length()>0 ? defaultExtension: Tools.FILEEXT_PNG));
+      fileDialog.setFile(
+          createFileNamePreset(
+              defaultExtension != null && defaultExtension.length() > 0
+                  ? defaultExtension
+                  : Tools.FILEEXT_PNG));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{defaultExtension, Tools.FILEEXT_PNG, Tools.FILEEXT_JPG, Tools.FILEEXT_JPEG, Tools.FILEEXT_MP4});
+      if(openSaveDialog(centerPanel, fileDialog, defaultExtension != null && defaultExtension.length() > 0
+              ? defaultExtension
+              : Tools.FILEEXT_PNG))  {
+        File file =
+            enforceFileExt(
+                fileDialog.getFiles()[0],
+                new String[] {
+                  defaultExtension,
+                  Tools.FILEEXT_PNG,
+                  Tools.FILEEXT_JPG,
+                  Tools.FILEEXT_JPEG,
+                  Tools.FILEEXT_MP4
+                });
         Prefs.getPrefs().setLastOutputImageFile(file);
         return file;
       }
@@ -995,9 +1067,8 @@ public class FileDialogTools {
       fileDialog.setFile(createFileNamePreset(Tools.FILEEXT_ANB));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_ANB});
+      if(openSaveDialog(centerPanel, fileDialog, Tools.FILEEXT_ANB))  {
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_ANB});
         Prefs.getPrefs().setLastOutputImageFile(file);
         return file;
       }
@@ -1023,12 +1094,12 @@ public class FileDialogTools {
     if (Tools.OSType.MAC == Tools.getOSType()) {
       FileDialog fileDialog = new FileDialog(frame, "Render a MP4-file");
       fileDialog.setFilenameFilter(
-              new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                  return new VideoFileFilter().accept(new File(dir, name));
-                }
-              });
+          new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+              return new VideoFileFilter().accept(new File(dir, name));
+            }
+          });
       if (Prefs.getPrefs().getOutputImagePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getOutputImagePath());
@@ -1039,9 +1110,8 @@ public class FileDialogTools {
       fileDialog.setFile(createFileNamePreset(Tools.FILEEXT_MP4));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_MP4});
+      if(openSaveDialog(centerPanel, fileDialog, Tools.FILEEXT_MP4))  {
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_MP4});
         Prefs.getPrefs().setLastOutputImageFile(file);
         return file;
       }
@@ -1051,8 +1121,7 @@ public class FileDialogTools {
       if (Prefs.getPrefs().getOutputImagePath() != null) {
         try {
           chooser.setCurrentDirectory(new File(Prefs.getPrefs().getOutputImagePath()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
@@ -1068,27 +1137,24 @@ public class FileDialogTools {
     if (Tools.OSType.MAC == Tools.getOSType()) {
       FileDialog fileDialog = new FileDialog(frame, "Save flame-file-sequence");
       fileDialog.setFilenameFilter(
-              new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                  return new FlameFileFilter().accept(new File(dir, name));
-                }
-
-              });
+          new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+              return new FlameFileFilter().accept(new File(dir, name));
+            }
+          });
       if (Prefs.getPrefs().getMovieFlamesPath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getMovieFlamesPath());
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
       fileDialog.setFile(createFileNamePreset(Tools.FILEEXT_FLAME));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_FLAME});
+      if(openSaveDialog(centerPanel, fileDialog, Tools.FILEEXT_FLAME))  {
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_FLAME});
         return file;
       }
     } else {
@@ -1096,8 +1162,7 @@ public class FileDialogTools {
       if (Prefs.getPrefs().getMovieFlamesPath() != null) {
         try {
           chooser.setCurrentDirectory(new File(Prefs.getPrefs().getMovieFlamesPath()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
@@ -1110,16 +1175,16 @@ public class FileDialogTools {
   }
 
   public static File selectJWFMovieFileForOpen(
-          Frame frame, Component centerPanel, String defaultFilename) {
+      Frame frame, Component centerPanel, String defaultFilename) {
     if (Tools.OSType.MAC == Tools.getOSType()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a jwfmovie-file");
       fileDialog.setFilenameFilter(
-              new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                  return new JWFMovieFileFilter().accept(new File(dir, name));
-                }
-              });
+          new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+              return new JWFMovieFileFilter().accept(new File(dir, name));
+            }
+          });
       if (Prefs.getPrefs().getInputJWFMoviePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getInputJWFMoviePath());
@@ -1131,7 +1196,7 @@ public class FileDialogTools {
       fileDialog.setModal(true);
       fileDialog.setVisible(true);
       if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_JWFMOVIE});
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_JWFMOVIE});
         Prefs.getPrefs().setLastOutputJWFMovieFile(file);
         return file;
       }
@@ -1156,12 +1221,12 @@ public class FileDialogTools {
     if (Tools.OSType.MAC == Tools.getOSType()) {
       FileDialog fileDialog = new FileDialog(frame, "Save jwfmovie-file");
       fileDialog.setFilenameFilter(
-              new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                  return new JWFMovieFileFilter().accept(new File(dir, name));
-                }
-              });
+          new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+              return new JWFMovieFileFilter().accept(new File(dir, name));
+            }
+          });
       if (Prefs.getPrefs().getOutputJWFMoviePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getOutputJWFMoviePath());
@@ -1172,9 +1237,8 @@ public class FileDialogTools {
       fileDialog.setFile(createFileNamePreset(Tools.FILEEXT_JWFMOVIE));
       fileDialog.setMode(FileDialog.SAVE);
       fileDialog.setModal(true);
-      fileDialog.setVisible(true);
-      if (fileDialog.getFiles() != null && fileDialog.getFiles().length > 0) {
-        File file = enforceFileExt(fileDialog.getFiles()[0], new String[]{Tools.FILEEXT_JWFMOVIE});
+      if(openSaveDialog(centerPanel, fileDialog, Tools.FILEEXT_JWFMOVIE))  {
+        File file = enforceFileExt(fileDialog.getFiles()[0], new String[] {Tools.FILEEXT_JWFMOVIE});
         Prefs.getPrefs().setLastOutputJWFMovieFile(file);
         return file;
       }
@@ -1195,5 +1259,4 @@ public class FileDialogTools {
     }
     return null;
   }
-
 }

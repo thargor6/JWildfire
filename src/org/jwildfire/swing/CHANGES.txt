@@ -1,10 +1,29 @@
 V6.02 (15.09.2020)
+ - force to enter a valid file-extension in the file-dialogs, when saving a file under macOS, otherwise saving
+   would fail later due to security reasons
+ - removed the old post-denoiser at the Antialiasing/Filter-tab (it is recommended to use AI-denoiser instead)
+ - fixed the position of the filter-indicator-checkbox at the Antialiasing/Filter-tab
+ - fixed a bug regarding proper refresh of the filter-kernel-visualization
+ - the "RunRandomScript"-random-flame-generator now only runs internal scripts in order to make it more transparent which scripts
+   where executed (which makes it easier to give proper credit to the creators of the scripts)
  - fixed a bug regarding FileDialogs under macOS Catalina
- - added color support for lsystem3D_js by Rick Sidwell:
+ - fixes/enhancements to some dc_ variations, by Rick Sidwell:
+     -dc_fractcolor: changing time parameter did not work
+     -dc_kaleidoscopic: changed default for Radial to 1 since that is more "kaleidoscopic"
+     -dc_mandala: changed sides, multiply, and loops to integers so spinner buttons work better
+     -dc_quadtree: changed default for zoom to 1 to better fit the space
+     -dc_randomoctree: removed restriction of Rot parameters (was 0-1); no new functionality, but it allows easier animation
+     -dc_starsfield: changed default for glow to 1 (was 2, which is higher than the max)
+     -dc_sunflower: removed unused seed and time parameters, and allow negative values for step to reverse the spiral direction
+     -dc_tesla: removed unused thicknes and shift parameters
+     -dc_worley: removed unused seed and time parameters, and add new pattern and distort parameters to allow changing the pattern
+ - added color support for lsystem3D_js, by Rick Sidwell:
      New parameter color_mode:
        0 for normal color (default for compatibility); c drawing commands are ignored.
        1 for direct color; c drawing commands set the gradient index for coloring; color directives are ignored.
        2 for rgb color; c drawing commands use the colors set by the color directives.
+ - added variable to add sides on Z to colorscale_wf-variations, by Brad Stefanov
+ - new glitchy2-Variation, by Brad Stefanov
 
 V6.01 (15.09.2020)
  - I worked the last three weeks on a dedicated macOS build which can be distributed
