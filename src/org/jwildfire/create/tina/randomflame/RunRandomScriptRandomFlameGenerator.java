@@ -308,10 +308,11 @@ public class RunRandomScriptRandomFlameGenerator extends RandomFlameGenerator {
 
   public static void visitAllScriptNodes(TreeNode node, List<ScriptEntry> scripts, List<String> included, List<String> excluded) {
     if (node instanceof JWFScriptUserNode) {
+      /*
       String scriptPath = ((JWFScriptUserNode) node).getFilename();
       if(isIncluded(scriptPath, included, excluded)) {
         scripts.add(new ScriptEntry((JWFScriptUtils.ScriptNode) node, scriptPath, true));
-      }
+      }*/
     } else if (node instanceof JWFScriptInternalNode) {
       String scriptPath = ((JWFScriptInternalNode) node).getResFilename();
       if(isIncluded(scriptPath, included, excluded)) {
