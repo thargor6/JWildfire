@@ -7460,7 +7460,6 @@ public class MainEditorFrame extends JFrame {
         getLeapMotionDeleteButton(), getLeapMotionClearButton(), getLeapMotionResetConfigButton(),
         getFilterKernelPreviewRootPnl(), getTinaSpatialOversamplingREd(), getTinaSpatialOversamplingSlider(),
         getFilterKernelFlatPreviewBtn(),
-        getTinaPostNoiseFilterCheckBox(), getTinaPostNoiseThresholdField(), getTinaPostNoiseThresholdSlider(),
         getForegroundOpacityField(), getForegroundOpacitySlider(), getScriptEditBtn(), getRealtimePreviewToggleButton(),
         getSolidRenderingToggleBtn(), getTinaSolidRenderingEnableAOCBx(), getTinaSolidRenderingAOIntensityREd(),
         getTinaSolidRenderingAOIntensitySlider(), getTinaSolidRenderingAOSearchRadiusREd(), getTinaSolidRenderingAOSearchRadiusSlider(),
@@ -12980,9 +12979,6 @@ public class MainEditorFrame extends JFrame {
   private JSlider tinaSpatialOversamplingSlider;
   private JPanel filterKernelPreviewRootPnl;
   private JToggleButton filterKernelFlatPreviewBtn;
-  private JCheckBox tinaPostNoiseFilterCheckBox;
-  private JWFNumberField tinaPostNoiseThresholdField;
-  private JSlider tinaPostNoiseThresholdSlider;
   private JWFNumberField tinaOptiXDenoiserBlendField;
   private JSlider tinaOptiXDenoiserBlendSlider;
   private JLabel lblOptiXBlend;
@@ -14078,7 +14074,7 @@ public class MainEditorFrame extends JFrame {
       filterKernelFlatPreviewBtn = new JToggleButton();
       filterKernelFlatPreviewBtn.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
+          if (tinaController != null) {
             tinaController.filterKernelFlatPreviewBtn_clicked();
           }
         }
@@ -14169,94 +14165,6 @@ public class MainEditorFrame extends JFrame {
 
       antialiasPanel.add(tinaOptiXDenoiserBlendSlider);
 
-      tinaPostNoiseFilterCheckBox = new JCheckBox("Post noise reduction");
-      tinaPostNoiseFilterCheckBox.setToolTipText("Enable a filter to reduce noise after the render");
-      tinaPostNoiseFilterCheckBox.setBounds(674, 104, 169, 18);
-      tinaPostNoiseFilterCheckBox.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().postNoiseFilterCheckBox_changed();
-          }
-        }
-      });
-      tinaPostNoiseFilterCheckBox.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      antialiasPanel.add(tinaPostNoiseFilterCheckBox);
-
-      tinaPostNoiseThresholdField = new JWFNumberField();
-      tinaPostNoiseThresholdField.setMouseSpeed(0.1);
-      tinaPostNoiseThresholdField.setValueStep(0.05);
-      tinaPostNoiseThresholdField.setText("");
-      tinaPostNoiseThresholdField.setSize(new Dimension(100, 24));
-      tinaPostNoiseThresholdField.setPreferredSize(new Dimension(100, 24));
-      tinaPostNoiseThresholdField.setMaxValue(1.0);
-      tinaPostNoiseThresholdField.setLocation(new Point(584, 42));
-      tinaPostNoiseThresholdField.setLinkedMotionControlName("tinaPostNoiseThresholdSlider");
-      tinaPostNoiseThresholdField.setHasMinValue(true);
-      tinaPostNoiseThresholdField.setHasMaxValue(true);
-      tinaPostNoiseThresholdField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      tinaPostNoiseThresholdField.setEditable(true);
-      tinaPostNoiseThresholdField.setBounds(674, 125, 100, 24);
-      tinaPostNoiseThresholdField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            if (!tinaPostNoiseThresholdField.isMouseAdjusting() || tinaPostNoiseThresholdField.getMouseChangeCount() == 0) {
-              if (!tinaPostNoiseThresholdSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().postNoiseFilterThresholdREd_changed();
-          }
-        }
-      });
-
-      antialiasPanel.add(tinaPostNoiseThresholdField);
-
-      JLabel lblNoiseThreshold = new JLabel();
-      lblNoiseThreshold.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().postNoiseFilterThresholdREd_reset();
-          }
-        }
-      });
-
-      lblNoiseThreshold.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      lblNoiseThreshold.setText("Noise threshold");
-      lblNoiseThreshold.setToolTipText("Threshold for noise reduction: 0 (no noise reduction) to 1 (soften entire image)");
-      lblNoiseThreshold.setSize(new Dimension(94, 22));
-      lblNoiseThreshold.setPreferredSize(new Dimension(94, 22));
-      lblNoiseThreshold.setLocation(new Point(488, 42));
-      lblNoiseThreshold.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblNoiseThreshold.setBounds(565, 125, 107, 22);
-      antialiasPanel.add(lblNoiseThreshold);
-
-      tinaPostNoiseThresholdSlider = new JSlider();
-      tinaPostNoiseThresholdSlider.setMaximum(1000);
-      tinaPostNoiseThresholdSlider.setValue(0);
-      tinaPostNoiseThresholdSlider.setSize(new Dimension(220, 19));
-      tinaPostNoiseThresholdSlider.setPreferredSize(new Dimension(220, 19));
-      tinaPostNoiseThresholdSlider.setName("tinaPostNoiseThresholdSlider");
-      tinaPostNoiseThresholdSlider.setLocation(new Point(686, 42));
-      tinaPostNoiseThresholdSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaPostNoiseThresholdSlider.setBounds(776, 125, 220, 24);
-      tinaPostNoiseThresholdSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().postNoiseFilterThresholdSlider_stateChanged(e);
-          }
-        }
-      });
-      tinaPostNoiseThresholdSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-
-      antialiasPanel.add(tinaPostNoiseThresholdSlider);
-
       tinaFilterTypeCmb = new JComboBox();
       tinaFilterTypeCmb.setSize(new Dimension(125, 22));
       tinaFilterTypeCmb.setPreferredSize(new Dimension(125, 22));
@@ -14296,7 +14204,7 @@ public class MainEditorFrame extends JFrame {
 
       tinaFilterIndicatorCBx = new JCheckBox("Indicator (red=sharp, green=smooth, blue=low density, displays only at the next-quickrender)");
       tinaFilterIndicatorCBx.setToolTipText("Enable/disable the Adaptive filter indicator");
-      tinaFilterIndicatorCBx.setBounds(450, 147, 553, 18);
+      tinaFilterIndicatorCBx.setBounds(565, 127, 553, 18);
       tinaFilterIndicatorCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -20643,18 +20551,6 @@ public class MainEditorFrame extends JFrame {
 
   public JToggleButton getFilterKernelFlatPreviewBtn() {
     return filterKernelFlatPreviewBtn;
-  }
-
-  public JCheckBox getTinaPostNoiseFilterCheckBox() {
-    return tinaPostNoiseFilterCheckBox;
-  }
-
-  public JWFNumberField getTinaPostNoiseThresholdField() {
-    return tinaPostNoiseThresholdField;
-  }
-
-  public JSlider getTinaPostNoiseThresholdSlider() {
-    return tinaPostNoiseThresholdSlider;
   }
 
   public JWFNumberField getTinaOptiXDenoiserBlendField() {
