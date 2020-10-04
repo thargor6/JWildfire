@@ -68,8 +68,6 @@ public class AbstractFlameReader {
   public static final String ATTR_ROTATE = "rotate";
   public static final String ATTR_FILTER = "filter";
   public static final String ATTR_SPATIAL_OVERSAMPLE = "oversample";
-  public static final String ATTR_POST_NOISE_FILTER = "post_noise_filter";
-  public static final String ATTR_POST_NOISE_FILTER_THRESHOLD = "post_noise_filter_threshold";
   public static final String ATTR_AI_POST_DENOISER = "ai_post_denoiser";
   public static final String ATTR_POST_OPTIX_DENOISER = "post_optix_denoiser";
   public static final String ATTR_POST_OPTIX_DENOISER_BLEND = "post_optix_denoiser_blend";
@@ -327,12 +325,6 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_SPATIAL_OVERSAMPLE)) != null) {
       pFlame.setSpatialOversampling(Integer.parseInt(hs));
-    }
-    if ((hs = atts.get(ATTR_POST_NOISE_FILTER)) != null) {
-      pFlame.setPostNoiseFilter(Integer.parseInt(hs) == 1);
-    }
-    if ((hs = atts.get(ATTR_POST_NOISE_FILTER_THRESHOLD)) != null) {
-      pFlame.setPostNoiseFilterThreshold(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_POST_OPTIX_DENOISER)) != null) {
       pFlame.setAiPostDenoiser(AIPostDenoiserFactory.getBestAvailableDenoiserType(AIPostDenoiserType.OPTIX));

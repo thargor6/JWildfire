@@ -47,13 +47,11 @@ import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
-import org.jwildfire.create.tina.render.image.PostFilterImageThread;
 import org.jwildfire.create.tina.render.image.RenderHDRImageThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleScaledThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleThread;
 import org.jwildfire.create.tina.render.image.RenderImageThread;
 import org.jwildfire.create.tina.render.image.RenderZBufferThread;
-import org.jwildfire.create.tina.render.denoiser.OptixCmdLineAIPostDenoiser;
 import org.jwildfire.create.tina.render.postdof.PostDOFBuffer;
 import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -555,9 +553,6 @@ public class FlameRenderer {
     }
 
     renderImage(pImage);
-    if (flame.isPostNoiseFilter() && flame.getPostNoiseFilterThreshold() > MathLib.EPSILON) {
-      postFilterImage(pImage);
-    }
 
     AIPostDenoiserType postDenoiser = AIPostDenoiserFactory.getBestAvailableDenoiserType(flame.getAiPostDenoiser());
     if(!AIPostDenoiserType.NONE.equals(postDenoiser) &&
@@ -662,33 +657,6 @@ public class FlameRenderer {
       if (dofBuffer != null) {
         dofBuffer.renderToImage(pImage);
       }
-    }
-  }
-
-  private void postFilterImage(SimpleImage pImage) {
-    if (pImage != null) {
-      int threadCount = prefs.getTinaRenderThreads();
-      if (threadCount < 1 || pImage.getImageHeight() < 8 * threadCount) {
-        threadCount = 1;
-      }
-      int rowsPerThread = pImage.getImageHeight() / threadCount;
-      SimpleImage input = pImage.clone();
-      List<PostFilterImageThread> threads = new ArrayList<PostFilterImageThread>();
-      for (int i = 0; i < threadCount; i++) {
-        int startRow = i * rowsPerThread;
-        int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-        PostFilterImageThread thread = new PostFilterImageThread(startRow, endRow, input, pImage, flame.getPostNoiseFilterThreshold());
-        threads.add(thread);
-        if (threadCount > 1) {
-          Thread t = new Thread(thread);
-          t.setPriority(Thread.MIN_PRIORITY);
-          t.start();
-        }
-        else {
-          thread.run();
-        }
-      }
-      ThreadTools.waitForThreads(threadCount, threads);
     }
   }
 

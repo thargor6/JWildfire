@@ -199,7 +199,6 @@ public class FlamePreviewHelper implements IterationObserver {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
-        boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
         AIPostDenoiserType oldAIPostDenoiser = flame.getAiPostDenoiser();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -293,7 +292,6 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSampleDensity(oldSampleDensity);
           flame.setSpatialOversampling(oldSpatialOversampling);
-          flame.setPostNoiseFilter(oldPostNoiseFilter);
           flame.setAiPostDenoiser(oldAIPostDenoiser);
         }
       }
@@ -478,7 +476,6 @@ public class FlamePreviewHelper implements IterationObserver {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
-        boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
         AIPostDenoiserType oldAIPostDenoiser = flame.getAiPostDenoiser();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -515,7 +512,6 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSampleDensity(oldSampleDensity);
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSpatialOversampling(oldSpatialOversampling);
-          flame.setPostNoiseFilter(oldPostNoiseFilter);
           flame.setAiPostDenoiser(oldAIPostDenoiser);
         }
       }

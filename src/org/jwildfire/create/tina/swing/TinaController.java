@@ -636,9 +636,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSpatialOversamplingSlider = parameterObject.tinaSpatialOversamplingSlider;
     data.filterKernelPreviewRootPnl = parameterObject.filterKernelPreviewRootPnl;
     data.filterKernelFlatPreviewBtn = parameterObject.filterKernelFlatPreviewBtn;
-    data.tinaPostNoiseFilterCheckBox = parameterObject.tinaPostNoiseFilterCheckBox;
-    data.tinaPostNoiseThresholdField = parameterObject.tinaPostNoiseThresholdField;
-    data.tinaPostNoiseThresholdSlider = parameterObject.tinaPostNoiseThresholdSlider;
     data.tinaAIPostDenoiserCmb = parameterObject.tinaAIPostDenoiserCmb;
     data.tinaOptiXDenoiserBlendField = parameterObject.tinaOptiXDenoiserBlendField;
     data.tinaOptiXDenoiserBlendSlider = parameterObject.tinaOptiXDenoiserBlendSlider;

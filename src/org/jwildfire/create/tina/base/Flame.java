@@ -145,8 +145,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double spatialFilterLowDensity;
   private double sampleDensity;
   private boolean bgTransparency;
-  private boolean postNoiseFilter;
-  private double postNoiseFilterThreshold;
   private AIPostDenoiserType aiPostDenoiser;
   private double postOptiXDenoiserBlend;
 
@@ -350,8 +348,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     }
     spatialOversampling = Prefs.getPrefs().getTinaDefaultSpatialOversampling();
     spatialFilterIndicator = false;
-    postNoiseFilter = Prefs.getPrefs().isTinaDefaultPostNoiseFilter();
-    postNoiseFilterThreshold = Prefs.getPrefs().getTinaDefaultPostNoiseFilterThreshold();
     antialiasAmount = Prefs.getPrefs().getTinaDefaultAntialiasingAmount();
     antialiasRadius = Prefs.getPrefs().getTinaDefaultAntialiasingRadius();
     aiPostDenoiser = AIPostDenoiserFactory.getBestAvailableDenoiserType(Prefs.getPrefs().getTinaDefaultAIPostDenoiser());
@@ -833,8 +829,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     antialiasAmount = pFlame.antialiasAmount;
     antialiasRadius = pFlame.antialiasRadius;
     spatialOversampling = pFlame.spatialOversampling;
-    postNoiseFilter = pFlame.postNoiseFilter;
-    postNoiseFilterThreshold = pFlame.postNoiseFilterThreshold;
     aiPostDenoiser = pFlame.aiPostDenoiser;
     postOptiXDenoiserBlend = pFlame.postOptiXDenoiserBlend;
     foregroundOpacity = pFlame.foregroundOpacity;
@@ -919,7 +913,6 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(dimZDistance - pFlame.dimZDistance) > EPSILON) || !dimZDistanceCurve.isEqual(pFlame.dimZDistanceCurve) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
         (camDOFShape != pFlame.camDOFShape) || (spatialOversampling != pFlame.spatialOversampling) ||
-        (postNoiseFilter != pFlame.postNoiseFilter) || (fabs(postNoiseFilterThreshold - pFlame.postNoiseFilterThreshold) > EPSILON) ||
         (aiPostDenoiser != pFlame.aiPostDenoiser) || (fabs(postOptiXDenoiserBlend - pFlame.postOptiXDenoiserBlend) > EPSILON) ||
         (fabs(foregroundOpacity - pFlame.foregroundOpacity) > EPSILON) || !foregroundOpacityCurve.isEqual(pFlame.foregroundOpacityCurve) ||
         (fabs(camDOFScale - pFlame.camDOFScale) > EPSILON) || !camDOFScaleCurve.isEqual(pFlame.camDOFScaleCurve) ||
@@ -1643,7 +1636,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void applyFastOversamplingSettings() {
     setSpatialFilterRadius(0.0);
     setSpatialOversampling(1);
-    setPostNoiseFilter(false);
     setAiPostDenoiser(AIPostDenoiserType.NONE);
   }
 
@@ -1651,28 +1643,11 @@ public class Flame implements Assignable<Flame>, Serializable {
     Prefs prefs = Prefs.getPrefs();
     setSpatialFilterRadius(prefs.getTinaDefaultSpatialFilterRadius());
     setSpatialOversampling(getSolidRenderSettings().isSolidRenderingEnabled() ? DFLT_SOLID_SPATIAL_OVERSAMPLING : prefs.getTinaDefaultSpatialOversampling());
-    setPostNoiseFilter(prefs.isTinaDefaultPostNoiseFilter());
     setAiPostDenoiser(AIPostDenoiserFactory.getBestAvailableDenoiserType(Prefs.getPrefs().getTinaDefaultAIPostDenoiser()));
     setPostOptiXDenoiserBlend(prefs.getTinaDefaultPostOptiXDenoiserBlend());
   }
 
-  public boolean isPostNoiseFilter() {
-    return postNoiseFilter;
-  }
-
-  public void setPostNoiseFilter(boolean pPostNoiseFilter) {
-    postNoiseFilter = pPostNoiseFilter;
-  }
-
-  public double getPostNoiseFilterThreshold() {
-    return postNoiseFilterThreshold;
-  }
-
-  public void setPostNoiseFilterThreshold(double pPostNoiseFilterThreshold) {
-    postNoiseFilterThreshold = pPostNoiseFilterThreshold;
-  }
-
-  public AIPostDenoiserType getAiPostDenoiser() {
+ public AIPostDenoiserType getAiPostDenoiser() {
     return aiPostDenoiser;
   }
 
@@ -1966,5 +1941,18 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void setSpatialFilterLowDensity(double spatialFilterLowDensity) {
     this.spatialFilterLowDensity = spatialFilterLowDensity;
   }
+
+  // for script compatibility
+  @Deprecated
+  public void setPostNoiseFilter(boolean postNoiseFilter) {
+    // EMPTY
+  }
+
+  // for script compatibility
+  @Deprecated
+  public void setPostNoiseFilterThreshold (double postNoiseFilterThreshold) {
+    // EMPTY
+  }
+
 
 }

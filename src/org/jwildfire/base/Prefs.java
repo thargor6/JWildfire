@@ -131,8 +131,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
   static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.5";
-  static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
-  static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
   static final String KEY_TINA_DEFAULT_AI_POST_DENOISER = "tina.default.ai_post_denoiser.2";
   static final String KEY_TINA_DEFAULT_POST_OPTIX_DENOISER_BLEND = "tina.default.post_optix_denoiser_blend";
 
@@ -318,12 +316,6 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Default spatial oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
   private int tinaDefaultSpatialOversampling = 1;
-
-  @Property(description = "Default setting for applying a post-noise-filter to rendered images", category = PropertyCategory.TINA)
-  private boolean tinaDefaultPostNoiseFilter = false;
-
-  @Property(description = "Default threshold-setting for the post-noise-filter", category = PropertyCategory.TINA)
-  private double tinaDefaultPostNoiseFilterThreshold = 0.35;
 
   @Property(description = "Default setting for applying an AI-based denoiser to rendered final images (not all options are available on all platformss, in this case a fallback takes place)", category = PropertyCategory.TINA, editorClass = AIPostDenoiserTypeEditor.class)
   private AIPostDenoiserType tinaDefaultAIPostDenoiser = AIPostDenoiserType.OPTIX;
@@ -852,8 +844,6 @@ public class Prefs extends ManagedObject {
     tinaDefaultSpatialFilterRadius = pSrc.tinaDefaultSpatialFilterRadius;
     tinaDefaultFilterVisualisationFlat = pSrc.tinaDefaultFilterVisualisationFlat;
     tinaDefaultForegroundOpacity = pSrc.tinaDefaultForegroundOpacity;
-    tinaDefaultPostNoiseFilter = pSrc.tinaDefaultPostNoiseFilter;
-    tinaDefaultPostNoiseFilterThreshold = pSrc.tinaDefaultPostNoiseFilterThreshold;
     tinaDefaultAIPostDenoiser = pSrc.tinaDefaultAIPostDenoiser;
     tinaDefaultPostOptiXDenoiserBlend = pSrc.tinaDefaultPostOptiXDenoiserBlend;
 
@@ -1532,22 +1522,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultFilterVisualisationFlat(boolean pTinaDefaultFilterVisualisationFlat) {
     tinaDefaultFilterVisualisationFlat = pTinaDefaultFilterVisualisationFlat;
-  }
-
-  public boolean isTinaDefaultPostNoiseFilter() {
-    return tinaDefaultPostNoiseFilter;
-  }
-
-  public void setTinaDefaultPostNoiseFilter(boolean pTinaDefaultPostNoiseFilter) {
-    tinaDefaultPostNoiseFilter = pTinaDefaultPostNoiseFilter;
-  }
-
-  public double getTinaDefaultPostNoiseFilterThreshold() {
-    return tinaDefaultPostNoiseFilterThreshold;
-  }
-
-  public void setTinaDefaultPostNoiseFilterThreshold(double pTinaDefaultPostNoiseFilterThreshold) {
-    tinaDefaultPostNoiseFilterThreshold = pTinaDefaultPostNoiseFilterThreshold;
   }
 
   public AIPostDenoiserType getTinaDefaultAIPostDenoiser() {

@@ -681,8 +681,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaFilterIndicatorCBx, adapativeOptionsDisabled);
 
     enableControl(data.tinaSpatialOversamplingREd, false);
-    enableControl(data.tinaPostNoiseFilterCheckBox, false);
-    enableControl(data.tinaPostNoiseThresholdField, !data.tinaPostNoiseFilterCheckBox.isSelected());
     enableControl(data.tinaAIPostDenoiserCmb, false);
 
     {
@@ -756,8 +754,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
 
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0);
-      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
-      data.tinaPostNoiseFilterCheckBox.setSelected(getCurrFlame().isPostNoiseFilter());
       data.tinaAIPostDenoiserCmb.setSelectedItem(getCurrFlame().getAiPostDenoiser());
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaOptiXDenoiserBlendSlider, data.tinaOptiXDenoiserBlendField, "postOptiXDenoiserBlend", TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND);
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
@@ -1351,17 +1347,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
-  public void postNoiseFilterCheckBox_changed() {
-    if (!isNoRefresh()) {
-      Flame flame = getCurrFlame();
-      if (flame != null) {
-        owner.saveUndoPoint();
-        flame.setPostNoiseFilter(data.tinaPostNoiseFilterCheckBox.isSelected());
-        enableControls();
-      }
-    }
-  }
-
   public void filterIndicatorCheckBox_changed() {
     if (!isNoRefresh()) {
       Flame flame = getCurrFlame();
@@ -1371,14 +1356,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.refreshFlameImage(true, false, 1, true, true);
       }
     }
-  }
-
-  public void postNoiseFilterThresholdSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, false);
-  }
-
-  public void postNoiseFilterThresholdREd_changed() {
-    flameTextFieldChanged(data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, false);
   }
 
   public void tinaOptiXDenoiserBlendSlider_stateChanged(ChangeEvent e) {
@@ -2416,10 +2393,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void tinaOptiXDenoiserBlendField_reset() {
     flameTextFieldReset(data.tinaOptiXDenoiserBlendSlider, data.tinaOptiXDenoiserBlendField, "postOptiXDenoiserBlend", TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND, true);
-  }
-
-  public void postNoiseFilterThresholdREd_reset() {
-    flameTextFieldReset(data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, false);
   }
 
   public void solidRenderingAOIntensityREd_reset() {

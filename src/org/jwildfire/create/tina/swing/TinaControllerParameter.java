@@ -653,9 +653,6 @@ public class TinaControllerParameter {
   public JWFNumberField tinaSpatialOversamplingREd;
   public JSlider tinaSpatialOversamplingSlider;
   public JToggleButton filterKernelFlatPreviewBtn;
-  public JCheckBox tinaPostNoiseFilterCheckBox;
-  public JWFNumberField tinaPostNoiseThresholdField;
-  public JSlider tinaPostNoiseThresholdSlider;
   public JComboBox tinaAIPostDenoiserCmb;
   public JWFNumberField tinaOptiXDenoiserBlendField;
   public JSlider tinaOptiXDenoiserBlendSlider;
@@ -1214,8 +1211,7 @@ public class TinaControllerParameter {
       JWFNumberField pLeapMotionOffsetField, JButton pLeapMotionAddButton, JButton pLeapMotionDuplicateButton,
       JButton pLeapMotionDeleteButton, JButton pLeapMotionClearButton, JButton pLeapMotionResetConfigButton,
       JPanel pFilterKernelPreviewRootPnl, JWFNumberField pTinaSpatialOversamplingREd, JSlider pTinaSpatialOversamplingSlider,
-      JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
-      JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
+      JToggleButton pFilterKernelFlatPreviewBtn, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
       JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton,
       JToggleButton solidRenderingToggleBtn, JCheckBox tinaSolidRenderingEnableSSAOCBx, JWFNumberField tinaSolidRenderingSSAOIntensityREd,
       JSlider tinaSolidRenderingSSAOIntensitySlider, JWFNumberField tinaSolidRenderingAOSearchRadiusREd, JSlider tinaSolidRenderingAOSearchRadiusSlider,
@@ -1347,9 +1343,6 @@ public class TinaControllerParameter {
     tinaSpatialOversamplingREd = pTinaSpatialOversamplingREd;
     tinaSpatialOversamplingSlider = pTinaSpatialOversamplingSlider;
     filterKernelFlatPreviewBtn = pFilterKernelFlatPreviewBtn;
-    tinaPostNoiseFilterCheckBox = pTinaPostNoiseFilterCheckBox;
-    tinaPostNoiseThresholdField = pTinaPostNoiseThresholdField;
-    tinaPostNoiseThresholdSlider = pTinaPostNoiseThresholdSlider;
     foregroundOpacityField = pForegroundOpacityField;
     foregroundOpacitySlider = pForegroundOpacitySlider;
     scriptEditBtn = pScriptEditBtn;
