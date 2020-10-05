@@ -78,3 +78,5 @@ TODO.txt
 
 .idea/*
 out/*
+/target/production/JWildfire/
+/.gradle/
