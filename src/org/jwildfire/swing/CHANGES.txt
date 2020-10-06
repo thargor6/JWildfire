@@ -1,4 +1,8 @@
-V6.02 (15.09.2020)
+V6.03 (06.10.2020)
+ - removed the "scriptPath"-setting from the Prefs. This setting was nearly unused and was often confused with
+   "tinaJWFScriptPath"-setting (to set the path for flame-scripts)
+
+V6.02 (04.10.2020)
  - force to enter a valid file-extension in the file-dialogs, when saving a file under macOS, otherwise saving
    would fail later due to security reasons
  - removed the old post-denoiser at the Antialiasing/Filter-tab (it is recommended to use AI-denoiser instead)

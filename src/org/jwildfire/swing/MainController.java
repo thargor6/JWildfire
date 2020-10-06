@@ -402,25 +402,6 @@ public class MainController {
     return false;
   }
 
-  public void saveScript() throws Exception {
-    if (actionList.size() > 0) {
-      JFileChooser chooser = getScriptJFileChooser();
-      if (prefs.getOutputScriptPath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getOutputScriptPath()));
-        } catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showSaveDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        prefs.setLastOutputScriptFile(file);
-        String filename = Tools.forceFileExt(file.getAbsolutePath(), Tools.FILEEXT_JFX);
-        actionList.saveToFile(filename);
-      }
-    }
-  }
-
   public void replayScript() throws Exception {
     if (actionList.size() > 0) {
       String msg = "Do you really want to clear all buffers and replay the current script?";
@@ -466,35 +447,6 @@ public class MainController {
               }
               break;
           }
-          mainFrame.repaint();
-        }
-      }
-    }
-  }
-
-  public void loadScript() throws Exception {
-    String msg = "Do you really want to clear all buffers and the current script?";
-    String title = msg;
-    if (((getBufferList().size() == 0) && (actionList.size() == 0))
-        || (JOptionPane.showConfirmDialog(mainFrame, msg, title, JOptionPane.YES_NO_OPTION)
-            == JOptionPane.YES_OPTION)) {
-      JFileChooser chooser = getScriptJFileChooser();
-      if (prefs.getInputScriptPath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputScriptPath()));
-        } catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(windowMenu) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        try {
-          prefs.setLastInputScriptFile(file);
-          clearAllBuffers();
-          actionList.clear();
-          actionList.loadFromFile(file.getAbsolutePath());
-        } finally {
-          refreshWindowMenu();
           mainFrame.repaint();
         }
       }

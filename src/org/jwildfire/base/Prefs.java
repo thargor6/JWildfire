@@ -41,7 +41,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_LOOK_AND_FEEL = "general.look_and_feel.3";
   static final String KEY_GENERAL_LOOK_AND_FEEL_THEME = "general.look_and_feel.theme.3";
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
-  static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
 
   static final String KEY_GENERAL_SHOW_TIPS_AT_STARTUP = "general.show_tips_at_startup";
@@ -179,11 +178,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_IFLAMES_LIBRARY_PATH_FLAMES = "iflames.library_path.flames";
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
   static final String KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP = "iflames.load_library_at_startup";
-
-  @Property(description = "Script drawer for the animation editor (please note that this NOT for scripts of the flame-editor)", category = PropertyCategory.MISC)
-  private String scriptPath = null;
-  private String lastInputScriptPath = null;
-  private String lastOutputScriptPath = null;
 
   @Property(description = "Drawer for thumbnail-cache (restart of program after change required)", category = PropertyCategory.GENERAL)
   private String thumbnailPath = null;
@@ -541,24 +535,12 @@ public class Prefs extends ManagedObject {
   @Property(description = "Quality for preview rendering", category = PropertyCategory.TINA)
   private int tinaRenderPreviewQuality = 100;
 
-  public String getInputScriptPath() {
-    return lastInputScriptPath != null ? lastInputScriptPath : scriptPath;
-  }
-
   public String getInputSoundFilePath() {
     return lastInputSoundFilePath != null ? lastInputSoundFilePath : soundFilePath;
   }
 
-  public String getOutputScriptPath() {
-    return lastOutputScriptPath != null ? lastOutputScriptPath : scriptPath;
-  }
-
   public String getOutputMovieFlamesPath() {
     return lastOutputMovieFlamesPath != null ? lastOutputMovieFlamesPath : movieFlamesPath;
-  }
-
-  public void setScriptPath(String pScriptPath) {
-    this.scriptPath = pScriptPath;
   }
 
   public String getInputImagePath() {
@@ -569,24 +551,10 @@ public class Prefs extends ManagedObject {
     return lastOutputImagePath != null ? lastOutputImagePath : imagePath;
   }
 
-  public void setLastInputScriptFile(File pFile) {
-    lastInputScriptPath = pFile.getParent();
-    if (imagePath == null || imagePath.length() == 0) {
-      imagePath = lastInputScriptPath;
-    }
-  }
-
   public void setLastInputSoundFile(File pFile) {
     lastInputSoundFilePath = pFile.getParent();
     if (soundFilePath == null || soundFilePath.length() == 0) {
       soundFilePath = lastInputSoundFilePath;
-    }
-  }
-
-  public void setLastOutputScriptFile(File pFile) {
-    lastOutputScriptPath = pFile.getParent();
-    if (scriptPath == null || scriptPath.length() == 0) {
-      scriptPath = lastOutputScriptPath;
     }
   }
 
@@ -740,15 +708,8 @@ public class Prefs extends ManagedObject {
     return sunflowScenePath;
   }
 
-  public String getScriptPath() {
-    return scriptPath;
-  }
-
   public void assign(Prefs pSrc) {
     thumbnailPath = pSrc.thumbnailPath;
-    scriptPath = pSrc.scriptPath;
-    lastInputScriptPath = pSrc.lastInputScriptPath;
-    lastOutputScriptPath = pSrc.lastOutputScriptPath;
     imagePath = pSrc.imagePath;
     lastInputImagePath = pSrc.lastInputImagePath;
     lastOutputImagePath = pSrc.lastOutputImagePath;
