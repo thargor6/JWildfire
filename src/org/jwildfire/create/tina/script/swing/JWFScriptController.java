@@ -28,10 +28,7 @@ import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.palette.RGBColor;
-import org.jwildfire.create.tina.swing.ScriptEditDialog;
-import org.jwildfire.create.tina.swing.StandardDialogs;
-import org.jwildfire.create.tina.swing.TinaController;
-import org.jwildfire.create.tina.swing.TinaControllerData;
+import org.jwildfire.create.tina.swing.*;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.swing.ErrorHandler;
 
@@ -231,9 +228,12 @@ public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
             throw new Exception("Unknown node type <" + selNode.getClass() + ">");
           }
 
+          FileDialogTools.ensureFileAccess(new java.awt.Frame(), rootPanel, scriptFilename);
           if (new File(scriptFilename).exists()) {
             throw new Exception("File <" + scriptFilename + "> already exists");
           }
+
+          FileDialogTools.ensureFileAccess(new java.awt.Frame(), rootPanel, descFilename);
           if (new File(descFilename).exists()) {
             throw new Exception("File <" + descFilename + "> already exists");
           }
@@ -1037,6 +1037,8 @@ public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
               throw new Exception("Invalid script-drawer. Please enter a valid script-path in the Preferences-Window (property \"tinaJWFScriptPath\")");
             }
             File destinationFile = new File(baseDrawer, scriptName + extension);
+
+            FileDialogTools.ensureFileAccess(new java.awt.Frame(), rootPanel, destinationFile);
             if (!destinationFile.exists() || JOptionPane.showConfirmDialog(null,
                     "The destination-file \"" + scriptName + extension + "\"already exists. Do you want to overwrite it?",
                     "Warning",

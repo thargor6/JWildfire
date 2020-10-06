@@ -165,6 +165,10 @@ public class GradientController {
       System.out.println(path);
       File oldFile = new File(path, (String) getUserObject());
       File newFile = new File(path, pName);
+
+      FileDialogTools.ensureFileAccess(new java.awt.Frame(), new JPanel(), oldFile);
+      FileDialogTools.ensureFileAccess(new java.awt.Frame(), new JPanel(), newFile);
+
       if (newFile.exists()) {
         throw new RuntimeException("Destination file <" + pName + "> already exists ");
       }
@@ -239,6 +243,9 @@ public class GradientController {
         GradientUserNode parentNode =
             userGradientsRootNode = new GradientUserNode("Your gradients", null);
         root.add(parentNode);
+        if (new File(baseDrawer).exists()) {
+          FileDialogTools.ensureFileAccess(new Frame(), rootPanel, baseDrawer);
+        }
         scanUserGradients(baseDrawer, parentNode);
       }
     }
@@ -502,7 +509,7 @@ public class GradientController {
           } else {
             newDir = new File(gradientNode.getAbsolutePath(), newName);
           }
-
+          FileDialogTools.ensureFileAccess(new java.awt.Frame(), new JPanel(), newDir);
           if (!newDir.mkdir()) {
             throw new RuntimeException(
                 "The directory <" + newDir.getAbsolutePath() + "> could not be created");

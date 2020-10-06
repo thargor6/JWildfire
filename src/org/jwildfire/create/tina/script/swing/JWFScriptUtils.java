@@ -20,6 +20,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
+import org.jwildfire.create.tina.swing.FileDialogTools;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -133,6 +134,9 @@ public class JWFScriptUtils {
       if (baseDrawer == null || baseDrawer.equals("") || baseDrawer.equals(".") || baseDrawer.equals("/") || baseDrawer.equals("\\")) {
         root.add(new InvalidScriptFolderNode());
       } else {
+        if(new File(baseDrawer).exists()) {
+          FileDialogTools.ensureFileAccess(new java.awt.Frame(), scriptTree, baseDrawer);
+        }
         DefaultMutableTreeNode userScriptsRootNode;
         DefaultMutableTreeNode parentNode = userScriptsRootNode = new JWFScriptFolderNode("Your scripts", baseDrawer, true);
         if(userScriptsRootNodeConsumer!=null) {

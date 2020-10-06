@@ -1,4 +1,7 @@
 V6.03 (06.10.2020)
+ - several fixes regarding file-access under macOS Catalina, especially:
+     - user-scripts- and user-gradients can be accessed now
+     - creating new scripts and and gradients works now
  - removed the "scriptPath"-setting from the Prefs. This setting was nearly unused and was often confused with
    "tinaJWFScriptPath"-setting (to set the path for flame-scripts)
 

@@ -45,11 +45,11 @@ public class FileDialogTools {
     visitedFolders.add(path);
   }
 
-  public static void ensureFileAccess(Frame frame, Component parent, String path) {
-    ensureFileAccess(frame, parent, new File(path));
+  public static boolean ensureFileAccess(Frame frame, Component parent, String path) {
+    return ensureFileAccess(frame, parent, new File(path));
   }
 
-  public static void ensureFileAccess(Frame frame, Component parent, File file) {
+  public static boolean ensureFileAccess(Frame frame, Component parent, File file) {
     if (Tools.OSType.MAC == Tools.getOSType()) {
       String path = getFolderPath(file);
       if (!visitedFolders.contains(path)) {
@@ -60,20 +60,30 @@ public class FileDialogTools {
               parent,
               "Please select the folder <"
                   + path
-                  + "> in the following dialog in order to obtain write access to it");
+                  + "> in the following dialog in order to access it from within JWildfire");
           String selectPath =
               selectDirectory(frame, parent, "Please select the folder <" + path + ">", path);
           if (selectPath != null) {
             String selectedFolderPath = getFolderPath(new File(selectPath));
             visitedFolders.add(selectedFolderPath);
             if (selectedFolderPath.equals(path)) {
-              break;
+              return true;
             } else {
               i++;
             }
           }
+          else {
+            // Cancelled
+            return false;
+          }
         }
+        return false;
+      } else {
+        return true;
       }
+    }
+    else {
+      return true;
     }
   }
 
@@ -205,7 +215,7 @@ public class FileDialogTools {
         if(!fileDialog.getFilenameFilter().accept(fileDialog.getFiles()[0].getParentFile(), fileDialog.getFiles()[0].getName())) {
           StandardDialogs.message(
                   parent,
-                  "Please specify a filename including a file-extension, e.g. \"" + createFileNamePreset(fileExt) +"\"");
+                  "Please specify a filename including a file-extension, e.g. \"" + createFileNamePreset("Test", fileExt) +"\"");
           return false;
         }
         else {
@@ -218,12 +228,16 @@ public class FileDialogTools {
     return false;
   }
 
-  private static String createFileNamePreset(String fileExt) {
+  private static String createFileNamePreset(String prefix, String fileExt) {
     if (fileExt != null && fileExt.length() > 0) {
-      return "Untitled" + "." + fileExt;
+      return prefix + "." + fileExt;
     } else {
-      return "Untitled";
+      return prefix;
     }
+  }
+
+  private static String createFileNamePreset(String fileExt) {
+    return createFileNamePreset("Untitled", fileExt);
   }
 
   public static File selectMapFileForSave(
