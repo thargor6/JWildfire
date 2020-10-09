@@ -158,6 +158,13 @@ public class SimpleImage implements WFImage, Cloneable {
       return getBufferedImg().getRGB(pX, pY);
   }
 
+  public int getAValueIgnoreBounds(int pX, int pY) {
+    if ((pX < 0) || (pX >= imageWidth) || (pY < 0) || (pY >= imageHeight))
+      return 0;
+    else
+      return getAValue(pX, pY);
+  }
+
   public int getRValueIgnoreBounds(int pX, int pY) {
     if ((pX < 0) || (pX >= imageWidth) || (pY < 0) || (pY >= imageHeight))
       return 0;

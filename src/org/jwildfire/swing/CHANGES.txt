@@ -1,3 +1,7 @@
+V6.04 (09.10.2020)
+ - when using a denoiser, the alpha channel (transparent background) is preserved
+ - made the main preview a little bit more responsive
+
 V6.03 (06.10.2020)
  - several fixes regarding file-access under macOS Catalina, especially:
      - user-scripts- and user-gradients can be accessed now

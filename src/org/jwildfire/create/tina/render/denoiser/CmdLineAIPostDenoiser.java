@@ -2,6 +2,7 @@ package org.jwildfire.create.tina.render.denoiser;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.GradientCreator;
+import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
@@ -41,6 +42,7 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
             crop.setHeight(img.getImageHeight());
             crop.transformImage(denoisedImage);
           }
+          applyAlpha(img, denoisedImage);
           return denoisedImage;
         } finally {
           try {
@@ -58,6 +60,19 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
       }
     } catch (Exception ex) {
       throw new RuntimeException(ex);
+    }
+  }
+
+  private void applyAlpha(SimpleImage src, SimpleImage dest) {
+    Pixel pixel = new Pixel();
+    for(int i=0;i<dest.getImageHeight();i++) {
+      for(int j=0;j<dest.getImageWidth();j++) {
+        int alpha=src.getAValueIgnoreBounds(j,i);
+        if(alpha!=255) {
+          pixel.setARGBValue(dest.getARGBValue(j,i));
+          dest.setARGB(j,i, alpha, pixel.r, pixel.g, pixel.b);
+        }
+      }
     }
   }
 
