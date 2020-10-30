@@ -324,7 +324,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     SwingUtilities.invokeLater(new Runnable() {
 
       public void run() {
-        JFrame frame = new JFrame(Tools.APP_TITLE + "Applet" + " " + Tools.APP_VERSION);
+        JFrame frame = new JFrame(Tools.APP_TITLE + "Applet" + " " + Tools.getAppVersion());
         JWildfireApplet applet = new JWildfireApplet();
         frame.getContentPane().add(applet);
         frame.setSize(640, 480);

@@ -22,7 +22,7 @@ public class MapGradientWriter {
       if (i == 0) {
         sb.append(" \"");
         sb.append(pGradient.getFlam3Name());
-        sb.append("\", created with " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
+        sb.append("\", created with " + Tools.APP_TITLE + " " + Tools.getAppVersion());
       }
       sb.append("\n");
     }

@@ -178,7 +178,7 @@ public class WelcomeFrame extends JFrame {
       }
     });
     getContentPane().add(panel_2, BorderLayout.CENTER);
-    setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
+    setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.getAppVersion());
     setBounds(440, 140, 490, 498);
     setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     setResizable(true);

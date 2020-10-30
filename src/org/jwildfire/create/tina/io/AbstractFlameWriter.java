@@ -279,7 +279,7 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr(ATTR_SMOOTH_GRADIENT, pFlame.getFirstLayer().isSmoothGradient() ? "1" : "0"));
     }
 
-    attrList.add(xb.createAttr("version", Tools.APP_TITLE + " " + Tools.APP_VERSION));
+    attrList.add(xb.createAttr("version", Tools.APP_TITLE + " " + Tools.getAppVersion()));
     attrList.add(xb.createAttr("size", pFlame.getWidth() + " " + pFlame.getHeight()));
     attrList.add(xb.createAttr("center", pFlame.getCentreX() + " " + pFlame.getCentreY()));
     attrList.add(xb.createAttr("scale", pFlame.getPixelsPerUnit()));

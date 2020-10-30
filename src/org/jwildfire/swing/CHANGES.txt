@@ -1,6 +1,12 @@
-V6.04 (09.10.2020)
+V6.05 (21.10.2020)
+ - new Steam Edition for more simple distribution on Windows (and maybe later Linux)
+
+V6.04 (17.10.2020)
  - when using a denoiser, the alpha channel (transparent background) is preserved
  - made the main preview a little bit more responsive
+ - fixed a bug in the mp4-encoder (causing an java.lang.ArrayIndexOutOfBoundsException)
+ - added some simple heuristics to add the name of the script-author to the title of the flame,
+   when using the RunRandomScript-random-flame-generator
 
 V6.03 (06.10.2020)
  - several fixes regarding file-access under macOS Catalina, especially:

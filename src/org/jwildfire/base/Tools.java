@@ -57,8 +57,9 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "V6.03 (06.10.2020)";
+  private static final String APP_VERSION = "V6.05 (21.10.2020)";
 
+  public static final boolean STEAM_EDITION = false;
   public static final boolean SPECIAL_VERSION = false;
 
   public static final int MAX_SPATIAL_OVERSAMPLING = 6;
@@ -472,6 +473,10 @@ public class Tools {
   public static boolean isMovieFile(String absolutePath) {
     String lname = absolutePath != null ? absolutePath.toLowerCase() : "";
     return lname.endsWith(FILEEXT_MP4);
+  }
+
+  public static String getAppVersion() {
+    return STEAM_EDITION ? String.format("%s Steam Edition", APP_VERSION) : APP_VERSION;
   }
 
   public static class XMLAttributes {

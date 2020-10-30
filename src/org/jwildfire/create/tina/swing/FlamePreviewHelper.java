@@ -655,7 +655,7 @@ public class FlamePreviewHelper implements IterationObserver {
     }
   }
 
-  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 0;
+  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 3;
   private final static int IMAGE_UPDATE_INC_INTERVAL = 2;
   private final static int MAX_UPDATE_INC_INTERVAL = 200;
 
@@ -725,11 +725,13 @@ public class FlamePreviewHelper implements IterationObserver {
                 replaceImageFlag = true;
               }
               currQuality = threads.getRenderThreads().get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
-              if (currQuality > 0.025) {
+              if (currQuality > 0.075) {
                 if (currQuality < 0.5)
                   currQuality *= 10;
                 else if (currQuality < 1.0)
                   currQuality *= 5;
+                else if (currQuality < 2.0)
+                  currQuality *= 2;
                 for (AbstractRenderThread thread : threads.getRenderThreads()) {
                   thread.getTonemapper().setDensity(currQuality);
                 }

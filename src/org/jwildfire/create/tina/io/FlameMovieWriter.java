@@ -60,7 +60,7 @@ public class FlameMovieWriter {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
-    attrList.add(xb.createAttr(ATTR_APPLICATION, Tools.APP_TITLE + " " + Tools.APP_VERSION));
+    attrList.add(xb.createAttr(ATTR_APPLICATION, Tools.APP_TITLE + " " + Tools.getAppVersion()));
     attrList.add(xb.createAttr(ATTR_MOVIE_VERSION, MOVIE_VERSION));
 
     for (int i = 0; i < pMovie.getGlobalScripts().length; i++) {

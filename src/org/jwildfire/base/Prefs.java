@@ -130,7 +130,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
   static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.5";
-  static final String KEY_TINA_DEFAULT_AI_POST_DENOISER = "tina.default.ai_post_denoiser.2";
+  static final String KEY_TINA_DEFAULT_AI_POST_DENOISER = "tina.default.ai_post_denoiser.3";
   static final String KEY_TINA_DEFAULT_POST_OPTIX_DENOISER_BLEND = "tina.default.post_optix_denoiser_blend";
 
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";

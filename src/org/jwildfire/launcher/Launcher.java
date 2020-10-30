@@ -159,7 +159,7 @@ public class Launcher {
   private JTextField uiScaleEdit;
 
   private void loadImages() {
-    frame.setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
+    frame.setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.getAppVersion());
     // Load logo
     try {
       SimpleImage img = getImage(Tools.SPECIAL_VERSION ? "logo_special.png" : "logo.png");

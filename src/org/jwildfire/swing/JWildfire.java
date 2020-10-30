@@ -119,7 +119,14 @@ public class JWildfire extends JApplet {
 
     helpInternalFrames = new ArrayList<>();
     helpInternalFrames.add(new DefaultJFrameHolder<>(SystemInfoFrame.class, this, WindowPrefs.WINDOW_SYSTEMINFO, "System Information"));
-    helpInternalFrames.add(new DefaultJFrameHolder<>(WelcomeFrame.class, this, WindowPrefs.WINDOW_WELCOME, "Welcome to " + Tools.APP_TITLE));
+    if (!Tools.STEAM_EDITION) {
+      helpInternalFrames.add(
+          new DefaultJFrameHolder<>(
+              WelcomeFrame.class,
+              this,
+              WindowPrefs.WINDOW_WELCOME,
+              "Welcome to " + Tools.APP_TITLE));
+    }
     helpInternalFrames.add(new DefaultJFrameHolder<>(ListOfChangesFrame.class, this, WindowPrefs.WINDOW_LIST_OF_CHANGES, "List of changes"));
     helpInternalFrames.add(new DefaultJFrameHolder<>(GPURenderInfoFrame.class, this, WindowPrefs.WINDOW_GPU_RENDERING, "GPU rendering"));
     helpInternalFrames.add(new DefaultJFrameHolder<>(AIPostDenoiserInfoFrame.class, this, WindowPrefs.WINDOW_AI_POST_DENOISER_INFO, "Supported AI-Post-Denoisers"));
@@ -275,7 +282,7 @@ public class JWildfire extends JApplet {
     }
 
     try {
-      getJFrame(MainEditorFrame.class).setTitle("Welcome to " + Tools.APP_TITLE+" "+Tools.APP_VERSION+"!");
+      getJFrame(MainEditorFrame.class).setTitle("Welcome to " + Tools.APP_TITLE+" "+ Tools.getAppVersion() +"!");
       getJFrame(MainEditorFrame.class).toFront();
     }
     catch (Exception ex) {
