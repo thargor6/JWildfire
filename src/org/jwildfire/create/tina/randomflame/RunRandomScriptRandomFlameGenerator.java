@@ -156,6 +156,15 @@ public class RunRandomScriptRandomFlameGenerator extends RandomFlameGenerator {
       scriptFolder = null;
     }
 
+    if(!isUserScript) {
+      if(scriptName.startsWith("YU-") || scriptName.startsWith("UG-") || scriptName.startsWith("SX ") || scriptName.startsWith("LU-") || scriptName.startsWith("HB ")) {
+        scriptName+=", by Michael Bourne";
+      }
+      else if(scriptName.endsWith(" BS")) {
+        scriptName+=", by Brad Stefanov";
+      }
+    }
+
     if(scriptFolder==null) {
       return getName() + "[" + scriptName + "]" + " - " + flame.hashCode();
     }
