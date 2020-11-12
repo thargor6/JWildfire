@@ -940,6 +940,9 @@ public class VariationFuncList {
     
     registerVariationFunc(Glitchy2Func.class);	  
 	  
+    registerVariationFunc(Hypertile3DbFunc.class);
+    registerVariationFunc(Hypertile3D2bFunc.class);  	  
+	  
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
