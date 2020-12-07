@@ -941,7 +941,8 @@ public class VariationFuncList {
     registerVariationFunc(Glitchy2Func.class);	  
 	  
     registerVariationFunc(Hypertile3DbFunc.class);
-    registerVariationFunc(Hypertile3D2bFunc.class);  	  
+    registerVariationFunc(Hypertile3D2bFunc.class);  
+    registerVariationFunc(PDJ3DFunc.class);	  
 	  
 
     resolvedAliasMap = new HashMap<>();
