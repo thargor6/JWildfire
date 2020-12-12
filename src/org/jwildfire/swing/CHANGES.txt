@@ -1,3 +1,12 @@
+V6.06 (12.12.2020)
+ - new variations:
+     -hypertile3D2b by Brad Stefanov
+     -hypertile3Db by Brad Stefanov
+     -pdj3D by Brad Stefanov
+ - the advanced code editor (which is used for editing scripts or large text) is now disabled per default
+   (which works better for dark themes). You may activate it by setting the property tinaAdvancedCodeEditor
+   in the Preferences to true.
+
 V6.05 (21.10.2020)
  - new Steam Edition for more simple distribution on Windows (and maybe later Linux)
 

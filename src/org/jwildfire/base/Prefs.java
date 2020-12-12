@@ -120,7 +120,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_CONTROLS_STYLE = "tina.editor.controls.style";
   static final String KEY_TINA_EDITOR_GRID_SIZE = "tina.editor.grid_size";
 
-  static final String KEY_TINA_ADVANCED_CODE_EDITOR = "tina.advanced_code_editor";
+  static final String KEY_TINA_ADVANCED_CODE_EDITOR = "tina.advanced_code_editor.2";
   static final String KEY_TINA_ADVANCED_CODE_EDITOR_COLOR_FIX = "tina.advanced_code_editor_color_fix";
   static final String KEY_TINA_ADVANCED_CODE_EDITOR_FONT_SIZE = "tina.advanced_code_editor_font_size.2";
 
@@ -223,7 +223,7 @@ public class Prefs extends ManagedObject {
   private boolean iflamesLoadLibraryAtStartup = false;
 
   @Property(description = "Use an advanced editor with syntax-highlighting for editing scripts and custom variations. May not work on all systems and may not look good with all themes, so you can turn it off. A change of this property requires a program-restart", category = PropertyCategory.TINA)
-  private boolean tinaAdvancedCodeEditor = true;
+  private boolean tinaAdvancedCodeEditor = false;
 
   @Property(description = "Make background color of advanced code editor white, overriding any look and feel settings. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
   private boolean tinaAdvancedCodeEditorColorFix = true;
