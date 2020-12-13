@@ -60,7 +60,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
@@ -70,7 +69,6 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
@@ -99,6 +97,7 @@ import org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderOutputType;
+import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.quilt.QuiltFlameRendererFrame;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
@@ -1544,56 +1543,7 @@ public class MainEditorFrame extends JFrame {
       });
       panel_3.add(leapMotionClearButton);
       panel_1.add(getPanel_111(), BorderLayout.CENTER);
-
-      JPanel panel_1_1 = new JPanel();
-      tinaSouthTabbedPane.addTab("Randomize", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")), panel_1_1, null);
-      panel_1_1.setLayout(null);
-
-      randomizeBtn = new JButton();
-      randomizeBtn.setBounds(180, 24, 213, 24);
-      randomizeBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      panel_1_1.add(randomizeBtn);
-      randomizeBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.randomizeBtn_clicked();
-        }
-      });
-      randomizeBtn.setToolTipText("Randomize random parameters of the current flame");
-      randomizeBtn.setText("Randomize random settings");
-      randomizeBtn.setSelected(false);
-      randomizeBtn.setPreferredSize(new Dimension(42, 24));
-      panel_1_1.add(getBokehBtn());
-
-      JButton btnWfld = new JButton();
-      btnWfld.setBounds(180, 66, 213, 24);
-      panel_1_1.add(btnWfld);
-      btnWfld.setToolTipText("Randomize all weighting-field-settings, either of the whole fractal or the selected transform");
-      btnWfld.setText("Randomize weighting-fields");
-
-      btnWfld.setMnemonic(KeyEvent.VK_W);
-      btnWfld.setPreferredSize(new Dimension(72, 36));
-      btnWfld.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-
-      JPanel panel_8 = new JPanel();
-      panel_8.setBorder(new TitledBorder(null, "Hints", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      panel_8.setBounds(567, 6, 593, 142);
-      panel_1_1.add(panel_8);
-      panel_8.setLayout(new BorderLayout(0, 0));
-
-      JScrollPane scrollPane = new JScrollPane();
-      panel_8.add(scrollPane, BorderLayout.CENTER);
-
-      randomizersHintPane = new JTextPane();
-      scrollPane.setViewportView(randomizersHintPane);
-      randomizersHintPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 12));
-      randomizersHintPane.setEditable(false);
-      randomizersHintPane.setBackground(SystemColor.menu);
-      btnWfld.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.weightMapRandomizeAllBtn_clicked(getWeightMapEditWholeFractalCBx().isSelected());
-        }
-      });
-
+      tinaSouthTabbedPane.addTab("Quick mutations", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/lightbulb.png")), getQuickMutationMainPanel(), null);
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -7285,6 +7235,7 @@ public class MainEditorFrame extends JFrame {
     initWeightMapInputTypeCmb(getWeightingFieldInputCmb());
     initRandomWeightingFieldGenCmb(getRandomWeightingFieldCmb());
     initAIPostDenoiserCmb(getTinaAIDenoiserCmb());
+    MutaGenController.refreshTrendCmb(getQuickMutationTypeCmb(), null);
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -7414,7 +7365,7 @@ public class MainEditorFrame extends JFrame {
         getImportScriptBtn(),
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
-        getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(),
+        getGradientsList(), getBackgroundColorIndicatorBtn(),
         getTinaPaletteFadeColorsCBx(), getTinaPaletteUniformWidthCBx(), getLayerWeightEd(), getLayerDensityREd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(), getLayerExtractBtn(),
         getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
         getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getMotionBlurLengthField(), getMotionBlurLengthSlider(),
@@ -7434,7 +7385,6 @@ public class MainEditorFrame extends JFrame {
         getXFormModContrastREd(), getXFormModContrastSlider(), getXFormModContrastSpeedREd(), getXFormModContrastSpeedSlider(),
         getXFormModSaturationREd(), getXFormModSaturationSlider(), getXFormModSaturationSpeedREd(), getXFormModSaturationSpeedSlider(),
         getBtnAllSave());
-
     params.setParams3(getChannelMixerResetBtn(), getChannelMixerModeCmb(),
         getChannelMixerRedRedRootPanel(), getChannelMixerRedGreenRootPanel(), getChannelMixerRedBlueRootPanel(), getChannelMixerGreenRedRootPanel(),
         getChannelMixerGreenGreenRootPanel(), getChannelMixerGreenBlueRootPanel(), getChannelMixerBlueRedRootPanel(), getChannelMixerBlueGreenRootPanel(),
@@ -7442,7 +7392,7 @@ public class MainEditorFrame extends JFrame {
         getDofDOFFadeREd(), getDofDOFFadeSlider(), getDofDOFParam1REd(), getDofDOFParam1Slider(), getDofDOFParam1Lbl(), getDofDOFParam2REd(),
         getDofDOFParam2Slider(), getDofDOFParam2Lbl(), getDofDOFParam3REd(), getDofDOFParam3Slider(), getDofDOFParam3Lbl(), getDofDOFParam4REd(),
         getDofDOFParam4Slider(), getDofDOFParam4Lbl(), getDofDOFParam5REd(), getDofDOFParam5Slider(), getDofDOFParam5Lbl(), getDofDOFParam6REd(),
-        getDofDOFParam6Slider(), getDofDOFParam6Lbl(), getBokehBtn(),
+        getDofDOFParam6Slider(), getDofDOFParam6Lbl(),
         getResetCameraSettingsBtn(), getResetDOFSettingsButton(), getResetBokehOptionsButton(), getResetColoringOptionsButton(),
         getResetAntialiasOptionsButton(), getResetPostBlurSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
         getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
@@ -7504,7 +7454,7 @@ public class MainEditorFrame extends JFrame {
         getWeightingFieldParam04Cmb(), getWeightingFieldParam04Lbl(), getWeightingFieldParam05REd(), getWeightingFieldParam05Lbl(), getWeightingFieldParam06REd(), getWeightingFieldParam06Lbl(),
         getWeightingFieldParam07REd(), getWeightingFieldParam07Lbl(), getWeightingFieldParam08Cmb(), getWeightingFieldParam08Lbl(), getWeightingFieldPreviewImgRootPanel(),
         getTinaAIDenoiserCmb(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider(), getTinaOptixDenoiseButton(),
-        getTinaAIPostDenoiseExternalImageBtn());
+        getTinaAIPostDenoiseExternalImageBtn(), getQuickMutationTypeCmb(), getQuickMutationBatchSizeEdit(), getQuickMutationButton(), getQuickMutationProgressBar(), getQuickMutationPanel());
 
     tinaController = new TinaController(params);
 
@@ -7681,10 +7631,7 @@ public class MainEditorFrame extends JFrame {
 
       tinaController.refreshMacroButtonsPanel();
 
-      tinaController.initRandomizerHintsPanel(getRandomizersHintPane());
-
       getMotionCurveEditModeButton().setSelected(pPrefs.isTinaDefaultAnimationControlsEnabled());
-
     }
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
@@ -12745,7 +12692,6 @@ public class MainEditorFrame extends JFrame {
   private JPanel panel_70;
   private JButton gradientSaveBtn;
   private JButton backgroundColorIndicatorBtn;
-  private JButton randomizeBtn;
   private JPanel panel_73;
   private JCheckBox tinaPaletteFadeColorsCBx;
   private JCheckBox tinaPaletteUniformWidthCBx;
@@ -12899,7 +12845,6 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField dofDOFParam6REd;
   private JWFNumberField dofDOFAngleREd;
   private JWFNumberField dofDOFFadeREd;
-  private JButton bokehBtn;
   private JButton resetCameraSettingsBtn;
   private JButton resetDOFSettingsButton;
   private JButton resetBokehOptionsButton;
@@ -13209,7 +13154,6 @@ public class MainEditorFrame extends JFrame {
   private JComboBox randomWeightingFieldCmb;
   private JSeparator separator_1;
   private JButton button_2;
-  private JTextPane randomizersHintPane;
   private JButton deleteKeyFrameButton;
   private JButton gotoPrevKeyFrameButton;
   private JButton gotoNextKeyFrameButton;
@@ -13217,6 +13161,13 @@ public class MainEditorFrame extends JFrame {
   private JComboBox tinaAIDenoiserCmb;
   private JLabel lblPostDenoiser;
   private JButton tinaAIPostDenoiseExternalImageBtn;
+  private JPanel panel_14;
+  private JPanel quickMutationMainPanel;
+  private JTextField quickMutationBatchSizeEdit;
+  private JComboBox quickMutationTypeCmb;
+  private JButton quickMutationButton;
+  private JProgressBar quickMutationProgressBar;
+  private JPanel quickMutationPanel;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -15735,10 +15686,6 @@ public class MainEditorFrame extends JFrame {
       backgroundColorIndicatorBtn.setBounds(1027, 3, 30, 24);
     }
     return backgroundColorIndicatorBtn;
-  }
-
-  public JButton getRandomizeBtn() {
-    return randomizeBtn;
   }
 
   private JPanel getPanel_73() {
@@ -19277,23 +19224,6 @@ public class MainEditorFrame extends JFrame {
 
   public JWFNumberField getDofDOFFadeREd() {
     return dofDOFFadeREd;
-  }
-
-  private JButton getBokehBtn() {
-    if (bokehBtn == null) {
-      bokehBtn = new JButton();
-      bokehBtn.setBounds(180, 108, 213, 24);
-      bokehBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.bokehBtn_clicked();
-        }
-      });
-      bokehBtn.setToolTipText("Add random bokeh-like-effects (DOF)");
-      bokehBtn.setText("Randomize DOF/bokeh");
-      bokehBtn.setPreferredSize(new Dimension(72, 24));
-      bokehBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return bokehBtn;
   }
 
   private JButton getResetCameraSettingsBtn() {
@@ -24225,10 +24155,6 @@ public class MainEditorFrame extends JFrame {
     return button_2;
   }
 
-  public JTextPane getRandomizersHintPane() {
-    return randomizersHintPane;
-  }
-
   private JButton getDeleteKeyFrameButton() {
     if (deleteKeyFrameButton == null) {
       deleteKeyFrameButton = new JButton();
@@ -24312,5 +24238,104 @@ public class MainEditorFrame extends JFrame {
 
   public JButton getTinaAIPostDenoiseExternalImageBtn() {
     return tinaAIPostDenoiseExternalImageBtn;
+  }
+
+  private JPanel getPanel_14() {
+    if (panel_14 == null) {
+      panel_14 = new JPanel();
+      panel_14.setPreferredSize(new Dimension(142, 10));
+      panel_14.setMinimumSize(new Dimension(200, 10));
+      panel_14.setLayout(null);
+
+      quickMutationButton = new JButton();
+      quickMutationButton.setToolTipText("Create a batch of quick mutations");
+      quickMutationButton.setText("Mutate");
+      quickMutationButton.setPreferredSize(new Dimension(115, 46));
+      quickMutationButton.setMinimumSize(new Dimension(100, 46));
+      quickMutationButton.setMaximumSize(new Dimension(32000, 46));
+      quickMutationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      quickMutationButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/lightbulb.png")));
+      quickMutationButton.setBounds(1, 6, 139, 46);
+      quickMutationButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.quickMutationButton_clicked();
+        }
+      });
+      panel_14.add(quickMutationButton);
+
+      quickMutationProgressBar = new JProgressBar();
+      quickMutationProgressBar.setValue(0);
+      quickMutationProgressBar.setStringPainted(true);
+      quickMutationProgressBar.setSize(new Dimension(19, 175));
+      quickMutationProgressBar.setPreferredSize(new Dimension(19, 169));
+      quickMutationProgressBar.setMinimumSize(new Dimension(19, 32767));
+      quickMutationProgressBar.setMaximumSize(new Dimension(19, 32767));
+      quickMutationProgressBar.setLocation(new Point(273, 9));
+      quickMutationProgressBar.setFocusable(false);
+      quickMutationProgressBar.setDoubleBuffered(true);
+      quickMutationProgressBar.setAlignmentX(0.0f);
+      quickMutationProgressBar.setBounds(1, 53, 139, 19);
+      panel_14.add(quickMutationProgressBar);
+
+      quickMutationBatchSizeEdit = new JTextField();
+      quickMutationBatchSizeEdit.setText("11");
+      quickMutationBatchSizeEdit.setPreferredSize(new Dimension(55, 22));
+      quickMutationBatchSizeEdit.setFont(null);
+      quickMutationBatchSizeEdit.setBounds(71, 105, 68, 22);
+      quickMutationBatchSizeEdit.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      panel_14.add(quickMutationBatchSizeEdit);
+
+      JLabel label = new JLabel();
+      label.setToolTipText("Number of color points in random gradients (not used by all gradient generators)");
+      label.setText("Batch size");
+      label.setPreferredSize(new Dimension(100, 22));
+      label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      label.setBounds(4, 110, 67, 14);
+      panel_14.add(label);
+
+      quickMutationTypeCmb = new JComboBox();
+      quickMutationTypeCmb.setToolTipText("Random gradient generator");
+      quickMutationTypeCmb.setPreferredSize(new Dimension(50, 24));
+      quickMutationTypeCmb.setMinimumSize(new Dimension(100, 24));
+      quickMutationTypeCmb.setMaximumSize(new Dimension(32767, 24));
+      quickMutationTypeCmb.setMaximumRowCount(32);
+      quickMutationTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      quickMutationTypeCmb.setBounds(2, 78, 139, 24);
+      panel_14.add(quickMutationTypeCmb);
+    }
+    return panel_14;
+  }
+
+  private JPanel getQuickMutationMainPanel() {
+    if (quickMutationMainPanel == null) {
+      quickMutationMainPanel = new JPanel();
+      quickMutationMainPanel.setLayout(new BorderLayout(0, 0));
+
+      quickMutationPanel = new JPanel();
+      quickMutationMainPanel.add(quickMutationPanel, BorderLayout.CENTER);
+      quickMutationPanel.setLayout(new BorderLayout(0, 0));
+      quickMutationMainPanel.add(getPanel_14(), BorderLayout.EAST);
+    }
+    return quickMutationMainPanel;
+  }
+
+  public JComboBox getQuickMutationTypeCmb() {
+    return quickMutationTypeCmb;
+  }
+
+  public JButton getQuickMutationButton() {
+    return quickMutationButton;
+  }
+
+  public JTextField getQuickMutationBatchSizeEdit() {
+    return quickMutationBatchSizeEdit;
+  }
+
+  public JProgressBar getQuickMutationProgressBar() {
+    return quickMutationProgressBar;
+  }
+
+  public JPanel getQuickMutationPanel() {
+    return quickMutationPanel;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

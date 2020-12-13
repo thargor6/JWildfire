@@ -17,6 +17,17 @@
 package org.jwildfire.create.tina.swing;
 
 public enum RandomBatchQuality {
+  VERY_LOW {
+    @Override
+    public double getCoverage() {
+      return 0.08;
+    }
+
+    @Override
+    public int getMaxSamples() {
+      return 3;
+    }
+  },
   LOW {
     @Override
     public double getCoverage() {

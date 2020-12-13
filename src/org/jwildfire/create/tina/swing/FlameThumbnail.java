@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -37,16 +37,27 @@ public class FlameThumbnail {
   private ImagePanel imgPanel;
   private JCheckBox selectCheckbox;
   private final ThumbnailCacheKey cacheKey;
+  private final int imgWidth, imgHeight;
 
   public FlameThumbnail(Flame pFlame, SimpleImage pPreview, ThumbnailCacheKey pCacheKey) {
     cacheKey = pCacheKey;
     flame = pFlame;
     preview = pPreview;
+    imgWidth = IMG_WIDTH;
+    imgHeight = IMG_HEIGHT;
+  }
+
+  public FlameThumbnail(Flame pFlame, SimpleImage pPreview, ThumbnailCacheKey pCacheKey, int imgWidth, int imgHeight) {
+    cacheKey = pCacheKey;
+    flame = pFlame;
+    preview = pPreview;
+    this.imgWidth = imgWidth;
+    this.imgHeight = imgHeight;
   }
 
   private void generatePreview(double pQuality) {
     if (cacheKey != null) {
-      preview = ThumbnailCacheProvider.getThumbnail(cacheKey, IMG_WIDTH, IMG_HEIGHT, pQuality);
+      preview = ThumbnailCacheProvider.getThumbnail(cacheKey, imgWidth, imgHeight, pQuality);
       if (preview != null) {
         return;
       }
@@ -55,12 +66,12 @@ public class FlameThumbnail {
     RenderedFlame res = getPreviewRenderer(info, pQuality).renderFlame(info);
     preview = res.getImage();
     if (cacheKey != null) {
-      ThumbnailCacheProvider.storeThumbnail(cacheKey, IMG_WIDTH, IMG_HEIGHT, pQuality, preview);
+      ThumbnailCacheProvider.storeThumbnail(cacheKey, imgWidth, imgHeight, pQuality, preview);
     }
   }
 
   public RenderInfo getPreviewRenderInfo() {
-    return new RenderInfo(IMG_WIDTH, IMG_HEIGHT, RenderMode.PREVIEW);
+    return new RenderInfo(imgWidth, imgHeight, RenderMode.PREVIEW);
   }
 
   public FlameRenderer getPreviewRenderer(RenderInfo info, double pQuality) {
@@ -69,8 +80,8 @@ public class FlameThumbnail {
     double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
     renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());
-    renderFlame.setWidth(IMG_WIDTH);
-    renderFlame.setHeight(IMG_HEIGHT);
+    renderFlame.setWidth(imgWidth);
+    renderFlame.setHeight(imgHeight);
     renderFlame.setSampleDensity(pQuality);
     renderFlame.setSpatialFilterRadius(0.0);
     return new FlameRenderer(renderFlame, prefs, false, false);
