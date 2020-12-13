@@ -166,6 +166,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
   private final ProgressUpdater randomBatchProgressUpdater;
+  private final ProgressUpdater quickMutationProgressUpdater;
+
   public TinaControllerData data = new TinaControllerData();
   public TinaWeightingFieldControllerData weightMapData = new TinaWeightingFieldControllerData();
 
@@ -606,7 +608,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.mouseTransformEditViewButton = parameterObject.pMouseTransformViewButton;
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
     data.toggleTransparencyButton = parameterObject.pToggleTransparencyButton;
-    data.randomizeButton = parameterObject.randomizeButton;
     mainProgressUpdater = new RenderProgressUpdater(this);
     randomBatchProgressUpdater = new RenderProgressUpdater(new RenderProgressBarHolder() {
       @Override
@@ -614,10 +615,23 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         return parameterObject.randomBatchProgressBar;
       }
     });
+    quickMutationProgressUpdater = new RenderProgressUpdater(new RenderProgressBarHolder() {
+      @Override
+      public JProgressBar getRenderProgressBar() {
+        return parameterObject.quickMutationProgressBar;
+      }
+    });
+
     data.affineResetTransformButton = parameterObject.pAffineResetTransformButton;
     data.createPaletteColorsTable = parameterObject.pCreatePaletteColorsTable;
     data.randomBatchButton = parameterObject.randomBatchButton;
     data.randomBatchProgressBar = parameterObject.randomBatchProgressBar;
+    data.quickMutationTypeCmb = parameterObject.quickMutationTypeCmb;
+    data.quickMutationBatchSizeEdit = parameterObject.quickMutationBatchSizeEdit;
+    data.quickMutationButton = parameterObject.quickMutationButton;
+    data.quickMutationProgressBar = parameterObject.quickMutationProgressBar;
+    data.quickMutationPanel = parameterObject.quickMutationPanel;
+
     data.postBlurRadiusREd = parameterObject.postBlurRadiusREd;
     data.postBlurRadiusSlider = parameterObject.postBlurRadiusSlider;
     data.postBlurFadeREd = parameterObject.postBlurFadeREd;
@@ -744,7 +758,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.qSaveButton = parameterObject.qSaveButton;
     data.saveAllButton = parameterObject.saveAllButton;
     data.sendToIRButton = parameterObject.sendToIRButton;
-    data.bokehButton = parameterObject.bokehButton;
     data.movieButton = parameterObject.movieButton;
     data.transformSlowButton = parameterObject.transformSlowButton;
     data.transparencyButton = parameterObject.transparencyButton;
@@ -1453,32 +1466,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           scrollThumbnailsToTop();
         }
       });
-    }
-  }
-
-  public void initRandomizerHintsPanel(JTextPane hintPane) {
-    hintPane.setContentType("text/html");
-    try {
-      Font f = Prefs.getPrefs().getFont(Font.DIALOG, Font.PLAIN, 12);
-      hintPane.setFont(f);
-
-      InputStream is = this.getClass().getResourceAsStream("randomizers.html");
-      StringBuffer content = new StringBuffer();
-      String lineFeed = System.getProperty("line.separator");
-      String line;
-      Reader r = new InputStreamReader(is, "utf-8");
-      BufferedReader in = new BufferedReader(r);
-      while ((line = in.readLine()) != null) {
-        content.append(line).append(lineFeed);
-      }
-      in.close();
-
-      hintPane.setText(content.toString());
-      hintPane.setSelectionStart(0);
-      hintPane.setSelectionEnd(0);
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
     }
   }
 
@@ -2417,11 +2404,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     data.sendToIRButton.setEnabled(true);
     data.movieButton.setEnabled(true);
-    data.bokehButton.setEnabled(enabled);
     data.solidRenderingToggleBtn.setEnabled(enabled);
     data.transformSlowButton.setEnabled(enabled);
     data.transparencyButton.setEnabled(enabled);
-    data.randomizeButton.setEnabled(enabled);
     data.resetCameraSettingsBtn.setEnabled(enabled);
     data.resetDOFSettingsButton.setEnabled(enabled);
     data.resetBokehOptionsButton.setEnabled(enabled);
@@ -2998,6 +2983,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                 importFromRandomBatch(idx);
               }
             });
+          }
+          else {
+            super.mouseClicked(e);
           }
         }
       });
@@ -6761,4 +6749,146 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public JPanel getCenterPanel() {
     return centerPanel;
   }
+
+  private CreateQuickMutationBatchThread createQuickMutationBatchThread;
+
+  private List<FlameThumbnail> quickMutationBatch = new ArrayList<FlameThumbnail>();
+
+  public void quickMutationButton_clicked() {
+    if (createQuickMutationBatchThread != null) {
+      stopQuickMutationBatchThread();
+      return;
+    }
+    if(getCurrFlame()==null) {
+      return;
+    }
+
+    stopPreviewRendering();
+    quickMutationBatch.clear();
+    updateQuickMutationThumbnails();
+
+    int imgCount = prefs.getTinaRandomBatchSize();
+    List<SimpleImage> imgList = new ArrayList<SimpleImage>();
+    createQuickMutationBatchThread = new CreateQuickMutationBatchThread(this, getCurrFlame(), quickMutationProgressUpdater, imgCount, imgList, quickMutationBatch,  getQuickMutationThumbnailWidth(), getQuickMutationThumbnailHeight(), (MutationType) data.quickMutationTypeCmb.getSelectedItem());
+    refreshQuickMutationButton();
+    new Thread(createQuickMutationBatchThread).start();
+  }
+
+  private void stopQuickMutationBatchThread() {
+    if (createQuickMutationBatchThread != null) {
+      try {
+        createQuickMutationBatchThread.signalCancel();
+        while (createQuickMutationBatchThread != null && !createQuickMutationBatchThread.isDone()) {
+          Thread.sleep(1);
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+      createQuickMutationBatchThread = null;
+    }
+  }
+
+  private void refreshQuickMutationButton() {
+    data.quickMutationButton.setText(createQuickMutationBatchThread != null ? "Cancel" : "Random batch");
+    data.quickMutationButton.invalidate();
+    data.quickMutationButton.validate();
+  }
+
+  private final double QUICK_MUTATION_IMG_SCALE = 2.0;
+
+  private int getQuickMutationThumbnailWidth() {
+    return (int)(FlameThumbnail.IMG_WIDTH * QUICK_MUTATION_IMG_SCALE + 0.5);
+  }
+
+  private int getQuickMutationThumbnailHeight() {
+    return (int)(FlameThumbnail.IMG_HEIGHT * QUICK_MUTATION_IMG_SCALE + 0.5);
+  }
+
+  public void updateQuickMutationThumbnails() {
+    if (data.quickMutationPanelScrollPane != null) {
+      data.quickMutationPanel.remove(data.quickMutationPanelScrollPane);
+      data.quickMutationPanelScrollPane = null;
+    }
+    final int imgWidth = getQuickMutationThumbnailWidth();
+    final int imgHeight = getQuickMutationThumbnailHeight();
+    int panelWidth = (imgWidth + FlameThumbnail.BORDER_SIZE) * quickMutationBatch.size();
+    int panelHeight = imgHeight + 2 * FlameThumbnail.BORDER_SIZE;
+    JPanel batchPanel = new JPanel();
+    batchPanel.setLayout(null);
+    batchPanel.setSize(panelWidth, panelHeight);
+    batchPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+    for (int i = 0; i < quickMutationBatch.size(); i++) {
+      SimpleImage img = quickMutationBatch.get(i).getPreview(3 * prefs.getTinaRenderPreviewQuality() / 4);
+      // add it to the main panel
+      ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
+      imgPanel.setImage(img);
+      imgPanel.setLocation(i * imgWidth + (i + 1) * FlameThumbnail.BORDER_SIZE, FlameThumbnail.BORDER_SIZE);
+      quickMutationBatch.get(i).setImgPanel(imgPanel);
+      final int idx = i;
+      imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+          if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
+            SwingUtilities.invokeLater(new Runnable() {
+
+              @Override
+              public void run() {
+                importFromQuickMutationBatch(idx);
+              }
+            });
+          }
+          else {
+            super.mouseClicked(e);
+          }
+        }
+      });
+      batchPanel.add(imgPanel);
+    }
+    batchPanel.invalidate();
+    batchPanel.validate();
+    data.quickMutationPanelScrollPane = new JScrollPane(batchPanel);
+    data.quickMutationPanelScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+    data.quickMutationPanelScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    data.quickMutationPanelScrollPane.getHorizontalScrollBar().setUnitIncrement(16);
+    data.quickMutationPanel.add(data.quickMutationPanelScrollPane, BorderLayout.CENTER);
+    data.quickMutationPanel.invalidate();
+    data.quickMutationPanel.validate();
+    batchPanel.repaint();
+  }
+
+  public int getScrollQuickMutationThumbnailsPosition() {
+    JScrollBar horizontal = data.quickMutationPanelScrollPane.getHorizontalScrollBar();
+    return horizontal.getValue();
+  }
+
+  public void scrollQuickMutationThumbnailsToPosition(int scrollPos) {
+    JScrollBar horizontal = data.quickMutationPanelScrollPane.getHorizontalScrollBar();
+    horizontal.setValue(scrollPos);
+  }
+
+  public void notifyQuickMutationsFinished() {
+    createQuickMutationBatchThread = null;
+    refreshQuickMutationButton();
+  }
+
+  public void importFromQuickMutationBatch(int pIdx) {
+    if (pIdx >= 0 && pIdx < quickMutationBatch.size()) {
+      Flame newFlame = quickMutationBatch.get(pIdx).getFlame();
+      {
+        FlamePanel imgPanel = getFlamePanel();
+        Rectangle bounds = imgPanel.getImageBounds();
+        double wScl = (double) bounds.width / (double) newFlame.getWidth();
+        double hScl = (double) bounds.height / (double) newFlame.getHeight();
+        newFlame.setWidth(bounds.width);
+        newFlame.setHeight(bounds.height);
+        newFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * newFlame.getPixelsPerUnit());
+      }
+      setCurrFlame(newFlame);
+      undoManager.initUndoStack(getCurrFlame());
+      setupProfiles(getCurrFlame());
+      updateThumbnails();
+      refreshUI();
+    }
+  }
+
 }

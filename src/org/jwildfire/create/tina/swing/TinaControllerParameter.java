@@ -360,7 +360,6 @@ public class TinaControllerParameter {
   public JButton qSaveButton;
   public JButton saveAllButton;
   public JButton sendToIRButton;
-  public JButton bokehButton;
   public JToggleButton solidRenderingToggleBtn;
   public JButton movieButton;
   public JToggleButton transformSlowButton;
@@ -387,7 +386,6 @@ public class TinaControllerParameter {
   public JButton backgroundColorLLIndicatorBtn;
   public JButton backgroundColorLRIndicatorBtn;
   public JButton backgroundColorCCIndicatorBtn;
-  public JButton randomizeButton;
   public JTree flameBrowserTree;
   public JPanel flameBrowersImagesPnl;
   public JButton flameBrowserRefreshBtn;
@@ -738,7 +736,11 @@ public class TinaControllerParameter {
   public JPopupMenu thumbnailRemovePopupMenu;
   public JButton randomBatchButton;
   public JProgressBar randomBatchProgressBar;
-
+  public JComboBox quickMutationTypeCmb;
+  public JTextField quickMutationBatchSizeEdit;
+  public JButton quickMutationButton;
+  public JProgressBar quickMutationProgressBar;
+  public JPanel quickMutationPanel;
   public JComboBox weightingFieldTypeCmb;
   public JComboBox weightingFieldInputCmb;
   public JWFNumberField weightingFieldColorIntensityREd;
@@ -1044,7 +1046,7 @@ public class TinaControllerParameter {
       JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
       JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree, JButton pGradientLibraryRescanBtn,
       JButton pGradientLibraryNewFolderBtn, JButton pGradientLibraryRenameFolderBtn, JList pGradientsList,
-      JButton pBackgroundColorIndicatorBtn, JButton pRandomizeButton, JCheckBox pPaletteFadeColorsCBx, JCheckBox pPaletteUniformWidthCBx,
+      JButton pBackgroundColorIndicatorBtn, JCheckBox pPaletteFadeColorsCBx, JCheckBox pPaletteUniformWidthCBx,
       JWFNumberField pLayerWeightEd, JWFNumberField pLayerDensityREd, JButton pLayerAddBtn, JButton pLayerDuplicateBtn, JButton pLayerDeleteBtn, JButton pLayerExtractBtn,
       JTable pLayersTable, JToggleButton pLayerVisibleBtn, JToggleButton pLayerAppendBtn, JButton pLayerHideOthersBtn,
       JButton pLayerShowAllBtn, JToggleButton pLayerPreviewBtn,
@@ -1097,7 +1099,6 @@ public class TinaControllerParameter {
     this.gradientLibraryRenameFolderBtn = pGradientLibraryRenameFolderBtn;
     this.gradientsList = pGradientsList;
     this.backgroundColorIndicatorBtn = pBackgroundColorIndicatorBtn;
-    this.randomizeButton = pRandomizeButton;
     this.paletteFadeColorsCBx = pPaletteFadeColorsCBx;
     this.paletteUniformWidthCBx = pPaletteUniformWidthCBx;
     this.layerWeightEd = pLayerWeightEd;
@@ -1190,7 +1191,7 @@ public class TinaControllerParameter {
       JLabel pDofDOFParam2Lbl, JWFNumberField pDofDOFParam3REd, JSlider pDofDOFParam3Slider, JLabel pDofDOFParam3Lbl,
       JWFNumberField pDofDOFParam4REd, JSlider pDofDOFParam4Slider, JLabel pDofDOFParam4Lbl, JWFNumberField pDofDOFParam5REd,
       JSlider pDofDOFParam5Slider, JLabel pDofDOFParam5Lbl, JWFNumberField pDofDOFParam6REd, JSlider pDofDOFParam6Slider,
-      JLabel pDofDOFParam6Lbl, JButton pBokehButton,
+      JLabel pDofDOFParam6Lbl,
       JButton pResetCameraSettingsBtn, JButton pResetDOFSettingsButton, JButton pResetBokehOptionsButton,
       JButton pResetColoringOptionsButton, JButton pResetAntialiasOptionsButton, JButton pResetShadingSettingsBtn,
       JButton pResetStereo3DSettingsBtn, JButton pResetPostSymmetrySettingsBtn, JButton pResetMotionBlurSettingsBtn,
@@ -1282,7 +1283,6 @@ public class TinaControllerParameter {
     dofDOFParam6REd = pDofDOFParam6REd;
     dofDOFParam6Slider = pDofDOFParam6Slider;
     dofDOFParam6Lbl = pDofDOFParam6Lbl;
-    bokehButton = pBokehButton;
     resetCameraSettingsBtn = pResetCameraSettingsBtn;
     resetDOFSettingsButton = pResetDOFSettingsButton;
     resetBokehOptionsButton = pResetBokehOptionsButton;
@@ -1452,7 +1452,8 @@ public class TinaControllerParameter {
     JWFNumberField weightingFieldParam06REd, JLabel weightingFieldParam06Lbl, JWFNumberField weightingFieldParam07REd, JLabel weightingFieldParam07Lbl,
     JComboBox weightingFieldParam08Cmb, JLabel weightingFieldParam08Lbl, JPanel weightingFieldPreviewImgRootPanel,
     JComboBox tinaAIPostDenoiserCmb, JWFNumberField tinaOptiXDenoiserBlendField, JSlider tinaOptiXDenoiserBlendSlider, JButton tinaOptixDenoiseButton,
-    JButton tinaAIPostDenoiseExternalImageBtn) {
+    JButton tinaAIPostDenoiseExternalImageBtn, JComboBox quickMutationTypeCmb, JTextField quickMutationBatchSizeEdit, JButton quickMutationButton,
+    JProgressBar quickMutationProgressBar, JPanel quickMutationPanel) {
       this.weightingFieldTypeCmb = weightingFieldTypeCmb;
       this.weightingFieldInputCmb = weightingFieldInputCmb;
       this.weightingFieldColorIntensityREd = weightingFieldColorIntensityREd;
@@ -1489,6 +1490,11 @@ public class TinaControllerParameter {
       this.tinaOptiXDenoiserBlendSlider = tinaOptiXDenoiserBlendSlider;
       this.tinaOptixDenoiseButton = tinaOptixDenoiseButton;
       this.tinaAIPostDenoiseExternalImageBtn = tinaAIPostDenoiseExternalImageBtn;
+      this.quickMutationTypeCmb = quickMutationTypeCmb;
+      this.quickMutationBatchSizeEdit = quickMutationBatchSizeEdit;
+      this.quickMutationButton = quickMutationButton;
+      this.quickMutationProgressBar = quickMutationProgressBar;
+      this.quickMutationPanel = quickMutationPanel;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

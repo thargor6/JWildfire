@@ -81,21 +81,22 @@ public class CreateRandomBatchThread implements Runnable{
           imgList.add(img);
         }
         final int currProgress = i + 1;
-        SwingUtilities.invokeLater(new Runnable() {
-          @Override
-          public void run() {
-            try {
-              mainProgressUpdater.updateProgress(currProgress);
-              int scrollPos = parentController.getScrollThumbnailsPosition();
-              parentController.updateThumbnails();
-              parentController.scrollThumbnailsToPosition(scrollPos);
+        if(!cancelSignalled) {
+          SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+              try {
+                mainProgressUpdater.updateProgress(currProgress);
+                int scrollPos = parentController.getScrollThumbnailsPosition();
+                parentController.updateThumbnails();
+                parentController.scrollThumbnailsToPosition(scrollPos);
+              }
+              catch(Exception ex) {
+                ex.printStackTrace();;
+              }
             }
-            catch(Exception ex) {
-              ex.printStackTrace();;
-            }
-          }
-        });
-
+          });
+        }
       }
     }
     finally {

@@ -227,7 +227,6 @@ public class TinaControllerData {
   public JToggleButton affineEditPostTransformButton;
   public JToggleButton affineEditPostTransformSmallButton;
   public JToggleButton affinePreserveZButton;
-  public JButton randomizeButton;
   public JToggleButton toggleVariationsButton;
   public JToggleButton toggleTransparencyButton;
   public JPanel gradientLibraryPanel;
@@ -235,6 +234,12 @@ public class TinaControllerData {
   public JScrollPane randomBatchScrollPane;
   public JButton randomBatchButton;
   public JProgressBar randomBatchProgressBar;
+  public JComboBox quickMutationTypeCmb;
+  public JTextField quickMutationBatchSizeEdit;
+  public JButton quickMutationButton;
+  public JProgressBar quickMutationProgressBar;
+  public JPanel quickMutationPanel;
+  public JScrollPane quickMutationPanelScrollPane;
   public TinaNonlinearControlsRow[] TinaNonlinearControlsRows;
   public VariationControlsDelegate[] variationControlsDelegates;
   public JWFNumberField xFormColorREd;
@@ -303,7 +308,6 @@ public class TinaControllerData {
   public JButton qSaveButton;
   public JButton saveAllButton;
   public JButton sendToIRButton;
-  public JButton bokehButton;
   public JButton movieButton;
   public JToggleButton transformSlowButton;
   public JToggleButton transparencyButton;
