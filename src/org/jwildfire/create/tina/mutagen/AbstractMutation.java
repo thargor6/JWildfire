@@ -14,55 +14,13 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.swing;
+package org.jwildfire.create.tina.mutagen;
 
-public enum RandomBatchQuality {
-  LOW {
-    @Override
-    public double getCoverage() {
-      return 0.32;
-    }
+public abstract class AbstractMutation implements Mutation {
 
-    @Override
-    public int getMaxSamples() {
-      return 8;
-    }
-  },
-  QUICK_MUTATIONS {
-    @Override
-    public double getCoverage() {
-      return 0.32;
-    }
+  @Override
+  public String getCaption() {
+    return this.getClass().getSimpleName();
+  }
 
-    @Override
-    public int getMaxSamples() {
-      return 12;
-    }
-  },
-  NORMAL {
-    @Override
-    public double getCoverage() {
-      return 0.42;
-    }
-
-    @Override
-    public int getMaxSamples() {
-      return 16;
-    }
-  },
-  HIGH {
-    @Override
-    public double getCoverage() {
-      return 0.56;
-    }
-
-    @Override
-    public int getMaxSamples() {
-      return 24;
-    }
-  };
-
-  public abstract double getCoverage();
-
-  public abstract int getMaxSamples();
 }

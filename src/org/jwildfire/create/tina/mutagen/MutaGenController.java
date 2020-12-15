@@ -159,15 +159,15 @@ public class MutaGenController {
     saveFlameToEditorBtn = pSaveFlameToEditorBtn;
     saveFlameToFileBtn = pSaveFlameToFileBtn;
 
-    refreshTrendCmb(horizontalTrend1Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeHoriz1());
-    refreshTrendCmb(horizontalTrend2Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeHoriz2());
-    refreshTrendCmb(verticalTrend1Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeVert1());
-    refreshTrendCmb(verticalTrend2Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeVert2());
+    refreshTrendCmb(horizontalTrend1Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeHoriz1(), true);
+    refreshTrendCmb(horizontalTrend2Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeHoriz2(), true);
+    refreshTrendCmb(verticalTrend1Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeVert1(), true);
+    refreshTrendCmb(verticalTrend2Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeVert2(), true);
     amountREd.setValue(1.0);
     initHintsPane();
   }
 
-  public static void refreshTrendCmb(JComboBox pCmb, String pInitialValue) {
+  public static void refreshTrendCmb(JComboBox pCmb, String pInitialValue, boolean pIncludeRandomFlameMutation) {
     pCmb.removeAllItems();
     pCmb.addItem(MutationType.ALL);
     pCmb.addItem(MutationType.USER1);
@@ -182,7 +182,9 @@ public class MutaGenController {
     pCmb.addItem(MutationType.COLOR_TYPE);
     pCmb.addItem(MutationType.GRADIENT_POSITION);
     pCmb.addItem(MutationType.LOCAL_GAMMA);
-    pCmb.addItem(MutationType.RANDOM_FLAME);
+    if (pIncludeRandomFlameMutation) {
+      pCmb.addItem(MutationType.RANDOM_FLAME);
+    }
     pCmb.addItem(MutationType.RANDOM_GRADIENT);
     pCmb.addItem(MutationType.RANDOM_PARAMETER);
     pCmb.addItem(MutationType.SIMILAR_GRADIENT);

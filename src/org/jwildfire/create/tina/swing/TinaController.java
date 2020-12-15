@@ -162,7 +162,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   MainController mainController;
   private final JPanel rootPanel;
-  private Flame _currFlame, _currRandomizeFlame;
+  private Flame _currFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
   private final ProgressUpdater randomBatchProgressUpdater;
@@ -1315,19 +1315,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return null;
   }
 
-  private Flame getCurrRandomizeFlame() {
-    return _currRandomizeFlame;
-  }
-
   @Override
   public void setCurrFlame(Flame pFlame) {
     setCurrFlame(pFlame, true);
   }
 
   private void setCurrFlame(Flame pFlame, boolean pAddToThumbnails) {
-    if (_currFlame == null || !_currFlame.equals(pFlame)) {
-      _currRandomizeFlame = pFlame.makeCopy();
-    }
     setLastGradient(null);
     if (_currFlame != null) {
       for (Layer layer : _currFlame.getLayers()) {
@@ -3047,8 +3040,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private void refreshRandomBatchButton() {
     data.randomBatchButton.setText(createRandomBatchThread != null ? "Cancel" : "Random batch");
-    data.randomBatchButton.invalidate();
-    data.randomBatchButton.validate();
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        data.randomBatchButton.invalidate();
+        data.randomBatchButton.validate();
+        data.randomBatchButton.repaint();
+      }
+    });
   }
 
   private void stopRandomBatchThread() {
@@ -3699,9 +3698,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
     }
     else {
-      if (_currFlame == null || !_currFlame.equals(pFlame)) {
-        _currRandomizeFlame = pFlame.makeCopy();
-      }
       if (pAddToThumbnails) {
         _currFlame = pFlame.makeCopy();
         undoManager.initUndoStack(_currFlame);
@@ -4943,64 +4939,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return res.getImage();
   }
 
-  public void randomizeBtn_clicked() {
-    if (getCurrRandomizeFlame() != null) {
-      saveUndoPoint();
-
-      if (!getCurrRandomizeFlame().isRenderable()) {
-        _currRandomizeFlame = getCurrFlame().makeCopy();
-      }
-
-      final int MAX_ITER = 10;
-      final double MIN_RENDER_COVERAGE = 0.42;
-      final double MIN_DIFF_COVERAGE = 0.28;
-      final double INVALID_COVERAGE = -1.0;
-      Dimension probeSize = new Dimension(80, 60);
-
-      SimpleImage baseFlameImg = renderRandomizedFlame(getCurrRandomizeFlame().makeCopy(), probeSize);
-      SimpleImage simplifiedBaseFlameImg = RandomFlameGeneratorSampler.createSimplifiedRefImage(baseFlameImg);
-
-      int iter = 0;
-      double bestCoverage = INVALID_COVERAGE;
-      Flame bestMutation = null;
-      while (true) {
-        Flame currMutation = getCurrRandomizeFlame().makeCopy();
-        List<MutationType> mutationTypes = createRandomMutationTypes();
-        for (MutationType mutationType : mutationTypes) {
-          int layerIdx = data.layersTable.getSelectedRow();
-          Layer layer = currMutation.getLayers().get(layerIdx);
-          mutationType.createMutationInstance().execute(layer);
-        }
-
-        SimpleImage renderedImg = renderRandomizedFlame(currMutation.makeCopy(), probeSize);
-        double coverage = renderedImg != null ? RandomFlameGeneratorSampler.calculateCoverage(renderedImg, 0, 0, 0, true) : INVALID_COVERAGE;
-        if (coverage > MIN_RENDER_COVERAGE) {
-          coverage = RandomFlameGeneratorSampler.calculateDiffCoverage(renderedImg, simplifiedBaseFlameImg);
-        }
-        if (coverage > MIN_DIFF_COVERAGE) {
-          bestMutation = currMutation;
-          break;
-        }
-        else if (coverage > bestCoverage) {
-          bestCoverage = coverage;
-          bestMutation = currMutation;
-        }
-        // Don't count invalid mutations
-        if (renderedImg != null) {
-          iter++;
-        }
-        if (iter >= MAX_ITER) {
-          break;
-        }
-      }
-
-      if (bestMutation != null) {
-        getCurrFlame().assign(bestMutation);
-      }
-      refreshUI();
-    }
-  }
-
   public void layersTableClicked() {
     if (!gridRefreshing) {
       boolean oldGridRefreshing = gridRefreshing;
@@ -5522,15 +5460,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   protected ErrorHandler getErrorHandler() {
     return errorHandler;
-  }
-
-  public void bokehBtn_clicked() {
-    Flame flame = getCurrFlame();
-    if (flame != null) {
-      saveUndoPoint();
-      new BokehMutation().execute(flame.getFirstLayer());
-      refreshUI();
-    }
   }
 
   public void resetCameraSettings() {
@@ -6767,8 +6696,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     quickMutationBatch.clear();
     updateQuickMutationThumbnails();
 
-    int imgCount = prefs.getTinaRandomBatchSize();
-    List<SimpleImage> imgList = new ArrayList<SimpleImage>();
+    int imgCount = Math.max(1, Tools.stringToInt(data.quickMutationBatchSizeEdit.getText()));
+    List<SimpleImage> imgList = new ArrayList<>();
     createQuickMutationBatchThread = new CreateQuickMutationBatchThread(this, getCurrFlame(), quickMutationProgressUpdater, imgCount, imgList, quickMutationBatch,  getQuickMutationThumbnailWidth(), getQuickMutationThumbnailHeight(), (MutationType) data.quickMutationTypeCmb.getSelectedItem());
     refreshQuickMutationButton();
     new Thread(createQuickMutationBatchThread).start();
@@ -6790,12 +6719,18 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   private void refreshQuickMutationButton() {
-    data.quickMutationButton.setText(createQuickMutationBatchThread != null ? "Cancel" : "Random batch");
-    data.quickMutationButton.invalidate();
-    data.quickMutationButton.validate();
+    data.quickMutationButton.setText(createQuickMutationBatchThread != null ? "Cancel" : "Mutate");
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        data.quickMutationButton.invalidate();
+        data.quickMutationButton.validate();
+        data.quickMutationButton.repaint();
+      }
+    });
   }
 
-  private final double QUICK_MUTATION_IMG_SCALE = 2.0;
+  private final double QUICK_MUTATION_IMG_SCALE = 1.8;
 
   private int getQuickMutationThumbnailWidth() {
     return (int)(FlameThumbnail.IMG_WIDTH * QUICK_MUTATION_IMG_SCALE + 0.5);

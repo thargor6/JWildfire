@@ -7235,7 +7235,8 @@ public class MainEditorFrame extends JFrame {
     initWeightMapInputTypeCmb(getWeightingFieldInputCmb());
     initRandomWeightingFieldGenCmb(getRandomWeightingFieldCmb());
     initAIPostDenoiserCmb(getTinaAIDenoiserCmb());
-    MutaGenController.refreshTrendCmb(getQuickMutationTypeCmb(), null);
+    MutaGenController.refreshTrendCmb(getQuickMutationTypeCmb(), Prefs.getPrefs().getTinaQuickMutationDefaultMutationType(), false);
+    getQuickMutationBatchSizeEdit().setText(String.valueOf(Math.max(1, Prefs.getPrefs().getTinaQuickMutationBatchSize())));
 
     TinaControllerParameter params = new TinaControllerParameter();
 

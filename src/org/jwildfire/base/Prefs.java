@@ -175,6 +175,9 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT1 = "tina.mutagen.mutationtype_vert1";
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2 = "tina.mutagen.mutationtype_vert2";
 
+  public static final String KEY_TINA_QUICK_MUTATIONS_BATCH_SIZE = "tina.quick_mutations.batch_size";
+  public static final String KEY_TINA_QUICK_MUTATIONS_DEFAULT_MUTATION_TYPE = "tina.quick_mutations.default_mutation_type";
+
   static final String KEY_IFLAMES_LIBRARY_PATH_FLAMES = "iflames.library_path.flames";
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
   static final String KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP = "iflames.load_library_at_startup";
@@ -368,7 +371,10 @@ public class Prefs extends ManagedObject {
   private String tinaMutaGenMutationTypeVert1 = "ALL";
   @Property(description = "Default mutation-type at category \"Vert 2\" in the MutaGen", category = PropertyCategory.TINA)
   private String tinaMutaGenMutationTypeVert2 = "USER3";
-
+  @Property(description = "Default batch size for creating quick mutations in the main editor", category = PropertyCategory.TINA)
+  private int tinaQuickMutationBatchSize = 5;
+  @Property(description = "Default mutation-type for creating quick mutations in the main editor", category = PropertyCategory.TINA)
+  private String tinaQuickMutationDefaultMutationType = "ALL";
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
   private String sunflowScenePath = null;
   private String lastInputSunflowScenePath = null;
@@ -793,6 +799,9 @@ public class Prefs extends ManagedObject {
     tinaMutaGenMutationTypeHoriz2 = pSrc.tinaMutaGenMutationTypeHoriz2;
     tinaMutaGenMutationTypeVert1 = pSrc.tinaMutaGenMutationTypeVert1;
     tinaMutaGenMutationTypeVert2 = pSrc.tinaMutaGenMutationTypeVert2;
+
+    tinaQuickMutationBatchSize = pSrc.tinaQuickMutationBatchSize;
+    tinaQuickMutationDefaultMutationType = pSrc.tinaQuickMutationDefaultMutationType;
 
     tinaDefaultFadeToWhiteLevel = pSrc.tinaDefaultFadeToWhiteLevel;
     tinaEditorDoubleClickAction = pSrc.tinaEditorDoubleClickAction;
@@ -1743,4 +1752,19 @@ public class Prefs extends ManagedObject {
     this.tinaEnableLeapMotionTab = tinaEnableLeapMotionTab;
   }
 
+  public int getTinaQuickMutationBatchSize() {
+    return tinaQuickMutationBatchSize;
+  }
+
+  public void setTinaQuickMutationBatchSize(int tinaQuickMutationBatchSize) {
+    this.tinaQuickMutationBatchSize = tinaQuickMutationBatchSize;
+  }
+
+  public String getTinaQuickMutationDefaultMutationType() {
+    return tinaQuickMutationDefaultMutationType;
+  }
+
+  public void setTinaQuickMutationDefaultMutationType(String tinaQuickMutationDefaultMutationType) {
+    this.tinaQuickMutationDefaultMutationType = tinaQuickMutationDefaultMutationType;
+  }
 }

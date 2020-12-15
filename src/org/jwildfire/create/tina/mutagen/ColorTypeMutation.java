@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 
-public class ColorTypeMutation implements Mutation {
+public class ColorTypeMutation extends AbstractMutation {
   private static final List<ColorType> xFormColorTypes;
   private static final List<ColorType> finalXFormColorTypes;
 

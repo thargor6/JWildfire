@@ -200,6 +200,9 @@ public class PrefsReader {
         pPrefs.setTinaMutaGenMutationTypeVert2(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2, pPrefs.getTinaMutaGenMutationTypeVert2()));
         pPrefs.setTinaFreeCacheInBatchRenderer(getBooleanProperty(props, Prefs.KEY_TINA_FREE_CACHE_IN_BATCH_RENDERER, pPrefs.isTinaFreeCacheInBatchRenderer()));
 
+        pPrefs.setTinaQuickMutationBatchSize(getIntProperty(props, Prefs.KEY_TINA_QUICK_MUTATIONS_BATCH_SIZE, pPrefs.getTinaQuickMutationBatchSize()));
+        pPrefs.setTinaQuickMutationDefaultMutationType(getProperty(props, Prefs.KEY_TINA_QUICK_MUTATIONS_DEFAULT_MUTATION_TYPE, pPrefs.getTinaQuickMutationDefaultMutationType()));
+
         pPrefs.setIflamesFlameLibraryPath(getProperty(props, Prefs.KEY_IFLAMES_LIBRARY_PATH_FLAMES, pPrefs.getIflamesFlameLibraryPath()));
         pPrefs.setIflamesImageLibraryPath(getProperty(props, Prefs.KEY_IFLAMES_LIBRARY_PATH_IMAGES, pPrefs.getIflamesImageLibraryPath()));
         pPrefs.setIflamesLoadLibraryAtStartup(getBooleanProperty(props, Prefs.KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP, pPrefs.isIflamesLoadLibraryAtStartup()));
