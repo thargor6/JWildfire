@@ -24,6 +24,8 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
   private final String FILE_EXT = "_denoise";
   private final String DENOISER_PATH = "Denoiser";
 
+  // Changes the original image as a side-effect. Could be easily changed, but this would requiere more memory.
+  // On the other side, the original image is not needed in any way.
   @Override
   public SimpleImage denoise(SimpleImage img, double blend) {
     try {
@@ -42,8 +44,8 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
             crop.setHeight(img.getImageHeight());
             crop.transformImage(denoisedImage);
           }
-          applyAlpha(img, denoisedImage);
-          return denoisedImage;
+          replaceColorButKeepAlpha(img, denoisedImage);
+          return img;
         } finally {
           try {
             new File(outputFilename).delete();
@@ -63,15 +65,13 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
     }
   }
 
-  private void applyAlpha(SimpleImage src, SimpleImage dest) {
+  private void replaceColorButKeepAlpha(SimpleImage img, SimpleImage denoisedImg) {
     Pixel pixel = new Pixel();
-    for(int i=0;i<dest.getImageHeight();i++) {
-      for(int j=0;j<dest.getImageWidth();j++) {
-        int alpha=src.getAValueIgnoreBounds(j,i);
-        if(alpha!=255) {
-          pixel.setARGBValue(dest.getARGBValue(j,i));
-          dest.setARGB(j,i, alpha, pixel.r, pixel.g, pixel.b);
-        }
+    for(int i=0;i<img.getImageHeight();i++) {
+      for(int j=0;j<img.getImageWidth();j++) {
+        int alpha=img.getAValueIgnoreBounds(j, i);
+        pixel.setARGBValue(denoisedImg.getARGBValue(j, i));
+        img.setARGB(j, i, alpha, pixel.r, pixel.g, pixel.b);
       }
     }
   }

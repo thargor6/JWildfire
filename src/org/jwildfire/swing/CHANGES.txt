@@ -12,6 +12,7 @@ V6.10 (17.12.2020)
      -hypertile3Db,
      -petal3D,
      -pdj3D by Brad Stefanov
+ - fixed a bug regarding preserving the alpha channel, when an ai-denoiser is used
  - removed the "Randomize"-tab (all of it's features are still available, at the "Quick mutations"-tab in the form
    of mutations)
  - the advanced code editor (which is used for editing scripts or large text) is now disabled per default
