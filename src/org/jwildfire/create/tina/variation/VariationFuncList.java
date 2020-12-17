@@ -944,8 +944,9 @@ public class VariationFuncList {
     registerVariationFunc(Hypertile3D2bFunc.class);  
     registerVariationFunc(PDJ3DFunc.class);	  
     registerVariationFunc(Petal3DFunc.class);
-	  
-
+    registerVariationFunc(CutKleinianFunc.class);	  
+    registerVariationFunc(CutMandalaFunc.class);	  
+  
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
