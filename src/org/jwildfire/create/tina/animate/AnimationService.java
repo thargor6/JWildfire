@@ -22,7 +22,6 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import javafx.animation.KeyFrame;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
