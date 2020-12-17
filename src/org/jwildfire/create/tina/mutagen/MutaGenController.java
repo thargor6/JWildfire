@@ -187,6 +187,7 @@ public class MutaGenController {
     }
     pCmb.addItem(MutationType.RANDOM_GRADIENT);
     pCmb.addItem(MutationType.RANDOM_PARAMETER);
+    pCmb.addItem(MutationType.RANDOM_ZTRANSFORM);
     pCmb.addItem(MutationType.SIMILAR_GRADIENT);
     pCmb.addItem(MutationType.WEIGHTING_FIELD);
     MutationType initialValue = MutationType.ALL;

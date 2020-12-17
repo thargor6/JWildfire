@@ -95,6 +95,12 @@ public enum MutationType {
       return RandomFlameMutation.class;
     }
   },
+  RANDOM_ZTRANSFORM {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return RandomAffineZMutation.class;
+    }
+  },
   RANDOM_GRADIENT {
     @Override
     protected Class<? extends Mutation> getMutationClass() {

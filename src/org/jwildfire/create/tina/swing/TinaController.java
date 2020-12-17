@@ -35,7 +35,6 @@ import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.leapmotion.LeapMotionMainEditorController;
 import org.jwildfire.create.tina.meshgen.MeshGenController;
-import org.jwildfire.create.tina.mutagen.BokehMutation;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.mutagen.MutationType;
 import org.jwildfire.create.tina.mutagen.WeightingFieldMutation;
@@ -4912,17 +4911,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       color = Color.BLACK;
     }
     data.backgroundColorCCIndicatorBtn.setBackground(color);
-  }
-
-  private List<MutationType> createRandomMutationTypes() {
-    MutationType allMutationTypes[] = { MutationType.LOCAL_GAMMA, MutationType.ADD_TRANSFORM, MutationType.ADD_VARIATION, MutationType.CHANGE_WEIGHT, MutationType.WEIGHTING_FIELD, MutationType.GRADIENT_POSITION, MutationType.AFFINE, MutationType.RANDOM_GRADIENT, MutationType.RANDOM_PARAMETER, MutationType.SIMILAR_GRADIENT };
-    int[] allCounts = { 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9 };
-    int count = allCounts[(int) (Math.random() * allCounts.length)];
-    List<MutationType> res = new ArrayList<MutationType>();
-    for (int i = 0; i < count; i++) {
-      res.add(allMutationTypes[(int) (Math.random() * allMutationTypes.length)]);
-    }
-    return res;
   }
 
   private SimpleImage renderRandomizedFlame(Flame pFlame, Dimension pImgSize) {

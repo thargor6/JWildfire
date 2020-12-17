@@ -1,12 +1,16 @@
-V6.06 (12.12.2020)
+V6.10 (17.12.2020)
  - added a new "Quick mutations"-tab for easily creating a batch of variations of the currently selected flame.
    You may load any of those mutations into the main editor by double-clicking at it.
    This creates a new flame in a new slot and does not alter the original flame in any way.
    You may set the default batch size for quick mutations in the Preferences (property tinaQuickMutationBatchSize).
    You may also set the default mutaiton-type for quick mutations in the Preferences (property tinaQuickMutationDefaultMutationType).
+ - new RandomAffineZ-mutation (which both can be used in Quick Mutations and the regular MutaGen module)
  - new variations:
-     -hypertile3D2b by Brad Stefanov
-     -hypertile3Db by Brad Stefanov
+     -cut_kleinian,
+     -cut_mandala by Jesus Sosa
+     -hypertile3D2b,
+     -hypertile3Db,
+     -petal3D,
      -pdj3D by Brad Stefanov
  - removed the "Randomize"-tab (all of it's features are still available, at the "Quick mutations"-tab in the form
    of mutations)
