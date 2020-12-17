@@ -44,7 +44,7 @@ public class Affine3DMutation extends AbstractMutation {
     EditPlane editPlane = flame.getEditPlane();
     try {
       flame.setEditPlane(Math.random() < 0.5 ? EditPlane.YZ : EditPlane.ZX);
-      apply(pLayer, 0.75);
+      apply(pLayer, 0.5);
       flame.setEditPlane(Math.random() < 0.5 ? EditPlane.YZ : EditPlane.ZX);
       apply(pLayer, 0.2);
       flame.setEditPlane(Math.random() < 0.5 ? EditPlane.YZ : EditPlane.ZX);
