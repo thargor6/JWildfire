@@ -130,7 +130,7 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
 
   @Override
   public void addDenoisePreviewToImage(SimpleImage img, double blend) {
-    SimpleImage denoisedImage = denoise(img, blend);
+    SimpleImage denoisedImage = denoise(img.clone(), blend);
     int wHalve = img.getImageWidth() / 3;
     RectangleTransformer rect = new RectangleTransformer();
     rect.setColor(getIndicatorColor());
