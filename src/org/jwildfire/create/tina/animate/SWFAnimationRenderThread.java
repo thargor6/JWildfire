@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2020 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -28,12 +28,14 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.create.tina.swing.RenderMovieUtil;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -125,6 +127,7 @@ public class SWFAnimationRenderThread implements Runnable {
     SeekableByteChannel out = null;
     int currProgress = flameMovie.getFrameCount();
     try {
+      FileDialogTools.ensureFileAccess(new Frame(), controller.getProgressBar(), outputFilename);
       out = NIOUtils.writableFileChannel(outputFilename);
       AWTSequenceEncoder encoder = new AWTSequenceEncoder(out, Rational.R(Tools.FTOI(flameMovie.getFramesPerSecond()), 1));
       for (int i = 1; i < flameMovie.getFrameCount(); i++) {
@@ -222,6 +225,7 @@ public class SWFAnimationRenderThread implements Runnable {
     if (!filename.endsWith(Tools.FILEEXT_ANB)) {
       filename = filename + "." + Tools.FILEEXT_ANB;
     }
+    FileDialogTools.ensureFileAccess(new Frame(), controller.getProgressBar(), filename);
     Tools.writeFile(filename, buffer);
   }
 
@@ -274,6 +278,7 @@ public class SWFAnimationRenderThread implements Runnable {
   }
 
   private void saveImage(SimpleImage pImage, int pFrame, String filename) throws Exception {
+    FileDialogTools.ensureFileAccess(new Frame(), controller.getProgressBar(), filename);
     new ImageWriter().saveAsPNG(pImage, filename);
   }
 
@@ -300,6 +305,7 @@ public class SWFAnimationRenderThread implements Runnable {
 
   private void saveFlame(Flame pFlame, int pFrame) throws Exception {
     String filename = generateFilename(pFrame, Tools.FILEEXT_FLAME);
+    FileDialogTools.ensureFileAccess(new Frame(), controller.getProgressBar(), filename);
     new FlameWriter().writeFlame(pFlame, filename);
   }
 

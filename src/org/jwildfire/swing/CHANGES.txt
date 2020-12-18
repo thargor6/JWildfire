@@ -1,4 +1,4 @@
-V6.10 (17.12.2020)
+V6.10 (18.12.2020)
  - added a new "Quick mutations"-tab for easily creating a batch of variations of the currently selected flame.
    You may load any of those mutations into the main editor by double-clicking at it.
    This creates a new flame in a new slot and does not alter the original flame in any way.
@@ -12,7 +12,9 @@ V6.10 (17.12.2020)
      -hypertile3Db,
      -petal3D,
      -pdj3D by Brad Stefanov
+ - JWildfire also has been successfully tested on macOS Big Sur now
  - fixed a bug regarding preserving the alpha channel, when an ai-denoiser is used
+ - fixed a bug regarding writing files in the Easy Movie Maker under macOS (Catalina and Big Sur)
  - removed the "Randomize"-tab (all of it's features are still available, at the "Quick mutations"-tab in the form
    of mutations)
  - the advanced code editor (which is used for editing scripts or large text) is now disabled per default
