@@ -55,7 +55,7 @@ public class RessourceManager {
       if ("hdr".equalsIgnoreCase(fileExt)) {
         res = new ImageReader(new JLabel()).loadHDRImage(pFilename);
       } else {
-        res = new ImageReader(new JLabel()).loadImage(pFilename);
+        res = new ImageReader(new JLabel()).loadImageWithAlpha(pFilename);
       }
       imageMapByName.put(pFilename, res);
     }

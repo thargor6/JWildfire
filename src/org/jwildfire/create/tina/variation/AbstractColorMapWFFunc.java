@@ -47,6 +47,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private static final String PARAM_TILEY = "tile_y";
   private static final String PARAM_RESETZ = "reset_z";
   private static final String PARAM_DC_COLOR = "dc_color";
+  private static final String PARAM_WITH_ALPHA = "with_alpha";
   private static final String PARAM_BLEND_COLORMAP = "blend_colormap";
   private static final String PARAM_IS_SEQUENCE = "is_sequence";
   private static final String PARAM_SEQUENCE_START = "sequence_start";
@@ -57,7 +58,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   public static final String RESSOURCE_IMAGE_SRC = "image_src";
   public static final String RESSOURCE_IMAGE_DESC_SRC = "image_desc_src";
 
-  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ, PARAM_DC_COLOR, PARAM_BLEND_COLORMAP, PARAM_IS_SEQUENCE, PARAM_SEQUENCE_START, PARAM_SEQUENCE_DIGITS};
+  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ, PARAM_DC_COLOR, PARAM_BLEND_COLORMAP, PARAM_WITH_ALPHA, PARAM_IS_SEQUENCE, PARAM_SEQUENCE_START, PARAM_SEQUENCE_DIGITS};
   private static final String[] ressourceNames = {RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE, RESSOURCE_IMAGE_DESC_SRC, RESSOURCE_IMAGE_SRC};
 
   private double scaleX = 1.0;
@@ -71,6 +72,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private int resetZ = 1;
   private int dc_color = 1;
   private int blend_colormap = 0;
+  private int with_alpha = 0;
   private String imageFilename = null;
   private byte[] inlinedImage = null;
   private String imageDescSrc = null;
@@ -115,41 +117,64 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       }
     }
 
-    double r, g, b;
+    double r, g, b, a;
     if (ix >= 0 && ix < imgWidth && iy >= 0 && iy < imgHeight) {
       if (colorMap instanceof SimpleImage) {
         if (blend_colormap > 0) {
           double iufrac = MathLib.frac(x);
           double ivfrac = MathLib.frac(y);
+
           toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
                   ix, iy));
           int lur = toolPixel.r;
           int lug = toolPixel.g;
           int lub = toolPixel.b;
-          toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
-                  ix + 1, iy));
+          int lua = toolPixel.a;
+
+          if (ix < imgWidth - 1) {
+            toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(ix + 1, iy));
+          }
+          else {
+            toolPixel.clear();
+          }
           int rur = toolPixel.r;
           int rug = toolPixel.g;
           int rub = toolPixel.b;
-          toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+          int rua = toolPixel.a;
+
+          if (iy < imgHeight - 1) {
+            toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
                   ix, iy + 1));
+          }
+          else {
+            toolPixel.clear();
+          }
           int lbr = toolPixel.r;
           int lbg = toolPixel.g;
           int lbb = toolPixel.b;
-          toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
-                  ix + 1, iy + 1));
+          int lba = toolPixel.a;
+
+          if (ix < imgWidth - 1 && iy < imgHeight - 1) {
+            toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(ix + 1, iy + 1));
+          }
+          else {
+            toolPixel.clear();
+          }
           int rbr = toolPixel.r;
           int rbg = toolPixel.g;
           int rbb = toolPixel.b;
+          int rba = toolPixel.a;
           r = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
           g = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
           b = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
+          a = GfxMathLib.blerp(lua, rua, lba, rba, iufrac, ivfrac);
         } else {
           toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
                   ix, iy));
           r = toolPixel.r;
           g = toolPixel.g;
           b = toolPixel.b;
+          a = toolPixel.a;
         }
         if (dc_color > 0) {
           pVarTP.rgbColor = true;
@@ -181,11 +206,13 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
           r = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
           g = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
           b = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
+          a = 255.0;
         } else {
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
           r = rgbArray[0] * 255;
           g = rgbArray[1] * 255;
           b = rgbArray[2] * 255;
+          a = 255.0;
         }
         if (dc_color > 0) {
           pVarTP.rgbColor = true;
@@ -195,7 +222,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
         }
       }
     } else {
-      r = g = b = 0.0;
+      r = g = b = a = 0.0;
       if (dc_color > 0) {
         pVarTP.rgbColor = true;
         pVarTP.redColor = r;
@@ -203,6 +230,13 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
         pVarTP.blueColor = b;
       }
     }
+    if(with_alpha > 0) {
+      pVarTP.doHide = a <=0.1;
+    }
+    else {
+      pVarTP.doHide = false;
+    }
+
     double dz = this.offsetZ;
     if (fabs(scaleZ) > EPSILON) {
       double intensity = (0.299 * r + 0.588 * g + 0.113 * b) / 255.0;
@@ -225,7 +259,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ, dc_color, blend_colormap, is_sequence, sequence_start, sequence_digits};
+    return new Object[]{scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ, dc_color, blend_colormap, with_alpha, is_sequence, sequence_start, sequence_digits};
   }
 
   @Override
@@ -252,6 +286,8 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       dc_color = Tools.FTOI(pValue);
     else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName))
       blend_colormap = Tools.FTOI(pValue);
+    else if (PARAM_WITH_ALPHA.equalsIgnoreCase(pName))
+      with_alpha = Tools.FTOI(pValue);
     else if (PARAM_IS_SEQUENCE.equalsIgnoreCase(pName)) {
       is_sequence = Tools.FTOI(pValue);
       clearCurrColorMap();

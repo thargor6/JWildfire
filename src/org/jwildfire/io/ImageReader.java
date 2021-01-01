@@ -76,6 +76,23 @@ public class ImageReader {
     return new SimpleImage(bImg, width, height);
   }
 
+  public SimpleImage loadImageWithAlpha(String pFilename) throws Exception {
+    File file = new File(pFilename);
+    if (!file.exists())
+      throw new FileNotFoundException(pFilename);
+    Image fileImg = Toolkit.getDefaultToolkit().createImage(pFilename);
+    MediaTracker tracker = new MediaTracker(owner);
+    tracker.addImage(fileImg, 0);
+    tracker.waitForID(0);
+    int width = fileImg.getWidth(null);
+    int height = fileImg.getHeight(null);
+    BufferedImage bImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    Graphics g = bImg.getGraphics();
+    g.drawImage(fileImg, 0, 0, null);
+    fileImg = null;
+    return new SimpleImage(bImg, width, height);
+  }
+
   public BufferedImage loadBufferedRGBImage(String pFilename) throws Exception {
     File file = new File(pFilename);
     if (!file.exists())
