@@ -945,8 +945,10 @@ public class VariationFuncList {
     registerVariationFunc(PDJ3DFunc.class);	  
     registerVariationFunc(Petal3DFunc.class);
     registerVariationFunc(CutKleinianFunc.class);	  
-    registerVariationFunc(CutMandalaFunc.class);	  
-  
+    registerVariationFunc(CutMandalaFunc.class);
+
+    registerVariationFunc(SnowflakeWFFunc.class);
+
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);

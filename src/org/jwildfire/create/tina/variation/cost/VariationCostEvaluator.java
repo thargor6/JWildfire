@@ -157,6 +157,7 @@ public class VariationCostEvaluator {
     BLACKLIST.add(new CustomWFFunc().getName());
     BLACKLIST.add(new CustomWFFunc().getName());
     BLACKLIST.add(new DLAWFFunc().getName());
+    BLACKLIST.add(new SnowflakeWFFunc().getName());
     BLACKLIST.add(new GPatternFunc().getName());
     BLACKLIST.add(new IFlamesFunc().getName());
     BLACKLIST.add(new Knots3DFunc().getName());

@@ -44,6 +44,7 @@ public class RandomParamMutation extends AbstractMutation {
     BLACKLIST.add("fract_formula_julia_wf");
     BLACKLIST.add("fract_formula_mand_wf");
     BLACKLIST.add("dc_perlin");
+    BLACKLIST.add("snowflake_wf");
     BLACKLIST.add("crob");
     BLACKLIST.add("tree_js");
     BLACKLIST.add("brownian_js");
