@@ -83,6 +83,12 @@ public enum DOFBlurShapeType {
       return HeartDOFBlurShape.class;
     }
   },
+  SNOWFLAKE {
+    @Override
+    protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
+      return SnowflakeDOFBlurShape.class;
+    }
+  },
   SUB_FLAME {
     @Override
     protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {

@@ -7704,6 +7704,7 @@ public class MainEditorFrame extends JFrame {
     pCmb.addItem(DOFBlurShapeType.SINEBLUR);
     pCmb.addItem(DOFBlurShapeType.STARBLUR);
     pCmb.addItem(DOFBlurShapeType.TAURUS);
+    pCmb.addItem(DOFBlurShapeType.SNOWFLAKE);
     pCmb.addItem(DOFBlurShapeType.SUB_FLAME);
     pCmb.setSelectedItem(DOFBlurShapeType.BUBBLE);
   }
