@@ -57,7 +57,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  private static final String APP_VERSION = "V6.10 (18.12.2020)";
+  private static final String APP_VERSION = "V6.14 (06.01.2020)";
 
   public static final boolean STEAM_EDITION = false;
   public static final boolean SPECIAL_VERSION = false;
@@ -679,4 +679,30 @@ public class Tools {
       return OSType.UNKNOWN;
   }
 
+  public static int getOSVersion(int idx) {
+    try {
+      String[] versions = System.getProperty("os.version").split("\\.", -1);
+      if(versions.length>idx) {
+        return Integer.parseInt(versions[idx]);
+      }
+      else {
+        return 0;
+      }
+    }
+    catch(Exception ex) {
+      ex.printStackTrace();
+      return 0;
+    }
+  }
+
+  public static final int OSTYPE_MACOS_VERSION_X = 10;
+  public static final int OSTYPE_MACOS_SUBVERSION_CATALINA = 15;
+
+  public static boolean isMacOsBeforeCatalina() {
+    return getOSVersion(0)<=OSTYPE_MACOS_VERSION_X && getOSVersion(1)<OSTYPE_MACOS_SUBVERSION_CATALINA;
+  }
+
+  public static boolean ensureSpecialMacOSFileAccessHandling() {
+    return (Tools.OSType.MAC == Tools.getOSType()) && !isMacOsBeforeCatalina();
+  }
 }

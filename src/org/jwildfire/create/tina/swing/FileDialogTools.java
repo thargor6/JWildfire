@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -50,7 +50,7 @@ public class FileDialogTools {
   }
 
   public static boolean ensureFileAccess(Frame frame, Component parent, File file) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       String path = getFolderPath(file);
       if (!visitedFolders.contains(path)) {
         int i = 0;
@@ -89,7 +89,7 @@ public class FileDialogTools {
 
   public static File selectFlameFileForOpen(
       Frame frame, Component centerPanel, String defaultFilename) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a flame-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -166,7 +166,7 @@ public class FileDialogTools {
   }
 
   public static File selectFlameFileForSave(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save flame-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -242,7 +242,7 @@ public class FileDialogTools {
 
   public static File selectMapFileForSave(
       Frame frame, Component centerPanel, String previousGradientPath) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a map-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -296,7 +296,7 @@ public class FileDialogTools {
 
   public static File selectRessourceForOpen(
       Frame frame, Component centerPanel, RessourceDialog.ContentType contentType) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a ressource");
       try {
         if (contentType == RessourceDialog.ContentType.JAVA)
@@ -335,7 +335,7 @@ public class FileDialogTools {
   }
 
   public static File selectSoundFileForOpen(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a sound-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -380,7 +380,7 @@ public class FileDialogTools {
   }
 
   public static List<File> selectFlameFilesForOpen(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open flame-files...");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -432,7 +432,7 @@ public class FileDialogTools {
   }
 
   public static File selectJWFDanceFileForOpen(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a JWFDance-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -475,7 +475,7 @@ public class FileDialogTools {
   }
 
   public static File selectJWFDanceFileForSave(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save JWFDance-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -519,7 +519,7 @@ public class FileDialogTools {
 
   public static File selectImageFileForOpen(
       Frame frame, Component centerPanel, String defaultExtension, String defaultFilename) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open an image");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -590,7 +590,7 @@ public class FileDialogTools {
 
   public static File selectImageFileForSave(
       Frame frame, Component centerPanel, String defaultExtension) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save an image");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -653,7 +653,7 @@ public class FileDialogTools {
 
   public static File selectPointCloudFileForSave(
       Frame frame, Component centerPanel, String defaultExtension) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save pointcloud-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -705,7 +705,7 @@ public class FileDialogTools {
   }
 
   public static File selectMeshFileForSave(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save mesh-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -748,7 +748,7 @@ public class FileDialogTools {
   }
 
   public static File selectMeshFileForOpen(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open mesh-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -791,7 +791,7 @@ public class FileDialogTools {
   }
 
   public static File selectSvgFileForOpen(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open svg-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -833,7 +833,7 @@ public class FileDialogTools {
 
   public static String selectDirectory(
       Frame frame, Component centerPanel, String caption, String directory) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       String oldProp = System.getProperty("apple.awt.fileDialogForDirectories");
       try {
         System.setProperty("apple.awt.fileDialogForDirectories", "true");
@@ -877,7 +877,7 @@ public class FileDialogTools {
 
   public static File selectFileForOpen(
       Frame frame, Component centerPanel, String caption, String defaultFilename) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, caption);
       if (defaultFilename != null && defaultFilename.length() > 0) {
         try {
@@ -914,7 +914,7 @@ public class FileDialogTools {
   }
 
   public static File selectJWFRenderFileForSave(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save render-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -958,7 +958,7 @@ public class FileDialogTools {
   }
 
   public static File selectJWFRenderFileForOpen(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open render-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -1003,7 +1003,7 @@ public class FileDialogTools {
 
   public static File selectRenderFileForSave(
       Frame frame, Component centerPanel, String defaultExtension) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Render an image/video");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -1062,7 +1062,7 @@ public class FileDialogTools {
   }
 
   public static File selectAnbFileForSave(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Render an ANB-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -1105,7 +1105,7 @@ public class FileDialogTools {
   }
 
   public static File selectMp4FileForSave(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Render a MP4-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -1148,7 +1148,7 @@ public class FileDialogTools {
   }
 
   public static File selectFlameSequenceFileForSave(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save flame-file-sequence");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -1190,7 +1190,7 @@ public class FileDialogTools {
 
   public static File selectJWFMovieFileForOpen(
       Frame frame, Component centerPanel, String defaultFilename) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a jwfmovie-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
@@ -1232,7 +1232,7 @@ public class FileDialogTools {
   }
 
   public static File selectJWFMovieFileForSave(Frame frame, Component centerPanel) {
-    if (Tools.OSType.MAC == Tools.getOSType()) {
+    if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save jwfmovie-file");
       fileDialog.setFilenameFilter(
           new FilenameFilter() {
