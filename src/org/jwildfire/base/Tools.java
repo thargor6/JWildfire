@@ -699,7 +699,9 @@ public class Tools {
   public static final int OSTYPE_MACOS_SUBVERSION_CATALINA = 15;
 
   public static boolean isMacOsBeforeCatalina() {
-    return getOSVersion(0)<=OSTYPE_MACOS_VERSION_X && getOSVersion(1)<OSTYPE_MACOS_SUBVERSION_CATALINA;
+    int majorVersion = getOSVersion(0);
+    int minorVersion = getOSVersion(1);
+    return (majorVersion < OSTYPE_MACOS_VERSION_X) || (majorVersion == OSTYPE_MACOS_VERSION_X && minorVersion<OSTYPE_MACOS_SUBVERSION_CATALINA);
   }
 
   public static boolean ensureSpecialMacOSFileAccessHandling() {
