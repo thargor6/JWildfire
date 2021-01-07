@@ -4760,7 +4760,7 @@ public class MainEditorFrame extends JFrame {
       affinePreserveZButton.setPreferredSize(new Dimension(136, 24));
       affinePreserveZButton.setLocation(new Point(4, 181));
       affinePreserveZButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affinePreserveZButton.setBounds(218, 154, 104, 24);
+      affinePreserveZButton.setBounds(218, 144, 104, 24);
       tinaAffineTransformationPanel.add(affinePreserveZButton);
 
       affineRotateEditMotionCurveBtn = new JButton();
@@ -4776,7 +4776,7 @@ public class MainEditorFrame extends JFrame {
       affineRotateEditMotionCurveBtn.setPreferredSize(new Dimension(55, 24));
       affineRotateEditMotionCurveBtn.setLocation(new Point(0, 56));
       affineRotateEditMotionCurveBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineRotateEditMotionCurveBtn.setBounds(0, 56, 22, 24);
+      affineRotateEditMotionCurveBtn.setBounds(0, 50, 22, 24);
       tinaAffineTransformationPanel.add(affineRotateEditMotionCurveBtn);
     }
     return tinaAffineTransformationPanel;
@@ -7906,7 +7906,7 @@ public class MainEditorFrame extends JFrame {
       affineC00Lbl.setName("affineC00Lbl");
       affineC00Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC00Lbl.setText("X1");
-      affineC00Lbl.setLocation(new Point(0, 6));
+      affineC00Lbl.setLocation(new Point(0, 4));
       affineC00Lbl.setSize(new Dimension(20, 22));
       affineC00Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC00Lbl.setPreferredSize(new Dimension(24, 22));
@@ -7932,7 +7932,7 @@ public class MainEditorFrame extends JFrame {
       affineC01Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC01Lbl.setText("X2");
       affineC01Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineC01Lbl.setLocation(new Point(0, 30));
+      affineC01Lbl.setLocation(new Point(0, 26));
       affineC01Lbl.setSize(new Dimension(20, 22));
       affineC01Lbl.setPreferredSize(new Dimension(24, 22));
     }
@@ -7956,7 +7956,7 @@ public class MainEditorFrame extends JFrame {
       affineC10Lbl.setName("affineC10Lbl");
       affineC10Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC10Lbl.setText("Y1");
-      affineC10Lbl.setLocation(new Point(108, 6));
+      affineC10Lbl.setLocation(new Point(108, 4));
       affineC10Lbl.setSize(new Dimension(20, 22));
       affineC10Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC10Lbl.setPreferredSize(new Dimension(24, 22));
@@ -7981,7 +7981,7 @@ public class MainEditorFrame extends JFrame {
       affineC11Lbl.setName("affineC11Lbl");
       affineC11Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC11Lbl.setText("Y2");
-      affineC11Lbl.setLocation(new Point(108, 30));
+      affineC11Lbl.setLocation(new Point(108, 26));
       affineC11Lbl.setSize(new Dimension(20, 22));
       affineC11Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC11Lbl.setPreferredSize(new Dimension(24, 22));
@@ -8006,7 +8006,7 @@ public class MainEditorFrame extends JFrame {
       affineC20Lbl.setName("affineC20Lbl");
       affineC20Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC20Lbl.setText("O1");
-      affineC20Lbl.setLocation(new Point(216, 6));
+      affineC20Lbl.setLocation(new Point(216, 4));
       affineC20Lbl.setSize(new Dimension(20, 22));
       affineC20Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC20Lbl.setPreferredSize(new Dimension(24, 22));
@@ -8031,7 +8031,7 @@ public class MainEditorFrame extends JFrame {
       affineC21Lbl.setName("affineC21Lbl");
       affineC21Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC21Lbl.setText("O2");
-      affineC21Lbl.setLocation(new Point(216, 30));
+      affineC21Lbl.setLocation(new Point(216, 26));
       affineC21Lbl.setSize(new Dimension(20, 22));
       affineC21Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC21Lbl.setPreferredSize(new Dimension(24, 22));
@@ -8062,7 +8062,7 @@ public class MainEditorFrame extends JFrame {
       affineC00REd.setPreferredSize(new Dimension(76, 24));
       affineC00REd.setText("");
       affineC00REd.setToolTipText("Set affine coefficients directly");
-      affineC00REd.setLocation(new Point(24, 6));
+      affineC00REd.setLocation(new Point(24, 4));
       affineC00REd.setSize(new Dimension(84, 24));
       affineC00REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
@@ -8092,7 +8092,7 @@ public class MainEditorFrame extends JFrame {
       affineC01REd.setPreferredSize(new Dimension(76, 24));
       affineC01REd.setText("");
       affineC01REd.setToolTipText("Set affine coefficients directly");
-      affineC01REd.setLocation(new Point(24, 30));
+      affineC01REd.setLocation(new Point(24, 26));
       affineC01REd.setSize(new Dimension(84, 24));
       affineC01REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
@@ -8123,7 +8123,7 @@ public class MainEditorFrame extends JFrame {
       affineC10REd.setPreferredSize(new Dimension(76, 24));
       affineC10REd.setText("");
       affineC10REd.setToolTipText("Set affine coefficients directly");
-      affineC10REd.setLocation(new Point(132, 6));
+      affineC10REd.setLocation(new Point(132, 4));
       affineC10REd.setSize(new Dimension(84, 24));
       affineC10REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
@@ -8153,7 +8153,7 @@ public class MainEditorFrame extends JFrame {
       affineC11REd.setPreferredSize(new Dimension(76, 24));
       affineC11REd.setText("");
       affineC11REd.setToolTipText("Set affine coefficients directly");
-      affineC11REd.setLocation(new Point(132, 30));
+      affineC11REd.setLocation(new Point(132, 26));
       affineC11REd.setSize(new Dimension(84, 24));
       affineC11REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
@@ -8183,7 +8183,7 @@ public class MainEditorFrame extends JFrame {
       affineC20REd.setPreferredSize(new Dimension(76, 24));
       affineC20REd.setText("");
       affineC20REd.setToolTipText("Set affine coefficients directly");
-      affineC20REd.setLocation(new Point(240, 6));
+      affineC20REd.setLocation(new Point(240, 4));
       affineC20REd.setSize(new Dimension(84, 24));
       affineC20REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
@@ -8213,7 +8213,7 @@ public class MainEditorFrame extends JFrame {
       affineC21REd.setPreferredSize(new Dimension(76, 24));
       affineC21REd.setText("");
       affineC21REd.setToolTipText("Set affine coefficients directly");
-      affineC21REd.setLocation(new Point(240, 30));
+      affineC21REd.setLocation(new Point(240, 26));
       affineC21REd.setSize(new Dimension(84, 24));
       affineC21REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
@@ -8231,7 +8231,7 @@ public class MainEditorFrame extends JFrame {
       affineRotateLeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineRotateLeftButton.setPreferredSize(new Dimension(55, 24));
       affineRotateLeftButton.setSize(new Dimension(70, 24));
-      affineRotateLeftButton.setLocation(new Point(0, 56));
+      affineRotateLeftButton.setLocation(new Point(0, 50));
       affineRotateLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/object-rotate-left-3.png")));
       affineRotateLeftButton.setToolTipText("Rotate triangle left");
       affineRotateLeftButton.setText("");
@@ -8254,7 +8254,7 @@ public class MainEditorFrame extends JFrame {
       affineRotateRightButton = new JButton();
       affineRotateRightButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineRotateRightButton.setPreferredSize(new Dimension(55, 24));
-      affineRotateRightButton.setLocation(new Point(0, 101));
+      affineRotateRightButton.setLocation(new Point(0, 94));
       affineRotateRightButton.setSize(new Dimension(70, 24));
       //      affineRotateRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnRight.gif")));
       affineRotateRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/object-rotate-right-3.png")));
@@ -8279,7 +8279,7 @@ public class MainEditorFrame extends JFrame {
       affineEnlargeButton = new JButton();
       affineEnlargeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 8));
       affineEnlargeButton.setPreferredSize(new Dimension(55, 24));
-      affineEnlargeButton.setLocation(new Point(92, 56));
+      affineEnlargeButton.setLocation(new Point(92, 50));
       affineEnlargeButton.setSize(new Dimension(70, 24));
       affineEnlargeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-out.png")));
       affineEnlargeButton.setToolTipText("Enlarge triangle");
@@ -8303,7 +8303,7 @@ public class MainEditorFrame extends JFrame {
       affineShrinkButton = new JButton();
       affineShrinkButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 8));
       affineShrinkButton.setPreferredSize(new Dimension(55, 24));
-      affineShrinkButton.setLocation(new Point(92, 101));
+      affineShrinkButton.setLocation(new Point(92, 94));
       affineShrinkButton.setSize(new Dimension(70, 24));
       //      affineShrinkButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/shrink.gif")));
       affineShrinkButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-in.png")));
@@ -8330,7 +8330,7 @@ public class MainEditorFrame extends JFrame {
       affineRotateAmountREd.setText("90");
       affineRotateAmountREd.setToolTipText("Angle in degrees to rotate triangle");
       affineRotateAmountREd.setSize(new Dimension(70, 24));
-      affineRotateAmountREd.setLocation(new Point(0, 79));
+      affineRotateAmountREd.setLocation(new Point(0, 72));
       affineRotateAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineRotateAmountREd;
@@ -8401,7 +8401,7 @@ public class MainEditorFrame extends JFrame {
   private JSplitPane getTransformationsSplitPane() {
     if (transformationsSplitPane == null) {
       transformationsSplitPane = new JSplitPane();
-      transformationsSplitPane.setDividerLocation(142);
+      transformationsSplitPane.setDividerLocation(140);
       transformationsSplitPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       transformationsSplitPane.setTopComponent(getTransformationsNorthPanel());
       transformationsSplitPane.setBottomComponent(getTinaTransformationsTabbedPane());
@@ -8422,7 +8422,7 @@ public class MainEditorFrame extends JFrame {
       affineScaleAmountREd.setText("105");
       affineScaleAmountREd.setToolTipText("Percentage to enlarge or shrink triangle (should be larger than 100)");
       affineScaleAmountREd.setSize(new Dimension(70, 24));
-      affineScaleAmountREd.setLocation(new Point(92, 79));
+      affineScaleAmountREd.setLocation(new Point(92, 72));
       affineScaleAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineScaleAmountREd;
@@ -8438,7 +8438,7 @@ public class MainEditorFrame extends JFrame {
       affineMoveUpButton = new JButton();
       affineMoveUpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineMoveUpButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveUpButton.setLocation(new Point(215, 56));
+      affineMoveUpButton.setLocation(new Point(215, 50));
       affineMoveUpButton.setSize(new Dimension(70, 24));
       //      affineMoveUpButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveUp.gif")));
       affineMoveUpButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-up.png")));
@@ -8463,7 +8463,7 @@ public class MainEditorFrame extends JFrame {
       affineMoveDownButton = new JButton();
       affineMoveDownButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineMoveDownButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveDownButton.setLocation(new Point(215, 101));
+      affineMoveDownButton.setLocation(new Point(215, 94));
       affineMoveDownButton.setSize(new Dimension(70, 24));
       //      affineMoveDownButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveDown.gif")));
       affineMoveDownButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-down.png")));
@@ -8488,7 +8488,7 @@ public class MainEditorFrame extends JFrame {
       affineMoveLeftButton = new JButton();
       affineMoveLeftButton.setText("");
       affineMoveLeftButton.setPreferredSize(new Dimension(55, 24));
-      affineMoveLeftButton.setLocation(new Point(176, 79));
+      affineMoveLeftButton.setLocation(new Point(176, 72));
       affineMoveLeftButton.setSize(new Dimension(42, 24));
       //      affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
       affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-left.png")));
@@ -8512,7 +8512,7 @@ public class MainEditorFrame extends JFrame {
     if (affineMoveRightButton == null) {
       affineMoveRightButton = new JButton();
       affineMoveRightButton.setText("");
-      affineMoveRightButton.setLocation(new Point(282, 79));
+      affineMoveRightButton.setLocation(new Point(282, 72));
       affineMoveRightButton.setSize(new Dimension(42, 24));
       affineMoveRightButton.setPreferredSize(new Dimension(55, 24));
       //      affineMoveRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
@@ -8540,7 +8540,7 @@ public class MainEditorFrame extends JFrame {
       affineMoveVertAmountREd.setText("0.5");
       affineMoveVertAmountREd.setToolTipText("Units to move triangle");
       affineMoveVertAmountREd.setSize(new Dimension(70, 24));
-      affineMoveVertAmountREd.setLocation(new Point(215, 79));
+      affineMoveVertAmountREd.setLocation(new Point(215, 72));
       affineMoveVertAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineMoveVertAmountREd;
@@ -10115,7 +10115,7 @@ public class MainEditorFrame extends JFrame {
       affineEditPostTransformButton.setText("Post TF");
       affineEditPostTransformButton.setToolTipText("Toggle post transform mode");
       affineEditPostTransformButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineEditPostTransformButton.setLocation(new Point(0, 154));
+      affineEditPostTransformButton.setLocation(new Point(0, 144));
       affineEditPostTransformButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_post.png")));
       affineEditPostTransformButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10173,7 +10173,7 @@ public class MainEditorFrame extends JFrame {
       affineResetTransformButton = new JButton();
       affineResetTransformButton.setPreferredSize(new Dimension(136, 24));
       affineResetTransformButton.setText("Reset TF");
-      affineResetTransformButton.setLocation(new Point(109, 154));
+      affineResetTransformButton.setLocation(new Point(109, 144));
       affineResetTransformButton.setSize(new Dimension(104, 24));
       affineResetTransformButton.setToolTipText("Reset affine transform to defaults");
       affineResetTransformButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -13185,7 +13185,7 @@ public class MainEditorFrame extends JFrame {
       affineFlipHorizontalButton.setText("");
       affineFlipHorizontalButton.setToolTipText("Horizontal flip");
       affineFlipHorizontalButton.setSize(new Dimension(70, 24));
-      affineFlipHorizontalButton.setLocation(new Point(176, 126));
+      affineFlipHorizontalButton.setLocation(new Point(176, 118));
       affineFlipHorizontalButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 8));
       affineFlipHorizontalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -13210,7 +13210,7 @@ public class MainEditorFrame extends JFrame {
       affineFlipVerticalButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/object-flip-vertical-2.png")));
       affineFlipVerticalButton.setText("");
       affineFlipVerticalButton.setSize(new Dimension(70, 24));
-      affineFlipVerticalButton.setLocation(new Point(254, 126));
+      affineFlipVerticalButton.setLocation(new Point(254, 118));
       affineFlipVerticalButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 8));
       affineFlipVerticalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -13534,7 +13534,7 @@ public class MainEditorFrame extends JFrame {
       affineScaleXButton.setToolTipText("Allow scaling in x-direction");
       affineScaleXButton.setMnemonic(KeyEvent.VK_P);
       affineScaleXButton.setText("");
-      affineScaleXButton.setLocation(new Point(92, 126));
+      affineScaleXButton.setLocation(new Point(92, 118));
       affineScaleXButton.setSize(new Dimension(32, 24));
       affineScaleXButton.setSelected(true);
       //      affineScaleXButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleX.gif")));
@@ -13563,7 +13563,7 @@ public class MainEditorFrame extends JFrame {
       affineScaleYButton.setSelected(true);
       affineScaleYButton.setText("");
       affineScaleYButton.setSize(new Dimension(32, 24));
-      affineScaleYButton.setLocation(new Point(130, 126));
+      affineScaleYButton.setLocation(new Point(130, 118));
       //      affineScaleYButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleY.gif")));
       affineScaleYButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/object-flip-vertical.png")));
       affineScaleYButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -17645,7 +17645,7 @@ public class MainEditorFrame extends JFrame {
       affineScaleEditMotionCurveBtn.setPreferredSize(new Dimension(55, 24));
       affineScaleEditMotionCurveBtn.setLocation(new Point(0, 56));
       affineScaleEditMotionCurveBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineScaleEditMotionCurveBtn.setBounds(92, 56, 22, 24);
+      affineScaleEditMotionCurveBtn.setBounds(92, 50, 22, 24);
       tinaAffineTransformationPanel.add(affineScaleEditMotionCurveBtn);
     }
     return affineScaleEditMotionCurveBtn;
