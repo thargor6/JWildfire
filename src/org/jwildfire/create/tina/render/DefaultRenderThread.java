@@ -114,6 +114,13 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
             state.validateState();
           }
         }
+        if (iter % 100000 == 0) {
+          try {
+            Thread.sleep(3);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
         for (DefaultRenderIterationState state : iterationState) {
           try {
             state.iterateNext();
