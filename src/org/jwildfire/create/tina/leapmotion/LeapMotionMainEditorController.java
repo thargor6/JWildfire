@@ -101,7 +101,7 @@ public class LeapMotionMainEditorController {
 
       try {
         String libPath = System.getProperty("java.library.path").trim();
-        leapMotionEnabled = libPath.length() > 0 && new File(libPath).exists();
+        leapMotionEnabled = libPath.length() > 0;
       }
       catch (Exception ex) {
         leapMotionEnabled = false;

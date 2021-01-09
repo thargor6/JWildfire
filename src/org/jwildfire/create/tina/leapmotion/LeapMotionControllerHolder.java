@@ -210,7 +210,7 @@ public class LeapMotionControllerHolder {
       new Thread(leapMotionEditorListenerThread).start();
       leapMotionController.addListener(listener);
     }
-    catch (Exception ex) {
+    catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
