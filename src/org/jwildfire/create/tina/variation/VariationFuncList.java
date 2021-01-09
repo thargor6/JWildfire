@@ -944,6 +944,7 @@ public class VariationFuncList {
     registerVariationFunc(Hypertile3D2bFunc.class);  
     registerVariationFunc(PDJ3DFunc.class);	  
     registerVariationFunc(Petal3DFunc.class);
+    registerVariationFunc(Petal3DApoFunc.class);
     registerVariationFunc(CutKleinianFunc.class);	  
     registerVariationFunc(CutMandalaFunc.class);	  
   
