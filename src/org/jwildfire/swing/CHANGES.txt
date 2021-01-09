@@ -9,7 +9,12 @@ V6.20 (10.01.2021)
  - minor optimizations of the user-interface for smaller resolutions at the "affine"-tab
  - new petal3D_apo variation by Rick Sidwell and
  - fixed a bug regarding initialization of Leap Motion Controller
- - macOS: fixing problems regarding native file-dialogs under macOS Mojave and below
+ - macOS: fixed problems regarding native file-dialogs under macOS Mojave and below (which caused
+   the app to crash when trying to save an image, for example. This is fixed now.).
+   It was not possible to resolve the problem completely, though. Due to a bug in Java
+   you can currently only access folders in the sandbox (~/Library/Containers/com.overwhale.JWildfire/Data)
+   on Mojave and below. So it is recommended to update to Catalina or Big Sur if possible.
+   But, besides that, all file-operations should work as expected now.
 
 V6.10 (18.12.2020)
  - added a new "Quick mutations"-tab for easily creating a batch of variations of the currently selected flame.
