@@ -24,7 +24,7 @@ import java.util.*;
 
 public class VariationCostEvaluator {
   private final long EVAL_ROUNDS = 200000;
-  private final long INIT_ROUNDS = 30000;
+  private final long INIT_ROUNDS = 3000;
 
   private final long MAX_INIT_TIME = 10000000000L;
   private final long MAX_EVAL_TIME = 5000000000L;
@@ -192,87 +192,99 @@ public class VariationCostEvaluator {
     XYZPoint affine = new XYZPoint();
     XYZPoint var = new XYZPoint();
 
-    System.err.println("ROUND 1/2...");
     List<Item> items = new ArrayList<>();
-    for(String variationName: VariationFuncList.getNameList()) {
-      Flame flame = createFlame();
-      XForm xForm = flame.getFirstLayer().getXForms().get(0);
-      xForm.clearVariations();
-      VariationFunc fnc = VariationFuncList.getVariationFuncInstance(variationName);
-      xForm.addVariation(1.0, fnc);
-      Item item = new Item(flame, fnc, variationName);
-      items.add(item);
-      System.err.println("Probing initialization of " + item.getVariationName() + "...");
-      if(BLACKLIST.contains(item.getVariationName())) {
-        item.setInitCost(-1);
-        item.setEvalCost(-1);
-        item.setInitError(true);
-        item.setEvalError(true);
+    {
+      System.err.println("ROUND 1/2...");
+      int idx = 0;
+      for (String variationName : VariationFuncList.getNameList()) {
+        idx++;
+        Flame flame = createFlame();
+        XForm xForm = flame.getFirstLayer().getXForms().get(0);
+        xForm.clearVariations();
+        VariationFunc fnc = VariationFuncList.getVariationFuncInstance(variationName);
+        xForm.addVariation(1.0, fnc);
+        Item item = new Item(flame, fnc, variationName);
+        items.add(item);
+        System.err.println(
+            idx
+                + "/"
+                + VariationFuncList.getNameList().size()
+                + ": probing initialization of "
+                + item.getVariationName()
+                + "...");
+        if (BLACKLIST.contains(item.getVariationName())) {
+          item.setInitCost(-1);
+          item.setEvalCost(-1);
+          item.setInitError(true);
+          item.setEvalError(true);
+        } else {
+          System.gc();
+          long m0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+          long t0 = System.nanoTime();
+          for (int i = 0; i < INIT_ROUNDS; i++) {
+            try {
+              rndParamMutation.execute(item.getFlame().getFirstLayer());
+              fnc.init(ctx, flame.getFirstLayer(), flame.getFirstLayer().getXForms().get(0), 1.0);
+            } catch (Exception ex) {
+              item.setInitError(true);
+            }
+            item.setInitRounds(i);
+            if (System.nanoTime() - t0 >= MAX_INIT_TIME) {
+              System.err.println("  TOO LONG");
+              break;
+            }
+          }
+          long t1 = System.nanoTime();
+          long m1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+          System.gc();
+          item.setInitCost(t1 - t0);
+          System.err.println("  " + item.getInitCost());
+          item.setInitMemory(m1 - m0);
+        }
       }
-      else {
-        System.gc();
-        long m0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        long t0 = System.nanoTime();
-        for (int i = 0; i < INIT_ROUNDS; i++) {
-          try {
+    }
+
+    {
+      System.err.println("ROUND 2/2...");
+      int idx = 0;
+      for (Item item : items) {
+        idx++;
+        if (!item.isInitError()) {
+          System.err.println(idx +"/" + items.size() + ": probing evaluation of " + item.getVariationName() + "...");
+          System.gc();
+          long m0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+          long t0 = System.nanoTime();
+          for (int i = 0; i < EVAL_ROUNDS; i++) {
             rndParamMutation.execute(item.getFlame().getFirstLayer());
-            fnc.init(ctx, flame.getFirstLayer(), flame.getFirstLayer().getXForms().get(0), 1.0);
-          } catch (Exception ex) {
-            item.setInitError(true);
+            var.clear();
+            affine.x = 0.5 - randGen.random();
+            affine.y = 0.5 - randGen.random();
+            affine.z = 0.5 - randGen.random();
+            try {
+              item.getFnc()
+                  .transform(
+                      ctx, item.getFlame().getFirstLayer().getXForms().get(0), affine, var, 1.0);
+            } catch (Exception ex) {
+              item.setEvalError(true);
+            }
+            item.setEvalRounds(i);
+            if (System.nanoTime() - t0 > MAX_EVAL_TIME) {
+              System.err.println("  TOO LONG");
+              break;
+            }
           }
-          item.setInitRounds(i);
-          if (System.nanoTime() - t0 >= MAX_INIT_TIME) {
-            System.err.println("  TOO LONG");
-            break;
-          }
+          long t1 = System.nanoTime();
+          long m1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+          System.gc();
+          item.setEvalCost(t1 - t0);
+          System.err.println("  " + item.getEvalCost());
+          item.setEvalMemory(m1 - m0);
+        } else {
+          item.setEvalError(true);
+          item.setEvalCost(-1);
         }
-        long t1 = System.nanoTime();
-        long m1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        System.gc();
-        item.setInitCost(t1 - t0);
-        System.err.println("  "+item.getInitCost());
-        item.setInitMemory(m1 - m0);
       }
     }
-
-    System.err.println("ROUND 2/2...");
-    for(Item item: items) {
-      if(!item.isInitError()) {
-        System.err.println("probing evaluation of " + item.getVariationName() + "...");
-        System.gc();
-        long m0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        long t0 = System.nanoTime();
-        for (int i = 0; i < EVAL_ROUNDS; i++) {
-          rndParamMutation.execute(item.getFlame().getFirstLayer());
-          var.clear();
-          affine.x = 0.5 - randGen.random();
-          affine.y = 0.5 - randGen.random();
-          affine.z = 0.5 - randGen.random();
-          try {
-            item.getFnc().transform(ctx, item.getFlame().getFirstLayer().getXForms().get(0), affine, var, 1.0);
-          }
-          catch(Exception ex) {
-            item.setEvalError(true);
-          }
-          item.setEvalRounds(i);
-          if(System.nanoTime() - t0 > MAX_EVAL_TIME) {
-            System.err.println("  TOO LONG");
-            break;
-          }
-        }
-        long t1 = System.nanoTime();
-        long m1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        System.gc();
-        item.setEvalCost(t1 - t0);
-        System.err.println("  " + item.getEvalCost());
-        item.setEvalMemory(m1 - m0);
-      }
-      else {
-        item.setEvalError(true);
-        item.setEvalCost(-1);
-      }
-    }
-
     for(Item item: items) {
       long initPenalty = (item.getInitRounds() < INIT_ROUNDS - INIT_ROUNDS / 10) ? 2 : 1;
       long evalPenalty = (item.getEvalRounds() < EVAL_ROUNDS - EVAL_ROUNDS / 10) ? 2 : 1;

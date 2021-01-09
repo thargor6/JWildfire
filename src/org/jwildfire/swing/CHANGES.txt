@@ -1,3 +1,16 @@
+V6.20 (10.01.2021)
+ - improved the responsibility of the app (which also reduces "micro-freezes"). This will also slightly
+   reduce "peak-rendering-performance", but this should not matter much
+ - new snowflake_wf-variation (which utilizes the same algorithm (with the same params) as my online-snowflake-generator: http://overwhale.com/snowflake ,
+   which is an implementation of the excellent paper "A local cellular model for snow crystal growth" by Clifford A. Reiter).
+   Using this variation (similar to "dla_wf") you can create a bunch of interesting "organic" looking fractals,
+   you may have a look at my gallery fro inspiration: https://blog.overwhale.com/?page_id=5517
+ - new SNOWFLAKE-dof-blur-shape (see the "Bokeh"-sub-tab at the "DOF/Bokeh"-tab)
+ - minor optimizations of the user-interface for smaller resolutions at the "affine"-tab
+ - new petal3D_apo variation by Rick Sidwell and
+ - fixed a bug regarding initialization of Leap Motion Controller
+ - macOS: fixing problems regarding native file-dialogs under macOS Mojave and below
+
 V6.10 (18.12.2020)
  - added a new "Quick mutations"-tab for easily creating a batch of variations of the currently selected flame.
    You may load any of those mutations into the main editor by double-clicking at it.
