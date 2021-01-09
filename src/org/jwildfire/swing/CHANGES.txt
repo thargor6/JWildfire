@@ -7,7 +7,7 @@ V6.20 (10.01.2021)
    you may have a look at my gallery for inspiration: https://blog.overwhale.com/?page_id=5517
  - new SNOWFLAKE-dof-blur-shape (see the "Bokeh"-sub-tab at the "DOF/Bokeh"-tab)
  - minor optimizations of the user-interface for smaller resolutions at the "affine"-tab
- - new petal3D_apo variation by Rick Sidwell and
+ - new petal3D_apo variation by Rick Sidwell and Larry Berlin
  - fixed a bug regarding initialization of Leap Motion Controller
  - macOS: fixed problems regarding native file-dialogs under macOS Mojave and below (which caused
    the app to crash when trying to save an image, for example. This is fixed now.).
