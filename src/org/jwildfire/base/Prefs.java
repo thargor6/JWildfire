@@ -541,20 +541,60 @@ public class Prefs extends ManagedObject {
   @Property(description = "Quality for preview rendering", category = PropertyCategory.TINA)
   private int tinaRenderPreviewQuality = 100;
 
+  private String getDefaultHomeDir() {
+    File homeDir = new File(System.getProperty("user.home"));
+    if(Tools.ensureSpecialMacOSFileAccessHandling()) {
+      String path = homeDir.getAbsolutePath();
+      if(path.contains("Library/Containers/com.overwhale.JWildfire")) {
+        String fixedPath = path.substring(0, path.indexOf("/Library/"));
+        homeDir = new File(fixedPath);
+      }
+    }
+    {
+      File jwfDir = new File(homeDir, "JWildfire");
+      if (jwfDir.exists() && jwfDir.isDirectory()) {
+        return jwfDir.getAbsolutePath();
+      }
+    }
+    {
+      File docJwfDir = new File(homeDir, "Documents/JWildfire");
+      if (docJwfDir.exists() && docJwfDir.isDirectory()) {
+        return docJwfDir.getAbsolutePath();
+      }
+    }
+    {
+      File docDir = new File(homeDir, "Documents");
+      if (docDir.exists() && docDir.isDirectory()) {
+        return docDir.getAbsolutePath();
+      }
+    }
+    return homeDir.getAbsolutePath();
+  }
+
+  private String checkPathAndProvideDefault(String folder) {
+    if(folder!=null) {
+      File file = new File(folder);
+      if(file.isDirectory() && file.exists() && file.canRead()) {
+        return folder;
+      }
+    }
+    return getDefaultHomeDir();
+  }
+
   public String getInputSoundFilePath() {
-    return lastInputSoundFilePath != null ? lastInputSoundFilePath : soundFilePath;
+    return checkPathAndProvideDefault(lastInputSoundFilePath != null ? lastInputSoundFilePath : soundFilePath);
   }
 
   public String getOutputMovieFlamesPath() {
-    return lastOutputMovieFlamesPath != null ? lastOutputMovieFlamesPath : movieFlamesPath;
+    return checkPathAndProvideDefault(lastOutputMovieFlamesPath != null ? lastOutputMovieFlamesPath : movieFlamesPath);
   }
 
   public String getInputImagePath() {
-    return lastInputImagePath != null ? lastInputImagePath : imagePath;
+    return checkPathAndProvideDefault(lastInputImagePath != null ? lastInputImagePath : imagePath);
   }
 
   public String getOutputImagePath() {
-    return lastOutputImagePath != null ? lastOutputImagePath : imagePath;
+    return checkPathAndProvideDefault(lastOutputImagePath != null ? lastOutputImagePath : imagePath);
   }
 
   public void setLastInputSoundFile(File pFile) {
@@ -586,7 +626,7 @@ public class Prefs extends ManagedObject {
   }
 
   public String getInputFlamePath() {
-    return lastInputFlamePath != null ? lastInputFlamePath : tinaFlamePath;
+    return checkPathAndProvideDefault(lastInputFlamePath != null ? lastInputFlamePath : tinaFlamePath);
   }
 
   public void setLastInputFlameFile(File pFile) {
@@ -604,7 +644,7 @@ public class Prefs extends ManagedObject {
   }
 
   public String getOutputFlamePath() {
-    return lastOutputFlamePath != null ? lastOutputFlamePath : tinaFlamePath;
+    return checkPathAndProvideDefault(lastOutputFlamePath != null ? lastOutputFlamePath : tinaFlamePath);
   }
 
   public void setLastOutputFlameFile(File pFile) {
@@ -615,7 +655,7 @@ public class Prefs extends ManagedObject {
   }
 
   public String getInputJWFMoviePath() {
-    return lastInputJWFMoviePath != null ? lastInputJWFMoviePath : tinaJWFMoviePath;
+    return checkPathAndProvideDefault(lastInputJWFMoviePath != null ? lastInputJWFMoviePath : tinaJWFMoviePath);
   }
 
   public void setLastInputJWFMovieFile(File pFile) {
@@ -626,7 +666,7 @@ public class Prefs extends ManagedObject {
   }
 
   public String getOutputJWFMoviePath() {
-    return lastOutputJWFMoviePath != null ? lastOutputJWFMoviePath : tinaJWFMoviePath;
+    return checkPathAndProvideDefault(lastOutputJWFMoviePath != null ? lastOutputJWFMoviePath : tinaJWFMoviePath);
   }
 
   public void setLastOutputJWFMovieFile(File pFile) {
@@ -653,7 +693,7 @@ public class Prefs extends ManagedObject {
   }
 
   public String getInputSunflowScenePath() {
-    return lastInputSunflowScenePath != null ? lastInputSunflowScenePath : sunflowScenePath;
+    return checkPathAndProvideDefault(lastInputSunflowScenePath != null ? lastInputSunflowScenePath : sunflowScenePath);
   }
 
   public void setLastInputSunflowSceneFile(File pFile) {
@@ -664,7 +704,7 @@ public class Prefs extends ManagedObject {
   }
 
   public String getOutputSunflowScenePath() {
-    return lastOutputSunflowScenePath != null ? lastOutputSunflowScenePath : sunflowScenePath;
+    return checkPathAndProvideDefault(lastOutputSunflowScenePath != null ? lastOutputSunflowScenePath : sunflowScenePath);
   }
 
   public void setLastOutputSunflowSceneFile(File pFile) {
@@ -699,19 +739,19 @@ public class Prefs extends ManagedObject {
   }
 
   public String getImagePath() {
-    return imagePath;
+    return checkPathAndProvideDefault(imagePath);
   }
 
   public String getTinaFlamePath() {
-    return tinaFlamePath;
+    return checkPathAndProvideDefault(tinaFlamePath);
   }
 
   public String getTinaJWFMoviePath() {
-    return tinaJWFMoviePath;
+    return checkPathAndProvideDefault(tinaJWFMoviePath);
   }
 
   public String getSunflowScenePath() {
-    return sunflowScenePath;
+    return checkPathAndProvideDefault(sunflowScenePath);
   }
 
   public void assign(Prefs pSrc) {
@@ -959,7 +999,7 @@ public class Prefs extends ManagedObject {
   }
 
   public String getMovieFlamesPath() {
-    return movieFlamesPath;
+    return checkPathAndProvideDefault(movieFlamesPath);
   }
 
   public void setMovieFlamesPath(String movieFlamesPath) {
@@ -1056,7 +1096,7 @@ public class Prefs extends ManagedObject {
   }
 
   public String getTinaSVGPath() {
-    return tinaSVGPath;
+    return checkPathAndProvideDefault(tinaSVGPath);
   }
 
   public void setTinaSVGPath(String tinaSVGPath) {
@@ -1191,7 +1231,7 @@ public class Prefs extends ManagedObject {
   }
 
   public String getTinaMeshPath() {
-    return tinaMeshPath;
+    return checkPathAndProvideDefault(tinaMeshPath);
   }
 
   public void setTinaMeshPath(String pTinaMeshPath) {
@@ -1450,7 +1490,7 @@ public class Prefs extends ManagedObject {
   }
 
   public String getTinaRawMotionDataPath() {
-    return tinaRawMotionDataPath;
+    return checkPathAndProvideDefault(tinaRawMotionDataPath);
   }
 
   public void setTinaRawMotionDataPath(String pTinaRawMotionDataPath) {

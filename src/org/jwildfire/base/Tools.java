@@ -696,8 +696,11 @@ public class Tools {
   }
 
   public static final int OSTYPE_MACOS_VERSION_X = 10;
+  // public static final int OSTYPE_MACOS_SUBVERSION_HIGH_SIERRA = 13;
+  // public static final int OSTYPE_MACOS_SUBVERSION_MOJAVE = 14;
   public static final int OSTYPE_MACOS_SUBVERSION_CATALINA = 15;
 
+  // Because native file dialogs crash on Mojave
   public static boolean isMacOsBeforeCatalina() {
     int majorVersion = getOSVersion(0);
     int minorVersion = getOSVersion(1);

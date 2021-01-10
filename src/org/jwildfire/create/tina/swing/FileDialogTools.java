@@ -838,8 +838,6 @@ public class FileDialogTools {
       try {
         System.setProperty("apple.awt.fileDialogForDirectories", "true");
         FileDialog fileDialog = new FileDialog(frame, caption);
-        fileDialog.setModal(true);
-        fileDialog.setVisible(true);
         if (directory != null && !directory.isEmpty()) {
           try {
             fileDialog.setDirectory(directory);
@@ -847,6 +845,8 @@ public class FileDialogTools {
             ex.printStackTrace();
           }
         }
+        fileDialog.setModal(true);
+        fileDialog.setVisible(true);
         if (fileDialog.getFile() != null && !fileDialog.getFile().isEmpty()) {
           File file = fileDialog.getFiles()[0];
           // return file.getParentFile().getAbsolutePath();
