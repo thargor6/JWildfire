@@ -27,6 +27,9 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -38,6 +41,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
 import jsyntaxpane.DefaultSyntaxKit;
+import jsyntaxpane.syntaxkits.JavaSyntaxKit;
 import jsyntaxpane.util.Configuration;
 
 import org.jwildfire.base.Prefs;
@@ -320,13 +324,14 @@ public class ScriptEditDialog extends JDialog {
   public void setScriptNode(JWFScriptUserNode pScriptNode) throws Exception {
     String scriptname = pScriptNode.getUserObject().toString();
     setTitle("Editing " + scriptname);
-
     String script = pScriptNode.getScript();
-    scriptEditor.setText("");
-    scriptEditor.setContentType("text/java");
+    if (Prefs.getPrefs().isTinaAdvancedCodeEditor()) {
+      scriptEditor.setText("");
+      removeInvalidActionsFromJavaSyntaxKit();
+      scriptEditor.setContentType("text/java");
+    }
     scriptEditor.setText(script);
     scriptEditor.setCaretPosition(0);
-
     String description = pScriptNode.getDescription();
     descriptionEditor.setBackground(SystemColor.menu);
     descriptionEditor.setText("");
@@ -335,6 +340,15 @@ public class ScriptEditDialog extends JDialog {
     descriptionEditor.setCaretPosition(0);
 
     scriptNode = pScriptNode;
+  }
+
+  // remove (unused) actions which would not work since Java 15 from the config of the syntax kit
+  private void removeInvalidActionsFromJavaSyntaxKit() {
+    final Pattern ACTION_KEY_PATTERN = Pattern.compile("Action\\.((\\w|-)+)");
+    List<Configuration.StringKeyMatcher> filtered = DefaultSyntaxKit.getConfig(JavaSyntaxKit.class).getKeys(ACTION_KEY_PATTERN).stream().filter(m -> m.group1.equals("insert-date")).collect(Collectors.toList());
+    for (Configuration.StringKeyMatcher m : filtered) {
+      DefaultSyntaxKit.getConfig(JavaSyntaxKit.class).remove(m.key);
+    }
   }
 
   protected void runScript() {

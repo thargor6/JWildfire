@@ -154,7 +154,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       height /= 2;
     }
     image = new SimpleImage(width, height);
-    image.getBufferedImg().setAccelerationPriority(1.0f);
+    //image.getBufferedImg().setAccelerationPriority(1.0f);
     image.fillBackground(prefs.getTinaRandomBatchBGColorRed(), prefs.getTinaRandomBatchBGColorGreen(), prefs.getTinaRandomBatchBGColorBlue());
     ImagePanel imagePanel = new ImagePanel(image, 0, 0, image.getImageWidth());
     imagePanel.setSize(image.getImageWidth(), image.getImageHeight());

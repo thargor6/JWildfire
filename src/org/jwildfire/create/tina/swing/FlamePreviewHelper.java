@@ -257,7 +257,7 @@ public class FlamePreviewHelper implements IterationObserver {
 
             SimpleImage img = res.getImage();
             long t1 = System.currentTimeMillis();
-            img.getBufferedImg().setAccelerationPriority(1.0f);
+            //img.getBufferedImg().setAccelerationPriority(1.0f);
 
             if (layerAppendBtn != null && layerAppendBtn.isSelected() && !pMouseDown) {
               showLayerAppendModeIndicator(img);
@@ -327,7 +327,7 @@ public class FlamePreviewHelper implements IterationObserver {
           FlameRenderer renderer = new FlameRenderer(flame, prefs, isTransparencyEnabled(), false);
           RenderedFlame res = renderer.renderFlame(info);
           SimpleImage img = res.getImage();
-          img.getBufferedImg().setAccelerationPriority(1.0f);
+          //img.getBufferedImg().setAccelerationPriority(1.0f);
           return img;
         }
         catch (Throwable ex) {
@@ -501,7 +501,7 @@ public class FlamePreviewHelper implements IterationObserver {
             renderer.setRenderScale(renderScale);
             RenderedFlame res = renderer.renderFlame(info);
             SimpleImage img = res.getImage();
-            img.getBufferedImg().setAccelerationPriority(1.0f);
+            //img.getBufferedImg().setAccelerationPriority(1.0f);
             return img;
           }
           catch (Throwable ex) {
@@ -655,8 +655,8 @@ public class FlamePreviewHelper implements IterationObserver {
     }
   }
 
-  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 3;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 2;
+  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 5;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 8;
   private final static int MAX_UPDATE_INC_INTERVAL = 200;
 
   private class UpdateDisplayThread implements Runnable, InteractiveRendererImagePostProcessor {
@@ -725,7 +725,7 @@ public class FlamePreviewHelper implements IterationObserver {
                 replaceImageFlag = true;
               }
               currQuality = threads.getRenderThreads().get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
-              if (currQuality > 0.075) {
+              if (currQuality > 0.1) {
                 if (currQuality < 0.5)
                   currQuality *= 10;
                 else if (currQuality < 1.0)

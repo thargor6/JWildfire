@@ -298,7 +298,7 @@ public class FlamesGPURenderFrame extends JFrame {
   JPanel getInteractiveCenterTopPanel() {
     if (interactiveCenterTopPanel == null) {
       interactiveCenterTopPanel = new JPanel();
-      interactiveCenterTopPanel.setBorder(new TitledBorder(null, "GPU render result", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      interactiveCenterTopPanel.setBorder(new TitledBorder(null, "GPU render result  ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       interactiveCenterTopPanel.setLayout(new BorderLayout(0, 0));
     }
     return interactiveCenterTopPanel;

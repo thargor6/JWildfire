@@ -161,7 +161,7 @@ public class FlamesGPURenderController {
       height /= 2;
     }
     image = new SimpleImage(width, height);
-    image.getBufferedImg().setAccelerationPriority(1.0f);
+    //image.getBufferedImg().setAccelerationPriority(1.0f);
     image.fillBackground(
         prefs.getTinaRandomBatchBGColorRed(),
         prefs.getTinaRandomBatchBGColorGreen(),
@@ -177,6 +177,7 @@ public class FlamesGPURenderController {
 
     imageRootPanel.add(imageScrollPane, BorderLayout.CENTER);
 
+    imageRootPanel.getParent().invalidate();
     imageRootPanel.getParent().validate();
   }
 

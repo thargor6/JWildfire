@@ -113,6 +113,7 @@ public class SystemInfoFrame extends JFrame {
     StringBuffer sb = new StringBuffer();
     sb.append("Operating system: " + System.getProperty("os.name") + "\n");
     sb.append("Available processors: " + Runtime.getRuntime().availableProcessors() + " cores\n\n");
+    sb.append("Java version: " + System.getProperty("java.version") + "\n\n");
     long allocatedMemory =
         (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
     long presumableFreeMemory = Runtime.getRuntime().maxMemory() - allocatedMemory;
