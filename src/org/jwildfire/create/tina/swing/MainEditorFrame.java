@@ -12562,6 +12562,7 @@ public class MainEditorFrame extends JFrame {
       mouseTransformSlowButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/click.png")));
       mouseTransformSlowButton.setSelected(false);
       mouseTransformSlowButton.setText("Fine edit");
+      mouseTransformSlowButton.setMnemonic(KeyEvent.VK_F);
       mouseTransformSlowButton.setSize(new Dimension(92, 24));
       mouseTransformSlowButton.setLocation(new Point(88, 4));
       mouseTransformSlowButton.setToolTipText("Toggle fine triangle adjustment mode");
