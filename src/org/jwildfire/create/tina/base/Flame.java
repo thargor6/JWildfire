@@ -271,6 +271,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     layers.add(new Layer());
     sampleDensity = 100.0;
     bgTransparency = true;
+    width = 800;
+    height = 600;
     pixelsPerUnit = 50;
     name = "";
     bgImageFilename = "";
