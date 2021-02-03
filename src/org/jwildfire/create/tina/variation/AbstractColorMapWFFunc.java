@@ -176,7 +176,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
           b = toolPixel.b;
           a = toolPixel.a;
         }
-        if (dc_color > 0) {
+        if (dc_color == 0) {
           pVarTP.rgbColor = true;
           pVarTP.redColor = r;
           pVarTP.greenColor = g;
@@ -214,7 +214,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
           b = rgbArray[2] * 255;
           a = 255.0;
         }
-        if (dc_color > 0) {
+        if (dc_color == 0) {
           pVarTP.rgbColor = true;
           pVarTP.redColor = r;
           pVarTP.greenColor = g;
@@ -223,7 +223,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       }
     } else {
       r = g = b = a = 0.0;
-      if (dc_color > 0) {
+      if (dc_color == 0) {
         pVarTP.rgbColor = true;
         pVarTP.redColor = r;
         pVarTP.greenColor = g;

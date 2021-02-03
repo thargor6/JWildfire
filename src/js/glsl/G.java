@@ -1,7 +1,133 @@
 package js.glsl;
 
+import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleHDRImage;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
+
 public class G {
 
+	  public static vec3 texture(WFImage colorMap,vec2 uv)
+	  {
+//	    Credits:  
+//		  https://forum.openframeworks.cc/t/what-does-the-texture-function-in-glsl-do/21196
+//	    Based with code from JWildfire AbstractColorWFFunc	
+		  
+		int imgWidth =colorMap.getImageWidth();
+		int imgHeight=colorMap.getImageHeight();  
+		int blend_colormap=1;
+		Pixel toolPixel = new Pixel();
+		float[] rgbArray = new float[3];
+		
+	  	double pInputX=uv.x;
+	  	double pInputY=uv.y;
+	      double x = (pInputX - 0.5)  * (double) (imgWidth  - 2);
+	      double y = (pInputY - 0.5)  * (double) (imgHeight - 2);
+	      int ix, iy;
+	      if (blend_colormap > 0) {
+	        ix = (int) MathLib.trunc(x);
+	        iy = (int) MathLib.trunc(y);
+	      } else {
+	        ix = Tools.FTOI(x);
+	        iy = Tools.FTOI(y);
+	      }
+
+	        if (ix < 0) {
+	          int nx = ix / imgWidth - 1;
+	          ix -= nx * imgWidth;
+	        } else if (ix >= imgWidth) {
+	          int nx = ix / imgWidth;
+	          ix -= nx * imgWidth;
+	        }
+
+
+	        if (iy < 0) {
+	          int ny = iy / imgHeight - 1;
+	          iy -= ny * imgHeight;
+	        } else if (iy >= imgHeight) {
+	          int ny = iy / imgHeight;
+	          iy -= ny * imgHeight;
+	        }
+
+
+	      double r, g, b;
+	      if (ix >= 0 && ix < (imgWidth-1) && iy >= 0 && iy < (imgHeight-1)) {
+	        if (colorMap instanceof SimpleImage) {
+	          if (blend_colormap > 0) {
+	            double iufrac = MathLib.frac(x);
+	            double ivfrac = MathLib.frac(y);
+	            toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+	                    ix, iy));
+	            int lur = toolPixel.r;
+	            int lug = toolPixel.g;
+	            int lub = toolPixel.b;
+	            toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+	                    ix + 1, iy));
+	            int rur = toolPixel.r;
+	            int rug = toolPixel.g;
+	            int rub = toolPixel.b;
+	            toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+	                    ix, iy + 1));
+	            int lbr = toolPixel.r;
+	            int lbg = toolPixel.g;
+	            int lbb = toolPixel.b;
+	            toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+	                    ix + 1, iy + 1));
+	            int rbr = toolPixel.r;
+	            int rbg = toolPixel.g;
+	            int rbb = toolPixel.b;
+	            r = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
+	            g = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
+	            b = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
+	          } else {
+	            toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+	                    ix, iy));
+	            r = toolPixel.r;
+	            g = toolPixel.g;
+	            b = toolPixel.b;
+	          }
+	        } else {
+	          if (blend_colormap > 0) {
+	            double iufrac = MathLib.frac(x);
+	            double ivfrac = MathLib.frac(y);
+
+	            ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
+	            double lur = rgbArray[0] * 255;
+	            double lug = rgbArray[1] * 255;
+	            double lub = rgbArray[2] * 255;
+	            ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix + 1, iy);
+	            double rur = rgbArray[0] * 255;
+	            double rug = rgbArray[1] * 255;
+	            double rub = rgbArray[2] * 255;
+	            ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy + 1);
+	            double lbr = rgbArray[0] * 255;
+	            double lbg = rgbArray[1] * 255;
+	            double lbb = rgbArray[2] * 255;
+	            ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix + 1, iy + 1);
+	            double rbr = rgbArray[0] * 255;
+	            double rbg = rgbArray[1] * 255;
+	            double rbb = rgbArray[2] * 255;
+	            r = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
+	            g = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
+	            b = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
+	          } else {
+	            ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
+	            r = rgbArray[0] * 255;
+	            g = rgbArray[1] * 255;
+	            b = rgbArray[2] * 255;
+	          }
+	        }
+	      } else {
+	        r = g = b = 0.0;
+
+	      }
+	      return new vec3(r,g,b);
+	  }	  
+	
+	
 	public static  vec2 Reflect(vec2 incidentVec, vec2 normal)
 	{
 	 vec2 out = incidentVec.minus(normal.multiply( 2.0 * dot(incidentVec, normal)));
