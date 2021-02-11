@@ -90,6 +90,9 @@ public class TQMirrorFunc extends VariationFunc {
 			} else {
 				pVarTP.x += y * r;
 				pVarTP.y += x * s;
+				if (pContext.isPreserveZCoordinate()) {
+					pVarTP.z += pAmount * pAffineTP.z;
+				}				
 			}
 			return;
 		}
