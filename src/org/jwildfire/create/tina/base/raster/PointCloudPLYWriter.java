@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -37,11 +37,13 @@ public class PointCloudPLYWriter {
             "property uchar green\r\n" +
             "property uchar blue\r\n" +
             "property uchar alpha\r\n" +
+            "property float intensity\r\n" +
+            "property float pscale\r\n" +
             "element face 0\r\n" +
             "property list uchar int vertex_indices\r\n" +
             "end_header\r\n");
     for (PCPoint p : pPoints) {
-      sb.append(p.x + " " + p.y + " " + p.z + " " + Tools.roundColor(p.r) + " " + Tools.roundColor(p.g) + " " + Tools.roundColor(p.b) + " " + Tools.roundColor(p.intensity * 255.0) + "\r\n");
+      sb.append(p.x + " " + p.y + " " + p.z + " " + Tools.roundColor(p.r) + " " + Tools.roundColor(p.g) + " " + Tools.roundColor(p.b) + " " + Tools.roundColor(p.intensity * 255.0) + " " + p.intensity + " " + p.logScale + "\r\n");
     }
     try {
       Tools.writeUTF8Textfile(pFilename, sb.toString());
@@ -50,5 +52,4 @@ public class PointCloudPLYWriter {
       Unchecker.rethrow(ex);
     }
   }
-
 }

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.OctreeNode;
 import org.jwildfire.create.tina.OctreeNodeVisitor;
 import org.jwildfire.create.tina.OctreeValue;
@@ -55,7 +56,7 @@ public class RasterPointCloud implements AbstractRaster, Serializable {
   public static class PCPoint {
     float x, y, z;
     float r, g, b;
-    float intensity;
+    float intensity, logScale;
   }
 
   public RasterPointCloud(double pZmin, double pZmax, double pMaxOctreeCellSize) {
@@ -96,6 +97,7 @@ public class RasterPointCloud implements AbstractRaster, Serializable {
         p.x = (float) sample.originalX;
         p.y = (float) sample.originalY;
         p.z = (float) sample.originalZ;
+
         p.r = (float) sample.r;
         p.g = (float) sample.g;
         p.b = (float) sample.b;
@@ -111,6 +113,10 @@ public class RasterPointCloud implements AbstractRaster, Serializable {
 
       }
     }
+  }
+
+  private double calcColorIntensity(double r, double g, double b) {
+    return 0.299 * r + 0.588 * g + 0.113 * b;
   }
 
   @Override
@@ -148,28 +154,32 @@ public class RasterPointCloud implements AbstractRaster, Serializable {
     final LogScaleCalculator logScaleCalculator = new LogScaleCalculator(flame, rasterWidth, rasterHeight, 1);
 
     final List<PCPoint> res = new ArrayList<>();
-    octree.accept(new OctreeNodeVisitor() {
+    octree.accept(
+        new OctreeNodeVisitor() {
 
-      @Override
-      public void visit(OctreeNode pNode) {
-        if (pNode.getValues() != null && !pNode.getValues().isEmpty()) {
-          if (pNode.getValues().size() > 1) {
-            throw new RuntimeException("Call <condenseOctreeNodes> first");
+          @Override
+          public void visit(OctreeNode pNode) {
+            if (pNode.getValues() != null && !pNode.getValues().isEmpty()) {
+              if (pNode.getValues().size() > 1) {
+                throw new RuntimeException("Call <condenseOctreeNodes> first");
+              }
+              PCRawPoint cumPoint = (PCRawPoint) pNode.getValues().iterator().next().getValue();
+              PCPoint avgPoint = new PCPoint();
+              avgPoint.x = (float) (cumPoint.x / (double) cumPoint.count);
+              avgPoint.y = (float) (cumPoint.y / (double) cumPoint.count);
+              avgPoint.z = (float) (cumPoint.z / (double) cumPoint.count);
+              avgPoint.r = (float) (cumPoint.r / (double) cumPoint.count);
+              avgPoint.g = (float) (cumPoint.g / (double) cumPoint.count);
+              avgPoint.b = (float) (cumPoint.b / (double) cumPoint.count);
+              double logScale = logScaleCalculator.calcLogScale(cumPoint.count);
+              avgPoint.logScale = (float)(logScale * 1.0e+06);
+              avgPoint.intensity = (float)(logScale * cumPoint.count * flame.getWhiteLevel());
+              if (avgPoint.intensity >= 0.0 && calcColorIntensity(avgPoint.r, avgPoint.g, avgPoint.b) >= 0.0) {
+                res.add(avgPoint);
+              }
+            }
           }
-          PCRawPoint cumPoint = (PCRawPoint) pNode.getValues().iterator().next().getValue();
-          PCPoint avgPoint = new PCPoint();
-          avgPoint.x = (float) (cumPoint.x / (double) cumPoint.count);
-          avgPoint.y = (float) (cumPoint.y / (double) cumPoint.count);
-          avgPoint.z = (float) (cumPoint.z / (double) cumPoint.count);
-          avgPoint.r = (float) (cumPoint.r / (double) cumPoint.count);
-          avgPoint.g = (float) (cumPoint.g / (double) cumPoint.count);
-          avgPoint.b = (float) (cumPoint.b / (double) cumPoint.count);
-          avgPoint.intensity = (float) (logScaleCalculator.calcLogScale(cumPoint.count) * cumPoint.count * flame.getWhiteLevel());
-          res.add(avgPoint);
-        }
-      }
-
-    });
+        });
     return res;
   }
 

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -713,8 +713,8 @@ public class MeshGenInternalFrame extends JFrame {
       meshGenCentreYSlider.setValue(0);
       meshGenCentreYSlider.setSize(new Dimension(205, 19));
       meshGenCentreYSlider.setPreferredSize(new Dimension(220, 19));
-      meshGenCentreYSlider.setMinimum(-25000);
-      meshGenCentreYSlider.setMaximum(25000);
+      meshGenCentreYSlider.setMinimum(-10000);
+      meshGenCentreYSlider.setMaximum(10000);
       meshGenCentreYSlider.setLocation(new Point(558, 28));
       meshGenCentreYSlider.setBounds(184, 46, 308, 19);
       meshGenCentreYSlider.addChangeListener(new ChangeListener() {
@@ -756,8 +756,8 @@ public class MeshGenInternalFrame extends JFrame {
       meshGenZoomSlider.setValue(0);
       meshGenZoomSlider.setSize(new Dimension(205, 19));
       meshGenZoomSlider.setPreferredSize(new Dimension(220, 19));
-      meshGenZoomSlider.setMinimum(100);
-      meshGenZoomSlider.setMaximum(10000);
+      meshGenZoomSlider.setMinimum(500);
+      meshGenZoomSlider.setMaximum(1500);
       meshGenZoomSlider.setLocation(new Point(558, 52));
       meshGenZoomSlider.setBounds(184, 70, 308, 19);
       meshGenZoomSlider.addChangeListener(new ChangeListener() {
@@ -796,8 +796,8 @@ public class MeshGenInternalFrame extends JFrame {
       panel_1.add(meshGenCentreXSlider);
       meshGenCentreXSlider.setValue(0);
       meshGenCentreXSlider.setPreferredSize(new Dimension(220, 19));
-      meshGenCentreXSlider.setMinimum(-25000);
-      meshGenCentreXSlider.setMaximum(25000);
+      meshGenCentreXSlider.setMinimum(-10000);
+      meshGenCentreXSlider.setMaximum(10000);
       meshGenCentreXSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getMeshGenController() != null) {
