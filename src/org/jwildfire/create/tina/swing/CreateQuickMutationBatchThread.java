@@ -68,7 +68,7 @@ public class CreateQuickMutationBatchThread implements Runnable{
         MutationSampler sampler = new MutationSampler( baseFlame,imgWidth / 4, imgHeight / 4, prefs, mutationType);
         RandomFlameGeneratorSample sample = sampler.createSample();
         FlameThumbnail thumbnail;
-        thumbnail = new FlameThumbnail(sample.getFlame(), null, null, imgWidth, imgHeight);
+        thumbnail = new FlameThumbnail( createFinalFlame(sample.getFlame(), baseFlame), null, null, imgWidth, imgHeight);
         SimpleImage img = thumbnail.getPreview(3 * prefs.getTinaRenderPreviewQuality() / 16);
         randomBatch.add(thumbnail);
         imgList.add(img);
@@ -105,6 +105,18 @@ public class CreateQuickMutationBatchThread implements Runnable{
         }
       });
     }
+  }
+
+  // create a mutation with the settings of the original flame
+  private Flame createFinalFlame(Flame flame, Flame baseFlame) {
+    Flame res = flame.makeCopy();
+    res.setSampleDensity(baseFlame.getSampleDensity());
+    res.setWidth(baseFlame.getWidth());
+    res.setHeight(baseFlame.getHeight());
+    res.setQualityProfile(baseFlame.getQualityProfile());
+    res.setSpatialOversampling(baseFlame.getSpatialOversampling());
+    res.setPixelsPerUnit(baseFlame.getPixelsPerUnit());
+    return res;
   }
 
   public boolean isDone() {
