@@ -91,4 +91,9 @@ public class Hypershift2Func extends VariationFunc {
     return "hypershift2";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

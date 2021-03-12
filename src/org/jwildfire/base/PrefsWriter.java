@@ -16,9 +16,15 @@
 */
 package org.jwildfire.base;
 
+import org.jwildfire.create.tina.variation.VariationFuncType;
+
 import java.awt.Color;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PrefsWriter {
 
@@ -166,6 +172,16 @@ public class PrefsWriter {
       addValue(sb, WindowPrefs.KEY_MAXIMIZED + "." + i, prefs.isMaximized());
       addValue(sb, WindowPrefs.KEY_VISIBLE + "." + i, prefs.isVisible());
     }
+    // Variation Profiles
+    addValue(sb, VariationProfile.KEY_COUNT, pPrefs.getVariationProfiles().size());
+    for (int i = 0; i < pPrefs.getVariationProfiles().size(); i++) {
+      VariationProfile profile = pPrefs.getVariationProfiles().get(i);
+      addValue(sb, VariationProfile.KEY_NAME + "." + i, profile.getName());
+      addValue(sb, VariationProfile.KEY_DEFAULT + "." + i, profile.isDefaultProfile());
+      addValue(sb, VariationProfile.KEY_PROFILE_TYPE + "." + i, profile.getVariationProfileType().toString());
+      addValue(sb, VariationProfile.KEY_VARIATIONS + "." + i, new ArrayList<>(profile.getVariations()));
+      addValue(sb, VariationProfile.KEY_VARIATION_TYPES + "." + i, profile.getVariationTypes().stream().map(vt -> vt.toString()).collect(Collectors.toList()));
+    }
     // macro buttons
     addValue(sb, Prefs.KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS, pPrefs.isCreateTinaDefaultMacroButtons());
     addValue(sb, Prefs.KEY_TINA_MACRO_TOOLBAR_WIDTH, pPrefs.getTinaMacroToolbarWidth());
@@ -179,8 +195,6 @@ public class PrefsWriter {
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_MACRO + "." + i, macroButton.getMacro());
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_INTERNAL + "." + i, macroButton.isInternal());
     }
-    // excluded variations
-    addValue(sb, Prefs.KEY_TINA_EXCLUDED_VARIATIONS, pPrefs.getTinaExcludedVariations());
     //
     Tools.writeUTF8Textfile(System.getProperty("user.home") + File.separator + Prefs.PREFS_FILE, sb.toString());
   }

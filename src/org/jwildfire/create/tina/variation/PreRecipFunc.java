@@ -288,4 +288,9 @@ public class PreRecipFunc extends VariationFunc {
 		return -1;
 	}
 
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_PRE};
+	}
+
 }

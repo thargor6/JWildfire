@@ -47,4 +47,9 @@ public class PyramidFunc extends SimpleVariationFunc {
     return "pyramid";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

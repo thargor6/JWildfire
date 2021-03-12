@@ -208,4 +208,10 @@ public class OctapolFunc extends VariationFunc {
 		r.value = MathLib.sqrt(MathLib.sqr(p.x) + MathLib.sqr(p.y));
     return (r.value <= radius);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

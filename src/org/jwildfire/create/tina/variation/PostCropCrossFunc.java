@@ -158,7 +158,13 @@ double sdCross( vec2 p,  vec2 b, double r )
 	  @Override
 	  public int getPriority() {
 	    return 1;
-	  }  
+	  }
+
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+	}
+
 }
 
 

@@ -66,4 +66,9 @@ public class HelixFunc extends VariationFunc {
     return "helix";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

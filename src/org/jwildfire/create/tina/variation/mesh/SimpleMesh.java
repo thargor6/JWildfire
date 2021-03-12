@@ -1,16 +1,16 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2017 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SimpleMesh {
-  private List<Vertex> vertices = new ArrayList<>();
-  private Map<String, Integer> verticesMap = new HashMap<>();
+  private final List<Vertex> vertices = new ArrayList<>();
+  private final Map<String, Integer> verticesMap = new HashMap<>();
   private List<Face> faces = new ArrayList<>();
   private BoundingBox boundingBox;
 
@@ -36,7 +36,8 @@ public class SimpleMesh {
     private final double ymin, ymax, ycentre;
     private final double zmin, zmax, zcentre;
 
-    public BoundingBox(double xmin, double xmax, double ymin, double ymax, double zmin, double zmax) {
+    public BoundingBox(
+        double xmin, double xmax, double ymin, double ymax, double zmin, double zmax) {
       super();
       this.xmin = xmin;
       this.xmax = xmax;
@@ -84,12 +85,15 @@ public class SimpleMesh {
     public double getZcentre() {
       return zcentre;
     }
-
   }
 
   private String calculateVertexKey(double x, double y, double z) {
     final double prec = 10000.0;
-    return String.valueOf(Tools.FTOI(x * prec)) + "#" + String.valueOf(Tools.FTOI(y * prec)) + "#" + String.valueOf(Tools.FTOI(z * prec));
+    return Tools.FTOI(x * prec)
+        + "#"
+        + Tools.FTOI(y * prec)
+        + "#"
+        + Tools.FTOI(z * prec);
   }
 
   public int addVertex(double x, double y, double z) {
@@ -148,7 +152,7 @@ public class SimpleMesh {
     f2.v3 = p4;
     faces.add(f2);
   }
-  
+
   public void addColoredFace(int p1, int p2, int p3, double c) {
     FaceWithColor f = new FaceWithColor();
     f.v1 = p1;
@@ -222,7 +226,7 @@ public class SimpleMesh {
   }
 
   public void distributeFaces() {
-    //System.out.println("VERTICES: " + vertices.size());
+    // System.out.println("VERTICES: " + vertices.size());
 
     List<Double> areaLst = new ArrayList<>();
     double areaMin = Double.MAX_VALUE, areaMax = 0.0;
@@ -332,7 +336,6 @@ public class SimpleMesh {
       newMesh.addFace(nv5, nv3, nv6);
 
       newMesh.addFace(nv4, nv5, nv6);
-
     }
     return newMesh;
   }

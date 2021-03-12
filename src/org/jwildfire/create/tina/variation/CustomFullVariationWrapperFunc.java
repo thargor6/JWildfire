@@ -465,4 +465,9 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
     return full_variation != null ? full_variation.getPriority() : 0;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CUSTOM};
+  }
+
 }

@@ -80,4 +80,9 @@ public class LinearTFunc extends VariationFunc {
     return "linearT";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

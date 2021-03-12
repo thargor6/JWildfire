@@ -80,4 +80,9 @@ public class CircusFunc extends VariationFunc {
     scale_1 = 1.0 / scale;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

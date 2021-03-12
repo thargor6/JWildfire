@@ -123,4 +123,9 @@ public class OnionFunc extends VariationFunc {
     return "onion";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

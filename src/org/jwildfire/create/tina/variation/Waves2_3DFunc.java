@@ -65,4 +65,9 @@ public class Waves2_3DFunc extends VariationFunc {
   public String getName() {
     return "waves2_3D";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
 }

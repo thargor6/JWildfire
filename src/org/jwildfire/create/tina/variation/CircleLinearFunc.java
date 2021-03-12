@@ -135,4 +135,9 @@ public class CircleLinearFunc extends VariationFunc {
     return "circleLinear";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

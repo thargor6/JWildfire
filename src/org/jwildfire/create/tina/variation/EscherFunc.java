@@ -79,4 +79,9 @@ public class EscherFunc extends VariationFunc {
     return "escher";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

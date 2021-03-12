@@ -121,4 +121,9 @@ public class CornersFunc extends VariationFunc {
     return "corners";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

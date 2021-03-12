@@ -46,4 +46,9 @@ public class CoshFunc extends SimpleVariationFunc {
     return "cosh";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

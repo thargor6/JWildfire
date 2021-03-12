@@ -77,4 +77,9 @@ public class JacSnFunc extends VariationFunc {
     return "jac_sn";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

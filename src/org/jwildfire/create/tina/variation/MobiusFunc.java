@@ -107,4 +107,9 @@ public class MobiusFunc extends VariationFunc {
     return "mobius";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

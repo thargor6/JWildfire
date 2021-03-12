@@ -271,4 +271,11 @@ public class BubbleT3DFunc extends VariationFunc {
 
     angHoleComp = M_PI - angle_of_hole;
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }
+

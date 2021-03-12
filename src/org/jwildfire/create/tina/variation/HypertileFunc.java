@@ -101,4 +101,9 @@ public class HypertileFunc extends VariationFunc {
     im = r * sin(a);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

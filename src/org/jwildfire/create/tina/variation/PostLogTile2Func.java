@@ -82,6 +82,11 @@ public class PostLogTile2Func extends VariationFunc {
   @Override
   public int getPriority() {
     return 1;
-  }  
-  
+  }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST};
+  }
+
 }

@@ -88,4 +88,9 @@ public class Curl3DFunc extends VariationFunc {
     c2 = cx2 + cy2 + cz2;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

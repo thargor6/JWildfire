@@ -68,4 +68,8 @@ public class Tile_LogFunc extends VariationFunc {
     return "tile_log";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
 }

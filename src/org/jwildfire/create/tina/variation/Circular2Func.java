@@ -89,4 +89,10 @@ public class Circular2Func extends VariationFunc {
   public String getName() {
     return "circular2";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

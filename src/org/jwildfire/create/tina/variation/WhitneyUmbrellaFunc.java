@@ -37,4 +37,8 @@ public class WhitneyUmbrellaFunc extends SimpleVariationFunc {
     return "whitney_umbrella";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
 }

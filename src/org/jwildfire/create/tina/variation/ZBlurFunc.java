@@ -47,4 +47,8 @@ public class ZBlurFunc extends SimpleVariationFunc {
     gauss_N = 0;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM, VariationFuncType.VARTYPE_BLUR};
+  }
 }

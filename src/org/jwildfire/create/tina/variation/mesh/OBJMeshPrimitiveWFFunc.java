@@ -1,16 +1,16 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2011 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -22,6 +22,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.RessourceType;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 
 import java.io.File;
 import java.io.InputStream;
@@ -31,17 +32,60 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   public static final String PARAM_PRIMITIVE = "primitive";
 
-  private static final String[] paramNames = {PARAM_PRIMITIVE, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS};
+  private static final String[] paramNames = {
+    PARAM_PRIMITIVE,
+    PARAM_SCALEX,
+    PARAM_SCALEY,
+    PARAM_SCALEZ,
+    PARAM_OFFSETX,
+    PARAM_OFFSETY,
+    PARAM_OFFSETZ,
+    PARAM_SUBDIV_LEVEL,
+    PARAM_SUBDIV_SMOOTH_PASSES,
+    PARAM_SUBDIV_SMOOTH_LAMBDA,
+    PARAM_SUBDIV_SMOOTH_MU,
+    PARAM_BLEND_COLORMAP,
+    PARAM_DISPL_AMOUNT,
+    PARAM_BLEND_DISPLMAP,
+    PARAM_RECEIVE_ONLY_SHADOWS
+  };
 
   private int primitive = 0;
 
   public static final int LOWPOLY_SHAPE_COUNT = 14;
 
-  private String primitives[] = {"ball", "capsule", "cone", "diamond", "torus", "box", "gear15", "icosahedron", "tetrahedron",
-          "octahedron", "dodecahedron", "wedge", "icosidodecahedron", "cubeoctahedron", "gears6a", "gears6s", "gears8a", "gears8s",
-          "gears12a", "gears12s", "gears16a", "gears16s", "gears24a", "gears24s", "mandelbulb", "drop"};
+  private final String[] primitives = {
+    "ball",
+    "capsule",
+    "cone",
+    "diamond",
+    "torus",
+    "box",
+    "gear15",
+    "icosahedron",
+    "tetrahedron",
+    "octahedron",
+    "dodecahedron",
+    "wedge",
+    "icosidodecahedron",
+    "cubeoctahedron",
+    "gears6a",
+    "gears6s",
+    "gears8a",
+    "gears8s",
+    "gears12a",
+    "gears12s",
+    "gears16a",
+    "gears16s",
+    "gears24a",
+    "gears24s",
+    "mandelbulb",
+    "drop"
+  };
 
-  private static final String[] ressourceNames = {RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME};
+  private static final String[] ressourceNames = {
+    RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME
+  };
 
   @Override
   public String[] getParameterNames() {
@@ -50,7 +94,23 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{primitive, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows};
+    return new Object[] {
+      primitive,
+      scaleX,
+      scaleY,
+      scaleZ,
+      offsetX,
+      offsetY,
+      offsetZ,
+      subdiv_level,
+      subdiv_smooth_passes,
+      subdiv_smooth_lambda,
+      subdiv_smooth_mu,
+      colorMapHolder.getBlend_colormap(),
+      displacementMapHolder.getDispl_amount(),
+      displacementMapHolder.getBlend_displ_map(),
+      receive_only_shadows
+    };
   }
 
   @Override
@@ -60,27 +120,41 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_PRIMITIVE.equalsIgnoreCase(pName))
-      primitive = Tools.FTOI(pValue);
-    else
-      super.setParameter(pName, pValue);
+    if (PARAM_PRIMITIVE.equalsIgnoreCase(pName)) primitive = Tools.FTOI(pValue);
+    else super.setParameter(pName, pValue);
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  public void init(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.init(pContext, pLayer, pXForm, pAmount);
-    String meshName = primitive >= 0 && primitive < primitives.length ? primitives[primitive] : null;
+    String meshName =
+        primitive >= 0 && primitive < primitives.length ? primitives[primitive] : null;
 
     if (meshName != null && meshName.length() > 0) {
       try {
-        String meshKey = this.getClass().getName() + "_" + OBJMeshUtil.getMeshname(meshName, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu);
+        String meshKey =
+            this.getClass().getName()
+                + "_"
+                + OBJMeshUtil.getMeshname(
+                    meshName,
+                    subdiv_level,
+                    subdiv_smooth_passes,
+                    subdiv_smooth_lambda,
+                    subdiv_smooth_mu);
         mesh = (SimpleMesh) RessourceManager.getRessource(meshKey);
         if (mesh == null) {
           String resourceObj = meshName + ".obj";
           InputStream is = this.getClass().getResourceAsStream(resourceObj);
           File objFile = OBJMeshUtil.obj2file(is);
           try {
-            mesh = OBJMeshUtil.loadAndSmoothMeshFromFile(objFile.getAbsolutePath(), subdiv_smooth_passes, subdiv_level, subdiv_smooth_lambda, subdiv_smooth_mu);
+            mesh =
+                OBJMeshUtil.loadAndSmoothMeshFromFile(
+                    objFile.getAbsolutePath(),
+                    subdiv_smooth_passes,
+                    subdiv_level,
+                    subdiv_smooth_lambda,
+                    subdiv_smooth_mu);
           } finally {
             objFile.delete();
           }
@@ -102,7 +176,14 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][]{(colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null)};
+    return new byte[][] {
+      (colorMapHolder.getColormap_filename() != null
+          ? colorMapHolder.getColormap_filename().getBytes()
+          : null),
+      (displacementMapHolder.getDispl_map_filename() != null
+          ? displacementMapHolder.getDispl_map_filename().getBytes()
+          : null)
+    };
   }
 
   @Override
@@ -114,8 +195,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
       displacementMapHolder.clear();
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -124,7 +204,13 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
       return RessourceType.IMAGE_FILENAME;
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[] {
+      VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE
+    };
   }
 }

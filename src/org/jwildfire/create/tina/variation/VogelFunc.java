@@ -61,4 +61,9 @@ public class VogelFunc extends VariationFunc {
       pVarTP.z += pAmount * pAffineTP.z;
     }
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

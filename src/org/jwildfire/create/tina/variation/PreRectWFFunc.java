@@ -83,4 +83,9 @@ public class PreRectWFFunc extends VariationFunc {
     dy = y1 - y0;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_PRE};
+  }
+
 }

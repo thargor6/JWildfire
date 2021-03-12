@@ -42,4 +42,9 @@ public class NoiseFunc extends SimpleVariationFunc {
     return "noise";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BLUR};
+  }
+
 }

@@ -111,4 +111,8 @@ public class WaffleFunc extends VariationFunc {
     vsinr = pAmount * sin(rotation);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

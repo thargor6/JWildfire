@@ -58,4 +58,10 @@ public class HolesqFunc extends SimpleVariationFunc {
     return "holesq";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
+
 }

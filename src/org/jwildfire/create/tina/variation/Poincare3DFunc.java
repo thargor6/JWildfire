@@ -95,4 +95,9 @@ public class Poincare3DFunc extends VariationFunc {
     s2z = sqr(cz) - sqr(cy) - sqr(cx) + 1;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

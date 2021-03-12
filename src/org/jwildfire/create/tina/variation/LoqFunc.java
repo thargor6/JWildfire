@@ -72,4 +72,9 @@ public class LoqFunc extends VariationFunc {
     return "loq";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

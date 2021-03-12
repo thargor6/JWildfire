@@ -34,4 +34,8 @@ public class ZConeFunc extends SimpleVariationFunc {
     return "zcone";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM};
+  }
 }

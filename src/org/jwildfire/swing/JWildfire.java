@@ -83,7 +83,6 @@ public class JWildfire extends JApplet {
     mainInternalFrames.add(new DefaultJFrameHolder<>(BatchFlameRendererFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(QuiltFlameRendererFrame.class, this, WindowPrefs.WINDOW_QUILTFLAMERENDERER, "Fractal flames: Quilt renderer"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
-    mainInternalFrames.add(new DefaultJFrameHolder<>(VariationsSettingsFrame.class, this, WindowPrefs.WINDOW_VARIATIONSSETTINGS, "Fractal flames: Variations settings"));
     if (FACLRenderTools.isFaclRenderAvalailable()) {
       mainInternalFrames.add(new DefaultJFrameHolder<>(FlamesGPURenderFrame.class, this, WindowPrefs.WINDOW_FLAMES_GPU, "Fractal flames: GPU render"));
     }
@@ -223,7 +222,6 @@ public class JWildfire extends JApplet {
       QuiltFlameRendererFrame quiltFlameRendererFrame = getJFrame(QuiltFlameRendererFrame.class);
       MeshGenInternalFrame meshGenFrame = getJFrame(MeshGenInternalFrame.class);
       InteractiveRendererFrame interactiveRendererFrame = getJFrame(InteractiveRendererFrame.class);
-      VariationsSettingsFrame variationsSettingsFrame = getJFrame(VariationsSettingsFrame.class);
       // create some unregistered window even when FACLRender is not available, in order to avoid further null-checks etc.
       FlamesGPURenderFrame gpuRendererFrame = FACLRenderTools.isFaclRenderAvalailable() ? getJFrame(FlamesGPURenderFrame.class) : new FlamesGPURenderFrame();
       HelpFrame helpFrame = getJFrame(HelpFrame.class);
@@ -237,7 +235,6 @@ public class JWildfire extends JApplet {
       dancingFlamesFrame.setTinaController(tinaController);
       batchFlameRendererFrame.setTinaController(tinaController);
       quiltFlameRendererFrame.setTinaController(tinaController);
-      variationsSettingsFrame.setTinaController(tinaController);
       meshGenFrame.setTinaController(tinaController);
       interactiveRendererFrame.setTinaController(tinaController);
       gpuRendererFrame.setTinaController(tinaController);
@@ -267,10 +264,6 @@ public class JWildfire extends JApplet {
           getWindowMenu(), operatorsFrame.getTransformerInputCmb(), operatorsFrame.getTransformerPresetCmb(), operatorsFrame.getCreatorPresetCmb(),
           getShowMessageDlg(), getShowMessageDlgTextArea(), null, null, null, null, null, null, mainInternalFrames.size());
 
-      /*
-      EDENInternalFrame edenFrame = (EDENInternalFrame) getEDENInternalFrame();
-      edenFrame.createController(mainController, errorHandler, prefs).newEmptyScene();
-      */
       IFlamesFrame iflamesFrame = getJFrame(IFlamesFrame.class);
       iflamesFrame.createController(mainController, tinaController, errorHandler);
 

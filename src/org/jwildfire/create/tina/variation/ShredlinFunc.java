@@ -85,4 +85,9 @@ public class ShredlinFunc extends VariationFunc {
     return "shredlin";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

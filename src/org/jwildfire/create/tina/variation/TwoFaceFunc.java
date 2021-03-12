@@ -42,4 +42,8 @@ public class TwoFaceFunc extends SimpleVariationFunc {
     return "twoface";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

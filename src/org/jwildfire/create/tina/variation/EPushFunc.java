@@ -104,4 +104,9 @@ public class EPushFunc extends VariationFunc {
     return "ePush";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

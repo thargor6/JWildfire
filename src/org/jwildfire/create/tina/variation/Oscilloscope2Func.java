@@ -112,4 +112,10 @@ public class Oscilloscope2Func extends VariationFunc {
     _tpf2 = 2.0f * M_PI * frequencyy;
     _noDamping = fabs(damping) <= EPSILON;
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

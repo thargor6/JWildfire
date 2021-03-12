@@ -102,4 +102,9 @@ public class Hypertile3D2Func extends VariationFunc {
     s2z = 1 - sqr(cx);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

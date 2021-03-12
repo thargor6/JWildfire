@@ -71,4 +71,9 @@ public class Popcorn2Func extends VariationFunc {
     return "popcorn2";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

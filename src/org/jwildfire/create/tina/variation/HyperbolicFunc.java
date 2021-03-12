@@ -37,4 +37,9 @@ public class HyperbolicFunc extends SimpleVariationFunc {
     return "hyperbolic";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

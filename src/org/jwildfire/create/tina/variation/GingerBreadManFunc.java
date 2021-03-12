@@ -46,4 +46,9 @@ public class GingerBreadManFunc extends SimpleVariationFunc {
     return "gingerbread_man";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

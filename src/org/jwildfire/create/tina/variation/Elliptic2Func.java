@@ -129,4 +129,10 @@ public class Elliptic2Func extends VariationFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _v = pAmount / (M_PI / h);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -26,4 +26,10 @@ public class PreSubFlameWFFunc extends SubFlameWFFunc {
     return "pre_subflame_wf";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_PRE};
+  }
+
+
 }

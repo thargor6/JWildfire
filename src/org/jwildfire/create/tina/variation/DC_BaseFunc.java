@@ -15,7 +15,7 @@ import js.glsl.vec2;
 import js.glsl.vec3;
 
 
-public  class DC_BaseFunc  extends VariationFunc {
+public abstract class DC_BaseFunc  extends VariationFunc {
 
 	/*
 	 * Base Class for DC_Variations
@@ -180,10 +180,6 @@ public  class DC_BaseFunc  extends VariationFunc {
   		color[2] =  Math.max(0, Math.min(255, (int)Math.floor(theColor.z * 256.0D)));
   		return color;
   	}
-
-	public String getName() {
-		return "dc_base";
-	}
 
 	public String[] getParameterNames() {
 		return paramNames;

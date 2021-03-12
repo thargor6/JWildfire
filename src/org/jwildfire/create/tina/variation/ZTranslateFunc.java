@@ -32,4 +32,8 @@ public class ZTranslateFunc extends SimpleVariationFunc {
     return "ztranslate";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM};
+  }
 }

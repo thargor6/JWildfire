@@ -73,4 +73,9 @@ public class FlowerFunc extends VariationFunc {
     return "flower";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

@@ -46,4 +46,9 @@ public class CosFunc extends SimpleVariationFunc {
     return "cos";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

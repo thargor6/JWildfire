@@ -13,4 +13,9 @@ public class PostCustomWFFunc extends CustomWFFunc {
     return 1;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_POST};
+  }
+
 }

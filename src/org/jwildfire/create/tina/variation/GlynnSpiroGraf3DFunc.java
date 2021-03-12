@@ -267,4 +267,9 @@ public class GlynnSpiroGraf3DFunc extends VariationFunc {
     return "glynnspiro";
   }
 
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+	}
+
 }

@@ -47,4 +47,9 @@ public class CosqFunc extends SimpleVariationFunc {
     return "cosq";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

@@ -116,4 +116,9 @@ public class ExBlurFunc extends VariationFunc {
     _r[3] = pContext.random();
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BLUR};
+  }
+
 }

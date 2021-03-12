@@ -84,4 +84,10 @@ public class LorenzFunc extends VariationFunc {
     else
       throw new IllegalArgumentException(pName);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC};
+  }
+
 }

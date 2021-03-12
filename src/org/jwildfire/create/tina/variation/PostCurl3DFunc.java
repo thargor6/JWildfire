@@ -96,4 +96,9 @@ public class PostCurl3DFunc extends VariationFunc {
     _c_2 = _cx2 + _cy2 + _cz2;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST};
+  }
+
 }

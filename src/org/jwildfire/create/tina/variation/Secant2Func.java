@@ -49,4 +49,9 @@ public class Secant2Func extends SimpleVariationFunc {
     return "secant2";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

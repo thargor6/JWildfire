@@ -50,4 +50,8 @@ public class UnpolarFunc extends SimpleVariationFunc {
     vvar_2 = vvar * 0.5;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

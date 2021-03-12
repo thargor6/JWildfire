@@ -85,4 +85,9 @@ public class Csc2_BSFunc extends VariationFunc {
     return "csc2_bs";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

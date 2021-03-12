@@ -165,7 +165,8 @@ public class NonlinearControlsDelegate {
         pRow.getNonlinearVarLbl().getFont().getStyle();
       }
 
-      if (VariationFuncList.getExcludedNameList().contains(varFunc.getName())) {
+      VariationFuncFilter filter = owner.getCurrentVariationFuncFilter();
+      if (!filter.evaluate(varFunc.getName())) {
         Font font = pRow.getNonlinearVarLbl().getFont();
         Map attributes = font.getAttributes();
         if (!attributes.containsKey(TextAttribute.STRIKETHROUGH)) {
@@ -460,16 +461,21 @@ public class NonlinearControlsDelegate {
             }
           }
         } else {
-          var = new Variation();
           String varStr = data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd().getText();
           if (varStr == null || varStr.length() == 0) {
             varStr = "0";
           }
           VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fName);
-          var.setFunc(varFunc);
-          var.setPriority(varFunc.getPriority());
-          var.setAmount(Tools.stringToDouble(varStr));
-          xForm.addVariation(var);
+          if (varFunc != null) {
+            var = new Variation();
+            var.setFunc(varFunc);
+            var.setPriority(varFunc.getPriority());
+            var.setAmount(Tools.stringToDouble(varStr));
+            xForm.addVariation(var);
+          }
+          else {
+            var = null;
+          }
         }
         refreshParamControls(data.TinaNonlinearControlsRows[pIdx], pIdx, xForm, var, true);
         owner.refreshXFormUI(xForm);

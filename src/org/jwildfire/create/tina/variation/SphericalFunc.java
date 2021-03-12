@@ -39,4 +39,9 @@ public class SphericalFunc extends SimpleVariationFunc {
     return "spherical";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

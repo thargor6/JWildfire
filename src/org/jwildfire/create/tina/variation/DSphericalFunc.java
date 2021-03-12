@@ -80,5 +80,9 @@ public class DSphericalFunc extends VariationFunc {
     return "d_spherical";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 
 }

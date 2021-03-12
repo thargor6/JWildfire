@@ -131,4 +131,8 @@ public class YinYangFunc extends VariationFunc {
     cosb = cos(M_PI * ang2);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

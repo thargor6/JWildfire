@@ -160,4 +160,9 @@ public class CPow3WFFunc extends VariationFunc {
     full_spread = 2 * M_PI * spread;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -156,4 +156,9 @@ public class Hexaplay3DFunc extends VariationFunc {
     _seg120y[2] = -hlift;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

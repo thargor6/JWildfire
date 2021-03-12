@@ -39,4 +39,8 @@ public class EyefishFunc extends SimpleVariationFunc {
     return "eyefish";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

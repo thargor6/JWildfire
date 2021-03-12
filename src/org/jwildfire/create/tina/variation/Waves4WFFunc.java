@@ -109,4 +109,8 @@ public class Waves4WFFunc extends VariationFunc {
     _dampingY = fabs(dampy) < EPSILON ? 1.0 : exp(dampy);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

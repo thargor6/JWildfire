@@ -80,4 +80,9 @@ public class LoziFunc extends VariationFunc {
     return "lozi";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

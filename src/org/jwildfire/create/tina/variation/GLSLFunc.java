@@ -9,7 +9,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 
-public class GLSLFunc extends VariationFunc {
+public abstract class GLSLFunc extends VariationFunc {
 
   /*
    * Variation : glslFunc Base class for GLSL variations

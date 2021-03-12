@@ -79,4 +79,9 @@ public class LogTile2Func extends VariationFunc {
     return "log_tile2";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

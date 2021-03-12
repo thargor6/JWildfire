@@ -52,4 +52,9 @@ public class Sqrt_AsechFunc extends SimpleVariationFunc {
     return "sqrt_asech";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

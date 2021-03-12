@@ -136,4 +136,9 @@ public class Julia3DZFunc extends VariationFunc {
     cPower = 1.0 / power * 0.5;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

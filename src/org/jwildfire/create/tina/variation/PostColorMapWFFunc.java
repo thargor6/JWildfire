@@ -36,4 +36,10 @@ public class PostColorMapWFFunc extends AbstractColorMapWFFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     transform(pContext, pXForm, pAffineTP, pVarTP, pAmount, pVarTP.x, pVarTP.y);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_POST};
+  }
+
 }

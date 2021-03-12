@@ -58,4 +58,10 @@ public class Arcsech2Func extends SimpleVariationFunc {
     return "arcsech2";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
+
 }

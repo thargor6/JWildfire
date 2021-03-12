@@ -82,4 +82,9 @@ public class LinearT3DFunc extends VariationFunc {
     return "linearT3D";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

@@ -96,4 +96,9 @@ public class TargetFunc extends VariationFunc {
     t_size_2 = 0.5 * size;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -38,4 +38,10 @@ public class CylinderFunc extends SimpleVariationFunc {
     return "cylinder";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
+
 }

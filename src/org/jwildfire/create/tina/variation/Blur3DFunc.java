@@ -63,4 +63,9 @@ public class Blur3DFunc extends SimpleVariationFunc {
     gauss_N = 0;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BLUR};
+  }
+
 }

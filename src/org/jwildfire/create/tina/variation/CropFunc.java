@@ -115,4 +115,9 @@ public class CropFunc extends VariationFunc {
     h = (ymax - ymin) * 0.5 * scatter_area;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP};
+  }
+
 }

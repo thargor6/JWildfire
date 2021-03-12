@@ -96,4 +96,8 @@ public class Tile_Reverse_Func extends VariationFunc {
     return "tile_reverse";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

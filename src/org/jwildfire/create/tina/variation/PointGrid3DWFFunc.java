@@ -134,4 +134,9 @@ public class PointGrid3DWFFunc extends VariationFunc {
     _dz = (zmax - zmin) / (double) zcount;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

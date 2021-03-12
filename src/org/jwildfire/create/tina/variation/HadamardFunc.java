@@ -45,4 +45,10 @@ public class HadamardFunc extends SimpleVariationFunc {
   public String getName() {
     return "hadamard_js";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

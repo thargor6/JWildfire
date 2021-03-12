@@ -80,4 +80,9 @@ public class Sinh2_BSFunc extends VariationFunc {
     return "sinh2_bs";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

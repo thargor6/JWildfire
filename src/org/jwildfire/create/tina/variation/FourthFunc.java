@@ -132,4 +132,10 @@ public class FourthFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     sqrvvar = pAmount * pAmount;
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

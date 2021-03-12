@@ -95,4 +95,9 @@ public class LissajousFunc extends VariationFunc {
     return "lissajous";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -38,4 +38,9 @@ public class InflateZ_6Func extends SimpleVariationFunc {
     return "inflateZ_6";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM};
+  }
+
 }

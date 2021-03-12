@@ -42,4 +42,9 @@ public class Rays3Func extends SimpleVariationFunc {
     return "rays3";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

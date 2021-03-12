@@ -83,4 +83,9 @@ public class RoseWFFunc extends VariationFunc {
     return "rose_wf";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

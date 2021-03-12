@@ -216,4 +216,8 @@ public class Vibration2Func extends VariationFunc {
     return "vibration2";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

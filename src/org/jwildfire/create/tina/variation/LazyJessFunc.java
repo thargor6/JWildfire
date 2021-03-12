@@ -158,4 +158,9 @@ public class LazyJessFunc extends VariationFunc {
     corner_rotation = (corner - 1) * pie_slice;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

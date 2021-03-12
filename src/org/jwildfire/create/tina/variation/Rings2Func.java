@@ -76,4 +76,10 @@ public class Rings2Func extends VariationFunc {
     _dx = val * val + EPSILON;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
+
 }

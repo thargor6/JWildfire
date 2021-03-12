@@ -1,16 +1,16 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2011 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -39,9 +39,11 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceType;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
@@ -73,7 +75,24 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
   protected static final String PARAM_RECEIVE_ONLY_SHADOWS = "receive_only_shadows";
 
-  private static final String[] paramNames = {PARAM_PRESETID, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_COLOR_MODE, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS};
+  private static final String[] paramNames = {
+    PARAM_PRESETID,
+    PARAM_SCALEX,
+    PARAM_SCALEY,
+    PARAM_SCALEZ,
+    PARAM_OFFSETX,
+    PARAM_OFFSETY,
+    PARAM_OFFSETZ,
+    PARAM_COLOR_MODE,
+    PARAM_SUBDIV_LEVEL,
+    PARAM_SUBDIV_SMOOTH_PASSES,
+    PARAM_SUBDIV_SMOOTH_LAMBDA,
+    PARAM_SUBDIV_SMOOTH_MU,
+    PARAM_BLEND_COLORMAP,
+    PARAM_DISPL_AMOUNT,
+    PARAM_BLEND_DISPLMAP,
+    PARAM_RECEIVE_ONLY_SHADOWS
+  };
 
   private String grammar = null;
 
@@ -84,7 +103,24 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{presetId, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, color_mode, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows};
+    return new Object[] {
+      presetId,
+      scaleX,
+      scaleY,
+      scaleZ,
+      offsetX,
+      offsetY,
+      offsetZ,
+      color_mode,
+      subdiv_level,
+      subdiv_smooth_passes,
+      subdiv_smooth_lambda,
+      subdiv_smooth_mu,
+      colorMapHolder.getBlend_colormap(),
+      displacementMapHolder.getDispl_amount(),
+      displacementMapHolder.getBlend_displ_map(),
+      receive_only_shadows
+    };
   }
 
   @Override
@@ -95,7 +131,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_PRESETID.equalsIgnoreCase(pName)) {
-      String Strgrammar = new String();
+      String Strgrammar = "";
       presetId = (int) pValue;
       if (presetId > 0) {
         try {
@@ -104,30 +140,22 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
-        setRessource(RESSOURCE_GRAMMAR, Strgrammar.getBytes(Charset.forName("UTF-8")));
+        setRessource(RESSOURCE_GRAMMAR, Strgrammar.getBytes(StandardCharsets.UTF_8));
       }
-    } else if (PARAM_SCALEX.equalsIgnoreCase(pName))
-      scaleX = pValue;
-    else if (PARAM_SCALEY.equalsIgnoreCase(pName))
-      scaleY = pValue;
-    else if (PARAM_SCALEZ.equalsIgnoreCase(pName))
-      scaleZ = pValue;
-    else if (PARAM_OFFSETX.equalsIgnoreCase(pName))
-      offsetX = pValue;
-    else if (PARAM_OFFSETY.equalsIgnoreCase(pName))
-      offsetY = pValue;
-    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
-      offsetZ = pValue;
+    } else if (PARAM_SCALEX.equalsIgnoreCase(pName)) scaleX = pValue;
+    else if (PARAM_SCALEY.equalsIgnoreCase(pName)) scaleY = pValue;
+    else if (PARAM_SCALEZ.equalsIgnoreCase(pName)) scaleZ = pValue;
+    else if (PARAM_OFFSETX.equalsIgnoreCase(pName)) offsetX = pValue;
+    else if (PARAM_OFFSETY.equalsIgnoreCase(pName)) offsetY = pValue;
+    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName)) offsetZ = pValue;
     else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName))
       color_mode = limitIntVal(Tools.FTOI(pValue), 0, 2);
     else if (PARAM_SUBDIV_LEVEL.equalsIgnoreCase(pName))
       subdiv_level = limitIntVal(Tools.FTOI(pValue), 0, 6);
     else if (PARAM_SUBDIV_SMOOTH_PASSES.equalsIgnoreCase(pName))
       subdiv_smooth_passes = limitIntVal(Tools.FTOI(pValue), 0, 24);
-    else if (PARAM_SUBDIV_SMOOTH_LAMBDA.equalsIgnoreCase(pName))
-      subdiv_smooth_lambda = pValue;
-    else if (PARAM_SUBDIV_SMOOTH_MU.equalsIgnoreCase(pName))
-      subdiv_smooth_mu = pValue;
+    else if (PARAM_SUBDIV_SMOOTH_LAMBDA.equalsIgnoreCase(pName)) subdiv_smooth_lambda = pValue;
+    else if (PARAM_SUBDIV_SMOOTH_MU.equalsIgnoreCase(pName)) subdiv_smooth_mu = pValue;
     else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName))
       colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
     else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName))
@@ -136,8 +164,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
     else if (PARAM_RECEIVE_ONLY_SHADOWS.equalsIgnoreCase(pName))
       receive_only_shadows = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    else
-      throw new IllegalArgumentException(pName);
+    else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -147,7 +174,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][]{(grammar != null ? grammar.getBytes() : null)};
+    return new byte[][] {(grammar != null ? grammar.getBytes() : null)};
   }
 
   @Override
@@ -162,16 +189,14 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         ls.L_draw();
         mesh = ls.getMesh();
       }
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   @Override
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_GRAMMAR.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -180,8 +205,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   }
 
   public String getGrammarId() throws Exception {
-    StringBuilder result = new StringBuilder("");
-    String grammar = new String("");
+    StringBuilder result = new StringBuilder();
+    String grammar = "";
     try {
       InputStream inputStream = getClass().getResourceAsStream("lsystems3D.txt");
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -198,13 +223,13 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     Matcher matcher = pattern.matcher(fileContent);
     while (matcher.find()) {
       int istart = matcher.end();
-      String sSeparator = new String(matcher.group());
+      String sSeparator = matcher.group();
       // System.out.println(sSeparator);
       String sNumber = sSeparator.substring(2, 4);
       int vNumber = Integer.parseInt(sNumber);
       // System.out.println("vNumber " +vNumber);
 
-      String str = fileContent.substring(istart, fileContent.length());
+      String str = fileContent.substring(istart);
       int end = str.indexOf("##END");
       grammar = str.substring(0, end + 1);
       if (vNumber == presetId) {
@@ -216,11 +241,12 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  public void init(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.init(pContext, pLayer, pXForm, pAmount);
 
     //    if(  presetId > 0)
-    //    {    try 
+    //    {    try
     //        {
     //		  String  Strgrammar=getGrammarId();
     //		  setRessource(RESSOURCE_GRAMMAR, Strgrammar.getBytes(Charset.forName("UTF-8")));
@@ -243,7 +269,6 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       this.y = b;
       this.z = c;
     }
-
   }
 
   static class face {
@@ -277,14 +302,13 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       pVertex[2] = v3;
       pVertex[3] = v4;
     }
-
   }
 
   /* Polygon stack used for solving {} references */
   static class p_rec {
     public int count; // Number of vertices
-    //C++ TO JAVA CONVERTER TODO TASK: Java does not have an equivalent to pointers to value types:
-    //ORIGINAL LINE: float *ver[3];
+    // C++ TO JAVA CONVERTER TODO TASK: Java does not have an equivalent to pointers to value types:
+    // ORIGINAL LINE: float *ver[3];
     public ArrayList<point3D> ver = new ArrayList<point3D>(); // Vertex store
 
     public p_rec(int count, ArrayList<point3D> ver) {
@@ -292,12 +316,11 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       for (int i = 0; i < count; i++) {
         this.ver.add(ver.get(i));
       }
-
     }
   }
 
   /* Settings stack used for solving [] references */
-  static public class s_rec {
+  public static class s_rec {
     public float[] pos = new float[3]; /* Position in 3space of turtle
      * origin */
     public float[] fow = new float[3]; // Forward direction
@@ -319,11 +342,11 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     public int last_obj; // Last object #
   }
 
-  //import org.jwildfire.create.tina.variation.mesh.SimpleMesh;
+  // import org.jwildfire.create.tina.variation.mesh.SimpleMesh;
 
   static class DynamicStringArray {
 
-    // The storage for the elements. 
+    // The storage for the elements.
     // The capacity is the length of this array.
     private String[] data;
 
@@ -340,8 +363,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     // Constructs an empty DynamicArray with the
     // specified initial capacity.
     public DynamicStringArray(int capacity) {
-      if (capacity < 16)
-        capacity = 16;
+      if (capacity < 16) capacity = 16;
       data = new String[capacity];
       size = 0;
     }
@@ -353,8 +375,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       int oldCapacity = data.length;
       if (minCapacity > oldCapacity) {
         int newCapacity = (oldCapacity * 2);
-        if (newCapacity < minCapacity)
-          newCapacity = minCapacity;
+        if (newCapacity < minCapacity) newCapacity = minCapacity;
         data = Arrays.copyOf(data, newCapacity);
       }
     }
@@ -383,7 +404,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     // Appends the specified element to the end.
     public boolean add(String element) {
       ensureCapacity(size + 1);
-      data[size++] = new String(element);
+      data[size++] = element;
       return true;
     }
 
@@ -396,7 +417,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     public String set(int index, String element) {
       rangeCheck(index);
       String oldValue = data[index];
-      data[index] = new String(element);
+      data[index] = element;
       return oldValue;
     }
 
@@ -413,7 +434,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     public static final int max_p_object = 400; // Max polygons per object
     public static final int rule_n = 200;
     public static int max_prod = 4 * 1024 * 1024; // Maximum size l-system production string
-    public static final String min_bar = "---------------------------------------------------------";
+    public static final String min_bar =
+        "---------------------------------------------------------";
     public static double zero = 0.0;
     public static double one = 1.0;
     public static double half = 0.5;
@@ -425,16 +447,15 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     public int last_col = 0;
     public int color_mode = 0;
     public int muts = 0;
-    public double ang = (double) 45.0;
-    public double thick = (double) 100.0;
+    public double ang = 45.0;
+    public double thick = 100.0;
     public float min_thick = (float) 0.0;
     public int pcount_limit = 0;
-    public String object_s = new String();
+    public String object_s = "";
     public double closed = 1.0;
     public boolean poly_limit = false;
     public boolean switch_yz = false;
     public boolean closed_form = false;
-    ;
     public boolean trace = false;
     public boolean nowait = false;
 
@@ -444,7 +465,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     public short[] size = new short[rule_n];
 
     public s_rec[] stack = new s_rec[max_stack];
-    public float[] trope = new float[]{0.0F, 0.0F, 0.0F};
+    public float[] trope = new float[] {0.0F, 0.0F, 0.0F};
     public s_rec org = new s_rec();
     public s_rec save = new s_rec();
     public float[] C1 = new float[3];
@@ -453,12 +474,12 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     public ArrayList<p_rec> pstack = new ArrayList<p_rec>();
     public double dis = one, dis2 = half, tr = 0.2;
     public int obj = 0;
-    public float[] sky = new float[]{0.0F, 0.0F, 1.0F};
+    public float[] sky = new float[] {0.0F, 0.0F, 1.0F};
     public float[][] last_v = new float[9][3];
 
     public int poly_count = 0;
     public int scount = 0;
-    public float[] last = new float[]{0.0F, 0.0F, 0.0F};
+    public float[] last = new float[] {0.0F, 0.0F, 0.0F};
     public float[][] ver = new float[max_p_object][3];
     public int pscount = 0;
 
@@ -498,7 +519,6 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         this.color_store[i][_x] = 0.5F;
         color_store[i][_y] = 0.5F;
         color_store[i][_z] = 0.5F;
-
       }
 
       color_store[2][_x] = 0.8F;
@@ -556,7 +576,6 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       color_store[15][_x] = 1.0F;
       color_store[15][_y] = 1.0F;
       color_store[15][_z] = 1.0F;
-
     }
 
     private static String activeString;
@@ -569,53 +588,50 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         activePosition = -1;
       }
 
-      //the stringToTokenize was never set:
-      if (activeString == null)
-        return null;
+      // the stringToTokenize was never set:
+      if (activeString == null) return null;
 
-      //all tokens have already been extracted:
-      if (activePosition == activeString.length())
-        return null;
+      // all tokens have already been extracted:
+      if (activePosition == activeString.length()) return null;
 
-      //bypass delimiters:
+      // bypass delimiters:
       activePosition++;
-      while (activePosition < activeString.length() && delimiters.indexOf(activeString.charAt(activePosition)) > -1) {
+      while (activePosition < activeString.length()
+          && delimiters.indexOf(activeString.charAt(activePosition)) > -1) {
         activePosition++;
       }
 
-      //only delimiters were left, so return null:
-      if (activePosition == activeString.length())
-        return null;
+      // only delimiters were left, so return null:
+      if (activePosition == activeString.length()) return null;
 
-      //get starting position of string to return:
+      // get starting position of string to return:
       int startingPosition = activePosition;
 
-      //read until next delimiter:
+      // read until next delimiter:
       do {
         activePosition++;
-      }
-      while (activePosition < activeString.length() && delimiters.indexOf(activeString.charAt(activePosition)) == -1);
+      } while (activePosition < activeString.length()
+          && delimiters.indexOf(activeString.charAt(activePosition)) == -1);
 
       return activeString.substring(startingPosition, activePosition);
     }
 
     public int readGrammar(String inputname) {
-      String temp = new String();
-      String keyword = new String();
-      String command = new String();
+      String temp = "";
+      String keyword = "";
+      String command = "";
 
       //  		BufferedReader br = null;
-      String r_1 = new String();
-      String r_2 = new String();
+      String r_1 = "";
+      String r_2 = "";
 
       int error = 0;
       int tt = 0;
 
       int num = 0;
-      // File name 
+      // File name
 
-      if (inputname.isEmpty())
-        return -1;
+      if (inputname.isEmpty()) return -1;
       byte[] filecontent = inputname.getBytes();
       InputStream is = null;
       BufferedReader br = null;
@@ -623,33 +639,30 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
       // Construct BufferedReader from FileReader
       br = new BufferedReader(new InputStreamReader(is));
-      /*		
-        		try
-        		{
-        		  File file = new File(inputname);
-        		  FileReader fileReader = new FileReader(file);
-        		  br = new BufferedReader(fileReader);
-        		}
-        		catch (IOException e)
-        		{
-        			//User_error("Cannot find file " + inputname);
-        			error=1;
-        			return error;
-        		}
-       */
+      /*
+       		try
+       		{
+       		  File file = new File(inputname);
+       		  FileReader fileReader = new FileReader(file);
+       		  br = new BufferedReader(fileReader);
+       		}
+       		catch (IOException e)
+       		{
+       			//User_error("Cannot find file " + inputname);
+       			error=1;
+       			return error;
+       		}
+      */
       Add_deafult_colors();
 
-      // Read input file 
+      // Read input file
       try {
         while ((temp = br.readLine()) != null) {
-          if (trace)
-            System.out.println("R<" + temp + ">");
-          if (temp.isEmpty())
-            continue;
-          if (temp.charAt(0) == '#')
-            continue;
+          if (trace) System.out.println("R<" + temp + ">");
+          if (temp.isEmpty()) continue;
+          if (temp.charAt(0) == '#') continue;
           if (temp.length() < 5) // Leading white spaces, not a real line
-            continue;
+          continue;
 
           keyword = strTok(temp, " \r\n#");
           command = strTok(null, "\r\n#");
@@ -697,7 +710,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             color_store[tt][_z] = (float) blue / 255;
           } else if (keyword.equals("axiom")) {
             String tmp = Remove_spaces(command);
-            object_s = new String(strTok(tmp, "\r\n\t#"));
+            object_s = strTok(tmp, "\r\n\t#");
           } else if (keyword.equals("rule")) {
             String tmp = Remove_spaces(command);
             r_1 = strTok(tmp, "=");
@@ -720,7 +733,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       }
 
       // Echo input
-      if(trace) {
+      if (trace) {
         System.out.println("L-system file      : " + inputname);
         System.out.println("Recursion depth    : " + lev);
         System.out.println("Mutations          : " + muts);
@@ -738,12 +751,12 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         System.out.println("Shape style        : ");
       }
       if (closed == 1.0) {
-        if(trace) {
+        if (trace) {
           System.out.println("Attached cylinders");
         }
         closed_form = true;
       } else {
-        if(trace) {
+        if (trace) {
           System.out.println("Blocks");
         }
         closed_form = false;
@@ -776,7 +789,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       num++;
       rule.add(";=;");
       num++;
-      rule.add("\'=\'");
+      rule.add("'='");
       num++;
       rule.add("\"=\"");
       num++;
@@ -845,18 +858,18 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         size[i] = (short) (rule.get(i).length() - 2); // Set length of rules
       }
 
-      // Echo rules  
+      // Echo rules
       for (int i = 0; i < num; i++) {
         if (rule.get(i).charAt(0) == '+') {
           break;
         }
-        if(trace) {
+        if (trace) {
           System.out.println("Rule " + (i + 1) + " = " + rule.get(i));
         }
       }
 
-      // Set values ready 
-      ang = (float) ((ang / (double) 180.0) * pi);
+      // Set values ready
+      ang = (float) ((ang / 180.0) * pi);
       thick /= 100.0;
       min_thick /= 100.0;
       return 0;
@@ -867,14 +880,14 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       //                                             * string. Object_s is read with
       //                                             * the k counter and the next
       //                                             * generation is build up in otemp
-      //                                             * with the ot counter. 
+      //                                             * with the ot counter.
 
       int k;
       int st;
       int s;
       int ss;
       int max = max_prod - 50;
-      String otemp = new String();
+      String otemp = "";
 
       String ot;
       int[] S = new int[256];
@@ -885,7 +898,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
       int num = rule.size();
 
-      // calculate size of each rule         
+      // calculate size of each rule
       for (int m = 0; m < num; m++) {
         size[m] = (short) (rule.get(m).length() - 2); // Set length of rules
       }
@@ -895,10 +908,10 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       // with a char.
       //
       for (i = 0; i < 256; i++)
-        S[i] = num - 1; // Num -1 contains the default rule which does nothing 
-      // Each char gets a rule number 
+        S[i] = num - 1; // Num -1 contains the default rule which does nothing
+      // Each char gets a rule number
       for (i = num - 1; i >= 0; i--) {
-        S[(int) rule.get(i).charAt(0)] = i;
+        S[rule.get(i).charAt(0)] = i;
       }
 
       for (l = 0; l < lev; l++) { // For each recursion
@@ -906,8 +919,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         ot = otemp;
         ss = 0;
 
-        for (k = (int) 0; k < st; k++) { // For each char in the string
-          i = S[object_s.charAt(k)]; // i = rule number attached to current char 
+        for (k = 0; k < st; k++) { // For each char in the string
+          i = S[object_s.charAt(k)]; // i = rule number attached to current char
           s = size[i]; // s = size of current rule
           ss += s;
 
@@ -919,26 +932,30 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
             String cInrule = rule.get(i).substring(2);
             ot = ot + cInrule;
-
           }
         }
-        ;
 
-        object_s = new String(ot); // Copy the temp string to object_s and repeat cycle 
+        object_s = ot; // Copy the temp string to object_s and repeat cycle
       }
-      ;
-      if(trace) {
-        System.out.println("Size of string     : " + object_s.length() + " chars " + (incomplete ? "(incomplete)" : ""));
+      if (trace) {
+        System.out.println(
+            "Size of string     : "
+                + object_s.length()
+                + " chars "
+                + (incomplete ? "(incomplete)" : ""));
       }
       return object_s;
     }
 
     public float vector_length(float[] Vector) {
-      return (float) MathLib.sqrt(Vector[_x] * Vector[_x] + Vector[_y] * Vector[_y] + Vector[_z] * Vector[_z]);
+      return (float)
+          MathLib.sqrt(Vector[_x] * Vector[_x] + Vector[_y] * Vector[_y] + Vector[_z] * Vector[_z]);
     }
 
     public float scalar_product(float[] VectorA, float[] VectorB) {
-      return (float) VectorA[_x] * VectorB[_x] + VectorA[_y] * VectorB[_y] + VectorA[_z] * VectorB[_z];
+      return VectorA[_x] * VectorB[_x]
+          + VectorA[_y] * VectorB[_y]
+          + VectorA[_z] * VectorB[_z];
     }
 
     public float[] util_t(float[] In, float[] C1, float[] C2, float[] C3) {
@@ -973,15 +990,15 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       A[_z] = (-A[_z]);
     }
 
-    public double Get_value(int j) { /* Read a (xx) value from a
-     * production string at location j
-     * and make it into a real */
+    public double Get_value(int j) {
+      /* Read a (xx) value from a
+       * production string at location j
+       * and make it into a real */
       double r = zero;
-      StringBuffer bValue = new StringBuffer("");
+      StringBuffer bValue = new StringBuffer();
 
       for (; ; ) {
-        if (object_s.charAt(j + 2) == ')')
-          break;
+        if (object_s.charAt(j + 2) == ')') break;
         bValue.append(object_s.charAt(j + 2));
         j++;
       }
@@ -1052,8 +1069,12 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         dis[_y] = p2[_y] - p1[_y];
         dis[_z] = p2[_z] - p1[_z];
       }
-      ;
-      d = ((float) MathLib.sqrt((float) (dis[_x] * dis[_x]) + (float) (dis[_y] * dis[_y]) + (float) (dis[_z] * dis[_z])));
+      d =
+          ((float)
+              MathLib.sqrt(
+                  (dis[_x] * dis[_x])
+                      + (dis[_y] * dis[_y])
+                      + (dis[_z] * dis[_z])));
       if (d == (float) 0.0) {
         return;
       }
@@ -1062,34 +1083,46 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       s *= 0.7071;
 
       /* D1 */
-      //C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in Java:
+      // C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent
+      // in Java:
       //  			memcpy(((Object)(d1)), ((Object)(dis)), 12);
       d1[_x] = dis[_x];
       d1[_y] = dis[_y];
       d1[_z] = dis[_z];
 
       {
-        float Dist = (float) 1.0 / ((float) MathLib.sqrt((float) (d1[_x] * d1[_x]) + (float) (d1[_y] * d1[_y]) + (float) (d1[_z] * d1[_z])));
+        float Dist =
+            (float) 1.0
+                / ((float)
+                    MathLib.sqrt(
+                        (d1[_x] * d1[_x])
+                            + (d1[_y] * d1[_y])
+                            + (d1[_z] * d1[_z])));
         d1[_x] *= Dist;
         d1[_y] *= Dist;
         d1[_z] *= Dist;
       }
-      ;
 
       /* D2 */
-      //C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in Java:
+      // C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent
+      // in Java:
       //  			memcpy(((Object)(d2)), ((Object)(up)), 12);
       d2[_x] = up[_x];
       d2[_y] = up[_y];
       d2[_z] = up[_z];
 
       {
-        float Dist = (float) 1.0 / ((float) MathLib.sqrt((float) (d2[_x] * d2[_x]) + (float) (d2[_y] * d2[_y]) + (float) (d2[_z] * d2[_z])));
+        float Dist =
+            (float) 1.0
+                / ((float)
+                    MathLib.sqrt(
+                        (d2[_x] * d2[_x])
+                            + (d2[_y] * d2[_y])
+                            + (d2[_z] * d2[_z])));
         d2[_x] *= Dist;
         d2[_y] *= Dist;
         d2[_z] *= Dist;
       }
-      ;
 
       /* D3 */
       {
@@ -1097,14 +1130,18 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         d3[_y] = d1[_z] * d2[_x] - d1[_x] * d2[_z];
         d3[_z] = d1[_x] * d2[_y] - d1[_y] * d2[_x];
       }
-      ;
       {
-        float Dist = (float) 1.0 / ((float) MathLib.sqrt((float) (d3[_x] * d3[_x]) + (float) (d3[_y] * d3[_y]) + (float) (d3[_z] * d3[_z])));
+        float Dist =
+            (float) 1.0
+                / ((float)
+                    MathLib.sqrt(
+                        (d3[_x] * d3[_x])
+                            + (d3[_y] * d3[_y])
+                            + (d3[_z] * d3[_z])));
         d3[_x] *= Dist;
         d3[_y] *= Dist;
         d3[_z] *= Dist;
       }
-      ;
 
       /* Base 1, 3 */
       {
@@ -1112,26 +1149,28 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         d1[_y] = d2[_y] + d3[_y];
         d1[_z] = d2[_z] + d3[_z];
       }
-      ;
       {
-        float Dist = (float) 1.0 / ((float) MathLib.sqrt((float) (d1[_x] * d1[_x]) + (float) (d1[_y] * d1[_y]) + (float) (d1[_z] * d1[_z])));
+        float Dist =
+            (float) 1.0
+                / ((float)
+                    MathLib.sqrt(
+                        (d1[_x] * d1[_x])
+                            + (d1[_y] * d1[_y])
+                            + (d1[_z] * d1[_z])));
         d1[_x] *= Dist;
         d1[_y] *= Dist;
         d1[_z] *= Dist;
       }
-      ;
       {
         ver[1][_x] = (float) (p1[_x] + (s) * d1[_x]);
         ver[1][_y] = (float) (p1[_y] + (s) * d1[_y]);
         ver[1][_z] = (float) (p1[_z] + (s) * d1[_z]);
       }
-      ;
       {
         ver[3][_x] = (float) (p1[_x] + (-s) * d1[_x]);
         ver[3][_y] = (float) (p1[_y] + (-s) * d1[_y]);
         ver[3][_z] = (float) (p1[_z] + (-s) * d1[_z]);
       }
-      ;
 
       /* Base 2, 4 */
       {
@@ -1139,26 +1178,28 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         d1[_y] = d2[_y] - d3[_y];
         d1[_z] = d2[_z] - d3[_z];
       }
-      ;
       {
-        float Dist = (float) 1.0 / ((float) MathLib.sqrt((float) (d1[_x] * d1[_x]) + (float) (d1[_y] * d1[_y]) + (float) (d1[_z] * d1[_z])));
+        float Dist =
+            (float) 1.0
+                / ((float)
+                    MathLib.sqrt(
+                        (d1[_x] * d1[_x])
+                            + (d1[_y] * d1[_y])
+                            + (d1[_z] * d1[_z])));
         d1[_x] *= Dist;
         d1[_y] *= Dist;
         d1[_z] *= Dist;
       }
-      ;
       {
         ver[2][_x] = (float) (p1[_x] + (s) * d1[_x]);
         ver[2][_y] = (float) (p1[_y] + (s) * d1[_y]);
         ver[2][_z] = (float) (p1[_z] + (s) * d1[_z]);
       }
-      ;
       {
         ver[4][_x] = (float) (p1[_x] + (-s) * d1[_x]);
         ver[4][_y] = (float) (p1[_y] + (-s) * d1[_y]);
         ver[4][_z] = (float) (p1[_z] + (-s) * d1[_z]);
       }
-      ;
 
       /* End */
       for (i = 1; i <= 4; i++) {
@@ -1166,7 +1207,6 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         ver[i + 4][_y] = ver[i][_y] + dis[_y];
         ver[i + 4][_z] = ver[i][_z] + dis[_z];
       }
-      ;
 
       /* Polygons */
       poly_store[1][0] = 1;
@@ -1200,7 +1240,6 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       poly_store[6][3] = 5;
 
       Save_object(8, 6, c);
-
     }
 
     public void Define_closed(float[] p1, float[] p2, float[] up, int c) {
@@ -1233,44 +1272,60 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         dis[_y] = p2[_y] - p1[_y];
         dis[_z] = p2[_z] - p1[_z];
       }
-      ;
-      d = ((float) MathLib.sqrt((float) (dis[_x] * dis[_x]) + (float) (dis[_y] * dis[_y]) + (float) (dis[_z] * dis[_z])));
+      d =
+          ((float)
+              MathLib.sqrt(
+                  (dis[_x] * dis[_x])
+                      + (dis[_y] * dis[_y])
+                      + (dis[_z] * dis[_z])));
       if (d == (float) 0.0) {
         return;
       }
       s = d * thick;
-      s = (s < (float) min_thick) ? min_thick : s;
+      s = (s < min_thick) ? min_thick : s;
       s *= (float) 0.5;
 
       /* D1 */
-      //C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in Java:
+      // C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent
+      // in Java:
       //  			memcpy(((Object)(d1)), ((Object)(dis)), 12);
       d1[_x] = dis[_x];
       d1[_y] = dis[_y];
       d1[_z] = dis[_z];
 
       {
-        float Dist = (float) 1.0 / ((float) MathLib.sqrt((float) (d1[_x] * d1[_x]) + (float) (d1[_y] * d1[_y]) + (float) (d1[_z] * d1[_z])));
+        float Dist =
+            (float) 1.0
+                / ((float)
+                    MathLib.sqrt(
+                        (d1[_x] * d1[_x])
+                            + (d1[_y] * d1[_y])
+                            + (d1[_z] * d1[_z])));
         d1[_x] *= Dist;
         d1[_y] *= Dist;
         d1[_z] *= Dist;
       }
-      ;
 
       /* D2 */
-      //C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in Java:
+      // C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent
+      // in Java:
       //  			memcpy(((Object)(d2)), ((Object)(up)), 12);
       d2[_x] = up[_x];
       d2[_y] = up[_y];
       d2[_z] = up[_z];
 
       {
-        float Dist = (float) 1.0 / ((float) MathLib.sqrt((float) (d2[_x] * d2[_x]) + (float) (d2[_y] * d2[_y]) + (float) (d2[_z] * d2[_z])));
+        float Dist =
+            (float) 1.0
+                / ((float)
+                    MathLib.sqrt(
+                        (d2[_x] * d2[_x])
+                            + (d2[_y] * d2[_y])
+                            + (d2[_z] * d2[_z])));
         d2[_x] *= Dist;
         d2[_y] *= Dist;
         d2[_z] *= Dist;
       }
-      ;
 
       /* D3 */
       {
@@ -1278,66 +1333,74 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         d3[_y] = d1[_z] * d2[_x] - d1[_x] * d2[_z];
         d3[_z] = d1[_x] * d2[_y] - d1[_y] * d2[_x];
       }
-      ;
       {
-        float Dist = (float) 1.0 / ((float) MathLib.sqrt((float) (d3[_x] * d3[_x]) + (float) (d3[_y] * d3[_y]) + (float) (d3[_z] * d3[_z])));
+        float Dist =
+            (float) 1.0
+                / ((float)
+                    MathLib.sqrt(
+                        (d3[_x] * d3[_x])
+                            + (d3[_y] * d3[_y])
+                            + (d3[_z] * d3[_z])));
         d3[_x] *= Dist;
         d3[_y] *= Dist;
         d3[_z] *= Dist;
       }
-      ;
 
       {
         t1[_x] = d2[_x] + d3[_x];
         t1[_y] = d2[_y] + d3[_y];
         t1[_z] = d2[_z] + d3[_z];
       }
-      ;
       {
-        float Dist = (float) 1.0 / ((float) MathLib.sqrt((float) (t1[_x] * t1[_x]) + (float) (t1[_y] * t1[_y]) + (float) (t1[_z] * t1[_z])));
+        float Dist =
+            (float) 1.0
+                / ((float)
+                    MathLib.sqrt(
+                        (t1[_x] * t1[_x])
+                            + (t1[_y] * t1[_y])
+                            + (t1[_z] * t1[_z])));
         t1[_x] *= Dist;
         t1[_y] *= Dist;
         t1[_z] *= Dist;
       }
-      ;
       {
         t2[_x] = d2[_x] - d3[_x];
         t2[_y] = d2[_y] - d3[_y];
         t2[_z] = d2[_z] - d3[_z];
       }
-      ;
       {
-        float Dist = (float) 1.0 / ((float) MathLib.sqrt((float) (t2[_x] * t2[_x]) + (float) (t2[_y] * t2[_y]) + (float) (t2[_z] * t2[_z])));
+        float Dist =
+            (float) 1.0
+                / ((float)
+                    MathLib.sqrt(
+                        (t2[_x] * t2[_x])
+                            + (t2[_y] * t2[_y])
+                            + (t2[_z] * t2[_z])));
         t2[_x] *= Dist;
         t2[_y] *= Dist;
         t2[_z] *= Dist;
       }
-      ;
 
       {
         ver[1][_x] = (float) (p1[_x] + (s) * t1[_x]);
         ver[1][_y] = (float) (p1[_y] + (s) * t1[_y]);
         ver[1][_z] = (float) (p1[_z] + (s) * t1[_z]);
       }
-      ;
       {
         ver[5][_x] = (float) (p1[_x] + (-s) * t1[_x]);
         ver[5][_y] = (float) (p1[_y] + (-s) * t1[_y]);
         ver[5][_z] = (float) (p1[_z] + (-s) * t1[_z]);
       }
-      ;
       {
         ver[3][_x] = (float) (p1[_x] + (s) * t2[_x]);
         ver[3][_y] = (float) (p1[_y] + (s) * t2[_y]);
         ver[3][_z] = (float) (p1[_z] + (s) * t2[_z]);
       }
-      ;
       {
         ver[7][_x] = (float) (p1[_x] + (-s) * t2[_x]);
         ver[7][_y] = (float) (p1[_y] + (-s) * t2[_y]);
         ver[7][_z] = (float) (p1[_z] + (-s) * t2[_z]);
       }
-      ;
 
       s *= (float) 0.7071;
       {
@@ -1345,25 +1408,21 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         ver[2][_y] = (float) (p1[_y] + (s) * t1[_y] + (s) * t2[_y]);
         ver[2][_z] = (float) (p1[_z] + (s) * t1[_z] + (s) * t2[_z]);
       }
-      ;
       {
         ver[4][_x] = (float) (p1[_x] + (-s) * t1[_x] + (s) * t2[_x]);
         ver[4][_y] = (float) (p1[_y] + (-s) * t1[_y] + (s) * t2[_y]);
         ver[4][_z] = (float) (p1[_z] + (-s) * t1[_z] + (s) * t2[_z]);
       }
-      ;
       {
         ver[6][_x] = (float) (p1[_x] + (-s) * t1[_x] + (-s) * t2[_x]);
         ver[6][_y] = (float) (p1[_y] + (-s) * t1[_y] + (-s) * t2[_y]);
         ver[6][_z] = (float) (p1[_z] + (-s) * t1[_z] + (-s) * t2[_z]);
       }
-      ;
       {
         ver[8][_x] = (float) (p1[_x] + (s) * t1[_x] + (-s) * t2[_x]);
         ver[8][_y] = (float) (p1[_y] + (s) * t1[_y] + (-s) * t2[_y]);
         ver[8][_z] = (float) (p1[_z] + (s) * t1[_z] + (-s) * t2[_z]);
       }
-      ;
 
       /* End */
       for (i = 1; i <= 8; i++) {
@@ -1371,7 +1430,6 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         ver[i + 8][_y] = ver[i][_y] + dis[_y];
         ver[i + 8][_z] = ver[i][_z] + dis[_z];
       }
-      ;
 
       if (last_col == c) {
         {
@@ -1379,8 +1437,12 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           dis[_y] = p1[_y] - last[_y];
           dis[_z] = p1[_z] - last[_z];
         }
-        ;
-        d = ((float) MathLib.sqrt((float) (dis[_x] * dis[_x]) + (float) (dis[_y] * dis[_y]) + (float) (dis[_z] * dis[_z])));
+        d =
+            ((float)
+                MathLib.sqrt(
+                    (dis[_x] * dis[_x])
+                        + (dis[_y] * dis[_y])
+                        + (dis[_z] * dis[_z])));
 
         if (d < (float) 1.0) {
           for (i = 1; i <= 8; i++) {
@@ -1389,15 +1451,20 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
               dis[_y] = ver[1][_y] - last_v[i][_y];
               dis[_z] = ver[1][_z] - last_v[i][_z];
             }
-            ;
-            d = ((float) MathLib.sqrt((float) (dis[_x] * dis[_x]) + (float) (dis[_y] * dis[_y]) + (float) (dis[_z] * dis[_z])));
+            d =
+                ((float)
+                    MathLib.sqrt(
+                        (dis[_x] * dis[_x])
+                            + (dis[_y] * dis[_y])
+                            + (dis[_z] * dis[_z])));
             if (d < dd) {
               dd = d;
               ii = i;
             }
           }
           for (i = 1; i <= 8; i++) {
-            //C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in Java:
+            // C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no
+            // equivalent in Java:
             //  						memcpy(((Object)(ver[i])), ((Object)(last_v[ii])), 12);
 
             ver[i][_x] = last_v[ii][_x];
@@ -1456,15 +1523,16 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       Save_object(16, 8, c);
 
       last_col = c;
-      //C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent in Java:
+      // C++ TO JAVA CONVERTER TODO TASK: The memory management function 'memcpy' has no equivalent
+      // in Java:
       //  			memcpy(((Object)(last)), ((Object)(p2)), 12);
       last[_x] = p2[_x];
       last[_y] = p2[_y];
       last[_z] = p2[_z];
 
-      //  			
+      //
       //  				memcpy(((Object)(last_v[i])), ((Object)(ver[i + 8])), 12);
-      //  			
+      //
       for (i = 1; i <= 8; i++) {
         last_v[i][_x] = ver[i + 8][_x];
         last_v[i][_y] = ver[i + 8][_y];
@@ -1512,37 +1580,41 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       for (t = 1; t <= polygons; t++) {
 
         if (poly_store[t][2] == poly_store[t][3]) {
-          // 				     mesh.addFace(vert_count+ poly_store[t][0],vert_count+ poly_store[t][1],vert_count+ poly_store[t][2]);
+          // 				     mesh.addFace(vert_count+ poly_store[t][0],vert_count+
+          // poly_store[t][1],vert_count+ poly_store[t][2]);
           int v1 = nvert[poly_store[t][0] - 1];
           int v2 = nvert[poly_store[t][1] - 1];
           int v3 = nvert[poly_store[t][2] - 1];
-          if (color_mode == 0)
-            mesh.addFace(v1, v2, v3);
-          else if (color_mode == 1) 
-            mesh.addColoredFace(v1,  v2,  v3, (double) color / (double) max_colors);
+          if (color_mode == 0) mesh.addFace(v1, v2, v3);
+          else if (color_mode == 1)
+            mesh.addColoredFace(v1, v2, v3, (double) color / (double) max_colors);
           else {
             if (color >= max_colors) color = max_colors - 1;
-            mesh.addColoredFace(v1,  v2,  v3, color_store[color][_x], color_store[color][_y], color_store[color][_z]);
+            mesh.addColoredFace(
+                v1, v2, v3, color_store[color][_x], color_store[color][_y], color_store[color][_z]);
           }
-          //                   faces.add(new face(vert_count+ poly_store[t][0],vert_count+ poly_store[t][1],vert_count+ poly_store[t][2]));
+          //                   faces.add(new face(vert_count+ poly_store[t][0],vert_count+
+          // poly_store[t][1],vert_count+ poly_store[t][2]));
         } else {
           int v1 = nvert[poly_store[t][0] - 1];
           int v2 = nvert[poly_store[t][1] - 1];
           int v3 = nvert[poly_store[t][2] - 1];
           int v4 = nvert[poly_store[t][3] - 1];
-          if (color_mode == 0)
-            mesh.addFace(v1, v2, v3, v4);
-          else if (color_mode == 1) 
-            mesh.addColoredFace(v1,  v2,  v3, v4, (double) color / (double) max_colors);
+          if (color_mode == 0) mesh.addFace(v1, v2, v3, v4);
+          else if (color_mode == 1)
+            mesh.addColoredFace(v1, v2, v3, v4, (double) color / (double) max_colors);
           else {
             if (color >= max_colors) color = max_colors - 1;
             double r = Math.floor(color_store[color][_x] * 256.0);
             double g = Math.floor(color_store[color][_y] * 256.0);
             double b = Math.floor(color_store[color][_z] * 256.0);
-            mesh.addColoredFace(v1,  v2,  v3, v4, r, g, b);
+            mesh.addColoredFace(v1, v2, v3, v4, r, g, b);
           }
-          //  					mesh.addFace(vert_count + poly_store[t][0] - 1,vert_count + poly_store[t][1] - 1,vert_count +poly_store[t][2] - 1, vert_count+ poly_store[t][3] - 1);
-          //                    faces.add(new face(vert_count + poly_store[t][0] - 1,vert_count + poly_store[t][1] - 1,vert_count +poly_store[t][2] - 1, vert_count+ poly_store[t][3] - 1));
+          //  					mesh.addFace(vert_count + poly_store[t][0] - 1,vert_count + poly_store[t][1] -
+          // 1,vert_count +poly_store[t][2] - 1, vert_count+ poly_store[t][3] - 1);
+          //                    faces.add(new face(vert_count + poly_store[t][0] - 1,vert_count +
+          // poly_store[t][1] - 1,vert_count +poly_store[t][2] - 1, vert_count+ poly_store[t][3] -
+          // 1));
         }
       }
       mesh_count++;
@@ -1550,15 +1622,15 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     }
 
     public void L_draw() {
-      // Process a production string and generate form 
+      // Process a production string and generate form
       float[] pos = new float[3];
       float[] end = new float[3];
       float[] v = new float[3];
       float[] fow = new float[3];
       float[] upp = new float[3];
       float[] lef = new float[3];
-      //C++ TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
-      //ORIGINAL LINE: u32 i, max = strlen(object_s);
+      // C++ TO JAVA CONVERTER WARNING: Unsigned integer types have no direct equivalent in Java:
+      // ORIGINAL LINE: u32 i, max = strlen(object_s);
       int i;
       //  			int max = object_s.length();
       double r;
@@ -1569,7 +1641,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       char next;
       boolean poly_on = false;
 
-      // Setup vectors 
+      // Setup vectors
       pos[_x] = (float) zero;
       pos[_y] = (float) zero;
       pos[_z] = (float) zero;
@@ -1591,7 +1663,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       //  			Vector_make(lef, zero, one, zero);
       //  			Vector_make(upp, one, zero, zero);
 
-      // initizalize stack array		
+      // initizalize stack array
       for (i = 0; i < max_stack; i++) {
         stack[i] = new s_rec();
       }
@@ -1603,7 +1675,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       trope[_y] = trope[_y] / vLength;
       trope[_z] = trope[_z] / vLength;
 
-      // Start values 
+      // Start values
       org.col = col;
       org.obj = obj;
       org.dis = dis;
@@ -1612,7 +1684,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       org.thick = thick;
       org.tr = tr;
 
-      // Feedback 
+      // Feedback
 
       for (i = 0; i < object_s.length() - 1; i++) {
 
@@ -1623,14 +1695,13 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         }
 
         switch (object_s.charAt(i)) { // The current char in the string
-
           default:
             break;
 
           case '+':
             save.ang = ang;
             if (next == '(') {
-              ang = ((double) 0.017453) * Get_value(i);
+              ang = 0.017453 * Get_value(i);
             }
             Set_rot((float) -ang, upp);
             //  					Util_t(fow, C1, C2, C3, v);
@@ -1660,7 +1731,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case '-':
             save.ang = ang;
             if (next == '(') {
-              ang = ((double) 0.017453) * Get_value(i);
+              ang = 0.017453 * Get_value(i);
             }
             Set_rot((float) ang, upp);
             //  					Util_t(fow, C1, C2, C3, v);
@@ -1688,11 +1759,11 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
           case '~':
             if (next == '(') {
-              r = ((double) 0.017453) * Get_value(i);
+              r = 0.017453 * Get_value(i);
             } else {
-              r = (double) 6.0;
+              r = 6.0;
             }
-            a = (Math.random() * r * (double) 2.0) - r;
+            a = (Math.random() * r * 2.0) - r;
             Set_rot((float) a, upp);
             //  					Util_t(fow, C1, C2, C3, v);
             v = util_t(fow, C1, C2, C3);
@@ -1715,7 +1786,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             lef[_y] = lef[_y] / vLength;
             lef[_z] = lef[_z] / vLength;
 
-            a = (Math.random() * r * (double) 2.0) - r;
+            a = (Math.random() * r * 2.0) - r;
 
             Set_rot((float) a, lef);
 
@@ -1740,7 +1811,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             upp[_y] = upp[_y] / vLength;
             upp[_z] = upp[_z] / vLength;
 
-            a = (Math.random() * r * (double) 2.0) - r;
+            a = (Math.random() * r * 2.0) - r;
 
             Set_rot((float) a, fow);
             //  					Util_t(lef, C1, C2, C3, v);
@@ -1830,7 +1901,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case '&':
             save.ang = ang;
             if (next == '(') {
-              ang = ((double) 0.017453) * Get_value(i);
+              ang = 0.017453 * Get_value(i);
             }
             Set_rot((float) ang, lef);
             //  					Util_t(fow, C1, C2, C3, v);
@@ -1857,7 +1928,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case '^':
             save.ang = ang;
             if (next == '(') {
-              ang = ((double) 0.017453) * Get_value(i);
+              ang = 0.017453 * Get_value(i);
             }
             Set_rot((float) -ang, lef);
             //  					Util_t(fow, C1, C2, C3, v);
@@ -1883,7 +1954,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case '<':
             save.ang = ang;
             if (next == '(') {
-              ang = ((double) 0.017453) * Get_value(i);
+              ang = 0.017453 * Get_value(i);
             }
             Set_rot((float) -ang, fow);
             //  					Util_t(lef, C1, C2, C3, v);
@@ -1911,7 +1982,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case '>':
             save.ang = ang;
             if (next == '(') {
-              ang = ((double) 0.017453) * Get_value(i);
+              ang = 0.017453 * Get_value(i);
             }
             Set_rot((float) ang, fow);
 
@@ -1987,7 +2058,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             if (next == '(') {
               thick *= Get_value(i);
             } else {
-              thick *= (double) 0.7;
+              thick *= 0.7;
             }
             break;
 
@@ -1995,7 +2066,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             if (next == '(') {
               thick *= Get_value(i);
             } else {
-              thick /= (double) 0.7;
+              thick /= 0.7;
             }
             break;
 
@@ -2003,7 +2074,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             if (next == '(') {
               ang *= Get_value(i);
             } else {
-              ang *= (double) 0.9;
+              ang *= 0.9;
             }
             break;
 
@@ -2011,7 +2082,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             if (next == '(') {
               ang *= Get_value(i);
             } else {
-              ang /= (double) 0.9;
+              ang /= 0.9;
             }
             break;
 
@@ -2021,8 +2092,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
               dis *= r;
               dis2 *= r;
             } else {
-              dis *= (double) 0.9;
-              dis2 *= (double) 0.9;
+              dis *= 0.9;
+              dis2 *= 0.9;
             }
             break;
 
@@ -2032,8 +2103,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
               dis *= r;
               dis2 *= r;
             } else {
-              dis /= (double) 0.9;
-              dis2 /= (double) 0.9;
+              dis /= 0.9;
+              dis2 /= 0.9;
             }
             break;
 
@@ -2089,8 +2160,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
               //  						vector_copy(last_v[j][k], stack[scount].last_v[j][k]);
               for (j = 1; j <= 8; j++) {
-                for (int k = 0; k < 3; k++)
-                  stack[scount].last_v[j][k] = last_v[j][k];
+                for (int k = 0; k < 3; k++) stack[scount].last_v[j][k] = last_v[j][k];
               }
             }
             scount++;
@@ -2114,8 +2184,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
               last_col = stack[scount].last_col;
               //  							vector_copy(stack[scount].last_v[j], last_v[j]);
               for (j = 1; j <= 8; j++) {
-                for (int k = 0; k < 3; k++)
-                  last_v[j][k] = stack[scount].last_v[j][k];
+                for (int k = 0; k < 3; k++) last_v[j][k] = stack[scount].last_v[j][k];
               }
             }
 
@@ -2124,7 +2193,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case '{':
             if (poly_on) {
               //  						pstack[pscount].count = vcount;
-              //C++ TO JAVA CONVERTER TODO TASK: The memory management function 'malloc' has no equivalent in Java:
+              // C++ TO JAVA CONVERTER TODO TASK: The memory management function 'malloc' has no
+              // equivalent in Java:
               //  						pstack[pscount].ver = (vector) malloc(vcount * 12);
 
               //  						if (pstack[pscount].ver == null)
@@ -2147,8 +2217,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
               }
             }
             poly_on = true;
-            vcount = (int) 1;
-            pcount = (int) 1;
+            vcount = 1;
+            pcount = 1;
             break;
 
           case 'f':
@@ -2191,7 +2261,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             break;
 
           case '}':
-            if (vcount > (int) 3) {
+            if (vcount > 3) {
               for (j = 1; j < vcount - 2; j++) {
                 poly_store[pcount][0] = 1;
                 poly_store[pcount][1] = j + 1;
@@ -2234,7 +2304,6 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             break;
         }
       }
-
     }
 
     public SimpleMesh getMesh() {
@@ -2242,4 +2311,13 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     }
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[] {
+      VariationFuncType.VARTYPE_3D,
+      VariationFuncType.VARTYPE_BASE_SHAPE,
+      VariationFuncType.VARTYPE_DC,
+      VariationFuncType.VARTYPE_CUSTOM
+    };
+  }
 }

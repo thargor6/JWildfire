@@ -66,4 +66,10 @@ public class DinisSurfaceWFFunc extends VariationFunc {
   public String getName() {
     return "dinis_surface_wf";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

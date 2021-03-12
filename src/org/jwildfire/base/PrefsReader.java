@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.create.tina.base.raster.RasterCreator;
@@ -34,6 +35,7 @@ import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.EditorDoubleClickActionType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 import org.jwildfire.swing.LookAndFeelType;
 
 public class PrefsReader {
@@ -322,6 +324,24 @@ public class PrefsReader {
             }
           }
         }
+        // Variation profiles
+        {
+          int count = getIntProperty(props, VariationProfile.KEY_COUNT, 0);
+          for (int i = 0; i < count; i++) {
+            try {
+              VariationProfile profile = new VariationProfile();
+              profile.setName(getProperty(props, VariationProfile.KEY_NAME + "." + i, ""));
+              profile.setDefaultProfile(getBooleanProperty(props, VariationProfile.KEY_DEFAULT + "." + i, false));
+              profile.setVariationProfileType(VariationProfileType.valueOf(getProperty(props, VariationProfile.KEY_PROFILE_TYPE + "." + i, "")));
+              profile.getVariations().addAll(getListProperty(props, VariationProfile.KEY_VARIATIONS + "." + i, new ArrayList<>()));
+              profile.getVariationTypes().addAll(getListProperty(props, VariationProfile.KEY_VARIATION_TYPES + "." + i, new ArrayList<>()).stream().map( s -> VariationFuncType.valueOf(s)).collect(Collectors.toSet()));
+              pPrefs.getVariationProfiles().add(profile);
+            }
+            catch (Throwable ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
         // macro buttons
         pPrefs.setCreateTinaDefaultMacroButtons(getBooleanProperty(props, Prefs.KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS, pPrefs.isCreateTinaDefaultMacroButtons()));
         pPrefs.setTinaMacroToolbarWidth(getIntProperty(props, Prefs.KEY_TINA_MACRO_TOOLBAR_WIDTH, pPrefs.getTinaMacroToolbarWidth()));
@@ -350,7 +370,6 @@ public class PrefsReader {
         }
         //
         pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath()));
-        pPrefs.setTinaExcludedVariations(getListProperty(props, Prefs.KEY_TINA_EXCLUDED_VARIATIONS, pPrefs.getTinaExcludedVariations()));
         //
 
       }

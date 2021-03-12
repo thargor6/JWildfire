@@ -1,16 +1,16 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2017 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -43,10 +43,15 @@ public class OBJMeshUtil {
     return mesh;
   }
 
-  public static SimpleMesh loadAndSmoothMeshFromFile(String pFilename, int subdiv_smooth_passes, int subdiv_level, double subdiv_smooth_lambda, double subdiv_smooth_mu) throws Exception {
+  public static SimpleMesh loadAndSmoothMeshFromFile(
+      String pFilename,
+      int subdiv_smooth_passes,
+      int subdiv_level,
+      double subdiv_smooth_lambda,
+      double subdiv_smooth_mu)
+      throws Exception {
     Build builder = new Build();
-    /*    Parse obj =*/
-    new Parse(builder, pFilename);
+    /*    Parse obj =*/ new Parse(builder, pFilename);
 
     SimpleMesh mesh = new SimpleMesh();
     for (com.owens.oobjloader.builder.Face face : builder.faces) {
@@ -113,7 +118,12 @@ public class OBJMeshUtil {
     return tmpFile;
   }
 
-  public static String getMeshname(String prefix, int subdiv_level, int subdiv_smooth_passes, double subdiv_smooth_lambda, double subdiv_smooth_mu) {
+  public static String getMeshname(
+      String prefix,
+      int subdiv_level,
+      int subdiv_smooth_passes,
+      double subdiv_smooth_lambda,
+      double subdiv_smooth_mu) {
     String res = prefix + "#" + subdiv_level;
     if (subdiv_level > 0) {
       res += "#" + subdiv_smooth_passes;
@@ -123,5 +133,4 @@ public class OBJMeshUtil {
     }
     return res;
   }
-
 }

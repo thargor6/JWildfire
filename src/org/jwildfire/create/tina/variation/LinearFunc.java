@@ -36,4 +36,9 @@ public class LinearFunc extends SimpleVariationFunc {
     return "linear";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

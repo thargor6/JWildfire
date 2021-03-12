@@ -77,4 +77,10 @@ public class BlurLinearFunc extends VariationFunc {
   public String getName() {
     return "blur_linear";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

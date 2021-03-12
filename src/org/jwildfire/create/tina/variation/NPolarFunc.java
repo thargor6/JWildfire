@@ -97,4 +97,9 @@ public class NPolarFunc extends VariationFunc {
     this._isodd = iabs(parity) % 2;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -191,4 +191,9 @@ public class Falloff2Func extends VariationFunc {
     _rmax = 0.04 * scatter;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BLUR};
+  }
+
 }

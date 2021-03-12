@@ -208,4 +208,9 @@ public class Hexnix3DFunc extends VariationFunc {
     _seg120y[2] = 0.5;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

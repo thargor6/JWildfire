@@ -386,6 +386,9 @@ public class TinaControllerData {
   public JPanel channelMixerBGRootPanel;
   public JPanel channelMixerBBRootPanel;
 
+  public JComboBox tinaVariationProfile1Cmb;
+  public JComboBox tinaVariationProfile2Cmb;
+
   public JButton gradientCurveEditorSaveBtn;
   public JPanel gradientCurveEditorHueRootPanel;
   public JPanel gradientCurveEditorSaturationRootPanel;

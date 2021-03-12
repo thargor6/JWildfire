@@ -13,4 +13,9 @@ public class PreCustomWFFunc extends CustomWFFunc {
     return -1;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_PRE};
+  }
+
 }

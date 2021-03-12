@@ -83,5 +83,9 @@ public class TileHlpFunc extends VariationFunc {
     return "tile_hlp";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }
 

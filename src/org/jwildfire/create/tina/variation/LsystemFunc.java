@@ -1168,4 +1168,10 @@ public class LsystemFunc extends VariationFunc {
   public String getName() {
     return "lsystem_js";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

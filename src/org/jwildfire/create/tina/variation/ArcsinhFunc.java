@@ -42,4 +42,9 @@ public class ArcsinhFunc extends SimpleVariationFunc {
     return "arcsinh";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

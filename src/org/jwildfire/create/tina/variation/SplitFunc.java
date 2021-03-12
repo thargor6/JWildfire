@@ -77,4 +77,9 @@ public class SplitFunc extends VariationFunc {
     return "split";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

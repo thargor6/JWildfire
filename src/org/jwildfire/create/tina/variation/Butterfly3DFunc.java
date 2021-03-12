@@ -42,4 +42,9 @@ public class Butterfly3DFunc extends SimpleVariationFunc {
     return "butterfly3D";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

@@ -193,5 +193,10 @@ public class Glitchy1Func extends VariationFunc {
     public String getName() {
         return "glitchy1";
     }
- 
+
+    @Override
+    public VariationFuncType[] getVariationTypes() {
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    }
+
 }

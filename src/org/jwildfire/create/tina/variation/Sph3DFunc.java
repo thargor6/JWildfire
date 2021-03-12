@@ -76,4 +76,10 @@ public class Sph3DFunc extends VariationFunc {
   public String getName() {
     return "sph3D";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

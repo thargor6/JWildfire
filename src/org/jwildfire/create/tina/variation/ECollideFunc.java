@@ -111,4 +111,9 @@ public class ECollideFunc extends VariationFunc {
     _eCa_eCn = _eCa / (double) num;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

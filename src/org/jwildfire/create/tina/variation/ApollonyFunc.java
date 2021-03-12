@@ -56,4 +56,10 @@ public class ApollonyFunc extends SimpleVariationFunc {
   public String getName() {
     return "apollony";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

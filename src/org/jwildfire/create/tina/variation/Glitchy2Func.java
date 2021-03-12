@@ -392,4 +392,10 @@ public class Glitchy2Func extends VariationFunc {
 		ul_pz_sin = sin(ul_spin * M_PI_2);
 		ul_pz_cos = cos(ul_spin * M_PI_2);
 	}
+
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+	}
+
 }

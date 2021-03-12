@@ -167,4 +167,9 @@ public class Petal3DFunc extends VariationFunc {
 		return "petal3D";
 	}
 
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+	}
+
 }

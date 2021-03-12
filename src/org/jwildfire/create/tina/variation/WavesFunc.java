@@ -39,4 +39,8 @@ public class WavesFunc extends SimpleVariationFunc {
     return "waves";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

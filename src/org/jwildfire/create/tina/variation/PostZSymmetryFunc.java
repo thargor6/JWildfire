@@ -116,5 +116,11 @@ public class PostZSymmetryFunc extends VariationFunc {
 	  @Override
 	  public int getPriority() {
 	    return 1;
-	  }  
+	  }
+
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_POST};
+	}
+
 }

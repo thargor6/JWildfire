@@ -60,7 +60,6 @@ public abstract class WFFuncPresets<T extends WFFuncPreset> {
           res.put(preset.getId(), preset);
         } catch (Exception ex) {
           ex.printStackTrace();
-
         }
       }
     } catch (Exception ex) {
@@ -75,8 +74,7 @@ public abstract class WFFuncPresets<T extends WFFuncPreset> {
     int p1 = preset.indexOf("##");
     if (p1 >= 0) {
       int p2 = preset.indexOf("\n", p1 + 1);
-      if (p2 < 0)
-        p2 = preset.length();
+      if (p2 < 0) p2 = preset.length();
       String token = preset.substring(p1 + 2, p2).trim();
       return Integer.parseInt(token);
     }
@@ -87,13 +85,12 @@ public abstract class WFFuncPresets<T extends WFFuncPreset> {
     int p1 = preset.indexOf("\n" + token);
     if (p1 >= 0) {
       int p2 = preset.indexOf("\n", p1 + 1);
-      if (p2 < 0)
-        p2 = preset.length();
+      if (p2 < 0) p2 = preset.length();
       String line = preset.substring(p1 + token.length(), p2).trim();
 
       int p3 = line.indexOf("=");
       if (p3 >= 0) {
-        line = line.substring(p3 + 1, line.length());
+        line = line.substring(p3 + 1);
         int p4 = line.indexOf("---");
         if (p4 > 0) {
           line = line.substring(0, p4);
@@ -115,7 +112,7 @@ public abstract class WFFuncPresets<T extends WFFuncPreset> {
     }
     JEPWrapper parser = new JEPWrapper();
     Node node = parser.parse(value);
-    return (Double) parser.evaluate(node);
+    return parser.evaluate(node);
   }
 
   public int getRandomPresetId() {

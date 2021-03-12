@@ -127,4 +127,8 @@ public class VoronFunc extends VariationFunc {
     return ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) * AM;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+  }
 }

@@ -100,4 +100,9 @@ public class SpirographFunc extends VariationFunc {
     return "spirograph";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

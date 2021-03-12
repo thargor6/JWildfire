@@ -744,4 +744,9 @@ public class InversionFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+  }
+
 }

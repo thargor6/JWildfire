@@ -40,4 +40,9 @@ public class BubbleWFFunc extends SimpleVariationFunc {
     return "bubble_wf";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

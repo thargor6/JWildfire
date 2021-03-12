@@ -45,4 +45,9 @@ public class GammaFunc extends SimpleVariationFunc {
     return "gamma";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

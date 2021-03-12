@@ -146,4 +146,9 @@ public class GDOffsFunc extends VariationFunc {
     return (c * (b - a) + a);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -193,4 +193,10 @@ public class ArcTruchetFunc extends VariationFunc {
       for (int j = 0; j < numberTilesPerColumn; j++)
         tiltArray[j * numberTilesPerRow + i] = (int) (randomize.nextDouble() * 4);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -96,4 +96,9 @@ public class AtanFunc extends VariationFunc {
     return "atan";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

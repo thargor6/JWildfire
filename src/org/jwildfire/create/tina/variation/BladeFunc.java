@@ -53,4 +53,9 @@ public class BladeFunc extends SimpleVariationFunc {
     return "blade";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

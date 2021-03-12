@@ -47,4 +47,9 @@ public class SinqFunc extends SimpleVariationFunc {
     return "sinq";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

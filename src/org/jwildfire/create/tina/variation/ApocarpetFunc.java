@@ -68,4 +68,10 @@ public class ApocarpetFunc extends SimpleVariationFunc {
   public String getName() {
     return "apocarpet_js";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

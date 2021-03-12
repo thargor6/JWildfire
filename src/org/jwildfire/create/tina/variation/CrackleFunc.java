@@ -225,4 +225,9 @@ public class CrackleFunc extends VariationFunc {
     }
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

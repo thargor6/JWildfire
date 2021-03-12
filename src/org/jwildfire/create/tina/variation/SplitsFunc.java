@@ -92,4 +92,9 @@ public class SplitsFunc extends VariationFunc {
     return "splits";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

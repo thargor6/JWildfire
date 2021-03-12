@@ -237,4 +237,10 @@ public class MobiusStripFunc extends VariationFunc {
   public int getPriority() {
     return 0;
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

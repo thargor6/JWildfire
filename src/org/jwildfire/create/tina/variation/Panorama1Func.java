@@ -43,4 +43,9 @@ public class Panorama1Func extends SimpleVariationFunc {
     return "panorama1";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

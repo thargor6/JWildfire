@@ -176,4 +176,8 @@ public class TruchetHexCropFunc extends VariationFunc {
 		return "truchet_hex_crop";
 	}
 
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_SIMULATION};
+	}
 }

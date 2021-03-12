@@ -98,6 +98,10 @@ public class ConeFunc extends VariationFunc {
     public String getName() {
         return "cone";
     }
- 
- 
+
+    @Override
+    public VariationFuncType[] getVariationTypes() {
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE };
+    }
+
 }

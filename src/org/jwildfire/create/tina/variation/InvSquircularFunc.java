@@ -30,5 +30,10 @@ public class InvSquircularFunc extends SimpleVariationFunc {
     return "invsquircular";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 
 }

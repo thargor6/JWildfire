@@ -44,4 +44,8 @@ public class XErfFunc extends SimpleVariationFunc {
     return "xerf";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
 }

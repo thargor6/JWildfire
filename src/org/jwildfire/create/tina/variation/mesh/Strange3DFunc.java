@@ -1,16 +1,16 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2011 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -31,19 +31,18 @@
 
 package org.jwildfire.create.tina.variation.mesh;
 
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.RessourceType;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 import org.jwildfire.create.tina.variation.plot.SAttractor3DFormulaEvaluator;
 import org.jwildfire.create.tina.variation.plot.SAttractor3DWFFuncPreset;
 import org.jwildfire.create.tina.variation.plot.WFFuncPresetsStore;
 
 import java.util.ArrayList;
-
 
 public class Strange3DFunc extends AbstractOBJMeshWFFunc {
   private static final long serialVersionUID = 1L;
@@ -68,14 +67,12 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
   private static final String PARAM_G = "param_g";
   private static final String PARAM_H = "param_h";
 
-
   public static final String PARAM_SCALEX = "scale_x";
   public static final String PARAM_SCALEY = "scale_y";
   protected static final String PARAM_SCALEZ = "scale_z";
   protected static final String PARAM_OFFSETX = "offset_x";
   protected static final String PARAM_OFFSETY = "offset_y";
   protected static final String PARAM_OFFSETZ = "offset_z";
-
 
   protected static final String PARAM_SUBDIV_LEVEL = "subdiv_level";
   protected static final String PARAM_SUBDIV_SMOOTH_PASSES = "subdiv_smooth_passes";
@@ -88,15 +85,47 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
 
   protected static final String PARAM_RECEIVE_ONLY_SHADOWS = "receive_only_shadows";
 
-  private static final String[] paramNames = {PARAM_PRESETID, PARAM_STEPS, PARAM_RADIUS, PARAM_STEPTIME, PARAM_FACETS, PARAM_START_X, PARAM_START_Y, PARAM_START_Z, PARAM_WARMUP,
-          PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, PARAM_G, PARAM_H,
-          PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS};
+  private static final String[] paramNames = {
+    PARAM_PRESETID,
+    PARAM_STEPS,
+    PARAM_RADIUS,
+    PARAM_STEPTIME,
+    PARAM_FACETS,
+    PARAM_START_X,
+    PARAM_START_Y,
+    PARAM_START_Z,
+    PARAM_WARMUP,
+    PARAM_A,
+    PARAM_B,
+    PARAM_C,
+    PARAM_D,
+    PARAM_E,
+    PARAM_F,
+    PARAM_G,
+    PARAM_H,
+    PARAM_SCALEX,
+    PARAM_SCALEY,
+    PARAM_SCALEZ,
+    PARAM_OFFSETX,
+    PARAM_OFFSETY,
+    PARAM_OFFSETZ,
+    PARAM_SUBDIV_LEVEL,
+    PARAM_SUBDIV_SMOOTH_PASSES,
+    PARAM_SUBDIV_SMOOTH_LAMBDA,
+    PARAM_SUBDIV_SMOOTH_MU,
+    PARAM_BLEND_COLORMAP,
+    PARAM_DISPL_AMOUNT,
+    PARAM_BLEND_DISPLMAP,
+    PARAM_RECEIVE_ONLY_SHADOWS
+  };
 
   private static final String RESSOURCE_XFORMULA = "xformula";
   private static final String RESSOURCE_YFORMULA = "yformula";
   private static final String RESSOURCE_ZFORMULA = "zformula";
 
-  private static final String[] ressourceNames = {RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA};
+  private static final String[] ressourceNames = {
+    RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA
+  };
 
   private String xformula;
   private String yformula;
@@ -127,7 +156,39 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{preset_id, steps, radius, stepTime, facets, startx, starty, startz, warmup, param_a, param_b, param_c, param_d, param_e, param_f, param_g, param_h, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows};
+    return new Object[] {
+      preset_id,
+      steps,
+      radius,
+      stepTime,
+      facets,
+      startx,
+      starty,
+      startz,
+      warmup,
+      param_a,
+      param_b,
+      param_c,
+      param_d,
+      param_e,
+      param_f,
+      param_g,
+      param_h,
+      scaleX,
+      scaleY,
+      scaleZ,
+      offsetX,
+      offsetY,
+      offsetZ,
+      subdiv_level,
+      subdiv_smooth_passes,
+      subdiv_smooth_lambda,
+      subdiv_smooth_mu,
+      colorMapHolder.getBlend_colormap(),
+      displacementMapHolder.getDispl_amount(),
+      displacementMapHolder.getBlend_displ_map(),
+      receive_only_shadows
+    };
   }
 
   @Override
@@ -142,7 +203,17 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][]{(xformula != null ? xformula.getBytes() : null), (yformula != null ? yformula.getBytes() : null), (zformula != null ? zformula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null)};
+    return new byte[][] {
+      (xformula != null ? xformula.getBytes() : null),
+      (yformula != null ? yformula.getBytes() : null),
+      (zformula != null ? zformula.getBytes() : null),
+      (colorMapHolder.getColormap_filename() != null
+          ? colorMapHolder.getColormap_filename().getBytes()
+          : null),
+      (displacementMapHolder.getDispl_map_filename() != null
+          ? displacementMapHolder.getDispl_map_filename().getBytes()
+          : null)
+    };
   }
 
   @Override
@@ -156,8 +227,7 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
     } else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
       zformula = pValue != null ? new String(pValue) : "";
       validatePresetId();
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -168,8 +238,7 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
       return RessourceType.BYTEARRAY;
     } else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -195,42 +264,26 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
       startz = pValue;
     } else if (PARAM_WARMUP.equalsIgnoreCase(pName)) {
       warmup = (int) pValue;
-    } else if (PARAM_A.equalsIgnoreCase(pName))
-      param_a = pValue;
-    else if (PARAM_B.equalsIgnoreCase(pName))
-      param_b = pValue;
-    else if (PARAM_C.equalsIgnoreCase(pName))
-      param_c = pValue;
-    else if (PARAM_D.equalsIgnoreCase(pName))
-      param_d = pValue;
-    else if (PARAM_E.equalsIgnoreCase(pName))
-      param_e = pValue;
-    else if (PARAM_F.equalsIgnoreCase(pName))
-      param_f = pValue;
-    else if (PARAM_G.equalsIgnoreCase(pName))
-      param_g = pValue;
-    else if (PARAM_H.equalsIgnoreCase(pName))
-      param_h = pValue;
-    else if (PARAM_SCALEX.equalsIgnoreCase(pName))
-      scaleX = pValue;
-    else if (PARAM_SCALEY.equalsIgnoreCase(pName))
-      scaleY = pValue;
-    else if (PARAM_SCALEZ.equalsIgnoreCase(pName))
-      scaleZ = pValue;
-    else if (PARAM_OFFSETX.equalsIgnoreCase(pName))
-      offsetX = pValue;
-    else if (PARAM_OFFSETY.equalsIgnoreCase(pName))
-      offsetY = pValue;
-    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
-      offsetZ = pValue;
+    } else if (PARAM_A.equalsIgnoreCase(pName)) param_a = pValue;
+    else if (PARAM_B.equalsIgnoreCase(pName)) param_b = pValue;
+    else if (PARAM_C.equalsIgnoreCase(pName)) param_c = pValue;
+    else if (PARAM_D.equalsIgnoreCase(pName)) param_d = pValue;
+    else if (PARAM_E.equalsIgnoreCase(pName)) param_e = pValue;
+    else if (PARAM_F.equalsIgnoreCase(pName)) param_f = pValue;
+    else if (PARAM_G.equalsIgnoreCase(pName)) param_g = pValue;
+    else if (PARAM_H.equalsIgnoreCase(pName)) param_h = pValue;
+    else if (PARAM_SCALEX.equalsIgnoreCase(pName)) scaleX = pValue;
+    else if (PARAM_SCALEY.equalsIgnoreCase(pName)) scaleY = pValue;
+    else if (PARAM_SCALEZ.equalsIgnoreCase(pName)) scaleZ = pValue;
+    else if (PARAM_OFFSETX.equalsIgnoreCase(pName)) offsetX = pValue;
+    else if (PARAM_OFFSETY.equalsIgnoreCase(pName)) offsetY = pValue;
+    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName)) offsetZ = pValue;
     else if (PARAM_SUBDIV_LEVEL.equalsIgnoreCase(pName))
       subdiv_level = limitIntVal(Tools.FTOI(pValue), 0, 6);
     else if (PARAM_SUBDIV_SMOOTH_PASSES.equalsIgnoreCase(pName))
       subdiv_smooth_passes = limitIntVal(Tools.FTOI(pValue), 0, 24);
-    else if (PARAM_SUBDIV_SMOOTH_LAMBDA.equalsIgnoreCase(pName))
-      subdiv_smooth_lambda = pValue;
-    else if (PARAM_SUBDIV_SMOOTH_MU.equalsIgnoreCase(pName))
-      subdiv_smooth_mu = pValue;
+    else if (PARAM_SUBDIV_SMOOTH_LAMBDA.equalsIgnoreCase(pName)) subdiv_smooth_lambda = pValue;
+    else if (PARAM_SUBDIV_SMOOTH_MU.equalsIgnoreCase(pName)) subdiv_smooth_mu = pValue;
     else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName))
       colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
     else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName))
@@ -239,8 +292,7 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
       displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
     else if (PARAM_RECEIVE_ONLY_SHADOWS.equalsIgnoreCase(pName))
       receive_only_shadows = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    else
-      throw new IllegalArgumentException(pName);
+    else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -249,52 +301,112 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
   }
 
   private String calculateMeshKey() {
-    return xformula + "#" + yformula + "#" + zformula + "#" + steps + "#" + radius + "#" + stepTime + "#" + facets + "#" + startx + "#" + starty + "#" + startz + "#" +
-            warmup + "#" + param_a + "#" + param_b + "#" + param_c + "#" + param_d + "#" + param_e + "#" + param_f + "#" + param_g + "#" + param_h;
+    return xformula + "#" + yformula + "#" + zformula + "#" + steps + "#" + radius + "#" + stepTime
+        + "#" + facets + "#" + startx + "#" + starty + "#" + startz + "#" + warmup + "#" + param_a
+        + "#" + param_b + "#" + param_c + "#" + param_d + "#" + param_e + "#" + param_f + "#"
+        + param_g + "#" + param_h;
   }
 
   private SimpleMesh getMesh() {
     String key = calculateMeshKey();
     SimpleMesh simpleMesh = (SimpleMesh) RessourceManager.getRessource(key);
     if (simpleMesh == null) {
-      String code = "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
-              "\r\n" +
-              "  public double evaluateX(double x,double y, double z, double delta_t) {\r\n" +
-              "    double pi = M_PI;\r\n" +
-              "    double param_a = " + param_a + ";\r\n" +
-              "    double param_b = " + param_b + ";\r\n" +
-              "    double param_c = " + param_c + ";\r\n" +
-              "    double param_d = " + param_d + ";\r\n" +
-              "    double param_e = " + param_e + ";\r\n" +
-              "    double param_f = " + param_f + ";\r\n" +
-              "    double param_g = " + param_g + ";\r\n" +
-              "    double param_h = " + param_h + ";\r\n" +
-              "    return  x + (" + (xformula != null && !xformula.isEmpty() ? xformula : "0.0") + ")*delta_t" + ";\r\n" +
-              "  }\r\n" +
-              "  public double evaluateY(double x,double y,double z, double delta_t) {\r\n" +
-              "    double pi = M_PI;\r\n" +
-              "    double param_a = " + param_a + ";\r\n" +
-              "    double param_b = " + param_b + ";\r\n" +
-              "    double param_c = " + param_c + ";\r\n" +
-              "    double param_d = " + param_d + ";\r\n" +
-              "    double param_e = " + param_e + ";\r\n" +
-              "    double param_f = " + param_f + ";\r\n" +
-              "    double param_g = " + param_g + ";\r\n" +
-              "    double param_h = " + param_h + ";\r\n" +
-              "    return  y + (" + (yformula != null && !yformula.isEmpty() ? yformula : "0.0") + ")*delta_t" + ";\r\n" +
-              "  }\r\n" +
-              "  public double evaluateZ(double x,double y, double z, double delta_t) {\r\n" +
-              "    double pi = M_PI;\r\n" +
-              "    double param_a = " + param_a + ";\r\n" +
-              "    double param_b = " + param_b + ";\r\n" +
-              "    double param_c = " + param_c + ";\r\n" +
-              "    double param_d = " + param_d + ";\r\n" +
-              "    double param_e = " + param_e + ";\r\n" +
-              "    double param_f = " + param_f + ";\r\n" +
-              "    double param_g = " + param_g + ";\r\n" +
-              "    double param_h = " + param_h + ";\r\n" +
-              "    return  z + (" + (zformula != null && !zformula.isEmpty() ? zformula : "0.0") + ")*delta_t" + ";\r\n" +
-              "  }\r\n";
+      String code =
+          "import static org.jwildfire.base.mathlib.MathLib.*;\r\n"
+              + "\r\n"
+              + "  public double evaluateX(double x,double y, double z, double delta_t) {\r\n"
+              + "    double pi = M_PI;\r\n"
+              + "    double param_a = "
+              + param_a
+              + ";\r\n"
+              + "    double param_b = "
+              + param_b
+              + ";\r\n"
+              + "    double param_c = "
+              + param_c
+              + ";\r\n"
+              + "    double param_d = "
+              + param_d
+              + ";\r\n"
+              + "    double param_e = "
+              + param_e
+              + ";\r\n"
+              + "    double param_f = "
+              + param_f
+              + ";\r\n"
+              + "    double param_g = "
+              + param_g
+              + ";\r\n"
+              + "    double param_h = "
+              + param_h
+              + ";\r\n"
+              + "    return  x + ("
+              + (xformula != null && !xformula.isEmpty() ? xformula : "0.0")
+              + ")*delta_t"
+              + ";\r\n"
+              + "  }\r\n"
+              + "  public double evaluateY(double x,double y,double z, double delta_t) {\r\n"
+              + "    double pi = M_PI;\r\n"
+              + "    double param_a = "
+              + param_a
+              + ";\r\n"
+              + "    double param_b = "
+              + param_b
+              + ";\r\n"
+              + "    double param_c = "
+              + param_c
+              + ";\r\n"
+              + "    double param_d = "
+              + param_d
+              + ";\r\n"
+              + "    double param_e = "
+              + param_e
+              + ";\r\n"
+              + "    double param_f = "
+              + param_f
+              + ";\r\n"
+              + "    double param_g = "
+              + param_g
+              + ";\r\n"
+              + "    double param_h = "
+              + param_h
+              + ";\r\n"
+              + "    return  y + ("
+              + (yformula != null && !yformula.isEmpty() ? yformula : "0.0")
+              + ")*delta_t"
+              + ";\r\n"
+              + "  }\r\n"
+              + "  public double evaluateZ(double x,double y, double z, double delta_t) {\r\n"
+              + "    double pi = M_PI;\r\n"
+              + "    double param_a = "
+              + param_a
+              + ";\r\n"
+              + "    double param_b = "
+              + param_b
+              + ";\r\n"
+              + "    double param_c = "
+              + param_c
+              + ";\r\n"
+              + "    double param_d = "
+              + param_d
+              + ";\r\n"
+              + "    double param_e = "
+              + param_e
+              + ";\r\n"
+              + "    double param_f = "
+              + param_f
+              + ";\r\n"
+              + "    double param_g = "
+              + param_g
+              + ";\r\n"
+              + "    double param_h = "
+              + param_h
+              + ";\r\n"
+              + "    return  z + ("
+              + (zformula != null && !zformula.isEmpty() ? zformula : "0.0")
+              + ")*delta_t"
+              + ";\r\n"
+              + "  }\r\n";
       try {
         evaluator = SAttractor3DFormulaEvaluator.compile(code);
       } catch (Exception e) {
@@ -303,7 +415,15 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
         System.out.println(code);
         throw new IllegalArgumentException(e);
       }
-      AttractorCurve attractor = new AttractorCurve(steps * 1000, evaluator, radius, stepTime, facets, new Vector3(startx, starty, startz), warmup);
+      AttractorCurve attractor =
+          new AttractorCurve(
+              steps * 1000,
+              evaluator,
+              radius,
+              stepTime,
+              facets,
+              new Vector3(startx, starty, startz),
+              warmup);
       attractor.build();
       attractor.getGeometry();
       simpleMesh = attractor.getMesh();
@@ -313,62 +433,121 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
   }
 
   @Override
-  public void initOnce(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  public void initOnce(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.initOnce(pContext, pLayer, pXForm, pAmount);
     // store result to cache
     getMesh();
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  public void init(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.init(pContext, pLayer, pXForm, pAmount);
     // get from cache
     mesh = getMesh();
   }
 
-
   public Strange3DFunc() {
     super();
     preset_id = WFFuncPresetsStore.getSAttractor3DWFFuncPresets().getRandomPresetId();
     refreshFormulaFromPreset(preset_id);
-    String code = "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
-            "\r\n" +
-            "  public double evaluateX(double x,double y, double z, double delta_t) {\r\n" +
-            "    double pi = M_PI;\r\n" +
-            "    double param_a = " + param_a + ";\r\n" +
-            "    double param_b = " + param_b + ";\r\n" +
-            "    double param_c = " + param_c + ";\r\n" +
-            "    double param_d = " + param_d + ";\r\n" +
-            "    double param_e = " + param_e + ";\r\n" +
-            "    double param_f = " + param_f + ";\r\n" +
-            "    double param_g = " + param_g + ";\r\n" +
-            "    double param_h = " + param_h + ";\r\n" +
-            "    return  x + (" + (xformula != null && !xformula.isEmpty() ? xformula : "0.0") + ")*delta_t" + ";\r\n" +
-            "  }\r\n" +
-            "  public double evaluateY(double x,double y,double z, double delta_t) {\r\n" +
-            "    double pi = M_PI;\r\n" +
-            "    double param_a = " + param_a + ";\r\n" +
-            "    double param_b = " + param_b + ";\r\n" +
-            "    double param_c = " + param_c + ";\r\n" +
-            "    double param_d = " + param_d + ";\r\n" +
-            "    double param_e = " + param_e + ";\r\n" +
-            "    double param_f = " + param_f + ";\r\n" +
-            "    double param_g = " + param_g + ";\r\n" +
-            "    double param_h = " + param_h + ";\r\n" +
-            "    return  y + (" + (yformula != null && !yformula.isEmpty() ? yformula : "0.0") + ")*delta_t" + ";\r\n" +
-            "  }\r\n" +
-            "  public double evaluateZ(double x,double y, double z, double delta_t) {\r\n" +
-            "    double pi = M_PI;\r\n" +
-            "    double param_a = " + param_a + ";\r\n" +
-            "    double param_b = " + param_b + ";\r\n" +
-            "    double param_c = " + param_c + ";\r\n" +
-            "    double param_d = " + param_d + ";\r\n" +
-            "    double param_e = " + param_e + ";\r\n" +
-            "    double param_f = " + param_f + ";\r\n" +
-            "    double param_g = " + param_g + ";\r\n" +
-            "    double param_h = " + param_h + ";\r\n" +
-            "    return  z + (" + (zformula != null && !zformula.isEmpty() ? zformula : "0.0") + ")*delta_t" + ";\r\n" +
-            "  }\r\n";
+    String code =
+        "import static org.jwildfire.base.mathlib.MathLib.*;\r\n"
+            + "\r\n"
+            + "  public double evaluateX(double x,double y, double z, double delta_t) {\r\n"
+            + "    double pi = M_PI;\r\n"
+            + "    double param_a = "
+            + param_a
+            + ";\r\n"
+            + "    double param_b = "
+            + param_b
+            + ";\r\n"
+            + "    double param_c = "
+            + param_c
+            + ";\r\n"
+            + "    double param_d = "
+            + param_d
+            + ";\r\n"
+            + "    double param_e = "
+            + param_e
+            + ";\r\n"
+            + "    double param_f = "
+            + param_f
+            + ";\r\n"
+            + "    double param_g = "
+            + param_g
+            + ";\r\n"
+            + "    double param_h = "
+            + param_h
+            + ";\r\n"
+            + "    return  x + ("
+            + (xformula != null && !xformula.isEmpty() ? xformula : "0.0")
+            + ")*delta_t"
+            + ";\r\n"
+            + "  }\r\n"
+            + "  public double evaluateY(double x,double y,double z, double delta_t) {\r\n"
+            + "    double pi = M_PI;\r\n"
+            + "    double param_a = "
+            + param_a
+            + ";\r\n"
+            + "    double param_b = "
+            + param_b
+            + ";\r\n"
+            + "    double param_c = "
+            + param_c
+            + ";\r\n"
+            + "    double param_d = "
+            + param_d
+            + ";\r\n"
+            + "    double param_e = "
+            + param_e
+            + ";\r\n"
+            + "    double param_f = "
+            + param_f
+            + ";\r\n"
+            + "    double param_g = "
+            + param_g
+            + ";\r\n"
+            + "    double param_h = "
+            + param_h
+            + ";\r\n"
+            + "    return  y + ("
+            + (yformula != null && !yformula.isEmpty() ? yformula : "0.0")
+            + ")*delta_t"
+            + ";\r\n"
+            + "  }\r\n"
+            + "  public double evaluateZ(double x,double y, double z, double delta_t) {\r\n"
+            + "    double pi = M_PI;\r\n"
+            + "    double param_a = "
+            + param_a
+            + ";\r\n"
+            + "    double param_b = "
+            + param_b
+            + ";\r\n"
+            + "    double param_c = "
+            + param_c
+            + ";\r\n"
+            + "    double param_d = "
+            + param_d
+            + ";\r\n"
+            + "    double param_e = "
+            + param_e
+            + ";\r\n"
+            + "    double param_f = "
+            + param_f
+            + ";\r\n"
+            + "    double param_g = "
+            + param_g
+            + ";\r\n"
+            + "    double param_h = "
+            + param_h
+            + ";\r\n"
+            + "    return  z + ("
+            + (zformula != null && !zformula.isEmpty() ? zformula : "0.0")
+            + ")*delta_t"
+            + ";\r\n"
+            + "  }\r\n";
     try {
       evaluator = SAttractor3DFormulaEvaluator.compile(code);
     } catch (Exception e) {
@@ -381,15 +560,19 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
 
   private void validatePresetId() {
     if (preset_id >= 0) {
-      SAttractor3DWFFuncPreset preset = WFFuncPresetsStore.getSAttractor3DWFFuncPresets().getPreset(preset_id);
-      if (!preset.getXformula().equals(xformula) || !preset.getYformula().equals(yformula) || !preset.getZformula().equals(zformula)) {
+      SAttractor3DWFFuncPreset preset =
+          WFFuncPresetsStore.getSAttractor3DWFFuncPresets().getPreset(preset_id);
+      if (!preset.getXformula().equals(xformula)
+          || !preset.getYformula().equals(yformula)
+          || !preset.getZformula().equals(zformula)) {
         preset_id = -1;
       }
     }
   }
 
   private void refreshFormulaFromPreset(int presetId) {
-    SAttractor3DWFFuncPreset preset = WFFuncPresetsStore.getSAttractor3DWFFuncPresets().getPreset(presetId);
+    SAttractor3DWFFuncPreset preset =
+        WFFuncPresetsStore.getSAttractor3DWFFuncPresets().getPreset(presetId);
 
     xformula = preset.getXformula();
     yformula = preset.getYformula();
@@ -411,7 +594,6 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
     param_f = preset.getParam_f();
     param_g = preset.getParam_g();
     param_h = preset.getParam_h();
-
   }
 
   @Override
@@ -422,8 +604,7 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
   @Override
   public boolean dynamicParameterExpansion(String pName) {
     // preset_id doesn't really expand parameters, but it changes them; this will make them refresh
-    if (PARAM_PRESETID.equalsIgnoreCase(pName)) return true;
-    else return false;
+    return PARAM_PRESETID.equalsIgnoreCase(pName);
   }
 
   static class Vector2 {
@@ -437,7 +618,6 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
       this.x = a;
       this.y = b;
     }
-
   }
 
   static class Vector3 {
@@ -463,7 +643,6 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
 
     public Vector3 divideScalar(double scalar) {
       return multiplyScalar(1.0 / scalar);
-
     }
 
     public double length() {
@@ -508,7 +687,6 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
     public Vector3 projectOnVector(Vector3 v) {
       double scalar = v.dot(this) / v.lengthSq();
       return copy(v).multiplyScalar(scalar);
-
     }
 
     public Vector3 sub(Vector3 v) {
@@ -525,7 +703,6 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
     }
   }
 
-
   static class AttractorCurve {
     // Strange Attractor curve points, normals tangents, binormals
     ArrayList<Vector3> pos = new ArrayList<Vector3>();
@@ -533,7 +710,7 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
     ArrayList<Vector3> normals = new ArrayList<Vector3>();
     ArrayList<Vector3> binormals = new ArrayList<Vector3>();
 
-    //2D shape points
+    // 2D shape points
     ArrayList<Vector2> points = new ArrayList<Vector2>();
 
     // 3D Attractor mesh
@@ -548,7 +725,14 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
     SAttractor3DFormulaEvaluator evaluator;
     Vector3 start;
 
-    public AttractorCurve(int count, SAttractor3DFormulaEvaluator evaluator, double radius, double timeStep, int facets, Vector3 start, int warmup) {
+    public AttractorCurve(
+        int count,
+        SAttractor3DFormulaEvaluator evaluator,
+        double radius,
+        double timeStep,
+        int facets,
+        Vector3 start,
+        int warmup) {
       this.count = count;
       this.radius = radius;
       this.timeStep = timeStep;
@@ -563,7 +747,7 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
       Vector3 position = null, tangent = null, normal = null;
 
       double t = timeStep;
-      //WarmUp
+      // WarmUp
       for (int i = 0; i < warmup; i++) {
         p.x = evaluator.evaluateX(p.x, p.y, p.z, timeStep / subAdvance);
         p.y = evaluator.evaluateY(p.x, p.y, p.z, timeStep / subAdvance);
@@ -582,15 +766,18 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
           tangent = tangent.normalize();
         }
 
-        if (i == 0) //First Step create a random Normal
+        if (i == 0) // First Step create a random Normal
         {
           normal = new Vector3(1, 0, 0);
           normal = normal.projectOnPlane(tangent);
           normal = normal.normalize();
           normals.add(normal);
-        } else       // Move previous normal along the path (using the Attractor equations), and orthogonalize it.
+        } else // Move previous normal along the path (using the Attractor equations), and
+               // orthogonalize it.
         {
-          normal = new Vector3(pos.get(i - 1).x + normals.get(i - 1).x,
+          normal =
+              new Vector3(
+                  pos.get(i - 1).x + normals.get(i - 1).x,
                   pos.get(i - 1).y + normals.get(i - 1).y,
                   pos.get(i - 1).z + normals.get(i - 1).z);
 
@@ -608,13 +795,12 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
       }
     }
 
-
     public void get2DShape() {
       double size = this.radius;
       for (int i = 0; i < this.facets; i++) {
         double a = i / (this.facets / 2) * Math.PI;
         points.add(new Vector2(Math.cos(a) * size, Math.sin(a) * size));
-//		   normals.add(Math.cos(a)*size,Math.sin(a)*size); //normals equals points in 2D
+        //		   normals.add(Math.cos(a)*size,Math.sin(a)*size); //normals equals points in 2D
       }
     }
 
@@ -627,17 +813,18 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
       }
     }
 
-    public void inFrame(Vector2 coord, Vector2 ncoord, Vector3 normal, Vector3 binormal, Vector3 pos) {
+    public void inFrame(
+        Vector2 coord, Vector2 ncoord, Vector3 normal, Vector3 binormal, Vector3 pos) {
       double x = pos.x + coord.x * normal.x + coord.y * binormal.x;
       double y = pos.y + coord.x * normal.y + coord.y * binormal.y;
       double z = pos.z + coord.x * normal.z + coord.y * binormal.z;
       mesh.addVertex(x, y, z);
 
-	   /* 
-	   normals.add(ncoord.x*normal.x+ncoord.y*binormal.x);
-	   normals.add(ncoord.x*normal.y + ncoord.y*binormal.y);
-	   normals.add(ncoord.x*normal.z+ncoord.y*binormal.z);
-     */
+      /*
+      normals.add(ncoord.x*normal.x+ncoord.y*binormal.x);
+      normals.add(ncoord.x*normal.y + ncoord.y*binormal.y);
+      normals.add(ncoord.x*normal.z+ncoord.y*binormal.z);
+       */
     }
 
     public void getGeometry() {
@@ -670,24 +857,24 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
         }
       }
 
-// create endcaps
+      // create endcaps
       Vector3 firstPos = pos.get(0);
       Vector3 lastPos = pos.get(pos.size() - 1);
       mesh.addVertex(firstPos.x, firstPos.y, firstPos.z);
       p += 3;
 
-/*
-       normals[n++] = -frames.tangents[0].x;
-       normals[n++] = -frames.tangents[0].y;
-       normals[n++] = -frames.tangents[0].z;
-*/
+      /*
+             normals[n++] = -frames.tangents[0].x;
+             normals[n++] = -frames.tangents[0].y;
+             normals[n++] = -frames.tangents[0].z;
+      */
       mesh.addVertex(lastPos.x, lastPos.y, lastPos.z);
       p += 3;
-/*
-       normals[n++] = frames.tangents[this.pos.length - 1].x;
-       normals[n++] = frames.tangents[this.pos.length - 1].y;
-       normals[n++] = frames.tangents[this.pos.length - 1].z;
-*/
+      /*
+             normals[n++] = frames.tangents[this.pos.length - 1].x;
+             normals[n++] = frames.tangents[this.pos.length - 1].y;
+             normals[n++] = frames.tangents[this.pos.length - 1].z;
+      */
       for (int j = 0; j < shapeCount; j++) {
         int p1 = j;
         int p2 = (j == shapeCount - 1) ? 0 : j + 1;
@@ -707,5 +894,12 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
     }
   }
 
-
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[] {
+      VariationFuncType.VARTYPE_3D,
+      VariationFuncType.VARTYPE_DC,
+      VariationFuncType.VARTYPE_BASE_SHAPE
+    };
+  }
 }

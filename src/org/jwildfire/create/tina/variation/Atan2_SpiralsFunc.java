@@ -135,4 +135,9 @@ public class Atan2_SpiralsFunc extends VariationFunc {
     return "atan2_spirals";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

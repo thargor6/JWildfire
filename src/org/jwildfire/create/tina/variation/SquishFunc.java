@@ -111,4 +111,9 @@ public class SquishFunc extends VariationFunc {
     _inv_power = 1.0 / (double) power;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

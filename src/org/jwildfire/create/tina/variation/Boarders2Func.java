@@ -109,4 +109,9 @@ public class Boarders2Func extends VariationFunc {
     _cr = _c + (_c * _cr);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

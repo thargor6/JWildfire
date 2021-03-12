@@ -81,4 +81,9 @@ public class AugerFunc extends VariationFunc {
     return "auger";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -83,7 +83,7 @@ public class VariationsSettingsFrame extends JFrame {
     variationNames = VariationFuncList.getNameList();
     Collections.sort(variationNames);
 
-    List<String> excludedVariations = Prefs.getPrefs().getTinaExcludedVariations();
+    List<String> excludedVariations = new ArrayList<>();
 
     int xOffset = 8;
     int xSize = 160;
@@ -231,9 +231,9 @@ public class VariationsSettingsFrame extends JFrame {
           }
         }
       }
-      Prefs.getPrefs().setTinaExcludedVariations(excludedVariations);
-      Prefs.getPrefs().saveToFile();
-      VariationFuncList.invalidateExcludedNameList();
+      //Prefs.getPrefs().setTinaExcludedVariations(excludedVariations);
+      //Prefs.getPrefs().saveToFile();
+      //VariationFuncList.invalidateExcludedNameList();
       boolean oldNoRefresh = tinaController.isNoRefresh();
       try {
         tinaController.setNoRefresh(true);

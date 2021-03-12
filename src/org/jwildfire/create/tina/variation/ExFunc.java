@@ -44,4 +44,9 @@ public class ExFunc extends SimpleVariationFunc {
     return "ex";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

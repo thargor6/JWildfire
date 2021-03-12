@@ -429,8 +429,13 @@ double sdBox( vec2 p, vec2 b )
 	public boolean dynamicParameterExpansion(String pName) {
 		// preset_id doesn't really expand parameters, but it changes them; this will make them refresh
 		return true;
-	}	
-	
+	}
+
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+	}
+
 }
 
 

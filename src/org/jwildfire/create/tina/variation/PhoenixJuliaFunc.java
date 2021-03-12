@@ -104,4 +104,9 @@ public class PhoenixJuliaFunc extends VariationFunc {
     _cN = dist / power / 2.0;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

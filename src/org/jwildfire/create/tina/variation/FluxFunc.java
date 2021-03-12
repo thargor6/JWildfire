@@ -70,4 +70,9 @@ public class FluxFunc extends VariationFunc {
     return "flux";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

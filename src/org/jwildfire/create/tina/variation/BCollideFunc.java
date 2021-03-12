@@ -98,4 +98,9 @@ public class BCollideFunc extends VariationFunc {
     _bCa_bCn = _bCa / (double) num;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

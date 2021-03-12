@@ -50,4 +50,9 @@ public class SechFunc extends SimpleVariationFunc {
     return "sech";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

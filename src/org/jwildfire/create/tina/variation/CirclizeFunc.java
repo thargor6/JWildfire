@@ -90,4 +90,9 @@ public class CirclizeFunc extends VariationFunc {
     return "circlize";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

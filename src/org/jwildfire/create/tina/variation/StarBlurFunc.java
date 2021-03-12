@@ -93,4 +93,9 @@ public class StarBlurFunc extends VariationFunc {
     starblur_alpha = asin(sin(starblur_alpha) * range / starblur_length);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

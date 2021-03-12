@@ -85,4 +85,9 @@ public class PostCurlFunc extends VariationFunc {
     _c22 = 2 * _c2;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_POST};
+  }
+
 }

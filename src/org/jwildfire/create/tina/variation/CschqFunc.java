@@ -48,4 +48,9 @@ public class CschqFunc extends SimpleVariationFunc {
     return "cschq";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

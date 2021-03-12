@@ -97,4 +97,9 @@ public class CscSquaredFunc extends VariationFunc {
     return "csc_squared";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

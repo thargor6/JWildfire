@@ -104,4 +104,9 @@ public class HexModulusFunc extends VariationFunc {
     return "hex_modulus";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

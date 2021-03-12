@@ -87,4 +87,9 @@ public class Pressure_WaveFunc extends VariationFunc {
     return "pressure_wave";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_PRE};
+  }
+
 }

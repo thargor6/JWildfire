@@ -97,4 +97,9 @@ public class DCZTranslFunc extends VariationFunc {
     _x1_m_x0 = _x1 - _x0 == 0 ? SMALL_EPSILON : _x1 - _x0;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM};
+  }
+
 }

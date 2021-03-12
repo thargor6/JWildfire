@@ -146,4 +146,9 @@ public class Affine3DFunc extends VariationFunc {
     _hasShear = fabs(shearXY) > EPSILON || fabs(shearXZ) > EPSILON || fabs(shearYX) > EPSILON ||
             fabs(shearYZ) > EPSILON || fabs(shearZX) > EPSILON || fabs(shearZY) > EPSILON;
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
 }

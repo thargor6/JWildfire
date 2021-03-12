@@ -1,16 +1,16 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2016 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -49,7 +49,22 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
 
   protected static final String PARAM_RECEIVE_ONLY_SHADOWS = "receive_only_shadows";
 
-  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS};
+  private static final String[] paramNames = {
+    PARAM_SCALEX,
+    PARAM_SCALEY,
+    PARAM_SCALEZ,
+    PARAM_OFFSETX,
+    PARAM_OFFSETY,
+    PARAM_OFFSETZ,
+    PARAM_SUBDIV_LEVEL,
+    PARAM_SUBDIV_SMOOTH_PASSES,
+    PARAM_SUBDIV_SMOOTH_LAMBDA,
+    PARAM_SUBDIV_SMOOTH_MU,
+    PARAM_BLEND_COLORMAP,
+    PARAM_DISPL_AMOUNT,
+    PARAM_BLEND_DISPLMAP,
+    PARAM_RECEIVE_ONLY_SHADOWS
+  };
 
   protected static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   protected static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
@@ -76,7 +91,12 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
   protected UVColorMapper uvColorMapper = new UVColorMapper();
 
   @Override
-  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(
+      FlameTransformationContext pContext,
+      XForm pXForm,
+      XYZPoint pAffineTP,
+      XYZPoint pVarTP,
+      double pAmount) {
     if (mesh == null || mesh.getFaceCount() == 0) {
       return;
     }
@@ -84,12 +104,14 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
     Vertex rawP1 = mesh.getVertex(f.v1);
     Vertex rawP2 = mesh.getVertex(f.v2);
     Vertex rawP3 = mesh.getVertex(f.v3);
-    if ((colorMapHolder.isActive() || displacementMapHolder.isActive()) && rawP1 instanceof VertexWithUV) {
+    if ((colorMapHolder.isActive() || displacementMapHolder.isActive())
+        && rawP1 instanceof VertexWithUV) {
       VertexWithUV p1 = transform((VertexWithUV) rawP1);
       VertexWithUV p2 = transform((VertexWithUV) rawP2);
       VertexWithUV p3 = transform((VertexWithUV) rawP3);
 
-      // uniform sampling:  http://math.stackexchange.com/questions/18686/uniform-random-point-in-triangle
+      // uniform sampling:
+      // http://math.stackexchange.com/questions/18686/uniform-random-point-in-triangle
       double sqrt_r1 = MathLib.sqrt(pContext.random());
       double r2 = pContext.random();
       double a = 1.0 - sqrt_r1;
@@ -107,20 +129,44 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
       double v = a * p1.v + b * p2.v + c * p3.v;
 
       if (colorMapHolder.isActive()) {
-        double iu = GfxMathLib.clamp(u * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-        double iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - v * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+        double iu =
+            GfxMathLib.clamp(
+                u * (colorMapHolder.getColorMapWidth() - 1.0),
+                0.0,
+                colorMapHolder.getColorMapWidth() - 1.0);
+        double iv =
+            GfxMathLib.clamp(
+                colorMapHolder.getColorMapHeight()
+                    - 1.0
+                    - v * (colorMapHolder.getColorMapHeight() - 1.0),
+                0,
+                colorMapHolder.getColorMapHeight() - 1.0);
         int ix = (int) MathLib.trunc(iu);
         int iy = (int) MathLib.trunc(iv);
         colorMapHolder.applyImageColor(pVarTP, ix, iy, iu, iv);
-        pVarTP.color = uvColorMapper.getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
+        pVarTP.color =
+            uvColorMapper.getUVColorIdx(
+                Tools.FTOI(pVarTP.redColor),
+                Tools.FTOI(pVarTP.greenColor),
+                Tools.FTOI(pVarTP.blueColor));
       }
       if (displacementMapHolder.isActive()) {
         VectorD av = new VectorD(p2.x - p1.x, p2.y - p1.y, p2.y - p1.y);
         VectorD bv = new VectorD(p3.x - p1.x, p3.y - p1.y, p3.y - p1.y);
         VectorD n = VectorD.cross(av, bv);
         n.normalize();
-        double iu = GfxMathLib.clamp(u * (displacementMapHolder.getDisplacementMapWidth() - 1.0), 0.0, displacementMapHolder.getDisplacementMapWidth() - 1.0);
-        double iv = GfxMathLib.clamp(displacementMapHolder.getDisplacementMapHeight() - 1.0 - v * (displacementMapHolder.getDisplacementMapHeight() - 1.0), 0, displacementMapHolder.getDisplacementMapHeight() - 1.0);
+        double iu =
+            GfxMathLib.clamp(
+                u * (displacementMapHolder.getDisplacementMapWidth() - 1.0),
+                0.0,
+                displacementMapHolder.getDisplacementMapWidth() - 1.0);
+        double iv =
+            GfxMathLib.clamp(
+                displacementMapHolder.getDisplacementMapHeight()
+                    - 1.0
+                    - v * (displacementMapHolder.getDisplacementMapHeight() - 1.0),
+                0,
+                displacementMapHolder.getDisplacementMapHeight() - 1.0);
         int ix = (int) MathLib.trunc(iu);
         int iy = (int) MathLib.trunc(iv);
         double d = displacementMapHolder.calculateImageDisplacement(ix, iy, iu, iv) * _displ_amount;
@@ -133,7 +179,8 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
       Vertex p2 = transform(rawP2);
       Vertex p3 = transform(rawP3);
 
-      // uniform sampling:  http://math.stackexchange.com/questions/18686/uniform-random-point-in-triangle
+      // uniform sampling:
+      // http://math.stackexchange.com/questions/18686/uniform-random-point-in-triangle
       double sqrt_r1 = MathLib.sqrt(pContext.random());
       double r2 = pContext.random();
       double a = 1.0 - sqrt_r1;
@@ -146,7 +193,7 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
       pVarTP.x += pAmount * dx;
       pVarTP.y += pAmount * dy;
       pVarTP.z += pAmount * dz;
-      
+
       if (f instanceof FaceWithColor) {
         if (((FaceWithColor) f).rgbColor) {
           pVarTP.rgbColor = true;
@@ -157,7 +204,6 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
           pVarTP.color = ((FaceWithColor) f).redColor;
         }
       }
-
     }
     if (receive_only_shadows == 1) {
       pVarTP.receiveOnlyShadows = true;
@@ -189,31 +235,38 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows};
+    return new Object[] {
+      scaleX,
+      scaleY,
+      scaleZ,
+      offsetX,
+      offsetY,
+      offsetZ,
+      subdiv_level,
+      subdiv_smooth_passes,
+      subdiv_smooth_lambda,
+      subdiv_smooth_mu,
+      colorMapHolder.getBlend_colormap(),
+      displacementMapHolder.getDispl_amount(),
+      displacementMapHolder.getBlend_displ_map(),
+      receive_only_shadows
+    };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_SCALEX.equalsIgnoreCase(pName))
-      scaleX = pValue;
-    else if (PARAM_SCALEY.equalsIgnoreCase(pName))
-      scaleY = pValue;
-    else if (PARAM_SCALEZ.equalsIgnoreCase(pName))
-      scaleZ = pValue;
-    else if (PARAM_OFFSETX.equalsIgnoreCase(pName))
-      offsetX = pValue;
-    else if (PARAM_OFFSETY.equalsIgnoreCase(pName))
-      offsetY = pValue;
-    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
-      offsetZ = pValue;
+    if (PARAM_SCALEX.equalsIgnoreCase(pName)) scaleX = pValue;
+    else if (PARAM_SCALEY.equalsIgnoreCase(pName)) scaleY = pValue;
+    else if (PARAM_SCALEZ.equalsIgnoreCase(pName)) scaleZ = pValue;
+    else if (PARAM_OFFSETX.equalsIgnoreCase(pName)) offsetX = pValue;
+    else if (PARAM_OFFSETY.equalsIgnoreCase(pName)) offsetY = pValue;
+    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName)) offsetZ = pValue;
     else if (PARAM_SUBDIV_LEVEL.equalsIgnoreCase(pName))
       subdiv_level = limitIntVal(Tools.FTOI(pValue), 0, 6);
     else if (PARAM_SUBDIV_SMOOTH_PASSES.equalsIgnoreCase(pName))
       subdiv_smooth_passes = limitIntVal(Tools.FTOI(pValue), 0, 24);
-    else if (PARAM_SUBDIV_SMOOTH_LAMBDA.equalsIgnoreCase(pName))
-      subdiv_smooth_lambda = pValue;
-    else if (PARAM_SUBDIV_SMOOTH_MU.equalsIgnoreCase(pName))
-      subdiv_smooth_mu = pValue;
+    else if (PARAM_SUBDIV_SMOOTH_LAMBDA.equalsIgnoreCase(pName)) subdiv_smooth_lambda = pValue;
+    else if (PARAM_SUBDIV_SMOOTH_MU.equalsIgnoreCase(pName)) subdiv_smooth_mu = pValue;
     else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName))
       colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
     else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName))
@@ -222,18 +275,17 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
       displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
     else if (PARAM_RECEIVE_ONLY_SHADOWS.equalsIgnoreCase(pName))
       receive_only_shadows = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    else
-      throw new IllegalArgumentException(pName);
+    else throw new IllegalArgumentException(pName);
   }
 
   private double _displ_amount;
 
   @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  public void init(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     colorMapHolder.init();
     uvColorMapper.initFromLayer(pContext, pLayer);
     displacementMapHolder.init();
     _displ_amount = displacementMapHolder.getDispl_amount();
   }
-
 }

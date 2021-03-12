@@ -163,4 +163,10 @@ public class JacCnFunc extends VariationFunc {
       (res.sn) = tanh(u);
     }
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

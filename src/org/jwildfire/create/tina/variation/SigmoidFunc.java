@@ -98,4 +98,9 @@ public class SigmoidFunc extends VariationFunc {
     return "sigmoid";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

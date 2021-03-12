@@ -82,4 +82,9 @@ public class Cos2_BSFunc extends VariationFunc {
     return "cos2_bs";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

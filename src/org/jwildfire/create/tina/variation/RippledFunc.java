@@ -40,4 +40,9 @@ public class RippledFunc extends SimpleVariationFunc {
     return "rippled";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

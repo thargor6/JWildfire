@@ -69,4 +69,10 @@ public class PreBlur3DFunc extends SimpleVariationFunc {
   public int getPriority() {
     return -1;
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BLUR, VariationFuncType.VARTYPE_PRE};
+  }
+
 }

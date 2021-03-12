@@ -71,4 +71,9 @@ public class Bent2Func extends VariationFunc {
     return "bent2";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

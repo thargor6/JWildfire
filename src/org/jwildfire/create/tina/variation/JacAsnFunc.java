@@ -154,4 +154,10 @@ public class JacAsnFunc extends VariationFunc {
   public String getName() {
     return "jac_asn";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

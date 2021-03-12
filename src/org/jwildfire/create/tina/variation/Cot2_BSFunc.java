@@ -83,4 +83,9 @@ public class Cot2_BSFunc extends VariationFunc {
     return "cot2_bs";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

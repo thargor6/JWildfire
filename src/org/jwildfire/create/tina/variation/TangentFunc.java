@@ -49,4 +49,9 @@ public class TangentFunc extends SimpleVariationFunc {
     return "tangent";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

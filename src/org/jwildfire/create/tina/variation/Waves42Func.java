@@ -107,4 +107,8 @@ public class Waves42Func extends VariationFunc {
 		return true;
 	}
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

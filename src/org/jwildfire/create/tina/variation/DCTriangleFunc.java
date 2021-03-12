@@ -144,4 +144,9 @@ public class DCTriangleFunc extends VariationFunc {
     A = scatter_area < -1 ? -1 : scatter_area > 1 ? 1 : scatter_area;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC};
+  }
+
 }

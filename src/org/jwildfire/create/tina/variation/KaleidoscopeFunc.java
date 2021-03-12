@@ -97,4 +97,9 @@ public class KaleidoscopeFunc extends VariationFunc {
     _t = y; // changes y co-ordinates for 1 part of the plugin
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

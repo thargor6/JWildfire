@@ -199,4 +199,8 @@ public class Truchet2Func extends VariationFunc {
     return "truchet2";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+  }
 }

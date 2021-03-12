@@ -109,4 +109,8 @@ public class TradeFunc extends VariationFunc {
     _c2 = r2 + d2;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

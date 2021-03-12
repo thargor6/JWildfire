@@ -162,4 +162,9 @@ public class RosoniFunc extends VariationFunc {
     _cosa = cos(phi);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

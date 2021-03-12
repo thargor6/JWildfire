@@ -287,4 +287,8 @@ public class BWRandsFunc extends VariationFunc {
     return ((a * 857 - 4) & 0xFF00 ^ (-b * 977 + 8) & 0x00FF);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

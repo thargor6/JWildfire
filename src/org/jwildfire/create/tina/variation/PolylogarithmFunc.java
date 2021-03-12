@@ -303,4 +303,9 @@ public class PolylogarithmFunc extends VariationFunc {
     HSTerm = HarmonicS((int) N - 1);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

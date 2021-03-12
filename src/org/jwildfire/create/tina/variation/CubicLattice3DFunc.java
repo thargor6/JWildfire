@@ -126,4 +126,9 @@ public class CubicLattice3DFunc extends VariationFunc {
     }
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

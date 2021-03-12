@@ -90,4 +90,9 @@ public class DevilWarpFunc extends VariationFunc {
     return "devil_warp";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

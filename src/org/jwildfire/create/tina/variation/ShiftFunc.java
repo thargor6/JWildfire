@@ -80,4 +80,10 @@ public class ShiftFunc extends VariationFunc {
   public String getName() {
     return "shift";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

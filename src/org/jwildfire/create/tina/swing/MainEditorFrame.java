@@ -35,6 +35,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -78,6 +79,8 @@ import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.VariationProfile;
+import org.jwildfire.base.VariationProfileRepository;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.SequenceOutputType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
@@ -4812,6 +4815,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar1Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaVariationPanel = new JPanel();
       tinaVariationPanel.setLayout(new BorderLayout());
+      tinaVariationPanel.add(getPanel_16(), BorderLayout.NORTH);
       tinaVariationPanel.add(getNonlinearScrollPane(), BorderLayout.CENTER);
     }
     return tinaVariationPanel;
@@ -7213,6 +7217,9 @@ public class MainEditorFrame extends JFrame {
         getNonlinearParams12REd(), getNonlinearParams12LeftButton(), getNonlinearParams12PreButton(), getNonlinearParams12PostButton(), getNonlinearParams12UpButton(),
         getNonlinearParams12ToggleParamsPnlButton());
 
+    initVariationProfileCmb(getTinaVariationProfile1Cmb(), true);
+    initVariationProfileCmb(getTinaVariationProfile2Cmb(), false);
+
     initFilterKernelCmb(getPostBokehFilterKernelCmb());
 
     initFilterTypeCmb(getTinaFilterTypeCmb());
@@ -7445,7 +7452,7 @@ public class MainEditorFrame extends JFrame {
         getLowDensityBrightnessREd(), getLowDensityBrightnessSlider(), getBalanceRedREd(), getBalanceRedSlider(),
         getBalanceGreenREd(), getBalanceGreenSlider(), getBalanceBlueREd(), getBalanceBlueSlider(),
         getBackgroundColorURIndicatorBtn(), getBackgroundColorLLIndicatorBtn(), getBackgroundColorLRIndicatorBtn(), getBackgroundColorTypeCmb(),
-        getBackgroundColorCCIndicatorBtn());
+        getBackgroundColorCCIndicatorBtn(), getTinaVariationProfile1Cmb(), getTinaVariationProfile2Cmb());
 
     params.setParams4(getWeightingFieldTypeCmb(), getWeightingFieldInputCmb(), getWeightingFieldColorIntensityREd(), getWeightingFieldVariationIntensityREd(), getWeightingFieldJitterIntensityREd(),
         getWeightingFieldVarParam1AmountREd(), getWeightingFieldVarParam2AmountREd(), getWeightingFieldVarParam3AmountREd(),
@@ -7638,6 +7645,27 @@ public class MainEditorFrame extends JFrame {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
     }
     return tinaController;
+  }
+
+  private void initVariationProfileCmb(JComboBox pCmb, boolean pSelectDefault) {
+    pCmb.removeAllItems();
+    pCmb.setMaximumRowCount(16);
+    int selectedIdx = -1;
+    int currIdx = 0;
+     pCmb.addItem("");
+    for(VariationProfile profile: VariationProfileRepository.getProfiles()) {
+      pCmb.addItem(profile.getName());
+      if(pSelectDefault && profile.isDefaultProfile() && selectedIdx < 0) {
+        selectedIdx = currIdx;
+      }
+      currIdx++;
+    }
+    if(pSelectDefault && pCmb.getItemCount() > 0) {
+      pCmb.setSelectedIndex(selectedIdx >= 0 ? selectedIdx + 1 : 1);
+    }
+    else {
+      pCmb.setSelectedIndex(0);
+    }
   }
 
   private void initWeightMapTypeCmb(JComboBox pCmb) {
@@ -13171,6 +13199,10 @@ public class MainEditorFrame extends JFrame {
   private JButton quickMutationButton;
   private JProgressBar quickMutationProgressBar;
   private JPanel quickMutationPanel;
+  private JPanel panel_16;
+  private JComboBox tinaVariationProfile1Cmb;
+  private JComboBox tinaVariationProfile2Cmb;
+  private JButton tinaVariationProfileEditBtn;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -24340,5 +24372,83 @@ public class MainEditorFrame extends JFrame {
 
   public JPanel getQuickMutationPanel() {
     return quickMutationPanel;
+  }
+
+  private JPanel getPanel_16() {
+    if (panel_16 == null) {
+      panel_16 = new JPanel();
+      panel_16.setPreferredSize(new Dimension(10, 28));
+      panel_16.setLayout(null);
+
+      tinaVariationProfile1Cmb = new JComboBox();
+      tinaVariationProfile1Cmb.setSize(new Dimension(108, 24));
+      tinaVariationProfile1Cmb.setPreferredSize(new Dimension(120, 22));
+      tinaVariationProfile1Cmb.setMaximumRowCount(22);
+      tinaVariationProfile1Cmb.setLocation(new Point(62, 2));
+      tinaVariationProfile1Cmb.setFont(null);
+      tinaVariationProfile1Cmb.setBounds(45, 2, 120, 24);
+      tinaVariationProfile1Cmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
+            tinaController.tinaVariationProfile1Cmb1_changed();
+          }
+        }
+      });
+      panel_16.add(tinaVariationProfile1Cmb);
+
+      JLabel lblProfile = new JLabel();
+      lblProfile.setText("Filter");
+      lblProfile.setSize(new Dimension(36, 22));
+      lblProfile.setPreferredSize(new Dimension(60, 22));
+      lblProfile.setLocation(new Point(4, 2));
+      lblProfile.setFont(null);
+      lblProfile.setBounds(6, 2, 40, 22);
+      panel_16.add(lblProfile);
+
+      tinaVariationProfile2Cmb = new JComboBox();
+      tinaVariationProfile2Cmb.setSize(new Dimension(108, 24));
+      tinaVariationProfile2Cmb.setPreferredSize(new Dimension(120, 22));
+      tinaVariationProfile2Cmb.setMaximumRowCount(22);
+      tinaVariationProfile2Cmb.setLocation(new Point(62, 2));
+      tinaVariationProfile2Cmb.setFont(null);
+      tinaVariationProfile2Cmb.setBounds(168, 2, 120, 24);
+      tinaVariationProfile2Cmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
+            tinaController.tinaVariationProfile1Cmb2_changed();
+          }
+        }
+      });
+
+      panel_16.add(tinaVariationProfile2Cmb);
+
+      tinaVariationProfileEditBtn = new JButton();
+      tinaVariationProfileEditBtn.setToolTipText("Edit variation profiles");
+      tinaVariationProfileEditBtn.setText("...");
+      tinaVariationProfileEditBtn.setPreferredSize(new Dimension(32, 24));
+      tinaVariationProfileEditBtn.setMinimumSize(new Dimension(42, 24));
+      tinaVariationProfileEditBtn.setMaximumSize(new Dimension(52, 24));
+      tinaVariationProfileEditBtn.setFont(null);
+      tinaVariationProfileEditBtn.setBounds(290, 2, 32, 24);
+      tinaVariationProfileEditBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.editVariationProfiles();
+        }
+      });
+      panel_16.add(tinaVariationProfileEditBtn);
+    }
+    return panel_16;
+  }
+
+  public JComboBox getTinaVariationProfile1Cmb() {
+    return tinaVariationProfile1Cmb;
+  }
+
+  public JComboBox getTinaVariationProfile2Cmb() {
+    return tinaVariationProfile2Cmb;
+  }
+
+  public JButton tinaVariationProfileEditBtn() {
+    return tinaVariationProfileEditBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

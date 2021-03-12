@@ -47,4 +47,9 @@ public class CircleBlurFunc extends SimpleVariationFunc {
     return "circleblur";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BLUR};
+  }
+
 }

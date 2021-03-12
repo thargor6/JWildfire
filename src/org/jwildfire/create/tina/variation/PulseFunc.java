@@ -83,4 +83,9 @@ public class PulseFunc extends VariationFunc {
     return "pulse";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

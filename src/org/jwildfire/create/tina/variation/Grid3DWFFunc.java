@@ -294,4 +294,10 @@ public class Grid3DWFFunc extends VariationFunc {
     gammaSpreadRnd = new Random();
     gammaSpreadRnd.setSeed(random_seed);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

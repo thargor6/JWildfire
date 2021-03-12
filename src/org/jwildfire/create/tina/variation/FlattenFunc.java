@@ -37,4 +37,9 @@ public class FlattenFunc extends SimpleVariationFunc {
     return +1;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM, VariationFuncType.VARTYPE_POST};
+  }
+
 }

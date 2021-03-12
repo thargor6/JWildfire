@@ -233,4 +233,10 @@ public class GlynnS3SubflWFFunc extends SubFlameWFFunc {
   public GlynnS3SubflWFFunc() {
     color_mode = CM_DIRECT;
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

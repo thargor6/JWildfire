@@ -103,4 +103,9 @@ public class Fibonacci2Func extends VariationFunc {
     fnatlog = log(M_PHI);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

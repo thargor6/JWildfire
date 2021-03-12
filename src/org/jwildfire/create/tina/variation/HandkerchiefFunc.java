@@ -40,4 +40,9 @@ public class HandkerchiefFunc extends SimpleVariationFunc {
     return "handkerchief";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

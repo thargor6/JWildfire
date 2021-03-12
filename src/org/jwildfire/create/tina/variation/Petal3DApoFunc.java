@@ -133,4 +133,9 @@ public class Petal3DApoFunc extends VariationFunc {
         return "petal3D_apo";
     }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

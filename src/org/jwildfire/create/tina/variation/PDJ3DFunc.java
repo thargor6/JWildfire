@@ -90,4 +90,9 @@ public class PDJ3DFunc extends VariationFunc {
     return "pdj3D";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

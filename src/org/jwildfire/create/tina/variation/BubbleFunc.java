@@ -36,4 +36,9 @@ public class BubbleFunc extends SimpleVariationFunc {
     return "bubble";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

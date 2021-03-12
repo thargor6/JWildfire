@@ -91,4 +91,10 @@ public class SplipticBSFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _v = pAmount / (M_PI / 2.0);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

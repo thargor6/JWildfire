@@ -264,4 +264,9 @@ public class PlaneWFFunc extends VariationFunc {
     return res;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

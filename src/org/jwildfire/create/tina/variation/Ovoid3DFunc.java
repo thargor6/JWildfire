@@ -70,4 +70,9 @@ public class Ovoid3DFunc extends VariationFunc {
     return "ovoid3d";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

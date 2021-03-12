@@ -129,4 +129,9 @@ public class Crop3DFunc extends VariationFunc {
     l = (zmax - zmin) * 0.5 * scatter_area;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP};
+  }
+
 }

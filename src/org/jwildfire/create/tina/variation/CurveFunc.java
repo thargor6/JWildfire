@@ -88,4 +88,9 @@ public class CurveFunc extends VariationFunc {
       _pc_ylen = 1E-20;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -125,4 +125,10 @@ public class GlynnSim3Func extends VariationFunc {
     this._gamma = this._radius1 / (this._radius1 + this._radius2);
     this._absPow = fabs(this.pow);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+  }
+
 }

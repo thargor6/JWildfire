@@ -39,4 +39,9 @@ public class EnnepersFunc extends SimpleVariationFunc {
     return "ennepers";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

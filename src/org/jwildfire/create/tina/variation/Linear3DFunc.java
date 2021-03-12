@@ -34,4 +34,9 @@ public class Linear3DFunc extends SimpleVariationFunc {
     return "linear3D";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

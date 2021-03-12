@@ -59,4 +59,10 @@ public class LaceFunc extends SimpleVariationFunc {
   public String getName() {
     return "lace_js";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

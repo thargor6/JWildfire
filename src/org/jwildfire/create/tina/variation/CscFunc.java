@@ -50,4 +50,9 @@ public class CscFunc extends SimpleVariationFunc {
     return "csc";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

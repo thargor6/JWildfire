@@ -52,4 +52,9 @@ public class Sqrt_AtanhFunc extends SimpleVariationFunc {
     return "sqrt_atanh";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

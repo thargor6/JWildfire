@@ -71,4 +71,9 @@ public class EpispiralWFFunc extends VariationFunc {
     return "epispiral_wf";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -465,4 +465,9 @@ public class RhodoneaFunc extends VariationFunc {
     return "rhodonea";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+  }
+
 }

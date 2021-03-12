@@ -50,7 +50,6 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   public static final String WINDOW_LIST_OF_CHANGES = "LISTOFCHANGES";
   public static final String WINDOW_GPU_RENDERING = "GPURENDERING";
   public static final String WINDOW_AI_POST_DENOISER_INFO = "AI_POST_DENOISER_INFO";
-  public static final String WINDOW_VARIATIONSSETTINGS = "VARIATIONSSETTINGS";
   public static final String WINDOW_QUILTFLAMERENDERER = "QUILTFLAMERENDERER";
 
   private int width;

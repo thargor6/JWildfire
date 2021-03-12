@@ -463,6 +463,9 @@ public class TinaControllerParameter {
   public JToggleButton realtimePreviewToggleButton;
   public JComboBox triangleStyleCmb;
 
+  public JComboBox tinaVariationProfile1Cmb;
+  public JComboBox tinaVariationProfile2Cmb;
+
   public JButton meshGenFromEditorBtn;
   public JButton meshGenFromClipboardBtn;
   public JButton meshGenLoadFlameBtn;
@@ -1245,7 +1248,7 @@ public class TinaControllerParameter {
       JWFNumberField lowDensityBrightnessREd, JSlider lowDensityBrightnessSlider, JWFNumberField balanceRedREd, JSlider balanceRedSlider,
       JWFNumberField balanceGreenREd, JSlider balanceGreenSlider, JWFNumberField balanceBlueREd, JSlider balanceBlueSlider,
       JButton backgroundColorURIndicatorBtn, JButton backgroundColorLLIndicatorBtn, JButton backgroundColorLRIndicatorBtn, JComboBox backgroundColorTypeCmb,
-      JButton backgroundColorCCIndicatorBtn) {
+      JButton backgroundColorCCIndicatorBtn, JComboBox tinaVariationProfile1Cmb, JComboBox tinaVariationProfile2Cmb) {
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
     channelMixerRRRootPanel = pChannelMixerRRRootPanel;
@@ -1441,6 +1444,8 @@ public class TinaControllerParameter {
     this.backgroundColorLRIndicatorBtn = backgroundColorLRIndicatorBtn;
     this.backgroundColorTypeCmb = backgroundColorTypeCmb;
     this.backgroundColorCCIndicatorBtn = backgroundColorCCIndicatorBtn;
+    this.tinaVariationProfile1Cmb = tinaVariationProfile1Cmb;
+    this.tinaVariationProfile2Cmb = tinaVariationProfile2Cmb;
   }
 
   public void setParams4(JComboBox weightingFieldTypeCmb, JComboBox weightingFieldInputCmb, JWFNumberField weightingFieldColorIntensityREd, JWFNumberField weightingFieldVariationIntensityREd, JWFNumberField weightingFieldJitterIntensityREd,

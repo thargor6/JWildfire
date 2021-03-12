@@ -58,4 +58,9 @@ public class PostZScaleWFFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM, VariationFuncType.VARTYPE_POST};
+  }
+
 }

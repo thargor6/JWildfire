@@ -159,8 +159,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
   public static final String KEY_TINA_FREE_CACHE_IN_BATCH_RENDERER = "tina.free_cache_in_batch_renderer";
 
-  public static final String KEY_TINA_EXCLUDED_VARIATIONS = "tina.excluded_variations";
-
   public static final String KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS = "tina.create_default_macrobuttons.6";
   public static final String KEY_TINA_VERTICAL_MACRO_BUTTONS = "tina.macro_buttons.vertical";
   public static final String KEY_TINA_MACRO_TOOLBAR_WIDTH = "tina.toolbar.macro.width";
@@ -422,7 +420,7 @@ public class Prefs extends ManagedObject {
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
   private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
-  private final List<String> tinaExcludedVariations = new ArrayList<>();
+  private final List<VariationProfile> variationProfiles = new ArrayList<>();
   @Property(description = "Maximum size of the generated string for the L-System variation", category = PropertyCategory.TINA)
   private int tinaLSystemMaxLength = 25000;
 
@@ -886,9 +884,9 @@ public class Prefs extends ManagedObject {
     for (WindowPrefs prefs : pSrc.windowPrefs) {
       windowPrefs.add((WindowPrefs) prefs.makeCopy());
     }
-    tinaExcludedVariations.clear();
-    for (String variation : pSrc.getTinaExcludedVariations()) {
-      tinaExcludedVariations.add(variation);
+    variationProfiles.clear();
+    for (VariationProfile profile : pSrc.getVariationProfiles()) {
+      variationProfiles.add(profile.makeCopy());
     }
     tinaLSystemMaxLength = pSrc.tinaLSystemMaxLength;
 
@@ -1046,7 +1044,6 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LIST_OF_CHANGES));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_GPU_RENDERING));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_AI_POST_DENOISER_INFO));
-    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_VARIATIONSSETTINGS));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_QUILTFLAMERENDERER));
   }
 
@@ -1717,15 +1714,17 @@ public class Prefs extends ManagedObject {
     tinaFACLRenderOptions = pTinaFACLRenderOptions;
   }
 
-  public void setTinaExcludedVariations(List<String> pTinaExcludedVariations) {
-    tinaExcludedVariations.clear();
-    if (pTinaExcludedVariations != null) {
-      tinaExcludedVariations.addAll(pTinaExcludedVariations);
+  public void setVariationProfiles(List<VariationProfile> pVariationProfiles) {
+    variationProfiles.clear();
+    if (pVariationProfiles != null) {
+      for(VariationProfile profile: pVariationProfiles) {
+        variationProfiles.add(profile.makeCopy());
+      }
     }
   }
 
-  public List<String> getTinaExcludedVariations() {
-    return tinaExcludedVariations;
+  public List<VariationProfile> getVariationProfiles() {
+    return variationProfiles;
   }
 
   public int getTinaLSystemMaxLength() {

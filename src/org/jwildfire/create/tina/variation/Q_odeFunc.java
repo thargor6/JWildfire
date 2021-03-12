@@ -123,4 +123,9 @@ public class Q_odeFunc extends VariationFunc {
     return "q_ode";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

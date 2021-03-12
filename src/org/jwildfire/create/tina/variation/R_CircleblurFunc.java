@@ -106,4 +106,10 @@ public class R_CircleblurFunc extends VariationFunc {
   public String getName() {
     return "r_circleblur";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_BLUR};
+  }
+
 }

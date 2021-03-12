@@ -121,4 +121,9 @@ public class CircleCropFunc extends VariationFunc {
     cA = max(-1.0, min(scatter_area, 1.0));
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP};
+  }
+
 }

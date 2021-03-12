@@ -250,4 +250,9 @@ public class PRose3DFunc extends VariationFunc {
     _petalsSign = 0.0;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION};
+  }
+
 }

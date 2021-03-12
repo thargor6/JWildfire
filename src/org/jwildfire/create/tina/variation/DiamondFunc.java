@@ -44,4 +44,9 @@ public class DiamondFunc extends SimpleVariationFunc {
     return "diamond";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

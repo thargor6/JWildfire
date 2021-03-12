@@ -110,4 +110,9 @@ public class SplitBrdrFunc extends VariationFunc {
     return "splitbrdr";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

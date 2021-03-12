@@ -64,4 +64,9 @@ public class SintrangeFunc extends VariationFunc {
     return "sintrange";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

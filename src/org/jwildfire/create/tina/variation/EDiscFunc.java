@@ -58,4 +58,9 @@ public class EDiscFunc extends SimpleVariationFunc {
     return "edisc";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

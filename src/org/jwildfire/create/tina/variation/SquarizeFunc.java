@@ -61,4 +61,9 @@ public class SquarizeFunc extends SimpleVariationFunc {
     return "squarize";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

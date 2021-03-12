@@ -49,4 +49,8 @@ public class TwintrianFunc extends SimpleVariationFunc {
     return "twintrian";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

@@ -44,4 +44,9 @@ public class LogFunc extends SimpleVariationFunc {
     return "log";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

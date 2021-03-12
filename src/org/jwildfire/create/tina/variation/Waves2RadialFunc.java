@@ -89,4 +89,8 @@ public class Waves2RadialFunc extends VariationFunc {
     return "waves2_radial";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

@@ -137,4 +137,8 @@ public class TruchetFillFunc extends VariationFunc {
     return "truchet_fill";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+  }
 }

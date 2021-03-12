@@ -45,4 +45,9 @@ public class SpiralFunc extends SimpleVariationFunc {
     return "spiral";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

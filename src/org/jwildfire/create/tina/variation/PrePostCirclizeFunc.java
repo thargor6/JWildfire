@@ -118,4 +118,9 @@ public class PrePostCirclizeFunc extends VariationFunc {
     return (1 - t) * v0 + t * v1;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_PREPOST};
+  }
+
 }

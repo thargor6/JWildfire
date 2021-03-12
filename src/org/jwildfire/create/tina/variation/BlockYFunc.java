@@ -97,4 +97,9 @@ public class BlockYFunc extends VariationFunc {
     v = pAmount / M_PI_2;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -48,4 +48,9 @@ public class CotFunc extends SimpleVariationFunc {
     return "cot";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

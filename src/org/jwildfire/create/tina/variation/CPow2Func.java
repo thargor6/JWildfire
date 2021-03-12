@@ -109,4 +109,9 @@ public class CPow2Func extends VariationFunc {
     return "cpow2";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

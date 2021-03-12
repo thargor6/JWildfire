@@ -42,4 +42,9 @@ public class ExponentialFunc extends SimpleVariationFunc {
     return "exponential";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -1,16 +1,16 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2011 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -31,7 +31,6 @@
 
 package org.jwildfire.create.tina.variation.mesh;
 
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
@@ -39,9 +38,9 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 
 import java.util.Random;
-
 
 public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   private static final long serialVersionUID = 1L;
@@ -59,7 +58,6 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   protected static final String PARAM_OFFSETY = "offset_y";
   protected static final String PARAM_OFFSETZ = "offset_z";
 
-
   protected static final String PARAM_SUBDIV_LEVEL = "subdiv_level";
   protected static final String PARAM_SUBDIV_SMOOTH_PASSES = "subdiv_smooth_passes";
   protected static final String PARAM_SUBDIV_SMOOTH_LAMBDA = "subdiv_smooth_lambda";
@@ -71,9 +69,27 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
 
   protected static final String PARAM_RECEIVE_ONLY_SHADOWS = "receive_only_shadows";
 
-
-  private static final String[] paramNames = {PARAM_ROUGHNESS, PARAM_EXAGGERATION, PARAM_N, PARAM_SEED, PARAM_DC, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS};
-
+  private static final String[] paramNames = {
+    PARAM_ROUGHNESS,
+    PARAM_EXAGGERATION,
+    PARAM_N,
+    PARAM_SEED,
+    PARAM_DC,
+    PARAM_SCALEX,
+    PARAM_SCALEY,
+    PARAM_SCALEZ,
+    PARAM_OFFSETX,
+    PARAM_OFFSETY,
+    PARAM_OFFSETZ,
+    PARAM_SUBDIV_LEVEL,
+    PARAM_SUBDIV_SMOOTH_PASSES,
+    PARAM_SUBDIV_SMOOTH_LAMBDA,
+    PARAM_SUBDIV_SMOOTH_MU,
+    PARAM_BLEND_COLORMAP,
+    PARAM_DISPL_AMOUNT,
+    PARAM_BLEND_DISPLMAP,
+    PARAM_RECEIVE_ONLY_SHADOWS
+  };
 
   double roughness = 0.5;
   double exaggeration = 0.7;
@@ -81,22 +97,21 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   private int seed = (int) (1000 * Math.random());
   private int dc = 1;
 
-  static public class FractalTerrain {
-    private double[][] terrain;
+  public static class FractalTerrain {
+    private final double[][] terrain;
     private double min, max;
-    private int divisions;
-    private Random rng;
+    private final int divisions;
+    private final Random rng;
     int lod;
-
 
     SimpleMesh mesh = new SimpleMesh();
 
     public FractalTerrain(int lod, double roughness, double seed) {
       this.lod = lod;
-//	    this.roughness = roughness;
+      //	    this.roughness = roughness;
       this.divisions = 1 << lod;
       terrain = new double[divisions + 1][divisions + 1];
-//	    rng = new Random ();
+      //	    rng = new Random ();
 
       rng = new Random((long) seed);
       terrain[0][0] = rnd();
@@ -107,12 +122,10 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
       for (int i = 0; i < lod; ++i) {
         int q = 1 << i, r = 1 << (lod - i), s = r >> 1;
         for (int j = 0; j < divisions; j += r)
-          for (int k = 0; k < divisions; k += r)
-            diamond(j, k, r, rough);
+          for (int k = 0; k < divisions; k += r) diamond(j, k, r, rough);
         if (s > 0)
           for (int j = 0; j <= divisions; j += s)
-            for (int k = (j + s) % r; k <= divisions; k += r)
-              square(j - s, k - s, r, rough);
+            for (int k = (j + s) % r; k <= divisions; k += r) square(j - s, k - s, r, rough);
         rough *= roughness;
       }
       min = max = terrain[0][0];
@@ -125,8 +138,12 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
     private void diamond(int x, int y, int side, double scale) {
       if (side > 1) {
         int half = side / 2;
-        double avg = (terrain[x][y] + terrain[x + side][y] +
-                terrain[x + side][y + side] + terrain[x][y + side]) * 0.25;
+        double avg =
+            (terrain[x][y]
+                    + terrain[x + side][y]
+                    + terrain[x + side][y + side]
+                    + terrain[x][y + side])
+                * 0.25;
         terrain[x + half][y + half] = avg + rnd() * scale;
       }
     }
@@ -163,7 +180,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
     }
 
     public void setTerrainData(double exaggeration) {
-//	   double exaggeration = .7;
+      //	   double exaggeration = .7;
       int steps = 1 << lod;
 
       for (int i = 0; i <= steps; ++i) {
@@ -185,19 +202,36 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
           mesh.addFace(v1, v2, v3);
         }
       }
-
     }
 
     public SimpleMesh getMesh() {
       return this.mesh;
     }
-
   }
-
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{roughness, exaggeration, n, seed, dc, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows};
+    return new Object[] {
+      roughness,
+      exaggeration,
+      n,
+      seed,
+      dc,
+      scaleX,
+      scaleY,
+      scaleZ,
+      offsetX,
+      offsetY,
+      offsetZ,
+      subdiv_level,
+      subdiv_smooth_passes,
+      subdiv_smooth_lambda,
+      subdiv_smooth_mu,
+      colorMapHolder.getBlend_colormap(),
+      displacementMapHolder.getDispl_amount(),
+      displacementMapHolder.getBlend_displ_map(),
+      receive_only_shadows
+    };
   }
 
   @Override
@@ -215,30 +249,22 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
     } else if (PARAM_N.equalsIgnoreCase(pName)) {
       n = (int) Tools.limitValue(pValue, 1, 8);
     } else if (PARAM_SEED.equalsIgnoreCase(pName)) {
-      seed = (int) Tools.FTOI(pValue);
+      seed = Tools.FTOI(pValue);
 
     } else if (PARAM_DC.equalsIgnoreCase(pName)) {
       dc = (int) Tools.limitValue(pValue, 0, 1);
-    } else if (PARAM_SCALEX.equalsIgnoreCase(pName))
-      scaleX = pValue;
-    else if (PARAM_SCALEY.equalsIgnoreCase(pName))
-      scaleY = pValue;
-    else if (PARAM_SCALEZ.equalsIgnoreCase(pName))
-      scaleZ = pValue;
-    else if (PARAM_OFFSETX.equalsIgnoreCase(pName))
-      offsetX = pValue;
-    else if (PARAM_OFFSETY.equalsIgnoreCase(pName))
-      offsetY = pValue;
-    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
-      offsetZ = pValue;
+    } else if (PARAM_SCALEX.equalsIgnoreCase(pName)) scaleX = pValue;
+    else if (PARAM_SCALEY.equalsIgnoreCase(pName)) scaleY = pValue;
+    else if (PARAM_SCALEZ.equalsIgnoreCase(pName)) scaleZ = pValue;
+    else if (PARAM_OFFSETX.equalsIgnoreCase(pName)) offsetX = pValue;
+    else if (PARAM_OFFSETY.equalsIgnoreCase(pName)) offsetY = pValue;
+    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName)) offsetZ = pValue;
     else if (PARAM_SUBDIV_LEVEL.equalsIgnoreCase(pName))
       subdiv_level = limitIntVal(Tools.FTOI(pValue), 0, 6);
     else if (PARAM_SUBDIV_SMOOTH_PASSES.equalsIgnoreCase(pName))
       subdiv_smooth_passes = limitIntVal(Tools.FTOI(pValue), 0, 24);
-    else if (PARAM_SUBDIV_SMOOTH_LAMBDA.equalsIgnoreCase(pName))
-      subdiv_smooth_lambda = pValue;
-    else if (PARAM_SUBDIV_SMOOTH_MU.equalsIgnoreCase(pName))
-      subdiv_smooth_mu = pValue;
+    else if (PARAM_SUBDIV_SMOOTH_LAMBDA.equalsIgnoreCase(pName)) subdiv_smooth_lambda = pValue;
+    else if (PARAM_SUBDIV_SMOOTH_MU.equalsIgnoreCase(pName)) subdiv_smooth_mu = pValue;
     else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName))
       colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
     else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName))
@@ -247,8 +273,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
       displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
     else if (PARAM_RECEIVE_ONLY_SHADOWS.equalsIgnoreCase(pName))
       receive_only_shadows = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    else
-      throw new IllegalArgumentException(pName);
+    else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -257,11 +282,26 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   }
 
   private String calcMeshKey() {
-    return n + "#" + roughness + "#" + seed + "#" + exaggeration + "#" + subdiv_level + "#" + subdiv_smooth_passes + "#" + subdiv_smooth_lambda + "#" + subdiv_smooth_mu;
+    return n
+        + "#"
+        + roughness
+        + "#"
+        + seed
+        + "#"
+        + exaggeration
+        + "#"
+        + subdiv_level
+        + "#"
+        + subdiv_smooth_passes
+        + "#"
+        + subdiv_smooth_lambda
+        + "#"
+        + subdiv_smooth_mu;
   }
 
   @Override
-  public void initOnce(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  public void initOnce(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.initOnce(pContext, pLayer, pXForm, pAmount);
     String key = calcMeshKey();
     mesh = (SimpleMesh) RessourceManager.getRessource(key);
@@ -279,16 +319,30 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  public void init(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.init(pContext, pLayer, pXForm, pAmount);
     mesh = (SimpleMesh) RessourceManager.getRessource(calcMeshKey());
   }
 
+  @Override
+  public void transform(
+      FlameTransformationContext pContext,
+      XForm pXForm,
+      XYZPoint pAffineTP,
+      XYZPoint pVarTP,
+      double pAmount) {
+    super.transform(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    if (dc == 1) pVarTP.color = MathLib.fmod(pVarTP.y, 1.0);
+  }
 
   @Override
-  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    super.transform(pContext, pXForm, pAffineTP, pVarTP, pAmount);
-    if (dc == 1)
-      pVarTP.color = MathLib.fmod(pVarTP.y, 1.0);
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[] {
+      VariationFuncType.VARTYPE_3D,
+      VariationFuncType.VARTYPE_SIMULATION,
+      VariationFuncType.VARTYPE_DC,
+      VariationFuncType.VARTYPE_BASE_SHAPE
+    };
   }
 }

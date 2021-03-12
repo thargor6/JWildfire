@@ -74,4 +74,10 @@ public class Blob3DFunc extends VariationFunc {
     return "blob3D";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
+
 }

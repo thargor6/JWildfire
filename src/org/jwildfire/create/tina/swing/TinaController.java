@@ -793,6 +793,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.channelMixerBGRootPanel = parameterObject.channelMixerBGRootPanel;
     data.channelMixerBBRootPanel = parameterObject.channelMixerBBRootPanel;
 
+    data.tinaVariationProfile1Cmb = parameterObject.tinaVariationProfile1Cmb;
+    data.tinaVariationProfile2Cmb = parameterObject.tinaVariationProfile2Cmb;
+
     data.gradientCurveEditorSaveBtn = parameterObject.gradientCurveEditorSaveBtn;
     data.gradientCurveEditorHueRootPanel = parameterObject.gradientCurveEditorHueRootPanel;
     data.gradientCurveEditorSaturationRootPanel = parameterObject.gradientCurveEditorSaturationRootPanel;
@@ -6812,6 +6815,23 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       updateThumbnails();
       refreshUI();
     }
+  }
+
+  protected VariationFuncFilter getCurrentVariationFuncFilter() {
+    return new VariationFuncFilter(
+            data.tinaVariationProfile1Cmb.getSelectedIndex() >=0 ? (String)data.tinaVariationProfile1Cmb.getSelectedItem() : "",
+            data.tinaVariationProfile2Cmb.getSelectedIndex() >=0 ? (String)data.tinaVariationProfile2Cmb.getSelectedItem() : "");
+  }
+
+  public void tinaVariationProfile1Cmb1_changed() {
+    initNonlinearVariationCmb();
+  }
+
+  public void tinaVariationProfile1Cmb2_changed() {
+    initNonlinearVariationCmb();
+  }
+
+  public void editVariationProfiles() {
   }
 
 }

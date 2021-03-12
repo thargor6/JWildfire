@@ -67,4 +67,9 @@ public class LayeredSpiralFunc extends VariationFunc {
     return "layered_spiral";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

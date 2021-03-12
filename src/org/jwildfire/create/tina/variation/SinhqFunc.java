@@ -47,4 +47,9 @@ public class SinhqFunc extends SimpleVariationFunc {
     return "sinhq";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

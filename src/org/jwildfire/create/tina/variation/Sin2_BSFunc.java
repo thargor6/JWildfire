@@ -80,4 +80,9 @@ public class Sin2_BSFunc extends VariationFunc {
     return "sin2_bs";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

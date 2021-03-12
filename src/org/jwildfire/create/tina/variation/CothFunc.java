@@ -51,4 +51,9 @@ public class CothFunc extends SimpleVariationFunc {
     return "coth";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

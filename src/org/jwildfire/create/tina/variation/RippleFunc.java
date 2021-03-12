@@ -146,4 +146,9 @@ public class RippleFunc extends VariationFunc {
     return a + (b - a) * p;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

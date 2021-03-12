@@ -85,4 +85,9 @@ public class SpligonFunc extends VariationFunc {
     return "spligon";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

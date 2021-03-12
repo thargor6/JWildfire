@@ -211,4 +211,9 @@ public class GlynnLissaFunc extends VariationFunc {
     return "glynnlissa";
   }
 
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+	}
+
 }

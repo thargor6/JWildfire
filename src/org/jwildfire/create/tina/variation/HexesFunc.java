@@ -237,4 +237,9 @@ public class HexesFunc extends VariationFunc {
     rotCos = cos(rotate * 2.0 * MathLib.M_PI);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+  }
+
 }

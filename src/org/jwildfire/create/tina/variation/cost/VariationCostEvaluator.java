@@ -9,7 +9,6 @@ import org.jwildfire.create.tina.mutagen.Mutation;
 import org.jwildfire.create.tina.mutagen.RandomParamMutation;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
-import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorState;
 import org.jwildfire.create.tina.randomflame.SimpleRandomFlameGenerator;
@@ -29,7 +28,7 @@ public class VariationCostEvaluator {
   private final long MAX_INIT_TIME = 10000000000L;
   private final long MAX_EVAL_TIME = 5000000000L;
 
-  public static void main(String args[]) {
+  public static void main(String[] args) {
     new VariationCostEvaluator().evaluate();
   }
 
@@ -133,8 +132,7 @@ public class VariationCostEvaluator {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       Item item = (Item) o;
-      return evalCost == item.evalCost &&
-              Objects.equals(variationName, item.variationName);
+      return evalCost == item.evalCost && Objects.equals(variationName, item.variationName);
     }
 
     @Override
@@ -149,7 +147,7 @@ public class VariationCostEvaluator {
   }
 
   // bad variations which may fall into an endless loop or cause an OutOfMemoryError
-  private static List<String> BLACKLIST;
+  private static final List<String> BLACKLIST;
 
   static {
     BLACKLIST = new ArrayList<String>();
@@ -176,7 +174,6 @@ public class VariationCostEvaluator {
     BLACKLIST.add(new TapratsFunc().getName());
     BLACKLIST.add(new TrianTruchetFunc().getName());
   }
-
 
   public void evaluate() {
     AbstractRandomGenerator randGen = new MarsagliaRandomGenerator();
@@ -250,7 +247,13 @@ public class VariationCostEvaluator {
       for (Item item : items) {
         idx++;
         if (!item.isInitError()) {
-          System.err.println(idx +"/" + items.size() + ": probing evaluation of " + item.getVariationName() + "...");
+          System.err.println(
+              idx
+                  + "/"
+                  + items.size()
+                  + ": probing evaluation of "
+                  + item.getVariationName()
+                  + "...");
           System.gc();
           long m0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
           long t0 = System.nanoTime();
@@ -285,34 +288,61 @@ public class VariationCostEvaluator {
         }
       }
     }
-    for(Item item: items) {
+    for (Item item : items) {
       long initPenalty = (item.getInitRounds() < INIT_ROUNDS - INIT_ROUNDS / 10) ? 2 : 1;
       long evalPenalty = (item.getEvalRounds() < EVAL_ROUNDS - EVAL_ROUNDS / 10) ? 2 : 1;
-      item.setInitCost( initPenalty * item.getInitCost() );
-      item.setEvalCost( evalPenalty * item.getEvalCost() );
+      item.setInitCost(initPenalty * item.getInitCost());
+      item.setEvalCost(evalPenalty * item.getEvalCost());
     }
-    Collections.sort(items, new Comparator<Item>() {
-      @Override
-      public int compare(Item o1, Item o2) {
-        // sort descending
-        return o2.compareTo(o1);
-      }
-    });
+    Collections.sort(
+        items,
+        new Comparator<Item>() {
+          @Override
+          public int compare(Item o1, Item o2) {
+            // sort descending
+            return o2.compareTo(o1);
+          }
+        });
     System.err.println("--------------------------");
     StringBuffer sb = new StringBuffer();
-    sb.append("#variation; average eval-cost in ms; average init-cost in ms; average eval-memory in KB; average init-memory in KB; had eval-error; had init-error\n");
-    for(Item item: items) {
-      sb.append(item.getVariationName()).append("; ")
-              .append((item.getEvalCost() > 0 ? Tools.doubleToString((double)item.getEvalCost()/(double)EVAL_ROUNDS/1000000.0) : -1)).append("; ")
-              .append((item.getInitCost() > 0 ? Tools.doubleToString((double)item.getInitCost()/(double)INIT_ROUNDS/1000000.0) : -1)).append("; ")
-              .append((item.getEvalCost() > 0 ? Tools.doubleToString((double)item.getEvalMemory()/(double)EVAL_ROUNDS/1024.0) : -1)).append("; ")
-              .append((item.getEvalCost() > 0 ? Tools.doubleToString((double)item.getInitMemory()/(double)INIT_ROUNDS/1024.0) : -1)).append("; ")
-              .append(item.isEvalError()).append("; ")
-              .append(item.isInitError()).append("\n");
+    sb.append(
+        "#variation; average eval-cost in ms; average init-cost in ms; average eval-memory in KB; average init-memory in KB; had eval-error; had init-error\n");
+    for (Item item : items) {
+      sb.append(item.getVariationName())
+          .append("; ")
+          .append(
+              (item.getEvalCost() > 0
+                  ? Tools.doubleToString(
+                      (double) item.getEvalCost() / (double) EVAL_ROUNDS / 1000000.0)
+                  : -1))
+          .append("; ")
+          .append(
+              (item.getInitCost() > 0
+                  ? Tools.doubleToString(
+                      (double) item.getInitCost() / (double) INIT_ROUNDS / 1000000.0)
+                  : -1))
+          .append("; ")
+          .append(
+              (item.getEvalCost() > 0
+                  ? Tools.doubleToString(
+                      (double) item.getEvalMemory() / (double) EVAL_ROUNDS / 1024.0)
+                  : -1))
+          .append("; ")
+          .append(
+              (item.getEvalCost() > 0
+                  ? Tools.doubleToString(
+                      (double) item.getInitMemory() / (double) INIT_ROUNDS / 1024.0)
+                  : -1))
+          .append("; ")
+          .append(item.isEvalError())
+          .append("; ")
+          .append(item.isInitError())
+          .append("\n");
     }
     System.err.println(sb);
     try {
-      Tools.writeUTF8Textfile("src/org/jwildfire/create/tina/variation/variation_costs.txt", sb.toString());
+      Tools.writeUTF8Textfile(
+          "src/org/jwildfire/create/tina/variation/variation_costs.txt", sb.toString());
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -320,10 +350,11 @@ public class VariationCostEvaluator {
 
   private Flame createFlame() {
     RandomFlameGenerator randGen = new SimpleRandomFlameGenerator();
-    RandomFlameGeneratorState state=randGen.initState(Prefs.getPrefs(),new StrongHueRandomGradientGenerator());
+    RandomFlameGeneratorState state =
+        randGen.initState(Prefs.getPrefs(), new StrongHueRandomGradientGenerator());
     randGen.prepareFlame(state);
-    Flame flame = randGen.createFlame(Prefs.getPrefs(),state);
-    while(flame.getFirstLayer().getXForms().size()>1) {
+    Flame flame = randGen.createFlame(Prefs.getPrefs(), state);
+    while (flame.getFirstLayer().getXForms().size() > 1) {
       flame.getFirstLayer().getXForms().remove(0);
     }
     flame.getFirstLayer().getFinalXForms().clear();

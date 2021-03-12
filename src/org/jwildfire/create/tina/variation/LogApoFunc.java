@@ -70,4 +70,9 @@ public class LogApoFunc extends VariationFunc {
     _denom = 0.5 / log(base);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -85,4 +85,9 @@ public class Fan2Func extends VariationFunc {
     return "fan2";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

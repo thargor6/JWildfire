@@ -106,4 +106,9 @@ public class CircleRandFunc extends VariationFunc {
     return "circleRand";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

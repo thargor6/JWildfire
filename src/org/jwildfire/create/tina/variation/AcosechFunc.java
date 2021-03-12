@@ -52,4 +52,9 @@ public class AcosechFunc extends SimpleVariationFunc {
     return "acosech";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

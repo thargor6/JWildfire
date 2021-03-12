@@ -65,4 +65,9 @@ public class Disc3DFunc extends VariationFunc {
     return "disc3d";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

@@ -103,4 +103,9 @@ public class OscilloscopeFunc extends VariationFunc {
     _noDamping = fabs(damping) <= EPSILON;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

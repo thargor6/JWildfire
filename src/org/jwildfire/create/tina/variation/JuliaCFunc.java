@@ -91,4 +91,9 @@ public class JuliaCFunc extends VariationFunc {
     return new String[]{"juliac_re", "juliac_im", "juliac_dist"};
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -103,4 +103,9 @@ public class EModFunc extends VariationFunc {
     return "eMod";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

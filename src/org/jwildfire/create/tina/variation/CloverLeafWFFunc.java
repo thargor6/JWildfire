@@ -74,4 +74,8 @@ public class CloverLeafWFFunc extends VariationFunc {
     return "cloverleaf_wf";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
 }

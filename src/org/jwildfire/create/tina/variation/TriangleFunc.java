@@ -122,5 +122,10 @@ public class TriangleFunc extends VariationFunc {
 	public boolean dynamicParameterExpansion(String pName) {
 		// preset_id doesn't really expand parameters, but it changes them; this will make them refresh
 		return true;
-	}	
+	}
+
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+	}
 }

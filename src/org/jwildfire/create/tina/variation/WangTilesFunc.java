@@ -823,6 +823,11 @@ public class WangTilesFunc extends VariationFunc {
   public String getName() {
     return "wangtiles";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC};
+  }
 }
 
  

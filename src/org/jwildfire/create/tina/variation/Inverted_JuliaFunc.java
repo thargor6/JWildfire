@@ -105,4 +105,9 @@ public class Inverted_JuliaFunc extends VariationFunc {
     return "inverted_julia";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

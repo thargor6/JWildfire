@@ -91,4 +91,9 @@ public class SinusGridFunc extends VariationFunc {
     if (_fy == 0.0) _fy = MathLib.EPSILON;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

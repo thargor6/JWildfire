@@ -90,4 +90,10 @@ public class MaskFunc extends VariationFunc {
     } else
       throw new IllegalArgumentException(pName);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

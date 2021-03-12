@@ -49,4 +49,9 @@ public class ThreePointIFSFunc extends SimpleVariationFunc {
   public String getName() {
     return "threepoint_js";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

@@ -161,4 +161,9 @@ public class InternalSliceRangeIndicatorWFFunc extends VariationFunc {
     return 1;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{};
+  }
+
 }

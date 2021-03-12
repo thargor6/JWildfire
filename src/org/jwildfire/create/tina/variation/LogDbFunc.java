@@ -108,4 +108,9 @@ public class LogDbFunc extends VariationFunc {
       _fixpe *= fix_period;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

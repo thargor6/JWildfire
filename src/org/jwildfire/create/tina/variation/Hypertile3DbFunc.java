@@ -150,4 +150,9 @@ public class Hypertile3DbFunc extends VariationFunc {
 		s2z = k - sqr(cy) - sqr(cx);
 	}
 
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+	}
+
 }

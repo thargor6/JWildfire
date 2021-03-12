@@ -228,4 +228,9 @@ public class Waves2BFunc extends VariationFunc {
     }
     return sn;
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

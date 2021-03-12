@@ -168,4 +168,9 @@ public class MobiqFunc extends VariationFunc {
     return "mobiq";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

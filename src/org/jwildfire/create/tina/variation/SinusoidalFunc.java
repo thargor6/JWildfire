@@ -38,4 +38,9 @@ public class SinusoidalFunc extends SimpleVariationFunc {
     return "sinusoidal";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

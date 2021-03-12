@@ -85,4 +85,9 @@ public class Spherical3DWFFunc extends VariationFunc {
     _regularForm = fabs(exponent - 2.0) < EPSILON;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

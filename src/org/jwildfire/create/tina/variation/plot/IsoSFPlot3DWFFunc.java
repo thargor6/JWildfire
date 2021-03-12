@@ -1,16 +1,16 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2016 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -27,6 +27,7 @@ import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.ColorMapHolder;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceType;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 import org.jwildfire.create.tina.variation.mesh.AbstractOBJMeshWFFunc;
 
 import java.util.HashMap;
@@ -61,7 +62,26 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
   private static final String RESSOURCE_FORMULA = "formula";
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
 
-  private static final String[] paramNames = {PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_THICKNESS, PARAM_MAX_ITER, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F};
+  private static final String[] paramNames = {
+    PARAM_PRESET_ID,
+    PARAM_XMIN,
+    PARAM_XMAX,
+    PARAM_YMIN,
+    PARAM_YMAX,
+    PARAM_ZMIN,
+    PARAM_ZMAX,
+    PARAM_THICKNESS,
+    PARAM_MAX_ITER,
+    PARAM_DIRECT_COLOR,
+    PARAM_COLOR_MODE,
+    PARAM_BLEND_COLORMAP,
+    PARAM_PARAM_A,
+    PARAM_PARAM_B,
+    PARAM_PARAM_C,
+    PARAM_PARAM_D,
+    PARAM_PARAM_E,
+    PARAM_PARAM_F
+  };
 
   private static final String[] ressourceNames = {RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME};
 
@@ -111,7 +131,26 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{preset_id, xmin, xmax, ymin, ymax, zmin, zmax, thickness, max_iter, direct_color, color_mode, colorMapHolder.getBlend_colormap(), param_a, param_b, param_c, param_d, param_e, param_f};
+    return new Object[] {
+      preset_id,
+      xmin,
+      xmax,
+      ymin,
+      ymax,
+      zmin,
+      zmax,
+      thickness,
+      max_iter,
+      direct_color,
+      color_mode,
+      colorMapHolder.getBlend_colormap(),
+      param_a,
+      param_b,
+      param_c,
+      param_d,
+      param_e,
+      param_f
+    };
   }
 
   @Override
@@ -167,8 +206,7 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
       if (thickness < EPSILON) {
         thickness = EPSILON;
       }
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -183,7 +221,12 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][]{(formula != null ? formula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null)};
+    return new byte[][] {
+      (formula != null ? formula.getBytes() : null),
+      (colorMapHolder.getColormap_filename() != null
+          ? colorMapHolder.getColormap_filename().getBytes()
+          : null)
+    };
   }
 
   @Override
@@ -195,8 +238,7 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
       colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
       colorMapHolder.clear();
       uvIdxMap.clear();
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -205,8 +247,7 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
       return RessourceType.BYTEARRAY;
     } else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   private double _xmin, _xmax, _dx;
@@ -214,9 +255,13 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
   private double _zmin, _zmax, _dz;
 
   @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  public void init(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     colorMapHolder.init();
-    uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
+    uvColors =
+        pLayer
+            .getPalette()
+            .createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     hits = new AtomicInteger(0);
     misses = new AtomicInteger(0);
     super.init(pContext, pLayer, pXForm, pAmount);
@@ -248,18 +293,33 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
     }
     _dz = _zmax - _zmin;
 
-    String code = "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
-            "\r\n" +
-            "  public double evaluate(double x,double y,double z) {\r\n" +
-            "    double pi = M_PI;\r\n" +
-            "    double param_a = " + param_a + ";\r\n" +
-            "    double param_b = " + param_b + ";\r\n" +
-            "    double param_c = " + param_c + ";\r\n" +
-            "    double param_d = " + param_d + ";\r\n" +
-            "    double param_e = " + param_e + ";\r\n" +
-            "    double param_f = " + param_f + ";\r\n" +
-            "    return " + (formula != null && !formula.isEmpty() ? formula : "0.0") + ";\r\n" +
-            "  }\r\n";
+    String code =
+        "import static org.jwildfire.base.mathlib.MathLib.*;\r\n"
+            + "\r\n"
+            + "  public double evaluate(double x,double y,double z) {\r\n"
+            + "    double pi = M_PI;\r\n"
+            + "    double param_a = "
+            + param_a
+            + ";\r\n"
+            + "    double param_b = "
+            + param_b
+            + ";\r\n"
+            + "    double param_c = "
+            + param_c
+            + ";\r\n"
+            + "    double param_d = "
+            + param_d
+            + ";\r\n"
+            + "    double param_e = "
+            + param_e
+            + ";\r\n"
+            + "    double param_f = "
+            + param_f
+            + ";\r\n"
+            + "    return "
+            + (formula != null && !formula.isEmpty() ? formula : "0.0")
+            + ";\r\n"
+            + "  }\r\n";
     try {
       evaluator = IsoSFPlot3DFormulaEvaluator.compile(code);
     } catch (Exception e) {
@@ -278,18 +338,23 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
 
   private void validatePresetId() {
     if (preset_id >= 0) {
-      IsoSFPlot3DWFFuncPreset preset = WFFuncPresetsStore.getIsoSFPlot3DWFFuncPresets().getPreset(preset_id);
-      if (!preset.getFormula().equals(formula) ||
-              (fabs(xmin - preset.getXmin()) > EPSILON) || (fabs(xmax - preset.getXmax()) > EPSILON) ||
-              (fabs(ymin - preset.getYmin()) > EPSILON) || (fabs(ymax - preset.getYmax()) > EPSILON) ||
-              (fabs(zmin - preset.getZmin()) > EPSILON) || (fabs(zmax - preset.getZmax()) > EPSILON)) {
+      IsoSFPlot3DWFFuncPreset preset =
+          WFFuncPresetsStore.getIsoSFPlot3DWFFuncPresets().getPreset(preset_id);
+      if (!preset.getFormula().equals(formula)
+          || (fabs(xmin - preset.getXmin()) > EPSILON)
+          || (fabs(xmax - preset.getXmax()) > EPSILON)
+          || (fabs(ymin - preset.getYmin()) > EPSILON)
+          || (fabs(ymax - preset.getYmax()) > EPSILON)
+          || (fabs(zmin - preset.getZmin()) > EPSILON)
+          || (fabs(zmax - preset.getZmax()) > EPSILON)) {
         preset_id = -1;
       }
     }
   }
 
   private void refreshFormulaFromPreset(int presetId) {
-    IsoSFPlot3DWFFuncPreset preset = WFFuncPresetsStore.getIsoSFPlot3DWFFuncPresets().getPreset(presetId);
+    IsoSFPlot3DWFFuncPreset preset =
+        WFFuncPresetsStore.getIsoSFPlot3DWFFuncPresets().getPreset(presetId);
     formula = preset.getFormula();
     xmin = preset.getXmin();
     xmax = preset.getXmax();
@@ -340,7 +405,12 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
   private static AtomicInteger hits, misses;
 
   @Override
-  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(
+      FlameTransformationContext pContext,
+      XForm pXForm,
+      XYZPoint pAffineTP,
+      XYZPoint pVarTP,
+      double pAmount) {
     if (evaluator == null) {
       return;
     }
@@ -371,7 +441,8 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
     //    int h = hits.get();
     //    int sum = m + h;
     //    if (sum % 100000000 == 0) {
-    //      System.out.println("h: " + h + ", m: " + m + ", misses: " + Tools.FTOI(100.0 * (double) m / (double) (m + h)) + "%");
+    //      System.out.println("h: " + h + ", m: " + m + ", misses: " + Tools.FTOI(100.0 * (double)
+    // m / (double) (m + h)) + "%");
     //    }
 
     if (!pVarTP.doHide && direct_color > 0) {
@@ -392,23 +463,57 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
             double iu, iv;
             switch (color_mode) {
               case CM_COLORMAP_X:
-                iu = GfxMathLib.clamp(((y - _ymin) / _dy) * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - ((z - _zmin) / _dz) * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                iu =
+                    GfxMathLib.clamp(
+                        ((y - _ymin) / _dy) * (colorMapHolder.getColorMapWidth() - 1.0),
+                        0.0,
+                        colorMapHolder.getColorMapWidth() - 1.0);
+                iv =
+                    GfxMathLib.clamp(
+                        colorMapHolder.getColorMapHeight()
+                            - 1.0
+                            - ((z - _zmin) / _dz) * (colorMapHolder.getColorMapHeight() - 1.0),
+                        0,
+                        colorMapHolder.getColorMapHeight() - 1.0);
                 break;
               case CM_COLORMAP_Y:
-                iu = GfxMathLib.clamp(((z - _zmin) / _dz) * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - ((x - _xmin) / _dx) * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                iu =
+                    GfxMathLib.clamp(
+                        ((z - _zmin) / _dz) * (colorMapHolder.getColorMapWidth() - 1.0),
+                        0.0,
+                        colorMapHolder.getColorMapWidth() - 1.0);
+                iv =
+                    GfxMathLib.clamp(
+                        colorMapHolder.getColorMapHeight()
+                            - 1.0
+                            - ((x - _xmin) / _dx) * (colorMapHolder.getColorMapHeight() - 1.0),
+                        0,
+                        colorMapHolder.getColorMapHeight() - 1.0);
                 break;
               case CM_COLORMAP_Z:
               default:
-                iu = GfxMathLib.clamp(((x - _xmin) / _dx) * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-                iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - ((y - _ymin) / _dy) * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+                iu =
+                    GfxMathLib.clamp(
+                        ((x - _xmin) / _dx) * (colorMapHolder.getColorMapWidth() - 1.0),
+                        0.0,
+                        colorMapHolder.getColorMapWidth() - 1.0);
+                iv =
+                    GfxMathLib.clamp(
+                        colorMapHolder.getColorMapHeight()
+                            - 1.0
+                            - ((y - _ymin) / _dy) * (colorMapHolder.getColorMapHeight() - 1.0),
+                        0,
+                        colorMapHolder.getColorMapHeight() - 1.0);
                 break;
             }
             int ix = (int) MathLib.trunc(iu);
             int iy = (int) MathLib.trunc(iv);
             colorMapHolder.applyImageColor(pVarTP, ix, iy, iu, iv);
-            pVarTP.color = getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
+            pVarTP.color =
+                getUVColorIdx(
+                    Tools.FTOI(pVarTP.redColor),
+                    Tools.FTOI(pVarTP.greenColor),
+                    Tools.FTOI(pVarTP.blueColor));
           }
           break;
         case CM_XY:
@@ -425,10 +530,8 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
           pVarTP.color = (x - _xmin) / _dx * (y - _ymin) / _dy * (z - _zmin) / _dz;
           break;
       }
-      if (pVarTP.color < 0.0)
-        pVarTP.color = 0.0;
-      else if (pVarTP.color > 1.0)
-        pVarTP.color = 1.0;
+      if (pVarTP.color < 0.0) pVarTP.color = 0.0;
+      else if (pVarTP.color > 1.0) pVarTP.color = 1.0;
     }
   }
 
@@ -444,4 +547,13 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
     else return false;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[] {
+      VariationFuncType.VARTYPE_3D,
+      VariationFuncType.VARTYPE_BASE_SHAPE,
+      VariationFuncType.VARTYPE_DC,
+      VariationFuncType.VARTYPE_CUSTOM
+    };
+  }
 }

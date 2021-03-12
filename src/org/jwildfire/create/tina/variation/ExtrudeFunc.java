@@ -64,4 +64,9 @@ public class ExtrudeFunc extends VariationFunc {
     return "extrude";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM};
+  }
+
 }

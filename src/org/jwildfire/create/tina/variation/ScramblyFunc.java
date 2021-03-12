@@ -195,4 +195,10 @@ public class ScramblyFunc extends VariationFunc {
       return 0;
     }
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

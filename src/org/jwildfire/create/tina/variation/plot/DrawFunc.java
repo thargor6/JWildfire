@@ -1,21 +1,20 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2011 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.variation.plot;
-
 
 import csk.taprats.geometry.*;
 import org.jwildfire.base.mathlib.DoubleWrapperWF;
@@ -35,18 +34,16 @@ import static org.jwildfire.base.mathlib.MathLib.*;
  * @author Jesus Sosa
  * @date May 15, 2018
  */
-
-public class DrawFunc extends VariationFunc {
+public abstract class DrawFunc extends VariationFunc {
 
   private static final long serialVersionUID = 1L;
 
   private double line_thickness;
   protected ArrayList<Primitive> primitives = new ArrayList<Primitive>();
 
-  private int numEdges = 3;
-  private double ratioHole = 1.0;
-  private RandXYData _randXYData = new RandXYData();
-
+  private final int numEdges = 3;
+  private final double ratioHole = 1.0;
+  private final RandXYData _randXYData = new RandXYData();
 
   private static final int RAND_MAX = 32767;
 
@@ -54,9 +51,8 @@ public class DrawFunc extends VariationFunc {
     return pContext.random(RAND_MAX);
   }
 
-  private DoubleWrapperWF sina = new DoubleWrapperWF();
-  private DoubleWrapperWF cosa = new DoubleWrapperWF();
-
+  private final DoubleWrapperWF sina = new DoubleWrapperWF();
+  private final DoubleWrapperWF cosa = new DoubleWrapperWF();
 
   public Point plotBlur(FlameTransformationContext pContext, double x1, double y1, double pAmount) {
     double xout = x1, yout = y1;
@@ -72,14 +68,13 @@ public class DrawFunc extends VariationFunc {
     return value;
   }
 
-  public Point plotLine(FlameTransformationContext pContext, double x1, double y1, double x2, double y2) {
+  public Point plotLine(
+      FlameTransformationContext pContext, double x1, double y1, double x2, double y2) {
     double ydiff = y2 - y1;
     double xdiff = x2 - x1;
     double m;
-    if (xdiff == 0)
-      m = 10000;
-    else
-      m = ydiff / xdiff; // slope
+    if (xdiff == 0) m = 10000;
+    else m = ydiff / xdiff; // slope
     double line_length = MathLib.sqrt((xdiff * xdiff) + (ydiff * ydiff));
     double xout = 0, yout = 0;
     double xoffset = 0, yoffset = 0;
@@ -111,13 +106,13 @@ public class DrawFunc extends VariationFunc {
     return value;
   }
 
-
   public Point plotTriangle(FlameTransformationContext pContext, Triangle triangle) {
     Point p1 = triangle.getP1();
     Point p2 = triangle.getP2();
     Point p3 = triangle.getP3();
 
-    // uniform sampling:  http://math.stackexchange.com/questions/18686/uniform-random-point-in-triangle
+    // uniform sampling:
+    // http://math.stackexchange.com/questions/18686/uniform-random-point-in-triangle
     double sqrt_r1 = MathLib.sqrt(pContext.random());
     double r2 = pContext.random();
     double a = 1.0 - sqrt_r1;
@@ -128,13 +123,11 @@ public class DrawFunc extends VariationFunc {
     double dz = 0.0;
     Point out = new Point(dx, dy);
     return out;
-
   }
-
 
   public Point plotPolygon(FlameTransformationContext pContext, Ngon polygon) {
     // nBlur by FractalDesire, http://fractaldesire.deviantart.com/art/nBlur-plugin-190401515
-    //*********Adjustment of width of shape*********
+    // *********Adjustment of width of shape*********
 
     //
     randXY(pContext, _randXYData, polygon);
@@ -142,37 +135,34 @@ public class DrawFunc extends VariationFunc {
     double xTmp = _randXYData.x;
     double yTmp = _randXYData.y;
 
-    //**************************************************************************
+    // **************************************************************************
 
     double _midAngle = M_2PI / (double) polygon.getSides();
     double _sina, _cosa;
-    //*********Prepare edge calculation related stuff*********
+    // *********Prepare edge calculation related stuff*********
 
     double angle = _midAngle / 2.0;
     _sina = sin(angle);
     _cosa = cos(angle);
 
-    //********Begin of horizontal adjustment (rotation)********
+    // ********Begin of horizontal adjustment (rotation)********
     double x = _cosa * xTmp - _sina * yTmp;
     double y = _sina * xTmp + _cosa * yTmp;
-    //*********End of horizontal adjustment (rotation)*********
+    // *********End of horizontal adjustment (rotation)*********
 
     double pAmount = polygon.getScale();
     Point pos = polygon.getPos();
 
-
     Point p = new Point();
 
-//	  p.setX(  pAmount  * x  +  pos.getX());
-// 	  p.setY(  pAmount  * y  +  pos.getY());
+    //	  p.setX(  pAmount  * x  +  pos.getX());
+    // 	  p.setY(  pAmount  * y  +  pos.getY());
 
     p.setX(x);
     p.setY(y);
 
     return p;
-
   }
-
 
   private static class RandXYData implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -192,29 +182,24 @@ public class DrawFunc extends VariationFunc {
 
     double ratioHole;
 
-
     double _midAngle, _angStripes, _angStart;
     double _tan90_m_2, _sina, _cosa;
-
 
     double _arc_tan1, _arc_tan2;
     double _nb_ratioComplement;
     int nEdges = polygon.getSides();
     ratioHole = polygon.getFill();
 
-    if (nEdges < 3)
-      nEdges = 3;
+    if (nEdges < 3) nEdges = 3;
 
-
-    //**********Prepare angle related stuff**********
+    // **********Prepare angle related stuff**********
     _midAngle = M_2PI / (double) nEdges;
 
-    //*********Prepare edge calculation related stuff*********
+    // *********Prepare edge calculation related stuff*********
     _tan90_m_2 = tan(M_PI_2 + _midAngle / 2.0);
     double angle = _midAngle / 2.0;
     _sina = sin(angle);
     _cosa = cos(angle);
-
 
     _arc_tan1 = (13.0 / pow(nEdges, 1.3));
     _arc_tan2 = (2.0 * atan(_arc_tan1 / (-2.0)));
@@ -222,7 +207,11 @@ public class DrawFunc extends VariationFunc {
     //	   _arc_tan1 = (7.5 / pow(nEdges, 1.3));
     //	   _arc_tan2 = (2.0 * atan(_arc_tan1 / (-2.0)));
 
-    angXY = (atan(_arc_tan1 * (pContext.random() - 0.5)) / _arc_tan2 + 0.5 + (double) (rand(pContext) % nEdges)) * _midAngle;
+    angXY =
+        (atan(_arc_tan1 * (pContext.random() - 0.5)) / _arc_tan2
+                + 0.5
+                + (double) (rand(pContext) % nEdges))
+            * _midAngle;
 
     x = sin(angXY);
     y = cos(angXY);
@@ -232,24 +221,23 @@ public class DrawFunc extends VariationFunc {
       angXY -= _midAngle;
     }
 
-    //********Begin of calculation of edge limits********
+    // ********Begin of calculation of edge limits********
     xTmp = _tan90_m_2 / (_tan90_m_2 - tan(angXY));
     yTmp = xTmp * tan(angXY);
     lenOuterEdges = sqrt(xTmp * xTmp + yTmp * yTmp);
-    //*********End of calculation of edge limits********
+    // *********End of calculation of edge limits********
 
-
-//	  ranTmp = pContext.random() * lenOuterEdges;
+    //	  ranTmp = pContext.random() * lenOuterEdges;
     ranTmp = sqrt(pContext.random()) * lenOuterEdges;
 
     lenInnerEdges = ratioHole * lenOuterEdges;
     ranTmp = lenInnerEdges + sqrt(pContext.random()) * (lenOuterEdges - lenInnerEdges);
 
-    //if(VAR(hasStripes)==TRUE) ranTmp = pow(ranTmp,0.75);
+    // if(VAR(hasStripes)==TRUE) ranTmp = pow(ranTmp,0.75);
     x *= ranTmp;
     y *= ranTmp;
     lenXY = sqrt(x * x + y * y);
-    //*********End of radius-calculation (optionally hole)*********
+    // *********End of radius-calculation (optionally hole)*********
     data.x = x;
     data.y = y;
     data.lenXY = lenXY;
@@ -267,14 +255,18 @@ public class DrawFunc extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  public void init(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
 
     line_thickness = 0.5 / 100;
-
   }
 
-
-  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(
+      FlameTransformationContext pContext,
+      XForm pXForm,
+      XYZPoint pAffineTP,
+      XYZPoint pVarTP,
+      double pAmount) {
 
     Point out = null;
 
@@ -312,7 +304,6 @@ public class DrawFunc extends VariationFunc {
     }
   }
 
-
   @Override
   public String[] getParameterNames() {
     return null;
@@ -324,30 +315,10 @@ public class DrawFunc extends VariationFunc {
   }
 
   @Override
-  public void setParameter(String pName, double pValue) {
-
-  }
+  public void setParameter(String pName, double pValue) {}
 
   @Override
   public String getName() {
     return "draw";
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

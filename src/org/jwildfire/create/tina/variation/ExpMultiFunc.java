@@ -131,4 +131,9 @@ public class ExpMultiFunc extends VariationFunc {
     return "exp_multi";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

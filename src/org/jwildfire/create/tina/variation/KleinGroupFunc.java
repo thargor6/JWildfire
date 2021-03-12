@@ -405,4 +405,9 @@ public class KleinGroupFunc extends VariationFunc {
     return "klein_group";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

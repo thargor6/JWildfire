@@ -238,4 +238,9 @@ public class GlynnSuperShapeFunc extends VariationFunc {
     return "glynnSShape";
   }
 
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+	}
+
 }

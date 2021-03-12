@@ -59,4 +59,10 @@ public class Loonie3Func extends SimpleVariationFunc {
     _sqrvvar = pAmount * pAmount;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
+
 }

@@ -129,4 +129,9 @@ public class CurlSpFunc extends VariationFunc {
     return ((x) == 0 ? SMALL_EPSILON : (x));
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC};
+  }
+
 }

@@ -113,4 +113,9 @@ public class DCCylinderFunc extends VariationFunc {
     return "dc_cylinder";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

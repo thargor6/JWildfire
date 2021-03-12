@@ -85,4 +85,9 @@ public class Sech2_BSFunc extends VariationFunc {
     return "sech2_bs";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

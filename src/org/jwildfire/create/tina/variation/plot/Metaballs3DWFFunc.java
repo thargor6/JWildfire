@@ -29,6 +29,7 @@ import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.variation.ColorMapHolder;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceType;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 import org.jwildfire.create.tina.variation.mesh.AbstractOBJMeshWFFunc;
 
 import java.util.ArrayList;
@@ -457,4 +458,10 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
       this.influence = influence;
     }
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC};
+  }
+
 }

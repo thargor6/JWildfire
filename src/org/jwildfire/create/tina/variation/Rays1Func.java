@@ -43,4 +43,9 @@ public class Rays1Func extends SimpleVariationFunc {
     return "rays1"; // rays is alread used
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

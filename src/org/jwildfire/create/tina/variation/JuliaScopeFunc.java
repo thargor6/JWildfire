@@ -155,4 +155,9 @@ public class JuliaScopeFunc extends VariationFunc {
     cPower = dist / power * 0.5;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

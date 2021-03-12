@@ -42,4 +42,9 @@ public class FlipCircleFunc extends SimpleVariationFunc {
     return "flipcircle";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

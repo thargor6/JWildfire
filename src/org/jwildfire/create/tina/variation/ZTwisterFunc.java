@@ -75,4 +75,8 @@ public class ZTwisterFunc extends VariationFunc {
     return "ztwister";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

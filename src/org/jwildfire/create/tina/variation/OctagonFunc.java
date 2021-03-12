@@ -173,4 +173,9 @@ public class OctagonFunc extends VariationFunc {
     return new String[]{"octa_x", "octa_y", "octa_z", "octa_mode"};
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

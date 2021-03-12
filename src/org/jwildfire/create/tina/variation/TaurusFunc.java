@@ -78,4 +78,8 @@ public class TaurusFunc extends VariationFunc {
     return "taurus";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
 }

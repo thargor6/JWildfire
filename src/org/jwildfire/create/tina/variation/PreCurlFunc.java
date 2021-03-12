@@ -82,4 +82,9 @@ public class PreCurlFunc extends VariationFunc {
     return -1;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_PRE};
+  }
+
 }

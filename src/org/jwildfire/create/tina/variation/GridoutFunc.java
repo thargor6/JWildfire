@@ -75,4 +75,9 @@ public class GridoutFunc extends SimpleVariationFunc {
     return "gridout";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

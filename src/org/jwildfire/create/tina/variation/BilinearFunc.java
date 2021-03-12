@@ -36,4 +36,9 @@ public class BilinearFunc extends SimpleVariationFunc {
     return "bi_linear";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

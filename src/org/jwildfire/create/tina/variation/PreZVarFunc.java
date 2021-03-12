@@ -260,5 +260,11 @@ public class PreZVarFunc  extends VariationFunc {
 	public int getPriority() {
 		return -1;
 	}
+
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_PRE};
+	}
+
 }
 

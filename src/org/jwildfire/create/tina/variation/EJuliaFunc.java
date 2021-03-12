@@ -119,4 +119,9 @@ public class EJuliaFunc extends VariationFunc {
       _sign = -1;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -88,4 +88,9 @@ public class DCBubbleFunc extends VariationFunc {
     bdcs = 1.0 / (scale == 0.0 ? 10E-6 : scale);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

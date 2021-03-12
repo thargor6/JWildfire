@@ -68,4 +68,9 @@ public class Swirl3Func extends VariationFunc {
     return "swirl3";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

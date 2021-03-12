@@ -118,4 +118,10 @@ public class Scry2Func extends VariationFunc {
     _sinc = sin(a);
     _cosc = cos(a);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

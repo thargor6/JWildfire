@@ -127,4 +127,9 @@ public class Glynnia3Func extends VariationFunc {
     _vvar2 = pAmount * sqrt(2.0) / 2.0;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

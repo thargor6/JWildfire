@@ -82,4 +82,11 @@ public class CirclesplitFunc extends VariationFunc {
   public String getName() {
     return "circlesplit";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }
+

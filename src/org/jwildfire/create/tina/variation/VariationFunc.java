@@ -221,4 +221,7 @@ public abstract class VariationFunc implements Serializable {
     return false;
   }
 
+  /** A list of supported variation-types (for filtering) */
+  public abstract VariationFuncType[] getVariationTypes();
+
 }

@@ -88,4 +88,9 @@ public class Julia3DQFunc extends VariationFunc {
     inv_power_2pi = M_2PI / (double) power;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

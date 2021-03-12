@@ -127,4 +127,9 @@ public class SphereNjaFunc extends VariationFunc {
     return "sphere_nja";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

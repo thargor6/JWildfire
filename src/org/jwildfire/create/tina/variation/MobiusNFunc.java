@@ -140,4 +140,9 @@ public class MobiusNFunc extends VariationFunc {
       power = 1.0;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

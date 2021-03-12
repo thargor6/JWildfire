@@ -42,4 +42,14 @@ public class PostFalloff2Func extends Falloff2Func {
     return "post_falloff2";
   }
 
+  @Override
+  public int getPriority() {
+    return 1;
+  }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_BLUR};
+  }
+
 }

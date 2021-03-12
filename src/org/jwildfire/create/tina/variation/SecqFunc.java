@@ -48,4 +48,9 @@ public class SecqFunc extends SimpleVariationFunc {
     return "secq";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

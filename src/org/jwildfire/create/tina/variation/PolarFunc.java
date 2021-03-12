@@ -41,4 +41,9 @@ public class PolarFunc extends SimpleVariationFunc {
     return "polar";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -156,4 +156,9 @@ public class LazyTravisFunc extends VariationFunc {
     _spin_out = 4.0 * spin_out;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

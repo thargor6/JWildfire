@@ -47,4 +47,9 @@ public class AcothFunc extends SimpleVariationFunc {
     return "acoth";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

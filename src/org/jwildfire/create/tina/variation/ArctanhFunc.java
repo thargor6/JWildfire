@@ -49,4 +49,9 @@ public class ArctanhFunc extends SimpleVariationFunc {
     return "arctanh";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

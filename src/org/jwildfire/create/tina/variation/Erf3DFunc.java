@@ -41,4 +41,9 @@ public class Erf3DFunc extends SimpleVariationFunc {
     return "erf3D";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

@@ -1,16 +1,16 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2016 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -59,9 +59,30 @@ public class YPlot2DWFFunc extends VariationFunc {
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = {PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F};
+  private static final String[] paramNames = {
+    PARAM_PRESET_ID,
+    PARAM_XMIN,
+    PARAM_XMAX,
+    PARAM_YMIN,
+    PARAM_YMAX,
+    PARAM_ZMIN,
+    PARAM_ZMAX,
+    PARAM_DIRECT_COLOR,
+    PARAM_COLOR_MODE,
+    PARAM_BLEND_COLORMAP,
+    PARAM_DISPL_AMOUNT,
+    PARAM_BLEND_DISPLMAP,
+    PARAM_PARAM_A,
+    PARAM_PARAM_B,
+    PARAM_PARAM_C,
+    PARAM_PARAM_D,
+    PARAM_PARAM_E,
+    PARAM_PARAM_F
+  };
 
-  private static final String[] ressourceNames = {RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME};
+  private static final String[] ressourceNames = {
+    RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME
+  };
 
   private int preset_id = -1;
 
@@ -87,13 +108,18 @@ public class YPlot2DWFFunc extends VariationFunc {
 
   private String formula;
 
-  private ColorMapHolder colorMapHolder = new ColorMapHolder();
-  private DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
+  private final ColorMapHolder colorMapHolder = new ColorMapHolder();
+  private final DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
 
   private YPlot2DFormulaEvaluator evaluator;
 
   @Override
-  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+  public void transform(
+      FlameTransformationContext pContext,
+      XForm pXForm,
+      XYZPoint pAffineTP,
+      XYZPoint pVarTP,
+      double pAmount) {
     if (evaluator == null) {
       return;
     }
@@ -112,8 +138,18 @@ public class YPlot2DWFFunc extends VariationFunc {
       VectorD bv = new VectorD(0.0, 0.0, 1.0);
       VectorD n = VectorD.cross(av, bv);
       n.normalize();
-      double iu = GfxMathLib.clamp(randU * (displacementMapHolder.getDisplacementMapWidth() - 1.0), 0.0, displacementMapHolder.getDisplacementMapWidth() - 1.0);
-      double iv = GfxMathLib.clamp(displacementMapHolder.getDisplacementMapHeight() - 1.0 - randV * (displacementMapHolder.getDisplacementMapHeight() - 1.0), 0, displacementMapHolder.getDisplacementMapHeight() - 1.0);
+      double iu =
+          GfxMathLib.clamp(
+              randU * (displacementMapHolder.getDisplacementMapWidth() - 1.0),
+              0.0,
+              displacementMapHolder.getDisplacementMapWidth() - 1.0);
+      double iv =
+          GfxMathLib.clamp(
+              displacementMapHolder.getDisplacementMapHeight()
+                  - 1.0
+                  - randV * (displacementMapHolder.getDisplacementMapHeight() - 1.0),
+              0,
+              displacementMapHolder.getDisplacementMapHeight() - 1.0);
       int ix = (int) MathLib.trunc(iu);
       int iy = (int) MathLib.trunc(iv);
       double d = displacementMapHolder.calculateImageDisplacement(ix, iy, iu, iv) * _displ_amount;
@@ -126,12 +162,26 @@ public class YPlot2DWFFunc extends VariationFunc {
       switch (color_mode) {
         case CM_COLORMAP:
           if (colorMapHolder.isActive()) {
-            double iu = GfxMathLib.clamp(randU * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
-            double iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - randV * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+            double iu =
+                GfxMathLib.clamp(
+                    randU * (colorMapHolder.getColorMapWidth() - 1.0),
+                    0.0,
+                    colorMapHolder.getColorMapWidth() - 1.0);
+            double iv =
+                GfxMathLib.clamp(
+                    colorMapHolder.getColorMapHeight()
+                        - 1.0
+                        - randV * (colorMapHolder.getColorMapHeight() - 1.0),
+                    0,
+                    colorMapHolder.getColorMapHeight() - 1.0);
             int ix = (int) MathLib.trunc(iu);
             int iy = (int) MathLib.trunc(iv);
             colorMapHolder.applyImageColor(pVarTP, ix, iy, iu, iv);
-            pVarTP.color = getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
+            pVarTP.color =
+                getUVColorIdx(
+                    Tools.FTOI(pVarTP.redColor),
+                    Tools.FTOI(pVarTP.greenColor),
+                    Tools.FTOI(pVarTP.blueColor));
           }
           break;
         case CM_Y:
@@ -142,10 +192,8 @@ public class YPlot2DWFFunc extends VariationFunc {
           pVarTP.color = (x - _xmin) / _dx;
           break;
       }
-      if (pVarTP.color < 0.0)
-        pVarTP.color = 0.0;
-      else if (pVarTP.color > 1.0)
-        pVarTP.color = 1.0;
+      if (pVarTP.color < 0.0) pVarTP.color = 0.0;
+      else if (pVarTP.color > 1.0) pVarTP.color = 1.0;
     }
     pVarTP.x += pAmount * x;
     pVarTP.y += pAmount * y;
@@ -159,7 +207,26 @@ public class YPlot2DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{preset_id, xmin, xmax, ymin, ymax, zmin, zmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), param_a, param_b, param_c, param_d, param_e, param_f};
+    return new Object[] {
+      preset_id,
+      xmin,
+      xmax,
+      ymin,
+      ymax,
+      zmin,
+      zmax,
+      direct_color,
+      color_mode,
+      colorMapHolder.getBlend_colormap(),
+      displacementMapHolder.getDispl_amount(),
+      displacementMapHolder.getBlend_displ_map(),
+      param_a,
+      param_b,
+      param_c,
+      param_d,
+      param_e,
+      param_f
+    };
   }
 
   @Override
@@ -205,8 +272,7 @@ public class YPlot2DWFFunc extends VariationFunc {
       param_e = pValue;
     } else if (PARAM_PARAM_F.equalsIgnoreCase(pName)) {
       param_f = pValue;
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -221,7 +287,15 @@ public class YPlot2DWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][]{(formula != null ? formula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null)};
+    return new byte[][] {
+      (formula != null ? formula.getBytes() : null),
+      (colorMapHolder.getColormap_filename() != null
+          ? colorMapHolder.getColormap_filename().getBytes()
+          : null),
+      (displacementMapHolder.getDispl_map_filename() != null
+          ? displacementMapHolder.getDispl_map_filename().getBytes()
+          : null)
+    };
   }
 
   @Override
@@ -236,8 +310,7 @@ public class YPlot2DWFFunc extends VariationFunc {
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
       displacementMapHolder.clear();
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -248,8 +321,7 @@ public class YPlot2DWFFunc extends VariationFunc {
       return RessourceType.IMAGE_FILENAME;
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    } else
-      throw new IllegalArgumentException(pName);
+    } else throw new IllegalArgumentException(pName);
   }
 
   private double _xmin, _xmax, _dx;
@@ -258,9 +330,13 @@ public class YPlot2DWFFunc extends VariationFunc {
   private double _displ_amount;
 
   @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  public void init(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     colorMapHolder.init();
-    uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
+    uvColors =
+        pLayer
+            .getPalette()
+            .createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     displacementMapHolder.init();
     _displ_amount = displacementMapHolder.getDispl_amount();
 
@@ -293,18 +369,33 @@ public class YPlot2DWFFunc extends VariationFunc {
 
     evaluator = null;
     if (!formula.isEmpty()) {
-      String code = "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
-              "\r\n" +
-              "  public double evaluate(double x) {\r\n" +
-              "    double pi = M_PI;\r\n" +
-              "    double param_a = " + param_a + ";\r\n" +
-              "    double param_b = " + param_b + ";\r\n" +
-              "    double param_c = " + param_c + ";\r\n" +
-              "    double param_d = " + param_d + ";\r\n" +
-              "    double param_e = " + param_e + ";\r\n" +
-              "    double param_f = " + param_f + ";\r\n" +
-              "    return " + formula + ";\r\n" +
-              "  }\r\n";
+      String code =
+          "import static org.jwildfire.base.mathlib.MathLib.*;\r\n"
+              + "\r\n"
+              + "  public double evaluate(double x) {\r\n"
+              + "    double pi = M_PI;\r\n"
+              + "    double param_a = "
+              + param_a
+              + ";\r\n"
+              + "    double param_b = "
+              + param_b
+              + ";\r\n"
+              + "    double param_c = "
+              + param_c
+              + ";\r\n"
+              + "    double param_d = "
+              + param_d
+              + ";\r\n"
+              + "    double param_e = "
+              + param_e
+              + ";\r\n"
+              + "    double param_f = "
+              + param_f
+              + ";\r\n"
+              + "    return "
+              + formula
+              + ";\r\n"
+              + "  }\r\n";
 
       try {
         evaluator = YPlot2DFormulaEvaluator.compile(code);
@@ -325,9 +416,11 @@ public class YPlot2DWFFunc extends VariationFunc {
 
   private void validatePresetId() {
     if (preset_id >= 0) {
-      YPlot2DWFFuncPreset preset = WFFuncPresetsStore.getYPlot2DWFFuncPresets().getPreset(preset_id);
-      if (!preset.getFormula().equals(formula) ||
-              (fabs(xmin - preset.getXmin()) > EPSILON) || (fabs(xmax - preset.getXmax()) > EPSILON)) {
+      YPlot2DWFFuncPreset preset =
+          WFFuncPresetsStore.getYPlot2DWFFuncPresets().getPreset(preset_id);
+      if (!preset.getFormula().equals(formula)
+          || (fabs(xmin - preset.getXmin()) > EPSILON)
+          || (fabs(xmax - preset.getXmax()) > EPSILON)) {
         preset_id = -1;
       }
     }
@@ -387,8 +480,16 @@ public class YPlot2DWFFunc extends VariationFunc {
   @Override
   public boolean dynamicParameterExpansion(String pName) {
     // preset_id doesn't really expand parameters, but it changes them; this will make them refresh
-    if (PARAM_PRESET_ID.equalsIgnoreCase(pName)) return true;
-    else return false;
+    return PARAM_PRESET_ID.equalsIgnoreCase(pName);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[] {
+      VariationFuncType.VARTYPE_3D,
+      VariationFuncType.VARTYPE_BASE_SHAPE,
+      VariationFuncType.VARTYPE_DC,
+      VariationFuncType.VARTYPE_CUSTOM
+    };
+  }
 }

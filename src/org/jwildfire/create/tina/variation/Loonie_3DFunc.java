@@ -58,4 +58,9 @@ public class Loonie_3DFunc extends SimpleVariationFunc {
     return "loonie_3D";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

@@ -131,4 +131,9 @@ public class GlynnSim2Func extends VariationFunc {
     this._absPow = fabs(this.pow);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+  }
+
 }

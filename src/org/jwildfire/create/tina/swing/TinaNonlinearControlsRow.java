@@ -83,18 +83,39 @@ public class TinaNonlinearControlsRow {
   }
 
   public void initVariationCmb() {
-    nonlinearVarCmb.removeAllItems();
-    List<String> nameList = new ArrayList<String>();
-    nameList.addAll(VariationFuncList.getNameList());
-    Collections.sort(nameList);
-
-    List<String> excludedNames = VariationFuncList.getExcludedNameList();
-
-    nonlinearVarCmb.addItem("");
-    for (String name : nameList) {
-      if (!excludedNames.contains(name)) {
-        nonlinearVarCmb.addItem(name);
+    boolean oldNoRefresh = isNoRefresh();
+    try {
+      setNoRefresh(true);
+      boolean oldOwnerRefreshing = tinaController.cmbRefreshing;
+      try {
+        tinaController.cmbRefreshing = true;
+        String selectedItem = nonlinearVarCmb.getSelectedIndex() >= 0 ? (String) nonlinearVarCmb.getSelectedItem() : "";
+        boolean hasSelectedItem = false;
+        nonlinearVarCmb.removeAllItems();
+        List<String> nameList = new ArrayList<>();
+        nameList.addAll(VariationFuncList.getNameList());
+        Collections.sort(nameList);
+        VariationFuncFilter filter = tinaController.getCurrentVariationFuncFilter();
+        nonlinearVarCmb.addItem("");
+        for (String name : nameList) {
+          if (filter.evaluate(name)) {
+            nonlinearVarCmb.addItem(name);
+            if(name.equals(selectedItem)) {
+              hasSelectedItem = true;
+            }
+          }
+        }
+        if(!hasSelectedItem) {
+          nonlinearVarCmb.addItem(selectedItem);
+        }
+        nonlinearVarCmb.setSelectedItem(selectedItem);
       }
+      finally {
+        tinaController.cmbRefreshing = oldOwnerRefreshing;
+      }
+    }
+    finally {
+      setNoRefresh(oldNoRefresh);
     }
   }
 

@@ -85,4 +85,9 @@ public class Tan2_BSFunc extends VariationFunc {
     return "tan2_bs";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

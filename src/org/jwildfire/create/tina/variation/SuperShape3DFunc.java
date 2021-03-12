@@ -179,4 +179,9 @@ public class SuperShape3DFunc extends VariationFunc {
     phi_pi = phi * M_2_PI;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

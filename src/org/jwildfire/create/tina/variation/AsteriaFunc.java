@@ -98,4 +98,9 @@ public class AsteriaFunc extends VariationFunc {
     cosa = cos(M_PI * alpha);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

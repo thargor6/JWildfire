@@ -42,4 +42,9 @@ public class TanCosFunc extends SimpleVariationFunc {
     return "tancos";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

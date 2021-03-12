@@ -167,4 +167,8 @@ public class BWraps7Func extends VariationFunc {
     _rfactor = radius / max_bubble;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

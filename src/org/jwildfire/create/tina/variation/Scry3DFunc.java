@@ -49,4 +49,9 @@ public class Scry3DFunc extends SimpleVariationFunc {
     return "scry_3D";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

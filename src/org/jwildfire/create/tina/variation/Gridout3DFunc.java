@@ -212,4 +212,9 @@ public class Gridout3DFunc extends VariationFunc {
 		return "gridout3D";
 	}
 
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+	}
+
 }

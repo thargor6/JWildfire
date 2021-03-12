@@ -25,10 +25,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.RessourceManager;
-import org.jwildfire.create.tina.variation.RessourceType;
-import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.*;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 
@@ -179,6 +176,12 @@ public class IFlamesFunc extends VariationFunc {
 
     throw new IllegalArgumentException(pName);
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{};
+  }
+
 
   @Override
   public String getName() {

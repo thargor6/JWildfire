@@ -157,5 +157,9 @@ public class MinkowskopeFunc extends VariationFunc {
     return new String[]{"mskope_separation", "mskope_frequencyx", "mskope_frequencyy", "mskope_amplitude", "mskope_perturbation", "mskope_damping"};
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }
 

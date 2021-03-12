@@ -797,4 +797,10 @@ z = 4*sin(3*t) - 10*sin(6*t);
     }
 
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+
 }

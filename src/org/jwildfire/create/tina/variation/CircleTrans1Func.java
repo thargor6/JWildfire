@@ -139,4 +139,9 @@ public class CircleTrans1Func extends VariationFunc {
     return "circleTrans1";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

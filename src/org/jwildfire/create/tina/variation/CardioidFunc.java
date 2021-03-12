@@ -68,4 +68,9 @@ public class CardioidFunc extends VariationFunc {
     return "cardioid";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -63,4 +63,9 @@ public class FunnelFunc extends VariationFunc {
     return "funnel";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

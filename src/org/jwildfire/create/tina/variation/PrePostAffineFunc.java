@@ -158,4 +158,9 @@ public class PrePostAffineFunc extends VariationFunc {
     return 2;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_PREPOST};
+  }
+
 }

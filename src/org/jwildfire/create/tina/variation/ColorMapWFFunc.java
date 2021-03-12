@@ -32,4 +32,9 @@ public class ColorMapWFFunc extends AbstractColorMapWFFunc {
     transform(pContext, pXForm, pAffineTP, pVarTP, pAmount, pAffineTP.x, pAffineTP.y);
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC};
+  }
+
 }

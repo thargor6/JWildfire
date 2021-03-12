@@ -32,4 +32,8 @@ public class ZScaleFunc extends SimpleVariationFunc {
     return "zscale";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM};
+  }
 }

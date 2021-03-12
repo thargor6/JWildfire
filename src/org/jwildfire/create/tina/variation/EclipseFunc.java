@@ -85,4 +85,9 @@ public class EclipseFunc extends VariationFunc {
     return "eclipse";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

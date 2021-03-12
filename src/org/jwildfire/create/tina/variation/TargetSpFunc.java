@@ -103,4 +103,9 @@ public class TargetSpFunc extends VariationFunc {
     _rotb = -M_PI + _rota;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

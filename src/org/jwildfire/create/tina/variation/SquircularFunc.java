@@ -33,5 +33,9 @@ public class SquircularFunc extends SimpleVariationFunc {
     return "squircular";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 
 }

@@ -99,4 +99,9 @@ public class ESwirlFunc extends VariationFunc {
     return "eSwirl";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

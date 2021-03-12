@@ -123,4 +123,10 @@ public class MinkQMFunc extends VariationFunc {
   public String getName() {
     return "minkQM";
   }
+
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

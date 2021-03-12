@@ -92,4 +92,9 @@ public class PTransformFunc extends VariationFunc {
     return "pTransform";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

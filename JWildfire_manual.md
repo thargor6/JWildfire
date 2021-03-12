@@ -78,10 +78,57 @@ Position of the camera in z-direction.
 
 ### _DOF/Bokeh_ tab
 #### _DOF_ subtab
+##### _New DOF_
+##### _Amount_
+##### _Area_
+##### _Exponent_
+##### _Camera dist_
+##### _FocusX_
+##### _FocusY_
+##### _FocusZ_
+
 #### _Bokeh_ subtab
+##### _Shape_
+##### _Scale_
+##### _Rotate_
+##### _Fade_
+##### _Shape specific parameters_
+
 #### _Post bokeh_ subtab
+##### _Bokeh intensity_
+##### _Bokeh size_
+##### _Bokeh filter kernel_
+##### _Bokeh brightness_
+##### _Bokeh activation_
+
+#### _Post blur_ subtab
+##### _Blur radius_
+##### _Blur fade_
+##### _Blur falloff_
+
+#### _ZBuffer_ subtab
+##### _ZBuffer scale_
+##### _ZBuffer bias_
+##### _ZBuffer filename_
+
+
 
 ### _Coloring_ tab
+#### _Brightness_
+#### _Low brightness_
+#### _Gamma_
+#### _Gamma threshold_
+#### _Contrast_
+#### _Red balance_
+#### _Green balance_
+#### _Blue balance_
+#### _Fade to White_
+#### _Vibrancy_
+#### _Saturation_
+#### _Bg color_
+#### _Bg image_
+#### _Fg opacity_
+#### _Background transparency_
 
 ### _Anti-Aliasing / Filter_ tab
 
@@ -90,4 +137,7 @@ Position of the camera in z-direction.
 
 # FAQ (frequently asked questions)
 Here are answers to some popular questions I get often, which do not fit into the other chapters.
-## 4k renders possible?
+## Are 4k renders possible?
+## Can I render images with removed/transparent background?
+## How to save a flame as image? 
+

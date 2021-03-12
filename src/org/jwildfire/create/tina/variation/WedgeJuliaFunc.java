@@ -88,4 +88,8 @@ public class WedgeJuliaFunc extends VariationFunc {
     return "wedge_julia";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

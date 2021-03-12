@@ -102,4 +102,9 @@ public class PowBlockFunc extends VariationFunc {
     _deneps = 1.0 / _deneps;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

@@ -76,4 +76,9 @@ public class Exp2_BSFunc extends VariationFunc {
     return "exp2_bs";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

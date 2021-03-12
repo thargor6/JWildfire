@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2021Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -35,8 +35,8 @@ public class VariationFuncList {
   private static final double MEMORY_THRESHOLD = 10.0;
   private static List<Class<? extends VariationFunc>> items = new ArrayList<Class<? extends VariationFunc>>();
   private static List<String> unfilteredNameList = null;
-  private static List<String> excludedNameList = null;
   private static List<String> filteredNameList = null;
+  private static Map<String, Set<VariationFuncType>> variationTypes = null;
   private static Map<Class<? extends VariationFunc>, String> aliasMap = new HashMap<Class<? extends VariationFunc>, String>();
   private static final Map<String, String> resolvedAliasMap;
   public static boolean considerVariationCosts = true;
@@ -957,9 +957,9 @@ public class VariationFuncList {
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
-      String vName = getVariationName(funcCls.getKey(), false);
-      if (vName != null) {
-        resolvedAliasMap.put(funcCls.getValue(), vName);
+      VariationFunc varFunc = getVariationInstance(funcCls.getKey(), false);
+      if (varFunc != null) {
+        resolvedAliasMap.put(funcCls.getValue(), varFunc.getName());
       }
     }
 
@@ -1021,10 +1021,10 @@ public class VariationFuncList {
     unfilteredNameList = null;
   }
 
-  private static String getVariationName(
+  private static VariationFunc getVariationInstance(
           Class<? extends VariationFunc> pFuncCls, boolean pFatal) {
     try {
-      return pFuncCls.newInstance().getName();
+      return pFuncCls.newInstance();
     } catch (InstantiationException ex) {
       if (pFatal) {
         throw new RuntimeException(ex);
@@ -1042,21 +1042,20 @@ public class VariationFuncList {
   }
 
   private static void refreshNameList() {
-    unfilteredNameList = new ArrayList<String>();
-    filteredNameList = new ArrayList<String>();
+    unfilteredNameList = new ArrayList<>();
+    filteredNameList = new ArrayList<>();
+    variationTypes = new HashMap<>();
     for (Class<? extends VariationFunc> funcCls : items) {
-      String vName = getVariationName(funcCls, false);
-      if (vName != null) {
+      VariationFunc varFunc = getVariationInstance(funcCls, false);
+      if (varFunc != null) {
+        String vName = varFunc.getName();
         unfilteredNameList.add(vName);
         if (!vName.startsWith("_")) {
           filteredNameList.add(vName);
         }
+        variationTypes.put(vName, new HashSet<>(Arrays.asList(varFunc.getVariationTypes())));
       }
     }
-  }
-
-  private static void refreshExcludedNameList() {
-    excludedNameList = new ArrayList<String>(Prefs.getPrefs().getTinaExcludedVariations());
   }
 
   public static List<String> getNameList() {
@@ -1064,17 +1063,6 @@ public class VariationFuncList {
       refreshNameList();
     }
     return filteredNameList;
-  }
-
-  public static List<String> getExcludedNameList() {
-    if (excludedNameList == null) {
-      refreshExcludedNameList();
-    }
-    return excludedNameList;
-  }
-
-  public static void invalidateExcludedNameList() {
-    excludedNameList = null;
   }
 
   private static List<String> getUnfilteredNameList() {
@@ -1144,5 +1132,11 @@ public class VariationFuncList {
     return items;
   }
 
+  public static Set<VariationFuncType> getVariationTypes(String variationName) {
+    if (filteredNameList == null) {
+      refreshNameList();
+    }
+    return variationTypes.get(variationName);
+  }
 }
 

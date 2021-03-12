@@ -716,4 +716,9 @@ public class QuaternionFunc extends VariationFunc {
     return "quaternion";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
+
 }

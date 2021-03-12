@@ -82,4 +82,9 @@ public class SphericalNFunc extends VariationFunc {
     return paramAltNames;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

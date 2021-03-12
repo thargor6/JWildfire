@@ -95,4 +95,9 @@ public class CellFunc extends VariationFunc {
     return "cell";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

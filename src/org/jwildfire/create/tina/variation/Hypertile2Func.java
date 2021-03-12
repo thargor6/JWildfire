@@ -99,4 +99,9 @@ public class Hypertile2Func extends VariationFunc {
       this.r = 1.0;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

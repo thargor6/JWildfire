@@ -99,4 +99,9 @@ public class FlowerDbFunc extends VariationFunc {
     return "flower_db";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

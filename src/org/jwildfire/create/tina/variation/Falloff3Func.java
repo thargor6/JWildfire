@@ -41,4 +41,9 @@ public class Falloff3Func extends AbstractFalloff3Func {
     pVIn.c = pAffineTP.color;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BLUR};
+  }
+
 }

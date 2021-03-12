@@ -112,4 +112,8 @@ public class WaveBlurWFFunc extends VariationFunc {
     return "waveblur_wf";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC};
+  }
 }

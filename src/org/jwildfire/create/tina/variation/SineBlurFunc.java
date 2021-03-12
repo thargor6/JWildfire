@@ -69,4 +69,9 @@ public class SineBlurFunc extends VariationFunc {
     return "sineblur";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

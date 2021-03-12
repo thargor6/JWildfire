@@ -78,4 +78,9 @@ public class MCarpetFunc extends VariationFunc {
     return "mcarpet";
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }

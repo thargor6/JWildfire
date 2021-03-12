@@ -78,4 +78,9 @@ public class BlurPixelizeFunc extends VariationFunc {
     _v = pAmount * this.size;
   }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
+
 }
