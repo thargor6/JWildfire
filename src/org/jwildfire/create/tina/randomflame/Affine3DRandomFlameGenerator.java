@@ -20,10 +20,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
-import org.jwildfire.create.tina.variation.Affine3DFunc;
-import org.jwildfire.create.tina.variation.Linear3DFunc;
-import org.jwildfire.create.tina.variation.VariationFunc;
-import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.variation.*;
 
 public class Affine3DRandomFlameGenerator extends RandomFlameGenerator {
 
@@ -106,7 +103,7 @@ public class Affine3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColor(Math.random());
       xForm.setWeight(scl * Math.random() * 19.9 + 0.1);
 
-      if(Math.random()<0.2) {
+      if(Math.random()<0.56) {
         xForm.addVariation(Math.random() * 0.25 + 0.25, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true) );
       }
     }
@@ -120,7 +117,7 @@ public class Affine3DRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   public boolean isUseFilter(RandomFlameGeneratorState pState) {
-    return false;
+    return Math.random() > 0.42;
   }
 
   @Override

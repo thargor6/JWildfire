@@ -1,4 +1,4 @@
-V6.xx (xx.03.2021)
+V6.xx (xx.xx.2021)
  - Introducing variation-filters, based on variation-profiles and variation-types.
    They will improve usability a lot by simplifying the selection of variations/"plugins" by selecting
    and combining variation-types.
@@ -19,6 +19,7 @@ V6.xx (xx.03.2021)
      -kaleidoimg,
      -dc_portal,
      -kaplan by  by Jesus Sosa
+ - improved the "Affine3D"-random-flame-generator
  - fix: QuickMutations now inherit the zoom-factor, quality and spatial oversampling settings form the original flame
  - fix: regarding z-coordinate to tqmirror-variation, by Brad Stefanov
  - fix: regarding of priority in the post_falloff2-variation

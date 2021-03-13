@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -17,7 +17,6 @@
 
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.mesh.*;
 import org.jwildfire.create.tina.variation.plot.*;
@@ -35,8 +34,10 @@ public class VariationFuncList {
   private static final double MEMORY_THRESHOLD = 10.0;
   private static List<Class<? extends VariationFunc>> items = new ArrayList<Class<? extends VariationFunc>>();
   private static List<String> unfilteredNameList = null;
-  private static List<String> filteredNameList = null;
+  private static List<String> nonInternalVariationsNameList = null;
+  private static List<String> validatedRandomVariationsNameList = null;
   private static Map<String, Set<VariationFuncType>> variationTypes = null;
+  private static Map<VariationFuncType, List<String>> variationsByType = null;
   private static Map<Class<? extends VariationFunc>, String> aliasMap = new HashMap<Class<? extends VariationFunc>, String>();
   private static final Map<String, String> resolvedAliasMap;
   public static boolean considerVariationCosts = true;
@@ -1043,7 +1044,7 @@ public class VariationFuncList {
 
   private static void refreshNameList() {
     unfilteredNameList = new ArrayList<>();
-    filteredNameList = new ArrayList<>();
+    nonInternalVariationsNameList = new ArrayList<>();
     variationTypes = new HashMap<>();
     for (Class<? extends VariationFunc> funcCls : items) {
       VariationFunc varFunc = getVariationInstance(funcCls, false);
@@ -1051,18 +1052,37 @@ public class VariationFuncList {
         String vName = varFunc.getName();
         unfilteredNameList.add(vName);
         if (!vName.startsWith("_")) {
-          filteredNameList.add(vName);
+          nonInternalVariationsNameList.add(vName);
         }
         variationTypes.put(vName, new HashSet<>(Arrays.asList(varFunc.getVariationTypes())));
+      }
+    }
+
+    validatedRandomVariationsNameList = new ArrayList<>();
+    for(String name:nonInternalVariationsNameList) {
+      if (isValidRandomVariation(name)) {
+        validatedRandomVariationsNameList.add(name);
+      }
+    }
+
+    variationsByType = new HashMap<>();
+    for(String name: validatedRandomVariationsNameList) {
+      for(VariationFuncType variationFuncType: variationTypes.get(name)) {
+        List<String> variations = variationsByType.get(variationFuncType);
+        if(variations==null) {
+          variations = new ArrayList<>();
+          variationsByType.put(variationFuncType, variations);
+        }
+        variations.add(name);
       }
     }
   }
 
   public static List<String> getNameList() {
-    if (filteredNameList == null) {
+    if (nonInternalVariationsNameList == null) {
       refreshNameList();
     }
-    return filteredNameList;
+    return nonInternalVariationsNameList;
   }
 
   private static List<String> getUnfilteredNameList() {
@@ -1077,23 +1097,49 @@ public class VariationFuncList {
   }
 
   public static String getRandomVariationname() {
-    while (true) {
-      int idx = (int) (Math.random() * getNameList().size());
-      String name = getNameList().get(idx);
-      if (isValidRandomVariation(name)) {
-        return name;
-      }
+/*
+    double preSelection = Math.random();
+    if(preSelection<0.22) {
+      return getRandomVariationname(VariationFuncType.VARTYPE_3D);
     }
+    else if(preSelection<0.37) {
+      return getRandomVariationname(VariationFuncType.VARTYPE_BASE_SHAPE);
+    }
+    else if(preSelection<0.55) {
+      return getRandomVariationname(VariationFuncType.VARTYPE_2D);
+    }
+    else if(preSelection<0.66) {
+      return getRandomVariationname(VariationFuncType.VARTYPE_DC);
+    }
+    else {
+      int idx =
+          Math.min(
+              (int) (Math.random() * getRandomVariationnames().size()),
+              getRandomVariationnames().size() - 1);
+      return getRandomVariationnames().get(idx);
+    }
+ */
+    int idx =
+            Math.min(
+                    (int) (Math.random() * getRandomVariationnames().size()),
+                    getRandomVariationnames().size() - 1);
+    return getRandomVariationnames().get(idx);
+  }
+
+  public static String getRandomVariationname(VariationFuncType variationFuncType) {
+    if(variationsByType==null) {
+      refreshNameList();
+    }
+    List<String> variations = variationsByType.get(variationFuncType);
+    int idx = Math.min((int) (Math.random() * variations.size()), variations.size()-1);
+    return idx >=0 ? variations.get(idx) : DEFAULT_VARIATION;
   }
 
   public static List<String> getRandomVariationnames() {
-    List<String> res = new ArrayList<>();
-    for(String name:getNameList()) {
-      if (isValidRandomVariation(name)) {
-        res.add(name);
-      }
+    if(validatedRandomVariationsNameList==null) {
+      refreshNameList();
     }
-    return res;
+    return validatedRandomVariationsNameList;
   }
 
   public static boolean isValidRandomVariation(String name) {
@@ -1133,7 +1179,7 @@ public class VariationFuncList {
   }
 
   public static Set<VariationFuncType> getVariationTypes(String variationName) {
-    if (filteredNameList == null) {
+    if (nonInternalVariationsNameList == null) {
       refreshNameList();
     }
     return variationTypes.get(variationName);
