@@ -3,46 +3,92 @@
 
 # Main Editor
 
+[.thumb]
+image::main_editor_with_regions.jpg[scaledwidth=75%]
+The Main Editor is the core part of JWildfire.
+Here you create random flames or fine-tune your artworks.
+It consists of the following parts:
+
+ . Preview/Editor Area
+ . Thumbnail ribbon
+ . Transformations and Scripts
+ . Flame settings
+ . Global functions
+
+You find a description of each part as separate sub-chapter in this manual.
 
 ## Preview/Editor area
+This area is both for previewing fractals and editing them in realtime.
+The most simple and intuitive way to edit a fractal is to drag or rotate one of the
+visible controls on top of the fractals (usually in the shape of triangles).
+But, there also much more precise ways and lots of other options to manipulate a flame-fractal.
 
-### _Display/hide variation effect_
-### _Display/hide transparency_
-### _Fine edit_
-### _Realtime_
-### _Turn grid on/off_
-### _Turn guides on/off_
-### _Style of editor controls_
-### _Toggle monochrome/colored controls_
-### _Toggle post transform_
-### _Enable view editing mode_
-### _Move triangles mode_
-### _Rotate triangles mode_
-### _Scale triangles mode_
-### _Enable free point editing_
-### _Edit view of the controls_
-### _Edit focus point_
-### _Affine XY edit plane_
-### _Affine YZ edit plane_
-### _Affine ZX edit plane_
-### _AI Denoiser preview_
-### _External render preview_
-### _Render image preview_
+### Quick buttons on the top of the preview area
+This buttons primarily control the previewing/editing options.
 
-## Quick buttons on the left of the preview area
-### _Interactive renderer_
-### _Easy Movie Maker_
-### _Flame Browser_
-### _Undo_
-### _Redo_
-### _SShot (Snapshot)_
-### _Title_
-### _3D_
-### _Animations controls on/off_
+#### _Display/hide variation effect_
+Displays the contribution of the currently selected transformation (in the Transformations-area) in the form of a transformed grid.
+For example, if the current transformation is a rotation, it will show a rotated grid.
+If there are nonlinear transformations (=variations or "plugins"), then the displayed grid may change/deform much more.
+
+#### _Display/hide transparency_
+Switch preview-rendering with transparent background on or off.
+Please note, that this only affects the preview display and does not the transparency setting of the flame itself.
+
+#### _Fine edit_
+Turn on or off "fine editing". Fine editing means that changes are less sensitive to changes using mouse or touchpad to allow editing with a higher grade of detail.
+
+#### _Realtime_
+Turns progressive rendering of the preview on or off. Progressive rendering means that the image starts to render in very low quality and gets improved after a while.
+This image gets improved after a while again, and so on. Usually this works very good and allows a very fluid editing.
+On slower machines (e.g. notebooks) this may cause a heavy load and on some fractals it may cause flickering.
+Turning it off causes to render previews at lower and constant (non-progressive) quality level.
+
+#### _Turn grid on/off_
+Tuns on or off a grid which may help to align controls
+
+#### _Turn guides on/off_
+Turns on or off "artistic guides" for
+
+ - center point
+ - rule of thirds
+ - golden ratio
+
+which may help to find the right camera position/view.
+
+#### _Style of editor controls_
 
 
+#### _Toggle monochrome/colored controls_
+#### _Toggle post transform_
+#### _Enable view editing mode_
+#### _Move triangles mode_
+#### _Rotate triangles mode_
+#### _Scale triangles mode_
+#### _Enable free point editing_
+#### _Edit view of the controls_
+#### _Edit focus point_
+#### _Affine XY edit plane_
+#### _Affine YZ edit plane_
+#### _Affine ZX edit plane_
+#### _AI Denoiser preview_
+#### _External render preview_
+#### _Render image preview_
 
-## Bottom tabs
+### Quick buttons on the left of the preview area
+#### _Interactive renderer_
+#### _Easy Movie Maker_
+#### _Flame Browser_
+#### _Undo_
+#### _Redo_
+#### _SShot (Snapshot)_
+#### _Title_
+#### _3D_
+#### _Animations controls on/off_
+
+##Thumbnail ribbon
+
+## Flame settings
 ### _Camera_ tab
 With this controls you can control the camera-view. You can rotate and move the camera freely and zoom in/out.
 
@@ -53,26 +99,37 @@ But, you can "mix" them, of course. So you can apply all parameters to any fract
 
 #### _Roll_
 Camera roll angle in degrees. Rotates around the virtual z-axis and also applies to 2D fractals.  
+
 #### _Pitch_
 Camera pitch angle in degrees.  
+
 #### _Yaw_
 Camera yaw angle in degrees.
+
 #### _Bank_
 Camera bank angle in degrees.
+
 #### _Perspective_
 Camera perspective. A value of 0 means no perspective, while higher value get more dramatic perspective effects. Can even be negative for more intersting effects.
+
 #### _CentreX_
 Offset (translation) of the fractal x-direction. 
+
 #### _CentreY_
 Offset (translation) of the fractal y-direction.
+
 #### _Zoom_
 Camera zoom.
+
 #### _Pixels per unit_
 Another (classic) measure of zoom. "Pixels per unit" means how many pixels are needed to fill a numerical distance of 1.0 (in fractal coordinates). The higher the value, the more details (like zooming in).   
+
 #### _CamPosX_
 Position of the camera in x-direction. Has a similar effect like CentreX for 2D fractals, but not for 3D-fractals. 
+
 #### _CamPosY_
 Position of the camera in y-direction. Has a similar effect like CentreY for 2D fractals, but not for 3D-fractals.
+
 #### _CamPosY_
 Position of the camera in z-direction.
 
@@ -132,15 +189,26 @@ Position of the camera in z-direction.
 
 ### _Anti-Aliasing / Filter_ tab
 
+## Transformations and Scripts
+
+##
+
+## Global functions
+
+
 # Platform-specific topics (Windows, Mac, Steam, ...)
 
 
 # FAQ (frequently asked questions)
 Here are answers to some popular questions I get often, which do not fit into the other chapters.
+
 ## Are 4k renders possible?
 ## Can I render images with removed/transparent background?
 ## How to save a flame as image? 
 
+# Interactive Renderer
+
+# Batch renderer
 
 
 [source,java]
@@ -149,11 +217,3 @@ Here are answers to some popular questions I get often, which do not fit into th
 include::{sourcedir}/example/StringUtils.java[tags=contains,indent=0]
 ----
 
-This page was built by the following command:
-
- $ ./gradlew asciidoctor
-
-== Images
-
-[.thumb]
-image::sunset.jpg[scaledwidth=75%]
