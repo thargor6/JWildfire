@@ -141,3 +141,19 @@ Here are answers to some popular questions I get often, which do not fit into th
 ## Can I render images with removed/transparent background?
 ## How to save a flame as image? 
 
+
+
+[source,java]
+.Java code from project
+----
+include::{sourcedir}/example/StringUtils.java[tags=contains,indent=0]
+----
+
+This page was built by the following command:
+
+ $ ./gradlew asciidoctor
+
+== Images
+
+[.thumb]
+image::sunset.jpg[scaledwidth=75%]

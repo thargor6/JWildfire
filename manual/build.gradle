@@ -1,0 +1,39 @@
+plugins {
+  id 'org.asciidoctor.jvm.pdf' version '3.3.0'
+  id 'org.asciidoctor.jvm.gems' version '3.3.0'
+}
+
+apply plugin: 'java'
+
+version = '1.0.0-SNAPSHOT'
+
+repositories {
+    jcenter()
+    ruby.gems()
+}
+
+dependencies {
+  asciidoctorGems 'rubygems:rouge:3.15.0'
+}
+
+asciidoctorPdf {
+  dependsOn asciidoctorGemsPrepare
+
+  baseDirFollowsSourceFile()
+
+  asciidoctorj {
+    requires 'rouge'
+    attributes 'build-gradle': file('build.gradle'),
+        'sourcedir': project.sourceSets.main.java.srcDirs[0],
+        'endpoint-url': 'https://jwildfire.overwhale.com/',
+        'source-highlighter': 'rouge',
+        'imagesdir': './images',
+        'toc': 'left',
+        'icons': 'font',
+        'idprefix': '',
+        'idseparator': '-'
+  }
+}
+
+// alias
+task asciidoctor(dependsOn: asciidoctorPdf)
