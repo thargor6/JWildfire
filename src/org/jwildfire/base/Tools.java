@@ -38,6 +38,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -709,5 +711,26 @@ public class Tools {
 
   public static boolean ensureSpecialMacOSFileAccessHandling() {
     return (Tools.OSType.MAC == Tools.getOSType()) && !isMacOsBeforeCatalina();
+  }
+
+  public static String getPathRelativeToCodeSource(String path) {
+    try {
+    String encodedCodeSource = Tools.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    String codeSource = URLDecoder.decode(encodedCodeSource, StandardCharsets.UTF_8.toString());
+
+    if (codeSource.toLowerCase().endsWith(".jar")) {
+      for (int i = codeSource.length() - 1; i >= 0; i--) {
+        if (codeSource.charAt(i) == '/' || codeSource.charAt(i) == '\\') {
+          codeSource = codeSource.substring(0, i);
+          break;
+        }
+      }
+    }
+
+    return new File(codeSource, path).getAbsolutePath();
+    }
+    catch(Throwable ex) {
+      throw new RuntimeException(ex);
+    }
   }
 }

@@ -152,8 +152,11 @@
     </copy>    
     <copy todir="${dist.dir}/lib/Denoiser">
        <fileset file="${src.dir}/../Denoiser/**" />
-    </copy>    
-   	<zip destfile="${dist.name}">
+    </copy>
+      <copy todir="${dist.dir}/lib">
+          <fileset file="${src.dir}/../manual/build/docs/asciidocPdf/JWildfire_manual.pdf" />
+      </copy>
+      <zip destfile="${dist.name}">
       <zipfileset dir="${dist.dir}/" excludes="start_*" />
       <zipfileset filemode="755" dir="${dist.dir}/" includes="start_*" />
     </zip>

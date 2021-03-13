@@ -85,7 +85,7 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
       } else {
         outputFilename = inputFilename + FILE_EXT + ".png";
       }
-
+/*
       String encodedCodeSource = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
       String codeSource = URLDecoder.decode(encodedCodeSource, StandardCharsets.UTF_8.toString());
 
@@ -99,6 +99,9 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
       }
 
       String denoiserPath = new File(codeSource, DENOISER_PATH).getAbsolutePath();
+*/
+      String denoiserPath = Tools.getPathRelativeToCodeSource(DENOISER_PATH);
+
       String[] denoiserCmd = getDenoiserCmd(denoiserPath, inputFilename, outputFilename, blend);
       System.out.println("Executing command:");
       System.out.println(String.join(" ", denoiserCmd));

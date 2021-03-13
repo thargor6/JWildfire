@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -141,6 +142,7 @@ public class JWildfire extends JApplet {
   private JMenu helpMenu = null;
   private JMenu settingsMenu = null;
   private JMenuItem exitMenuItem = null;
+  private JMenuItem userManualMenuItem = null;
   private JMenu windowMenu = null;
   private JMenuItem openImageMenuItem = null;
   private JMenuItem openFlameMenuItem = null;
@@ -926,6 +928,7 @@ public class JWildfire extends JApplet {
     if (helpMenu == null) {
       helpMenu = new JMenu();
       helpMenu.setText("Help");
+      helpMenu.add(getUserManualMenuItem());
       for (FrameHolder internalFrame : helpInternalFrames) {
         helpMenu.add(internalFrame.getMenuItem());
       }
@@ -955,6 +958,24 @@ public class JWildfire extends JApplet {
       });
     }
     return exitMenuItem;
+  }
+
+  private JMenuItem getUserManualMenuItem() {
+    if (userManualMenuItem == null) {
+      userManualMenuItem = new JMenuItem();
+      userManualMenuItem.setText("User manual");
+      userManualMenuItem.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          try {
+            Desktop.getDesktop().open(new File(Tools.getPathRelativeToCodeSource("JWildfire_manual.pdf")));
+          }
+          catch(Throwable ex) {
+            errorHandler.handleError(ex);
+          }
+        }
+      });
+    }
+    return userManualMenuItem;
   }
 
   private MainController mainController = null;
