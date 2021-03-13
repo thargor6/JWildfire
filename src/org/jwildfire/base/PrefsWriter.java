@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -47,9 +47,6 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY, pPrefs.isTinaDefaultBGTransparency());
     addValue(sb, Prefs.KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT, pPrefs.getTinaDefaultAntialiasingAmount());
     addValue(sb, Prefs.KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS, pPrefs.getTinaDefaultAntialiasingRadius());
-    addValue(sb, Prefs.KEY_TINA_ADVANCED_CODE_EDITOR, pPrefs.isTinaAdvancedCodeEditor());
-    addValue(sb, Prefs.KEY_TINA_ADVANCED_CODE_EDITOR_COLOR_FIX, pPrefs.isTinaAdvancedCodeEditorColorFix());
-    addValue(sb, Prefs.KEY_TINA_ADVANCED_CODE_EDITOR_FONT_SIZE, pPrefs.getTinaAdvancedCodeEditorFontSize());
     addValue(sb, Prefs.KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES, pPrefs.isTinaAssociateProfilesWithFlames());
     addValue(sb, Prefs.KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE, pPrefs.isTinaSaveFlamesWhenImageIsSaved());
     addValue(sb, Prefs.KEY_TINA_SAVING_STORE_HDR_IN_IR, pPrefs.isTinaSaveHDRInIR());

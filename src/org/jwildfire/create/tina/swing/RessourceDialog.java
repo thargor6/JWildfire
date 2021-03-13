@@ -16,8 +16,6 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import jsyntaxpane.DefaultSyntaxKit;
-import jsyntaxpane.util.Configuration;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.swing.ErrorHandler;
@@ -260,34 +258,7 @@ public class RessourceDialog extends JDialog {
    */
   private JEditorPane getEditorTextArea() {
     if (editorTextArea == null) {
-      if (Prefs.getPrefs().isTinaAdvancedCodeEditor()) {
-        try {
-          DefaultSyntaxKit.initKit();
-          // setting JSyntaxPane font, see comment in
-          // org.jwildfire.create.tina.swing.ScriptEditDialog for explanation
-          Configuration config = DefaultSyntaxKit.getConfig(DefaultSyntaxKit.class);
-          config.put(
-              "DefaultFont",
-              "monospaced "
-                  + Integer.toString(Prefs.getPrefs().getTinaAdvancedCodeEditorFontSize()));
-        } catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
       editorTextArea = new JEditorPane();
-      // if using advanced editor color fix, and one of JWildfire's dark look and feels (HiFi or
-      // Noire),
-      //   override look and feel to set scriptEditor background to white,
-      //   to work better with JSyntaxPane text colors
-      LookAndFeel laf = UIManager.getLookAndFeel();
-      String laf_name = laf.getName();
-      boolean using_dark_theme =
-          laf_name.equalsIgnoreCase("HiFi") || laf_name.equalsIgnoreCase("Noire");
-      if (using_dark_theme
-          && Prefs.getPrefs().isTinaAdvancedCodeEditor()
-          && Prefs.getPrefs().isTinaAdvancedCodeEditorColorFix()) {
-        editorTextArea.setBackground(Color.white);
-      }
       editorTextArea.setText("");
     }
     return editorTextArea;

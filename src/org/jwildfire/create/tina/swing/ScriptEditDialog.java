@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -17,7 +17,6 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
@@ -27,9 +26,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -37,14 +33,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.LookAndFeel;
-import javax.swing.UIManager;
 
-import jsyntaxpane.DefaultSyntaxKit;
-import jsyntaxpane.syntaxkits.JavaSyntaxKit;
-import jsyntaxpane.util.Configuration;
-
-import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.script.swing.JWFScriptUserNode;
 import org.jwildfire.swing.ErrorHandler;
 
@@ -77,34 +66,6 @@ public class ScriptEditDialog extends JDialog {
     Rectangle rootBounds = pOwner.getBounds();
     Dimension size = getSize();
     setLocation(rootBounds.x + (rootBounds.width - size.width) / 2, rootBounds.y + (rootBounds.height - size.height) / 2);
-    if (Prefs.getPrefs().isTinaAdvancedCodeEditor()) {
-      try {
-        DefaultSyntaxKit.initKit();
-        // setting font size (and style) based on suggestion found on thread at
-        // https://code.google.com/p/jsyntaxpane/issues/detail?id=1
-        // reproducing relevant text of thread here, since Google Code is shutting down 
-        // and issues text may not be retrievable soon
-        //   -----------------------------------------------------------------------------
-        //     #5 benneybopper, Feb 6 2013:
-        //     After a brief but hilarious foray into the source code, 
-        //     I have stumbled upon some marvelous undocumented code. 
-        //     Set the "DefaultFont" property to the font name followed by the size eg.
-        //           DefaultSyntaxKit.initKit()
-        //           // override default syntax values
-        //           Configuration config = DefaultSyntaxKit.getConfig(DefaultSyntaxKit.class);
-        //           config.put("DefaultFont","monospaced 14");
-        //   -----------------------------------------------------------------------------
-        //     #6 trejkaz, Jul 5 2014:
-        //     This is a good trick. Monospaced is a much better default than Courier, 
-        //     because it will automatically pick the right monospaced font for the platform.
-        //   -----------------------------------------------------------------------------
-        Configuration config = DefaultSyntaxKit.getConfig(DefaultSyntaxKit.class);
-        config.put("DefaultFont", "monospaced " + Integer.toString(Prefs.getPrefs().getTinaAdvancedCodeEditorFontSize()));
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
   }
 
   /**
@@ -228,18 +189,6 @@ public class ScriptEditDialog extends JDialog {
   private JEditorPane getScriptEditor() {
     if (scriptEditor == null) {
       scriptEditor = new JEditorPane();
-
-      // if using advanced editor color fix, and one of JWildfire's dark look and feels (HiFi or Noire), 
-      //   override look and feel to set scriptEditor background to white, 
-      //   to work better with JSyntaxPane text colors
-      LookAndFeel laf = UIManager.getLookAndFeel();
-      String laf_name = laf.getName();
-      boolean using_dark_theme = laf_name.equalsIgnoreCase("HiFi") || laf_name.equalsIgnoreCase("Noire");
-      if (using_dark_theme &&
-          Prefs.getPrefs().isTinaAdvancedCodeEditor() &&
-          Prefs.getPrefs().isTinaAdvancedCodeEditorColorFix()) {
-        scriptEditor.setBackground(Color.white);
-      }
     }
     return scriptEditor;
   }
@@ -325,11 +274,6 @@ public class ScriptEditDialog extends JDialog {
     String scriptname = pScriptNode.getUserObject().toString();
     setTitle("Editing " + scriptname);
     String script = pScriptNode.getScript();
-    if (Prefs.getPrefs().isTinaAdvancedCodeEditor()) {
-      scriptEditor.setText("");
-      removeInvalidActionsFromJavaSyntaxKit();
-      scriptEditor.setContentType("text/java");
-    }
     scriptEditor.setText(script);
     scriptEditor.setCaretPosition(0);
     String description = pScriptNode.getDescription();
@@ -340,15 +284,6 @@ public class ScriptEditDialog extends JDialog {
     descriptionEditor.setCaretPosition(0);
 
     scriptNode = pScriptNode;
-  }
-
-  // remove (unused) actions which would not work since Java 15 from the config of the syntax kit
-  private void removeInvalidActionsFromJavaSyntaxKit() {
-    final Pattern ACTION_KEY_PATTERN = Pattern.compile("Action\\.((\\w|-)+)");
-    List<Configuration.StringKeyMatcher> filtered = DefaultSyntaxKit.getConfig(JavaSyntaxKit.class).getKeys(ACTION_KEY_PATTERN).stream().filter(m -> m.group1.equals("insert-date")).collect(Collectors.toList());
-    for (Configuration.StringKeyMatcher m : filtered) {
-      DefaultSyntaxKit.getConfig(JavaSyntaxKit.class).remove(m.key);
-    }
   }
 
   protected void runScript() {

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -123,9 +123,6 @@ public class PrefsReader {
         pPrefs.setThumbnailPath(getProperty(props, Prefs.KEY_GENERAL_PATH_THUMBNAILS, pPrefs.getThumbnailPath()));
         pPrefs.setMovieFlamesPath(getProperty(props, Prefs.KEY_TINA_PATH_MOVIEFLAMES, pPrefs.getMovieFlamesPath()));
         pPrefs.setSoundFilePath(getProperty(props, Prefs.KEY_GENERAL_PATH_SOUND_FILES, pPrefs.getSoundFilePath()));
-        pPrefs.setTinaAdvancedCodeEditor(getBooleanProperty(props, Prefs.KEY_TINA_ADVANCED_CODE_EDITOR, pPrefs.isTinaAdvancedCodeEditor()));
-        pPrefs.setTinaAdvancedCodeEditorColorFix(getBooleanProperty(props, Prefs.KEY_TINA_ADVANCED_CODE_EDITOR_COLOR_FIX, pPrefs.isTinaAdvancedCodeEditorColorFix()));
-        pPrefs.setTinaAdvancedCodeEditorFontSize(getIntProperty(props, Prefs.KEY_TINA_ADVANCED_CODE_EDITOR_FONT_SIZE, pPrefs.getTinaAdvancedCodeEditorFontSize()));
         pPrefs.setShowTipsAtStartup(getBooleanProperty(props, Prefs.KEY_GENERAL_SHOW_TIPS_AT_STARTUP, pPrefs.isShowTipsAtStartup()));
         pPrefs.setLastTip(getIntProperty(props, Prefs.KEY_GENERAL_LAST_TIP, pPrefs.getLastTip()));
         pPrefs.setTinaAssociateProfilesWithFlames(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES, pPrefs.isTinaAssociateProfilesWithFlames()));

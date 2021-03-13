@@ -120,10 +120,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_CONTROLS_STYLE = "tina.editor.controls.style";
   static final String KEY_TINA_EDITOR_GRID_SIZE = "tina.editor.grid_size";
 
-  static final String KEY_TINA_ADVANCED_CODE_EDITOR = "tina.advanced_code_editor.2";
-  static final String KEY_TINA_ADVANCED_CODE_EDITOR_COLOR_FIX = "tina.advanced_code_editor_color_fix";
-  static final String KEY_TINA_ADVANCED_CODE_EDITOR_FONT_SIZE = "tina.advanced_code_editor_font_size.2";
-
   static final String KEY_TINA_EDITOR_GUIDES_LINE_WIDTH = "tina.editor.guides.linewidth";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_CENTER_POINT = "tina.editor.guides.color.center_point";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
@@ -223,17 +219,8 @@ public class Prefs extends ManagedObject {
   @Property(description = "Automatically load the flame- and image-library when opening the IFlames-window", category = PropertyCategory.IFLAMES)
   private boolean iflamesLoadLibraryAtStartup = false;
 
-  @Property(description = "Use an advanced editor with syntax-highlighting for editing scripts and custom variations. May not work on all systems and may not look good with all themes, so you can turn it off. A change of this property requires a program-restart", category = PropertyCategory.TINA)
-  private boolean tinaAdvancedCodeEditor = false;
-
-  @Property(description = "Make background color of advanced code editor white, overriding any look and feel settings. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
-  private boolean tinaAdvancedCodeEditorColorFix = true;
-
   @Property(description = "Disable solid-flame-random-generators inside the global \"All\"-random-generator. This may make sense when you do not like solid flames at all or when the calculation takes too long on your machine. You may still manually select solid-flame-random-generators. A change of this property requires a program-restart", category = PropertyCategory.TINA)
   private boolean tinaDisableSolidFlameRandGens = false;
-
-  @Property(description = "Set font size for advanced code editor. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
-  private int tinaAdvancedCodeEditorFontSize = 14;
 
   @Property(description = "Expand the params in the non-linear tab per default. This is only the initial value, you may expand and collapse the params at any time manually", category = PropertyCategory.TINA)
   private boolean tinaDefaultExpandNonlinearParams = false;
@@ -855,9 +842,6 @@ public class Prefs extends ManagedObject {
     tinaDefaultAIPostDenoiser = pSrc.tinaDefaultAIPostDenoiser;
     tinaDefaultPostOptiXDenoiserBlend = pSrc.tinaDefaultPostOptiXDenoiserBlend;
 
-    tinaAdvancedCodeEditor = pSrc.tinaAdvancedCodeEditor;
-    tinaAdvancedCodeEditorColorFix = pSrc.tinaAdvancedCodeEditorColorFix;
-    tinaAdvancedCodeEditorFontSize = pSrc.tinaAdvancedCodeEditorFontSize;
     tinaEditorProgressivePreview = pSrc.tinaEditorProgressivePreview;
     tinaEditorProgressivePreviewMaxRenderTime = pSrc.tinaEditorProgressivePreviewMaxRenderTime;
     tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
@@ -1578,33 +1562,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultAntialiasingRadius(double pTinaDefaultAntialiasingRadius) {
     tinaDefaultAntialiasingRadius = pTinaDefaultAntialiasingRadius;
-  }
-
-  public boolean isTinaAdvancedCodeEditor() {
-    return tinaAdvancedCodeEditor;
-  }
-
-  public void setTinaAdvancedCodeEditor(boolean pTinaAdvancedCodeEditor) {
-    tinaAdvancedCodeEditor = pTinaAdvancedCodeEditor;
-  }
-
-  public boolean isTinaAdvancedCodeEditorColorFix() {
-    return tinaAdvancedCodeEditorColorFix;
-  }
-
-  public void setTinaAdvancedCodeEditorColorFix(boolean pTinaAdvancedCodeEditorColorFix) {
-    tinaAdvancedCodeEditorColorFix = pTinaAdvancedCodeEditorColorFix;
-  }
-
-  public int getTinaAdvancedCodeEditorFontSize() {
-    return tinaAdvancedCodeEditorFontSize;
-  }
-
-  public void setTinaAdvancedCodeEditorFontSize(int font_size) {
-    if (font_size <= 8) {
-      font_size = 10;
-    }
-    tinaAdvancedCodeEditorFontSize = font_size;
   }
 
   public boolean isTinaEditorProgressivePreview() {

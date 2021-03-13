@@ -87,7 +87,6 @@
       <zipfileset src="lib/svgSalamander-tiny.jar"/>
       <zipfileset src="lib/colt-1.2.0.jar"/>
       <zipfileset src="lib/JOCL-0.1.9.jar"/>
-      <zipfileset src="lib/jsyntaxpane-1.1.5.jar"/>
       <zipfileset src="lib/vecmath-1.5.1.jar"/>
       <zipfileset src="lib/commons-cli-1.4.jar"/>
       <zipfileset src="lib/jcodec-0.2.6-SNAPSHOT.jar"/>
