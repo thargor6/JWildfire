@@ -1,12 +1,14 @@
 :doctype: book
 :sectnums:
 :sectnumlevels: 5
+:toc:
+:toclevels: 3
 
 # JWildfire users manual
 
+## Introduction
+
 ## Main Editor
-
-
 
 [.thumb]
 image::main_editor_with_regions.jpg[scaledwidth=75%]
@@ -265,22 +267,83 @@ Position of the camera in y-direction. Has a similar effect like CentreY for 2D 
 Position of the camera in z-direction.
 
 #### _DOF/Bokeh_ tab
+DOF (depth of field) is a kind of controversy topic in flame-fractals. Some people like it a lot (including myself),
+some people do not like it at all. So, this sub-chapter describes a rather "special" topic.
+Bokeh is some kind of art which utilizes DOF to achieve certain artistic effects (using a real camera).
+Some typical types of bokeh-effects you may also simulate with JWildfire.
+
 ##### _DOF_ subtab
+This tab contains some of the more basic settings regarding to DOF.
+
 ###### _New DOF_
+Switches between classic and more sophisticated (="new") DOF mode.
+Usually, the "new mode" is recommended. The classic mode is still ther because of backwards compatibility.
+
 ###### _Amount_
+Amount of DOF. A value of zero means no DOF at all
+
 ###### _Area_
+Measure of the sharp area around the focus point
+
 ###### _Exponent_
+Measure of the fallof of the sharp area around the focus point
+
 ###### _Camera dist_
+Only applies to the classic mode and is a measure of the distance of the camera to the focus point
+
 ###### _FocusX_
+X-position of the focus point (point which is sharp). May also be edited interactively in the preview area.
+
 ###### _FocusY_
+Y-position of the focus point (point which is sharp). May also be edited interactively in the preview area.
+
 ###### _FocusZ_
+Z-position of the focus point (point which is sharp). May also be edited interactively in the preview area.
 
 ##### _Bokeh_ subtab
+At this tab you can select options to create bokeh-like styles of DOF-effects
+
 ###### _Shape_
+Selects the shape of the bokeh-effect
+
+ - Bubble: the typical and default shape
+ - Cannabiscurve: some nice-looking organic shape
+ - Cloverleaf
+ - Flower
+ - Heart: little hearts, makes nice Valentine-cards
+ - NBlur: has some interesting options to create very different shapes
+ - Perlin Noise: some unusual but interesting style
+ - Rect: very simple but effective style. You can also create "rain"-like scenes with this
+ - SineBlur: some popular circular bokeh
+ - StarBlur: tiny stars
+ - Taurus: some other unusual, but interesting shape
+ - Snowflake: a complex snowflake, created wtih the algorithm described in the
+paper "A local cellular model for snow crystal growth" by Clifford A. Reiter.
+ - SubFlame: This is the most versatile option: You may use any other fractal as bokeh-style.
+
 ###### _Scale_
+Global scale of the bokeh-shapes
+
 ###### _Rotate_
+Global rotation-angle of the bokeh-shapes
+
 ###### _Fade_
+Global falloff of the bokeh-shapes
+
 ###### _Shape specific parameters_
+Depending on the bokeh-shape, there are additional parameters.
+Most of them are the same as in the variation of the same name. E.g. the "Taurus"-bokeh-style has a
+parameter N (which is the number of corners). The "taurus"-variation has the same parameter.
+Not all parameters of a variation are exposed to the bokeh-style of the same name.
+
+###### Flame (for the Sub-Flame-bokeh-style)
+By this important parameter you select the flame you want to use as bokeh-style.
+It is a number, starting with 1. BEfore you can use a flame as bokeh-style you must save it to your default
+flame-folder by using a filename in the form "_dof_XXXX.flame", where XXXX corresponds to the number
+you select here.
+For example, when you enter "23" as parameter Flame, JWildfire will look for a flame-file with the
+filename _dof_0023.flame.
+
 
 ##### _Post bokeh_ subtab
 ###### _Bokeh intensity_
@@ -364,16 +427,49 @@ Position of the camera in z-direction.
 ## Platform-specific topics (Windows, Mac, Steam, ...)
 
 
+## Interactive Renderer
+
+## Batch renderer
+
+## Preferences
+
+## Flame Browser
+
+## MutaGen
+In this module you may create mutations of a certain flame in an interactive way.
+
+There are several mutation types affecting different "genes" (types of flame properties).
+Those mutations are applied at two levels: generation A (8 new fractals from the base flame)
+and generation B (16 new fractals from generation A), generating total 24 new flames at each mutation step.
+
+You can easily exchange fractals between the main editor and the new module at any time.
+
+There is also a history, i.e. you can navigate back to earlier generations at any time.
+
+## Quilt Renderer
+The Quilt Renderer allows you to render flames in nearly unlimited size.
+This works by splitting the whole image into tiles.
+
+You may freely specify how the tiles are generated, e.g. splitting the image in 3x2 tiles or 8 vertical stripes.
+
+Each of the rendered tiles is a valid image. So, even if JWildfire would finally fail to assemble the tiles into one
+final image (due to memory restrictions), you could perform this step using external image-processing-software,
+which is more optimized to handle large images.
+Images with a size upto 32K (30720x17280) where tested without any problems so far.
+
+You can cancel/resume the rendering-process at tile-level.
+
+Please note: Due to the nature of the flame-fractal-algorithm, the rendering of each tile may take as long as you
+would render the whole image at once. So, this method is not efficient, but effective.
+A 16K render on a modern computer can take about 12 hours, but you will usually get an awesome
+result with endless details.
+
 ## FAQ (frequently asked questions)
 Here are answers to some popular questions I get often, which do not fit into the other chapters.
 
 ### Are 4k renders possible?
 ### Can I render images with removed/transparent background?
 ### How to save a flame as image?
-
-## Interactive Renderer
-
-## Batch renderer
 
 
 [source,java]
