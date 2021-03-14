@@ -7,6 +7,8 @@
 # JWildfire users manual
 
 ## Introduction
+[.thumb]
+image::JWildfire.jpg[scaledwidth=75%]
 
 ## Main Editor
 
@@ -31,6 +33,9 @@ visible controls on top of the fractals (usually in the shape of triangles).
 But, there also much more precise ways and lots of other options to manipulate a flame-fractal.
 
 #### Quick buttons on the top of the preview area
+[.thumb]
+image::editor_buttons_top.jpg[scaledwidth=50%]
+
 This buttons primarily control the previewing/editing options.
 
 ##### _Display/hide variation effect_
@@ -91,6 +96,8 @@ by moving the visual controls with the mouse or touchpad.
 This button is to switch easily between this two options.
 
 #### Quick buttons on the right of the preview area
+[.thumb]
+image::editor_buttons_right.jpg[scaledwidth=50%]
 This buttons primarily control the type of editing and refreshing the preview.
 
 
@@ -141,7 +148,6 @@ The editing of affine-transforms takes place in one plane, the default setting i
 When editing "classic" 2d-fractals, the x-y-plane is the only plane.
 But, when editing 3d-fractals, you may choose different planes, in order to modify all three coordinates.
 
-
 ##### _Affine YZ edit plane_
 Sets the current editing-plane for editing affine-transform to the y-z-plane.
 
@@ -171,6 +177,9 @@ using this button, before changing the settings.
 Because this function is such important it is at this prominent place.
 
 #### Quick buttons on the left of the preview area
+[.thumb]
+image::editor_buttons_left.jpg[scaledwidth=50%]
+At this area you find some quick-buttons to reach other modules of JWildfire and the Undo/Redo-buttons.
 
 ##### _Interactive renderer_
 This is just a shortcut for the Interactive Renderer. It opens it or brings it into foreground.
@@ -213,16 +222,27 @@ But, it can be used to create really unusual and interesting things.
 Even to render the "classic" Mandelbulb (thanks to Whittaker Courtney for the idea):
 
 [.thumb]
-image::jwf_mandelbulb.jpg[scaledwidth=75%]
+image::jwf_mandelbulb.jpg[scaledwidth=50%]
 
 ##### _Animations controls on/off_
 Using this button you may quickly turn on or off animation controls on the fly.
 You may set up your preference for this setting in the Preferences-window.
 
 ### Thumbnail ribbon
+The thumbnail ribbon hold thumbnails of all flames you currently are editing.
+After starting the program some random flame are generated and displayed in the thumbnail ribbon.
+You can edit/view any flame of the thumbnail by just double-clicking it.
+If you want to return to your previous flame just double-click the thumbnail of this other flame.
+Each flame in the thumbnail-ribbon has its own undo-history.
+
 
 ### Flame settings
+
+
 #### _Camera_ tab
+[.thumb]
+image::camera_tab.jpg[scaledwidth=75%]
+
 With this controls you can control the camera-view. You can rotate and move the camera freely and zoom in/out.
 
 "Classic" flame fractals are flat (2D) and can not be rotated in space. Basically the parameters Roll, CentreX, CentreY and Zoom/Pixels per unit apply to them.
@@ -273,6 +293,9 @@ Bokeh is some kind of art which utilizes DOF to achieve certain artistic effects
 Some typical types of bokeh-effects you may also simulate with JWildfire.
 
 ##### _DOF_ subtab
+[.thumb]
+image::dof_tab.jpg[scaledwidth=75%]
+
 This tab contains some of the more basic settings regarding to DOF.
 
 ###### _New DOF_
@@ -301,7 +324,9 @@ Y-position of the focus point (point which is sharp). May also be edited interac
 Z-position of the focus point (point which is sharp). May also be edited interactively in the preview area.
 
 ##### _Bokeh_ subtab
-At this tab you can select options to create bokeh-like styles of DOF-effects
+At this tab you can select options to create bokeh-like styles of DOF-effects.
+Those options are not available when using solid rendering. For solid rendering there is an option to
+apply post-bokeh effects, but those are limited in comparison to the options you find at this tab.
 
 ###### _Shape_
 Selects the shape of the bokeh-effect
@@ -346,25 +371,50 @@ filename _dof_0023.flame.
 
 
 ##### _Post bokeh_ subtab
+[.thumb]
+image::dof_post_bokeh_tab.jpg[scaledwidth=75%]
+At this tab you can select options to create bokeh-like effects when using solid rendering.
+Those options are only available in solid rendering and are limited to the bokeh-related options
+which are available for regular flames.
+
 ###### _Bokeh intensity_
+Overall amount/intensity of bokeh-effecs.
+
 ###### _Bokeh size_
+Size of the bokeh-effects. The larger the effect, the more computation time is required.
+
 ###### _Bokeh filter kernel_
+Type of bokeh-shape. The default setting produces "classic" flat circular shapes.
+
 ###### _Bokeh brightness_
+Intensity of the bokeh in comparison the the original image.
+
 ###### _Bokeh activation_
+Intensity level of the original image for placing bokeh "seeds". The larger the value the more seeds, the more bokeh.
 
 ##### _Post blur_ subtab
+[.thumb]
+image::dof_post_blur_tab.jpg[scaledwidth=75%]
+
+Postblur is not really a DOF-effect, but it creates also some kind of blur, therefore is is located at this tab.
+It is not a popular option and primarily resides here for backwards compatibility.
+
+Postblur works by smudging each rendered sample of the flame-fractal.
+The effect diminishes the more far from the center. It usually makes a fractal appear more bold and "glassy".
+
 ###### _Blur radius_
+Radius of the blur
+
 ###### _Blur fade_
+(Inverse)intensity of the blur. The maximum value means maximum fade out, which is no blur effect at all.
+
 ###### _Blur falloff_
-
-##### _ZBuffer_ subtab
-###### _ZBuffer scale_
-###### _ZBuffer bias_
-###### _ZBuffer filename_
-
-
+Strength of diminishing of the effect dependent of the distance to the center of the individual sample.
 
 #### _Coloring_ tab
+[.thumb]
+image::coloring_tab.jpg[scaledwidth=75%]
+
 ##### _Brightness_
 ##### _Low brightness_
 ##### _Gamma_
@@ -382,6 +432,87 @@ filename _dof_0023.flame.
 ##### _Background transparency_
 
 #### _Anti-Aliasing / Filter_ tab
+[.thumb]
+image::antialiasing_tab.jpg[scaledwidth=75%]
+
+
+#### _Gradient_ tab
+
+##### _Gradient library_ subtab
+[.thumb]
+image::gradient_library_tab.jpg[scaledwidth=75%]
+
+##### _Create new_ subtab
+[.thumb]
+image::gradient_create_tab.jpg[scaledwidth=75%]
+
+##### _Curve editor_ subtab
+[.thumb]
+image::gradient_curve_editor_tab.jpg[scaledwidth=75%]
+
+##### _Modify gradient_ subtab
+[.thumb]
+image::gradient_modify_tab.jpg[scaledwidth=75%]
+
+##### _Balancing_ subtab
+[.thumb]
+image::gradient_balancing_tab.jpg[scaledwidth=75%]
+
+##### _Color map_ subtab
+[.thumb]
+image::gradient_colormap_tab.jpg[scaledwidth=75%]
+
+#### _3D rendering_ tab
+
+##### _Ambient shadows_ subtab
+[.thumb]
+image::3drendering_ambient_shadows_tab.jpg[scaledwidth=75%]
+
+##### _Hard shadows_ subtab
+[.thumb]
+image::3drendering_hard_shadows_tab.jpg[scaledwidth=75%]
+
+##### _Material settings_ subtab
+[.thumb]
+image::3drendering_material_tab.jpg[scaledwidth=75%]
+
+##### _Light settings_ subtab
+[.thumb]
+image::3drendering_light_settings_tab.jpg[scaledwidth=75%]
+
+##### _ZBuffer_ subtab
+[.thumb]
+image::3drendering_zbuffer_tab.jpg[scaledwidth=75%]
+
+###### _ZBuffer scale_
+###### _ZBuffer bias_
+###### _ZBuffer filename_
+
+
+##### _Ambient shadows_ subtab
+
+##### _Hard shadows_ subtab
+
+##### _Material settings_ subtab
+
+##### _Light settings_ subtab
+
+#### _Stereo3D_ tab
+
+#### _Post symmetry_ tab
+
+#### _FPS / Motion blur_ tab
+
+#### _Layers_ tab
+
+#### _Channel mixer_ tab
+
+#### _Quick mutations_ tab
+"Quick mutations"-tab allow easily creating a batch of variations of the currently selected flame.
+You may load any of those mutations into the main editor by double-clicking at it.
+This creates a new flame in a new slot and does not alter the original flame in any way.
+You may set the default batch size for quick mutations in the Preferences (property tinaQuickMutationBatchSize).
+You may also set the default mutaiton-type for quick mutations in the Preferences (property tinaQuickMutationDefaultMutationType).
 
 ### Transformations and Scripts
 
@@ -434,8 +565,21 @@ filename _dof_0023.flame.
 ## Preferences
 
 ## Flame Browser
+[.thumb]
+image::flame_browser.jpg[scaledwidth=75%]
+
+##Easy Movie Maker
+[.thumb]
+image::easy_movie_maker.jpg[scaledwidth=75%]
+
+##Mesh generator
+[.thumb]
+image::mesh_generator.jpg[scaledwidth=75%]
 
 ## MutaGen
+[.thumb]
+image::MutaGen.jpg[scaledwidth=75%]
+
 In this module you may create mutations of a certain flame in an interactive way.
 
 There are several mutation types affecting different "genes" (types of flame properties).
@@ -447,6 +591,9 @@ You can easily exchange fractals between the main editor and the new module at a
 There is also a history, i.e. you can navigate back to earlier generations at any time.
 
 ## Quilt Renderer
+[.thumb]
+image::quilt_renderer.jpg[scaledwidth=75%]
+
 The Quilt Renderer allows you to render flames in nearly unlimited size.
 This works by splitting the whole image into tiles.
 
