@@ -2339,6 +2339,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (flamePanel != null) {
           flamePanel.setSelectedXForm(xForm);
         }
+        if(xForm!=null) {
+          xForm.notifyCoeffChange();
+        }
         refreshXFormUI(xForm);
         xFormControls.enableControls(xForm);
         nonlinearControls.resizeNonlinearParamsPanel();
