@@ -1,7 +1,12 @@
-# Introduction
+:doctype: book
+:sectnums:
+:sectnumlevels: 5
+
+# JWildfire users manual
+
+## Main Editor
 
 
-# Main Editor
 
 [.thumb]
 image::main_editor_with_regions.jpg[scaledwidth=75%]
@@ -17,37 +22,37 @@ It consists of the following parts:
 
 You find a description of each part as separate sub-chapter in this manual.
 
-## Preview/Editor area
+### Preview/Editor area
 This area is both for previewing fractals and editing them in realtime.
 The most simple and intuitive way to edit a fractal is to drag or rotate one of the
 visible controls on top of the fractals (usually in the shape of triangles).
 But, there also much more precise ways and lots of other options to manipulate a flame-fractal.
 
-### Quick buttons on the top of the preview area
+#### Quick buttons on the top of the preview area
 This buttons primarily control the previewing/editing options.
 
-#### _Display/hide variation effect_
+##### _Display/hide variation effect_
 Displays the contribution of the currently selected transformation (in the Transformations-area) in the form of a transformed grid.
 For example, if the current transformation is a rotation, it will show a rotated grid.
 If there are nonlinear transformations (=variations or "plugins"), then the displayed grid may change/deform much more.
 
-#### _Display/hide transparency_
+##### _Display/hide transparency_
 Switch preview-rendering with transparent background on or off.
 Please note, that this only affects the preview display and does not the transparency setting of the flame itself.
 
-#### _Fine edit_
+##### _Fine edit_
 Turn on or off "fine editing". Fine editing means that changes are less sensitive to changes using mouse or touchpad to allow editing with a higher grade of detail.
 
-#### _Realtime_
+##### _Realtime_
 Turns progressive rendering of the preview on or off. Progressive rendering means that the image starts to render in very low quality and gets improved after a while.
 This image gets improved after a while again, and so on. Usually this works very good and allows a very fluid editing.
 On slower machines (e.g. notebooks) this may cause a heavy load and on some fractals it may cause flickering.
 Turning it off causes to render previews at lower and constant (non-progressive) quality level.
 
-#### _Turn grid on/off_
+##### _Turn grid on/off_
 Tuns on or off a grid which may help to align controls
 
-#### _Turn guides on/off_
+##### _Turn guides on/off_
 Turns on or off "artistic guides" for
 
  - center point
@@ -56,40 +61,166 @@ Turns on or off "artistic guides" for
 
 which may help to find the right camera position/view.
 
-#### _Style of editor controls_
+##### _Style of editor controls_
+You may select one of the following style of editor-controls:
+
+ - axis
+ - crosshair
+ - rectangle
+ - triangle (default)
+ - hidden
+
+##### _Toggle monochrome/colored controls_
+Per default each control is dran in its own color to make them more distinguishable.
+Sometimes this may distract you from the fractal. Using this option, you may switch
+to a less intrusive monochrome display of controls.
+
+##### _Toggle post transform_
+Quick-switch to toggle between editing of the affine-post-transform and the regular affine transform.
+
+Longer explanation: Transformations are executed in the following order:
+
+ . affine transform
+ . nonlinear transforms
+ . affine post-transform
+
+In the preview area you may either edit the affine transform or the post-affine-transform
+by moving the visual controls with the mouse or touchpad.
+This button is to switch easily between this two options.
+
+#### Quick buttons on the right of the preview area
+This buttons primarily control the type of editing and refreshing the preview.
 
 
-#### _Toggle monochrome/colored controls_
-#### _Toggle post transform_
-#### _Enable view editing mode_
-#### _Move triangles mode_
-#### _Rotate triangles mode_
-#### _Scale triangles mode_
-#### _Enable free point editing_
-#### _Edit view of the controls_
-#### _Edit focus point_
-#### _Affine XY edit plane_
-#### _Affine YZ edit plane_
-#### _Affine ZX edit plane_
-#### _AI Denoiser preview_
-#### _External render preview_
-#### _Render image preview_
+##### _Enable view editing mode_
+In this mode you change the camera settings (=view) when dragging the mouse.
 
-### Quick buttons on the left of the preview area
-#### _Interactive renderer_
-#### _Easy Movie Maker_
-#### _Flame Browser_
-#### _Undo_
-#### _Redo_
-#### _SShot (Snapshot)_
-#### _Title_
-#### _3D_
-#### _Animations controls on/off_
+ - using the mouse-wheel, you may zoom in/out.
+ - by dragging the mouse with the left mouse-button pressed, you move the camera.
+ - by dragging the mouse with the right mouse-button pressed, you rotate the camera.
 
-##Thumbnail ribbon
+##### _Move triangles mode_
+In this mode you edit the affine or post-affine transformation when dragging the mouse.
 
-## Flame settings
-### _Camera_ tab
+- using the mouse-wheel, you may scale up/down.
+- by dragging the mouse with the left mouse-button pressed, you move the control, causing a translation
+- by dragging the mouse with the right mouse-button pressed, you rotate the control, causing a rotation.
+
+##### _Rotate triangles mode_
+This mode is similar to _Move triangles mode_, but you are restricted to rotations.
+The rotation is done by dragging the mouse while pressing the left mouse-button.
+
+##### _Scale triangles mode_
+This mode is similar to _Move triangles mode_, but you are restricted to scale up/down.
+This operation is done by dragging the mouse while pressing the left mouse-button.
+
+##### _Enable free point editing_
+In this mode you may freely edit the affine transform by dragging the three corner points
+of the triangle-controls.
+This way you can get easily create a fre combination of translation, rotation and shear.
+
+##### _Edit view of the controls_
+In this mode you edit the appearance of the controls.
+
+- using the mouse-wheel, or by dragging the mouse with the right mouse-button pressed, you may scale them up/down.
+- by dragging the mouse with the left mouse-button pressed, you move the controls
+
+##### _Edit focus point_
+Edit the focus-point (parameters FocusX, FocusY and FocusZ at the "DOF/Bokeh -> DOF" - tab)
+using the mouse
+
+- by dragging the mouse with the left mouse-button pressed, you change FocusX- and FocusY-parameters
+- using the mouse-wheel you change the FocusZ-parameter
+
+##### _Affine XY edit plane_
+Sets the current editing-plane for editing affine-transform to the x-y-plane.
+
+The editing of affine-transforms takes place in one plane, the default setting is the x-y-plane.
+When editing "classic" 2d-fractals, the x-y-plane is the only plane.
+But, when editing 3d-fractals, you may choose different planes, in order to modify all three coordinates.
+
+
+##### _Affine YZ edit plane_
+Sets the current editing-plane for editing affine-transform to the y-z-plane.
+
+##### _Affine ZX edit plane_
+Sets the current editing-plane for editing affine-transform to the z-x-plane.
+
+##### _AI Denoiser preview_
+Apply the currently selected AI denoiser (OptiX or OIDN) and display it in the preview.
+This function uses a splitted preview, in order to allow to compare the denoised and the original image.
+On the left side, you see the original image, on the right side of the splitting-indicator you
+see the denoised image.
+
+This function uses the current preview. So it is often recommended to re-render the preview in
+higher quality before invoking it.
+
+##### _External render preview_
+Open an additional detached progressive preview, works especially well when you are using two monitors.
+
+##### _Render image preview_
+Re-renders the current preview with a much higher quality level.
+This is a very important function in the fractal-editing workflow, because certain parameter changes
+do not cause a complete re-render of the complete image, because this would be too slow.
+Instead they use a raw in-memory-version of the latest preview and apply the parameter-change to it.
+
+So, especially when fine-tuning colors it is recommended to re-render the preview in higher quality
+using this button, before changing the settings.
+Because this function is such important it is at this prominent place.
+
+#### Quick buttons on the left of the preview area
+
+##### _Interactive renderer_
+This is just a shortcut for the Interactive Renderer. It opens it or brings it into foreground.
+It does does nothing else, e.g. not to load the current flame into the Interactive Renderer. This is intended.
+
+##### _Easy Movie Maker_
+Opens the Easy Movie Maker.
+Automatically adds the currently loaded flame as first keyframe inside the Easy Movie Maker when
+there is no keyframe yet.
+
+##### _Flame Browser_
+Opens the Flame Browser.
+
+##### _Undo_
+Reverts the latest change to the currently selected flame.
+Each flame has its own undo-history. So undoing a change will never switch between flames.
+
+Please note, that the undo history is not saved together whith flames, so it is lost when
+you quit JWildfire.
+
+##### _Redo_
+Repeats the latest undone change to the currently selected flame.
+
+##### _SShot (Snapshot)_
+Create a snapshot of the current flame. This is an identical copy with new undo-history.
+
+##### _Title_
+Sets the title of the current flame. This is a common place to also put copyright information
+or to add your name (as the author of the artwork).
+
+##### _3D_
+Switch between "classic" rendering and experimental solid rendering.
+
+Solid rendering basically works by "remembering" each sample of the flame-fractal
+as a solid particle.
+The sum of all of these particles make up a larger solid shape.
+This works only good for a certain types of flame fractals.
+It may fail if the structure is too thin or is in general too "chaotic" or too blurry.
+But, it can be used to create really unusual and interesting things.
+Even to render the "classic" Mandelbulb (thanks to Whittaker Courtney for the idea):
+
+[.thumb]
+image::jwf_mandelbulb.jpg[scaledwidth=75%]
+
+##### _Animations controls on/off_
+Using this button you may quickly turn on or off animation controls on the fly.
+You may set up your preference for this setting in the Preferences-window.
+
+### Thumbnail ribbon
+
+### Flame settings
+#### _Camera_ tab
 With this controls you can control the camera-view. You can rotate and move the camera freely and zoom in/out.
 
 "Classic" flame fractals are flat (2D) and can not be rotated in space. Basically the parameters Roll, CentreX, CentreY and Zoom/Pixels per unit apply to them.
@@ -97,118 +228,152 @@ For 3D fractals there are a lot of more controls.
 
 But, you can "mix" them, of course. So you can apply all parameters to any fractal and also rotating a 2D flame in space or apply a perspectiv distortion to it.  
 
-#### _Roll_
+##### _Roll_
 Camera roll angle in degrees. Rotates around the virtual z-axis and also applies to 2D fractals.  
 
-#### _Pitch_
+##### _Pitch_
 Camera pitch angle in degrees.  
 
-#### _Yaw_
+##### _Yaw_
 Camera yaw angle in degrees.
 
-#### _Bank_
+##### _Bank_
 Camera bank angle in degrees.
 
-#### _Perspective_
+##### _Perspective_
 Camera perspective. A value of 0 means no perspective, while higher value get more dramatic perspective effects. Can even be negative for more intersting effects.
 
-#### _CentreX_
+##### _CentreX_
 Offset (translation) of the fractal x-direction. 
 
-#### _CentreY_
+##### _CentreY_
 Offset (translation) of the fractal y-direction.
 
-#### _Zoom_
+##### _Zoom_
 Camera zoom.
 
-#### _Pixels per unit_
+##### _Pixels per unit_
 Another (classic) measure of zoom. "Pixels per unit" means how many pixels are needed to fill a numerical distance of 1.0 (in fractal coordinates). The higher the value, the more details (like zooming in).   
 
-#### _CamPosX_
+##### _CamPosX_
 Position of the camera in x-direction. Has a similar effect like CentreX for 2D fractals, but not for 3D-fractals. 
 
-#### _CamPosY_
+##### _CamPosY_
 Position of the camera in y-direction. Has a similar effect like CentreY for 2D fractals, but not for 3D-fractals.
 
-#### _CamPosY_
+##### _CamPosY_
 Position of the camera in z-direction.
 
-### _DOF/Bokeh_ tab
-#### _DOF_ subtab
-##### _New DOF_
-##### _Amount_
-##### _Area_
-##### _Exponent_
-##### _Camera dist_
-##### _FocusX_
-##### _FocusY_
-##### _FocusZ_
+#### _DOF/Bokeh_ tab
+##### _DOF_ subtab
+###### _New DOF_
+###### _Amount_
+###### _Area_
+###### _Exponent_
+###### _Camera dist_
+###### _FocusX_
+###### _FocusY_
+###### _FocusZ_
 
-#### _Bokeh_ subtab
-##### _Shape_
-##### _Scale_
-##### _Rotate_
-##### _Fade_
-##### _Shape specific parameters_
+##### _Bokeh_ subtab
+###### _Shape_
+###### _Scale_
+###### _Rotate_
+###### _Fade_
+###### _Shape specific parameters_
 
-#### _Post bokeh_ subtab
-##### _Bokeh intensity_
-##### _Bokeh size_
-##### _Bokeh filter kernel_
-##### _Bokeh brightness_
-##### _Bokeh activation_
+##### _Post bokeh_ subtab
+###### _Bokeh intensity_
+###### _Bokeh size_
+###### _Bokeh filter kernel_
+###### _Bokeh brightness_
+###### _Bokeh activation_
 
-#### _Post blur_ subtab
-##### _Blur radius_
-##### _Blur fade_
-##### _Blur falloff_
+##### _Post blur_ subtab
+###### _Blur radius_
+###### _Blur fade_
+###### _Blur falloff_
 
-#### _ZBuffer_ subtab
-##### _ZBuffer scale_
-##### _ZBuffer bias_
-##### _ZBuffer filename_
-
-
-
-### _Coloring_ tab
-#### _Brightness_
-#### _Low brightness_
-#### _Gamma_
-#### _Gamma threshold_
-#### _Contrast_
-#### _Red balance_
-#### _Green balance_
-#### _Blue balance_
-#### _Fade to White_
-#### _Vibrancy_
-#### _Saturation_
-#### _Bg color_
-#### _Bg image_
-#### _Fg opacity_
-#### _Background transparency_
-
-### _Anti-Aliasing / Filter_ tab
-
-## Transformations and Scripts
-
-##
-
-## Global functions
+##### _ZBuffer_ subtab
+###### _ZBuffer scale_
+###### _ZBuffer bias_
+###### _ZBuffer filename_
 
 
-# Platform-specific topics (Windows, Mac, Steam, ...)
+
+#### _Coloring_ tab
+##### _Brightness_
+##### _Low brightness_
+##### _Gamma_
+##### _Gamma threshold_
+##### _Contrast_
+##### _Red balance_
+##### _Green balance_
+##### _Blue balance_
+##### _Fade to White_
+##### _Vibrancy_
+##### _Saturation_
+##### _Bg color_
+##### _Bg image_
+##### _Fg opacity_
+##### _Background transparency_
+
+#### _Anti-Aliasing / Filter_ tab
+
+### Transformations and Scripts
+
+### Global functions
+
+##### Random batch
+
+##### Rnd flame-generator
+
+##### Rnd Symmetry
+
+##### Rnd Gradient
+
+##### Rnd WField
+
+##### New from scratch
+
+##### From clipboard
+
+##### Load flame
+
+##### To clipboard
+
+##### Save flame
+
+##### Q (Quicksave)
+
+##### A (Save all)
+
+##### Render image
+
+##### Render resolution
+
+##### Edit resolution profiles
+
+##### Render quality
+
+##### Edit quality profiles
+
+##### Batch renderer
 
 
-# FAQ (frequently asked questions)
+## Platform-specific topics (Windows, Mac, Steam, ...)
+
+
+## FAQ (frequently asked questions)
 Here are answers to some popular questions I get often, which do not fit into the other chapters.
 
-## Are 4k renders possible?
-## Can I render images with removed/transparent background?
-## How to save a flame as image? 
+### Are 4k renders possible?
+### Can I render images with removed/transparent background?
+### How to save a flame as image?
 
-# Interactive Renderer
+## Interactive Renderer
 
-# Batch renderer
+## Batch renderer
 
 
 [source,java]
