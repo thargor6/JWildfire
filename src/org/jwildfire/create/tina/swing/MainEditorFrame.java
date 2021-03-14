@@ -35,7 +35,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -7652,15 +7651,15 @@ public class MainEditorFrame extends JFrame {
     pCmb.setMaximumRowCount(16);
     int selectedIdx = -1;
     int currIdx = 0;
-     pCmb.addItem("");
-    for(VariationProfile profile: VariationProfileRepository.getProfiles()) {
+    pCmb.addItem("");
+    for (VariationProfile profile : VariationProfileRepository.getProfiles()) {
       pCmb.addItem(profile.getName());
-      if(pSelectDefault && profile.isDefaultProfile() && selectedIdx < 0) {
+      if (pSelectDefault && profile.isDefaultProfile() && selectedIdx < 0) {
         selectedIdx = currIdx;
       }
       currIdx++;
     }
-    if(pSelectDefault && pCmb.getItemCount() > 0) {
+    if (pSelectDefault && pCmb.getItemCount() > 0) {
       pCmb.setSelectedIndex(selectedIdx >= 0 ? selectedIdx + 1 : 1);
     }
     else {
@@ -18371,7 +18370,6 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(getPostBlurFallOffREd(), null);
       panel_1.add(getPostBlurFallOffSlider(), null);
       panel_1.add(getResetPostBlurSettingsBtn());
-      tabbedPane_3.addTab("ZBuffer", null, getPanel_5(), null);
     }
     return tabbedPane_3;
   }
@@ -21356,6 +21354,9 @@ public class MainEditorFrame extends JFrame {
       button.setBounds(380, 59, 42, 24);
       tinaSolidRenderingLightPnl.add(button);
       tinaSolidRenderingLightPnl.add(getButton_1());
+
+      tinaSolidRenderingPane.addTab("ZBuffer", null, getPanel_5(), null);
+
     }
     return tinaSolidRenderingPane;
   }

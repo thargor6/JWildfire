@@ -25,6 +25,7 @@ V6.xx (xx.xx.2021)
  - fix: regarding of priority in the post_falloff2-variation
  - fix: initialize width and height for new flames, by Rick Sidwell
  - slightly improved the speed when chosing a random variation (from within a random-flame-generator or Mutation)
+ - moved the "ZBuffer"-subtab from the "DOF / Bokeh"-tab to the "3D rendering"-tab
  - removed the advanced code-editor (using jsyntaxpane-1.1.5), which was not properly working in
    Java 15 (and honestly,was never working very well).
    Accordingly, the properties tinaAdvancedCodeEditorColorFix, tinaAdvancedCodeEditorFontSize and tinaAdvancedCodeEditor
