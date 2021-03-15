@@ -414,22 +414,77 @@ Strength of diminishing of the effect dependent of the distance to the center of
 #### _Coloring_ tab
 [.thumb]
 image::coloring_tab.jpg[scaledwidth=75%]
+At this tab you may edit numerous coloring/tonemapping options to turn your fractals into real artworks.
 
 ##### _Brightness_
+Overall brightness level of the rendered image. For some fractals even very high values (above 20) may work nicely.
+
 ##### _Low brightness_
+Measure to increase the brightness of areas with low sampling density. May help to reveal background details
+of the fractals which would otherwise be hidden.
+
 ##### _Gamma_
+Gamma correction level. Small values (below 2.5) increase the brightness of already bright areas and darken
+already dark areas, causing some kind of glowing effect.
+
 ##### _Gamma threshold_
+A density-threshold defining when to apply the gamma correction. In areas with a density below the
+threshold a linear transformation is applied, while at areas with higher density the actual gamma
+correction is applied. Playing with this value may also help to increase details of ares with low density.
+
 ##### _Contrast_
+Overall contrast level of the fractal. Per default maximum contrast. In the most cases it should not be
+necessary to alter this value, because lowering the contrast usually leads only to less appealing images.
+
 ##### _Red balance_
+Overall red balance of the image. A convenient option for fine-tuning the final result without the
+need to change the gradient.
+
 ##### _Green balance_
+Overall green balance of the image. A convenient option for fine-tuning the final result without the
+need to change the gradient.
+
 ##### _Blue balance_
+Overall blue balance of the image. A convenient option for fine-tuning the final result without the
+need to change the gradient.
+
 ##### _Fade to White_
+A measure for the saturation-level of final colors. Can be used to achieve glowing-effects (decrease the value)
+or to reduced glowing and make more details visible (increase the value).
+Works similar to the gamma-value.
+
 ##### _Vibrancy_
+Overall vibrancy-level (measurement of the number of different color values). Per default set to the maximum value,
+which is very typical to fractal rendering.
+
 ##### _Saturation_
+Saturation-level of the colors. A convenient option for fine-tuning the final result without the
+need to change the gradient.
+
 ##### _Bg color_
+Background-color which is mixed with the fractal in the forground to create a smoothly-looking final result.
+There are the following options:
+
+ - Single color: one single color for the whole background
+ - Gradient 2x2: create a background by blending 4 colors at the corners of a rectangle
+ - Gradient 2x2_c: create a background by blending 4 colors at the corners of a rectangle and one color at the center
+
 ##### _Bg image_
+Background-image which is mixed with the fractal in the forground to create a smoothly-looking final result.
+Please note, that a background-image has higher priority than a background color. So, when choosing both,
+only the background-image is rendered.
+
+
 ##### _Fg opacity_
+Mixing-level of the Foreground (fractal) when applying a background-color or background-image.
+Lower values make the foreground less transparent, but may increase antialiasing effects.
+
 ##### _Background transparency_
+Turn on or off rendering with transparent background (alpha channel). This option is usually used when you
+want to use your fractal images inside other software-package like Adobe Photoshop to compose a final
+artwork out of different images or parts.
+Please note, that you may also activate a preview of the background-transparency in
+JWildfire (in the top area of the preview-window).
 
 #### _Anti-Aliasing / Filter_ tab
 [.thumb]

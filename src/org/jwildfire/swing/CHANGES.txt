@@ -20,10 +20,6 @@ V6.xx (xx.xx.2021)
      -dc_portal,
      -kaplan by  by Jesus Sosa
  - improved the "Affine3D"-random-flame-generator
- - fix: QuickMutations now inherit the zoom-factor, quality and spatial oversampling settings form the original flame
- - fix: regarding z-coordinate to tqmirror-variation, by Brad Stefanov
- - fix: regarding of priority in the post_falloff2-variation
- - fix: initialize width and height for new flames, by Rick Sidwell
  - slightly improved the speed when chosing a random variation (from within a random-flame-generator or Mutation)
  - moved the "ZBuffer"-subtab from the "DOF / Bokeh"-tab to the "3D rendering"-tab
  - removed the advanced code-editor (using jsyntaxpane-1.1.5), which was not properly working in
@@ -32,6 +28,11 @@ V6.xx (xx.xx.2021)
    where removed from the Preferences.
    Recommended Alternative: use Visual Studio Code for editing complex scripts (https://code.visualstudio.com/download)
  - removed the "Variations settings"-window which was superseeded by the new variation profiles
+ - fix: QuickMutations now inherit the zoom-factor, quality and spatial oversampling settings form the original flame
+ - fix: regarding z-coordinate to tqmirror-variation, by Brad Stefanov
+ - fix: regarding of priority in the post_falloff2-variation
+ - fix: initialize width and height for new flames, by Rick Sidwell
+ - fix: a bug where changing a post-affine-transformation-value was not properly updated and the change was lost when saving and re-loading the flame
 
 V6.22 (16.01.2021)
  - reduced flickering of the main preview
