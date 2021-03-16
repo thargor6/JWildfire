@@ -4,13 +4,13 @@
 :toc:
 :toclevels: 3
 
-# JWildfire users manual
+= JWildfire users manual
 
-## Introduction
+== Introduction
 [.thumb]
 image::JWildfire.jpg[scaledwidth=75%]
 
-## Main Editor
+== Main Editor
 
 [.thumb]
 image::main_editor_with_regions.jpg[scaledwidth=75%]
@@ -18,155 +18,155 @@ The Main Editor is the core part of JWildfire.
 Here you create random flames or fine-tune your artworks.
 It consists of the following parts:
 
- . Preview/Editor Area
- . Thumbnail ribbon
- . Transformations and Scripts
- . Flame settings
- . Global functions
+. Preview/Editor Area
+. Thumbnail ribbon
+. Transformations and Scripts
+. Flame settings
+. Global functions
 
 You find a description of each part as separate sub-chapter in this manual.
 
-### Preview/Editor area
+=== Preview/Editor area
 This area is both for previewing fractals and editing them in realtime.
 The most simple and intuitive way to edit a fractal is to drag or rotate one of the
 visible controls on top of the fractals (usually in the shape of triangles).
 But, there also much more precise ways and lots of other options to manipulate a flame-fractal.
 
-#### Quick buttons on the top of the preview area
+==== Quick buttons on the top of the preview area
 [.thumb]
 image::editor_buttons_top.jpg[scaledwidth=50%]
 
 This buttons primarily control the previewing/editing options.
 
-##### _Display/hide variation effect_
+===== _Display/hide variation effect_
 Displays the contribution of the currently selected transformation (in the Transformations-area) in the form of a transformed grid.
 For example, if the current transformation is a rotation, it will show a rotated grid.
 If there are nonlinear transformations (=variations or "plugins"), then the displayed grid may change/deform much more.
 
-##### _Display/hide transparency_
+===== _Display/hide transparency_
 Switch preview-rendering with transparent background on or off.
 Please note, that this only affects the preview display and does not the transparency setting of the flame itself.
 
-##### _Fine edit_
-Turn on or off "fine editing". Fine editing means that changes are less sensitive to changes using mouse or touchpad to allow editing with a higher grade of detail.
+===== _Fine edit_
+Turn on or off "fine editing".Fine editing means that changes are less sensitive to changes using mouse or touchpad to allow editing with a higher grade of detail.
 
-##### _Realtime_
-Turns progressive rendering of the preview on or off. Progressive rendering means that the image starts to render in very low quality and gets improved after a while.
-This image gets improved after a while again, and so on. Usually this works very good and allows a very fluid editing.
+===== _Realtime_
+Turns progressive rendering of the preview on or off.Progressive rendering means that the image starts to render in very low quality and gets improved after a while.
+This image gets improved after a while again, and so on.Usually this works very good and allows a very fluid editing.
 On slower machines (e.g. notebooks) this may cause a heavy load and on some fractals it may cause flickering.
 Turning it off causes to render previews at lower and constant (non-progressive) quality level.
 
-##### _Turn grid on/off_
+===== _Turn grid on/off_
 Tuns on or off a grid which may help to align controls
 
-##### _Turn guides on/off_
+===== _Turn guides on/off_
 Turns on or off "artistic guides" for
 
- - center point
- - rule of thirds
- - golden ratio
+- center point
+- rule of thirds
+- golden ratio
 
 which may help to find the right camera position/view.
 
-##### _Style of editor controls_
+===== _Style of editor controls_
 You may select one of the following style of editor-controls:
 
- - axis
- - crosshair
- - rectangle
- - triangle (default)
- - hidden
+- axis
+- crosshair
+- rectangle
+- triangle (default)
+- hidden
 
-##### _Toggle monochrome/colored controls_
+===== _Toggle monochrome/colored controls_
 Per default each control is dran in its own color to make them more distinguishable.
-Sometimes this may distract you from the fractal. Using this option, you may switch
+Sometimes this may distract you from the fractal.Using this option, you may switch
 to a less intrusive monochrome display of controls.
 
-##### _Toggle post transform_
+===== _Toggle post transform_
 Quick-switch to toggle between editing of the affine-post-transform and the regular affine transform.
 
 Longer explanation: Transformations are executed in the following order:
 
- . affine transform
- . nonlinear transforms
- . affine post-transform
+. affine transform
+. nonlinear transforms
+. affine post-transform
 
 In the preview area you may either edit the affine transform or the post-affine-transform
 by moving the visual controls with the mouse or touchpad.
 This button is to switch easily between this two options.
 
-#### Quick buttons on the right of the preview area
+==== Quick buttons on the right of the preview area
 [.thumb]
 image::editor_buttons_right.jpg[scaledwidth=50%]
 This buttons primarily control the type of editing and refreshing the preview.
 
 
-##### _Enable view editing mode_
+===== _Enable view editing mode_
 In this mode you change the camera settings (=view) when dragging the mouse.
 
- - using the mouse-wheel, you may zoom in/out.
- - by dragging the mouse with the left mouse-button pressed, you move the camera.
- - by dragging the mouse with the right mouse-button pressed, you rotate the camera.
+- using the mouse-wheel, you may zoom in/out.
+- by dragging the mouse with the left mouse-button pressed, you move the camera.
+- by dragging the mouse with the right mouse-button pressed, you rotate the camera.
 
-##### _Move triangles mode_
+===== _Move triangles mode_
 In this mode you edit the affine or post-affine transformation when dragging the mouse.
 
 - using the mouse-wheel, you may scale up/down.
 - by dragging the mouse with the left mouse-button pressed, you move the control, causing a translation
 - by dragging the mouse with the right mouse-button pressed, you rotate the control, causing a rotation.
 
-##### _Rotate triangles mode_
+===== _Rotate triangles mode_
 This mode is similar to _Move triangles mode_, but you are restricted to rotations.
 The rotation is done by dragging the mouse while pressing the left mouse-button.
 
-##### _Scale triangles mode_
+===== _Scale triangles mode_
 This mode is similar to _Move triangles mode_, but you are restricted to scale up/down.
 This operation is done by dragging the mouse while pressing the left mouse-button.
 
-##### _Enable free point editing_
+===== _Enable free point editing_
 In this mode you may freely edit the affine transform by dragging the three corner points
 of the triangle-controls.
 This way you can get easily create a fre combination of translation, rotation and shear.
 
-##### _Edit view of the controls_
+===== _Edit view of the controls_
 In this mode you edit the appearance of the controls.
 
 - using the mouse-wheel, or by dragging the mouse with the right mouse-button pressed, you may scale them up/down.
 - by dragging the mouse with the left mouse-button pressed, you move the controls
 
-##### _Edit focus point_
+===== _Edit focus point_
 Edit the focus-point (parameters FocusX, FocusY and FocusZ at the "DOF/Bokeh -> DOF" - tab)
 using the mouse
 
 - by dragging the mouse with the left mouse-button pressed, you change FocusX- and FocusY-parameters
 - using the mouse-wheel you change the FocusZ-parameter
 
-##### _Affine XY edit plane_
+===== _Affine XY edit plane_
 Sets the current editing-plane for editing affine-transform to the x-y-plane.
 
 The editing of affine-transforms takes place in one plane, the default setting is the x-y-plane.
 When editing "classic" 2d-fractals, the x-y-plane is the only plane.
 But, when editing 3d-fractals, you may choose different planes, in order to modify all three coordinates.
 
-##### _Affine YZ edit plane_
+===== _Affine YZ edit plane_
 Sets the current editing-plane for editing affine-transform to the y-z-plane.
 
-##### _Affine ZX edit plane_
+===== _Affine ZX edit plane_
 Sets the current editing-plane for editing affine-transform to the z-x-plane.
 
-##### _AI Denoiser preview_
+===== _AI Denoiser preview_
 Apply the currently selected AI denoiser (OptiX or OIDN) and display it in the preview.
 This function uses a splitted preview, in order to allow to compare the denoised and the original image.
 On the left side, you see the original image, on the right side of the splitting-indicator you
 see the denoised image.
 
-This function uses the current preview. So it is often recommended to re-render the preview in
+This function uses the current preview.So it is often recommended to re-render the preview in
 higher quality before invoking it.
 
-##### _External render preview_
+===== _External render preview_
 Open an additional detached progressive preview, works especially well when you are using two monitors.
 
-##### _Render image preview_
+===== _Render image preview_
 Re-renders the current preview with a much higher quality level.
 This is a very important function in the fractal-editing workflow, because certain parameter changes
 do not cause a complete re-render of the complete image, because this would be too slow.
@@ -176,26 +176,26 @@ So, especially when fine-tuning colors it is recommended to re-render the previe
 using this button, before changing the settings.
 Because this function is such important it is at this prominent place.
 
-#### Quick buttons on the left of the preview area
+==== Quick buttons on the left of the preview area
 [.thumb]
 image::editor_buttons_left.jpg[scaledwidth=50%]
 At this area you find some quick-buttons to reach other modules of JWildfire and the Undo/Redo-buttons.
 
-##### _Interactive renderer_
-This is just a shortcut for the Interactive Renderer. It opens it or brings it into foreground.
-It does does nothing else, e.g. not to load the current flame into the Interactive Renderer. This is intended.
+===== _Interactive renderer_
+This is just a shortcut for the Interactive Renderer.It opens it or brings it into foreground.
+It does does nothing else, e.g. not to load the current flame into the Interactive Renderer.This is intended.
 
-##### _Easy Movie Maker_
+===== _Easy Movie Maker_
 Opens the Easy Movie Maker.
 Automatically adds the currently loaded flame as first keyframe inside the Easy Movie Maker when
 there is no keyframe yet.
 
-##### _Flame Browser_
+===== _Flame Browser_
 Opens the Flame Browser.
 
-##### _Undo_
+===== _Undo_
 Reverts the latest change to the currently selected flame.
-Each flame has its own undo-history. So undoing a change will never switch between flames.
+Each flame has its own undo-history.So undoing a change will never switch between flames.
 
 Please note, that the undo history is not saved together whith flames, so it is lost when
 you quit JWildfire.
@@ -243,18 +243,18 @@ Each flame in the thumbnail-ribbon has its own undo-history.
 [.thumb]
 image::camera_tab.jpg[scaledwidth=75%]
 
-With this controls you can control the camera-view. You can rotate and move the camera freely and zoom in/out.
+With this controls you can control the camera-view.You can rotate and move the camera freely and zoom in/out.
 
-"Classic" flame fractals are flat (2D) and can not be rotated in space. Basically the parameters Roll, CentreX, CentreY and Zoom/Pixels per unit apply to them.
+"Classic" flame fractals are flat (2D) and can not be rotated in space.Basically the parameters Roll, CentreX, CentreY and Zoom/Pixels per unit apply to them.
 For 3D fractals there are a lot of more controls.
 
-But, you can "mix" them, of course. So you can apply all parameters to any fractal and also rotating a 2D flame in space or apply a perspectiv distortion to it.  
+But, you can "mix" them, of course.So you can apply all parameters to any fractal and also rotating a 2D flame in space or apply a perspectiv distortion to it.
 
 ##### _Roll_
-Camera roll angle in degrees. Rotates around the virtual z-axis and also applies to 2D fractals.  
+Camera roll angle in degrees. Rotates around the virtual z-axis and also applies to 2D fractals.
 
 ##### _Pitch_
-Camera pitch angle in degrees.  
+Camera pitch angle in degrees.
 
 ##### _Yaw_
 Camera yaw angle in degrees.
@@ -266,19 +266,19 @@ Camera bank angle in degrees.
 Camera perspective. A value of 0 means no perspective, while higher value get more dramatic perspective effects. Can even be negative for more intersting effects.
 
 ##### _CentreX_
-Offset (translation) of the fractal x-direction. 
+Offset (translation) of the fractal x-direction.
 
-##### _CentreY_
+===== _CentreY_
 Offset (translation) of the fractal y-direction.
 
 ##### _Zoom_
 Camera zoom.
 
 ##### _Pixels per unit_
-Another (classic) measure of zoom. "Pixels per unit" means how many pixels are needed to fill a numerical distance of 1.0 (in fractal coordinates). The higher the value, the more details (like zooming in).   
+Another (classic) measure of zoom. "Pixels per unit" means how many pixels are needed to fill a numerical distance of 1.0 (in fractal coordinates). The higher the value, the more details (like zooming in).
 
 ##### _CamPosX_
-Position of the camera in x-direction. Has a similar effect like CentreX for 2D fractals, but not for 3D-fractals. 
+Position of the camera in x-direction. Has a similar effect like CentreX for 2D fractals, but not for 3D-fractals.
 
 ##### _CamPosY_
 Position of the camera in y-direction. Has a similar effect like CentreY for 2D fractals, but not for 3D-fractals.
@@ -287,8 +287,8 @@ Position of the camera in y-direction. Has a similar effect like CentreY for 2D 
 Position of the camera in z-direction.
 
 #### _DOF/Bokeh_ tab
-DOF (depth of field) is a kind of controversy topic in flame-fractals. Some people like it a lot (including myself),
-some people do not like it at all. So, this sub-chapter describes a rather "special" topic.
+DOF (depth of field) is a kind of controversy topic in flame-fractals.Some people like it a lot (including myself),
+some people do not like it at all.So, this sub-chapter describes a rather "special" topic.
 Bokeh is some kind of art which utilizes DOF to achieve certain artistic effects (using a real camera).
 Some typical types of bokeh-effects you may also simulate with JWildfire.
 
@@ -317,51 +317,51 @@ Only applies to the classic mode and is a measure of the distance of the camera 
 ###### _FocusX_
 X-position of the focus point (point which is sharp). May also be edited interactively in the preview area.
 
-###### _FocusY_
-Y-position of the focus point (point which is sharp). May also be edited interactively in the preview area.
+====== _FocusY_
+Y-position of the focus point (point which is sharp).May also be edited interactively in the preview area.
 
-###### _FocusZ_
-Z-position of the focus point (point which is sharp). May also be edited interactively in the preview area.
+====== _FocusZ_
+Z-position of the focus point (point which is sharp).May also be edited interactively in the preview area.
 
-##### _Bokeh_ subtab
+===== _Bokeh_ subtab
 At this tab you can select options to create bokeh-like styles of DOF-effects.
-Those options are not available when using solid rendering. For solid rendering there is an option to
+Those options are not available when using solid rendering.For solid rendering there is an option to
 apply post-bokeh effects, but those are limited in comparison to the options you find at this tab.
 
-###### _Shape_
+====== _Shape_
 Selects the shape of the bokeh-effect
 
- - Bubble: the typical and default shape
- - Cannabiscurve: some nice-looking organic shape
- - Cloverleaf
- - Flower
- - Heart: little hearts, makes nice Valentine-cards
- - NBlur: has some interesting options to create very different shapes
- - Perlin Noise: some unusual but interesting style
- - Rect: very simple but effective style. You can also create "rain"-like scenes with this
- - SineBlur: some popular circular bokeh
- - StarBlur: tiny stars
- - Taurus: some other unusual, but interesting shape
- - Snowflake: a complex snowflake, created wtih the algorithm described in the
+- Bubble: the typical and default shape
+- Cannabiscurve: some nice-looking organic shape
+- Cloverleaf
+- Flower
+- Heart: little hearts, makes nice Valentine-cards
+- NBlur: has some interesting options to create very different shapes
+- Perlin Noise: some unusual but interesting style
+- Rect: very simple but effective style.You can also create "rain"-like scenes with this
+- SineBlur: some popular circular bokeh
+- StarBlur: tiny stars
+- Taurus: some other unusual, but interesting shape
+- Snowflake: a complex snowflake, created wtih the algorithm described in the
 paper "A local cellular model for snow crystal growth" by Clifford A. Reiter.
- - SubFlame: This is the most versatile option: You may use any other fractal as bokeh-style.
+- SubFlame: This is the most versatile option: You may use any other fractal as bokeh-style.
 
-###### _Scale_
+====== _Scale_
 Global scale of the bokeh-shapes
 
-###### _Rotate_
+====== _Rotate_
 Global rotation-angle of the bokeh-shapes
 
-###### _Fade_
+====== _Fade_
 Global falloff of the bokeh-shapes
 
-###### _Shape specific parameters_
+====== _Shape specific parameters_
 Depending on the bokeh-shape, there are additional parameters.
-Most of them are the same as in the variation of the same name. E.g. the "Taurus"-bokeh-style has a
-parameter N (which is the number of corners). The "taurus"-variation has the same parameter.
+Most of them are the same as in the variation of the same name.E.g. the "Taurus"-bokeh-style has a
+parameter N (which is the number of corners).The "taurus"-variation has the same parameter.
 Not all parameters of a variation are exposed to the bokeh-style of the same name.
 
-###### Flame (for the Sub-Flame-bokeh-style)
+====== Flame (for the Sub-Flame-bokeh-style)
 By this important parameter you select the flame you want to use as bokeh-style.
 It is a number, starting with 1. BEfore you can use a flame as bokeh-style you must save it to your default
 flame-folder by using a filename in the form "_dof_XXXX.flame", where XXXX corresponds to the number
@@ -370,29 +370,29 @@ For example, when you enter "23" as parameter Flame, JWildfire will look for a f
 filename _dof_0023.flame.
 
 
-##### _Post bokeh_ subtab
+===== _Post bokeh_ subtab
 [.thumb]
 image::dof_post_bokeh_tab.jpg[scaledwidth=75%]
 At this tab you can select options to create bokeh-like effects when using solid rendering.
 Those options are only available in solid rendering and are limited to the bokeh-related options
 which are available for regular flames.
 
-###### _Bokeh intensity_
+====== _Bokeh intensity_
 Overall amount/intensity of bokeh-effecs.
 
-###### _Bokeh size_
-Size of the bokeh-effects. The larger the effect, the more computation time is required.
+====== _Bokeh size_
+Size of the bokeh-effects.The larger the effect, the more computation time is required.
 
-###### _Bokeh filter kernel_
-Type of bokeh-shape. The default setting produces "classic" flat circular shapes.
+====== _Bokeh filter kernel_
+Type of bokeh-shape.The default setting produces "classic" flat circular shapes.
 
-###### _Bokeh brightness_
+====== _Bokeh brightness_
 Intensity of the bokeh in comparison the the original image.
 
-###### _Bokeh activation_
-Intensity level of the original image for placing bokeh "seeds". The larger the value the more seeds, the more bokeh.
+====== _Bokeh activation_
+Intensity level of the original image for placing bokeh "seeds".The larger the value the more seeds, the more bokeh.
 
-##### _Post blur_ subtab
+===== _Post blur_ subtab
 [.thumb]
 image::dof_post_blur_tab.jpg[scaledwidth=75%]
 
@@ -400,96 +400,263 @@ Postblur is not really a DOF-effect, but it creates also some kind of blur, ther
 It is not a popular option and primarily resides here for backwards compatibility.
 
 Postblur works by smudging each rendered sample of the flame-fractal.
-The effect diminishes the more far from the center. It usually makes a fractal appear more bold and "glassy".
+The effect diminishes the more far from the center.It usually makes a fractal appear more bold and "glassy".
 
-###### _Blur radius_
+====== _Blur radius_
 Radius of the blur
 
-###### _Blur fade_
-(Inverse)intensity of the blur. The maximum value means maximum fade out, which is no blur effect at all.
+====== _Blur fade_
+(Inverse)intensity of the blur.The maximum value means maximum fade out, which is no blur effect at all.
 
-###### _Blur falloff_
+====== _Blur falloff_
 Strength of diminishing of the effect dependent of the distance to the center of the individual sample.
 
-#### _Coloring_ tab
+==== _Coloring_ tab
 [.thumb]
 image::coloring_tab.jpg[scaledwidth=75%]
 At this tab you may edit numerous coloring/tonemapping options to turn your fractals into real artworks.
 
-##### _Brightness_
-Overall brightness level of the rendered image. For some fractals even very high values (above 20) may work nicely.
+===== _Brightness_
+Overall brightness level of the rendered image.For some fractals even very high values (above 20) may work nicely.
 
-##### _Low brightness_
-Measure to increase the brightness of areas with low sampling density. May help to reveal background details
+===== _Low brightness_
+Measure to increase the brightness of areas with low sampling density.May help to reveal background details
 of the fractals which would otherwise be hidden.
 
-##### _Gamma_
-Gamma correction level. Small values (below 2.5) increase the brightness of already bright areas and darken
+===== _Gamma_
+Gamma correction level.Small values (below 2.5) increase the brightness of already bright areas and darken
 already dark areas, causing some kind of glowing effect.
 
-##### _Gamma threshold_
-A density-threshold defining when to apply the gamma correction. In areas with a density below the
+===== _Gamma threshold_
+A density-threshold defining when to apply the gamma correction.In areas with a density below the
 threshold a linear transformation is applied, while at areas with higher density the actual gamma
-correction is applied. Playing with this value may also help to increase details of ares with low density.
+correction is applied.Playing with this value may also help to increase details of ares with low density.
 
-##### _Contrast_
-Overall contrast level of the fractal. Per default maximum contrast. In the most cases it should not be
+===== _Contrast_
+Overall contrast level of the fractal.Per default maximum contrast.In the most cases it should not be
 necessary to alter this value, because lowering the contrast usually leads only to less appealing images.
 
-##### _Red balance_
-Overall red balance of the image. A convenient option for fine-tuning the final result without the
+===== _Red balance_
+Overall red balance of the image.A convenient option for fine-tuning the final result without the
 need to change the gradient.
 
-##### _Green balance_
-Overall green balance of the image. A convenient option for fine-tuning the final result without the
+===== _Green balance_
+Overall green balance of the image.A convenient option for fine-tuning the final result without the
 need to change the gradient.
 
-##### _Blue balance_
-Overall blue balance of the image. A convenient option for fine-tuning the final result without the
+===== _Blue balance_
+Overall blue balance of the image.A convenient option for fine-tuning the final result without the
 need to change the gradient.
 
-##### _Fade to White_
-A measure for the saturation-level of final colors. Can be used to achieve glowing-effects (decrease the value)
+===== _Fade to White_
+A measure for the saturation-level of final colors.Can be used to achieve glowing-effects (decrease the value)
 or to reduced glowing and make more details visible (increase the value).
 Works similar to the gamma-value.
 
-##### _Vibrancy_
-Overall vibrancy-level (measurement of the number of different color values). Per default set to the maximum value,
+===== _Vibrancy_
+Overall vibrancy-level (measurement of the number of different color values).Per default set to the maximum value,
 which is very typical to fractal rendering.
 
-##### _Saturation_
-Saturation-level of the colors. A convenient option for fine-tuning the final result without the
+===== _Saturation_
+Saturation-level of the colors.A convenient option for fine-tuning the final result without the
 need to change the gradient.
 
-##### _Bg color_
+===== _Bg color_
 Background-color which is mixed with the fractal in the forground to create a smoothly-looking final result.
 There are the following options:
 
- - Single color: one single color for the whole background
- - Gradient 2x2: create a background by blending 4 colors at the corners of a rectangle
- - Gradient 2x2_c: create a background by blending 4 colors at the corners of a rectangle and one color at the center
+- Single color: one single color for the whole background
+- Gradient 2x2: create a background by blending 4 colors at the corners of a rectangle
+- Gradient 2x2_c: create a background by blending 4 colors at the corners of a rectangle and one color at the center
 
-##### _Bg image_
+===== _Bg image_
 Background-image which is mixed with the fractal in the forground to create a smoothly-looking final result.
-Please note, that a background-image has higher priority than a background color. So, when choosing both,
+Please note, that a background-image has higher priority than a background color.So, when choosing both,
 only the background-image is rendered.
 
 
-##### _Fg opacity_
+===== _Fg opacity_
 Mixing-level of the Foreground (fractal) when applying a background-color or background-image.
 Lower values make the foreground less transparent, but may increase antialiasing effects.
 
-##### _Background transparency_
-Turn on or off rendering with transparent background (alpha channel). This option is usually used when you
+===== _Background transparency_
+Turn on or off rendering with transparent background (alpha channel).This option is usually used when you
 want to use your fractal images inside other software-package like Adobe Photoshop to compose a final
 artwork out of different images or parts.
 Please note, that you may also activate a preview of the background-transparency in
 JWildfire (in the top area of the preview-window).
 
-#### _Anti-Aliasing / Filter_ tab
+==== _Anti-Aliasing / Filter_ tab
 [.thumb]
 image::antialiasing_tab.jpg[scaledwidth=75%]
+At this tab you find some very important settings which help to improve the visual quality or "cleanliness"
+of your fractal artworks.
+For details about filtering see the sub-section _Filter kernel preview / How filtering works_.
 
+===== _Spatial oversampling_
+Factor of spatial oversampling. Spatial oversampling works by internally rendering an image of larger size
+and then creating a final of (usual) better quality by taking all this additional information into account.
+
+ - a value of 1 means no spatial oversampling
+ - a value of 2 means rendering internally an image of double size (double the width and double the height,
+so it requires about 4 times of the memory)
+- a value of 3 means rendering internally an image of triple size (triple the width and triple the height,
+so it requires about 9 times of the memory)
+- ...
+
+The recommended value is 2.
+
+Please note that, while higher levels of spatial oversampling require much more memory, they do not need much
+higher rendering time.
+
+===== _Filtering_
+Global filtering strategy for building the final image by taking into account the fractal iteration information:
+
+ - Global sharpening: create an image with consistent high sharpness
+ - Global smoothing: create an image with consistent high smoothness
+ - Adaptive: try to sharpen details, while smoothing "unsharp" areas as well as areas with low density
+
+===== _Filter kernel_
+Filter-kernel to apply, accordingly to the Filtering setting.
+
+The following values are recommended (but feel free to play with other settings as well):
+
+ - Global sharpening: Mitchell-Filter
+ - Global smoothing: Sinepow10
+ - Adaptive: Mitchel_Sinepow (Mitchel-Filter for sharpening details, Sinepow10-Filter for smoothing areas of low density)
+
+===== _Filter kernel preview / How filtering works_
+Creating a fractal image is a elaborate process consisting of several steps.
+Filtering is one of thse steps and very important for the final outcome.
+It takes place after the iteration-process which creates a lot of individual "measure points" of the fractal,
+called samples.
+
+One pixel of the final image is usually created by taking into account a number of those raw samples.
+This is some kind of averaging the neigbourhood and causes a better quality of the final image than just
+using one sample per pixel (which also would works).
+
+
+The filter-kernel-preview in the middle of the _Anti-Aliasing / Filter_ - tab show a visual representation of
+this behaviour. Higher bars correspond to a higher influence of a sample, while lower bars correspond to a lower
+influence.
+Usually, the highest influence is in the centre, which makes sense because the sample at the position
+of the final pixel usually should have an important influence.
+
+====== _Example: Gaussian-filter_
+[.thumb]
+image::filter_preview_gaussian.jpg[scaledwidth=75%]
+The Gaussian-filter is a very popular filter for smoothing. You can see understand this behaviour in
+the preview:
+
+ - the middle sample has the largest influence.
+ - samples which have a certain distance to  the center, have a smaller influence.
+ - this influence is smaller the more far the sample is.
+
+====== _Example: Mitchell-filter_
+[.thumb]
+image::filter_preview_mitchell.jpg[scaledwidth=75%]
+The Mitchell-filter is a very popular filter for sharpening.
+In comparison to a smoothing filter, it has small areas with negative contributions, which
+finally cause the sharpening effect.
+
+====== _Example: Box-filter_
+[.thumb]
+image::filter_preview_box.jpg[scaledwidth=75%]
+
+The box-filter is a special filter because it creates some kind of average of a bunch of samples.
+You can see this clearly in the preview, having only bars of the same size, i. e. each sample has the
+same contribution.
+
+===== _Sharpness indicator_
+This value helps the Adaptive filter to decide which portions of the image should be sharpened and
+which should be smoothed.
+
+The higher the value, the more areas are treated as smooth areas.
+The lower the value, the more areas are sharpened.
+
+This is a very abstract value, but there is a preview-mode which helps to visualize the different areas.
+This feature is described in the sub-section _Adaptive filter preview_ .
+
+===== _Low density_
+This value helps the Adaptive filter to decide, which portions of the image should be treated as area
+with low density, and which area should be smoothed regardless of density.
+
+Usually, smoothing in areas of low density is more intense than in regular smoothing areas,
+therefore the distinction.
+
+The higher the value, the more areas are treated as low density areas.
+The lower the value, the more areas are treated a general smoothing areas.
+
+This is a very abstract value, but there is a preview-mode which helps to visualize the different areas.
+This feature is described in the sub-section _Adaptive filter preview_ .
+
+===== _Adaptive filter preview_
+[.thumb]
+image::filtering_show_indicator.jpg[scaledwidth=75%]
+By enabling the small checkbox labelled "Indicator" and re-rendering the preview you get a visualization
+of the different areas detected by the _Adaptive filter_ .
+
+ - red: sharp areas
+ - green: smooth areas
+ - blue: areas with low density (which are also smoothed)
+
+[.thumb]
+image::preview_sharpness_indicator.jpg[scaledwidth=75%]
+
+===== _Antialiasing amount_
+Antialiasing is a technique to defend hard (or "jagged") lines or isolated pixels which seem too important.
+It works by adding a little of "chaos" to the individual samples.
+The _Antialiasing amount_ is a measure of this "chaos".
+The higher the value, the more "chaos" is applied, causing less hard lines, but possibly also causing fewer
+details.
+See also _Antialiasing radius_ for another parameter to influence antialiasing.
+
+===== _Antialiasing radius_
+Radius of the added "Chaos" to avoid jagged lines. See _Antialiasing amount_ for a more detailed
+description.
+
+===== _AI-based denoiser_
+Type of AI-based denoiser applied to the final image:filtering_show_indicator.jpg
+
+ - OptiX: a very popular denoiserby NVIDIA, requires a modern graphics card from NVIDIA, see https://developer.nvidia.com/optix-denoiser
+ - OIDN: an open-source-denoiser by Intel, comes with fewer requirements than OptiX, see https://www.openimagedenoise.org/
+ - None: no post-denoiser
+
+While not mandatory for rendering single images, those AI-based denoisers are extremely
+helpful when it comes to render animations. By using an AI-based denoiser you can cut down
+render times significantly, by factors of 10 and more.
+
+This works by choosing a very low render quality in JWildfire (e.g. lower than normal by factor 10)
+and than "completing" those usually noisy images by using the AI-based denoiser.
+It is often amazing how good this works.
+When you then finally assemble a compressed video sequence, you often see not difference in comparison
+to render all frames in high quality.
+
+Please note, that AI-based denoisers are not available on all platforms. Therefore, JWildfire performs
+some self-test att startup and presents only the available options.
+
+You can preview this feature using the _AI Denoiser preview_ - button in the preview area.
+
+===== _OptiX filter blend_
+This option is only available when choosing the OptiX denoiser. See _AI-based denoiser_ fr details.
+It defines a blend between the original (noisy) image and the denoised image.
+
+ - a value of 0 means that the original image is not blended with the denoised image at all, showing only the denoised image
+ - a value of 0.5 would mean that there will be created an average of the original and the denoised image.
+
+Usually, small values in the range 0 .. 0.2 are recommended.
+
+You can preview this feature using the _AI Denoiser preview_ - button in the preview area.
+
+===== _Denoise image_
+Using this button you can denoise an external image using the currently selected AI-based denoiser.
+When using the OptiX-denoiser, also the parameter _OptiX filter blend_ is respected.
+
+This feature is useful when you want to play with different denoising-settings or forgot to enable
+the denoiser or just want to denoise some non-Jwildfire-image.
+
+Please note: It is recommended to use PNG as file-format, others may work as well, but are not
+guaranteed to work. So, eventually you have to convert the image before denoising it.
 
 #### _Gradient_ tab
 
@@ -609,17 +776,15 @@ You may also set the default mutaiton-type for quick mutations in the Preference
 
 ##### Batch renderer
 
+== Platform-specific topics (Windows, Mac, Steam, ...)
 
-## Platform-specific topics (Windows, Mac, Steam, ...)
+== Interactive Renderer
 
+== Batch renderer
 
-## Interactive Renderer
+== Preferences
 
-## Batch renderer
-
-## Preferences
-
-## Flame Browser
+== Flame Browser
 [.thumb]
 image::flame_browser.jpg[scaledwidth=75%]
 
@@ -631,7 +796,7 @@ image::easy_movie_maker.jpg[scaledwidth=75%]
 [.thumb]
 image::mesh_generator.jpg[scaledwidth=75%]
 
-## MutaGen
+== MutaGen
 [.thumb]
 image::MutaGen.jpg[scaledwidth=75%]
 
@@ -645,7 +810,7 @@ You can easily exchange fractals between the main editor and the new module at a
 
 There is also a history, i.e. you can navigate back to earlier generations at any time.
 
-## Quilt Renderer
+== Quilt Renderer
 [.thumb]
 image::quilt_renderer.jpg[scaledwidth=75%]
 
@@ -654,7 +819,7 @@ This works by splitting the whole image into tiles.
 
 You may freely specify how the tiles are generated, e.g. splitting the image in 3x2 tiles or 8 vertical stripes.
 
-Each of the rendered tiles is a valid image. So, even if JWildfire would finally fail to assemble the tiles into one
+Each of the rendered tiles is a valid image.So, even if JWildfire would finally fail to assemble the tiles into one
 final image (due to memory restrictions), you could perform this step using external image-processing-software,
 which is more optimized to handle large images.
 Images with a size upto 32K (30720x17280) where tested without any problems so far.
@@ -662,16 +827,19 @@ Images with a size upto 32K (30720x17280) where tested without any problems so f
 You can cancel/resume the rendering-process at tile-level.
 
 Please note: Due to the nature of the flame-fractal-algorithm, the rendering of each tile may take as long as you
-would render the whole image at once. So, this method is not efficient, but effective.
+would render the whole image at once.So, this method is not efficient, but effective.
 A 16K render on a modern computer can take about 12 hours, but you will usually get an awesome
 result with endless details.
 
-## FAQ (frequently asked questions)
-Here are answers to some popular questions I get often, which do not fit into the other chapters.
+== FAQ (frequently asked questions)
+Here are answers to some popular questions which I get very often. They seem not fit well into
+the other chapters, so I collected them in this section.
 
-### Are 4k renders possible?
-### Can I render images with removed/transparent background?
-### How to save a flame as image?
+=== Are 4k renders possible?
+
+=== Can I render images with removed/transparent background?
+
+=== How to save a flame as image?
 
 
 [source,java]
