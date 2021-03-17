@@ -5,16 +5,34 @@
 :toclevels: 3
 
 = JWildfire users manual
+Copyright (C) 2021 by Andreas Maschke
 
 == Introduction
 [.thumb]
 image::JWildfire.jpg[scaledwidth=75%]
 
-== Main Editor
+Welcome to JWildfire and this user manual!
 
+The goal of this book is to describe the numerous function of the software and also to try
+to explain how they work.
+After over 10 years of development there is really a lot of this functions,
+so the book is more a reference book than one you might read from start to end.
+
+This book will not attempt to teach you how to create fractals and does not contain
+tutorial materials or examples. This would be too much and will be part of another book
+I will probably write.
+
+Anyway, I'm hoping this book will help you to have more fun with the software and achieve
+the results you are looking for.
+
+Have fun!
+
+Andreas Maschke, Grambek (Germany) 2021
+
+== Flame-Fractal Editor
 [.thumb]
 image::main_editor_with_regions.jpg[scaledwidth=75%]
-The Main Editor is the core part of JWildfire.
+The Flame-Fractal Editor is the core part of JWildfire.
 Here you create random flames or fine-tune your artworks.
 It consists of the following parts:
 
@@ -200,17 +218,17 @@ Each flame has its own undo-history.So undoing a change will never switch betwee
 Please note, that the undo history is not saved together whith flames, so it is lost when
 you quit JWildfire.
 
-##### _Redo_
+===== _Redo_
 Repeats the latest undone change to the currently selected flame.
 
-##### _SShot (Snapshot)_
-Create a snapshot of the current flame. This is an identical copy with new undo-history.
+===== _SShot (Snapshot)_
+Create a snapshot of the current flame.This is an identical copy with new undo-history.
 
-##### _Title_
-Sets the title of the current flame. This is a common place to also put copyright information
+===== _Title_
+Sets the title of the current flame.This is a common place to also put copyright information
 or to add your name (as the author of the artwork).
 
-##### _3D_
+===== _3D_
 Switch between "classic" rendering and experimental solid rendering.
 
 Solid rendering basically works by "remembering" each sample of the flame-fractal
@@ -224,11 +242,11 @@ Even to render the "classic" Mandelbulb (thanks to Whittaker Courtney for the id
 [.thumb]
 image::jwf_mandelbulb.jpg[scaledwidth=50%]
 
-##### _Animations controls on/off_
+===== _Animations controls on/off_
 Using this button you may quickly turn on or off animation controls on the fly.
 You may set up your preference for this setting in the Preferences-window.
 
-### Thumbnail ribbon
+=== Thumbnail ribbon
 The thumbnail ribbon hold thumbnails of all flames you currently are editing.
 After starting the program some random flame are generated and displayed in the thumbnail ribbon.
 You can edit/view any flame of the thumbnail by just double-clicking it.
@@ -236,86 +254,89 @@ If you want to return to your previous flame just double-click the thumbnail of 
 Each flame in the thumbnail-ribbon has its own undo-history.
 
 
-### Flame settings
+=== Flame settings
+At this main tab you edit settings at the flame-fractal-level. Most of those options do
+affect the final outcome in a global way, but do not affect the structure of the fractal itself.
+E.g., you can change the view-settings or affect the final coloring, but not the shape itself or
+which details are computed.
 
-
-#### _Camera_ tab
+==== _Camera_ tab
 [.thumb]
 image::camera_tab.jpg[scaledwidth=75%]
 
-With this controls you can control the camera-view.You can rotate and move the camera freely and zoom in/out.
+With these controls you can control the camera-view.You can rotate and move the camera freely and zoom in/out.
 
 "Classic" flame fractals are flat (2D) and can not be rotated in space.Basically the parameters Roll, CentreX, CentreY and Zoom/Pixels per unit apply to them.
 For 3D fractals there are a lot of more controls.
 
 But, you can "mix" them, of course.So you can apply all parameters to any fractal and also rotating a 2D flame in space or apply a perspectiv distortion to it.
 
-##### _Roll_
-Camera roll angle in degrees. Rotates around the virtual z-axis and also applies to 2D fractals.
+===== _Roll_
+Camera roll angle in degrees.Rotates around the virtual z-axis and also applies to 2D fractals.
 
-##### _Pitch_
+===== _Pitch_
 Camera pitch angle in degrees.
 
-##### _Yaw_
+===== _Yaw_
 Camera yaw angle in degrees.
 
-##### _Bank_
+===== _Bank_
 Camera bank angle in degrees.
 
-##### _Perspective_
-Camera perspective. A value of 0 means no perspective, while higher value get more dramatic perspective effects. Can even be negative for more intersting effects.
+===== _Perspective_
+Camera perspective.A value of 0 means no perspective, while higher value get more dramatic perspective effects.Can even be negative for more intersting effects.
 
-##### _CentreX_
+===== _CentreX_
 Offset (translation) of the fractal x-direction.
 
 ===== _CentreY_
 Offset (translation) of the fractal y-direction.
 
-##### _Zoom_
+===== _Zoom_
 Camera zoom.
 
-##### _Pixels per unit_
-Another (classic) measure of zoom. "Pixels per unit" means how many pixels are needed to fill a numerical distance of 1.0 (in fractal coordinates). The higher the value, the more details (like zooming in).
+===== _Pixels per unit_
+Another (classic) measure of zoom."Pixels per unit" means how many pixels are needed to fill a numerical distance of 1.0 (in fractal coordinates).The higher the value, the more details (like zooming in).
 
-##### _CamPosX_
-Position of the camera in x-direction. Has a similar effect like CentreX for 2D fractals, but not for 3D-fractals.
+===== _CamPosX_
+Position of the camera in x-direction.Has a similar effect like CentreX for 2D fractals, but not for 3D-fractals.
 
-##### _CamPosY_
-Position of the camera in y-direction. Has a similar effect like CentreY for 2D fractals, but not for 3D-fractals.
+===== _CamPosY_
+Position of the camera in y-direction.Has a similar effect like CentreY for 2D fractals, but not for 3D-fractals.
 
-##### _CamPosY_
+===== _CamPosY_
 Position of the camera in z-direction.
 
-#### _DOF/Bokeh_ tab
+==== _DOF/Bokeh_ tab
 DOF (depth of field) is a kind of controversy topic in flame-fractals.Some people like it a lot (including myself),
 some people do not like it at all.So, this sub-chapter describes a rather "special" topic.
 Bokeh is some kind of art which utilizes DOF to achieve certain artistic effects (using a real camera).
 Some typical types of bokeh-effects you may also simulate with JWildfire.
 
-##### _DOF_ subtab
+===== _DOF_ subtab
 [.thumb]
 image::dof_tab.jpg[scaledwidth=75%]
 
 This tab contains some of the more basic settings regarding to DOF.
 
-###### _New DOF_
+====== _New DOF_
 Switches between classic and more sophisticated (="new") DOF mode.
-Usually, the "new mode" is recommended. The classic mode is still ther because of backwards compatibility.
+Usually, the "new mode" is recommended.The classic mode is still ther because of backwards compatibility.
 
-###### _Amount_
-Amount of DOF. A value of zero means no DOF at all
+====== _Amount_
+Amount of DOF.A value of zero means no DOF at all
 
-###### _Area_
+====== _Area_
 Measure of the sharp area around the focus point
 
-###### _Exponent_
-Measure of the fallof of the sharp area around the focus point
+====== _Exponent_
+Measure of the falloff of the sharp area around the focus point
 
-###### _Camera dist_
+====== _Camera dist_
 Only applies to the classic mode and is a measure of the distance of the camera to the focus point
 
-###### _FocusX_
-X-position of the focus point (point which is sharp). May also be edited interactively in the preview area.
+====== _FocusX_
+X-position of the focus point (point which is sharp).May also be edited interactively in the preview area.
 
 ====== _FocusY_
 Y-position of the focus point (point which is sharp).May also be edited interactively in the preview area.
@@ -618,7 +639,7 @@ description.
 ===== _AI-based denoiser_
 Type of AI-based denoiser applied to the final image:filtering_show_indicator.jpg
 
- - OptiX: a very popular denoiserby NVIDIA, requires a modern graphics card from NVIDIA, see https://developer.nvidia.com/optix-denoiser
+ - OptiX: a very popular denoiser by NVIDIA, requires a modern graphics card from NVIDIA, see https://developer.nvidia.com/optix-denoiser
  - OIDN: an open-source-denoiser by Intel, comes with fewer requirements than OptiX, see https://www.openimagedenoise.org/
  - None: no post-denoiser
 
@@ -658,123 +679,218 @@ the denoiser or just want to denoise some non-Jwildfire-image.
 Please note: It is recommended to use PNG as file-format, others may work as well, but are not
 guaranteed to work. So, eventually you have to convert the image before denoising it.
 
-#### _Gradient_ tab
+==== _Gradient_ tab
+At the gradient tab you find numerous option to create and modify the gradients of your fractals.
+Notice: gradients are sometimes also referred as "palette" or "color palette".
 
-##### _Gradient library_ subtab
+===== _General controls_ subtab
+[.thumb]
+image::gradient_tab_general_controls.jpg[scaledwidth=75%]
+The gradient-tab contains both some general controls and some sub-tabs.The former are described in this
+sub-chapter.
+
+====== _Edit gradient_ button
+Opens/closes the classic gradient-editor of JWildfire.It is outdated and not described here.
+This gradient editor was superseeded by the curve-editor you find at the _Curve editor_ subtab.
+
+====== _Random_ button
+Shortcut for creating a new random gradient (using the current settings at the _Create new_ subtab).
+Gradient changes are also part of the undo-history of the flame-fractal, so you may switch through
+the randomly generated gradients by Undoing/redoing afterwards.
+
+====== _Save_ button
+Save the current gradient to the gradient-library (as *.map-file).
+See the sub-chapter _Gradient library_ for futher details.
+
+====== _Rnd grd_ button
+Select a random gradient from your gradients-library.Per default, the built-in library is selected.
+If you want to choose a random gradient from your own gradient-library or a sub-folder inside it, you
+must select the right folder before.
+
+====== _Shift_
+Modifies the gradient-shift, which moves all colors by the given amount.
+This is non-destructive operation.Colors, which are "moving out" at one end of the gradient
+are "moving in" on the other side.
+
+====== _Rnd shift_ button
+Applies a randomly chosen _Shift_ value
+
+====== _Rnd clr_ button
+Sets the _Color_-parameter of all transformations of the fractal to a random value.
+
+This does not change the gradient, but does change how it is applied to generate the
+final coloring of the fractal.
+
+====== _Rnd spd_ button
+Sets the _Speed_-parameter of all transformations of the fractal to a random value.
+
+This does not change the gradient, but does change how it is applied to generate the
+final coloring of the fractal.
+
+====== _Reset clr_ button
+Sets both the _Color_- and the _Speed_-parameter of all transformations of the fractal to zero.
+
+This does not change the gradient, but does change how it is applied to generate the
+final coloring of the fractal.
+
+====== _Distribute clr_ button
+Distributes the _Color_-parameter of all transformations of the fractal evenly.
+
+This does not change the gradient, but does change how it is applied to generate the
+final coloring of the fractal.
+
+===== _Gradient library_ subtab
 [.thumb]
 image::gradient_library_tab.jpg[scaledwidth=75%]
 
-##### _Create new_ subtab
+At this tab you can select pre-saved gradients and apply them to your fractal by just clicking
+at them.
+The gradient-library contains of two parts:
+
+- in-built gradients: those are installed together with the program and can not be modified in any way
+- your own gradients. They are located in a folder outside the JWildfire-installation-drawer,
+  so that they are not lost when you update JWildfire. You must specify this path in the
+  _Preferences_ by setting the property _tinaGradientPath_.
+
+User-defined gradients may be structurized in sub-folders in order to make them easier accessible.
+
+===== _Create new_ subtab
 [.thumb]
 image::gradient_create_tab.jpg[scaledwidth=75%]
 
-##### _Curve editor_ subtab
+At this tab you can create gradients by various options.
+The most common use is to create random-gradients by selecting one of the sophisticated built-in
+random-gradient-generators. But, there are also other options.
+
+====== _Random gradient_ button
+
+====== _Gradient generator_
+
+====== _Random points_
+
+====== _Fade colors_
+
+====== _Uniform widths_
+
+====== _Base colors_ table
+
+====== _Create similar gradient_ button
+
+====== _Extract from flame_ button
+
+====== _Create from image_ button
+
+
+
+
+===== _Curve editor_ subtab
 [.thumb]
 image::gradient_curve_editor_tab.jpg[scaledwidth=75%]
 
-##### _Modify gradient_ subtab
+===== _Modify gradient_ subtab
 [.thumb]
 image::gradient_modify_tab.jpg[scaledwidth=75%]
 
-##### _Balancing_ subtab
+===== _Balancing_ subtab
 [.thumb]
 image::gradient_balancing_tab.jpg[scaledwidth=75%]
 
-##### _Color map_ subtab
+===== _Color map_ subtab
 [.thumb]
 image::gradient_colormap_tab.jpg[scaledwidth=75%]
 
-#### _3D rendering_ tab
+==== _3D rendering_ tab
 
-##### _Ambient shadows_ subtab
+===== _Ambient shadows_ subtab
 [.thumb]
 image::3drendering_ambient_shadows_tab.jpg[scaledwidth=75%]
 
-##### _Hard shadows_ subtab
+===== _Hard shadows_ subtab
 [.thumb]
 image::3drendering_hard_shadows_tab.jpg[scaledwidth=75%]
 
-##### _Material settings_ subtab
+===== _Material settings_ subtab
 [.thumb]
 image::3drendering_material_tab.jpg[scaledwidth=75%]
 
-##### _Light settings_ subtab
+===== _Light settings_ subtab
 [.thumb]
 image::3drendering_light_settings_tab.jpg[scaledwidth=75%]
 
-##### _ZBuffer_ subtab
+===== _ZBuffer_ subtab
 [.thumb]
 image::3drendering_zbuffer_tab.jpg[scaledwidth=75%]
 
-###### _ZBuffer scale_
-###### _ZBuffer bias_
-###### _ZBuffer filename_
+====== _ZBuffer scale_
 
+====== _ZBuffer bias_
 
-##### _Ambient shadows_ subtab
+====== _ZBuffer filename_
 
-##### _Hard shadows_ subtab
+===== _Ambient shadows_ subtab
 
-##### _Material settings_ subtab
+===== _Hard shadows_ subtab
 
-##### _Light settings_ subtab
+===== _Material settings_ subtab
 
-#### _Stereo3D_ tab
+===== _Light settings_ subtab
 
-#### _Post symmetry_ tab
+==== _Stereo3D_ tab
 
-#### _FPS / Motion blur_ tab
+==== _Post symmetry_ tab
 
-#### _Layers_ tab
+==== _FPS / Motion blur_ tab
 
-#### _Channel mixer_ tab
+==== _Layers_ tab
 
-#### _Quick mutations_ tab
+==== _Channel mixer_ tab
+
+==== _Quick mutations_ tab
 "Quick mutations"-tab allow easily creating a batch of variations of the currently selected flame.
 You may load any of those mutations into the main editor by double-clicking at it.
 This creates a new flame in a new slot and does not alter the original flame in any way.
 You may set the default batch size for quick mutations in the Preferences (property tinaQuickMutationBatchSize).
-You may also set the default mutaiton-type for quick mutations in the Preferences (property tinaQuickMutationDefaultMutationType).
+You may also set the default mutation-type for quick mutations in the Preferences (property tinaQuickMutationDefaultMutationType).
 
-### Transformations and Scripts
+=== Transformations and Scripts
 
-### Global functions
+=== Global functions
 
-##### Random batch
+==== Random batch
 
-##### Rnd flame-generator
+==== Rnd flame-generator
 
-##### Rnd Symmetry
+==== Rnd Symmetry
 
-##### Rnd Gradient
+==== Rnd Gradient
 
-##### Rnd WField
+==== Rnd WField
 
-##### New from scratch
+==== New from scratch
 
-##### From clipboard
+==== From clipboard
 
-##### Load flame
+==== Load flame
 
-##### To clipboard
+==== To clipboard
 
-##### Save flame
+==== Save flame
 
-##### Q (Quicksave)
+==== Q (Quicksave)
 
-##### A (Save all)
+==== A (Save all)
 
-##### Render image
+==== Render image
 
-##### Render resolution
+==== Render resolution
 
-##### Edit resolution profiles
+==== Edit resolution profiles
 
-##### Render quality
+==== Render quality
 
-##### Edit quality profiles
+==== Edit quality profiles
 
-##### Batch renderer
+==== Batch renderer
 
 == Platform-specific topics (Windows, Mac, Steam, ...)
 
@@ -836,15 +952,25 @@ Here are answers to some popular questions which I get very often. They seem not
 the other chapters, so I collected them in this section.
 
 === Are 4k renders possible?
+Yes, you can.
+
+You can literally render in any resolution, also 8k:
+
+- by rendering a single image at once. The maximum render size is only restricted by your available memory.
+(For really huge images, you may need patience, too.)
+- by using the _Quilt-renderer_-module you may render really huge images in smaller parts, which are finally
+assembled together. The maximum render size is also limited by memory. But often, you will
+get other problems before reaching the memory-limit in JWildfire. For example, those image files can be very big (I have tested with
+sizes up to 1 GB), and is hard to find other software which may process such large images.
 
 === Can I render images with removed/transparent background?
+Yes, you can.
+
+See the properties _Background transparency_ and _Fg opacity_ at the _Coloring_-tab.
+
+You can also preview the rendering with transparent background. Set the _Display/hide transparency_ - button
+at the preview-area.
 
 === How to save a flame as image?
 
-
-[source,java]
-.Java code from project
-----
-include::{sourcedir}/example/StringUtils.java[tags=contains,indent=0]
-----
 
