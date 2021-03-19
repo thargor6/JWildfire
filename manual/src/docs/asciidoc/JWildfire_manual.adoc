@@ -246,13 +246,46 @@ image::jwf_mandelbulb.jpg[scaledwidth=50%]
 Using this button you may quickly turn on or off animation controls on the fly.
 You may set up your preference for this setting in the Preferences-window.
 
-=== Thumbnail ribbon
+=== _Thumbnail ribbon_
+[.thumb]
+image::thumbnail_ribbon.jpg[scaledwidth=50%]
+
 The thumbnail ribbon hold thumbnails of all flames you currently are editing.
 After starting the program some random flame are generated and displayed in the thumbnail ribbon.
 You can edit/view any flame of the thumbnail by just double-clicking it.
 If you want to return to your previous flame just double-click the thumbnail of this other flame.
 Each flame in the thumbnail-ribbon has its own undo-history.
 
+==== Selecting flames in the _thumbnail ribbon_
+Each flame in the _thumbnail ribbon_ have a little checkbox assigned in the upper right edge.
+By changing the value of this checkbox you change the selected state of the thumbnail.
+
+Selection of individual flames is only important for saving and deleting.
+
+[.thumb]
+image::thumbnail_ribbon_select_menu.jpg[scaledwidth=50%]
+
+By pressing the right mouse-button on top of this checkbox you can open a popup-menu
+to change the selection for all flames inside the _thumbnail ribbon_:
+
+ - _Toggle all_: invert the selection of all flames
+ - _Deselect all_: set all flames to deselected state
+
+So, one way to select all flames is to deselect them all and then to invert the selection.
+
+==== Deleting flames in the _thumbnail ribbon_
+Each flame in the _thumbnail ribbon_ has also a little delete-button assigned in the upper right edge.
+By pressing this button you may delete the corresponding flame from the _thumbnail ribbon_.
+
+[.thumb]
+image::thumbnail_ribbon_delete_menu.jpg[scaledwidth=50%]
+
+By pressing the right mouse-button on top of this button you can open a popup-menu
+to delete a number of flames from the _thumbnail ribbon_:
+
+- _Remove selected_: delete all flames, which are selected (corresponding checkbox is checked),
+from the _thumbnail ribbon_
+- _Remove all_: empty the _thumbnail ribbon_
 
 === Flame settings
 At this main tab you edit settings at the flame-fractal-level. Most of those options do
@@ -760,90 +793,181 @@ image::gradient_create_tab.jpg[scaledwidth=75%]
 
 At this tab you can create gradients by various options.
 The most common use is to create random-gradients by selecting one of the sophisticated built-in
-random-gradient-generators. But, there are also other options.
+random-gradient-generators.
 
 ====== _Random gradient_ button
+Create a new random gradient using the currently selected options, which are described in the following sub-sections.
+Each new gradient is a separate entry in the undo-history of the currently selected flame fractal, so you can
+cycle through all the generated gradients by using the _Undo_ and _Redo_ button.
 
 ====== _Gradient generator_
+You may choose on of the following gradient generators:
+
+ - _(All)_: meta-random-gradient-generator which randomly chooses a random-gradient-generator to create the gradient
+ - _Strong hue_: creates a smooth  gradient with strong colors
+ - _Stripes_: creates a gradient with many regular color changes, having a "stripy" look
+ - _Monochrome_: creates a smooth and monochrome radient
+ - _Smooth_: creates a smooth gradient with primarily pastel colours
+ - _Bold_: creates a non-smooth gradient with large blocks of strong colors
+ - _Two colors_: creates a smooth gradient by fading exactly two colors into each other
+ - _Uniform curves_: creates a random color curve with evenly distributed base colors and then
+ derives the gradient from it. Using this generator you have both a gradient and
+matching color curves.
+ - _Uneven curves_: creates a random color curve with unevenly distributed base colors.
+Using this generator you have both a gradient and
+matching color curves.
+This setting creates usually the most interesting and versatile gradient together with the
+corresponding color curves and is the default.
 
 ====== _Random points_
+Number of random base colors to derive a gradient from. The more base colors, the more different
+colors do you have in the final gradient.
+
+Please note, that this setting is not respected by all
+random-gradient-generators (e. g. _Two colors_ will always only use two colors).
 
 ====== _Fade colors_
+Fade the base colors in order to create a smooth gradient, which is the default setting.
+
+Please note, that this setting is not respected by all
+random-gradient-generators (e. g. _Bold_ will never fade colors).
 
 ====== _Uniform widths_
+Distribute the base colors over the size of gradient in an uniform way.
 
 ====== _Base colors_ table
+In this table you can manually edit the base colors after a gradient was created.
+
+Please note, that those base colors are not saved. So you can only edit them
+at the time you create gradients, but not after saviong and loading a flame.
 
 ====== _Create similar gradient_ button
+Creates another random gradient which has similar colors to the current gradient,
+but has a different distribution over the area of gradient.
 
 ====== _Extract from flame_ button
+Load a gradient from a flame-file.
 
 ====== _Create from image_ button
-
-
-
+Imports an image and creates a gradient from the most frequent colors found in that image.
 
 ===== _Curve editor_ subtab
 [.thumb]
 image::gradient_curve_editor_tab.jpg[scaledwidth=75%]
 
+Color curves are an alternative way to edit gradients.
+Using color curves usually gives much more control over the final result because it allows
+a very interactive editing of both the gradient and the flame at the same time.
+Additionally, it allows more direct control over modifying the colors of a gradient,
+making it much easier to create "dramatic" effects.
+
+Internally, each gradient consist both of the "classic" part of the gradient and three
+curves: _hue_, _saturation_ and _luminosity_.
+Those curves belong to the flames, and are also stored within the flame-files.
+
+When loading an older flame-file without those curves, or assigning a "classic" gradient
+to a flame, the color curves are approximated.
+Usually, this  is only a very raw approximation, but this is absolutely intended.
+To reach a very accurate approximation, it would require to have a lot of curve-points,
+which would make the curve very hard to edit.
+Therefore, the goal of the raw approximation is to make the actual editing easier.
+
+So, there is no exact synchronisation between gradient and colors curves,
+in order to not break existing flames and concepts.
+Instead, it is meant as powerful additional tool, which is useful in very many cases,
+but might not be useful in each case.
+
+Only when you start to edit one of the curves, the gradient is synchronized to shape of the curves.
+When you save and re-load a flame you can continue the editing of the curves.
+
+Each curve has a toolbar with little buttons to help with editing:
+
+  - open a modal dialog for editing an enlarged version of a particular curve
+  - create ramp-shaped curve
+  - create line-shaped curve at the bottom (constant zero intensity)
+  - create line-shaped curve at the middle (constant halve intensity)
+  - mirror the curve at the vertical axis
+  - mirror the curve at the horizontal axis (e.g., to turn a constant line of zero intensity
+into a line with maximum intensity)
+
 ===== _Modify gradient_ subtab
 [.thumb]
 image::gradient_modify_tab.jpg[scaledwidth=75%]
+???
 
 ===== _Balancing_ subtab
 [.thumb]
 image::gradient_balancing_tab.jpg[scaledwidth=75%]
+???
 
 ===== _Color map_ subtab
 [.thumb]
 image::gradient_colormap_tab.jpg[scaledwidth=75%]
+???
 
 ==== _3D rendering_ tab
+???
 
 ===== _Ambient shadows_ subtab
 [.thumb]
 image::3drendering_ambient_shadows_tab.jpg[scaledwidth=75%]
+???
 
 ===== _Hard shadows_ subtab
 [.thumb]
 image::3drendering_hard_shadows_tab.jpg[scaledwidth=75%]
+???
 
 ===== _Material settings_ subtab
 [.thumb]
 image::3drendering_material_tab.jpg[scaledwidth=75%]
+???
 
 ===== _Light settings_ subtab
 [.thumb]
 image::3drendering_light_settings_tab.jpg[scaledwidth=75%]
+???
 
 ===== _ZBuffer_ subtab
 [.thumb]
 image::3drendering_zbuffer_tab.jpg[scaledwidth=75%]
+???
 
 ====== _ZBuffer scale_
+???
 
 ====== _ZBuffer bias_
+???
 
 ====== _ZBuffer filename_
+???
 
 ===== _Ambient shadows_ subtab
+???
 
 ===== _Hard shadows_ subtab
+???
 
 ===== _Material settings_ subtab
+???
 
 ===== _Light settings_ subtab
+???
 
 ==== _Stereo3D_ tab
+???
 
 ==== _Post symmetry_ tab
+???
 
 ==== _FPS / Motion blur_ tab
+???
 
 ==== _Layers_ tab
+???
 
 ==== _Channel mixer_ tab
+???
 
 ==== _Quick mutations_ tab
 "Quick mutations"-tab allow easily creating a batch of variations of the currently selected flame.
@@ -852,65 +976,151 @@ This creates a new flame in a new slot and does not alter the original flame in 
 You may set the default batch size for quick mutations in the Preferences (property tinaQuickMutationBatchSize).
 You may also set the default mutation-type for quick mutations in the Preferences (property tinaQuickMutationDefaultMutationType).
 
+???
+
 === Transformations and Scripts
+???
 
 === Global functions
+At this area you find global functions as well as the very often used ones.
 
-==== Random batch
+==== _Random batch_ button
+Create a new batch of random flames and displays it in the _thumbnail ribbon_.
+This is probably one of the most popular features of JWildire, because using this function
+you can create endless beauty in a very relaxing way. It is also very unlikely that you will
+ever generate two fractals which look exactly the same, so it possible that you
+are surprised by new and interesting results even after weeks of use of the program.
 
-==== Rnd flame-generator
+
+
+Please note, that this will per default remove any previously loaded flames together
+with their undo-history from memory. So, any change you did not save yet, will be lost.
+You can change this behaviour by editing the parameter _tinaRandomBatchRefreshType_ in
+the _Preferences_.
+
+The results of the random batch can be influenced by changing the following parameters
+
+ - Rnd flame-generator
+ - Rnd Symmetry
+ - Rnd Gradient
+ - Rnd WField
+ - tinaRandomBatchSize (in the _Preferences_)
+ - tinaRandomBatchBGColorRed, tinaRandomBatchBGColorGreen, tinaRandomBatchBGColorBlue (also in the _Preferences_)
+
+See the following sub-sections for more details to the former four parameters.
+
+==== _Rnd flame-generator_
+
+Choose here the random-flame-generator used to generate a batch of random flames.
+A random-flame-generator is a set of instructions to generate a skeleton of a certain type of fractal
+and fill this skeleton with random values or random sub-structures.
+What works good and what works not, depends on the type of fractals. Sometimes it just the
+random change of some single number, sometimes a random transformation or formula is inserted.
+
+Usually, the random-flame-generators of JWildfire use the strategy, to use some well-explained
+ranges of parameters together with some larger freedom. This way you get very often a pleasing result,
+but maybe also new variations, which you never saw before (or which may never been tried before at all).
+
+There are two types of random-flame-generators:
+
+ - _meta-random-flame-generator_: uses randomly-chosen random-flame-generators internally
+ - _random-flame-generator_: actually creates a random flame
+
+===== The special "All"-random-flame-generator
+The most common random-flame-generator is the default generator named "All".
+It is a meta-random-flame-generator and containes all other other random-flame-generators.
+When it generates a random flame, it selects randomly one of those internal generators
+to do the actual work.
+So, by choosing "(All)" you will get the most diverse results.
 
 ==== Rnd Symmetry
+Sets the random-symmetry-generator involved in generating random flames.
+A random-symmetry randomly sets post-symmetry-options of the random flames.
+
+There are the following options:
+
+ - _None_: the flame will have no post-symmetry
+ - _XAxis_: a random x-axis-symmetry
+ - _YAxis_: a random y-axis-symmetry
+ - _Point_: a random point-axis-symmetry
+ - _(All)_: randomly selects a random-symmetry-generator to generate post-symmetry
+ - _(All, sparse)_: like _(All)_, but with reduced probability to generate post-symmetry at all
+
+The default value is _(All, sparse)_, which means to randomly create random symmetry of all types,
+but only a few random flames.
+
+See the section about _Post symmetry_ for more details about the types of post-symmetry and related parameters.
 
 ==== Rnd Gradient
+???
 
 ==== Rnd WField
+???
 
 ==== New from scratch
+???
 
 ==== From clipboard
+???
 
 ==== Load flame
+???
 
 ==== To clipboard
+???
 
 ==== Save flame
+???
 
 ==== Q (Quicksave)
+???
 
 ==== A (Save all)
+???
 
 ==== Render image
+???
 
 ==== Render resolution
+???
 
 ==== Edit resolution profiles
+???
 
 ==== Render quality
+???
 
 ==== Edit quality profiles
+???
 
 ==== Batch renderer
+???
 
 == Platform-specific topics (Windows, Mac, Steam, ...)
+???
 
 == Interactive Renderer
+???
 
 == Batch renderer
+???
 
 == Preferences
+???
 
 == Flame Browser
 [.thumb]
 image::flame_browser.jpg[scaledwidth=75%]
-
-##Easy Movie Maker
+???
+== Easy Movie Maker
 [.thumb]
 image::easy_movie_maker.jpg[scaledwidth=75%]
+???
 
-##Mesh generator
+== Mesh generator
 [.thumb]
 image::mesh_generator.jpg[scaledwidth=75%]
+???
 
 == MutaGen
 [.thumb]
@@ -972,5 +1182,5 @@ You can also preview the rendering with transparent background. Set the _Display
 at the preview-area.
 
 === How to save a flame as image?
-
+???
 
