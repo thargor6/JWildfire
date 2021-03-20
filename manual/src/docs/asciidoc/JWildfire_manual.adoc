@@ -231,12 +231,12 @@ or to add your name (as the author of the artwork).
 ===== _3D_
 Switch between "classic" rendering and experimental solid rendering.
 
-Solid rendering basically works by "remembering" each sample of the flame-fractal
+Solid rendering basically works by remembering each sample of the flame-fractal
 as a solid particle.
 The sum of all of these particles make up a larger solid shape.
 This works only good for a certain types of flame fractals.
 It may fail if the structure is too thin or is in general too "chaotic" or too blurry.
-But, it can be used to create really unusual and interesting things.
+Solid rendering can be used to create really unusual and interesting things.
 Even to render the "classic" Mandelbulb (thanks to Whittaker Courtney for the idea):
 
 [.thumb]
@@ -893,226 +893,287 @@ into a line with maximum intensity)
 ===== _Modify gradient_ subtab
 [.thumb]
 image::gradient_modify_tab.jpg[scaledwidth=75%]
-???
+At this tab you can modify the gradient globally.
+Please note, that this does not respect color-curves, so they will be out of sync, if any.
 
 ===== _Swap RGB_
-???
+Swaps the color channels which changes the finally colors dramatically.
+Different values do swap different channels.
 
 ===== _Frequency_
-???
+Repeats the gradient inside itself. The higher the frequency the more copies are made.
+Because the copies must fit in the place of one gradient, they are scaled down.
 
 ===== _Blur_
-???
+Blur smudges the colors of the gradient making it more smooth or "unsharp"
 
 ===== _Invert_
-???
+Turns the colors of the gradient into negative colors.
 
 ===== _Reverse_
-???
+Mirrors the positions of the colors (last color will be first and vice versa).
 
 ===== _Sort_
-???
+Sorts the colors by hue and brightness.
 
-===== _Apply all current modifications_
-???
+===== _Apply all current modifications_ button
+All of the above options are "non-destructive" which mean they do not actually modify the gradient,
+but are applied dynamically. Using the _Apply all current modifications_ button you can
+finalize those changes by actually applying them to the gradient.
 
 ===== _Balancing_ subtab
 [.thumb]
 image::gradient_balancing_tab.jpg[scaledwidth=75%]
-???
+At this tab you can modify the colors of the gradient by applying typical color balancing operations.
+Please note, that this does not respect color-curves, so they will be out of sync, if any.
 
 ===== _Red_
-???
+Change the red color balance.
 
 ===== _Green_
-???
+Change the green color balance.
 
 ===== _Blue_
-???
+Change the blue color balance.
 
 ===== _Hue_
-???
+Increase or decrease the hues of the colors of the gradient.
 
 ===== _Saturation_
-???
+Increase or decrease the saturations of the colors of the gradient.
 
 ===== _Contrast_
-???
+Increase or decrease the contrasts of the colors of the gradient.
 
 ===== _Gamma_
-???
+Apply an overall gamma correction.
 
 ===== _Brightness_
-???
+Change the overall brightness.
 
-===== _Apply all current modifications_
-???
+===== _Apply all current modifications_ button
+All of the above options are "non-destructive" which mean they do not actually modify the gradient,
+but are applied dynamically. Using the _Apply all current modifications_ button you can
+finalize those changes by actually applying them to the gradient.
 
 ===== _Color map_ subtab
 [.thumb]
 image::gradient_colormap_tab.jpg[scaledwidth=75%]
-???
+At this tab you find a very experimental feature which lets you use an image as gradient.
+It works only well for flat fractals.
+When coloring the fractal it takes into account both the position at the (x,y)-plane and the local
+color information from the iteration process.
 
 ===== _Select image_
-???
+Select an external image.
 
 ===== _H Offset_
-???
+Horizontal offset of the image map.
 
 ===== _H Scale_
-???
+Horizontal sizing of the image map.
 
 ===== _Local Add_
-???
+Measure of influence of local color information at the current position.
 
 ===== _Local Scl_
-???
+Measure of another type of influence of local color information at the current position.
 
 ===== _V Offset_
-???
+Vertical offset of the image map.
 
 ===== _V Scale_
-???
-
-
-==== _3D rendering_ tab
-???
+Vertical sizing of the image map.
 
 ===== _Remove image_
-???
+Remove the selected color map (and revert to use a regular gradient for coloring).
+
+==== _3D rendering_ tab
+At this tab you can influence the outcome of a fractal rendered in solid mode.
+This is also an experimental feature of JWildfire.
+
+Solid rendering basically works by "remembering" each sample of the flame-fractal
+as a solid particle.
+The sum of all of these particles make up a larger solid shape.
+This works only good for a certain types of flame fractals and needs more rendering time
+than "classic" flame-fractals.
+
+It may fail at all, if the structure is too thin or is in general too "chaotic" or too blurry.
+
+Solid rendering can be used to create really unusual and interesting things.
 
 ===== _Ambient shadows_ subtab
 [.thumb]
 image::3drendering_ambient_shadows_tab.jpg[scaledwidth=75%]
-???
+Ambient shadow calculation is an effective method for approximating more complex physical processes
+that cause it to be darker in small corner ends or crevices.
+
+There are several methods to implements this, JWildfire uses a method based on
+"Image-Space Horizon-Based Ambient Occlusion", which was developed by NVIDIA.
+
+Ambient shadows are a global effect which is independant from any lightsources.
 
 ====== _Ambient shadows_ checkbox
-???
+Enable or disable Ambient shadow calculation.
+
+Please note that ambient shadows are applied after the main iteration process, so it will not be displayed
+in realtime during progressive rendering.
 
 ====== _Amb shadow intensity_
-???
+Intensity of the ambient shadows. The higher the value the higher the darknesser the shadows in small corners.
 
 ====== _Search radius_
-???
+Distance to search for ambient occlusions.
+Affects both the quality and the overall appearance of the ambient shadows.
+Optimum values depends on the individual fractal. The default value should work not to bad in most cases, though.
 
 ====== _Blur radius_
-???
+Blur amount of ambient shadows. A value of 0 means no blur at all, which would look very unnatural.
 
 ====== _Falloff_
-???
+Falling off of the shadows. Higher values lead to higher falling off, making the shadows smaller.
 
 ====== _Radius samples_
-???
+Number of samples in radius-search-direction. Higher values increase both quality of the shadows
+and rendering time.
 
 ====== _Azimuth samples_
-???
+Number of samples in azimuth-search-direction. Higher values increase both quality of the shadows
+and rendering time.
 
 ====== _Affect diffuse_
-???
+An experimental option to let influence the diffuse lighting by ambient shadows.
+This is in no way physically correct, but can help to generate more dramatic effects.
 
 ===== _Hard shadows_ subtab
 [.thumb]
 image::3drendering_hard_shadows_tab.jpg[scaledwidth=75%]
-???
+At this tab you can configure classic hard shadows which are geneated with the help of shadow maps.
+
+Hard and ambient shadows can be used at the same time and work well together.
 
 ====== _Shadow type_
-???
+There are the following options:
+
+ - _Off_: don't calculate hard shadows. This is the default setting
+ - _Fast_: classic hard shadows
+ - _Smooth_: a modification of hard shadows which smoothes them at the edges.
+Produces artifacts in some cases. You should use then _Fast_ shadows.
 
 ====== _Smooth radius_
-???
+Radius for smoothing hard shadows.
 
 ====== _Shadowmap size_
-???
+Resolution of the shadow map. The higher the resolution, the higher the quality of
+the shadows, but the higher the memory consumption.
+
+Please note, that a shadow map is required for each lightsource. So, having many lightsources
+may increase memory consumption indirectly, when using shadow maps.
 
 ====== _Shadowmap bias_
-???
+Sometimes shadow maps produces little stripy artifacts. By setting a small bias value those artifacts
+can be bypassed. The bias value must not necessarily high when there are a large number of artifacts.
 
 ===== _Material settings_ subtab
 [.thumb]
 image::3drendering_material_tab.jpg[scaledwidth=75%]
-???
+Here you can set up the materials of your fractal.
+Fractals can have any number of materials, which are selected by
+a material-index similar to colors by the color-index.
 
 ====== _Selected Material_ combobox
-???
+Here you select the material you want to edit.
 
 ====== _Add_ button
-???
+Create a new material.
 
 ====== _Del_ button
-???
+Delete the currently selected material.
 
 ====== _Diffuse_
-???
+Amount of diffuse reflection which is light reflected from rough surface.
+The color of this component is determined by the color of the lightsource.
 
 ====== _Ambient_
-???
+Amount of ambient light. The color of this component is determined by the fractal color.
 
 ====== _Specular_
-???
+Amount of specular reflection which is light reflected from a smooth surface.
+The color of this component is determined by the _specular color_.
 
 ====== _Spec size_
-???
+Size of the specular reflections. Higher values produce smaller and more intense reflections.
 
 ====== _Diffuse response_
-???
+Controls how the material reflects diffuse light.
 
 ====== _Specular color_
-???
+Color of specular reflections.
 
 ====== _Reflection map_
-???
+Allows mapping an image as environment which is reflected on the object surface.
 
 ====== _Refl mapping_
-???
+The function used to map the image to the environment.
 
 ====== _Refl intensity_
-???
+Amount of light emitted by the reflection map.
 
 ===== _Light settings_ subtab
 [.thumb]
 image::3drendering_light_settings_tab.jpg[scaledwidth=75%]
-???
+At this subtab you may set up directional lightsources for solid rendering.
+
+You may have as many lightsources as you want.
 
 ====== _Selected Light_ combobox
-???
+Select the lightsource you want to edit.
 
 ====== _Add_ button
-???
+Add a lightsource.
 
 ====== _Del_ button
-???
+Remove the currently selected lightsource.
 
 ====== _Altitude_
-???
+Changes the light direction by altering the angle between the light and the z-axis.
 
 ====== _Azimuth_
-???
+Changes the light direction by altering the angle between the light and the yz-plane.
 
 ====== _Light color_
-???
+Color of this light, used in the calculating the diffuse component of reflection.
 
 ====== _Cast shadows_
-???
+Choose if this light should cast shadows or not. Affects only hard shadows.
 
 ====== _Light intensity_
-???
+Intensity of the lightsource.
 
 ====== _Shadow intensity_
-???
+Intensity of the shadow casted by this lightsource.
 
 ===== _ZBuffer_ subtab
 [.thumb]
 image::3drendering_zbuffer_tab.jpg[scaledwidth=75%]
-???
+When rendering in solid mode you may also export an additional z-buffer-image.
+The settings on this tab help to customize the creation of this z-buffer.
+
+Hint: To export an z-buffer you must activate the option _with Z-Buffer_ in the _Quality_-profile, you are using.
+See the sub-section about _Quality Profiles_ for more details.
 
 ====== _ZBuffer scale_
-???
+Affects the amplitude of the z-shift/depth-effect caused the z-buffer.
+The higher the value, the more dramatic the depth-effect caused by this z-buffer.
 
 ====== _ZBuffer bias_
-???
+Moves the minimal z-shift.
 
 ====== _ZBuffer filename_
-???
+There are two options to control how the filename of the z-buffer-image is determined:
+
+ - _zbuf_name_: use image filename prefixed with "zbuf_"
+ - _name_depth_: append "_depth" to the image filename
 
 ==== _Stereo3D_ tab
 ???
@@ -1134,7 +1195,7 @@ image::3drendering_zbuffer_tab.jpg[scaledwidth=75%]
 You may load any of those mutations into the main editor by double-clicking at it.
 This creates a new flame in a new slot and does not alter the original flame in any way.
 You may set the default batch size for quick mutations in the _Preferences_ (property _tinaQuickMutationBatchSize_).
-You may also set the default mutation-type for quick mutations in the Preferences (property tinaQuickMutationDefaultMutationType).
+You may also set the default mutation-type for quick mutations in the _Preferences_ (property tinaQuickMutationDefaultMutationType).
 
 ???
 
