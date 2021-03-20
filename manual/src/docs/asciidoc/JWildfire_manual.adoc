@@ -895,9 +895,57 @@ into a line with maximum intensity)
 image::gradient_modify_tab.jpg[scaledwidth=75%]
 ???
 
+===== _Swap RGB_
+???
+
+===== _Frequency_
+???
+
+===== _Blur_
+???
+
+===== _Invert_
+???
+
+===== _Reverse_
+???
+
+===== _Sort_
+???
+
+===== _Apply all current modifications_
+???
+
 ===== _Balancing_ subtab
 [.thumb]
 image::gradient_balancing_tab.jpg[scaledwidth=75%]
+???
+
+===== _Red_
+???
+
+===== _Green_
+???
+
+===== _Blue_
+???
+
+===== _Hue_
+???
+
+===== _Saturation_
+???
+
+===== _Contrast_
+???
+
+===== _Gamma_
+???
+
+===== _Brightness_
+???
+
+===== _Apply all current modifications_
 ???
 
 ===== _Color map_ subtab
@@ -905,7 +953,32 @@ image::gradient_balancing_tab.jpg[scaledwidth=75%]
 image::gradient_colormap_tab.jpg[scaledwidth=75%]
 ???
 
+===== _Select image_
+???
+
+===== _H Offset_
+???
+
+===== _H Scale_
+???
+
+===== _Local Add_
+???
+
+===== _Local Scl_
+???
+
+===== _V Offset_
+???
+
+===== _V Scale_
+???
+
+
 ==== _3D rendering_ tab
+???
+
+===== _Remove image_
 ???
 
 ===== _Ambient shadows_ subtab
@@ -913,9 +986,45 @@ image::gradient_colormap_tab.jpg[scaledwidth=75%]
 image::3drendering_ambient_shadows_tab.jpg[scaledwidth=75%]
 ???
 
+====== _Ambient shadows_ checkbox
+???
+
+====== _Amb shadow intensity_
+???
+
+====== _Search radius_
+???
+
+====== _Blur radius_
+???
+
+====== _Falloff_
+???
+
+====== _Radius samples_
+???
+
+====== _Azimuth samples_
+???
+
+====== _Affect diffuse_
+???
+
 ===== _Hard shadows_ subtab
 [.thumb]
 image::3drendering_hard_shadows_tab.jpg[scaledwidth=75%]
+???
+
+====== _Shadow type_
+???
+
+====== _Smooth radius_
+???
+
+====== _Shadowmap size_
+???
+
+====== _Shadowmap bias_
 ???
 
 ===== _Material settings_ subtab
@@ -923,9 +1032,72 @@ image::3drendering_hard_shadows_tab.jpg[scaledwidth=75%]
 image::3drendering_material_tab.jpg[scaledwidth=75%]
 ???
 
+====== _Selected Material_ combobox
+???
+
+====== _Add_ button
+???
+
+====== _Del_ button
+???
+
+====== _Diffuse_
+???
+
+====== _Ambient_
+???
+
+====== _Specular_
+???
+
+====== _Spec size_
+???
+
+====== _Diffuse response_
+???
+
+====== _Specular color_
+???
+
+====== _Reflection map_
+???
+
+====== _Refl mapping_
+???
+
+====== _Refl intensity_
+???
+
 ===== _Light settings_ subtab
 [.thumb]
 image::3drendering_light_settings_tab.jpg[scaledwidth=75%]
+???
+
+====== _Selected Light_ combobox
+???
+
+====== _Add_ button
+???
+
+====== _Del_ button
+???
+
+====== _Altitude_
+???
+
+====== _Azimuth_
+???
+
+====== _Light color_
+???
+
+====== _Cast shadows_
+???
+
+====== _Light intensity_
+???
+
+====== _Shadow intensity_
 ???
 
 ===== _ZBuffer_ subtab
@@ -940,18 +1112,6 @@ image::3drendering_zbuffer_tab.jpg[scaledwidth=75%]
 ???
 
 ====== _ZBuffer filename_
-???
-
-===== _Ambient shadows_ subtab
-???
-
-===== _Hard shadows_ subtab
-???
-
-===== _Material settings_ subtab
-???
-
-===== _Light settings_ subtab
 ???
 
 ==== _Stereo3D_ tab
@@ -973,7 +1133,7 @@ image::3drendering_zbuffer_tab.jpg[scaledwidth=75%]
 "Quick mutations"-tab allow easily creating a batch of variations of the currently selected flame.
 You may load any of those mutations into the main editor by double-clicking at it.
 This creates a new flame in a new slot and does not alter the original flame in any way.
-You may set the default batch size for quick mutations in the Preferences (property tinaQuickMutationBatchSize).
+You may set the default batch size for quick mutations in the _Preferences_ (property _tinaQuickMutationBatchSize_).
 You may also set the default mutation-type for quick mutations in the Preferences (property tinaQuickMutationDefaultMutationType).
 
 ???

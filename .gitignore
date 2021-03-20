@@ -80,3 +80,9 @@ TODO.txt
 out/*
 /target/production/JWildfire/
 /.gradle/
+/build_steam.xml
+/manual/.gradle/
+/manual/build/
+/manual/gradle/wrapper/
+/manual/gradlew
+/manual/gradlew.bat
