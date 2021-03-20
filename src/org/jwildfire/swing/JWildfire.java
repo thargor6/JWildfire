@@ -143,6 +143,7 @@ public class JWildfire extends JApplet {
   private JMenu settingsMenu = null;
   private JMenuItem exitMenuItem = null;
   private JMenuItem userManualMenuItem = null;
+  private JMenuItem steamStartupSettingsMenuItem = null;
   private JMenu windowMenu = null;
   private JMenuItem openImageMenuItem = null;
   private JMenuItem openFlameMenuItem = null;
@@ -943,6 +944,9 @@ public class JWildfire extends JApplet {
       for (FrameHolder internalFrame : settingsInternalFrames) {
           settingsMenu.add(internalFrame.getMenuItem());
       }
+      if (Tools.STEAM_EDITION) {
+        settingsMenu.add(getSteamStartupSettingsMenuItem());
+      }
     }
     return settingsMenu;
   }
@@ -959,6 +963,7 @@ public class JWildfire extends JApplet {
     }
     return exitMenuItem;
   }
+
 
   private JMenuItem getUserManualMenuItem() {
     if (userManualMenuItem == null) {
@@ -977,6 +982,29 @@ public class JWildfire extends JApplet {
     }
     return userManualMenuItem;
   }
+
+  private JMenuItem getSteamStartupSettingsMenuItem() {
+    if (steamStartupSettingsMenuItem == null) {
+      steamStartupSettingsMenuItem = new JMenuItem();
+      steamStartupSettingsMenuItem.setText("Startup settings (Steam)");
+      steamStartupSettingsMenuItem.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          try {
+            File file = new File(Tools.getPathRelativeToCodeSource("JWildfire.cfg"));
+            if(!file.exists()) {
+              throw new RuntimeException("Config file <" + file.getAbsolutePath() + "> not found");
+            }
+            Desktop.getDesktop().open(file);
+          }
+          catch(Throwable ex) {
+            errorHandler.handleError(ex);
+          }
+        }
+      });
+    }
+    return steamStartupSettingsMenuItem;
+  }
+
 
   private MainController mainController = null;
   private FormulaExplorerController formulaExplorerController = null;
