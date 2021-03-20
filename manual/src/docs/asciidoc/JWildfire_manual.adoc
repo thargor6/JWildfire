@@ -783,7 +783,7 @@ The gradient-library contains of two parts:
 - in-built gradients: those are installed together with the program and can not be modified in any way
 - your own gradients. They are located in a folder outside the JWildfire-installation-drawer,
   so that they are not lost when you update JWildfire. You must specify this path in the
-  _Preferences_ by setting the property _tinaGradientPath_.
+  _Preferences_ by setting the property *tinaGradientPath*.
 
 User-defined gradients may be structurized in sub-folders in order to make them easier accessible.
 
@@ -814,8 +814,7 @@ You may choose on of the following gradient generators:
  derives the gradient from it. Using this generator you have both a gradient and
 matching color curves.
  - _Uneven curves_: creates a random color curve with unevenly distributed base colors.
-Using this generator you have both a gradient and
-matching color curves.
+Using this generator you have both a gradient and matching color curves.
 This setting creates usually the most interesting and versatile gradient together with the
 corresponding color curves and is the default.
 
@@ -1156,7 +1155,7 @@ Intensity of the shadow casted by this lightsource.
 ===== _ZBuffer_ subtab
 [.thumb]
 image::3drendering_zbuffer_tab.jpg[scaledwidth=75%]
-When rendering in solid mode you may also export an additional z-buffer-image.
+When rendering in solid mode, you may also export an additional z-buffer-image.
 The settings on this tab help to customize the creation of this z-buffer.
 
 Hint: To export an z-buffer you must activate the option _with Z-Buffer_ in the _Quality_-profile, you are using.
@@ -1194,8 +1193,8 @@ There are two options to control how the filename of the z-buffer-image is deter
 "Quick mutations"-tab allow easily creating a batch of variations of the currently selected flame.
 You may load any of those mutations into the main editor by double-clicking at it.
 This creates a new flame in a new slot and does not alter the original flame in any way.
-You may set the default batch size for quick mutations in the _Preferences_ (property _tinaQuickMutationBatchSize_).
-You may also set the default mutation-type for quick mutations in the _Preferences_ (property tinaQuickMutationDefaultMutationType).
+You may set the default batch size for quick mutations in the _Preferences_ (property *tinaQuickMutationBatchSize*).
+You may also set the default mutation-type for quick mutations in the _Preferences_ (property *tinaQuickMutationDefaultMutationType*).
 
 ???
 
@@ -1207,28 +1206,45 @@ At this area you find global functions as well as the very often used ones.
 
 ==== _Random batch_ button
 Create a new batch of random flames and displays it in the _thumbnail ribbon_.
-This is probably one of the most popular features of JWildire, because using this function
+This is probably one of the most popular features of JWildfire, because using this function
 you can create endless beauty in a very relaxing way. It is also very unlikely that you will
 ever generate two fractals which look exactly the same, so it possible that you
 are surprised by new and interesting results even after weeks of use of the program.
 
 
-
 Please note, that this will per default remove any previously loaded flames together
 with their undo-history from memory. So, any change you did not save yet, will be lost.
-You can change this behaviour by editing the parameter _tinaRandomBatchRefreshType_ in
+You can change this behaviour by editing the parameter *tinaRandomBatchRefreshType* in
 the _Preferences_.
 
-The results of the random batch can be influenced by changing the following parameters
 
- - Rnd flame-generator
- - Rnd Symmetry
- - Rnd Gradient
- - Rnd WField
- - tinaRandomBatchSize (in the _Preferences_)
- - tinaRandomBatchBGColorRed, tinaRandomBatchBGColorGreen, tinaRandomBatchBGColorBlue (also in the _Preferences_)
+The random-flame-generating-process can be influenced by changing the following parameters:
 
-See the following sub-sections for more details to the former four parameters.
+ - _Rnd flame-generator_
+ - _Rnd Symmetry_
+ - _Rnd Gradient_
+ - _Rnd WField_
+ - *tinaRandomBatchSize* (in the _Preferences_)
+ - *tinaRandomBatchBGColorRed*, *tinaRandomBatchBGColorGreen*, *tinaRandomBatchBGColorBlue* (also in the _Preferences_)
+
+All of these parameters may be combined freely to create customized random flames. See the following sub-sections
+for more details about these parameters.
+
+===== Example of combination of parameters for creating specific random flames
+
+For example, to generate mandala-like-structures which look very organic and have a yellowish background, you could
+use the following setup:
+
+ - _Rnd flame-generator_: *Simple (stunning)*
+ - _Rnd Symmetry_: *Point*
+ - _Rnd Gradient_: any
+ - _Rnd WField_: *(All)*
+ - *tinaRandomBatchBGColorRed*: *235*
+ - *tinaRandomBatchBGColorGreen*: *215*
+ - *tinaRandomBatchBGColorBlue*: *75*
+
+[.thumb]
+image::rnd_flame_gen_mandala.jpg[scaledwidth=75%]
 
 ==== _Rnd flame-generator_
 
@@ -1255,7 +1271,7 @@ to do the actual work.
 So, by choosing "(All)" you will get the most diverse results.
 
 ==== Rnd Symmetry
-Sets the random-symmetry-generator involved in generating random flames.
+Sets the random-symmetry-generator used for generating random flames.
 A random-symmetry randomly sets post-symmetry-options of the random flames.
 
 There are the following options:
@@ -1273,46 +1289,131 @@ but only a few random flames.
 See the section about _Post symmetry_ for more details about the types of post-symmetry and related parameters.
 
 ==== Rnd Gradient
-???
+Set the random-gradient-generator used for generating random flames.
+
+There are the following options:
+
+- _(All)_: meta-random-gradient-generator which randomly chooses a random-gradient-generator to create the gradient
+- _Strong hue_: creates a smooth  gradient with strong colors
+- _Stripes_: creates a gradient with many regular color changes, having a "stripy" look
+- _Monochrome_: creates a smooth and monochrome radient
+- _Smooth_: creates a smooth gradient with primarily pastel colours
+- _Bold_: creates a non-smooth gradient with large blocks of strong colors
+- _Two colors_: creates a smooth gradient by fading exactly two colors into each other
+- _Uniform curves_: creates a random color curve with evenly distributed base colors and then
+derives the gradient from it. Using this generator you have both a gradient and
+matching color curves.
+- _Uneven curves_: creates a random color curve with unevenly distributed base colors.
+Using this generator you have both a gradient and matching color curves.
+
+The default setting is _Uneven curves_, which creates usually the most interesting and
+versatile gradients together with the corresponding color curves.
 
 ==== Rnd WField
-???
+Set the random-weighting-field-generator used for generating random flames.
+
+There are the following options:
+
+ - _Cellular Noise_: create random weighting-fields using Cellular Noise
+ - _Basic Noise_: create random weighting-fields using basic noise, like Perlin noise
+ - _Fractal Noise_: create random weighting-fields using fractal noise, like Perlin fractal noise.
+Fractal noise means to apply one type of noise multiple times at different scales.
+ - _Image Map_: create random weighting-fields using an image map.
+Per default always the same fixed internal map is used. You can exchange it by editing the flame afterwards.
+ - _(All)_: randomly selects a random-weighting-field-generator to generate weighting-fields
+ - _(All, sparse)_: like _(All)_, but with reduced probability to generate weighting-fields at all
 
 ==== New from scratch
-???
+Create a new and empty flame with a random gradient. This is usually the first step when creating a fractal
+manually "from scratch", hence the name.
 
 ==== From clipboard
-???
+Load a flame which was stored in the clipboard.
+
+In social-media it is common to exchange flame-files in text-form by posting them. When loading such a flame
+you usually copy the text and the use the _From clipboard_ button to load into JWildfire.
 
 ==== Load flame
-???
+Load a flame from a file and display it in the _Thumbnail ribbon_.
+
+Flame files can also contain a batch of flames. In this case each flame from the flame-batch-file will be
+imported as individual flame, which is displayed as individual thumbnail in the _Thumbnail ribbon_.
+Each individual flame  of such a batch also has its own undo-history.
 
 ==== To clipboard
-???
+Stores the currently selected flame in text-form in the Clipboard.
+
+In social-media it is common to exchange flame-files in text-form by posting them.
+Using this function you may export your flame to paste it somewhere, e.g. at Facebook.
 
 ==== Save flame
-???
+Save the currently selected flame.
 
 ==== Q (Quicksave)
-???
+Quicksaves the currently selected flame by automatically generating a filename in the
+form "qsave_" + <Date> + <Counter> +".flame" in the default flame folder.
+You may set the default flame folder in the _Preferences_ by changing the property *tinaFlamePath* .
+
 
 ==== A (Save all)
-???
+Save all selected flames together into one flame. Selected flames are indicated by a small checkmark at the
+right upper edge of the thumbnail. See the sub-section _Selecting flames in the thumbnail ribbon_ for more
+informations about selecting flames.
 
 ==== Render image
-???
+Render the current flame using the selected _quality_ and _resolution profile_.
 
-==== Render resolution
-???
+Rendering means to create a final image and consists of the following steps:
 
-==== Edit resolution profiles
-???
+ - perform the fractal iteration process, possibly using internal a larger resolution than the desired image resolution.
+See _Spatial oversampling_ for details.
+ - perform tonemapping by turning the raw fractal information into colored pixels.
+See the section about the _Coloring tab_ for more details.
+ - optionally perform AI-based denoising. See _AI-based denoiser_ for more details.
 
-==== Render quality
-???
+The rendering runs in the background and can be cancelled at anytime. But, you can not render
+more than flame at once at this place. For rendering multiple images see the section about _Batch renderer_.
 
-==== Edit quality profiles
-???
+==== _Render resolution_ combobox
+Here you choose the desired render resolution by choosing a _Resolution profile_.
+JWildfire comes with some predefined _resolution profiles_, but you can completely customize them.
+
+Even when you do not render the flame in the main editor, the correct render resolution should be
+specified because of the aspect ratio. After changing a _resolution profile_, JWildfire will change the
+size of the preview-area accordingly to the aspect ratio of the selected _resolution profile_.
+For example, when you select a profile with same width and height, you will have a preview-area
+of square shape.
+
+==== Edit _resolution profiles_
+In this popup-window you may alter existing _resolution profiles_ as well as creating your own.
+
+There are the following parameters:
+
+ - *Width* x *Height*: image resolution
+ - *Default profile*: one profile can be defined as the default profile. The profile is chosen when you start JWildfire.
+
+==== _Render quality_ combobox
+Here you choose the desired render quality as well as some output options by choosing a _Quality profile_.
+JWildfire comes with some predefined _quality profiles_, but you can completely customize them.
+
+Especially, when using a AI-based post-denoiser, you may want to revisit your quality profiles.
+Such a denoiser can help to create visual appealing results with much lower quality settings
+in order to reduce render time. The default settings are thought to be used without such an denoiser.
+See the sub-chapter _AI-based denoiser_ for more details.
+
+_Quality profiles_ also contain the information which type of images should be generated.
+For example, you may specify inside a _quality profile_ that JWildfire shall generate an additional z-buffer-image
+when using solid rendering.
+
+==== Edit _quality profiles_
+In this popup-window you may alter existing _quality profiles_ as well as creating your own.
+
+There are the following parameters:
+
+- *Quality*: quality level
+- *with HDR*: ???
+- *with Z-Buffer*: ???
+- *Default profile*: one profile can be defined as the default profile. The profile is chosen when you start JWildfire.
 
 ==== Batch renderer
 ???
@@ -1333,6 +1434,7 @@ See the section about _Post symmetry_ for more details about the types of post-s
 [.thumb]
 image::flame_browser.jpg[scaledwidth=75%]
 ???
+
 == Easy Movie Maker
 [.thumb]
 image::easy_movie_maker.jpg[scaledwidth=75%]
@@ -1403,5 +1505,7 @@ You can also preview the rendering with transparent background. Set the _Display
 at the preview-area.
 
 === How to save a flame as image?
-???
+You can not directly save a flame as an image. You must _render_ a flame in order
+to generate an image. There are multiple options you can specify for rendering (for example: the output resolution),
+so you can out different images out of one flame-fractal.
 
