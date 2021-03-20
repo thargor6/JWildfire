@@ -6835,7 +6835,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void editVariationProfiles() {
-    VariationsSettingsFrame frame = new VariationsSettingsFrame();
+    VariationProfilesFrame frame = new VariationProfilesFrame();
     frame.setVisible(true);
     frame.toFront();
   }
