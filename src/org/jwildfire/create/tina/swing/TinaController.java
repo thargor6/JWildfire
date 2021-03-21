@@ -6834,10 +6834,21 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     initNonlinearVariationCmb();
   }
 
+
+  VariationProfilesFrame variationProfilesFrame = null;
+  VariationProfilesController variationProfilesController = null;
   public void editVariationProfiles() {
-    VariationProfilesFrame frame = new VariationProfilesFrame();
-    frame.setVisible(true);
-    frame.toFront();
+    if (variationProfilesFrame == null) {
+      variationProfilesController = new VariationProfilesController( this );
+      variationProfilesFrame = new VariationProfilesFrame( variationProfilesController );
+      variationProfilesController.setControls(variationProfilesFrame.getNewProfileBtn(), variationProfilesFrame.getDuplicateProfileBtn(),
+        variationProfilesFrame.getDeleteProfileBtn(), variationProfilesFrame.getProfilesTable(), variationProfilesFrame.getProfileNameEdit(),
+        variationProfilesFrame.getProfileTypeCmb(), variationProfilesFrame.getProfileStatusEdit(), variationProfilesFrame.getDefaultCheckbox());
+    }
+    variationProfilesController.refreshControls();
+    variationProfilesFrame.setVisible(true);
+    variationProfilesFrame.toFront();
   }
 
 }
+

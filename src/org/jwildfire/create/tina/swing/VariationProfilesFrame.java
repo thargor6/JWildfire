@@ -55,7 +55,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.swing.JWildfire;
 
 public class VariationProfilesFrame extends JFrame {
-  private TinaController tinaController;
+  private final VariationProfilesController controller;
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
   private JPanel mainPanel = null;
@@ -63,8 +63,9 @@ public class VariationProfilesFrame extends JFrame {
   private List<String> variationNames = null;
   private List<JCheckBox> checkboxes = new ArrayList<>();
 
-  public VariationProfilesFrame() {
+  public VariationProfilesFrame(VariationProfilesController controller) {
     super();
+    this.controller = controller;
     initialize();
   }
 
@@ -82,65 +83,6 @@ public class VariationProfilesFrame extends JFrame {
     this.setVisible(false);
     this.setResizable(true);
     this.setContentPane(getJContentPane());
-    refreshVariationsPanel();
-  }
-
-  private void refreshVariationsPanel() {
-    if (variationsPanel != null) {
-      try {
-        variationsScrollPane.setViewportView(null);
-        variationsPanel.removeAll();
-      }
-      finally {
-        variationsPanel = null;
-      }
-    }
-    checkboxes.clear();
-    variationsPanel = new JPanel();
-
-    variationNames = VariationFuncList.getNameList();
-    Collections.sort(variationNames);
-
-    List<String> excludedVariations = new ArrayList<>();
-
-    int xOffset = 8;
-    int xSize = 160;
-    int yOffset = 8;
-    int ySize = 18;
-    int yGap = 4;
-
-    int currY = yOffset;
-    for (String variation : variationNames) {
-      JCheckBox cbx = new JCheckBox(variation);
-      cbx.setSelected(!excludedVariations.contains(variation));
-      cbx.setBounds(xOffset, currY, xSize, ySize);
-      checkboxes.add(cbx);
-      variationsPanel.add(cbx);
-      currY += ySize + yGap;
-    }
-    int width = xSize + 2 * xOffset;
-    int height = currY;
-    variationsPanel.setBounds(0, 0, width, height);
-    variationsPanel.setPreferredSize(new Dimension(width, height));
-
-    variationsScrollPane.setViewportView(variationsPanel);
-    variationsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-    variationsScrollPane.invalidate();
-    variationsScrollPane.validate();
-
-    refreshTitle();
-  }
-
-  private void refreshTitle() {
-    int excluded = 0;
-    if (checkboxes != null) {
-      for (JCheckBox cbx : checkboxes) {
-        if (!cbx.isSelected()) {
-          excluded++;
-        }
-      }
-    }
-    this.setTitle((variationNames.size() - excluded) + "/" + variationNames.size() + " variations active");
   }
 
   /**
@@ -206,7 +148,7 @@ public class VariationProfilesFrame extends JFrame {
       profileTypeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED) {
-            // TODO
+            controller.profileTypeCmbChanged();
           }
         }
       });
@@ -232,7 +174,7 @@ public class VariationProfilesFrame extends JFrame {
         }
 
         private void textChanged() {
-          // TODO 
+          controller.profileNameChanged();
         }
       });
       profileNameEdit.setBounds(90, 4, 161, 28);
@@ -269,7 +211,7 @@ public class VariationProfilesFrame extends JFrame {
       defaultCheckbox.setBounds(604, 9, 104, 18);
       defaultCheckbox.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          // TODO
+          controller.defaultCheckboxChanged();
         }
       });
 
@@ -279,8 +221,7 @@ public class VariationProfilesFrame extends JFrame {
       JPanel profilesPanel = new JPanel();
       profilesPanel.setBorder(new TitledBorder(null, "Variation profile", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       profilesPanel.setPreferredSize(new Dimension(400, 10));
-      panel_1.add(profilesPanel, BorderLayout.WEST);
-      profilesPanel.setLayout(new BorderLayout(0, 0));
+      panel_1.add(profilesPanel, BorderLayout.WEST);profilesPanel.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_3 = new JPanel();
       panel_3.setBounds(new Rectangle(4, 4, 4, 4));
@@ -297,7 +238,7 @@ public class VariationProfilesFrame extends JFrame {
       newProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       newProfileBtn.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          // TODO
+          controller.newProfileClicked();
         }
       });
 
@@ -311,7 +252,7 @@ public class VariationProfilesFrame extends JFrame {
       duplicateProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       duplicateProfileBtn.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          // TODO
+          controller.duplicateProfileClicked();
         }
       });
 
@@ -328,7 +269,7 @@ public class VariationProfilesFrame extends JFrame {
       deleteProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       deleteProfileBtn.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          // TODO
+          controller.deleteProfileClicked();
         }
       });
 
@@ -344,7 +285,7 @@ public class VariationProfilesFrame extends JFrame {
         @Override
         public void valueChanged(ListSelectionEvent e) {
           if (!e.getValueIsAdjusting()) {
-            // TODO
+            controller.profilesTableClicked();
           }
         }
 
@@ -360,7 +301,8 @@ public class VariationProfilesFrame extends JFrame {
       saveBtn = new JButton();
       saveBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          saveAndApplyChanges();
+          controller.saveAndApplyChanges();
+          setVisible(false);
         }
       });
       saveBtn.setMnemonic(KeyEvent.VK_S);
@@ -375,7 +317,8 @@ public class VariationProfilesFrame extends JFrame {
       cancelBtn = new JButton();
       cancelBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          refreshVariationsPanel();
+          controller.cancelChanges();
+          setVisible(false);
         }
       });
       cancelBtn.setMnemonic(KeyEvent.VK_C);
@@ -390,37 +333,6 @@ public class VariationProfilesFrame extends JFrame {
     return mainPanel;
   }
 
-  protected void saveAndApplyChanges() {
-    try {
-      List<String> excludedVariations = new ArrayList<>();
-      if (!checkboxes.isEmpty() && variationNames != null && checkboxes.size() == variationNames.size()) {
-        for (int i = 0; i < checkboxes.size(); i++) {
-          if (!checkboxes.get(i).isSelected()) {
-            excludedVariations.add(variationNames.get(i));
-          }
-        }
-      }
-      //Prefs.getPrefs().setTinaExcludedVariations(excludedVariations);
-      //Prefs.getPrefs().saveToFile();
-      //VariationFuncList.invalidateExcludedNameList();
-      boolean oldNoRefresh = tinaController.isNoRefresh();
-      try {
-        tinaController.setNoRefresh(true);
-        tinaController.initNonlinearVariationCmb();
-      }
-      finally {
-        tinaController.setNoRefresh(oldNoRefresh);
-      }
-      //      tinaController.transformationChanged(false);
-      refreshTitle();
-    }
-    catch (Exception ex) {
-      tinaController.errorHandler.handleError(ex);
-    }
-  }
-
-  private JWFNumberField swfAnimatorFramesPerSecondREd;
-  private JWFNumberField swfAnimatorFrameREd;
   private JPanel variationsPanel;
   private JTextField profileNameEdit;
   private JTable profilesTable;
@@ -445,18 +357,6 @@ public class VariationProfilesFrame extends JFrame {
       variationsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     }
     return variationsScrollPane;
-  }
-
-  public JWFNumberField getSwfAnimatorFramesPerSecondREd() {
-    return swfAnimatorFramesPerSecondREd;
-  }
-
-  public JWFNumberField getSwfAnimatorFrameREd() {
-    return swfAnimatorFrameREd;
-  }
-
-  public void setTinaController(TinaController tinaController) {
-    this.tinaController = tinaController;
   }
 
   public JButton getNewProfileBtn() {
@@ -498,4 +398,67 @@ public class VariationProfilesFrame extends JFrame {
   public JCheckBox getDefaultCheckbox() {
     return defaultCheckbox;
   }
+
+  public void refreshControls() {
+    refreshVariationsPanel();
+  }
+
+  private void refreshVariationsPanel() {
+    if (variationsPanel != null) {
+      try {
+        variationsScrollPane.setViewportView(null);
+        variationsPanel.removeAll();
+      }
+      finally {
+        variationsPanel = null;
+      }
+    }
+    checkboxes.clear();
+    variationsPanel = new JPanel();
+
+    variationNames = VariationFuncList.getNameList();
+    Collections.sort(variationNames);
+
+    List<String> excludedVariations = new ArrayList<>();
+
+    int xOffset = 8;
+    int xSize = 160;
+    int yOffset = 8;
+    int ySize = 18;
+    int yGap = 4;
+
+    int currY = yOffset;
+    for (String variation : variationNames) {
+      JCheckBox cbx = new JCheckBox(variation);
+      cbx.setSelected(!excludedVariations.contains(variation));
+      cbx.setBounds(xOffset, currY, xSize, ySize);
+      checkboxes.add(cbx);
+      variationsPanel.add(cbx);
+      currY += ySize + yGap;
+    }
+    int width = xSize + 2 * xOffset;
+    int height = currY;
+    variationsPanel.setBounds(0, 0, width, height);
+    variationsPanel.setPreferredSize(new Dimension(width, height));
+
+    variationsScrollPane.setViewportView(variationsPanel);
+    variationsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+    variationsScrollPane.invalidate();
+    variationsScrollPane.validate();
+
+    refreshTitle();
+  }
+
+  private void refreshTitle() {
+    int excluded = 0;
+    if (checkboxes != null) {
+      for (JCheckBox cbx : checkboxes) {
+        if (!cbx.isSelected()) {
+          excluded++;
+        }
+      }
+    }
+    this.setTitle((variationNames.size() - excluded) + "/" + variationNames.size() + " variations active");
+  }
+
 }
