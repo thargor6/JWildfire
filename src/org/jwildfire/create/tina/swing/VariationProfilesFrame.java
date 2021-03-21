@@ -60,8 +60,6 @@ public class VariationProfilesFrame extends JFrame {
   private JPanel jContentPane = null;
   private JPanel mainPanel = null;
   private JScrollPane variationsScrollPane = null;
-  private List<String> variationNames = null;
-  private List<JCheckBox> checkboxes = new ArrayList<>();
 
   public VariationProfilesFrame(VariationProfilesController controller) {
     super();
@@ -333,7 +331,6 @@ public class VariationProfilesFrame extends JFrame {
     return mainPanel;
   }
 
-  private JPanel variationsPanel;
   private JTextField profileNameEdit;
   private JTable profilesTable;
   private JTextField profileStatusEdit;
@@ -350,7 +347,7 @@ public class VariationProfilesFrame extends JFrame {
    * 	
    * @return javax.swing.JScrollPane	
    */
-  private JScrollPane getVariationsScrollPane() {
+  public JScrollPane getVariationsScrollPane() {
     if (variationsScrollPane == null) {
       variationsScrollPane = new JScrollPane();
       variationsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -397,68 +394,6 @@ public class VariationProfilesFrame extends JFrame {
 
   public JCheckBox getDefaultCheckbox() {
     return defaultCheckbox;
-  }
-
-  public void refreshControls() {
-    refreshVariationsPanel();
-  }
-
-  private void refreshVariationsPanel() {
-    if (variationsPanel != null) {
-      try {
-        variationsScrollPane.setViewportView(null);
-        variationsPanel.removeAll();
-      }
-      finally {
-        variationsPanel = null;
-      }
-    }
-    checkboxes.clear();
-    variationsPanel = new JPanel();
-
-    variationNames = VariationFuncList.getNameList();
-    Collections.sort(variationNames);
-
-    List<String> excludedVariations = new ArrayList<>();
-
-    int xOffset = 8;
-    int xSize = 160;
-    int yOffset = 8;
-    int ySize = 18;
-    int yGap = 4;
-
-    int currY = yOffset;
-    for (String variation : variationNames) {
-      JCheckBox cbx = new JCheckBox(variation);
-      cbx.setSelected(!excludedVariations.contains(variation));
-      cbx.setBounds(xOffset, currY, xSize, ySize);
-      checkboxes.add(cbx);
-      variationsPanel.add(cbx);
-      currY += ySize + yGap;
-    }
-    int width = xSize + 2 * xOffset;
-    int height = currY;
-    variationsPanel.setBounds(0, 0, width, height);
-    variationsPanel.setPreferredSize(new Dimension(width, height));
-
-    variationsScrollPane.setViewportView(variationsPanel);
-    variationsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-    variationsScrollPane.invalidate();
-    variationsScrollPane.validate();
-
-    refreshTitle();
-  }
-
-  private void refreshTitle() {
-    int excluded = 0;
-    if (checkboxes != null) {
-      for (JCheckBox cbx : checkboxes) {
-        if (!cbx.isSelected()) {
-          excluded++;
-        }
-      }
-    }
-    this.setTitle((variationNames.size() - excluded) + "/" + variationNames.size() + " variations active");
   }
 
 }

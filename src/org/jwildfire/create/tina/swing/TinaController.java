@@ -6843,7 +6843,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       variationProfilesFrame = new VariationProfilesFrame( variationProfilesController );
       variationProfilesController.setControls(variationProfilesFrame.getNewProfileBtn(), variationProfilesFrame.getDuplicateProfileBtn(),
         variationProfilesFrame.getDeleteProfileBtn(), variationProfilesFrame.getProfilesTable(), variationProfilesFrame.getProfileNameEdit(),
-        variationProfilesFrame.getProfileTypeCmb(), variationProfilesFrame.getProfileStatusEdit(), variationProfilesFrame.getDefaultCheckbox());
+        variationProfilesFrame.getProfileTypeCmb(), variationProfilesFrame.getProfileStatusEdit(), variationProfilesFrame.getDefaultCheckbox(),
+        variationProfilesFrame.getVariationsScrollPane());
     }
     variationProfilesController.refreshControls();
     variationProfilesFrame.setVisible(true);
