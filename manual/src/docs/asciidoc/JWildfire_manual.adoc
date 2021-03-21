@@ -36,11 +36,11 @@ The Flame-Fractal Editor is the core part of JWildfire.
 Here you create random flames or fine-tune your artworks.
 It consists of the following parts:
 
-. Preview/Editor Area
-. Thumbnail ribbon
-. Transformations and Scripts
-. Flame settings
-. Global functions
+. *Preview/Editor Area*
+. *Thumbnail ribbon*
+. *Transformations and Scripts*
+. *Flame settings*
+. *Global functions*
 
 You find a description of each part as separate sub-chapter in this manual.
 
@@ -80,20 +80,20 @@ Tuns on or off a grid which may help to align controls
 ===== _Turn guides on/off_
 Turns on or off "artistic guides" for
 
-- center point
-- rule of thirds
-- golden ratio
+- *center point*
+- *rule of thirds*
+- *golden ratio*
 
 which may help to find the right camera position/view.
 
 ===== _Style of editor controls_
 You may select one of the following style of editor-controls:
 
-- axis
-- crosshair
-- rectangle
-- triangle (default)
-- hidden
+- *axis*
+- *crosshair*
+- *rectangle*
+- *triangle* (default)
+- *hidden*
 
 ===== _Toggle monochrome/colored controls_
 Per default each control is dran in its own color to make them more distinguishable.
@@ -105,9 +105,9 @@ Quick-switch to toggle between editing of the affine-post-transform and the regu
 
 Longer explanation: Transformations are executed in the following order:
 
-. affine transform
-. nonlinear transforms
-. affine post-transform
+. *affine transform*
+. *nonlinear transforms*
+. *affine post-transform*
 
 In the preview area you may either edit the affine transform or the post-affine-transform
 by moving the visual controls with the mouse or touchpad.
@@ -256,6 +256,7 @@ You can edit/view any flame of the thumbnail by just double-clicking it.
 If you want to return to your previous flame just double-click the thumbnail of this other flame.
 Each flame in the thumbnail-ribbon has its own undo-history.
 
+[#selecting_flames_thumbnail_ribbon]
 ==== Selecting flames in the _thumbnail ribbon_
 Each flame in the _thumbnail ribbon_ have a little checkbox assigned in the upper right edge.
 By changing the value of this checkbox you change the selected state of the thumbnail.
@@ -268,8 +269,8 @@ image::thumbnail_ribbon_select_menu.jpg[scaledwidth=50%]
 By pressing the right mouse-button on top of this checkbox you can open a popup-menu
 to change the selection for all flames inside the _thumbnail ribbon_:
 
- - _Toggle all_: invert the selection of all flames
- - _Deselect all_: set all flames to deselected state
+ - *Toggle all*: invert the selection of all flames
+ - *Deselect all*: set all flames to deselected state
 
 So, one way to select all flames is to deselect them all and then to invert the selection.
 
@@ -283,9 +284,9 @@ image::thumbnail_ribbon_delete_menu.jpg[scaledwidth=50%]
 By pressing the right mouse-button on top of this button you can open a popup-menu
 to delete a number of flames from the _thumbnail ribbon_:
 
-- _Remove selected_: delete all flames, which are selected (corresponding checkbox is checked),
+- *Remove selected*: delete all flames, which are selected (the corresponding checkbox is checked),
 from the _thumbnail ribbon_
-- _Remove all_: empty the _thumbnail ribbon_
+- *Remove all*: empty the _thumbnail ribbon_
 
 === Flame settings
 At this main tab you edit settings at the flame-fractal-level. Most of those options do
@@ -385,20 +386,20 @@ apply post-bokeh effects, but those are limited in comparison to the options you
 ====== _Shape_
 Selects the shape of the bokeh-effect
 
-- Bubble: the typical and default shape
-- Cannabiscurve: some nice-looking organic shape
-- Cloverleaf
-- Flower
-- Heart: little hearts, makes nice Valentine-cards
-- NBlur: has some interesting options to create very different shapes
-- Perlin Noise: some unusual but interesting style
-- Rect: very simple but effective style.You can also create "rain"-like scenes with this
-- SineBlur: some popular circular bokeh
-- StarBlur: tiny stars
-- Taurus: some other unusual, but interesting shape
-- Snowflake: a complex snowflake, created wtih the algorithm described in the
+- *Bubble*: the typical and default shape
+- *Cannabiscurve*: some nice-looking organic shape
+- *Cloverleaf*
+- *Flower*
+- *Heart*: little hearts, makes nice Valentine-cards
+- *NBlur*: has some interesting options to create very different shapes
+- *Perlin Noise*: some unusual but interesting style
+- *Rect*: very simple but effective style.You can also create "rain"-like scenes with this
+- *SineBlur*: some popular circular bokeh
+- *StarBlur*: tiny stars
+- *Taurus*: some other unusual, but interesting shape
+- *Snowflake*: a complex snowflake, created wtih the algorithm described in the
 paper "A local cellular model for snow crystal growth" by Clifford A. Reiter.
-- SubFlame: This is the most versatile option: You may use any other fractal as bokeh-style.
+- *SubFlame*: This is the most versatile option: You may use any other fractal as bokeh-style.
 
 ====== _Scale_
 Global scale of the bokeh-shapes
@@ -418,10 +419,10 @@ Not all parameters of a variation are exposed to the bokeh-style of the same nam
 ====== Flame (for the Sub-Flame-bokeh-style)
 By this important parameter you select the flame you want to use as bokeh-style.
 It is a number, starting with 1. BEfore you can use a flame as bokeh-style you must save it to your default
-flame-folder by using a filename in the form "_dof_XXXX.flame", where XXXX corresponds to the number
+flame-folder by using a filename in the form *"_dof_XXXX.flame"*, where XXXX corresponds to the number
 you select here.
 For example, when you enter "23" as parameter Flame, JWildfire will look for a flame-file with the
-filename _dof_0023.flame.
+filename *_dof_0023.flame*.
 
 
 ===== _Post bokeh_ subtab
@@ -519,9 +520,9 @@ need to change the gradient.
 Background-color which is mixed with the fractal in the forground to create a smoothly-looking final result.
 There are the following options:
 
-- Single color: one single color for the whole background
-- Gradient 2x2: create a background by blending 4 colors at the corners of a rectangle
-- Gradient 2x2_c: create a background by blending 4 colors at the corners of a rectangle and one color at the center
+- *Single color*: one single color for the whole background
+- *Gradient 2x2*: create a background by blending 4 colors at the corners of a rectangle
+- *Gradient 2x2_c*: create a background by blending 4 colors at the corners of a rectangle and one color at the center
 
 ===== _Bg image_
 Background-image which is mixed with the fractal in the forground to create a smoothly-looking final result.
@@ -545,7 +546,7 @@ JWildfire (in the top area of the preview-window).
 image::antialiasing_tab.jpg[scaledwidth=75%]
 At this tab you find some very important settings which help to improve the visual quality or "cleanliness"
 of your fractal artworks.
-For details about filtering see the sub-section _Filter kernel preview / How filtering works_.
+For details about filtering see the sub-section <<how_filtering_works, _Filter kernel preview / How filtering works_>>.
 
 ===== _Spatial oversampling_
 Factor of spatial oversampling. Spatial oversampling works by internally rendering an image of larger size
@@ -566,19 +567,20 @@ higher rendering time.
 ===== _Filtering_
 Global filtering strategy for building the final image by taking into account the fractal iteration information:
 
- - Global sharpening: create an image with consistent high sharpness
- - Global smoothing: create an image with consistent high smoothness
- - Adaptive: try to sharpen details, while smoothing "unsharp" areas as well as areas with low density
+ - *Global sharpening*: create an image with consistent high sharpness
+ - *Global smoothing*: create an image with consistent high smoothness
+ - *Adaptive*: try to sharpen details, while smoothing "unsharp" areas as well as areas with low density
 
 ===== _Filter kernel_
 Filter-kernel to apply, accordingly to the Filtering setting.
 
 The following values are recommended (but feel free to play with other settings as well):
 
- - Global sharpening: Mitchell-Filter
- - Global smoothing: Sinepow10
- - Adaptive: Mitchel_Sinepow (Mitchel-Filter for sharpening details, Sinepow10-Filter for smoothing areas of low density)
+ - *Global sharpening*: *Mitchell-Filter*
+ - *Global smoothing*: *Sinepow10*
+ - *Adaptive*: *Mitchel_Sinepow* (*Mitchel*-Filter for sharpening details, *Sinepow10*-Filter for smoothing areas of low density)
 
+[#how_filtering_works]
 ===== _Filter kernel preview / How filtering works_
 Creating a fractal image is a elaborate process consisting of several steps.
 Filtering is one of thse steps and very important for the final outcome.
@@ -629,7 +631,7 @@ The higher the value, the more areas are treated as smooth areas.
 The lower the value, the more areas are sharpened.
 
 This is a very abstract value, but there is a preview-mode which helps to visualize the different areas.
-This feature is described in the sub-section _Adaptive filter preview_ .
+This feature is described in the sub-section <<adaptive_filter_preview, _Adaptive filter preview_>> .
 
 ===== _Low density_
 This value helps the Adaptive filter to decide, which portions of the image should be treated as area
@@ -642,17 +644,18 @@ The higher the value, the more areas are treated as low density areas.
 The lower the value, the more areas are treated a general smoothing areas.
 
 This is a very abstract value, but there is a preview-mode which helps to visualize the different areas.
-This feature is described in the sub-section _Adaptive filter preview_ .
+This feature is described in the sub-section <<adaptive_filter_preview, _Adaptive filter preview_>>.
 
+[#adaptive_filter_preview]
 ===== _Adaptive filter preview_
 [.thumb]
 image::filtering_show_indicator.jpg[scaledwidth=75%]
 By enabling the small checkbox labelled "Indicator" and re-rendering the preview you get a visualization
 of the different areas detected by the _Adaptive filter_ .
 
- - red: sharp areas
- - green: smooth areas
- - blue: areas with low density (which are also smoothed)
+ - *red*: sharp areas
+ - *green*: smooth areas
+ - *blue*: areas with low density (which are also smoothed)
 
 [.thumb]
 image::preview_sharpness_indicator.jpg[scaledwidth=75%]
@@ -672,9 +675,9 @@ description.
 ===== _AI-based denoiser_
 Type of AI-based denoiser applied to the final image:filtering_show_indicator.jpg
 
- - OptiX: a very popular denoiser by NVIDIA, requires a modern graphics card from NVIDIA, see https://developer.nvidia.com/optix-denoiser
- - OIDN: an open-source-denoiser by Intel, comes with fewer requirements than OptiX, see https://www.openimagedenoise.org/
- - None: no post-denoiser
+ - *OptiX*: a very popular denoiser by NVIDIA, requires a modern graphics card from NVIDIA, see https://developer.nvidia.com/optix-denoiser
+ - *OIDN*: an open-source-denoiser by Intel, comes with fewer requirements than OptiX, see https://www.openimagedenoise.org/
+ - *None*: no post-denoiser
 
 While not mandatory for rendering single images, those AI-based denoisers are extremely
 helpful when it comes to render animations. By using an AI-based denoiser you can cut down
@@ -803,17 +806,17 @@ cycle through all the generated gradients by using the _Undo_ and _Redo_ button.
 ====== _Gradient generator_
 You may choose on of the following gradient generators:
 
- - _(All)_: meta-random-gradient-generator which randomly chooses a random-gradient-generator to create the gradient
- - _Strong hue_: creates a smooth  gradient with strong colors
- - _Stripes_: creates a gradient with many regular color changes, having a "stripy" look
- - _Monochrome_: creates a smooth and monochrome radient
- - _Smooth_: creates a smooth gradient with primarily pastel colours
- - _Bold_: creates a non-smooth gradient with large blocks of strong colors
- - _Two colors_: creates a smooth gradient by fading exactly two colors into each other
- - _Uniform curves_: creates a random color curve with evenly distributed base colors and then
+ - *(All)*: meta-random-gradient-generator which randomly chooses a random-gradient-generator to create the gradient
+ - *Strong hue*: creates a smooth  gradient with strong colors
+ - *Stripes*: creates a gradient with many regular color changes, having a "stripy" look
+ - *Monochrome*: creates a smooth and monochrome radient
+ - *Smooth*: creates a smooth gradient with primarily pastel colours
+ - *Bold*: creates a non-smooth gradient with large blocks of strong colors
+ - *Two colors*: creates a smooth gradient by fading exactly two colors into each other
+ - *Uniform curves*: creates a random color curve with evenly distributed base colors and then
  derives the gradient from it. Using this generator you have both a gradient and
 matching color curves.
- - _Uneven curves_: creates a random color curve with unevenly distributed base colors.
+ - *Uneven curves*: creates a random color curve with unevenly distributed base colors.
 Using this generator you have both a gradient and matching color curves.
 This setting creates usually the most interesting and versatile gradient together with the
 corresponding color curves and is the default.
@@ -861,7 +864,7 @@ Additionally, it allows more direct control over modifying the colors of a gradi
 making it much easier to create "dramatic" effects.
 
 Internally, each gradient consist both of the "classic" part of the gradient and three
-curves: _hue_, _saturation_ and _luminosity_.
+curves: *hue*, *saturation* and *luminosity*.
 Those curves belong to the flames, and are also stored within the flame-files.
 
 When loading an older flame-file without those curves, or assigning a "classic" gradient
@@ -1054,10 +1057,10 @@ Hard and ambient shadows can be used at the same time and work well together.
 ====== _Shadow type_
 There are the following options:
 
- - _Off_: don't calculate hard shadows. This is the default setting
- - _Fast_: classic hard shadows
- - _Smooth_: a modification of hard shadows which smoothes them at the edges.
-Produces artifacts in some cases. You should use then _Fast_ shadows.
+ - *Off*: don't calculate hard shadows. This is the default setting
+ - *Fast*: classic hard shadows
+ - *Smooth*: a modification of hard shadows which smoothes them at the edges.
+Produces artifacts in some cases. You should use then *Fast* shadows.
 
 ====== _Smooth radius_
 Radius for smoothing hard shadows.
@@ -1159,7 +1162,7 @@ When rendering in solid mode, you may also export an additional z-buffer-image.
 The settings on this tab help to customize the creation of this z-buffer.
 
 Hint: To export an z-buffer you must activate the option _with Z-Buffer_ in the _Quality_-profile, you are using.
-See the sub-section about _Quality Profiles_ for more details.
+See the sub-section about <<quality_profiles, _Quality Profiles_>> for more details.
 
 ====== _ZBuffer scale_
 Affects the amplitude of the z-shift/depth-effect caused the z-buffer.
@@ -1171,8 +1174,8 @@ Moves the minimal z-shift.
 ====== _ZBuffer filename_
 There are two options to control how the filename of the z-buffer-image is determined:
 
- - _zbuf_name_: use image filename prefixed with "zbuf_"
- - _name_depth_: append "_depth" to the image filename
+ - *zbuf_name*: use image filename prefixed with "zbuf_"
+ - *name_depth*: append "_depth" to the image filename
 
 ==== _Stereo3D_ tab
 ???
@@ -1196,7 +1199,33 @@ This creates a new flame in a new slot and does not alter the original flame in 
 You may set the default batch size for quick mutations in the _Preferences_ (property *tinaQuickMutationBatchSize*).
 You may also set the default mutation-type for quick mutations in the _Preferences_ (property *tinaQuickMutationDefaultMutationType*).
 
-???
+[#quick_mutation_types]
+===== _Mutation type_ combobox
+Here you can choose the type of mutation to be executed:
+
+ - *Add transform*: add a random transformation
+ - *Add variation*: add a random variation to a randomly selected transformation
+ - *Affine*: randomly change parameters of the affine part of a randomly selected transform
+ - *Affine3D*: randomly change parameters of the affine part in all three dimensions of a randomly selected transform
+ - *Bokeh*: add a randomized bokeh-effect
+ - *Change weight*: randomly change the weight of randomly selected transformations
+ - *Color type*: randomly change the color-type of randomly selected  transformations
+ - *Gradient position*: randomly change the color-parameter of randomly selected  transformations
+ - *Local gamma*: add randomized local-gamma-effects
+ - *Random gradient*: create a new random gradient
+ - *Random parameter*: change some randomly selected parameters of randomly selected variations
+ - *Random ztransform*: randomly change parameters of the affine part primarily affection the z-axis of a randomly selected transform
+ - *Similar gradient*: create a similar gradient
+ - *Weighting field*: add randomized weighting-field-effects
+ - *All*: randomly select one of the above mutations. This is the default option.
+
+ - *User1*, *User2*, *User3*: user-defined lists of mutations. You may customize them in the _Preferences_ by
+editing the properties *tinaMutaGenMutationTypesUser1*, *tinaMutaGenMutationTypesUser2* and *tinaMutaGenMutationTypesUser3*
+
+==== _Batch size_
+Here you can specify the number of create quick mutations.
+In some cases in may make sense to use a large number. So you can create a huge batch of quick mutations with
+one click and then view them later.
 
 === Transformations and Scripts
 ???
@@ -1220,10 +1249,10 @@ the _Preferences_.
 
 The random-flame-generating-process can be influenced by changing the following parameters:
 
- - _Rnd flame-generator_
- - _Rnd Symmetry_
- - _Rnd Gradient_
- - _Rnd WField_
+ - *Rnd flame-generator*
+ - *Rnd Symmetry*
+ - *Rnd Gradient*
+ - *Rnd WField*
  - *tinaRandomBatchSize* (in the _Preferences_)
  - *tinaRandomBatchBGColorRed*, *tinaRandomBatchBGColorGreen*, *tinaRandomBatchBGColorBlue* (also in the _Preferences_)
 
@@ -1235,10 +1264,10 @@ for more details about these parameters.
 For example, to generate mandala-like-structures which look very organic and have a yellowish background, you could
 use the following setup:
 
- - _Rnd flame-generator_: *Simple (stunning)*
- - _Rnd Symmetry_: *Point*
- - _Rnd Gradient_: any
- - _Rnd WField_: *(All)*
+ - *Rnd flame-generator*: *Simple (stunning)*
+ - *Rnd Symmetry*: *Point*
+ - *Rnd Gradient*: any
+ - *Rnd WField*: *(All)*
  - *tinaRandomBatchBGColorRed*: *235*
  - *tinaRandomBatchBGColorGreen*: *215*
  - *tinaRandomBatchBGColorBlue*: *75*
@@ -1260,8 +1289,8 @@ but maybe also new variations, which you never saw before (or which may never be
 
 There are two types of random-flame-generators:
 
- - _meta-random-flame-generator_: uses randomly-chosen random-flame-generators internally
- - _random-flame-generator_: actually creates a random flame
+ - *meta-random-flame-generator*: uses randomly-chosen random-flame-generators internally
+ - *random-flame-generator*: actually creates a random flame
 
 ===== The special "All"-random-flame-generator
 The most common random-flame-generator is the default generator named "All".
@@ -1276,14 +1305,14 @@ A random-symmetry randomly sets post-symmetry-options of the random flames.
 
 There are the following options:
 
- - _None_: the flame will have no post-symmetry
- - _XAxis_: a random x-axis-symmetry
- - _YAxis_: a random y-axis-symmetry
- - _Point_: a random point-axis-symmetry
- - _(All)_: randomly selects a random-symmetry-generator to generate post-symmetry
- - _(All, sparse)_: like _(All)_, but with reduced probability to generate post-symmetry at all
+ - *None*: the flame will have no post-symmetry
+ - *XAxis*: a random x-axis-symmetry
+ - *YAxis*: a random y-axis-symmetry
+ - *Point*: a random point-axis-symmetry
+ - *(All)*: randomly selects a random-symmetry-generator to generate post-symmetry
+ - *(All, sparse)*: like *(All)*, but with reduced probability to generate post-symmetry at all
 
-The default value is _(All, sparse)_, which means to randomly create random symmetry of all types,
+The default value is *(All, sparse)*, which means to randomly create random symmetry of all types,
 but only a few random flames.
 
 See the section about _Post symmetry_ for more details about the types of post-symmetry and related parameters.
@@ -1293,17 +1322,17 @@ Set the random-gradient-generator used for generating random flames.
 
 There are the following options:
 
-- _(All)_: meta-random-gradient-generator which randomly chooses a random-gradient-generator to create the gradient
-- _Strong hue_: creates a smooth  gradient with strong colors
-- _Stripes_: creates a gradient with many regular color changes, having a "stripy" look
-- _Monochrome_: creates a smooth and monochrome radient
-- _Smooth_: creates a smooth gradient with primarily pastel colours
-- _Bold_: creates a non-smooth gradient with large blocks of strong colors
-- _Two colors_: creates a smooth gradient by fading exactly two colors into each other
-- _Uniform curves_: creates a random color curve with evenly distributed base colors and then
+- *(All)*: meta-random-gradient-generator which randomly chooses a random-gradient-generator to create the gradient
+- *Strong hue*: creates a smooth  gradient with strong colors
+- *Stripes*: creates a gradient with many regular color changes, having a "stripy" look
+- *Monochrome*: creates a smooth and monochrome radient
+- *Smooth*: creates a smooth gradient with primarily pastel colours
+- *Bold*: creates a non-smooth gradient with large blocks of strong colors
+- *Two colors*: creates a smooth gradient by fading exactly two colors into each other
+- *Uniform curves*: creates a random color curve with evenly distributed base colors and then
 derives the gradient from it. Using this generator you have both a gradient and
 matching color curves.
-- _Uneven curves_: creates a random color curve with unevenly distributed base colors.
+- *Uneven curves*: creates a random color curve with unevenly distributed base colors.
 Using this generator you have both a gradient and matching color curves.
 
 The default setting is _Uneven curves_, which creates usually the most interesting and
@@ -1314,14 +1343,14 @@ Set the random-weighting-field-generator used for generating random flames.
 
 There are the following options:
 
- - _Cellular Noise_: create random weighting-fields using Cellular Noise
- - _Basic Noise_: create random weighting-fields using basic noise, like Perlin noise
- - _Fractal Noise_: create random weighting-fields using fractal noise, like Perlin fractal noise.
+ - *Cellular Noise*: create random weighting-fields using Cellular Noise
+ - *Basic Noise*: create random weighting-fields using basic noise, like Perlin noise
+ - *Fractal Noise*: create random weighting-fields using fractal noise, like Perlin fractal noise.
 Fractal noise means to apply one type of noise multiple times at different scales.
- - _Image Map_: create random weighting-fields using an image map.
+ - *Image Map*: create random weighting-fields using an image map.
 Per default always the same fixed internal map is used. You can exchange it by editing the flame afterwards.
- - _(All)_: randomly selects a random-weighting-field-generator to generate weighting-fields
- - _(All, sparse)_: like _(All)_, but with reduced probability to generate weighting-fields at all
+ - *(All)*: randomly selects a random-weighting-field-generator to generate weighting-fields
+ - *(All, sparse)*: like *(All)*, but with reduced probability to generate weighting-fields at all
 
 ==== New from scratch
 Create a new and empty flame with a random gradient. This is usually the first step when creating a fractal
@@ -1351,14 +1380,13 @@ Save the currently selected flame.
 
 ==== Q (Quicksave)
 Quicksaves the currently selected flame by automatically generating a filename in the
-form "qsave_" + <Date> + <Counter> +".flame" in the default flame folder.
+form *"qsave_" + <Date> + <Counter> +".flame"* in the default flame folder.
 You may set the default flame folder in the _Preferences_ by changing the property *tinaFlamePath* .
-
 
 ==== A (Save all)
 Save all selected flames together into one flame. Selected flames are indicated by a small checkmark at the
-right upper edge of the thumbnail. See the sub-section _Selecting flames in the thumbnail ribbon_ for more
-informations about selecting flames.
+right upper edge of the thumbnail. See the sub-section <<selecting_flames_thumbnail_ribbon, _Selecting flames in the thumbnail ribbon_>>
+for more informations about selecting flames.
 
 ==== Render image
 Render the current flame using the selected _quality_ and _resolution profile_.
@@ -1367,7 +1395,7 @@ Rendering means to create a final image and consists of the following steps:
 
  - perform the fractal iteration process, possibly using internal a larger resolution than the desired image resolution.
 See _Spatial oversampling_ for details.
- - perform tonemapping by turning the raw fractal information into colored pixels.
+ - perform tone-mapping by turning the raw fractal information into colored pixels.
 See the section about the _Coloring tab_ for more details.
  - optionally perform AI-based denoising. See _AI-based denoiser_ for more details.
 
@@ -1405,6 +1433,7 @@ _Quality profiles_ also contain the information which type of images should be g
 For example, you may specify inside a _quality profile_ that JWildfire shall generate an additional z-buffer-image
 when using solid rendering.
 
+[#quality_profiles]
 ==== Edit _quality profiles_
 In this popup-window you may alter existing _quality profiles_ as well as creating your own.
 
@@ -1423,33 +1452,6 @@ Currently, this is only implemented for fractals rendered in solid mode.
 ==== Batch renderer
 ???
 
-== Platform-specific topics (Windows, Mac, Steam, ...)
-???
-
-== Interactive Renderer
-???
-
-== Batch renderer
-???
-
-== Preferences
-???
-
-== Flame Browser
-[.thumb]
-image::flame_browser.jpg[scaledwidth=75%]
-???
-
-== Easy Movie Maker
-[.thumb]
-image::easy_movie_maker.jpg[scaledwidth=75%]
-???
-
-== Mesh generator
-[.thumb]
-image::mesh_generator.jpg[scaledwidth=75%]
-???
-
 == MutaGen
 [.thumb]
 image::MutaGen.jpg[scaledwidth=75%]
@@ -1463,6 +1465,44 @@ and generation B (16 new fractals from generation A), generating total 24 new fl
 You can easily exchange fractals between the main editor and the new module at any time.
 
 There is also a history, i.e. you can navigate back to earlier generations at any time.
+
+See the section about <<quick_mutation_types, _Quick mutation types_>> for a description of available mutation types.
+
+== Interactive Renderer
+[.thumb]
+image::interactive_renderer.jpg[scaledwidth=75%]
+
+???
+
+== Flame Browser
+[.thumb]
+image::flame_browser.jpg[scaledwidth=75%]
+
+The flame-browser can help you to get an overview over your flame-fractals you create over the time.
+It can scan a base-folder for flame-files and displays them as thumbnails in reverse chronologinal order.
+For a cleaner structure, for each month a separate virtual folder is created and flames are distributed over
+this folder-structure.
+
+On the right side of the window you can execute one of the following actions on the selected flame:
+
+ - *To Editor*: load the selected flame into the _Main Editor_
+ - *To Batch Renderer*: send the selected flame into the _Batch renderer_
+ - *To Mesh Gen*: send the selected flame into the _Mesh generator_
+ - *Delete*: delete the selected flame
+ - *Rename...*: rename the selected flame
+ - *Copy to...*: copy the selected flame into another folder
+ - *Move to...*: move the selected flame into another folder
+
+== Easy Movie Maker
+[.thumb]
+image::easy_movie_maker.jpg[scaledwidth=75%]
+???
+
+== Dancing flames
+???
+
+== Batch renderer
+???
 
 == Quilt Renderer
 [.thumb]
@@ -1484,6 +1524,107 @@ Please note: Due to the nature of the flame-fractal-algorithm, the rendering of 
 would render the whole image at once.So, this method is not efficient, but effective.
 A 16K render on a modern computer can take about 12 hours, but you will usually get an awesome
 result with endless details.
+
+== Mesh generator
+[.thumb]
+image::mesh_generator.jpg[scaledwidth=75%]
+???
+
+== GPU render
+[.thumb]
+image::gpu_render.jpg[scaledwidth=75%]
+
+GPU rendering in JWildfire is enabled by integrating FAEngine, an GPU-rendering-engine,
+created by Steven Brodhead.
+
+=== Limitations
+Currently, the engine is limited in terms of features (e.g. supported variations) and
+supported frameworks, but it actually works. And, it works very well.
+
+For now, it only supports the Windows-platform, uses OpenCl and has a very limited
+set of features (in comparison to the full JWildfire application, e.g. 3D-rendering
+is completely missed).
+
+=== Requirements
+You will need a modern graphics card with plenty of memory to make out the most of this
+stuff.
+
+=== Installation
+The FAEngine comes as a separate package, you must download separately. This enables us to
+update it more often than the main JWildfire application, if required.
+
+The overall installation is simple:
+
+ . Download the recent FACLRender-package from http://www.andreas-maschke.com/
+ . Extract the download *.zip-file to some permanent path on you hard-disk, preferably
+not on the Desktop, e. g. on D:\Program Files\FACLRender.
+If you look into this folder, you should see a file FACLRender.exe
+ . Start JWildfire and open the Preferences-window. Locate the property named
+tinaFACLRenderPath and enter the path to folder which contains the FACLRender.exe.
+In this example, enter "D:\Program Files\FACLRender"
+  . Press the "Save and Close"-button and exit JWildfire
+ . Start JWildfire again, now you should see a new entry "Fractal flames: GPU render"
+in the main Window-menu (see section 3.).
+
+==== Self-Test
+To test the GPU-rendering itself (and to simplify further troubleshooting), please invoke
+the self-test. Just enter the directory where you installed FACLRender and open the sub-folder
+"selftest" ( In this example "D:\Program Files\FACLRender\selftest" ).
+Double click at the selftest.bat. If everything works as expected, you should see that
+"selftest.png" was created. Otherwise, the console output hopefully helps to solve the
+problem.
+
+=== Rendering flames using the GPU
+Use the "GPU renderer"-window to play with flames. This window works similar to the
+Interactive renderer, you may import flames from the editor or load them from harddisc etc.
+
+Most flames will not work flawless, as most flames have at least one feature which is not
+supported by GPU-rendering at this time. But, of course, you will be able to create endless
+beautiful flames, though.
+
+=== Using the "Linear Only"-random-flame-generator
+A good starting point is to use the "Linear Only"-random-flame-generator to create a batch
+of flames which are guaranteed to work. Pick some nice one, transfer it to the GPU-render
+and see how it performs. Add some feature, see if it is still supported by GPU, etc.
+
+=== Batch rendering
+When FACLRender is properly integrated into JWildfire there appears a new "GPU"-button
+in the Batch-renderer. You may use it to render whole batches by using the GPU.
+But, before you render a huge sequence, you should be sure that the flames do not use
+features which are not supported by FACLRender. You may quickly do so by transfering
+one of the flames to the "GPU renderer"-window and see if it works.
+
+=== Troubleshooting
+If rendering fails, you should check if the FACLRender.exe can detect any devices (or is
+missung some vital library, for example). To do so, open a console/terminal window
+and enter the directory where the FACLRender.exe resides.
+Enter the command:
+FACLRender
+If the programm can be started at all, it should output a list of options, one of then
+being "-list"
+
+So, enter the command:
+FACLRender -list
+to get a list of detected devices. When something is wrong, you hopefully will get some
+usefull information displayed here.
+
+==== Visual C++ Redistributable for Visual Studio 2015
+If some *.dlls are missing, installing the the
+  "Visual C++ Redistributable for Visual Studio 2015"-Kit
+from Microsoft will help in the most cases.
+
+==== OpenCl drivers
+Also, be sure to have OpenCl-drivers for your graphics card installed.
+
+== IFlames
+???
+
+
+== Preferences
+???
+
+== Platform-specific topics (Windows, Mac, Steam, ...)
+???
 
 == FAQ (frequently asked questions)
 Here are answers to some popular questions which I get very often. They seem not fit well into
@@ -1512,5 +1653,5 @@ at the preview-area.
 === How to save a flame as image?
 You can not directly save a flame as an image. You must _render_ a flame in order
 to generate an image. There are multiple options you can specify for rendering (for example: the output resolution),
-so you can out different images out of one flame-fractal.
+so you can get out different images out of one flame-fractal.
 
