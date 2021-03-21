@@ -1411,8 +1411,13 @@ In this popup-window you may alter existing _quality profiles_ as well as creati
 There are the following parameters:
 
 - *Quality*: quality level
-- *with HDR*: ???
-- *with Z-Buffer*: ???
+- *with HDR*: create an additional _High Dynamic Range Image_ in .hdr-format.
+Such an image contains raw colors in a much more precise way than conventional images.
+But, it can usually not be displayed without special software.
+Is is similar to an RAW-image in photography.
+- *with Z-Buffer*: create an additional z-buffer-image. Together with the actual image of the fractal you can
+create "3d wiggle images" which are/where popular on some social media platforms like Facebook.
+Currently, this is only implemented for fractals rendered in solid mode.
 - *Default profile*: one profile can be defined as the default profile. The profile is chosen when you start JWildfire.
 
 ==== Batch renderer
