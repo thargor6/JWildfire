@@ -29,10 +29,10 @@ Have fun!
 
 Andreas Maschke, Grambek (Germany) 2021
 
-== Flame-Fractal Editor
+== Fractal-Flame Editor
 [.thumb]
 image::main_editor_with_regions.jpg[scaledwidth=75%]
-The Flame-Fractal Editor is the core part of JWildfire.
+The Fractal-Flame Editor is the core part of JWildfire.
 Here you create random flames or fine-tune your artworks.
 It consists of the following parts:
 
@@ -48,7 +48,7 @@ You find a description of each part as separate sub-chapter in this manual.
 This area is both for previewing fractals and editing them in realtime.
 The most simple and intuitive way to edit a fractal is to drag or rotate one of the
 visible controls on top of the fractals (usually in the shape of triangles).
-But, there also much more precise ways and lots of other options to manipulate a flame-fractal.
+But, there also much more precise ways and lots of other options to manipulate a fractal flame.
 
 ==== Quick buttons on the top of the preview area
 [.thumb]
@@ -231,7 +231,7 @@ or to add your name (as the author of the artwork).
 ===== _3D_
 Switch between "classic" rendering and experimental solid rendering.
 
-Solid rendering basically works by remembering each sample of the flame-fractal
+Solid rendering basically works by remembering each sample of the fractal flame.
 as a solid particle.
 The sum of all of these particles make up a larger solid shape.
 This works only good for a certain types of flame fractals.
@@ -289,7 +289,7 @@ from the _thumbnail ribbon_
 - *Remove all*: empty the _thumbnail ribbon_
 
 === Flame settings
-At this main tab you edit settings at the flame-fractal-level. Most of those options do
+At this main tab you edit settings at the fractal-flame-level. Most of those options do
 affect the final outcome in a global way, but do not affect the structure of the fractal itself.
 E.g., you can change the view-settings or affect the final coloring, but not the shape itself or
 which details are computed.
@@ -342,7 +342,8 @@ Position of the camera in y-direction.Has a similar effect like CentreY for 2D f
 Position of the camera in z-direction.
 
 ==== _DOF/Bokeh_ tab
-DOF (depth of field) is a kind of controversy topic in flame-fractals.Some people like it a lot (including myself),
+DOF (depth of field) is a kind of controversy topic in fractal flames.
+Some people like it a lot (including myself),
 some people do not like it at all.So, this sub-chapter describes a rather "special" topic.
 Bokeh is some kind of art which utilizes DOF to achieve certain artistic effects (using a real camera).
 Some typical types of bokeh-effects you may also simulate with JWildfire.
@@ -451,10 +452,10 @@ Intensity level of the original image for placing bokeh "seeds".The larger the v
 [.thumb]
 image::dof_post_blur_tab.jpg[scaledwidth=75%]
 
-Postblur is not really a DOF-effect, but it creates also some kind of blur, therefore is is located at this tab.
+Post-blur is not really a DOF-effect, but it creates also some kind of blur, therefore is is located at this tab.
 It is not a popular option and primarily resides here for backwards compatibility.
 
-Postblur works by smudging each rendered sample of the flame-fractal.
+Post-blur works by smudging each rendered sample of the fractal flame.
 The effect diminishes the more far from the center.It usually makes a fractal appear more bold and "glassy".
 
 ====== _Blur radius_
@@ -731,7 +732,7 @@ This gradient editor was superseeded by the curve-editor you find at the _Curve 
 
 ====== _Random_ button
 Shortcut for creating a new random gradient (using the current settings at the _Create new_ subtab).
-Gradient changes are also part of the undo-history of the flame-fractal, so you may switch through
+Gradient changes are also part of the undo-history of the fractal flame, so you may switch through
 the randomly generated gradients by Undoing/redoing afterwards.
 
 ====== _Save_ button
@@ -990,15 +991,16 @@ Vertical sizing of the image map.
 ===== _Remove image_
 Remove the selected color map (and revert to use a regular gradient for coloring).
 
+[#solid_rendering]
 ==== _3D rendering_ tab
 At this tab you can influence the outcome of a fractal rendered in solid mode.
 This is also an experimental feature of JWildfire.
 
-Solid rendering basically works by "remembering" each sample of the flame-fractal
+Solid rendering basically works by "remembering" each sample of the fractal flame
 as a solid particle.
 The sum of all of these particles make up a larger solid shape.
 This works only good for a certain types of flame fractals and needs more rendering time
-than "classic" flame-fractals.
+than "classic" fractal flames.
 
 It may fail at all, if the structure is too thin or is in general too "chaotic" or too blurry.
 
@@ -1013,7 +1015,7 @@ that cause it to be darker in small corner ends or crevices.
 There are several methods to implements this, JWildfire uses a method based on
 "Image-Space Horizon-Based Ambient Occlusion", which was developed by NVIDIA.
 
-Ambient shadows are a global effect which is independant from any lightsources.
+Ambient shadows are a global effect which is independent from any light sources.
 
 ====== _Ambient shadows_ checkbox
 Enable or disable Ambient shadow calculation.
@@ -1069,7 +1071,7 @@ Radius for smoothing hard shadows.
 Resolution of the shadow map. The higher the resolution, the higher the quality of
 the shadows, but the higher the memory consumption.
 
-Please note, that a shadow map is required for each lightsource. So, having many lightsources
+Please note, that a shadow map is required for each lightsource. So, having many light sources
 may increase memory consumption indirectly, when using shadow maps.
 
 ====== _Shadowmap bias_
@@ -1124,15 +1126,15 @@ Amount of light emitted by the reflection map.
 ===== _Light settings_ subtab
 [.thumb]
 image::3drendering_light_settings_tab.jpg[scaledwidth=75%]
-At this subtab you may set up directional lightsources for solid rendering.
+At this subtab you may set up directional light sources for solid rendering.
 
-You may have as many lightsources as you want.
+You may have as many light sources as you want.
 
 ====== _Selected Light_ combobox
-Select the lightsource you want to edit.
+Select the light source you want to edit.
 
 ====== _Add_ button
-Add a lightsource.
+Add a light source.
 
 ====== _Del_ button
 Remove the currently selected lightsource.
@@ -1245,7 +1247,6 @@ Please note, that this will per default remove any previously loaded flames toge
 with their undo-history from memory. So, any change you did not save yet, will be lost.
 You can change this behaviour by editing the parameter *tinaRandomBatchRefreshType* in
 the _Preferences_.
-
 
 The random-flame-generating-process can be influenced by changing the following parameters:
 
@@ -1389,7 +1390,7 @@ right upper edge of the thumbnail. See the sub-section <<selecting_flames_thumbn
 for more informations about selecting flames.
 
 ==== Render image
-Render the current flame using the selected _quality_ and _resolution profile_.
+Render the current flame using the selected <<quality_profiles, _quality_>> and <<resolution_profiles, _resolution profile_>>.
 
 Rendering means to create a final image and consists of the following steps:
 
@@ -1412,6 +1413,7 @@ size of the preview-area accordingly to the aspect ratio of the selected _resolu
 For example, when you select a profile with same width and height, you will have a preview-area
 of square shape.
 
+[#resolution_profiles]
 ==== Edit _resolution profiles_
 In this popup-window you may alter existing _resolution profiles_ as well as creating your own.
 
@@ -1450,9 +1452,16 @@ Currently, this is only implemented for fractals rendered in solid mode.
 - *Default profile*: one profile can be defined as the default profile. The profile is chosen when you start JWildfire.
 
 ==== Batch renderer
-???
+Quick-saves the currently selected fractal flame and sends it to the <<batch_renderer, _Batch renderer_>>.
 
-== MutaGen
+Please note, that this does not actually render the fractal flame.
+You must later open the _Batch renderer_ and invoke the rendering process.
+So, it is just a shortcut to simplify adding fractal flames to the rendering batch.
+
+Hint: when you continue to  edit the fractal flame and create a quicksave again, the _Batch renderer_
+will still render the quicksave you did send to the _Batch renderer_ before.
+
+== _MutaGen_ module
 [.thumb]
 image::MutaGen.jpg[scaledwidth=75%]
 
@@ -1468,17 +1477,120 @@ There is also a history, i.e. you can navigate back to earlier generations at an
 
 See the section about <<quick_mutation_types, _Quick mutation types_>> for a description of available mutation types.
 
-== Interactive Renderer
+== _Interactive Renderer_ module
 [.thumb]
 image::interactive_renderer.jpg[scaledwidth=75%]
 
-???
+The _Interactive Renderer_ is an alternative rendering module which focuses on rendering a single image.
+(In contrast, the _Batch Renderer_ focuses on rendering multiple images.)
+_Interactive Renderer_ has three main purposes:
+
+ - watch the rendering process for important artworks and let it render "until it is done"
+ - explore random fractal flames and watch them get rendered clear and clearer. This may be very relaxing
+ - explore the fractal rendering process in general
+
+=== Saving the image while rendering
+While rendering is in progress you may save a snapshot of the current image at any time.
+This will not influence or even interrupt the ongoing rendering process in any way and is
+an intended workflow.
+
+=== Stats
+When turning on the gathereing statistics you will not see the image becoming clearer and clearer the longer
+the rendering process last, you will also get information about the current quality level together with
+predictions when to reach certain quality levels.
+
+You may turn gathering Stats of when you are not interested in any way. This will improve render
+performance only slightly, though.
+
+=== Preview
+While previewing the image during rendering is a key-feature of the _Interactive Renderer_, it also
+slightly slows down rendering. So, when you are not interested for an update of the display, you may pause
+the Preview, e.g. when overnight.
+
+=== From Editor
+Imports the currently edited fractal flame from the _Main Editor_ and start rendering it.
+
+*Please beware, that this will cancel any ongoing render and you will lose any unsaved results.*
+
+=== From Clipboard
+Imports a fractal flame from the clipboard and start rendering it.
+
+*Please beware, that this will cancel any ongoing rendering and you will lose any unsaved results.*
+
+=== Load flame
+Loads a fractal flame from a flame start rendering it.
+
+*Please beware, that this will cancel any ongoing rendering and you will lose any unsaved results.*
+
+=== Resume render
+Load a previously saved <<render_state, _Render State_>> and start rendering it.
+
+*Please beware, that this will cancel any ongoing rendering and you will lose any unsaved results.*
+
+=== Stop
+Stops the currently ongoing rendering process.
+
+*Please beware, that the render can not be resumed. You must save the <<render_state, _Render State_>>
+when you want to be able to continue a render.*
+
+=== 1:2
+Sets the render size to the half of the currently selected render size. Can help to get a quick preview
+when rendering at huge resolutions.
+
+=== 1:4
+Sets the render size to the quarter of the currently selected render size. Can help to get a quick preview
+when rendering at huge resolutions.
+
+=== Full
+Use the full render resolution of the selected <<resolution_profiles, _Resolution Profile>>.
+This is the default setting.
+
+=== Resolution
+Desired render resolution. See the sub-section about <<resolution_profiles, _Resolution Profiles_>>
+for defining custom resolutions.
+
+[#render_state]
+=== Save render state
+Save the current state in a proprietary format. You may load this file later to continue rendering
+at exactly the same step.
+
+=== Save image
+Create a snapshot of the current render and save it as image.
+
+=== Z (Save Z-Buffer)
+Create a snapshot of the current render and save it as z-buffer. Currently z-buffers are only
+supported when rendering in <<solid_rendering, solid mode>>.
+
+=== Autoload saved image
+When this option is checked, JWildfire will automatically load and display images created by
+_Save image_- and the _Z (Save Z-Buffer)_-function.
+To view the actual final image may help help better to decide when "it's done" that to view the rendering-preview.
+
+=== To Editor
+Transfer the currently rendered flame to the Main editor. May make sense when you resumed a render by and want to
+edit the flame itself.
+
+=== To Clipboard
+Transfer the currently rendered flame to the clipboard. May make sense when you resumed a render by and want to
+save the flame itself.
+
+=== Save Flame
+Save the currently rendered flame to file. May make sense when you resumed a render by and want to
+save the flame itself.
+
+=== Next (random flame)
+Creates a random flame and starts rendering it.
+
+*Please beware, that this will cancel any ongoing rendering and you will lose any unsaved results.*
+
+=== Random generator
+Select the random-flame-generator used to generate a random-fractal-flame when using the _Next_-button.
 
 == Flame Browser
 [.thumb]
 image::flame_browser.jpg[scaledwidth=75%]
 
-The flame-browser can help you to get an overview over your flame-fractals you create over the time.
+The flame-browser can help you to get an overview over your fractal flames you create over the time.
 It can scan a base-folder for flame-files and displays them as thumbnails in reverse chronologinal order.
 For a cleaner structure, for each month a separate virtual folder is created and flames are distributed over
 this folder-structure.
@@ -1493,22 +1605,28 @@ On the right side of the window you can execute one of the following actions on 
  - *Copy to...*: copy the selected flame into another folder
  - *Move to...*: move the selected flame into another folder
 
-== Easy Movie Maker
+== _Easy Movie Maker_ module
 [.thumb]
 image::easy_movie_maker.jpg[scaledwidth=75%]
+In the
+
+== _Dancing flames_ module
+[.thumb]
+image::dancing_flames.jpg[scaledwidth=75%]
 ???
 
-== Dancing flames
+[#batch_renderer]
+== _Batch renderer_ module
+[.thumb]
+image::batch_renderer.jpg[scaledwidth=75%]
 ???
 
-== Batch renderer
-???
-
-== Quilt Renderer
+[#quilt_renderer]
+== _Quilt Renderer_ module
 [.thumb]
 image::quilt_renderer.jpg[scaledwidth=75%]
 
-The Quilt Renderer allows you to render flames in nearly unlimited size.
+The _Quilt Renderer_ allows you to render flames in nearly unlimited size.
 This works by splitting the whole image into tiles.
 
 You may freely specify how the tiles are generated, e.g. splitting the image in 3x2 tiles or 8 vertical stripes.
@@ -1520,17 +1638,17 @@ Images with a size upto 32K (30720x17280) where tested without any problems so f
 
 You can cancel/resume the rendering-process at tile-level.
 
-Please note: Due to the nature of the flame-fractal-algorithm, the rendering of each tile may take as long as you
+Please note: Due to the nature of the fractal-flame-algorithm, the rendering of each tile may take as long as you
 would render the whole image at once.So, this method is not efficient, but effective.
 A 16K render on a modern computer can take about 12 hours, but you will usually get an awesome
 result with endless details.
 
-== Mesh generator
+== _Mesh generator_ module
 [.thumb]
 image::mesh_generator.jpg[scaledwidth=75%]
 ???
 
-== GPU render
+== _GPU render_ module
 [.thumb]
 image::gpu_render.jpg[scaledwidth=75%]
 
@@ -1606,7 +1724,7 @@ being "-list"
 So, enter the command:
 FACLRender -list
 to get a list of detected devices. When something is wrong, you hopefully will get some
-usefull information displayed here.
+useful information displayed here.
 
 ==== Visual C++ Redistributable for Visual Studio 2015
 If some *.dlls are missing, installing the the
@@ -1616,12 +1734,46 @@ from Microsoft will help in the most cases.
 ==== OpenCl drivers
 Also, be sure to have OpenCl-drivers for your graphics card installed.
 
-== IFlames
-???
+== _IFlames_ module
+[.thumb]
+image::iflames.jpg[scaledwidth=75%]
 
+This is an experimental application which combines particle simulation and fractal flames.
 
-== Preferences
-???
+It requires a rather powerful computer, especially when you want to animate the iflames.
+
+There are about 350-parameters to change, many of them may be animated:
+
+- *Edge-finding*: controls where to place base-shapes
+- *Global structure*: controls the global structure of the resulting iflame
+- *Blending*: controls coloring
+- *Dynamics*: controls global settings affecting dynamics aspects, like gravity
+- *Base Flame Appearance*: controls the base-shapes inside an iflame (you may have upto 6 different base-shapes)
+- *Size and orientation*: The size and oriantation of the base-shapes
+- *Distribution*: how to place which base-shape
+- *Blending*: local coloring
+- *Mutations*: controls how to create mutations from the base-shapes
+- *Dynamics*: dynamic properties (like speed in a certain direction) of base-shapes
+
+== _Preferences_ window
+[.thumb]
+image::preferences.jpg[scaledwidth=75%]
+
+In the _Preferences_-window you may customize JWildfire to your needs.
+
+The customizable properties are key-value pairs which are displayed in one large table.
+You may edit a property by double-clicking at the value in the 2nd column of the table.
+
+Each property has a small description which is displayed at the bottom of the window.
+
+[.thumb]
+image::preferences_property_description.jpg[scaledwidth=75%]
+
+Depending on the type of a property a popup-dialog may appear or you may edit the value in place.
+For example, when editing properties of type color, a color-selection-dialog appears.
+
+Some properties may be changed "on the fly", others will need a restart of JWildfire in order
+to show an effect. This is usually mentioned in the description of the property.
 
 == Platform-specific topics (Windows, Mac, Steam, ...)
 ???
@@ -1637,7 +1789,7 @@ You can literally render in any resolution, also 8k:
 
 - by rendering a single image at once. The maximum render size is only restricted by your available memory.
 (For really huge images, you may need patience, too.)
-- by using the _Quilt-renderer_-module you may render really huge images in smaller parts, which are finally
+- by using the <<quilt_renderer, _Quilt-renderer_>>-module you may render really huge images in smaller parts, which are finally
 assembled together. The maximum render size is also limited by memory. But often, you will
 get other problems before reaching the memory-limit in JWildfire. For example, those image files can be very big (I have tested with
 sizes up to 1 GB), and is hard to find other software which may process such large images.
@@ -1653,5 +1805,5 @@ at the preview-area.
 === How to save a flame as image?
 You can not directly save a flame as an image. You must _render_ a flame in order
 to generate an image. There are multiple options you can specify for rendering (for example: the output resolution),
-so you can get out different images out of one flame-fractal.
+so you can get out different images out of one fractal flame.
 
