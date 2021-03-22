@@ -68,6 +68,7 @@ Please note, that this only affects the preview display and does not the transpa
 ===== _Fine edit_
 Turn on or off "fine editing".Fine editing means that changes are less sensitive to changes using mouse or touchpad to allow editing with a higher grade of detail.
 
+[#realtime_preview]
 ===== _Realtime_
 Turns progressive rendering of the preview on or off.Progressive rendering means that the image starts to render in very low quality and gets improved after a while.
 This image gets improved after a while again, and so on.Usually this works very good and allows a very fluid editing.
@@ -227,6 +228,7 @@ Create a snapshot of the current flame.This is an identical copy with new undo-h
 ===== _Title_
 Sets the title of the current flame.This is a common place to also put copyright information
 or to add your name (as the author of the artwork).
+
 
 ===== _3D_
 Switch between "classic" rendering and experimental solid rendering.
@@ -1180,7 +1182,60 @@ There are two options to control how the filename of the z-buffer-image is deter
  - *name_depth*: append "_depth" to the image filename
 
 ==== _Stereo3D_ tab
-???
+At this tab you can change options for rendering Stereo3D images.
+There are many options here, including settings to generate classic anaglyph images
+as well as options to generate interpolated images.
+
+===== Stereo3d mode
+Sets the type of Stereo3D mode:
+
+ - *None*: no Stereo3D rendering
+ - *Anaglyph*: the classic way to generate a Stereo3D image: creates one image for each eye,
+turns them into gray, turns the gray into two different monochrome tones, and compose
+those two images together.
+Creates one image per frame.
+Requires special 3d glasses with the matching colors to view the image.
+ - *Side by Side*: creates one image for each eye and put them side by side.
+Creates one image per frame.
+ - *Interpolated images*: create a number N of interpolated images for each eye.
+Creates 2 * N images per frame.
+
+===== View angle
+Angle between the eye-lines, also called Stereo angle.
+
+===== Eye distance
+Distance between the eyes.
+
+===== Focal offset
+Offset off the camera in z-direction.
+
+===== Preview mode
+Type of preview for Stereo3D-effect:
+
+ - *None*: no Stereo3D-preview. The fractal flame is displayed like a regular fractal flame.
+ - *Anaglyph*: preview as anaglyph image
+ - *Side by Side*: preview in side-by-side mode
+ - *Side by Side Full*: preview in enlarged side-by-side mode
+
+*Please note, that the preview currently does not work correctly in Realtime mode.
+When creating Stereo3d-images, it is recommended to <<realtime_preview, turn Realtime mode off>>*
+
+===== Left eye color
+Color of the left-eye-image in anaglyph mode. There are the following options:
+
+ - Red
+ - Cyan
+
+===== Right eye color
+Color of the left-eye-image in anaglyph mode. There are the same options as for the left eye.
+
+===== Images per eye
+Number of interpolated images which are created fopr each eye in _Interpolated Images_ mode.
+
+===== Swap side
+When checked, swaps the images for the left eye with the image for the right eye.
+For some people is easier to see the 3D-effect this way, while for others is is easier the
+other way.
 
 ==== _Post symmetry_ tab
 ???
@@ -1688,7 +1743,7 @@ in the main Window-menu (see section 3.).
 To test the GPU-rendering itself (and to simplify further troubleshooting), please invoke
 the self-test. Just enter the directory where you installed FACLRender and open the sub-folder
 "selftest" ( In this example "D:\Program Files\FACLRender\selftest" ).
-Double click at the selftest.bat. If everything works as expected, you should see that
+Double-click at the selftest.bat. If everything works as expected, you should see that
 "selftest.png" was created. Otherwise, the console output hopefully helps to solve the
 problem.
 
@@ -1714,7 +1769,7 @@ one of the flames to the "GPU renderer"-window and see if it works.
 
 === Troubleshooting
 If rendering fails, you should check if the FACLRender.exe can detect any devices (or is
-missung some vital library, for example). To do so, open a console/terminal window
+missing some vital library, for example). To do so, open a console/terminal window
 and enter the directory where the FACLRender.exe resides.
 Enter the command:
 FACLRender
@@ -1782,6 +1837,7 @@ to show an effect. This is usually mentioned in the description of the property.
 Here are answers to some popular questions which I get very often. They seem not fit well into
 the other chapters, so I collected them in this section.
 
+[#rendering_in_4k]
 === Are 4k renders possible?
 Yes, you can.
 
@@ -1807,3 +1863,7 @@ You can not directly save a flame as an image. You must _render_ a flame in orde
 to generate an image. There are multiple options you can specify for rendering (for example: the output resolution),
 so you can get out different images out of one fractal flame.
 
+=== Is it possible to render flames at higher resolutions than inside JWildfire?
+There are no restrictions regarding render size which could resolved by an external
+application for rendering. The only limitation is memory.
+See <<rendering_in_4k, Are 4k renders possible?>> for more informations.
