@@ -229,6 +229,8 @@ public class PrefsReader {
 
         pPrefs.setTinaFACLRenderPath(getProperty(props, Prefs.KEY_TINA_FACLRENDER_PATH, pPrefs.getTinaFACLRenderPath()));
         pPrefs.setTinaFACLRenderOptions(getProperty(props, Prefs.KEY_TINA_FACLRENDER_OPTS, pPrefs.getTinaFACLRenderOptions()));
+        pPrefs.setTinaDefaultNewFlameTitle(getProperty(props, Prefs.KEY_TINA_DEFAULT_NEW_FLAME_TITLE, pPrefs.getTinaDefaultNewFlameTitle()));
+
         pPrefs.setTinaDefaultExpandNonlinearParams(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS, pPrefs.isTinaDefaultExpandNonlinearParams()));
         pPrefs.setTinaEnableLeapMotionTab(getBooleanProperty(props, Prefs.KEY_TINA_ENABLE_LEAP_MOTION_TAB, pPrefs.isTinaEnableLeapMotionTab()));
         try {

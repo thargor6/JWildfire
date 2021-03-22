@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -144,6 +144,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_FACLRENDER_PATH = "tina.faclrender_path";
   static final String KEY_TINA_FACLRENDER_OPTS = "tina.faclrender_opts";
+  static final String KEY_TINA_DEFAULT_NEW_FLAME_TITLE = "tina.default.new_flame_title";
 
   static final String KEY_TINA_AUTOLOAD_IMAGES_IN_IR = "tina.autoload_images_in_ir";
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
@@ -233,6 +234,10 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Commandline-options added when invokling the external GPU-renderer. Refer to the documentation or sourcecode for more information.", category = PropertyCategory.TINA)
   private String tinaFACLRenderOptions = "-nde";
+
+  @Property(description = "Default title for fractal flames which are created using the \"New from scratch\"-button.", category = PropertyCategory.TINA)
+  private String tinaDefaultNewFlameTitle= "";
+
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
   private String tinaJWFMoviePath = null;
@@ -853,6 +858,7 @@ public class Prefs extends ManagedObject {
     tinaEnableLeapMotionTab = pSrc.tinaEnableLeapMotionTab;
     tinaFACLRenderPath = pSrc.tinaFACLRenderPath;
     tinaFACLRenderOptions = pSrc.tinaFACLRenderOptions;
+    tinaDefaultNewFlameTitle = pSrc.tinaDefaultNewFlameTitle;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1669,6 +1675,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaFACLRenderOptions(String pTinaFACLRenderOptions) {
     tinaFACLRenderOptions = pTinaFACLRenderOptions;
+  }
+
+  public String getTinaDefaultNewFlameTitle() {
+    return tinaDefaultNewFlameTitle;
+  }
+
+  public void setTinaDefaultNewFlameTitle(String tinaDefaultNewFlameTitle) {
+    this.tinaDefaultNewFlameTitle = tinaDefaultNewFlameTitle;
   }
 
   public void setVariationProfiles(List<VariationProfile> pVariationProfiles) {

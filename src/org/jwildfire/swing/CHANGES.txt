@@ -14,6 +14,8 @@ V6.xx (xx.xx.2021)
    "Help -> User manual" or in the file system inside the lib-subfolder (JWildfire_manual.pdf).
  - ply/PointCloud-export now generates two additional fields: pscale and intensity
  - started to create an official manual (AsciiDoc-based for simple editing)
+ - new property tinaDefaultNewFlameTitle where you can set a default flame title which is assigned when you
+   create a new flame by using the "New from Scratch"-button
  - added Alt-F shortcut for Fine edit, by Rick Sidwell
  - new variations
      -kaleidoimg,

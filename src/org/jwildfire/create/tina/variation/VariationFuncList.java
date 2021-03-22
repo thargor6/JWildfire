@@ -1043,7 +1043,6 @@ public class VariationFuncList {
   }
 
   private static void refreshNameList() {
-    items.clear();
     unfilteredNameList = new ArrayList<>();
     nonInternalVariationsNameList = new ArrayList<>();
     variationTypes = new HashMap<>();
@@ -1098,34 +1097,12 @@ public class VariationFuncList {
   }
 
   public static String getRandomVariationname() {
-    double preSelection = Math.random();
-    if(preSelection<0.22) {
-      return getRandomVariationname(VariationFuncType.VARTYPE_3D);
-    }
-    else if(preSelection<0.37) {
-      return getRandomVariationname(VariationFuncType.VARTYPE_BASE_SHAPE);
-    }
-    else if(preSelection<0.55) {
-      return getRandomVariationname(VariationFuncType.VARTYPE_2D);
-    }
-    else if(preSelection<0.66) {
-      return getRandomVariationname(VariationFuncType.VARTYPE_DC);
-    }
-    else {
-      int idx =
-          Math.min(
-              (int) (Math.random() * getRandomVariationnames().size()),
-              getRandomVariationnames().size() - 1);
-      return getRandomVariationnames().get(idx);
-    }
-    /*
     int idx =
             Math.min(
                     (int) (Math.random() * getRandomVariationnames().size()),
                     getRandomVariationnames().size() - 1);
     return getRandomVariationnames().get(idx);
-         */
-  }
+    }
 
   public static String getRandomVariationname(VariationFuncType variationFuncType) {
     if(variationsByType==null) {

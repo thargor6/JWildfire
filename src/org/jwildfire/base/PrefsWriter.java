@@ -135,6 +135,7 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_ENABLE_LEAP_MOTION_TAB, pPrefs.isTinaEnableLeapMotionTab());
     addValue(sb, Prefs.KEY_TINA_FACLRENDER_PATH, pPrefs.getTinaFACLRenderPath());
     addValue(sb, Prefs.KEY_TINA_FACLRENDER_OPTS, pPrefs.getTinaFACLRenderOptions());
+    addValue(sb, Prefs.KEY_TINA_DEFAULT_NEW_FLAME_TITLE, pPrefs.getTinaDefaultNewFlameTitle());
     addValue(sb, Prefs.KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION, pPrefs.getTinaEditorDoubleClickAction().toString());
     addValue(sb, Prefs.KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL, pPrefs.getTinaDefaultFadeToWhiteLevel());
     addValue(sb, Prefs.KEY_TINA_DEFAULT_FPS, pPrefs.getTinaDefaultFPS());

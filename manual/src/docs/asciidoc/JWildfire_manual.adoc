@@ -228,7 +228,9 @@ Create a snapshot of the current flame.This is an identical copy with new undo-h
 ===== _Title_
 Sets the title of the current flame.This is a common place to also put copyright information
 or to add your name (as the author of the artwork).
-
+You can set a default title for flames, which are created using the
+<<new_from_scratch, _New from Scratch_>>-button, by setting the
+property *tinaDefaultNewFlameTitle* in the <<preferences, _Preferences_>>-window.
 
 ===== _3D_
 Switch between "classic" rendering and experimental solid rendering.
@@ -246,7 +248,7 @@ image::jwf_mandelbulb.jpg[scaledwidth=50%]
 
 ===== _Animations controls on/off_
 Using this button you may quickly turn on or off animation controls on the fly.
-You may set up your preference for this setting in the Preferences-window.
+You may set up your preference for this setting in the <<preferences, _Preferences_>>-window.
 
 === _Thumbnail ribbon_
 [.thumb]
@@ -789,7 +791,7 @@ The gradient-library contains of two parts:
 - in-built gradients: those are installed together with the program and can not be modified in any way
 - your own gradients. They are located in a folder outside the JWildfire-installation-drawer,
   so that they are not lost when you update JWildfire. You must specify this path in the
-  _Preferences_ by setting the property *tinaGradientPath*.
+  <<preferences, _Preferences_>> by setting the property *tinaGradientPath*.
 
 User-defined gradients may be structurized in sub-folders in order to make them easier accessible.
 
@@ -1253,8 +1255,8 @@ other way.
 "Quick mutations"-tab allow easily creating a batch of variations of the currently selected flame.
 You may load any of those mutations into the main editor by double-clicking at it.
 This creates a new flame in a new slot and does not alter the original flame in any way.
-You may set the default batch size for quick mutations in the _Preferences_ (property *tinaQuickMutationBatchSize*).
-You may also set the default mutation-type for quick mutations in the _Preferences_ (property *tinaQuickMutationDefaultMutationType*).
+You may set the default batch size for quick mutations in the <<preferences, _Preferences_>> (property *tinaQuickMutationBatchSize*).
+You may also set the default mutation-type for quick mutations in the <<preferences, _Preferences_>> (property *tinaQuickMutationDefaultMutationType*).
 
 [#quick_mutation_types]
 ===== _Mutation type_ combobox
@@ -1276,7 +1278,7 @@ Here you can choose the type of mutation to be executed:
  - *Weighting field*: add randomized weighting-field-effects
  - *All*: randomly select one of the above mutations. This is the default option.
 
- - *User1*, *User2*, *User3*: user-defined lists of mutations. You may customize them in the _Preferences_ by
+ - *User1*, *User2*, *User3*: user-defined lists of mutations. You may customize them in the <<preferences, _Preferences_>> by
 editing the properties *tinaMutaGenMutationTypesUser1*, *tinaMutaGenMutationTypesUser2* and *tinaMutaGenMutationTypesUser3*
 
 ==== _Batch size_
@@ -1301,7 +1303,7 @@ are surprised by new and interesting results even after weeks of use of the prog
 Please note, that this will per default remove any previously loaded flames together
 with their undo-history from memory. So, any change you did not save yet, will be lost.
 You can change this behaviour by editing the parameter *tinaRandomBatchRefreshType* in
-the _Preferences_.
+the <<preferences, _Preferences_>>.
 
 The random-flame-generating-process can be influenced by changing the following parameters:
 
@@ -1309,8 +1311,8 @@ The random-flame-generating-process can be influenced by changing the following 
  - *Rnd Symmetry*
  - *Rnd Gradient*
  - *Rnd WField*
- - *tinaRandomBatchSize* (in the _Preferences_)
- - *tinaRandomBatchBGColorRed*, *tinaRandomBatchBGColorGreen*, *tinaRandomBatchBGColorBlue* (also in the _Preferences_)
+ - *tinaRandomBatchSize* (in the <<preferences, _Preferences_>>)
+ - *tinaRandomBatchBGColorRed*, *tinaRandomBatchBGColorGreen*, *tinaRandomBatchBGColorBlue* (also in the <<preferences, _Preferences_>>)
 
 All of these parameters may be combined freely to create customized random flames. See the following sub-sections
 for more details about these parameters.
@@ -1408,6 +1410,7 @@ Per default always the same fixed internal map is used. You can exchange it by e
  - *(All)*: randomly selects a random-weighting-field-generator to generate weighting-fields
  - *(All, sparse)*: like *(All)*, but with reduced probability to generate weighting-fields at all
 
+[#new_from_scratch]
 ==== New from scratch
 Create a new and empty flame with a random gradient. This is usually the first step when creating a fractal
 manually "from scratch", hence the name.
@@ -1437,7 +1440,7 @@ Save the currently selected flame.
 ==== Q (Quicksave)
 Quicksaves the currently selected flame by automatically generating a filename in the
 form *"qsave_" + <Date> + <Counter> +".flame"* in the default flame folder.
-You may set the default flame folder in the _Preferences_ by changing the property *tinaFlamePath* .
+You may set the default flame folder in the <<preferences, _Preferences_>> by changing the property *tinaFlamePath* .
 
 ==== A (Save all)
 Save all selected flames together into one flame. Selected flames are indicated by a small checkmark at the
@@ -1732,7 +1735,7 @@ The overall installation is simple:
  . Extract the download *.zip-file to some permanent path on you hard-disk, preferably
 not on the Desktop, e. g. on D:\Program Files\FACLRender.
 If you look into this folder, you should see a file FACLRender.exe
- . Start JWildfire and open the Preferences-window. Locate the property named
+ . Start JWildfire and open the <<preferences, _Preferences_>>-window. Locate the property named
 tinaFACLRenderPath and enter the path to folder which contains the FACLRender.exe.
 In this example, enter "D:\Program Files\FACLRender"
   . Press the "Save and Close"-button and exit JWildfire
@@ -1810,6 +1813,7 @@ There are about 350-parameters to change, many of them may be animated:
 - *Mutations*: controls how to create mutations from the base-shapes
 - *Dynamics*: dynamic properties (like speed in a certain direction) of base-shapes
 
+[#preferences]
 == _Preferences_ window
 [.thumb]
 image::preferences.jpg[scaledwidth=75%]
