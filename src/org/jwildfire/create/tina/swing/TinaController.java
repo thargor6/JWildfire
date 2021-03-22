@@ -3336,6 +3336,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void newFlameButton_clicked() {
     Flame flame = new Flame();
+    if(Prefs.getPrefs().getTinaDefaultNewFlameTitle()!=null && !Prefs.getPrefs().getTinaDefaultNewFlameTitle().trim().isEmpty()) {
+      flame.setName(Prefs.getPrefs().getTinaDefaultNewFlameTitle().trim());
+    }
     flame.setWidth(800);
     flame.setHeight(600);
     flame.setPixelsPerUnit(50);

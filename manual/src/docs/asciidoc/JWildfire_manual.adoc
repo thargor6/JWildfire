@@ -29,6 +29,7 @@ Have fun!
 
 Andreas Maschke, Grambek (Germany) 2021
 
+[#main_editor]
 == Fractal-Flame Editor
 [.thumb]
 image::main_editor_with_regions.jpg[scaledwidth=75%]
@@ -1459,7 +1460,8 @@ See the section about the _Coloring tab_ for more details.
  - optionally perform AI-based denoising. See _AI-based denoiser_ for more details.
 
 The rendering runs in the background and can be cancelled at anytime. But, you can not render
-more than flame at once at this place. For rendering multiple images see the section about _Batch renderer_.
+more than flame at once at this place. For rendering multiple images see the section
+about <<batch_renderer, _Batch renderer_>>.
 
 ==== _Render resolution_ combobox
 Here you choose the desired render resolution by choosing a _Resolution profile_.
@@ -1540,7 +1542,7 @@ See the section about <<quick_mutation_types, _Quick mutation types_>> for a des
 image::interactive_renderer.jpg[scaledwidth=75%]
 
 The _Interactive Renderer_ is an alternative rendering module which focuses on rendering a single image.
-(In contrast, the _Batch Renderer_ focuses on rendering multiple images.)
+(In contrast, the <<batch_renderer, _Batch Renderer_>> focuses on rendering multiple images.)
 _Interactive Renderer_ has three main purposes:
 
  - watch the rendering process for important artworks and let it render "until it is done"
@@ -1655,9 +1657,9 @@ this folder-structure.
 
 On the right side of the window you can execute one of the following actions on the selected flame:
 
- - *To Editor*: load the selected flame into the _Main Editor_
- - *To Batch Renderer*: send the selected flame into the _Batch renderer_
- - *To Mesh Gen*: send the selected flame into the _Mesh generator_
+ - *To Editor*: load the selected flame into the <<main_editor, _Main Editor_>>
+ - *To Batch Renderer*: send the selected flame into the <<batch_renderer, _Batch renderer_>>
+ - *To Mesh Gen*: send the selected flame into the <<mesh_generator, _Mesh generator_>>
  - *Delete*: delete the selected flame
  - *Rename...*: rename the selected flame
  - *Copy to...*: copy the selected flame into another folder
@@ -1666,7 +1668,7 @@ On the right side of the window you can execute one of the following actions on 
 == _Easy Movie Maker_ module
 [.thumb]
 image::easy_movie_maker.jpg[scaledwidth=75%]
-In the
+???
 
 == _Dancing flames_ module
 [.thumb]
@@ -1677,7 +1679,73 @@ image::dancing_flames.jpg[scaledwidth=75%]
 == _Batch renderer_ module
 [.thumb]
 image::batch_renderer.jpg[scaledwidth=75%]
-???
+
+The batch renderer is designed to render fractal flames in the background (for example overnight).
+Therefore it is well suited to render frames for animations or images with large resolution,
+which take a while to render.
+
+A special behaviour of the _Batch renderer_ is the place where it places the finished images:
+*all images rendered by the _Batch renderer_ are placed in the same folder as the corresponding
+flame-file*. This makes it possible that the _Batch renderer_ recognizes already rendered
+images (they are then skipped by default). This makes it also easy to pause and resume rendering.
+
+=== _Render jobs_ table
+All flames are displayed in a huge table which has some editable columns:
+
+ - *custom size*: here you can enter a custom resolution when it should differ from the main
+resolution selected in this this window. The format is *<width>x<height>*, e.g. *1920x1080*.
+ - *custom quality*: here you can enter a custom quality when it should differ from the main
+quality selected in this window. The format is a numerical value, e.g. *500* for a decent
+quality level.
+ - *render animation*: when you enter here a "1", JWildfire creates a whole .mp4-animation instead
+a single .png-image. You can cancel and continue this at the frame level of the animation.
+So when cancelling the rendering of an mp4-animation, you can continue it later at the
+frame you cancelled it.
+
+=== _Add files_ button
+Here you can add a single flame or any number of flame files at once to the _render jobs_ table.
+
+=== _Move down_ button
+Flames are processed in order they are displayed in the _render jobs_ table. By using this button
+you can move the currently selected flame one position down.
+
+=== _Move up_ button
+By using this button you can move the currently selected flame one position up.
+
+=== _Remove_ button
+Remove the currently selected flame from the _render jobs_ table. This does not delete
+the flame file.
+
+=== _Remove All_ button
+Removes all flames from the _render jobs_ table. This does not delete any flame file.
+
+=== _Settings: Resolution profile_
+Select the <<resolution_profiles, Resolution profile>> which should be used for
+all entries of _render jobs_ table.
+If you want to use a differing resolution for certain flames, you may override this
+setting by editing the column *custom size* for the individual flames.
+
+=== _Settings: Quality profile_
+Select the <<quality_profiles, Quality profile>> which should be used for
+all entries of _render jobs_ table.
+If you want to use a differing quality setting for certain flames, you may override this
+setting by editing the column *custom quality* for the individual flames.
+
+=== _Overwrite images_ checkbox
+Per default the _Batch renderer_ will not re-render already rendered images.
+You can change this by activating this checkbox.
+
+=== _GPU_ toggle button
+This toggle is only enabled, when <<gpu_rendering, _GPU rendering_>> is configured at your system.
+When you activate this button, all images are rendered using the _GPU renderer_.
+But please beware, that this is currently very limited and works not well for many fractal flames.
+So, you should test it with a single flame before GPU-rendering a longer batch.
+
+=== _Show image_ image
+Loads and displays the corrsponding image of the currently selected flame, if already rendered.
+
+=== _Render_ button
+Starts the rendering batch.
 
 [#quilt_renderer]
 == _Quilt Renderer_ module
@@ -1701,11 +1769,13 @@ would render the whole image at once.So, this method is not efficient, but effec
 A 16K render on a modern computer can take about 12 hours, but you will usually get an awesome
 result with endless details.
 
+[#mesh_generator]
 == _Mesh generator_ module
 [.thumb]
 image::mesh_generator.jpg[scaledwidth=75%]
 ???
 
+[#gpu_rendering]
 == _GPU render_ module
 [.thumb]
 image::gpu_render.jpg[scaledwidth=75%]
