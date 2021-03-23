@@ -300,6 +300,7 @@ public class VariationProfilesFrame extends JFrame {
       saveBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           controller.saveAndApplyChanges();
+          controller.refreshMainWindow();
           setVisible(false);
         }
       });
@@ -351,7 +352,7 @@ public class VariationProfilesFrame extends JFrame {
     if (variationsScrollPane == null) {
       variationsScrollPane = new JScrollPane();
       variationsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-      variationsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      variationsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     }
     return variationsScrollPane;
   }

@@ -37,6 +37,15 @@ public class VariationProfileRepository {
     }
   }
 
+  public static void updateVariationProfiles(List<VariationProfile> newProfiles) {
+    Prefs.getPrefs().setVariationProfiles(newProfiles);
+    try {
+      new PrefsWriter().writePrefs(Prefs.getPrefs());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
   public static List<VariationProfile> getProfiles() {
     return Prefs.getPrefs().getVariationProfiles();
   }
@@ -66,6 +75,7 @@ public class VariationProfileRepository {
     res.add(createCustomProfile());
     res.add(create3DProfile());
     res.add(createZTransformProfile());
+    res.add(createEscapeTimeFractalProfile());
     return res;
   }
 
@@ -164,6 +174,15 @@ public class VariationProfileRepository {
     res.getVariationTypes().add(VariationFuncType.VARTYPE_ZTRANSFORM);
     return res;
   }
+
+  private static VariationProfile createEscapeTimeFractalProfile() {
+    VariationProfile res = new VariationProfile();
+    res.setName("Escape-time fractal");
+    res.setVariationProfileType(VariationProfileType.INCLUDE_TYPES);
+    res.getVariationTypes().add(VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL);
+    return res;
+  }
+
 
   private static VariationProfile createDefaultProfile() {
     VariationProfile res = new VariationProfile();

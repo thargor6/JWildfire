@@ -7216,8 +7216,8 @@ public class MainEditorFrame extends JFrame {
         getNonlinearParams12REd(), getNonlinearParams12LeftButton(), getNonlinearParams12PreButton(), getNonlinearParams12PostButton(), getNonlinearParams12UpButton(),
         getNonlinearParams12ToggleParamsPnlButton());
 
-    initVariationProfileCmb(getTinaVariationProfile1Cmb(), true);
-    initVariationProfileCmb(getTinaVariationProfile2Cmb(), false);
+    ComboboxTools.initVariationProfileCmb(getTinaVariationProfile1Cmb(), true);
+    ComboboxTools.initVariationProfileCmb(getTinaVariationProfile2Cmb(), false);
 
     initFilterKernelCmb(getPostBokehFilterKernelCmb());
 
@@ -7644,27 +7644,6 @@ public class MainEditorFrame extends JFrame {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
     }
     return tinaController;
-  }
-
-  private void initVariationProfileCmb(JComboBox pCmb, boolean pSelectDefault) {
-    pCmb.removeAllItems();
-    pCmb.setMaximumRowCount(16);
-    int selectedIdx = -1;
-    int currIdx = 0;
-    pCmb.addItem("");
-    for (VariationProfile profile : VariationProfileRepository.getProfiles()) {
-      pCmb.addItem(profile.getName());
-      if (pSelectDefault && profile.isDefaultProfile() && selectedIdx < 0) {
-        selectedIdx = currIdx;
-      }
-      currIdx++;
-    }
-    if (pSelectDefault && pCmb.getItemCount() > 0) {
-      pCmb.setSelectedIndex(selectedIdx >= 0 ? selectedIdx + 1 : 1);
-    }
-    else {
-      pCmb.setSelectedIndex(0);
-    }
   }
 
   private void initWeightMapTypeCmb(JComboBox pCmb) {
@@ -24391,7 +24370,7 @@ public class MainEditorFrame extends JFrame {
       tinaVariationProfile1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
-            tinaController.tinaVariationProfile1Cmb1_changed();
+            tinaController.tinaVariationProfile1Cmb_changed();
           }
         }
       });

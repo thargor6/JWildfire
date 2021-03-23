@@ -6829,12 +6829,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             data.tinaVariationProfile2Cmb.getSelectedIndex() >=0 ? (String)data.tinaVariationProfile2Cmb.getSelectedItem() : "");
   }
 
-  public void tinaVariationProfile1Cmb1_changed() {
-    initNonlinearVariationCmb();
+  public void tinaVariationProfile1Cmb_changed() {
+    if (!isNoRefresh()) {
+      initNonlinearVariationCmb();
+    }
   }
 
   public void tinaVariationProfile1Cmb2_changed() {
-    initNonlinearVariationCmb();
+    if (!isNoRefresh()) {
+      initNonlinearVariationCmb();
+    }
   }
 
 
