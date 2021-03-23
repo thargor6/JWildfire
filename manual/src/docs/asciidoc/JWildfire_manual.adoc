@@ -1602,7 +1602,7 @@ Sets the render size to the quarter of the currently selected render size. Can h
 when rendering at huge resolutions.
 
 === Full
-Use the full render resolution of the selected <<resolution_profiles, _Resolution Profile>>.
+Use the full render resolution of the selected <<resolution_profiles, _Resolution Profile_>>.
 This is the default setting.
 
 === Resolution
@@ -1673,7 +1673,149 @@ image::easy_movie_maker.jpg[scaledwidth=75%]
 == _Dancing flames_ module
 [.thumb]
 image::dancing_flames.jpg[scaledwidth=75%]
-???
+
+The dancing-flames-module is another experimental feature of JWildfire.
+It allows you to create sound-synchronized animations of fractal flames in a very
+sophisticated way.
+
+What can you do:
+
+ -  animate anything! (i.e., any property of a flame which can be accessed in the flame-editor
+can be animated)
+ - synchronize motion with sound (a frequency spectrum computed by a FFT can be used to link
+motion with "beat")
+ - create motion curves (amplitude over time) for certain properties by using a spline editor or
+apply a predefined motion (basing on a certain formula, like "Sawtooth")
+ - group motions together (e.g., have a spline-motion-curve which is slightly altered by beat")
+ - watch the motion in realtime and record it to be processed again to create frames at
+accurate framerate
+ - use any number of fractal flames in your movie and switch between in realtime during the recording
+step
+ - load and save projects
+
+=== The basic concepts
+The basic concept of the animations in the dancing-flame-module is both very versatile and very simple
+and contains of four building blocks:
+ - motions
+ - flame properties and
+ - motion links
+ - motion hierarchies
+
+==== Motions
+You can define any number of motions (which are not related to anything in the first step), e.g. :
+- a rotation with frequency x
+- "beat" data of a certain channel from the FFT
+- a manually created motion curve using the spline-editor
+[.thumb]
+image::dancing_flames_add_motion.jpg[scaledwidth=30%]
+
+Each motion has special parameters which can be accessed through a property table. There are
+some parameters which can found by all motion-types.
+[.thumb]
+image::dancing_flames_motions.jpg[scaledwidth=50%]
+
+==== Flame properties
+Each flame has a lot of properties. Most of them can be easily be animated, e.g.:
+ - camera angle
+ - zoom factor of transform 2
+ - Julia index of variation "julian" in the final transform
+You have not to know all of those, they can all be accessed through a tree-view in the graphical
+interface.
+[.thumb]
+image::dancing_flames_properties.jpg[scaledwidth=50%]
+
+Each fractal flame has its own top-level-folder in this view. There are sub-folders for:
+ - each transform
+ - each final transform
+ - gradient parameters and
+ - shading parameters
+
+==== Motion links
+To actually animate a fractal flame we must connect properties to motions.
+Any motion can be connected with to number of fractal properties from any flame of the project.
+[.thumb]
+image::dancing_flames_motion_links.jpg[scaledwidth=50%]
+
+==== Motion hierarchies
+In certain cases it may make sense to group motions together. E.g., to have a more "rough" motion (like a
+motion curve which describes a basic rotation) where a "small" motion (like "beat") is added to.
+To achieve this, you may choose a parent for any motion.
+[.thumb]
+image::dancing_flames_motion_hierarchy.jpg[scaledwidth=50%]
+
+A motion having a parent can not explicitly be linked to a flame property (because it is already linked
+implicitly over its parent).
+
+=== Basic workflow
+In the following sub-section a basic workflow is outlined.
+
+==== Creating a flame-pool
+The flame-pool is a collection of flames which belong to a dancing-flames-project and can all be
+animated into this project. Simple projects start with only one flame in the pool, but there is no limit
+and even if you have many flames in the pool, not all have to be used in the actual resulting video.
+
+There a several ways to add flames to the pool:
+ - Generate a batch using a random generator
+ - import the currently load flame from the main editor
+ - add a flame from the clipboard
+ - load a batch from hard-disc
+
+==== Adding sound (mp3)
+Sound isn't actually required to create a dancing flame project, but the most projects will benefit
+from sound. Currently, there can only be one mp3-file for the whole project (If you want to use more
+than one sound file, you have to merge them and load them as single file)
+To add a sound file, just press the _Load sound_ button and choose a mp3 file.
+
+Please note, that the loading may take a while as the sound is actually processed and analyzed in
+background.
+
+==== Adjusting the projects FPS (frames per second)
+The FPS setting of the project is one of the most important parameters, is affects how smooth your
+animation will be and how many frames (=single images) you will have to generate in order to create
+the final animation.
+The more smooth your animation is, the more data has to be generated (and the more
+large will be the resulting movie).
+In my personal experience a fps value of 25 (i.e., 25 images shown per 1 second of the animation)
+is a very good compromise.
+
+==== Previewing the show
+To preview the current animation press the _Start Show_ button. This will display a preview
+animation and play back the sound.
+
+In many cases the preview will not be able to follow your FPS setting. This is no problem because the
+speed of the realtime-preview is not the speed at which the final animation will be created. The final
+animation is always created at the true fps setting, even at slow machines.
+
+==== Adjusting the speed of the realtime-preview
+You can improve the speed of the realtime-preview by decreasing its size.
+You can do this in real-time by modifying the slider of _border size_.
+
+==== Switching between flames during the show
+You may switch between the flames of your flame pool during the show all the time.
+This is currently the only interaction which is actually required to be done during the show.
+
+This kind of interaction is absolutely intended, and shall give your animation a more "spontaneous" or
+"looking-alive" behaviour. Just swap flames when you "feel" it.
+To switch between flames just select them from the list-box in the project area during the show.
+
+====  Recording a show
+To record a show just enable the _Record show_ checkbox and start the show. Now any user action
+(currently only switching between flames) is recorded accordingly to your fps setting.
+
+After finishing the show (by pressing the _Stop show_ button= you will be prompted for an output path.
+Just choose a directory and specify a base-name for the flame files to be generated.
+
+Now JWildfire recalculates the show again at accurate FPS setting and produces the flame-files which
+have to be rendered later to create the movie. Depending on the length of your show and the FPS
+setting this may take a while and produce lots of files.
+Please note that this phase is very important to have no hard interrupts (in order to create a really
+accurate timing), you should leave your computer alone with it, especially if you have a rather slow
+system.
+
+==== Rendering the flames
+The project until now was free from any output resolution settings and only fractal flames
+where generated. You can render them using any resolution and quality settings later.
+The recommended way is to use the <<batch_renderer, Batch renderer>> to perform final rendering.
 
 [#batch_renderer]
 == _Batch renderer_ module
