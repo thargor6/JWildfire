@@ -963,7 +963,7 @@ public class VariationFuncList {
         resolvedAliasMap.put(funcCls.getValue(), varFunc.getName());
       }
     }
-
+    items.clear();
   }
 
   private static Map<String, Double> variationInitCosts;

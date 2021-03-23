@@ -93,6 +93,12 @@ public enum VariationFuncType {
     public String getCaption() {
       return "Custom code";
     }
+  },
+  VARTYPE_ESCAPE_TIME_FRACTAL {
+    @Override
+    public String getCaption() {
+      return "Escape-time fractal";
+    }
   };
 
   public abstract String getCaption();

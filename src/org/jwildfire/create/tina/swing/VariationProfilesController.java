@@ -20,12 +20,14 @@ import org.jwildfire.base.VariationProfile;
 import org.jwildfire.base.VariationProfileRepository;
 import org.jwildfire.base.VariationProfileType;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +47,6 @@ public class VariationProfilesController {
   private boolean noRefresh;
 
   private JPanel variationsPanel;
-  private List<String> currVariationNames = null;
   private List<JCheckBox> currCheckboxes = new ArrayList<>();
 
   public VariationProfilesController(TinaController parentController) {
@@ -148,7 +149,19 @@ public class VariationProfilesController {
   }
 
   public void saveAndApplyChanges() {
-    // TODO
+    VariationProfileRepository.updateVariationProfiles(this.currProfiles);
+    this.currProfiles = null;
+    int row = profilesTable.getSelectedRow();
+    refreshProfilesTable();
+    if(row>=0) {
+      try {
+        profilesTable.getSelectionModel().setSelectionInterval(row, row);
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    profilesTableClicked();
   }
 
   public void profileNameChanged() {
@@ -160,7 +173,13 @@ public class VariationProfilesController {
   public void profileTypeCmbChanged() {
     if(!noRefresh && getCurrProfile()!=null) {
       getCurrProfile().setVariationProfileType((VariationProfileType) profileTypeCmb.getSelectedItem());
+      refreshVariationsPanel();
+      refreshStatusText();
     }
+  }
+
+  private void refreshStatusText() {
+    profileStatusEdit.setText(getStatusText());
   }
 
   public void defaultCheckboxChanged() {
@@ -219,7 +238,7 @@ public class VariationProfilesController {
     if (profile != null) {
       profileNameEdit.setText(profile.getName());
       profileTypeCmb.setSelectedItem(profile.getVariationProfileType());
-      profileStatusEdit.setText(refreshStatusText());
+      refreshStatusText();
       defaultCheckbox.setSelected(profile.isDefaultProfile());
     } else {
       profileNameEdit.setText("");
@@ -227,24 +246,44 @@ public class VariationProfilesController {
       profileStatusEdit.setText("");
       defaultCheckbox.setSelected(false);
     }
+    refreshVariationsPanel();
     enableControls();
   }
 
-  private String refreshStatusText() {
-    // TODO remove Array currVariationNames, use profile
-    if (currVariationNames != null) {
-      int excluded = 0;
-      if (currCheckboxes != null) {
-        for (JCheckBox cbx : currCheckboxes) {
-          if (!cbx.isSelected()) {
-            excluded++;
-          }
-        }
-      }
-      return (currVariationNames.size() - excluded)
-          + "/"
-          + currVariationNames.size()
-          + " variations active";
+  private String getVariationCaption(int count) {
+    return count <= 1 ? "variation" : "variations";
+  }
+
+  private String getVariationTypeCaption(int count) {
+    return count <= 1 ? "variation type" : "variation types";
+  }
+
+  private String getStatusText() {
+    VariationProfile profile = getCurrProfile();
+    if(profile!=null && profile.getVariationProfileType()!=null) {
+       int selected, inverse;
+       String excludedMsgFormat = "%d %s excluded / %d %s active";
+       String includedMsgFormat = "%d %s included / %d %s inactive";
+       switch(profile.getVariationProfileType()) {
+         case EXCLUDE_TYPES:
+           selected = profile.getVariationTypes().size();
+           inverse = VariationFuncType.values().length - profile.getVariationTypes().size();
+           return String.format( excludedMsgFormat, selected, getVariationTypeCaption(selected), inverse, getVariationTypeCaption(inverse));
+         case INCLUDE_TYPES:
+           selected = profile.getVariationTypes().size();
+           inverse = VariationFuncType.values().length - profile.getVariationTypes().size();
+           return String.format( includedMsgFormat, selected, getVariationTypeCaption(selected), inverse, getVariationTypeCaption(inverse));
+         case EXCLUDE_VARIATIONS:
+           selected = profile.getVariations().size();
+           inverse = VariationFuncList.getNameList().size() - profile.getVariations().size();
+           return String.format( excludedMsgFormat, selected, getVariationCaption(selected), inverse, getVariationCaption(inverse));
+         case INCLUDE_VARIATIONS:
+           selected = profile.getVariations().size();
+           inverse = VariationFuncList.getNameList().size() - profile.getVariations().size();
+           return String.format( includedMsgFormat, selected, getVariationCaption(selected), inverse, getVariationCaption(inverse));
+         default:
+           return "";
+       }
     }
     else {
       return "";
@@ -295,66 +334,115 @@ public class VariationProfilesController {
     currCheckboxes.clear();
     variationsPanel = new JPanel();
 
-    currVariationNames = VariationFuncList.getNameList();
-    Collections.sort(currVariationNames);
+    VariationProfile profile = getCurrProfile();
+    if (profile != null && profile.getVariationProfileType()!=null) {
+      variationsPanel.setLayout(new GridBagLayout());
+      GridBagConstraints constraints = new GridBagConstraints();
 
-    List<String> excludedVariations = new ArrayList<>();
+      List<String> currNames;
+      switch(profile.getVariationProfileType()) {
+        case EXCLUDE_TYPES:
+        case INCLUDE_TYPES:
+          currNames = Arrays.asList(VariationFuncType.values()).stream().map(VariationFuncType::getCaption).collect(Collectors.toList());
+          break;
+        case EXCLUDE_VARIATIONS:
+        case INCLUDE_VARIATIONS:
+          currNames = VariationFuncList.getNameList();
+          break;
+        default:
+          currNames = new ArrayList<>();
+          break;
+      }
+      Collections.sort(currNames);
 
-    int xOffset = 8;
-    int xSize = 160;
-    int yOffset = 8;
-    int ySize = 18;
-    int yGap = 4;
+      int colCount = 4;
+      int currRow = 0;
+      int idx = 0;
+      while(idx < currNames.size()) {
+        for (int currCol = 0; currCol < colCount; currCol++) {
+          if (idx < currNames.size()) {
+            constraints.gridx = currCol;
+            constraints.gridy = currRow;
+            constraints.anchor = GridBagConstraints.NORTHWEST;
+            String currName = currNames.get(idx++);
+            JCheckBox cbx = new JCheckBox(currName);
+            switch (profile.getVariationProfileType()) {
+              case EXCLUDE_TYPES:
+              case INCLUDE_TYPES:
+                cbx.setSelected( profile.getVariationTypes().contains(getVariationTypeByCaption(currName) ) );
+                break;
+              case EXCLUDE_VARIATIONS:
+              case INCLUDE_VARIATIONS:
+                cbx.setSelected( profile.getVariations().contains(currName));
+                break;
+            }
+            cbx.addItemListener(
+                new ItemListener() {
+                  public void itemStateChanged(ItemEvent e) {
+                    VariationProfile currProfile = getCurrProfile();
+                    if (currProfile != null && currProfile.getVariationProfileType() != null) {
+                      switch (currProfile.getVariationProfileType()) {
+                        case EXCLUDE_TYPES:
+                        case INCLUDE_TYPES:
+                          if (((JCheckBox) e.getItem()).isSelected()) {
+                            currProfile
+                                .getVariationTypes()
+                                .add(getVariationTypeByCaption(currName));
+                          } else {
+                            currProfile
+                                .getVariationTypes()
+                                .remove(getVariationTypeByCaption(currName));
+                          }
+                          refreshStatusText();
+                          break;
+                        case EXCLUDE_VARIATIONS:
+                        case INCLUDE_VARIATIONS:
+                          if (((JCheckBox) e.getItem()).isSelected()) {
+                            currProfile.getVariations().add(currName);
+                          }
+                          else {
+                            currProfile.getVariations().remove(currName);
+                          }
+                          refreshStatusText();
+                          break;
+                      }
+                    }
+                  }
+                });
 
-    int currY = yOffset;
-    for (String variation : currVariationNames) {
-      JCheckBox cbx = new JCheckBox(variation);
-      cbx.setSelected(!excludedVariations.contains(variation));
-      cbx.setBounds(xOffset, currY, xSize, ySize);
-      currCheckboxes.add(cbx);
-      variationsPanel.add(cbx);
-      currY += ySize + yGap;
+            currCheckboxes.add(cbx);
+            variationsPanel.add(cbx, constraints);
+          }
+        }
+        currRow++;
+      }
     }
-    int width = xSize + 2 * xOffset;
-    int height = currY;
-    variationsPanel.setBounds(0, 0, width, height);
-    variationsPanel.setPreferredSize(new Dimension(width, height));
-
     variationsScrollPane.setViewportView(variationsPanel);
-    variationsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
     variationsScrollPane.invalidate();
     variationsScrollPane.validate();
   }
 
+  private Map<String, VariationFuncType> variationTypeCaptions = null;
 
+  private VariationFuncType getVariationTypeByCaption(String caption) {
+    if(variationTypeCaptions==null) {
+      variationTypeCaptions = new HashMap<>();
+      Arrays.asList(VariationFuncType.values()).stream().forEach(vt -> variationTypeCaptions.put(vt.getCaption(), vt) );
+    }
+    return variationTypeCaptions.get(caption);
+  }
+
+  public void refreshMainWindow() {
+    boolean currNoRefresh = parentController.isNoRefresh();
+    parentController.setNoRefresh(true);
+    try {
+      ComboboxTools.initVariationProfileCmb(parentController.data.tinaVariationProfile1Cmb, true);
+      ComboboxTools.initVariationProfileCmb(parentController.data.tinaVariationProfile2Cmb, false);
+    }
+    finally {
+      parentController.setNoRefresh(currNoRefresh);
+    }
+    parentController.tinaVariationProfile1Cmb_changed();
+  }
 }
 
-/*
-   try {
-     List<String> excludedVariations = new ArrayList<>();
-     if (!checkboxes.isEmpty() && variationNames != null && checkboxes.size() == variationNames.size()) {
-       for (int i = 0; i < checkboxes.size(); i++) {
-         if (!checkboxes.get(i).isSelected()) {
-           excludedVariations.add(variationNames.get(i));
-         }
-       }
-     }
-     //Prefs.getPrefs().setTinaExcludedVariations(excludedVariations);
-     //Prefs.getPrefs().saveToFile();
-     //VariationFuncList.invalidateExcludedNameList();
-     boolean oldNoRefresh = tinaController.isNoRefresh();
-     try {
-       tinaController.setNoRefresh(true);
-       tinaController.initNonlinearVariationCmb();
-     }
-     finally {
-       tinaController.setNoRefresh(oldNoRefresh);
-     }
-     //      tinaController.transformationChanged(false);
-     refreshTitle();
-   }
-   catch (Exception ex) {
-     tinaController.errorHandler.handleError(ex);
-   }
-
-*/
