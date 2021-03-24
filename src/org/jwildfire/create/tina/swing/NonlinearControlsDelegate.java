@@ -147,6 +147,7 @@ public class NonlinearControlsDelegate {
 
     } else {
       VariationFunc varFunc = pVar.getFunc();
+      pRow.initVariationCmb(varFunc.getName());
 
       pRow.getNonlinearParamsPreButton().setEnabled(true);
       pRow.getNonlinearParamsPreButton()

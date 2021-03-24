@@ -16,6 +16,7 @@ V6.xx (xx.xx.2021)
  - started to create an official manual (AsciiDoc-based for simple editing)
  - new property tinaDefaultNewFlameTitle where you can set a default flame title which is assigned when you
    create a new flame by using the "New from Scratch"-button
+ - folder-parameters in the Preferences (e.g. gradient-folder) can now be entered manually or selected by using a folder-dialog
  - added Alt-F shortcut for Fine edit, by Rick Sidwell
  - new variations
      -kaleidoimg,

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -30,6 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TinaNonlinearControlsRow {
   private TinaController tinaController;
@@ -72,7 +73,7 @@ public class TinaNonlinearControlsRow {
   }
 
   public void initControls() {
-    initVariationCmb();
+    initVariationCmb(null);
     nonlinearVarCmb.setSelectedIndex(-1);
 
     nonlinearParamsCmb.removeAllItems();
@@ -82,31 +83,27 @@ public class TinaNonlinearControlsRow {
     nonlinearParamsPostButton.setSelected(false);
   }
 
-  public void initVariationCmb() {
+  public void initVariationCmb(String withSelectedVarFunc) {
     boolean oldNoRefresh = isNoRefresh();
     try {
       setNoRefresh(true);
       boolean oldOwnerRefreshing = tinaController.cmbRefreshing;
       try {
         tinaController.cmbRefreshing = true;
-        String selectedItem = nonlinearVarCmb.getSelectedIndex() >= 0 ? (String) nonlinearVarCmb.getSelectedItem() : "";
-        boolean hasSelectedItem = false;
+        String selectedItem = (withSelectedVarFunc!=null && !withSelectedVarFunc.isEmpty()) ? withSelectedVarFunc : nonlinearVarCmb.getSelectedIndex() >= 0 ? (String) nonlinearVarCmb.getSelectedItem() : "";
         nonlinearVarCmb.removeAllItems();
-        List<String> nameList = new ArrayList<>();
-        nameList.addAll(VariationFuncList.getNameList());
-        Collections.sort(nameList);
+
         VariationFuncFilter filter = tinaController.getCurrentVariationFuncFilter();
+
+        List<String> nameList = VariationFuncList.getNameList().stream().filter( n -> filter.evaluate(n)).collect(Collectors.toList());
+        if(!"".equals(selectedItem) && !nameList.contains(selectedItem)) {
+          nameList.add(selectedItem);
+        }
+        Collections.sort(nameList);
+
         nonlinearVarCmb.addItem("");
         for (String name : nameList) {
-          if (filter.evaluate(name)) {
-            nonlinearVarCmb.addItem(name);
-            if(name.equals(selectedItem)) {
-              hasSelectedItem = true;
-            }
-          }
-        }
-        if(!hasSelectedItem) {
-          nonlinearVarCmb.addItem(selectedItem);
+          nonlinearVarCmb.addItem(name);
         }
         nonlinearVarCmb.setSelectedItem(selectedItem);
       }

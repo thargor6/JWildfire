@@ -2609,9 +2609,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormTargetColorBtn.setBackground(Color.BLACK);
         getWeightMapControlsUpdater(null).clearComponents();
       }
-
       nonlinearControls.refreshParamControls(pXForm);
-
       refreshRelWeightsTable();
     }
     finally {
@@ -6192,7 +6190,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void initNonlinearVariationCmb() {
     for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
-      row.initVariationCmb();
+      row.initVariationCmb(null);
     }
   }
 
