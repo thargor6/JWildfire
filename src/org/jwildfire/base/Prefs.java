@@ -24,6 +24,7 @@ import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.EditorDoubleClickActionType;
+import org.jwildfire.create.tina.swing.FolderPropertyEditor;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.LookAndFeelType;
@@ -177,31 +178,31 @@ public class Prefs extends ManagedObject {
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
   static final String KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP = "iflames.load_library_at_startup";
 
-  @Property(description = "Drawer for thumbnail-cache (restart of program after change required)", category = PropertyCategory.GENERAL)
+  @Property(description = "Drawer for thumbnail-cache (restart of program after change required)", category = PropertyCategory.GENERAL, editorClass = FolderPropertyEditor.class)
   private String thumbnailPath = null;
 
-  @Property(description = "Image drawer", category = PropertyCategory.GENERAL)
+  @Property(description = "Image drawer", category = PropertyCategory.GENERAL, editorClass = FolderPropertyEditor.class)
   private String imagePath = null;
   private String lastInputImagePath = null;
   private String lastOutputImagePath = null;
 
-  @Property(description = "Sound file drawer", category = PropertyCategory.GENERAL)
+  @Property(description = "Sound file drawer", category = PropertyCategory.GENERAL, editorClass = FolderPropertyEditor.class)
   private String soundFilePath = null;
   private String lastInputSoundFilePath = null;
 
-  @Property(description = "Movie flames drawer", category = PropertyCategory.TINA)
+  @Property(description = "Movie flames drawer", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String movieFlamesPath = null;
   private String lastOutputMovieFlamesPath = null;
 
   @Property(description = "Number of preserved free cpus/cores", category = PropertyCategory.TINA)
   private int tinaPreserveFreeCPUs = 0;
 
-  @Property(description = "Flame file drawer", category = PropertyCategory.TINA)
+  @Property(description = "Flame file drawer", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaFlamePath = null;
   private String lastInputFlamePath = null;
   private String lastOutputFlamePath = null;
 
-  @Property(description = "Mesh file drawer", category = PropertyCategory.TINA)
+  @Property(description = "Mesh file drawer", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaMeshPath = null;
   private String lastMeshPath = null;
 
@@ -211,10 +212,10 @@ public class Prefs extends ManagedObject {
   @Property(description = "Last tip shown at startup", category = PropertyCategory.GENERAL)
   private int lastTip = 0;
 
-  @Property(description = "Path to the flames building the flame-library for the IFlames", category = PropertyCategory.IFLAMES)
+  @Property(description = "Path to the flames building the flame-library for the IFlames", category = PropertyCategory.IFLAMES, editorClass = FolderPropertyEditor.class)
   private String iflamesFlameLibraryPath = null;
 
-  @Property(description = "Path to the images building the image-library for the IFlames", category = PropertyCategory.IFLAMES)
+  @Property(description = "Path to the images building the image-library for the IFlames", category = PropertyCategory.IFLAMES, editorClass = FolderPropertyEditor.class)
   private String iflamesImageLibraryPath = null;
 
   @Property(description = "Automatically load the flame- and image-library when opening the IFlames-window", category = PropertyCategory.IFLAMES)
@@ -226,7 +227,7 @@ public class Prefs extends ManagedObject {
   @Property(description = "Expand the params in the non-linear tab per default. This is only the initial value, you may expand and collapse the params at any time manually", category = PropertyCategory.TINA)
   private boolean tinaDefaultExpandNonlinearParams = false;
 
-  @Property(description = "Path to the external GPU renderer, currently only Windows-plattforms are supported. The software searches this path at program-start for a file called \"FACLRender.exe\", only when this file exists, the GPU-rendering-window is displayed, a change of this property requires a program-restart.", category = PropertyCategory.TINA)
+  @Property(description = "Path to the external GPU renderer, currently only Windows-plattforms are supported. The software searches this path at program-start for a file called \"FACLRender.exe\", only when this file exists, the GPU-rendering-window is displayed, a change of this property requires a program-restart.", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaFACLRenderPath = null;
 
   @Property(description = "Enable the \"Leap Motion\"-tab (because this feature is very rarely used, it is hidden by default. Requires restart of the application after change.)", category = PropertyCategory.TINA)
@@ -239,24 +240,24 @@ public class Prefs extends ManagedObject {
   private String tinaDefaultNewFlameTitle= "";
 
 
-  @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
+  @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaJWFMoviePath = null;
   private String lastInputJWFMoviePath = null;
   private String lastOutputJWFMoviePath = null;
 
-  @Property(description = "Folder for user-scripts for the flame-editor", category = PropertyCategory.TINA)
+  @Property(description = "Folder for user-scripts for the flame-editor", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaJWFScriptPath = null;
 
-  @Property(description = "Folder for custom-variations", category = PropertyCategory.TINA)
+  @Property(description = "Folder for custom-variations", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaCustomVariationsPath = null;
 
-  @Property(description = "Drawer for raw motion data", category = PropertyCategory.TINA)
+  @Property(description = "Drawer for raw motion data", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaRawMotionDataPath = null;
 
-  @Property(description = "Gradient file drawer", category = PropertyCategory.TINA)
+  @Property(description = "Gradient file drawer", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaGradientPath = null;
 
-  @Property(description = "SVG file drawer", category = PropertyCategory.TINA)
+  @Property(description = "SVG file drawer", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaSVGPath = null;
 
   @Property(description = "Associate profile information with flame files", category = PropertyCategory.TINA)
@@ -365,7 +366,7 @@ public class Prefs extends ManagedObject {
   private int tinaQuickMutationBatchSize = 5;
   @Property(description = "Default mutation-type for creating quick mutations in the main editor", category = PropertyCategory.TINA)
   private String tinaQuickMutationDefaultMutationType = "ALL";
-  @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
+  @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW, editorClass = FolderPropertyEditor.class)
   private String sunflowScenePath = null;
   private String lastInputSunflowScenePath = null;
   private String lastOutputSunflowScenePath = null;
@@ -382,7 +383,7 @@ public class Prefs extends ManagedObject {
   @Property(description = "Excluded scripts from the \"RunRandomScript\"-random-flame generator. Excludes no script if empty. It is sufficient to only specify the beginng of the name. You may add multiple entries, they must be separated by comma. Requires restart of the program after change.", category = PropertyCategory.TINA)
   private String tinaRandGenRunRandomScriptExcludedScripts = "";
 
-  @Property(description = "Image-input-path for the \"Color map\"-random-flame-generator (is scanned recursively, so BEWARE)", category = PropertyCategory.TINA)
+  @Property(description = "Image-input-path for the \"Color map\"-random-flame-generator (is scanned recursively, so BEWARE)", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaRandGenColorMapImagePath = null;
 
   @Property(description = "Activate development mode", category = PropertyCategory.GENERAL)

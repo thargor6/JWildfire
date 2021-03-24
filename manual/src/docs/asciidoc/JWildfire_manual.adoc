@@ -2040,8 +2040,15 @@ Each property has a small description which is displayed at the bottom of the wi
 [.thumb]
 image::preferences_property_description.jpg[scaledwidth=75%]
 
-Depending on the type of a property a popup-dialog may appear or you may edit the value in place.
-For example, when editing properties of type color, a color-selection-dialog appears.
+Depending on the type of parameters, there are special parameter-editors available.
+You reach them by double-clicking at the value in the 2nd column of the table, e.g.:
+ - for color-parameters a color-selection-dialog is available
+ - for folder-parameters (e.g. to select the gradient-folder) you can both enter
+the folder manually or select the folder using a folder-dialog
+
+[.thumb]
+image::preferences_choose_path.jpg[scaledwidth=75%]
+
 
 Some properties may be changed "on the fly", others will need a restart of JWildfire in order
 to show an effect. This is usually mentioned in the description of the property.
