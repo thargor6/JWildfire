@@ -1241,7 +1241,38 @@ For some people is easier to see the 3D-effect this way, while for others is is 
 other way.
 
 ==== _Post symmetry_ tab
-???
+The options at the _Post symmetry_ tab are a very easy way to add symmetry to your fractal flames.
+You could also achieve this by adding certain transformation to your fractal, but this would require
+much more editing effort.
+Because symmetry is a very commonly used feature in fractal imagery, JWildfire offers this additional way
+to easily play with it.
+
+==== Symmetry type
+There are the following symmetry types:
+
+- *None*: no symmetry
+- *X-Axis*: mirror-symmetry along the x-axis (the mirror is the y-axis).
+Often used to create angel-like fractals.
+- *Y-Axis*: mirror-symmetry along the y-axis (the mirror is the x-axis)
+Often used to portal-like fractals.
+- *Point*: point-symmetry (often used in the process)
+Often uses to create Mandala-like fractals.
+
+==== Distance (only for X-Axis- and Y-axis-symmetry)
+Measure of the distance between the object and the mirror
+
+==== Rotation (only for X-Axis- and Y-axis-symmetry)
+Rotation angle of the mirror.
+
+==== Symmetry order (only for Point-symmetry)
+Order of the symmetry. Can be thought as the number of copies which are places around the
+symmetry center.
+
+==== CentreX
+Offset in the x-direction to place the symmetry-center.
+
+==== CentreY
+Offset in the y-direction to place the symmetry-center.
 
 ==== _FPS / Motion blur_ tab
 ???
