@@ -1275,13 +1275,121 @@ Offset in the x-direction to place the symmetry-center.
 Offset in the y-direction to place the symmetry-center.
 
 ==== _FPS / Motion blur_ tab
-???
+At this tab you can adjust options for motion-blur as well as the fps-setting for animations.
+While motion-blur is typical for animations (hence the name), it can also be used to create
+interesting effects for still images.
+
+===== Blur length
+Number of time steps to create for each frame. The more time steps, to smoother the effect, and the
+more calculation time is requiered.
+
+Recommended values are in the range of 16 ... 48.
+
+A value of 0 means no motion blur.
+
+*Please note, that the calculation of motion blur may significantly reduce the realtime-animation-playback-speed.*
+If you notice performance problems when previewing animation, you should turn motion blur temporarily off.
+
+===== Time step
+The time difference for each computed blur step. Larger time steps produce a larger blur length, but produce
+also visual gaps between the individual steps.
+
+===== Decay
+Fall-off of the brightness of the generated time-steps. The visual difference increases with each time-step, which
+produces "trails" with diminishing intensity at the ends.
+
+===== FPS
+Number of generated frames per second. This settings is a general setting for animations and is not tied to
+motion-blur.
 
 ==== _Layers_ tab
-???
+Layers allow you to create complex flames by composition of other fractals.
+Unlike to using traditional layers in image processing software, the layers in JWildfire are still
+fractals which are "alive" and can be modified as you know it from regular flames.
+So you can edit each layer before rendering the final image.
+Additionally, layers respect that flames have three coordinates, so each layer can be moved freely in
+space before rendering the image.
+
+Please note, that it are still flames and not solid objects or planes, so all flames will overlap if you design
+them that way.
+
+Each layer has its own:
+
+ - set of transforms
+ - set of final transforms
+ - gradient
+All camera-settings affect the whole flame, i.e. all layers at a whole.
+
+You can move, scale or rotate an individual layer by applying a final post-transformation.
+
+===== Basic manipulations
+There are basic functions for manipulating layers:
+ - *Add*: to create a new blank layer with a new randomly created gradient
+ - *Duplicate*: to create a new layer and copy all transforms, final transforms and the gradient
+from the currently selected layer
+ - *Delete*: to delete the currently selected layer, please note, that the last layer cannot be
+deleted
+
+===== Layer properties
+Layers have the following properties which you can modify:
+ - *Caption*: a free text you give them to describe themselves
+ - *Visible*: this property controls if the currently selected layer is rendered or not
+ - *Weights*: this property controls the intensity/weight of the current layer
+
+===== Hiding/Showing layers
+It may be important to show/hide certain layerzsto control which transform you want to edit. There
+are two useful function to support this workflow:
+ - *Hide all others*: Hides all layers except the currently selected one.
+ - *Show all*: makes all layers visible
+
+=====  Enabling _Layer append_mode
+If you activate the button _Layer append mode_ on the layers-tab, every fractal you load into the
+editor, will be appended as layer. If the fractal to append has more than one layer, all layers are appended.
+
+===== Adjusting flame position and orientation inside a layer
+You can move any fractal (layer) freely like a 3D-object in a 3D-modeling-software. All you need is a
+final transform. In flames which already have a final transform just enable _Post transform_-editing-mode
+and you are able to drag, rotate and scale the fractal by using the mouse.
+
+If you work with 3D-fractals you may also want to modify the fractal along the z-axis. This is also
+easily done using the final transform, but you have to add variations which perform the desired
+transforms as:
+ - *post_rotate_x* and *post_rotate_y*
+ - *post_ztranslate_wf*
+ - *post_zscale_wf* etc.
+
+===== Layer indicators
+There are two indicators to help you to work with layers:
+
+ - A red text "layer-append-mode active" on top of your preview if the append-mode is on.
+ - A small realtime-preview of the currently selected layer on top of the main preview. This
+preview is only visible if you have more than one layer and more than one layer is visible.
+So if you hide all layers except one (for fine-tuning of this layer) the small preview is hidden
+and does not distract you.
 
 ==== _Channel mixer_ tab
-???
+Using the channel-mixer you may influence the final coloring of your fractal by color-curves.
+This modifies the final colors by mapping input values to arbitrary output values.
+
+The simplest case is to take into account brightness levels.
+The default curve is a linear ramp. Each brightness value outputs the same value.
+But, when you start to modify the brighness curve, you may change this behaviour.
+E.g., drag the curve to higher values at lower levels and vice versa.
+This will increase the brightness of dark areas and darken brighter areas.
+
+You can do the same with color levels. Overall, there are the following options:
+
+ - *Off*: no color curves
+ - *Brightness*: one curve which affects only the brightness levels:
+ **  new brightness as function of old brightness
+ - *RGB*: one curve for each color channel:
+ ** new red as function of old red
+ ** new green as function of old green
+ ** new blue as function of old blue
+ - *Full*: three curves for each color-channel:
+ ** new red as function of old red, old green and old blue
+ ** new green as function of old red, old green and old blue
+ ** new blue as function of old red, old green and old blue
 
 ==== _Quick mutations_ tab
 "Quick mutations"-tab allow easily creating a batch of variations of the currently selected flame.
@@ -1946,7 +2054,150 @@ result with endless details.
 == _Mesh generator_ module
 [.thumb]
 image::mesh_generator.jpg[scaledwidth=75%]
-???
+Using the _mesh generator_ you can turn your fractals into _polygonal meshes_ or _point clouds_.
+
+=== Generating _Polygonal meshes_ by slicing the fractal in _Voxel stacks_
+The creation of solid meshes will not work well on any type of fractal and will
+require some patience and experience to get nice results.
+But once you have generated a nice mesh object, you may use it in any 3d-software
+or even try to 3d-print it.
+
+In JWildfire the process of generating _Polygonal meshes_ requires two steps:
+
+- creating a number of slices through the fractal. (Those slices are called _Voxel stacks_
+because they have both a fixed a resolution (like pixels in a image) and a certain depth.
+So each slice contains of pixels with a depth, called a _Voxel_. And those slices stacked
+together build a representation of the object, hence the name _Voxel stack_.)
+- building a _polygonal mesh_ from all this slices using the popular _Marching Cubes Algorithm_.
+
+==== _Total number of slices_
+Sets the number of slices to be rendered which represents the voxel-resolution in z-direction.
+
+==== _Render width_
+Sets the render-resolution in x-direction which represents the voxel-resolution in x-direction.
+
+==== _Render height_
+Sets the render-resolution in y-direction which represents the voxel-resolution in y-direction.
+
+==== _Slices per pass_
+With this setting you can improve the speed of the scanning process in a significant way at the
+cost of consumed memory.
+When you have enough memory you can even set this to the _Total number of slices_
+to create all slices at once.
+
+*Please note, that those three values should match the shape of the desired object.*
+So if you have a very thin, but very tall object, you may want a much higher resolution into z-direction.
+
+==== _Generate_ (_Voxel stack_)
+When the _Output type_ is set to *Voxelstack*, this will generate a batch of grayscale images
+which represent the slices through the fratal (similar to the scans made by a computer tomography).
+
+==== _Mesh generation_
+Once you have finished to create a _Voxel stack_ you may create the final mesh at the _Mesh generation_ tab.
+
+===== _From renderer_
+Loads the previously rendered _Voxel stack_ without the need to select it in a file dialog.
+
+===== _Load sequence_
+Loads a previously rendered _Voxel stack_ from hard disc.
+
+===== _Image downsample_
+Downsample the slices by this factor to reduce noise. Reduces resolution, but increases quality of the mesh.
+
+===== _Spatial filter radius_
+Filter-radius used for downsampling
+
+===== _Brighness threshold_
+Brightness level at which the object is actually seen. Increasing this value may
+also help to reduced background noise, but can also lead to loss of details.
+
+===== _Image step_
+With values higher than 1 you can skip slices.
+
+===== _Post smoothing_
+When you enable this checkbox you can apply a post-smoothing effect to the generated mesh.
+This is an experimental feature and is only useful on a certain types of meshes.
+
+===== _Generate_ (_Polygonal mesh_)
+Using this button you generate the final _polygonal mesh_ from the currently loaded _Voxel stack_.
+
+=== Generating _Point clouds_
+Generating _Point clouds_ it a little bit more complex internally, but much more simple from the
+users point of view. You have basically only to set up two parameters (_Cell size_ and _Render quality_)
+and then the _Point cloud_ can be generated in one step.
+
+==== Cell size
+This is the most important parameter for generating _Point clouds_. It affects both memory consumption
+and resolution of the final result. It represents the minimum absolute voxel size which can be filled
+with information.
+The smaller the _cell size_, the more voxels are generated and the more processing time is required.
+Voxels are generated at two levels:
+
+ - *raw voxels*: represent a result of a fractal iteration. Are generated at a scale of billions.
+ - *final voxels*: represent a kind of _average_ of all _raw voxel_ in a cell of _cell size_
+
+The smaller the _cell size_, the more calculations to create _final voxels_ are involved, and the
+more memory is required to temporarily hold _raw voxels_.
+
+*Please note, that the influence of this parameter is cubic.*
+E.g., halving it causes an increase of effort of factor 2 in 3 dimensions,
+reaching a total factor of 2 * 2 * 2 = 8. As a comparison: it is like increasing
+screen resolution, but into three directions instead of two.
+
+==== _Generate_ (_Point cloud_)
+When the _Output type_ is set to *Point cloud*, this will generate a _Point cloud_ in *.ply*-format.
+You may process/view such files for example in _Houdini_ or _Meshlab_.
+
+=== General options
+
+==== _Output type_
+There are two options:
+
+ - *Voxel stack*: create a _Voxel step_ as first part of generating a _polygonal mesh_
+ - *Pointcloud*: create a _point cloud_ in one step
+
+==== _From Editor_
+Transfers the currently edited fractal flame from the _Main Editor_ to the _Mesh generator_.
+
+==== _From Clipboard_
+Loads a fractal flame from the _Clipboard_ into the _Mesh generator_.
+
+==== _Load Flame_
+Loads a fractal flame from an external file into the _Mesh generator_.
+
+==== _Fractal position_
+This area contains controls to set the position and size of the fractal flame for
+the scanning process. Any portions which are outside of the preview will not
+be scanned and therefore will not be part of the generated mesh.
+
+===== _CentreX_
+Moves the fractal into x-direction.
+
+===== _CentreY_
+Moves the fractal into y-direction.
+
+===== _Zoom_
+Scales the fractal.
+
+==== _Slice cutting range_
+Here you set the start- and end-position of the scanning process in the z-direction.
+Any portions of the fractal which are outside of this range will not
+be scanned and therefore will not be part of the generated mesh.
+
+===== _Position 1_
+Sets the start position in z-direction for the scanning/slicing process.
+
+===== _Position 2_
+Sets the end position in z-direction for the scanning/slicing process.
+
+Hint: the order of _Position 1_ and _Position 2_ does not matter, you may have _Position 1_ at
+the top or at the botton, depending on how you prefer it.
+
+==== _Render quality_
+This sets the render quality for scanning the fractal.
+Optimum values highly depend on the type of fractal.
+Solid fractals usually need a high number of samples to be really clean.
+Values in the range of 300 ... 2000 are typical.
 
 [#gpu_rendering]
 == _GPU render_ module
@@ -2084,6 +2335,7 @@ image::preferences_choose_path.jpg[scaledwidth=75%]
 Some properties may be changed "on the fly", others will need a restart of JWildfire in order
 to show an effect. This is usually mentioned in the description of the property.
 
+[#platform_specific_topics]
 == Platform-specific topics (Windows, Mac, Steam, ...)
 ???
 
@@ -2121,3 +2373,37 @@ so you can get out different images out of one fractal flame.
 There are no restrictions regarding render size which could resolved by an external
 application for rendering. The only limitation is memory.
 See <<rendering_in_4k, Are 4k renders possible?>> for more informations.
+
+=== How to fix glitches/weird behaviour of the UI
+Some users have reported weird behaviour of the UI:
+
+- e.g., one window overwriting the content of another
+- or windows following the mouse pointer
+
+It seems that this is causes by some misconfiguration of
+_DirectDraw_-acceleration of Java2D (maybe some driver issue).
+
+The known solution is to switch to _OpenGL_-acceleration or turn _DirectDraw_ off.
+
+==== Option 1: Enable _OpenGL_
+set the following _JVM parameter_:
+[source,java]
+----
+-Dsun.java2d.opengl=True
+----
+
+(the uppercase T is correct)
+
+==== Option 2 (if option 1 does not work): Disable _DirectDraw_
+set the following _JVM parameter_:
+[source,java]
+----
+-Dsun.java2d.noddraw=true
+----
+(the lowercase t is correct)
+
+*Please note, that only one of those _JVM parameters_ should be set at the same time.*
+
+The location of those _JVM Parameters_ is platform-specific.
+Please see the section <<platform_specific_topics, _Platform-specific topics_>> for more informations
+about changing _JVM Parameters_.
