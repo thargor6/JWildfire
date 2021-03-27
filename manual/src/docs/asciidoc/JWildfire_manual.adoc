@@ -1279,6 +1279,7 @@ At this tab you can adjust options for motion-blur as well as the fps-setting fo
 While motion-blur is typical for animations (hence the name), it can also be used to create
 interesting effects for still images.
 
+[#motion_blur_length]
 ===== Blur length
 Number of time steps to create for each frame. The more time steps, to smoother the effect, and the
 more calculation time is requiered.
@@ -1290,6 +1291,7 @@ A value of 0 means no motion blur.
 *Please note, that the calculation of motion blur may significantly reduce the realtime-animation-playback-speed.*
 If you notice performance problems when previewing animation, you should turn motion blur temporarily off.
 
+[#motion_blur_time_step]
 ===== Time step
 The time difference for each computed blur step. Larger time steps produce a larger blur length, but produce
 also visual gaps between the individual steps.
@@ -1298,6 +1300,7 @@ also visual gaps between the individual steps.
 Fall-off of the brightness of the generated time-steps. The visual difference increases with each time-step, which
 produces "trails" with diminishing intensity at the ends.
 
+[#fps]
 ===== FPS
 Number of generated frames per second. This settings is a general setting for animations and is not tied to
 motion-blur.
@@ -1807,7 +1810,178 @@ On the right side of the window you can execute one of the following actions on 
 == _Easy Movie Maker_ module
 [.thumb]
 image::easy_movie_maker.jpg[scaledwidth=75%]
-???
+With the _Easy Movie Maker_ you can create animations consisting of multiple flames.
+It combines three types of animation:
+
+ - the keyframe-based animation of a fractal flame itsel. You set up those kind of animations in the
+<<main_editor, Main Editor>>
+ - transitions between two fractal flames
+ - global animation scripts, e.g. a movement of the camera
+
+You can even generate random movies, which is an experimental feature.
+
+=== _Thumnail ribbon_
+Similar to the <<main_editor, Main Editor>> there is a thumbail ribbon on the left, which hold all
+currently loaded objects - in this case: movies. You may select a movie by double-clicking at its thumbnail.
+
+=== Function at the main button bar (at the top)
+Here you find global functions at the movie level.
+
+==== _Random movies_
+Using this button you can generate random movies using the selected random-movie-generator.
+This works by generating random-flames and then applying random motions to it.
+This is currently limited to create movies containing only one animated flame.
+
+===== _Rnd generator_
+There are the following options:
+
+ - *Transforming bubbles*: generates a random fractal of type _bubbles_ and applies random motions at transformation-level to it
+ - *Transforming duckies*: generates a random fractal of type _duckies_ and applies random motions at transformation-level to it
+ - *Rotating Mandelbrots*: generates a random fractal of type _Mandelbrot_ and applies a random rotation-motion to it
+- *All*: randomly selects one of the random-movie-generators mentioned above to generate a random movie
+
+==== _From clipboard_
+Loads a movie-file from the clipboard and appends it to the _thumbnail ribbon_.
+
+==== _From movie_
+Loads a movie from a file and appends it to the _thumbnail ribbon_.
+
+==== _To clipboard_
+Transfers the currently selected movie in text-form to the Clipboard.
+
+==== _Save Movie_
+Saves the currently selected movie to a file.
+
+==== _Resolution_
+Here you select the <<resolution_profiles, _resolution profile_>> for rendering the movie.
+
+==== _Quality_
+Here you select the <<quality_profiles, _quality profile_>> for rendering the movie.
+
+==== _Output_
+There are the following output-options for generating a movie:
+
+- *Flames*: Produces a batch of flame-files (one flame file for each frame position), which are rendered later
+using the <<batch_renderer, Batch renderer>>. This is the recommended setting for larger projects, because
+using the <<batch_renderer, Batch renderer>> for rendering images is the msot comfortable way in JWildfire.
+It supports pausing/resuming and limited <<gpu_rendering, GPU-rendering>>.
+- *PNG-Images*: Produces a batch of .png-images by taking into account the selected resolution- and quality-settings.
+You need some external software (like _VirtualDub_) to actually create a video-file from this batch of images.
+Recommended for simple projects, which can be completely rendered in up two hours.
+- *MP4*: Directly produces an .mp4-movie by also taking into account the selected resolution- and quality-settings.
+This is recommended for very simple projects or quick test-renders, because there are no options to fine-tune the video-compression-settings (yet).
+- *ANB*: Produces an _Animated Brush_ in *.anb-format, which is used by painting software _Project Dogwaffle Howler_.
+Because the output is a brush you use for painting, it is only recommended for small animations.
+Takes also the selected resolution- and quality-settings into account.
+
+=== The timeline
+At the bottom there is a timeline where you can place individual flames.
+Each animated fractal flame has the following attributes:
+
+ - *Duration (frames)*: number of frames the flame is part of the whole movie
+ - *Morph (frames)*: number of frames of the transition to the next flame. This sub-frames are part of the
+whole duration. E.g. when you have a duration of 120 frames, and a transition of 60 frames, the transition
+will start at frame 61
+ - *Morph type*: type of transition. There are the following options:
+
+ ** *Fade*: fades the first flame out and the second flame in. Works for any flames
+ ** *Morphs*: tries to actually morpth between the flames at the transformation level.
+Does only work well for flames which do not differ too much. But often produces interesting
+results, even if they were not as expected.
+
+There are the following actions you can perform at animated flame level:
+
+ - *_E_* (Edit): transfers the current flame to the <<main_editor, Main Editor>>
+ - *_R_* (Replace): replaces the current flame with the currently loaded flame of the <<main_editor, Main Editor>>.
+In combination with the _E_ button this allows easy post-editing of a flame.
+ - *_D_* (Delete): Remove the current flame from the movie
+
+==== _Add from Editor_ button
+Appends the currently loaded flame of the <<main_editor, Main Editor>> to the movie.
+
+==== _Add from Clipboard_ button
+Appends a flame from the Clipboard to the movie.
+
+==== _Add flame from disc_ button
+Load a flame from a file and appends it to the movie.
+
+==== _Up_ button
+Moves the currently selected animated flame one position up (to the left). The currently selected flame is
+indicated by a filled radio box right of the _D_ button.
+
+==== _Down_ button
+Moves the currently selected animated flame one position down (to the right). The currently selected flame is
+indicated by a filled radio box right of the _D_ button.
+
+==== _Remove flame_ button
+Removes the currently selected animated flame from the movie. The currently selected flame is
+indicated by a filled radio box right of the _D_ button.
+
+==== _Remove all_ button
+Removes all flames from the movie.
+
+=== _Global (animation) scripts_
+Lets you apply up to 12 global animations scripts to the whole movie, i.e. those scripts are applied to
+each individual flame in the form of a post-effect. They override motions of the same type, in case
+they were are already applied at the flame-level.
+
+There are the following options (which may be combined freely):
+
+- *None*: no motion applied to the slot
+- *Rotate Roll / Pitch / Yaw / Bank*: constant rotation of the camera, by modifying the _Roll_- or _Pitch_- or _Yaw_-
+or _Bank_-parameter of the flame
+- *Move CamX / CamY / CamZ*: a movement of the camera into the x-, y- or z-direction in the form a sine-wave (moving gently back and forth)
+
+By changing the numerical value right of each script slot you may change the strength of the effect.
+
+=== _XForm (animation) scripts_
+Lets you apply up to 12 flame transformations to the whole movie, i.e. those scripts are applied to
+each individual flame in the form of a post-effect. They override motions of the same type, in case
+they were are already applied at the flame-level.
+
+There are the following options (which may be combined freely):
+- *None*: no motion applied to the slot
+- *Rotate Full*: constant rotation of all affine-transform
+- *Rotate First / 2nd / 3rd / 4th / Last XForm*:  constant rotation of the specified affine-transform
+- *Rotate Final XForm*:  constant rotation of the final-affine-transform
+- *Rotate Post Full*: constant rotation of all post-affine-transform
+- *Rotate Post First / 2nd / 3rd / 4th / Last XForm*:  constant rotation of the specified post-affine-transformat
+- *Rotate Post Final XForm*:  constant rotation of the post-final-affine-transform
+
+Those animations are only applied when a flame has the corresponding transformations.
+E.g., selecting the animation script _Rotate Final XForm_ on a flame without a final
+transform will have no effect, but will also not cause an error
+
+By changing the numerical value right of each script slot you may change the strength of the effect.
+
+=== (animation)Speed / Motion blur
+Here you can specify the overall animation speed (_frames per second_) and set up motion blur
+for the whole movie.
+
+==== Total frame count
+Displays the total frame count which is calculated accordingly to the inividual settings of the
+animated flames.
+
+==== Frames per second
+Global <<fps, fps-setting>> of the movie.
+
+==== Motion blur length
+Global <<motion_blur_length, motion blur length>> of the whole movie.
+
+==== Motion blur timestep
+Global <<motion_blur_time_step, Motion blur timestep>> of the whole movie.
+
+=== Preview
+You can preview the animation at any time by hitting the _Play_ button in the middle of the window.
+
+==== _Frame_
+Display the frame position at which the preview is displayed.
+
+==== _E_ (Edit) button
+Sends the currently displayed flame (at the selected frame position) to the editor.
+This might especially interesting when you are morphing between different
+flames and like the result at a certain frame position and want to work with
+the fractal flame at the current morphing-state.
 
 == _Dancing flames_ module
 [.thumb]
@@ -2337,7 +2511,33 @@ to show an effect. This is usually mentioned in the description of the property.
 
 [#platform_specific_topics]
 == Platform-specific topics (Windows, Mac, Steam, ...)
-???
+In this section some platform-specific topics are covered. Even if JWildfire is widely
+platform-independent, there are features which are not avaiable on certain platforms.
+Another topic are options for customizing the startup of the application which must
+be specified in different ways, depending on the platform.
+
+=== Startup options
+
+
+=== Restrictions
+==== Steam Edition (Window only)
+There are no restrictions. The Windows-based version of JWildfire currently has the most rich feature-set.
+
+==== App Store Edition (Mac only)
+On the Mac platform there are the following restrictions:
+- the JWildfire-specific file-dialogs can not be used due to security-related requirements,
+instead the macOS-native dialogs are used. This is not bad, because it gives you the typical
+behaviour on macOS, but there will be some missing features
+- <<_ai_based_denoiser, AI-based denoisers>> are not supported
+- LeapMotion-controller-support is not available
+
+==== Linux Version
+There is no special Linux version, but the free version from the official website https://jwildfire.overwhale.com
+does also work on Linux. To make it work, you must install a Java Virtual machine.
+
+Then there are the following restrictions:
+ - <<_ai_based_denoiser, AI-based denoisers>> are not supported
+ - LeapMotion-controller-support is not tested, probably does not work
 
 == FAQ (frequently asked questions)
 Here are answers to some popular questions which I get very often. They seem not fit well into
