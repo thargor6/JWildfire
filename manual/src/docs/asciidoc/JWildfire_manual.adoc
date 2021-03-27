@@ -678,6 +678,7 @@ See also _Antialiasing radius_ for another parameter to influence antialiasing.
 Radius of the added "Chaos" to avoid jagged lines. See _Antialiasing amount_ for a more detailed
 description.
 
+[#ai_based_denoiser]
 ===== _AI-based denoiser_
 Type of AI-based denoiser applied to the final image:filtering_show_indicator.jpg
 
@@ -1940,6 +1941,7 @@ each individual flame in the form of a post-effect. They override motions of the
 they were are already applied at the flame-level.
 
 There are the following options (which may be combined freely):
+
 - *None*: no motion applied to the slot
 - *Rotate Full*: constant rotation of all affine-transform
 - *Rotate First / 2nd / 3rd / 4th / Last XForm*:  constant rotation of the specified affine-transform
@@ -2516,6 +2518,7 @@ platform-independent, there are features which are not avaiable on certain platf
 Another topic are options for customizing the startup of the application which must
 be specified in different ways, depending on the platform.
 
+[#jvm_startup_parameters]
 === Startup options
 In some cases it is necessary to set up some startup parameters for the application.
 Such common cases are:
@@ -2592,10 +2595,11 @@ There are no restrictions. The Windows-based version of JWildfire currently has 
 
 ==== App Store Edition (Mac only)
 On the Mac platform there are the following restrictions:
+
 - the JWildfire-specific file-dialogs can not be used due to security-related requirements,
 instead the macOS-native dialogs are used. This is not bad, because it gives you the typical
 behaviour on macOS, but there will be some missing features
-- <<_ai_based_denoiser, AI-based denoisers>> are not supported
+- <<ai_based_denoiser, AI-based denoisers>> are not supported
 - <<gpu_rendering, GPU rendering>> is not supported
 - LeapMotion-controller-support is not available
 
@@ -2604,18 +2608,52 @@ There is no special Linux version, but the free version from the official websit
 does also work on Linux. To make it work, you must install a Java Virtual machine.
 
 Then there are the following restrictions:
- - <<_ai_based_denoiser, AI-based denoisers>> are not supported
+
+- <<ai_based_denoiser, AI-based denoisers>> are not supported
 - <<gpu_rendering, GPU rendering>> is not supported
- - LeapMotion-controller-support is not tested, probably does not work
+- LeapMotion-controller-support is not tested, probably does not work
 
 == FAQ (frequently asked questions)
 Here are answers to some popular questions which I get very often. They seem not fit well into
 the other chapters, so I collected them in this section.
 
 [#max_mem]
-???
+=== JWildfire does not use all my memory to render images at large resolutions
+Due to its nature, JWildfire uses a fixed setting for the maximum memory it can use.
+The default setting for this value is 8 GB.
+When this limit is too low for you to render images at your desired resolution,
+you can increase this value. To achieve this, you have to modify the JVM parameter *Xmx*.
+
+E.g., to increase the value to 32 GB, you should the *Xmx*-value in the _JWildfire.cfg_ like this:
+
+[source]
+----
+--Xmx32G
+----
+
+You can also decrease the value, if you want to use less memory.
+
+*Please note, that JWildfire will not start when this value exceeds the actual available memory
+when you attempt to start the application.*
+
+It is not recommended to use high values when you actually do not use them, because
+too high values my degrade performance (slightly).
+
+Please see the sub-section <<jvm_startup_parameters, Changing JVM startup parameters>> to see
+how this file can be edited.
+
 [#ui_scale]
-???
+=== The UI scale is microscopic (after an update)
+Currently, the UI-scale must be set after each update.
+You can increase the UI scale by changing the startup parameter *sun.java2d.uiScale*, e.g.
+
+[source]
+----
+-Dsun.java2d.uiScale=1.65
+----
+
+Please see the sub-section <<jvm_startup_parameters, Changing JVM startup parameters>> to see
+how this can be achieved.
 
 [#rendering_in_4k]
 === Are 4k renders possible?
@@ -2646,7 +2684,7 @@ so you can get out different images out of one fractal flame.
 === Is it possible to render flames at higher resolutions than inside JWildfire?
 There are no restrictions regarding render size which could resolved by an external
 application for rendering. The only limitation is memory.
-See <<rendering_in_4k, Are 4k renders possible?>> for more informations.
+See <<rendering_in_4k, Are 4k renders possible?>> for more information.
 
 [#ui_glitches]
 === How to fix glitches/weird behaviour of the UI
