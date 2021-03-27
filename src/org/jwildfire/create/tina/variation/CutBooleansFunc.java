@@ -32,7 +32,7 @@ public class CutBooleansFunc  extends VariationFunc {
 
 	private static final String PARAM_SEED = "seed";	
 	private static final String PARAM_MODE = "mode";
-	private static final String PARAM_TYPE = "^/&/|";
+	private static final String PARAM_TYPE = "type";
 
 
 	private static final String PARAM_ZOOM = "zoom";
