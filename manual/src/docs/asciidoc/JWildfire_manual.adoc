@@ -2517,7 +2517,74 @@ Another topic are options for customizing the startup of the application which m
 be specified in different ways, depending on the platform.
 
 === Startup options
+In some cases it is necessary to set up some startup parameters for the application.
+Such common cases are:
 
+ - increase the <<max_mem, maximum amount of usable memory>> (to be able to render in higher resolutions)
+ - increase the overall <<ui_scale, UI-scale>> (which may be too small on 4K monitors))
+ - fix some <<ui_glitches, UI-glitches>>
+
+The location of those parameters differs depending on the plattform.
+
+==== Steam Edition
+Currently, you must edit those parameters after each update.
+To simplify this, there is a shortcut inside JWildfire to open the right file.
+It is located under _Settings -> Startup settings (Steam)_.
+
+When you click at this menu-item, it should open the file *<SteamApps>\common\JWildfire\app\JWildfire.cfg*
+(When this does not work due to missing permissions, you may also open and edit this file manually).
+
+Please see the sub-section <<jvm_settings_example, _Example (for both _Steam_ and _Mac_ version)_>> for an example.
+
+==== App Store Edition
+Currently, you must edit those parameters after each update.
+Those parameters are inside a file named JWildfire.cfg inside the application folder.
+
+To edit this file you must open the _Finder_ and locate application _JWildfire_ inside the _programs_ folder.
+Right-click on the entry _JWildfire_ and select the option *Show Contents*. This will show the files
+which belong to the application. Navigate to the sub-folder _Contents/app_ and you should see the file
+_JWildfire.cfg_ inside this folder. You must edit this file in order to change the startup-parameters.
+
+Please see the next sub-section <<jvm_settings_example, _Example (for both _Steam_ and _Mac_ version)_>>
+for an example.
+
+[#jvm_settings_example]
+===== Example (for both _Steam_ and _Mac_ version)
+Once you are editing the file _JWildfire.cfg_ it works the same for both the _Steam_ and the _Mac_ platform.
+
+The file contains different sections, the _startup JVM parameters_ for JWildfire must be placed
+under the section *[JavaOptions]*.
+
+Example file:
+
+[source]
+----
+[Application]
+app.name=JWildfire
+app.version=6.40
+app.runtime=$ROOTDIR\runtime
+app.identifier=org.jwildfire.swing
+app.classpath=$ROOTDIR\app\j-wildfire.jar
+app.mainjar=$ROOTDIR\app\j-wildfire.jar
+app.mainclass=org.jwildfire.swing.JWildfire
+
+[JavaOptions]
+-splash:app/splash.png
+-Xmx8G
+
+[ArgOptions]
+----
+Here you see that under *[JavaOptions]* there is an entry *-Xmx8G*. This specifies the maximum
+usable memory. The default is *8G*, which means 8 GB.
+If you want to increase this to 32 GB, you just would change the line to:
+[source]
+----
+...
+[JavaOptions]
+-splash:app/splash.png
+-Xmx32G
+...
+----
 
 === Restrictions
 ==== Steam Edition (Window only)
@@ -2529,6 +2596,7 @@ On the Mac platform there are the following restrictions:
 instead the macOS-native dialogs are used. This is not bad, because it gives you the typical
 behaviour on macOS, but there will be some missing features
 - <<_ai_based_denoiser, AI-based denoisers>> are not supported
+- <<gpu_rendering, GPU rendering>> is not supported
 - LeapMotion-controller-support is not available
 
 ==== Linux Version
@@ -2537,11 +2605,17 @@ does also work on Linux. To make it work, you must install a Java Virtual machin
 
 Then there are the following restrictions:
  - <<_ai_based_denoiser, AI-based denoisers>> are not supported
+- <<gpu_rendering, GPU rendering>> is not supported
  - LeapMotion-controller-support is not tested, probably does not work
 
 == FAQ (frequently asked questions)
 Here are answers to some popular questions which I get very often. They seem not fit well into
 the other chapters, so I collected them in this section.
+
+[#max_mem]
+???
+[#ui_scale]
+???
 
 [#rendering_in_4k]
 === Are 4k renders possible?
@@ -2574,6 +2648,7 @@ There are no restrictions regarding render size which could resolved by an exter
 application for rendering. The only limitation is memory.
 See <<rendering_in_4k, Are 4k renders possible?>> for more informations.
 
+[#ui_glitches]
 === How to fix glitches/weird behaviour of the UI
 Some users have reported weird behaviour of the UI:
 
