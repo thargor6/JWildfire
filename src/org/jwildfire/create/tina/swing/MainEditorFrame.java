@@ -14943,7 +14943,7 @@ public class MainEditorFrame extends JFrame {
       tinaAddLinkedTransformationButton.setToolTipText("Add new linked transform");
       tinaAddLinkedTransformationButton.setText("L");
       tinaAddLinkedTransformationButton.setPreferredSize(new Dimension(34, 24));
-      tinaAddLinkedTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      tinaAddLinkedTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaAddLinkedTransformationButton;
   }
@@ -17691,7 +17691,7 @@ public class MainEditorFrame extends JFrame {
       editTransformCaptionBtn.setToolTipText("Edit the name of the current transform");
       editTransformCaptionBtn.setText("T");
       editTransformCaptionBtn.setPreferredSize(new Dimension(34, 24));
-      editTransformCaptionBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      editTransformCaptionBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return panel_19;
   }

@@ -4,6 +4,8 @@
 :toc:
 :toclevels: 3
 
+:title-page-background-image: image::front_cover.jpg[scaledwidth=50%]
+
 = JWildfire users manual
 Copyright (C) 2021 by Andreas Maschke
 
@@ -102,6 +104,7 @@ Per default each control is dran in its own color to make them more distinguisha
 Sometimes this may distract you from the fractal.Using this option, you may switch
 to a less intrusive monochrome display of controls.
 
+[#post_transform]
 ===== _Toggle post transform_
 Quick-switch to toggle between editing of the affine-post-transform and the regular affine transform.
 
@@ -1430,7 +1433,173 @@ Here you can specify the number of create quick mutations.
 In some cases in may make sense to use a large number. So you can create a huge batch of quick mutations with
 one click and then view them later.
 
-=== Transformations and Scripts
+=== _Transformations and Scripts_
+_Transformations_ and _scripts_ are the creative heart of JWildfire. Using _transformations_ you
+actually create and modify the fractal structure of a fractal flame, and using _scripts_ you
+can automate this.
+
+==== _Transformations_
+At this tab you can modify the structure or shape of the fractal itself.
+You do this by adding and modifying transformations.
+
+===== _Theory_
+It is beyond the scope of this book to explain exactly how transformations work and fractal flames
+are generated in general.
+If you are interested in the math behind fractal flames, a very good ressource
+is the dissertation of Scott Draves, the inventor of the fractal flame
+itself: https://flam3.com/flame_draves.pdf
+
+But, many of the actions described here are very intuitive to use, and allow you to
+create fractal artworks without knowing the exact backgrounds (which are not too intuitive from
+an artists view.)
+
+Besides this users manual I'm planning to write another book which brings those two worlds (thery and practice) together.
+But, at the time of writing this, this will take some time.
+
+===== _Transformations_ table
+This table displays all transforms of the currently selected fractal flame.
+There are two types of transform:
+
+- (regular) *Transforms*: they build the actual structure of the fractal
+- *Final transforms*: they are applied after the regular transforms and do only affect the shape
+after it is created, but not the inner details.
+
+You may think of them both as *transforms* being the *polygonal mesh* in a classic 3D-software, and
+*final transforms* being deformations of this mesh.
+
+===== Transformation _weights_
+Each transform has a numerical weight-value attached. This value influences the priority
+of this transform in the iteration process of the fractal.
+
+===== Transformation _order_
+Please note, that there is _no_ transformation order. Swapping the positions of two transforms
+would not change the fractal, hence there are no buttons to change the positions of the
+transformation inside the table.
+
+Importance/influence of a transform can be affected by:
+
+- the *weight* of the transform itself
+- *relative weights*, also known as *Xaos*-values
+
+===== _Add_ button
+Adds a new transform.
+
+===== _L (Linked transform)_ button
+Adds a linked transform. A linked transform is a regular transform which has a special setup
+of _relative_ weights, so that it is executed after the transform it is linked to, hence the name.
+
+===== _T (Rename transform)_ button
+Opens a popup to enter a name which is displayed in the transformations table. Useful for complex fractals.
+
+===== _Dupl_ button
+Duplicate the currently selected transform.
+
+===== _Delete_ button
+Delete the currently selected transform.
+
+===== _Add final_ button
+Add a final transform. You can add multiple final transforms.
+*Please note, that all final transforms are applied at each iteration step. Therefore
+final transforms massively affect render performance.* This does not hold for regular transforms.
+
+===== _Affine_ tab
+At this tab you can modify the affine part of a transform. This is very intuitive because
+an affine transformation is a possible combination of
+
+- movement
+- rotation
+- scale
+- shear
+
+Affine transformations are represented by the controls you see in the preview
+area. So, at the _affine_ tab you can perform the same changes like dragging controls in the
+preview, but in a more precise way.
+
+===== _Post TF_ button
+Switches between editing the regular part of a transform the <<post_transform, Post-transform>>-part.
+
+===== _Reset TF_ button
+Resets the selected part (regular or post) of the current transform.
+This means setting the transformation coefficients so that there is no movement, rotation and scale.
+
+==== _Preserve Z_ button
+Adds a linear transform in z-direction. This is a very special feature which is helpful in creating
+3d-fractal flames which should contain nonlinear-transforms which only support x- and y-axis
+and would make the fractal flat.
+
+==== _X1_, _X2_, _Y1_, _Y2_, _O1_, _O2_ fields
+These are called affine transformation coefficients, and build the actual value of the transform.
+Sometimes they also called *c00*, *c01*, *c10*, *c11*, *c20*, *c21* or *a*, *b*, *c*, *d*, *e*, *f*.
+
+There are two sets of this cooeficients, one set for the regular part and one set for the post part.
+
+===== _Nonlinear_ tab
+???
+
+===== _Xaos_ tab
+???
+
+===== _Color_ tab
+???
+
+===== _Gamma_ tab
+???
+
+===== _WField_ tab
+???
+
+==== _Scripts and Custom-Buttons_
+???
+
+===== _Scripts_ treeview
+???
+
+===== _Import script_ button
+???
+
+===== _New_ button
+???
+
+===== _Dupl_ button
+???
+
+===== _From flame_ button
+???
+
+===== _Btn_ button
+???
+
+===== _Scan_ button
+???
+
+===== _Run_ button
+???
+
+===== _Edit_ button
+???
+
+===== _Description_
+???
+
+===== _Code preview_
+???
+
+===== _Description_
+???
+
+===== _Macro buttons_
+???
+
+====== _Macro buttons_ table
+???
+
+====== _Up_ button
+???
+
+====== _Down_ button
+???
+
+====== _Delete_ button
 ???
 
 === Global functions
