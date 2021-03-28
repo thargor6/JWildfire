@@ -15,14 +15,14 @@ image::JWildfire.jpg[scaledwidth=75%]
 
 Welcome to JWildfire and this user manual!
 
-The goal of this book is to describe the numerous function of the software and also to try
+The goal of this book is to describe the numerous functions of the software and also to try
 to explain how they work.
 After over 10 years of development there is really a lot of this functions,
 so the book is more a reference book than one you might read from start to end.
 
-This book will not attempt to teach you how to create fractals and does not contain
-tutorial materials or examples. This would be too much and will be part of another book
-I will probably write.
+This book does not attempt to teach you how to create fractals, and it does not include
+any practice materials or examples. That would be too much for this manual and will be
+part of a kind of "workbook" that I have plans to write.
 
 Anyway, I'm hoping this book will help you to have more fun with the software and achieve
 the results you are looking for.
@@ -47,11 +47,14 @@ It consists of the following parts:
 
 You find a description of each part as separate sub-chapter in this manual.
 
+Most controls have tool tips, short descriptions that appear when you hover
+over them for a second.
+
 === Preview/Editor area
 This area is both for previewing fractals and editing them in realtime.
 The most simple and intuitive way to edit a fractal is to drag or rotate one of the
 visible controls on top of the fractals (usually in the shape of triangles).
-But, there also much more precise ways and lots of other options to manipulate a fractal flame.
+However, there are much more precise ways and many other ways to modify a fractal flame.
 
 ==== Quick buttons on the top of the preview area
 [.thumb]
@@ -69,17 +72,18 @@ Switch preview-rendering with transparent background on or off.
 Please note, that this only affects the preview display and does not the transparency setting of the flame itself.
 
 ===== _Fine edit_
-Turn on or off "fine editing".Fine editing means that changes are less sensitive to changes using mouse or touchpad to allow editing with a higher grade of detail.
+Turn on or off "fine editing". Fine editing means that changes are less sensitive to changes using mouse or touchpad to allow editing with a higher grade of detail.
 
 [#realtime_preview]
 ===== _Realtime_
-Turns progressive rendering of the preview on or off.Progressive rendering means that the image starts to render in very low quality and gets improved after a while.
+Turns progressive rendering of the preview on or off. Progressive rendering means that the image starts to render in very low quality and gets improved after a while.
 This image gets improved after a while again, and so on.Usually this works very good and allows a very fluid editing.
 On slower machines (e.g. notebooks) this may cause a heavy load and on some fractals it may cause flickering.
 Turning it off causes to render previews at lower and constant (non-progressive) quality level.
 
 ===== _Turn grid on/off_
-Tuns on or off a grid which may help to align controls
+Tuns on or off a grid which may help to align controls. Note that this grid can be moved (see "Edit view of the controls" below), so is intended for control
+alignment, not image alignment.
 
 ===== _Turn guides on/off_
 Turns on or off "artistic guides" for
@@ -100,8 +104,8 @@ You may select one of the following style of editor-controls:
 - *hidden*
 
 ===== _Toggle monochrome/colored controls_
-Per default each control is dran in its own color to make them more distinguishable.
-Sometimes this may distract you from the fractal.Using this option, you may switch
+Per default each control is drawn in its own color to make them more distinguishable.
+Sometimes this may distract you from the fractal. Using this option, you may switch
 to a less intrusive monochrome display of controls.
 
 [#post_transform]
@@ -129,37 +133,42 @@ In this mode you change the camera settings (=view) when dragging the mouse.
 
 - using the mouse-wheel, you may zoom in/out.
 - by dragging the mouse with the left mouse-button pressed, you move the camera.
-- by dragging the mouse with the right mouse-button pressed, you rotate the camera.
+- by dragging the mouse right or left with the right mouse-button pressed, you rotate the camera.
 
 ===== _Move triangles mode_
 In this mode you edit the affine or post-affine transformation when dragging the mouse.
 
 - using the mouse-wheel, you may scale up/down.
 - by dragging the mouse with the left mouse-button pressed, you move the control, causing a translation
-- by dragging the mouse with the right mouse-button pressed, you rotate the control, causing a rotation.
+- by dragging the mouse right or left with the right mouse-button pressed, you rotate the control, causing a rotation.
 
 ===== _Rotate triangles mode_
 This mode is similar to _Move triangles mode_, but you are restricted to rotations.
-The rotation is done by dragging the mouse while pressing the left mouse-button.
+The rotation is done by dragging the mouse right or left while pressing the left mouse-button.
 
 ===== _Scale triangles mode_
 This mode is similar to _Move triangles mode_, but you are restricted to scale up/down.
-This operation is done by dragging the mouse while pressing the left mouse-button.
+This operation is done by dragging the mouse right or left while pressing the left mouse-button.
 
 ===== _Enable free point editing_
 In this mode you may freely edit the affine transform by dragging the three corner points
 of the triangle-controls.
-This way you can get easily create a fre combination of translation, rotation and shear.
+This way you can get easily create a free combination of translation, rotation and shear.
 
 ===== _Edit view of the controls_
-In this mode you edit the appearance of the controls.
+In this mode you edit the appearance of the controls. This doesn't change the flame;
+only how the controls look. It can be used to see controls that are outside the window
+by moving them or scaling them down. It also controls how sensitive the controls are;
+scale them up for finer placement.
 
-- using the mouse-wheel, or by dragging the mouse with the right mouse-button pressed, you may scale them up/down.
+- using the mouse-wheel, or by dragging the mouse left or right with the right mouse-button pressed, you may scale them up/down.
 - by dragging the mouse with the left mouse-button pressed, you move the controls
 
+See "Turn grid on/off" above.
+
 ===== _Edit focus point_
-Edit the focus-point (parameters FocusX, FocusY and FocusZ at the "DOF/Bokeh -> DOF" - tab)
-using the mouse
+Edit the focus-point (parameters FocusX, FocusY and FocusZ at
+the <<dof_bokeh_tab, "DOF/Bokeh -> DOF" - tab>>) using the mouse
 
 - by dragging the mouse with the left mouse-button pressed, you change FocusX- and FocusY-parameters
 - using the mouse-wheel you change the FocusZ-parameter
@@ -182,8 +191,9 @@ Apply the currently selected AI denoiser (OptiX or OIDN) and display it in the p
 This function uses a splitted preview, in order to allow to compare the denoised and the original image.
 On the left side, you see the original image, on the right side of the splitting-indicator you
 see the denoised image.
+This button only appears if an AI denoiser is selected in the <<anti_aliasing_filter_tab, Anti-Aliasing/Filter tab>>.
 
-This function uses the current preview.So it is often recommended to re-render the preview in
+This function uses the current preview. So it is often recommended to re-render the preview in
 higher quality before invoking it.
 
 ===== _External render preview_
@@ -191,13 +201,21 @@ Open an additional detached progressive preview, works especially well when you 
 
 ===== _Render image preview_
 Re-renders the current preview with a much higher quality level.
+
+This can take some time. The progress bar on the top of the preview area shows the preview progress.
+If solid rendering is enabled, there will be a short delay after the progress bar reaches 100%
+before the result is displayed.
+
 This is a very important function in the fractal-editing workflow, because certain parameter changes
 do not cause a complete re-render of the complete image, because this would be too slow.
 Instead they use a raw in-memory-version of the latest preview and apply the parameter-change to it.
 
+This is especially helpful when progressive rendering is off (see the _Realtime_ button), where the
+preview has very low quality.
+
 So, especially when fine-tuning colors it is recommended to re-render the preview in higher quality
 using this button, before changing the settings.
-Because this function is such important it is at this prominent place.
+Because this function is so important, it is in this prominent place.
 
 ==== Quick buttons on the left of the preview area
 [.thumb]
@@ -206,7 +224,8 @@ At this area you find some quick-buttons to reach other modules of JWildfire and
 
 ===== _Interactive renderer_
 This is just a shortcut for the Interactive Renderer.It opens it or brings it into foreground.
-It does does nothing else, e.g. not to load the current flame into the Interactive Renderer.This is intended.
+It does does nothing else, e.g. not to load the current flame into the Interactive Renderer. This
+is intended.
 
 ===== _Easy Movie Maker_
 Opens the Easy Movie Maker.
@@ -218,16 +237,16 @@ Opens the Flame Browser.
 
 ===== _Undo_
 Reverts the latest change to the currently selected flame.
-Each flame has its own undo-history.So undoing a change will never switch between flames.
+Each flame has its own undo-history. So undoing a change will never switch between flames.
 
-Please note, that the undo history is not saved together whith flames, so it is lost when
+Please note, that the undo history is not saved together with flames, so it is lost when
 you quit JWildfire.
 
 ===== _Redo_
 Repeats the latest undone change to the currently selected flame.
 
 ===== _SShot (Snapshot)_
-Create a snapshot of the current flame.This is an identical copy with new undo-history.
+Create a snapshot of the current flame. This is an identical copy with new undo-history.
 
 ===== _Title_
 Sets the title of the current flame.This is a common place to also put copyright information
@@ -237,10 +256,9 @@ You can set a default title for flames, which are created using the
 property *tinaDefaultNewFlameTitle* in the <<preferences, _Preferences_>>-window.
 
 ===== _3D_
-Switch between "classic" rendering and experimental solid rendering.
+Switch between "classic" rendering and solid rendering.
 
-Solid rendering basically works by remembering each sample of the fractal flame.
-as a solid particle.
+Solid rendering basically works by treating each sample of the fractal flame as a solid particle.
 The sum of all of these particles make up a larger solid shape.
 This works only good for a certain types of flame fractals.
 It may fail if the structure is too thin or is in general too "chaotic" or too blurry.
@@ -251,7 +269,7 @@ Even to render the "classic" Mandelbulb (thanks to Whittaker Courtney for the id
 image::jwf_mandelbulb.jpg[scaledwidth=50%]
 
 ===== _Animations controls on/off_
-Using this button you may quickly turn on or off animation controls on the fly.
+Using this button you may turn on or off animation controls.
 You may set up your preference for this setting in the <<preferences, _Preferences_>>-window.
 
 === _Thumbnail ribbon_
@@ -259,14 +277,16 @@ You may set up your preference for this setting in the <<preferences, _Preferenc
 image::thumbnail_ribbon.jpg[scaledwidth=50%]
 
 The thumbnail ribbon hold thumbnails of all flames you currently are editing.
-After starting the program some random flame are generated and displayed in the thumbnail ribbon.
-You can edit/view any flame of the thumbnail by just double-clicking it.
+After starting the program some random flames are generated and displayed in the thumbnail ribbon.
+
+You can edit/view any flame of the thumbnail by just double-clicking (or right-clicking) on it.
+
 If you want to return to your previous flame just double-click the thumbnail of this other flame.
 Each flame in the thumbnail-ribbon has its own undo-history.
 
 [#selecting_flames_thumbnail_ribbon]
 ==== Selecting flames in the _thumbnail ribbon_
-Each flame in the _thumbnail ribbon_ have a little checkbox assigned in the upper right edge.
+Each flame in the _thumbnail ribbon_ has a little checkbox assigned in the upper right edge.
 By changing the value of this checkbox you change the selected state of the thumbnail.
 
 Selection of individual flames is only important for saving and deleting.
@@ -285,6 +305,7 @@ So, one way to select all flames is to deselect them all and then to invert the 
 ==== Deleting flames in the _thumbnail ribbon_
 Each flame in the _thumbnail ribbon_ has also a little delete-button assigned in the upper right edge.
 By pressing this button you may delete the corresponding flame from the _thumbnail ribbon_.
+Since this can not be undone, a popup will appear to confirm the action.
 
 [.thumb]
 image::thumbnail_ribbon_delete_menu.jpg[scaledwidth=50%]
@@ -349,6 +370,7 @@ Position of the camera in y-direction.Has a similar effect like CentreY for 2D f
 ===== _CamPosY_
 Position of the camera in z-direction.
 
+[#dof_bokeh_tab]
 ==== _DOF/Bokeh_ tab
 DOF (depth of field) is a kind of controversy topic in fractal flames.
 Some people like it a lot (including myself),
@@ -550,12 +572,13 @@ artwork out of different images or parts.
 Please note, that you may also activate a preview of the background-transparency in
 JWildfire (in the top area of the preview-window).
 
-==== _Anti-Aliasing / Filter_ tab
+[#anti_aliasing_filter_tab]
+==== _Anti-Aliasing/Filter_ tab
 [.thumb]
 image::antialiasing_tab.jpg[scaledwidth=75%]
 At this tab you find some very important settings which help to improve the visual quality or "cleanliness"
 of your fractal artworks.
-For details about filtering see the sub-section <<how_filtering_works, _Filter kernel preview / How filtering works_>>.
+For details about filtering see the sub-section <<how_filtering_works, _Filter kernel preview/How filtering works_>>.
 
 ===== _Spatial oversampling_
 Factor of spatial oversampling. Spatial oversampling works by internally rendering an image of larger size
@@ -590,7 +613,7 @@ The following values are recommended (but feel free to play with other settings 
  - *Adaptive*: *Mitchel_Sinepow* (*Mitchel*-Filter for sharpening details, *Sinepow10*-Filter for smoothing areas of low density)
 
 [#how_filtering_works]
-===== _Filter kernel preview / How filtering works_
+===== _Filter kernel preview/How filtering works_
 Creating a fractal image is a elaborate process consisting of several steps.
 Filtering is one of thse steps and very important for the final outcome.
 It takes place after the iteration-process which creates a lot of individual "measure points" of the fractal,
@@ -601,7 +624,7 @@ This is some kind of averaging the neigbourhood and causes a better quality of t
 using one sample per pixel (which also would works).
 
 
-The filter-kernel-preview in the middle of the _Anti-Aliasing / Filter_ - tab show a visual representation of
+The filter-kernel-preview in the middle of the _Anti-Aliasing/Filter_ - tab show a visual representation of
 this behaviour. Higher bars correspond to a higher influence of a sample, while lower bars correspond to a lower
 influence.
 Usually, the highest influence is in the centre, which makes sense because the sample at the position
@@ -1005,7 +1028,7 @@ Remove the selected color map (and revert to use a regular gradient for coloring
 At this tab you can influence the outcome of a fractal rendered in solid mode.
 This is also an experimental feature of JWildfire.
 
-Solid rendering basically works by "remembering" each sample of the fractal flame
+Solid rendering basically works by treating each sample of the fractal flame
 as a solid particle.
 The sum of all of these particles make up a larger solid shape.
 This works only good for a certain types of flame fractals and needs more rendering time
@@ -1255,17 +1278,17 @@ to easily play with it.
 There are the following symmetry types:
 
 - *None*: no symmetry
-- *X-Axis*: mirror-symmetry along the x-axis (the mirror is the y-axis).
+- *X-axis*: mirror-symmetry along the x-axis (the mirror is the y-axis).
 Often used to create angel-like fractals.
-- *Y-Axis*: mirror-symmetry along the y-axis (the mirror is the x-axis)
+- *Y-axis*: mirror-symmetry along the y-axis (the mirror is the x-axis)
 Often used to portal-like fractals.
 - *Point*: point-symmetry (often used in the process)
 Often uses to create Mandala-like fractals.
 
-==== Distance (only for X-Axis- and Y-axis-symmetry)
+==== Distance (only for X-axis- and Y-axis-symmetry)
 Measure of the distance between the object and the mirror
 
-==== Rotation (only for X-Axis- and Y-axis-symmetry)
+==== Rotation (only for X-axis- and Y-axis-symmetry)
 Rotation angle of the mirror.
 
 ==== Symmetry order (only for Point-symmetry)
@@ -1278,7 +1301,7 @@ Offset in the x-direction to place the symmetry-center.
 ==== CentreY
 Offset in the y-direction to place the symmetry-center.
 
-==== _FPS / Motion blur_ tab
+==== _FPS/Motion blur_ tab
 At this tab you can adjust options for motion-blur as well as the fps-setting for animations.
 While motion-blur is typical for animations (hence the name), it can also be used to create
 interesting effects for still images.
@@ -1317,7 +1340,7 @@ So you can edit each layer before rendering the final image.
 Additionally, layers respect that flames have three coordinates, so each layer can be moved freely in
 space before rendering the image.
 
-Please note, that it are still flames and not solid objects or planes, so all flames will overlap if you design
+Please note, they are still flames and not solid objects or planes, so all flames will overlap if you design
 them that way.
 
 Each layer has its own:
@@ -1549,22 +1572,93 @@ There are two sets of this cooeficients, one set for the regular part and one se
 ???
 
 ==== _Scripts and Custom-Buttons_
-???
+At this tab you can manage JWF-scripts and organize custom buttons which allow easier access
+certain scripts.
 
-===== _Scripts_ treeview
-???
+Custom-buttons are completely optional. You can also execute scripts directly from the _Scripts_ library
+by double-clicking at a script.
+
+JWF-scripts are written in the Java-language and can use most of language-features offered by
+Java 1.4. So you could also read external files, access ressources from the internet,
+open custom-windows etc.
+There are also several possibilities to interact with the <<main_editor, Main Editor>>,
+e.g. to modify the currently edited flame and to refresh the preview.
+
+===== _Scripts_ libary
+The scripts-library contains of two parts:
+- built-in scripts: those are installed together with the program and can not be modified in any way
+- your own scripts. They are located in a folder outside the JWildfire-installation-drawer,
+so that they are not lost when you update JWildfire. You must specify this path in the
+<<preferences, _Preferences_>> by setting the property *tinaJWFScriptPath*.
+
+User-defined scripts may be structured in sub-folders in order to make them easier accessible.
 
 ===== _Import script_ button
-???
+Import a script from an external file. The following file-types are supported:
+
+- a single *.java*-file containing the script-code
+- a *.zip*-archieve containing the script-toger together with additional files or folders.
+
+When you download scripts from the internet, e.g. from https://www.jwfsanctuary.club, they usually come
+as .zip-file.
 
 ===== _New_ button
-???
+Create a new script from scratch. This is rarely used, it is often more useful to duplicate
+an existing script or to create a script form a flame and then to modify it.
 
 ===== _Dupl_ button
-???
+Duplicates the currently selected script.
 
 ===== _From flame_ button
-???
+This is a very useful function to get started with creating scripts. It creates a script
+which contains all the Java-code to create the currently selected flame.
+
+This has the following purposes:
+- you have a working script which actually produces something with a single button-click
+- by modiyfing certain parts you can programmatically create similar flames
+
+===== Creating flame-randomizers
+This function also creates code, which randomizes certain parameters at the level
+of each transform. This code is inactive by default.
+So, the generated flames by this script will alsways look the same until you
+modify the script. This is intended, because randomizing a random selection of
+parameters usually does not lead to interesting results. So you must find out by yourself,
+which parameters are good fro randomizing a flame and which are not. This always depends
+on the type of fractal and small differences between flames may affect this behaviour in
+a very strong way.
+
+You can find the inactive code by looking for comments like this:
+[source,java]
+----
+// random affine transforms (uncomment to play around)
+//   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);
+//   XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
+//   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), false);
+// random affine post transforms (uncomment to play around)
+//   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);
+//   XFormTransformService.rotate(xForm, 360.0*Math.random(), true);
+//   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);
+----
+The first line is an actual comment (not code). But the 2nd line is code, which was commented out.
+
+- _Commenting in_ means to remove the characters *//* at the start of line, this activates the code.
+- _Commenting out_ means to add the characters *//* at the start of a line, this inactivates the code.
+
+If you now _comment in_ the 3rd line, you apply a rotation by an angle which is randomized.
+[source,java]
+----
+XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
+----
+The expression *360.0*Math.random()* calculates a random value in the range of 0..360, which
+differs each time you execute the script. So you will get a different fractal flame
+each time you execute the script.
+
+When you see, that this leads to interesting effects, you may leave it that way and work at another transformation,
+otherwise you could uncomment another line of this pre-generated code. You can also play with the values, e.g. to replace
+the *360* by some smaller value when the rotations are too large.
+Of course, you can combine all of this code-fragments freely and also add your won code.
+But, a rule of thumb is, that many large changes at a fractal flame at the same time
+do not lead to interesting results. In many cases you will not have any visible result at all.
 
 ===== _Btn_ button
 ???
@@ -1990,7 +2084,7 @@ It combines three types of animation:
 
 You can even generate random movies, which is an experimental feature.
 
-=== _Thumnail ribbon_
+=== _Thumbnail ribbon_
 Similar to the <<main_editor, Main Editor>> there is a thumbail ribbon on the left, which hold all
 currently loaded objects - in this case: movies. You may select a movie by double-clicking at its thumbnail.
 
@@ -2098,9 +2192,9 @@ they were are already applied at the flame-level.
 There are the following options (which may be combined freely):
 
 - *None*: no motion applied to the slot
-- *Rotate Roll / Pitch / Yaw / Bank*: constant rotation of the camera, by modifying the _Roll_- or _Pitch_- or _Yaw_-
+- *Rotate Roll/Pitch/Yaw/Bank*: constant rotation of the camera, by modifying the _Roll_- or _Pitch_- or _Yaw_-
 or _Bank_-parameter of the flame
-- *Move CamX / CamY / CamZ*: a movement of the camera into the x-, y- or z-direction in the form a sine-wave (moving gently back and forth)
+- *Move CamX/CamY/CamZ*: a movement of the camera into the x-, y- or z-direction in the form a sine-wave (moving gently back and forth)
 
 By changing the numerical value right of each script slot you may change the strength of the effect.
 
@@ -2113,10 +2207,10 @@ There are the following options (which may be combined freely):
 
 - *None*: no motion applied to the slot
 - *Rotate Full*: constant rotation of all affine-transform
-- *Rotate First / 2nd / 3rd / 4th / Last XForm*:  constant rotation of the specified affine-transform
+- *Rotate First/2nd/3rd/4th/Last XForm*:  constant rotation of the specified affine-transform
 - *Rotate Final XForm*:  constant rotation of the final-affine-transform
 - *Rotate Post Full*: constant rotation of all post-affine-transform
-- *Rotate Post First / 2nd / 3rd / 4th / Last XForm*:  constant rotation of the specified post-affine-transformat
+- *Rotate Post First/2nd/3rd/4th/Last XForm*:  constant rotation of the specified post-affine-transformat
 - *Rotate Post Final XForm*:  constant rotation of the post-final-affine-transform
 
 Those animations are only applied when a flame has the corresponding transformations.
@@ -2125,7 +2219,7 @@ transform will have no effect, but will also not cause an error
 
 By changing the numerical value right of each script slot you may change the strength of the effect.
 
-=== (animation)Speed / Motion blur
+=== (animation)Speed/Motion blur
 Here you can specify the overall animation speed (_frames per second_) and set up motion blur
 for the whole movie.
 
@@ -2367,7 +2461,7 @@ When you activate this button, all images are rendered using the _GPU renderer_.
 But please beware, that this is currently very limited and works not well for many fractal flames.
 So, you should test it with a single flame before GPU-rendering a longer batch.
 
-=== _Show image_ image
+=== _Show image_ button
 Loads and displays the corrsponding image of the currently selected flame, if already rendered.
 
 === _Render_ button
@@ -2759,7 +2853,7 @@ If you want to increase this to 32 GB, you just would change the line to:
 ----
 
 === Restrictions
-==== Steam Edition (Window only)
+==== Steam Edition (Windows only)
 There are no restrictions. The Windows-based version of JWildfire currently has the most rich feature-set.
 
 ==== App Store Edition (Mac only)
