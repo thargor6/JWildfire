@@ -1661,40 +1661,42 @@ But, a rule of thumb is, that many large changes at a fractal flame at the same 
 do not lead to interesting results. In many cases you will not have any visible result at all.
 
 ===== _Btn_ button
-???
+Create a <<macro_buttons, _Macro button_>> in the bottom area of the preview to execute the currently selected script.
+You can remove this button using the _Delete_-button at the <<macro_buttons, _Macro buttons_ subtab>>.
 
 ===== _Scan_ button
-???
+Rescans the script-library. This is only necessary when you modified files outside from JWildfire or changed
+the library-path in the _Preferences_.
 
 ===== _Run_ button
-???
+Runs the currently selected script.
 
 ===== _Edit_ button
-???
+Opens a popup-window to edit the currently selected script.
 
 ===== _Description_
-???
+You can enter a description of your script as plain text. Here you can give hints for usage or place copyright information.
 
 ===== _Code preview_
-???
+Shows the code of the script. Because this area is too small for making changes there is a separate _Edit_ button
+to edit the script.
 
-===== _Description_
-???
-
+[#macro_buttons]
 ===== _Macro buttons_
-???
+At this tab you can create and modify so-called _Macro buttons_. A _Macro button_ is a button which executes a
+script. Scripts are also called _Macros_, hence the name.
 
 ====== _Macro buttons_ table
-???
+In this table all _Macro Buttons_ are displayed and you can also edit the label and shorthint of each button.
 
 ====== _Up_ button
-???
+Moves the selected entry on position up. The corresponding button will move one position to the left.
 
 ====== _Down_ button
-???
+Moves the selected entry on position down. The corresponding button will move one position to the right.
 
 ====== _Delete_ button
-???
+Deletes the currently selected _Macro button_.
 
 === Global functions
 At this area you find global functions as well as the very often used ones.
