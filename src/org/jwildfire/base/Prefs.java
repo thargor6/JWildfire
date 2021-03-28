@@ -565,7 +565,7 @@ public class Prefs extends ManagedObject {
   private String checkPathAndProvideDefault(String folder) {
     if(folder!=null) {
       File file = new File(folder);
-      if(file.isDirectory() && file.exists() && file.canRead()) {
+      if(file.isDirectory() && file.exists()) {
         return folder;
       }
     }
