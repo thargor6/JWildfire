@@ -955,6 +955,10 @@ public class VariationFuncList {
     registerVariationFunc(DC_PortalFunc.class);  
     registerVariationFunc(KaplanFunc.class); 
     registerVariationFunc(kaleidoImgFunc.class);
+	  
+    registerVariationFunc(CropMandelbulb3dFunc.class);
+    registerVariationFunc(CropMandelbox3dFunc.class);
+	   
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
