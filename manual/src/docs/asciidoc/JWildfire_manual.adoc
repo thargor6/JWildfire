@@ -1655,6 +1655,86 @@ There are two sets of this cooeficients, one set for the regular part and one se
 ???
 
 ===== _WField_ tab
+Weighting fields are nice artistic tool to create very organic-looking fractals,
+
+The basic idea is to add some kind of "natural disturbances" at the transform-level of the flame-fractals.
+It is possible to choose between different types of this kind of disturbance, for example "Perlin Fractal Noise" for a
+very organic style.
+You can also load image-maps (photographs) for very individual styles. Each style comes with various options to tweak.
+
+Currently, the following fractal-parameters may be affected by a weighting-field:
+
+- variation-amount
+- variation-parameter-amount (for up to three parameters per transformation, like frequency of a waves-trandform)
+- color-index (allows subtle color-changing effects)
+
+===== _Weighting field_ drop-down list
+Type of the weighting field to apply to the currently selected transformation.
+There are the following choices:
+
+- *None*: no weighting field
+- *Cellular Noise*: apply a weighting field using the _cellular noise algorithm_. This produces
+structures which look like cells.
+- *Cubic Noise*/*Perlin Noise*/*Simplex Noise*/*Value Noise*: apply a weighting field using the
+selected _noise algorithm_. This gives a nice organic look.
+- *Cubic Fractal Noise*/*Perlin Fractal Noise*/*Simplex Fractal Noise*/*Value Fractal Noise*: apply a
+weighting field using the selected _fractal noise algorithm_. This also gives a nice organic look.
+The word "fractal" here means applying the same type of noise multiple times at different scales.
+- *Image Map*: apply a weighting field using the levels of red color channel of the given image map.
+
+===== _Input coordinate_ drop-down list
+Sets the position where the weight field is calculated. There are the following options:
+
+- *Position*: Position of the current iteration point before applying the affine transform
+- *Affine*: Position of the current iteration point after applying the affine transform
+
+===== _Var amounts_
+Strength with which the magnitude (also called _amount_) of the nonlinear variations is influenced by the weighting field.
+A value of 0 means no influence by a weighting field.
+
+===== _Color amount_
+Strength with which the color-calculation is influenced by the weighting field.
+A value of 0 means no influence by a weighting field.
+
+===== _Var param 1_/_Var param 2_/_Var param 3_
+You can define up three parameters of nonlinear transformations which may be affected by the
+weighting field. The numerical field specifies the magnitude, in the drop-down list you select the name of the paramter.
+A value of 0 means no influence by a weighting field.
+
+===== _Jitter amount_
+Overall strength (amplitude) of the weighting field.
+
+===== _Seed_
+Parameter to randomize the shape of the noise. Different values lead to different distributions.
+
+===== _Frequency_
+Frequency of the noise. Larger values lead to more details, smaller values lead to a more smooth shape.
+
+===== _Gain_/_Octaves_/_Lacunarity_/_Noise Type_
+These options for fractal noise control how to apply the same type of noise multiple times at different scales.
+
+===== _Return Type_/_Distance Function_
+These options control the shape of _cellular noise_.
+
+===== _CentreX_/_CentreY_/_SizeX_/_SizeY_
+These options control how to place the image map when using the option *Image map* as Weighting field type.
+
+===== _Randomize all_ button
+Creates a random weighting field:
+
+- when the _Whole fractal_ checkbox is checked, each transformation of the fractal might be affected.
+- when the _Whole fractal_ checkbox is not checked, a random weighting field is only applied to the current selected transformation.
+
+Hint: On small monitors this button might be hidden per default. You can resize the whole window or the transformations table to make it visible.
+
+===== _Reset all_ button
+Removes the weighting field:
+
+- when the _Whole fractal_ checkbox is checked, the weighting field for each transformation of the fractal is removed.
+- when the _Whole fractal_ checkbox is not checked, only the weighting field for the current selected transformation is removed.
+
+===== _Whole fractal_ checkbox
+Affects how the _Randomize all_ button and the _Reset all_ button work, please see above.
 
 ==== _Scripts and Custom-Buttons_
 At this tab you can manage JWF-scripts and organize custom buttons which allow easier access
