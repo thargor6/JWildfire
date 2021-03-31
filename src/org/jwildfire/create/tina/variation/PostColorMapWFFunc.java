@@ -39,7 +39,7 @@ public class PostColorMapWFFunc extends AbstractColorMapWFFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_EXTERNAL_SHAPES};
   }
 
 }

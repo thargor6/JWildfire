@@ -29,7 +29,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.Complex;
 
 
-public class PostAexion3DCropFunc extends VariationFunc {
+public class PostAexion3dCropFunc extends VariationFunc {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_ITERS = "Iters";  
@@ -147,10 +147,10 @@ public class PostAexion3DCropFunc extends VariationFunc {
 		return "post_aexion_crop";
 	}
 
-	  @Override
-	  public VariationFuncType[] getVariationTypes() {
-	    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
-	  }
+	@Override
+	public VariationFuncType[] getVariationTypes() {
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL};
+	}
 
 
 }

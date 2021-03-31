@@ -12,10 +12,6 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 import js.glsl.glslFuncRunner;
 import js.glsl.vec2;
 import js.glsl.vec3;
-import js.glsl.vec4;
-import js.glsl.mat2;
-import js.glsl.mat3;
-import js.glsl.mat4;
 
 
 public class DC_CodeFunc  extends DC_BaseFunc {
@@ -437,7 +433,7 @@ public static class randomizeCode
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_CUSTOM};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_EDIT_FORMULA};
 	}
 
 }

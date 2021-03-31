@@ -434,7 +434,7 @@ public class PolarPlot3DWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_CUSTOM};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_EDIT_FORMULA};
   }
 
 }

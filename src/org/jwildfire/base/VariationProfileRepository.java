@@ -72,10 +72,11 @@ public class VariationProfileRepository {
     res.add(createBaseShapeProfile());
     res.add(createSimulationProfile());
     res.add(createCropProfile());
-    res.add(createCustomProfile());
+    res.add(createEditFormulaProfile());
     res.add(create3DProfile());
     res.add(createZTransformProfile());
     res.add(createEscapeTimeFractalProfile());
+    res.add(createSupportsExternalShapesProfile());
     return res;
   }
 
@@ -151,11 +152,11 @@ public class VariationProfileRepository {
     return res;
   }
 
-  private static VariationProfile createCustomProfile() {
+  private static VariationProfile createEditFormulaProfile() {
     VariationProfile res = new VariationProfile();
-    res.setName("Custom");
+    res.setName("Edit formula/code");
     res.setVariationProfileType(VariationProfileType.INCLUDE_TYPES);
-    res.getVariationTypes().add(VariationFuncType.VARTYPE_CUSTOM);
+    res.getVariationTypes().add(VariationFuncType.VARTYPE_EDIT_FORMULA);
     return res;
   }
 
@@ -183,6 +184,13 @@ public class VariationProfileRepository {
     return res;
   }
 
+  private static VariationProfile createSupportsExternalShapesProfile() {
+    VariationProfile res = new VariationProfile();
+    res.setName("Ext. images/shapes");
+    res.setVariationProfileType(VariationProfileType.INCLUDE_TYPES);
+    res.getVariationTypes().add(VariationFuncType.VARTYPE_SUPPORTS_EXTERNAL_SHAPES);
+    return res;
+  }
 
   private static VariationProfile createDefaultProfile() {
     VariationProfile res = new VariationProfile();

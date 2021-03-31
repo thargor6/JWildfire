@@ -88,10 +88,10 @@ public enum VariationFuncType {
       return "Crop";
     }
   },
-  VARTYPE_CUSTOM {
+  VARTYPE_EDIT_FORMULA {
     @Override
     public String getCaption() {
-      return "Custom code";
+      return "Edit formula/code";
     }
   },
   VARTYPE_ESCAPE_TIME_FRACTAL {

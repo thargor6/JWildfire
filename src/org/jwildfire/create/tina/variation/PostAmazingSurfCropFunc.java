@@ -236,9 +236,9 @@ public String getName() {
   return "post_asurf_crop";
 }
 
-@Override
-public VariationFuncType[] getVariationTypes() {
-  return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
-}
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL};
+  }
 
 }

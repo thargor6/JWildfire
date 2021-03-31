@@ -951,19 +951,18 @@ public class VariationFuncList {
 
     registerVariationFunc(SnowflakeWFFunc.class);
     
-    
     registerVariationFunc(DC_PortalFunc.class);  
     registerVariationFunc(KaplanFunc.class); 
     registerVariationFunc(kaleidoImgFunc.class);
 	  
-    registerVariationFunc(CropMandelbulb3dFunc.class);
-    registerVariationFunc(CropMandelbox3dFunc.class);
+    registerVariationFunc(PostMandelbulb3dCropFunc.class);
+    registerVariationFunc(PostMandelbox3dCropFunc.class);
     
     registerVariationFunc(FresnelFunc.class);
     registerVariationFunc(TunnelFunc.class); 
     registerVariationFunc(BulgeFunc.class); 
     
-    registerVariationFunc(PostAexion3DCropFunc.class);
+    registerVariationFunc(PostAexion3dCropFunc.class);
     registerVariationFunc(PostBulbTorusCropFunc.class);  
     registerVariationFunc(PostBristorbrotCropFunc.class); 
     registerVariationFunc(PostBenesiCropFunc.class);
@@ -978,7 +977,6 @@ public class VariationFuncList {
         resolvedAliasMap.put(funcCls.getValue(), varFunc.getName());
       }
     }
-    items.clear();
   }
 
   private static Map<String, Double> variationInitCosts;

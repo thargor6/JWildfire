@@ -569,7 +569,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
       VariationFuncType.VARTYPE_3D,
       VariationFuncType.VARTYPE_BASE_SHAPE,
       VariationFuncType.VARTYPE_DC,
-      VariationFuncType.VARTYPE_CUSTOM
+      VariationFuncType.VARTYPE_EDIT_FORMULA
     };
   }
 }

@@ -20,7 +20,7 @@ import org.jwildfire.base.Tools;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
 
-public class CropMandelbox3dFunc extends VariationFunc {
+public class PostMandelbox3dCropFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   
   private static final String PARAM_SCALE = "scale";
@@ -157,16 +157,16 @@ public class CropMandelbox3dFunc extends VariationFunc {
  
   @Override
   public String getName() {
-    return "crop_mandelbox3d";
+    return "post_mandelbox3d_crop";
   }
   
   @Override
   public int getPriority() {
     return 1;
   }
-  
+
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL};
   }
 }

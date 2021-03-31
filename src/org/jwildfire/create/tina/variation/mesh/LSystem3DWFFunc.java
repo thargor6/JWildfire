@@ -42,7 +42,6 @@ import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.VariationFuncType;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -2317,7 +2316,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       VariationFuncType.VARTYPE_3D,
       VariationFuncType.VARTYPE_BASE_SHAPE,
       VariationFuncType.VARTYPE_DC,
-      VariationFuncType.VARTYPE_CUSTOM
+      VariationFuncType.VARTYPE_EDIT_FORMULA
     };
   }
 }
