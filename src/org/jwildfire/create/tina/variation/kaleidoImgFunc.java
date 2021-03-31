@@ -84,6 +84,8 @@ private static final String PARAM_RESETZ = "reset_z";
 
 public static final String PARAM_TYPE = "type";
 public static final String PARAM_NRADIUS = "nr";
+public static final String PARAM_A = "a";
+public static final String PARAM_B = "b";
 
 
 double zoom=2.0,time=0.0;
@@ -98,13 +100,15 @@ int resetZ = 1;
 
 int type=0;
 int nradius=12;
+double a=1.0;
+double b=0.0;
 
 private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
 public static final String RESSOURCE_INLINED_IMAGE = "inlined_image";
 public static final String RESSOURCE_IMAGE_SRC = "image_src";
 public static final String RESSOURCE_IMAGE_DESC_SRC = "image_desc_src";
 
-private static final String[] paramNames = {PARAM_ZOOM,PARAM_TIME,PARAM_BLEND,PARAM_DC,PARAM_ANGLE,PARAM_SX,PARAM_SY,PARAM_SCALEZ,PARAM_OX,PARAM_OY,PARAM_OFFSETZ,PARAM_TILEX,PARAM_TILEY,PARAM_RESETZ,PARAM_TYPE,PARAM_NRADIUS};
+private static final String[] paramNames = {PARAM_ZOOM,PARAM_TIME,PARAM_BLEND,PARAM_DC,PARAM_ANGLE,PARAM_SX,PARAM_SY,PARAM_SCALEZ,PARAM_OX,PARAM_OY,PARAM_OFFSETZ,PARAM_TILEX,PARAM_TILEY,PARAM_RESETZ,PARAM_TYPE,PARAM_NRADIUS,PARAM_A,PARAM_B};
 //private static final String[] paramNames = {PARAM_ZOOM,PARAM_TIME,PARAM_DC,PARAM_ANGLE,PARAM_SX,PARAM_SY,PARAM_OX,PARAM_OY,PARAM_TYPE,PARAM_NRADIUS};
 private static final String[] ressourceNames = {RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE, RESSOURCE_IMAGE_DESC_SRC, RESSOURCE_IMAGE_SRC};
 
@@ -280,6 +284,181 @@ vec2 mode5(vec2 uv)
     return uv;	
 }
 
+vec2 atan2(vec2 a,vec2 b)
+{
+  vec2 tmp=new vec2(0.0);
+  tmp.x=G.atan2(a.x,b.x);
+  tmp.y=G.atan2(a.y,b.y);
+  return tmp; 
+}
+
+vec2 mode6(vec2 uv)
+{
+	// Credits: https://www.shadertoy.com/view/ldd3Wn
+	
+    vec2 t1=atan2(uv,new vec2(uv.y,uv.x));
+         t1=t1.division(6.28);
+    double t2=Math.pow(2.0,-G.length(uv));
+    vec2 t3=(new vec2(5.0,8.0)).multiply(t1.add(t2));
+    return t3;
+}
+
+vec3 mode7(vec2 p)
+{
+	// Reference & Credits: 
+	// https://www.iquilezles.org/www/articles/tunnel/tunnel.htm
+	// https://www.shadertoy.com/view/Ms2SWW
+	
+	vec3 pixel=new vec3(0.);
+	// angle of each pixel to the center of the screen
+	double a = G.atan2(p.y,p.x);
+
+	// cylindrical tunnel
+	double r = G.length(p);
+
+	// index texture by (animated inverse) radious and angle
+	vec2 uv = new vec2( 0.3/r + 0.2*time, a/3.1415927 );
+
+    pixel= G.texture(colorMap,uv);
+    pixel= pixel.multiply(r);
+	return pixel;
+}
+
+vec2 distortUV(vec2 uv, vec2 nUV)
+{
+    double intensity = 0.01;
+    double scale = 0.01;
+    double speed = 0.25;
+    
+    
+    nUV.x += (time)*speed;
+    nUV.y += (time)*speed;
+    
+    vec2 xy=nUV.multiply(scale);
+    
+    vec3 tmp= G.texture( colorMap, xy) ;
+    vec2 noise=new vec2(tmp.x,tmp.y);
+   
+    vec2 tmp1=((noise.multiply(2.0)).minus(1.0)).multiply(intensity);
+    uv = uv.plus(tmp1);
+    
+    return uv;
+}
+
+vec2 mode8(vec2 uv)
+{
+
+    vec2 nUV=uv;
+	uv = distortUV(uv, nUV);
+    uv = distortUV(uv, new vec2(nUV.x+0.1,nUV.y+0.1));
+    uv = distortUV(uv, new vec2(nUV.x+0.2,nUV.y+0.2));
+    uv = distortUV(uv, new vec2(nUV.x+0.3,nUV.y+0.3));
+    uv = distortUV(uv, new vec2(nUV.x+0.4,nUV.y+0.4));
+    uv = distortUV(uv, new vec2(nUV.x+0.5,nUV.y+0.5));
+    uv = distortUV(uv, new vec2(nUV.x+0.6,nUV.y+0.6));
+    uv = distortUV(uv, new vec2(nUV.x+0.7,nUV.y+0.7));
+    uv = distortUV(uv, new vec2(nUV.x+0.8,nUV.y+0.8));
+    uv = distortUV(uv, new vec2(nUV.x+0.9,nUV.y+0.9));
+    uv = distortUV(uv, new vec2(nUV.x+0.15,nUV.y+0.15));
+    uv = distortUV(uv, new vec2(nUV.x+0.25,nUV.y+0.25));
+    uv = distortUV(uv, new vec2(nUV.x+0.35,nUV.y+0.35));
+    uv = distortUV(uv, new vec2(nUV.x+0.45,nUV.y+0.45));
+    uv = distortUV(uv, new vec2(nUV.x+0.55,nUV.y+0.55));
+    uv = distortUV(uv, new vec2(nUV.x+0.65,nUV.y+0.65));
+    uv = distortUV(uv, new vec2(nUV.x+0.75,nUV.y+0.75));
+    uv = distortUV(uv, new vec2(nUV.x+0.85,nUV.y+0.85));
+    uv = distortUV(uv, new vec2(nUV.x+0.95,nUV.y+0.95));
+    return uv;
+}
+
+vec2 mode9(vec2 p)
+{
+	// Reference & Credits: 
+	// https://stackoverflow.com/questions/5055625/image-warping-bulge-effect-algorithm
+ //   double r=G.length(p);
+	vec2 uv = (G.normalize(p).multiply(0.7*Math.log(G.length(p))));
+	
+	return p.plus(uv);
+}
+
+
+vec2 mode10(vec2 p)
+{
+	// Reference & Credits:  Variant rn=a*r^b
+	// https://stackoverflow.com/questions/5055625/image-warping-bulge-effect-algorithm
+    double r=G.length(p);
+    double rn= a*Math.pow(r, b);
+	return new vec2(rn*p.x/r,rn*p.y/rn);
+
+}
+
+double h00(double x) { return 2.*x*x*x - 3.*x*x + 1.; }
+double h10(double x) { return x*x*x - 2.*x*x + x; }
+double h01(double x) { return 3.*x*x - 2.*x*x*x; }
+double h11(double x) { return x*x*x - x*x; }
+
+double Hermite(double p0, double p1, double m0, double m1, double x)
+{
+	return p0*h00(x) + m0*h10(x) + p1*h01(x) + m1*h11(x);
+}
+
+vec2 mode11(vec2 uv)
+{
+	// Reference & Credits:  Hermite interpolation
+	// https://www.shadertoy.com/view/4sS3Wc
+	double a = sin(time * 1.0)*0.5 + 0.5;
+	double b = sin(time * 1.5)*0.5 + 0.5;
+	double c = sin(time * 2.0)*0.5 + 0.5;
+	double d = sin(time * 2.5)*0.5 + 0.5;
+	
+	double y0 = G.mix(a, b, uv.x);
+	double y1 = G.mix(c, d, uv.x);
+	double x0 = G.mix(a, c, uv.y);
+	double x1 = G.mix(b, d, uv.y);
+
+	uv.x = Hermite(0., 1., 3.*x0, 3.*x1, uv.x);
+	uv.y = Hermite(0., 1., 3.*y0, 3.*y1, uv.y);	
+    
+	return new vec2(uv.x,1.0-uv.y);
+}
+
+
+double distance(vec2 p0,vec2 p1)
+{
+  return G.length(p0.minus(p1));
+}
+
+vec2 mode12(vec2 uv)
+{
+ 	//  Fresnel distortion 
+	// Credits: // https://www.shadertoy.com/view/XtKSDm  
+	
+	double t=time*0.05;
+    double r = distance(uv, new vec2(0.0));
+	r -= t;
+    r = G.fract(r*a)/b;
+    
+    uv =  uv.multiply(2.0).minus(1.0);
+    uv = uv.multiply(r);
+    uv = uv.multiply( 0.5).plus( 0.5);
+	return uv;
+}
+
+vec2 mode13(vec2 uv)
+{
+ 	//  Interference distortion 
+	// Credits: // https://www.shadertoy.com/view/tsKXDh
+	
+	double x1= a/2.0;
+    double adist = distance(uv, new vec2(-a/2.0,0.0));
+    double bdist = distance(uv, new vec2( a/2.0,0.0));
+    
+    double a=(Math.sin((adist-time/20.0)*10.)+1.0)/2.0;
+    double b=(Math.sin((bdist-time/20.0)*10.)+1.0)/2.0;
+	
+    return new vec2(a,b);	
+}
+
 double s = Math.sin(angle);
 double c = Math.cos(angle);
 	    
@@ -353,7 +532,76 @@ public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoin
 	    uv=uv.times(rotationMatrix);              // Rotate 
 	    uv=uv.multiply(new vec2(scaleX,scaleY));  // Scale
 	    uv=uv.plus(new vec2(offsetX,offsetY));    // Shift
+	    pixel= G.texture(colorMap,uv.multiply(2.0).plus(time*0.05));
+	}
+	else if (type==6)
+	{
+        uv=mode6(uv);
+	    uv=uv.times(rotationMatrix);              // Rotate 
+	    uv=uv.multiply(new vec2(scaleX,scaleY));  // Scale
+	    uv=uv.plus(new vec2(offsetX,offsetY));    // Shift
 	    pixel= G.texture(colorMap,uv);
+	}
+	else if (type==7)
+	{
+	    uv=uv.times(rotationMatrix);              // Rotate 
+	    uv=uv.multiply(new vec2(scaleX,scaleY));  // Scale
+	    uv=uv.plus(new vec2(offsetX,offsetY));    // Shift
+        pixel=mode7(uv);
+	}
+	else if (type==8)
+	{
+	    uv=uv.times(rotationMatrix);              // Rotate 
+	    uv=uv.multiply(new vec2(scaleX,scaleY));  // Scale
+	    uv=uv.plus(new vec2(offsetX,offsetY));    // Shift
+        //uv=mode8(uv);
+        pixel= G.texture(colorMap,uv.plus(mode8(uv)));
+	}	
+	else if (type==9)
+	{
+	    uv=uv.times(rotationMatrix);              // Rotate 
+	    uv=uv.multiply(new vec2(scaleX,scaleY));  // Scale
+	    uv=uv.plus(new vec2(offsetX,offsetY));    // Shift
+        uv=mode9(uv);
+        pixel= G.texture(colorMap,uv);
+	}
+	else if (type==10)
+	{
+	    uv=uv.times(rotationMatrix);              // Rotate 
+	    uv=uv.multiply(new vec2(scaleX,scaleY));  // Scale
+	    uv=uv.plus(new vec2(offsetX,offsetY));    // Shift
+        uv=mode10(uv);
+        pixel= G.texture(colorMap,uv);
+	}
+	else if (type==11)
+	{
+	    uv=uv.times(rotationMatrix);              // Rotate 
+	    uv=uv.multiply(new vec2(scaleX,scaleY));  // Scale
+	    uv=uv.plus(new vec2(offsetX,offsetY));    // Shift
+        uv=mode11(uv);
+        pixel= G.texture(colorMap,uv);
+        
+
+	}
+	else if (type==12)
+	{
+	    uv=uv.times(rotationMatrix);              // Rotate 
+	    uv=uv.multiply(new vec2(scaleX,scaleY));  // Scale
+	    uv=uv.plus(new vec2(offsetX,offsetY));    // Shift
+        uv=mode12(uv);
+        pixel= G.texture(colorMap,uv);
+        
+
+	}
+	else if (type==13)
+	{
+	    uv=uv.times(rotationMatrix);              // Rotate 
+	    uv=uv.multiply(new vec2(scaleX,scaleY));  // Scale
+	    uv=uv.plus(new vec2(offsetX,offsetY));    // Shift
+        uv=mode13(uv);
+        pixel= G.texture(colorMap,uv);
+        
+
 	}
 		
     pVarTP.x = pAmount * (x);
@@ -397,7 +645,7 @@ public String[] getParameterNames() {
 
 @Override
 public Object[] getParameterValues() {
-  return new Object[]{zoom,time,blend_colormap,dc_color,angle,scaleX,scaleY,scaleZ,offsetX,offsetY,offsetZ,tileX,tileY,resetZ,type,nradius};
+  return new Object[]{zoom,time,blend_colormap,dc_color,angle,scaleX,scaleY,scaleZ,offsetX,offsetY,offsetZ,tileX,tileY,resetZ,type,nradius,a,b};
 	
 }
 
@@ -435,7 +683,10 @@ public void setParameter(String pName, double pValue) {
 	    type = (int) Tools.limitValue(pValue, -1 , 5);
   else if (PARAM_NRADIUS.equalsIgnoreCase(pName))
 	    nradius = (int) Tools.limitValue(pValue, 1 , 50);
-  else  
+  else if (PARAM_A.equalsIgnoreCase(pName))
+		    a = pValue;
+	  else if (PARAM_B.equalsIgnoreCase(pName))
+		    b = pValue;
     throw new IllegalArgumentException(pName);
 }
 

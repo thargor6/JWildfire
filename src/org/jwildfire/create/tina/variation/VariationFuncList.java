@@ -958,6 +958,17 @@ public class VariationFuncList {
 	  
     registerVariationFunc(CropMandelbulb3dFunc.class);
     registerVariationFunc(CropMandelbox3dFunc.class);
+    
+    registerVariationFunc(FresnelFunc.class);
+    registerVariationFunc(TunnelFunc.class); 
+    registerVariationFunc(BulgeFunc.class); 
+    
+    registerVariationFunc(PostAexion3DCropFunc.class);
+    registerVariationFunc(PostBulbTorusCropFunc.class);  
+    registerVariationFunc(PostBristorbrotCropFunc.class); 
+    registerVariationFunc(PostBenesiCropFunc.class);
+    registerVariationFunc(PostCoastalbrotCropFunc.class);
+    registerVariationFunc(PostAmazingSurfCropFunc.class);
 	   
 
     resolvedAliasMap = new HashMap<>();
