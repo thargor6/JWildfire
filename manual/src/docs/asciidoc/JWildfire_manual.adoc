@@ -1655,17 +1655,19 @@ There are two sets of this cooeficients, one set for the regular part and one se
 ???
 
 ===== _WField_ tab
-Weighting fields are nice artistic tool to create very organic-looking fractals,
+Weighting fields are a nice artistic tool to create very organic-looking fractals,
 
-The basic idea is to add some kind of "natural disturbances" at the transform-level of the flame-fractals.
-It is possible to choose between different types of this kind of disturbance, for example "Perlin Fractal Noise" for a
-very organic style.
-You can also load image-maps (photographs) for very individual styles. Each style comes with various options to tweak.
+The basic idea is to add some kind of "natural disturbance" at the transform-level to the flame-fractals.
+This is done in a non-destructive way, i.e. without changing the actual flame. This makes it very easy and intuitive to
+try out different styles and parameter combinations.
+It is possible to choose between different types of this kind of disturbance, for example the classic
+_Perlin Fractal Noise_ for a very organic style.
+You can also load image-maps (photographs) for more individual styles. Each weighting field type offers various options.
 
 Currently, the following fractal-parameters may be affected by a weighting-field:
 
 - variation-amount
-- variation-parameter-amount (for up to three parameters per transformation, like frequency of a waves-trandform)
+- variation-parameter-amount (for up to three parameters per transformation, for example, _frequency_ parameter of a _waves_-transform)
 - color-index (allows subtle color-changing effects)
 
 ===== _Weighting field_ drop-down list
@@ -2210,7 +2212,7 @@ supported when rendering in <<solid_rendering, solid mode>>.
 === Autoload saved image
 When this option is checked, JWildfire will automatically load and display images created by
 _Save image_- and the _Z (Save Z-Buffer)_-function.
-To view the actual final image may help help better to decide when "it's done" that to view the rendering-preview.
+To view the actual final image may help better to decide when "it's done" that to view the rendering-preview.
 
 === To Editor
 Transfer the currently rendered flame to the Main editor.
@@ -2224,18 +2226,18 @@ Save the currently rendered flame to file.
 === Next (random flame)
 Creates a random flame and starts rendering it.
 
-*Please beware, that this will cancel any ongoing rendering and you will lose any unsaved results.*
+*Please beware that this will cancel any ongoing rendering and you will lose any unsaved results.*
 
 === Random generator
-Select the random-flame-generator used to generate a random-fractal-flame when using the _Next_-button.
+Select the random-flame-generator used to generate a random-fractal-flame when using the _Next_ button.
 
 [#flame_browser_module]
 == Flame Browser
 [.thumb]
 image::flame_browser.jpg[scaledwidth=75%]
 
-The flame-browser can help you to get an overview over your fractal flames you create over the time.
-It can scan a base-folder for flame-files and displays them as thumbnails in reverse chronologinal order.
+The flame-browser can help you to get an overview of the fractal flames you have created over the time.
+It can scan a base-folder for flame-files and will display them as thumbnails in reverse chronological order.
 For a cleaner structure, for each month a separate virtual folder is created and flames are distributed over
 this folder-structure.
 Open the Flame Browser by clicking the Flame Browser button on the left side of the preview area or by
@@ -2247,9 +2249,9 @@ On the right side of the window you can execute one of the following actions on 
  - *To Batch Renderer*: send the selected flame into the <<batch_renderer, _Batch renderer_>>
  - *To Mesh Gen*: send the selected flame into the <<mesh_generator, _Mesh generator_>>
  - *Delete*: delete the selected flame
- - *Rename...*: rename the selected flame
- - *Copy to...*: copy the selected flame into another folder
- - *Move to...*: move the selected flame into another folder
+ - *Rename*: rename the selected flame
+ - *Copy to*: copy the selected flame into another folder
+ - *Move to*: move the selected flame into another folder
 
 [#easy_movie_maker_module]
 == _Easy Movie Maker_ module
@@ -2261,7 +2263,7 @@ by selecting _Flame fractals: Easy movie maker_ from the _Windows_ menu.
 
 It combines three types of animation:
 
- - the keyframe-based animation of a fractal flame itself. You set up those kind of animations in the
+ - the keyframe-based animation of a fractal flame itself. You set up these kinds of animations in the
 <<main_editor, Main Editor>>
  - transitions between two fractal flames
  - global animation scripts, for example, a movement of the camera
@@ -2269,22 +2271,23 @@ It combines three types of animation:
 You can even generate random movies, which is an experimental feature.
 
 === _Thumbnail ribbon_
-Similar to the <<main_editor, Main Editor>> there is a thumbnail ribbon on the left, which hold all
-currently loaded objects - in this case: movies. You may select a movie by double-clicking at its thumbnail.
+There is a thumbnail ribbon on the left, which holds all currently loaded movies.
+(This is very similar to the thumbnail ribbon inside <<main_editor, Main Editor>>, which hold all currently loaded flames.)
+You may select a movie by double-clicking at its thumbnail.
 
-=== Function at the main button bar (at the top)
+=== Functions at the main button bar (at the top)
 Here you find global functions at the movie level.
 
 ==== _Random movies_
-Using this button you can generate random movies using the selected random-movie-generator.
-This works by generating random-flames and then applying random motions to it.
-This is currently limited to create movies containing only one animated flame.
+Using this button you can generate random movies using the selected random-movie generator.
+This works by generating random-flames and then applying random motions to them.
+This is currently limited to creating movies containing only one animated flame.
 
 ===== _Rnd generator_
-There are the following options:
+These are the options:
 
- - *Transforming bubbles*: generates a random fractal of type _bubbles_ and applies random motions at transformation-level to it
- - *Transforming duckies*: generates a random fractal of type _duckies_ and applies random motions at transformation-level to it
+ - *Transforming bubbles*: generates a random fractal of type _bubbles_ and applies random motions at the transformation level to it
+ - *Transforming duckies*: generates a random fractal of type _duckies_ and applies random motions at the transformation level to it
  - *Rotating Mandelbrots*: generates a random fractal of type _Mandelbrot_ and applies a random rotation-motion to it
 - *All*: randomly selects one of the random-movie-generators mentioned above to generate a random movie
 
@@ -2307,7 +2310,7 @@ Here you select the <<resolution_profiles, _resolution profile_>> for rendering 
 Here you select the <<quality_profiles, _quality profile_>> for rendering the movie.
 
 ==== _Output_
-There are the following output-options for generating a movie:
+These are the output-options for generating a movie:
 
 - *Flames*: Produces a batch of flame-files (one flame file for each frame position), which are rendered later
 using the <<batch_renderer, Batch renderer>>. This is the recommended setting for larger projects, because
@@ -2315,55 +2318,55 @@ using the <<batch_renderer, Batch renderer>> for rendering images is the most co
 It supports pausing/resuming and limited <<gpu_rendering, GPU-rendering>>.
 - *PNG-Images*: Produces a batch of .png-images by taking into account the selected resolution- and quality-settings.
 You need some external software (like _VirtualDub_) to actually create a video-file from this batch of images.
-Recommended for simple projects, which can be completely rendered in up two hours.
+Recommended for simple projects, which can be completely rendered in two hours or less.
 - *MP4*: Directly produces an .mp4-movie by also taking into account the selected resolution- and quality-settings.
 This is recommended for very simple projects or quick test-renders, because there are no options to fine-tune the video-compression-settings (yet).
 - *ANB*: Produces an _Animated Brush_ in *.anb-format, which is used by painting software _Project Dogwaffle Howler_.
 Because the output is a brush you use for painting, it is only recommended for small animations.
-Takes also the selected resolution- and quality-settings into account.
+Takes the selected resolution- and quality-settings into account.
 
 === The timeline
 At the bottom there is a timeline where you can place individual flames.
 Each animated fractal flame has the following attributes:
 
  - *Duration (frames)*: number of frames the flame is part of the whole movie
- - *Morph (frames)*: number of frames of the transition to the next flame. This sub-frames are part of the
+ - *Morph (frames)*: number of frames of the transition to the next flame. These sub-frames are part of the
 whole duration. For example, when you have a duration of 120 frames, and a transition of 60 frames, the transition
 will start at frame 61
- - *Morph type*: type of transition. There are the following options:
+ - *Morph type*: a type of transition. These are the options:
 
- ** *Fade*: fades the first flame out and the second flame in. Works for any flames
- ** *Morphs*: tries to actually morpth between the flames at the transformation level.
-Does only work well for flames which do not differ too much. But often produces interesting
-results, even if they were not as expected.
+ ** *Fade*: fades the first flame out, and fades the second flame in. Works for any flame.
+ ** *Morphs*: tries to actually morph between the flames at the transformation level.
+Works best on flames that do not differ very much from each other. Often produces interesting
+results, even if they were not what was expected.
 
-There are the following actions you can perform at animated flame level:
+These are the actions you can perform at the animated flame level:
 
  - *_E_* (Edit): transfers the current flame to the <<main_editor, Main Editor>>
  - *_R_* (Replace): replaces the current flame with the currently loaded flame of the <<main_editor, Main Editor>>.
 In combination with the _E_ button this allows easy post-editing of a flame.
- - *_D_* (Delete): Remove the current flame from the movie
+ - *_D_* (Delete): Removes the current flame from the movie
 
 ==== _Add from Editor_ button
-Appends the currently loaded flame of the <<main_editor, Main Editor>> to the movie.
+Appends the currently loaded flame in the <<main_editor, Main Editor>> to the movie.
 
 ==== _Add from Clipboard_ button
 Appends a flame from the Clipboard to the movie.
 
 ==== _Add flame from disc_ button
-Load a flame from a file and appends it to the movie.
+Loads a flame from a file and appends it to the movie.
 
 ==== _Up_ button
 Moves the currently selected animated flame one position up (to the left). The currently selected flame is
-indicated by a filled radio box right of the _D_ button.
+indicated by a filled circular control right of the _D_ button.
 
 ==== _Down_ button
 Moves the currently selected animated flame one position down (to the right). The currently selected flame is
-indicated by a filled radio box right of the _D_ button.
+indicated by a filled circular control right of the _D_ button.
 
 ==== _Remove flame_ button
 Removes the currently selected animated flame from the movie. The currently selected flame is
-indicated by a filled radio box right of the _D_ button.
+indicated by a filled circular control right of the _D_ button.
 
 ==== _Remove all_ button
 Removes all flames from the movie.
@@ -2373,42 +2376,42 @@ Lets you apply up to 12 global animations scripts to the whole movie, i.e. those
 each individual flame in the form of a post-effect. They override motions of the same type, in case
 they were are already applied at the flame-level.
 
-There are the following options (which may be combined freely):
+These are the options (which may be combined freely):
 
 - *None*: no motion applied to the slot
 - *Rotate Roll/Pitch/Yaw/Bank*: constant rotation of the camera, by modifying the _Roll_- or _Pitch_- or _Yaw_-
 or _Bank_-parameter of the flame
-- *Move CamX/CamY/CamZ*: a movement of the camera into the x-, y- or z-direction in the form a sine-wave (moving gently back and forth)
+- *Move CamX/CamY/CamZ*: a movement of the camera into the x-, y- or z-direction in the form of a sine-wave (moving gently back and forth)
 
-By changing the numerical value right of each script slot you may change the strength of the effect.
+By changing the numerical value (to the right of each script slot) you may change the strength of the effect.
 
 === _XForm (animation) scripts_
 Lets you apply up to 12 flame transformations to the whole movie, i.e. those scripts are applied to
 each individual flame in the form of a post-effect. They override motions of the same type, in case
 they were are already applied at the flame-level.
 
-There are the following options (which may be combined freely):
+These are the options (which may be combined freely):
 
 - *None*: no motion applied to the slot
-- *Rotate Full*: constant rotation of all affine-transform
+- *Rotate Full*: constant rotation of all affine-transforms
 - *Rotate First/2nd/3rd/4th/Last XForm*:  constant rotation of the specified affine-transform
 - *Rotate Final XForm*:  constant rotation of the final-affine-transform
-- *Rotate Post Full*: constant rotation of all post-affine-transform
-- *Rotate Post First/2nd/3rd/4th/Last XForm*:  constant rotation of the specified post-affine-transformat
+- *Rotate Post Full*: constant rotation of all post-affine-transforms
+- *Rotate Post First/2nd/3rd/4th/Last XForm*:  constant rotation of the specified post-affine-transform
 - *Rotate Post Final XForm*:  constant rotation of the post-final-affine-transform
 
-Those animations are only applied when a flame has the corresponding transformations.
+These animations are only applied when a flame has the corresponding transformations.
 For example, selecting the animation script _Rotate Final XForm_ on a flame without a final
-transform will have no effect, but will also not cause an error
+transform will have no effect, but will also not cause an error.
 
-By changing the numerical value right of each script slot you may change the strength of the effect.
+By changing the numerical value (to the right of each script slot) you may change the strength of the effect.
 
 === (animation)Speed/Motion blur
 Here you can specify the overall animation speed (_frames per second_) and set up motion blur
 for the whole movie.
 
 ==== Total frame count
-Displays the total frame count which is calculated accordingly to the inividual settings of the
+Displays the total frame count which is calculated according to the inividual settings of the
 animated flames.
 
 ==== Frames per second
@@ -2424,11 +2427,11 @@ Global <<motion_blur_time_step, Motion blur timestep>> of the whole movie.
 You can preview the animation at any time by hitting the _Play_ button in the middle of the window.
 
 ==== _Frame_
-Display the frame position at which the preview is displayed.
+Displays the frame position at which the preview is displayed.
 
 ==== _E_ (Edit) button
 Sends the currently displayed flame (at the selected frame position) to the editor.
-This might especially interesting when you are morphing between different
+This might be especially useful when you are morphing between different
 flames and like the result at a certain frame position and want to work with
 the fractal flame at the current morphing-state.
 
@@ -2453,19 +2456,18 @@ a computer algorithm commonly used to analyze sounds, can be used to link motion
 apply a predefined motion (basing on a certain formula, like "Sawtooth")
  - group motions together (for example, have a spline-motion-curve which is slightly altered by beat")
  - watch the motion in realtime and record it to be processed again to create frames at
-accurate framerate
- - use any number of fractal flames in your movie and switch between in realtime during the recording
-step
+accurate frame rate
+ - use as many fractal flames as you like in your movie and switch between them in real time during recording
  - load and save projects
 
 === The basic concepts
 The basic concept of the animations in the dancing-flame-module is both very versatile and very simple
-and contains of four building blocks:
+and contains four building blocks:
 
- - motions
- - flame properties and
- - motion links
- - motion hierarchies
+ - *motions*,
+ - *flame properties*,
+ - *motion links* and
+ - *motion hierarchies*.
 
 ==== Motions
 You can define any number of motions, for example:
@@ -2482,36 +2484,34 @@ some parameters which can found by all motion-types.
 image::dancing_flames_motions.jpg[scaledwidth=50%]
 
 ==== Flame properties
-Each flame has a lot of properties. Most of them can be easily be animated, for example:
- - camera angle
- - zoom factor of transform 2
- - Julia index of variation "julian" in the final transform
-You have not to know all of those, they can all be accessed through a tree-view in the graphical
-interface.
+Each flame has many properties. Most of them can be easily be animated, for example:
+ - camera angle or
+ - zoom factor of transform 2 or
+ - Julia index of the Julian variation in the final transform.
+You don't need to know all of these, they can be accessed through a tree-view in the graphical interface.
 [.thumb]
 image::dancing_flames_properties.jpg[scaledwidth=50%]
 
 Each fractal flame has its own top-level-folder in this view. There are sub-folders for:
- - each transform
- - each final transform
- - gradient parameters and
- - shading parameters
+ - each *transform*,
+ - each *final transform* and
+ - *gradient* parameters.
 
 ==== Motion links
 To actually animate a fractal flame we must connect properties to motions.
-Any motion can be connected with to number of fractal properties from any flame of the project.
+Any motion can be connected with a number of fractal properties from any flame of the project.
 [.thumb]
 image::dancing_flames_motion_links.jpg[scaledwidth=50%]
 
 ==== Motion hierarchies
-In certain cases it may make sense to group motions together. For example, to have a more "rough" motion (like a
-motion curve which describes a basic rotation) where a "small" motion (like "beat") is added to.
+In certain cases it may make sense to group motions together. For example, to have a "rougher" motion (like a
+motion curve which describes a basic rotation) where a "small" motion (like "beat") is added.
 To achieve this, you may choose a parent for any motion.
 [.thumb]
 image::dancing_flames_motion_hierarchy.jpg[scaledwidth=50%]
 
 A motion having a parent can not explicitly be linked to a flame property (because it is already linked
-implicitly over its parent).
+implicitly through its parent).
 
 === Basic workflow
 In the following sub-section a basic workflow is outlined.
@@ -2519,13 +2519,14 @@ In the following sub-section a basic workflow is outlined.
 ==== Creating a flame-pool
 The flame-pool is a collection of flames which belong to a dancing-flames-project and can all be
 animated into this project. Simple projects start with only one flame in the pool, but there is no limit
-and even if you have many flames in the pool, not all have to be used in the actual resulting video.
+and even if you have many flames in the pool, not all have to be used in the video.
 
 There a several ways to add flames to the pool:
- - Generate a batch using a random generator
- - import the currently load flame from the main editor
- - add a flame from the clipboard
- - load a batch from hard-disc
+
+ - Generate a batch using a random generator,
+ - import the currently load flame from the main editor,
+ - add a flame from the clipboard or
+ - load a batch from hard-disc.
 
 ==== Adding sound (mp3)
 Sound isn't actually required to create a dancing flame project, but the most projects will benefit
