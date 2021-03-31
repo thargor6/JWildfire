@@ -20,6 +20,8 @@ import org.jwildfire.base.VariationProfileFilter;
 import org.jwildfire.base.VariationProfileRepository;
 
 public class VariationFuncFilter {
+  public static final String NEGATION_PREFIX = "!=";
+
   private final VariationProfileFilter filter1;
   private final VariationProfileFilter filter2;
 
@@ -29,6 +31,6 @@ public class VariationFuncFilter {
   }
 
   public boolean evaluate(String variationName) {
-    return filter1.evaluate(variationName) && filter2.evaluate(variationName);
+    return filter1.evaluate(variationName) && (filter2.isNegative() ^ filter2.evaluate(variationName));
   }
 }

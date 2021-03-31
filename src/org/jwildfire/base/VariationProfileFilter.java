@@ -18,4 +18,5 @@ package org.jwildfire.base;
 
 public interface VariationProfileFilter {
   boolean evaluate(String variationName);
+  boolean isNegative();
 }

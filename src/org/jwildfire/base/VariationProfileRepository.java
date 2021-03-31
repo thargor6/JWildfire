@@ -16,6 +16,7 @@
  */
 package org.jwildfire.base;
 
+import org.jwildfire.create.tina.swing.VariationFuncFilter;
 import org.jwildfire.create.tina.variation.*;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class VariationProfileRepository {
   private static List<VariationProfile> createDefaultProfiles() {
     List<VariationProfile> res = new ArrayList<>();
     res.add(createDefaultProfile());
-    res.add(createFlatProfile());
+    res.add(create2DProfile());
     res.add(createPreProfile());
     res.add(createPostProfile());
     res.add(createPrePostProfile());
@@ -80,9 +81,9 @@ public class VariationProfileRepository {
     return res;
   }
 
-  private static VariationProfile createFlatProfile() {
+  private static VariationProfile create2DProfile() {
     VariationProfile res = new VariationProfile();
-    res.setName("Flat");
+    res.setName("2D");
     res.setVariationProfileType(VariationProfileType.INCLUDE_TYPES);
     res.getVariationTypes().add(VariationFuncType.VARTYPE_2D);
     return res;
@@ -207,6 +208,11 @@ public class VariationProfileRepository {
     for(VariationProfile profile: getProfiles()) {
       if(profile.getName().equals(name)) {
         return profile;
+      }
+    }
+    for(VariationProfile profile: getProfiles()) {
+      if((VariationFuncFilter.NEGATION_PREFIX+profile.getName()).equals(name)) {
+        return profile.negate();
       }
     }
     return EMPTY_FILTER;

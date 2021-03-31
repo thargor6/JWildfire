@@ -23,12 +23,13 @@ import javax.swing.*;
 
 public final class ComboboxTools {
 
-  public static void initVariationProfileCmb(JComboBox pCmb, boolean pSelectDefault) {
+  public static void initVariationProfileCmb(JComboBox pCmb, boolean pSelectDefault, boolean pWithNegatedOptions) {
     pCmb.removeAllItems();
     pCmb.setMaximumRowCount(16);
     int selectedIdx = -1;
     int currIdx = 0;
     pCmb.addItem("");
+
     for (VariationProfile profile : VariationProfileRepository.getProfiles()) {
       pCmb.addItem(profile.getName());
       if (pSelectDefault && profile.isDefaultProfile() && selectedIdx < 0) {
@@ -36,6 +37,14 @@ public final class ComboboxTools {
       }
       currIdx++;
     }
+
+    if(pWithNegatedOptions) {
+      pCmb.addItem("");
+      for (VariationProfile profile : VariationProfileRepository.getProfiles()) {
+        pCmb.addItem(VariationFuncFilter.NEGATION_PREFIX+profile.getName());
+      }
+    }
+
     if (pSelectDefault && pCmb.getItemCount() > 0) {
       pCmb.setSelectedIndex(selectedIdx >= 0 ? selectedIdx + 1 : 1);
     }

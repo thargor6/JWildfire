@@ -436,8 +436,8 @@ public class VariationProfilesController {
     boolean currNoRefresh = parentController.isNoRefresh();
     parentController.setNoRefresh(true);
     try {
-      ComboboxTools.initVariationProfileCmb(parentController.data.tinaVariationProfile1Cmb, true);
-      ComboboxTools.initVariationProfileCmb(parentController.data.tinaVariationProfile2Cmb, false);
+      ComboboxTools.initVariationProfileCmb(parentController.data.tinaVariationProfile1Cmb, true, false);
+      ComboboxTools.initVariationProfileCmb(parentController.data.tinaVariationProfile2Cmb, false, true);
     }
     finally {
       parentController.setNoRefresh(currNoRefresh);

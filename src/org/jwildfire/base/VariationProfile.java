@@ -34,6 +34,7 @@ public class VariationProfile implements VariationProfileFilter, Assignable<Vari
 
   private String name;
   private boolean defaultProfile;
+  private boolean negatedProfile;
   private VariationProfileType variationProfileType;
   private final Set<String> variations = new HashSet<>();
   private final Set<VariationFuncType> variationTypes = new HashSet<>();
@@ -48,6 +49,10 @@ public class VariationProfile implements VariationProfileFilter, Assignable<Vari
 
   public boolean isDefaultProfile() {
     return defaultProfile;
+  }
+
+  public boolean isNegatedProfile() {
+    return negatedProfile;
   }
 
   public void setDefaultProfile(boolean defaultProfile) {
@@ -102,9 +107,15 @@ public class VariationProfile implements VariationProfileFilter, Assignable<Vari
   }
 
   @Override
+  public boolean isNegative() {
+    return negatedProfile;
+  }
+
+  @Override
   public void assign(VariationProfile pSrc) {
     name = pSrc.getName();
     defaultProfile = pSrc.isDefaultProfile();
+    negatedProfile = pSrc.isNegatedProfile();
     variationProfileType = pSrc.getVariationProfileType();
     variations.clear();
     variations.addAll(pSrc.getVariations());
@@ -119,8 +130,15 @@ public class VariationProfile implements VariationProfileFilter, Assignable<Vari
     return res;
   }
 
+  public VariationProfileFilter negate() {
+    VariationProfile negatedCopy = makeCopy();
+    negatedCopy.negatedProfile = !negatedCopy.negatedProfile;
+    return negatedCopy;
+  }
+
   @Override
   public boolean isEqual(VariationProfile pSrc) {
     return (pSrc.getName()==null && name == null) || pSrc.getName().equals(name);
   }
+
 }

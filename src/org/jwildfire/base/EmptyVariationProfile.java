@@ -21,4 +21,9 @@ public class EmptyVariationProfile implements VariationProfileFilter {
   public boolean evaluate(String variationName) {
     return true;
   }
+
+  @Override
+  public boolean isNegative() {
+    return false;
+  }
 }

@@ -1,4 +1,4 @@
-V6.xx (xx.xx.2021)
+V6.40 (xx.04.2021)
  - Introducing variation-filters, based on variation-profiles and variation-types.
    They will improve usability a lot by simplifying the selection of variations/"plugins" by selecting
    and combining variation-types.
@@ -12,6 +12,7 @@ V6.xx (xx.xx.2021)
    from your list. (a "Baseshape" is a variation which creates a shape/fractal on its own, like "square")
  - Introducing the first version of an official user manual. It can be reached from within the program under the
    "Help -> User manual" or in the file system inside the lib-subfolder (JWildfire_manual.pdf).
+   Thanks to Brad Stefanov, Nancy Pierce, my wife Patricia Maschke and Rick Sidwell for reviewing it!
  - ply/PointCloud-export now generates two additional fields: pscale and intensity
  - started to create an official manual (AsciiDoc-based for simple editing)
  - new property tinaDefaultNewFlameTitle where you can set a default flame title which is assigned when you
@@ -19,9 +20,20 @@ V6.xx (xx.xx.2021)
  - folder-parameters in the Preferences (e.g. gradient-folder) can now be entered manually or selected by using a folder-dialog
  - added Alt-F shortcut for Fine edit, by Rick Sidwell
  - new variations
+     -bulge,
+     -fresnel,
+     -tunnel,
      -kaleidoimg,
      -dc_portal,
-     -kaplan by  by Jesus Sosa
+     -kaplan by by Jesus Sosa
+     -crop_mandelbulb3d,
+     -crop_mandelbox3d by Whittaker Courtney
+     -post_aexion_crop,
+     -post_benesi_crop,
+     -post_asurf_crop,
+     -post_bristorbrot_crop,
+     -post_bulbtorus_crop,
+     -post_coastalbrot_crop by by Jesus Sosa
  - improved the "Affine3D"-random-flame-generator
  - slightly improved the speed when chosing a random variation (from within a random-flame-generator or Mutation)
  - moved the "ZBuffer"-subtab from the "DOF / Bokeh"-tab to the "3D rendering"-tab
@@ -31,6 +43,8 @@ V6.xx (xx.xx.2021)
    where removed from the Preferences.
    Recommended Alternative: use Visual Studio Code for editing complex scripts (https://code.visualstudio.com/download)
  - removed the "Variations settings"-window which was superseeded by the new variation profiles
+ - fix: a bug regarding macOS which prevented that path-settings where correctly saved in the Preferences
+ - fix: name of parameter "type" was wrong in "cut_booleans"-variation, by Brad Stefanov
  - fix: QuickMutations now inherit the zoom-factor, quality and spatial oversampling settings form the original flame
  - fix: regarding z-coordinate to tqmirror-variation, by Brad Stefanov
  - fix: regarding of priority in the post_falloff2-variation

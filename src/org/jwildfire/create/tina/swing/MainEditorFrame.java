@@ -7216,8 +7216,8 @@ public class MainEditorFrame extends JFrame {
         getNonlinearParams12REd(), getNonlinearParams12LeftButton(), getNonlinearParams12PreButton(), getNonlinearParams12PostButton(), getNonlinearParams12UpButton(),
         getNonlinearParams12ToggleParamsPnlButton());
 
-    ComboboxTools.initVariationProfileCmb(getTinaVariationProfile1Cmb(), true);
-    ComboboxTools.initVariationProfileCmb(getTinaVariationProfile2Cmb(), false);
+    ComboboxTools.initVariationProfileCmb(getTinaVariationProfile1Cmb(), true, false);
+    ComboboxTools.initVariationProfileCmb(getTinaVariationProfile2Cmb(), false, true);
 
     initFilterKernelCmb(getPostBokehFilterKernelCmb());
 
