@@ -166,29 +166,12 @@ public class NonlinearControlsDelegate {
         pRow.getNonlinearVarLbl().getFont().getStyle();
       }
 
-      VariationFuncFilter filter = owner.getCurrentVariationFuncFilter();
-      if (!filter.evaluate(varFunc.getName())) {
-        Font font = pRow.getNonlinearVarLbl().getFont();
-        Map attributes = font.getAttributes();
-        if (!attributes.containsKey(TextAttribute.STRIKETHROUGH)) {
-          attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
-          pRow.getNonlinearVarLbl().setFont(new Font(attributes));
-        }
-      } else {
-        Font font = pRow.getNonlinearVarLbl().getFont();
-        Map attributes = font.getAttributes();
-        if (attributes.containsKey(TextAttribute.STRIKETHROUGH)) {
-          attributes.remove(TextAttribute.STRIKETHROUGH);
-          pRow.getNonlinearVarLbl().setFont(new Font(attributes));
-        }
-      }
-      // pRow.getNonlinearVarREd().setText(Tools.doubleToString(pVar.getAmount()));
       owner
           .getFrameControlsUtil()
           .updateControl(pVar, null, pRow.getNonlinearVarREd(), "amount", 1.0);
 
       pRow.getNonlinearParamsCmb().removeAllItems();
-      // ressources
+      // resources
       int resCount = 0;
       String[] resNames = varFunc.getRessourceNames();
       if (resNames != null) {
