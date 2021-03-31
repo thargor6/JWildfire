@@ -31,7 +31,7 @@ public enum VariationFuncType {
   VARTYPE_2D {
     @Override
     public String getCaption() {
-      return "Flat (2D)";
+      return "2D";
     }
   },
   VARTYPE_ZTRANSFORM {
@@ -98,6 +98,12 @@ public enum VariationFuncType {
     @Override
     public String getCaption() {
       return "Escape-time fractal";
+    }
+  },
+  VARTYPE_SUPPORTS_EXTERNAL_SHAPES {
+    @Override
+    public String getCaption() {
+      return "Supports external shapes";
     }
   };
 

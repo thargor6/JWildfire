@@ -34,7 +34,7 @@ public class ColorMapWFFunc extends AbstractColorMapWFFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_EXTERNAL_SHAPES};
   }
 
 }
