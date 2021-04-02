@@ -1645,11 +1645,93 @@ There are two sets of these coefficients, one set for the regular component and 
 ???
 
 ===== _Xaos_ tab
-???
+_Xaos_ is a synonym for _relative weights_. Since "Xaos" is much shorter, it was used in the user interface.
+But the term _relative weights_ is much easier to understand:
+
+- Each transformation has an attached _weight_. This is an numerical value and controls how often the
+transformation is invoked in the iteration process. This weight is called an _absolute weight_.
+** When using only _absolute weights_, no attention is paid to the execution order of the transformations.
+- It has been observed, that execution order of certain transformations can lead to important and interesting
+changes of the structure of the fractal.
+** The basic idea behind _relative weights_ is to promote certain execution orders and prevent other execution orders.
+
+====== _Relative weights_ table
+The _relative weights_ are basically a matrix. On this tab you edit the part of this matrix that concerns
+the currently selected transformation.
+
+For each combination of this transformation with any other transformation of the fractal, this table describes
+the probability that this combination will be executed in the iteration process:
+
+- the first column contains the order of execution of two of these transformations.
+- the second column contains the corresponding probability that order of execution actually can happen:
+
+** a value of 0 means that it does not happen at all.
+** a value of 1 is the default value. The actual probability is not 100%, but depends on the distribution of the _absolute weights_.
+
+So, a relative weight of 0 is much easier to understand than the other values. Luckily, finding the right combinations
+where it makes sense to use 0 as the _relative weight_ has the biggest impact on the fractal images.
+All the other possiblities are also very interesting, but lead to much more subtle differences (in the most of the cases).
+
+====== _View as "to"_
+Controls which values of the _relative weights_ matrix are displayed in the table.
+The _View as "to"_ option shows the transitions from the currently selected transformation to any other selected transformation.
+This includes the transformation itself, which can be a bit confusing at first. But calling the same transformation
+again after this transformation has already been called is a perfectly valid and common behavior.
+
+For example, having three transformations *1* and *2* and *3*, the table will show:
+
+- *1 to 1* and *1 to 2* and *1 to 3* when transform *1* is selected,
+- *2 to 1* and *2 to 2* and *2 to 3* when transform *2* is selected,
+- *3 to 1* and *3 to 2* and *3 to 3* when transform *3* is selected.
+
+Note: changing the view mode does not affect the actual _relative weights_.
+
+====== _View as "from"_
+Controls which values of the _relative weights_ matrix are displayed in the table.
+The _View as "from"_ option shows the transitions from any other transformation to the currently selected transformation.
+This includes the transformation itself, which can be a bit confusing at first. But calling the same transformation
+again after this transformation has already been called is a perfectly valid and common behavior.
+
+For example, having three transformations *1* and *2* and *3*, the table will show:
+
+- *1 from 1* and *1 from 2* and *1 from 3* when transform *1* is selected,
+- *2 from 1* and *2 from 2* and *2 from 3* when transform *2* is selected,
+- *3 from 1* and *3 from 2* and *3 from 3* when transform *3* is selected.
+
+Note: changing the view mode does not affect the actual _relative weights_.
+
+====== _View as "to"_ vs _View as "from"_
+The values displayed in these two views are in some way inverses of each other.
+
+For example, having again three transformations *1* and *2* and *3*:
+
+- select transformation *1*
+- in _View as "to"_ select the row *1 to 2* and press the _0_ button (setting this _relative weight_ to 0)
+- switch to _View as "from"_ mode and selected transformation *2*
+- you should now see that the value at the first row *2 from 1* is 0
+
+*Please note that switching the view mode does not affect the order of execution of transformations (relative weights)
+in any way. It are only different views of the same thing.*
+
+====== _0_ button
+Sets the currently selected _relative weight_ to 0. Entering a numerical value would have the same effect, but
+invoking the button is thought to be easier.
+
+====== _1_ button
+Sets the currently selected _relative weight_ to 1. Entering a numerical value would have the same effect, but
+invoking the button is thought to be easier.
+
+====== _Reset_ button
+Resets all the _relative weights_ of the currently selected transformation (to the numerical value 1).
+
+====== _Reset all_ button
+Resets all the _relative weights_ of all transformations (to the numerical value 1).
 
 ===== _Color_ tab
-During the iteration process, each point has an associated color. When a transformation maps a point to a new position,
-it also gets a new color. The options on this tab give you control over exactly how these colors are calculated.
+On this tab you will find important options for the coloring options. These options do not primarily determine
+the final colors, but how many color details the fractal has and how they are distributed over the entire shape of the fractal.
+During the iteration process, each point has an associated color. When a transformation maps a point to a new
+position, it also gets a new color. The options on this tab give you control over exactly how these colors are calculated.
 
 ====== _Coloring type_/_Color_/_Speed_ (by Rick Sidwell)
 The _Coloring type_ controls how the color "moves" through the fractal during the iteration process.
@@ -1694,8 +1776,22 @@ color that *Cyclic* can use as a starting point.
 Normally, Speed is set to m/n, where m and n are small integers; this makes the colors cycle through n gradient colors,
 and is especially useful for coloring tilings.
 
+====== _Draw mode_/_Opacity_
+Controls the visual contribution of the currently selected transformation to the fractal.
 
+These are the options:
 
+- *Normal*: each iteration point contributes to the fractal without any modification.
+- *Hidden*: the contribution of the currently selected transformation is invisible (not drawn).
+- *Opaque*: the contribution of the currently selected transformation is faded out by taking into account the_Opacity_ parameter.
+Any value between 0 and 1 is possible, including the two extremes:
+
+ ** 0 means minimum Opacity, this is equal to using the *Hidden* setting.
+ ** 1 means maximum Opacity, this is equal to using the *Normal* setting.
+
+====== _Material_/_Mat Spd_
+Works similar to _Color_/_Speed_, but controls the material index used in <<solid_rendering, Solid rendering>> rather than
+the color index.
 
 ===== _Gamma_ tab
 On this tab you will find some advanced color change options. They are an extension of the original fractal flame algorithm.
