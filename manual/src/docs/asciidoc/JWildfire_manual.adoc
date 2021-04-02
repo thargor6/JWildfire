@@ -2,7 +2,7 @@
 :sectnums:
 :sectnumlevels: 5
 :toc:
-:toclevels: 3
+:toclevels: 4
 
 :title-page-background-image: image::front_cover.jpg[scaledwidth=50%]
 
@@ -35,8 +35,6 @@ Thanks to Brad Stefanov, Nancy Pierce, my wife Patricia Maschke, and Rick Sidwel
 comments and suggestions for improving this document.
 
 Thanks to the whole fractal art community for their neverending enthusiasm which always pushes me forward.
-
-[#main_editor]
 
 [#main_menu]
 == _Main_ menu
@@ -1642,7 +1640,107 @@ If the YZ or ZX edit plane is selected, Z1 and Z2 will replace one of the other 
 There are two sets of these coefficients, one set for the regular component and one set for the post component.
 
 ===== _Nonlinear_ tab
-???
+On this tab you can add up to 12 nonlinear transformations (with numerous parameters) to each of the
+transformations of your fractal.
+
+====== _Linear/affine transformations_
+Please note that you can also create a lot of very beautiful fractals without any nonlinear transformations.
+This works by using _linear_ as "nonlinear" transformation (for each transformation) and has the advantage
+that is very fast to compute. But, these are not true fractal flames.
+
+====== _Nonlinear transformations_
+The primary invention of Scott Draves, when creating the idea of fractal flames, was not only allow "classic"
+affine transformations, but also allowing arbitrary transformations.
+Mathematically spoken, this is more complex, but the basic is easy understand:
+
+- do not only allow transformations of the type rotation, translation, shear or reflections
+- but do allow more generic transformations, which still allow that the basic algorithm works.
+For example, a transformation which sets any value to 0, will probably not lead to any interesting results.
+But a transformation which moves a point along a gentle wave might as valid as a transformation which moves
+a point along a line, but lead to much more interesting results.
+
+So, a good way of thinking about nonlinear transforms is that they add small details to otherwise more
+"straight" transformations like a rotation.
+
+====== _Different names for nonlinear transformations_
+There are different names for nonlinear transformations:
+
+ - *nonlinear transformation*: this is the prefered name
+ - *variations*: this is shorter and also common
+ - *plugins*: because in some programs they are supplied as plugins which can be loaded at runtime. JWildfire
+also supports the creation of some kind of plugins by using the _wf_custom_ or _wf_custom_full_-variation.
+But this is intended only for exploration of some new ideas. Afte exploration they are included
+in the main code base, hence in JWildfire you usually do not find the term "plugin".
+
+====== _Superimposition of nonlinear transformations_
+You can add up to 12 nonlinear transformations on this tab. These will all be overlaid.
+Most of the nonlinear transformations have a lot of parameters.
+Some of them really a lot, they can be thought as complete independant simulating programs.
+
+The possibility of changing these parameters together with the superposition of different nonlinear transformations
+together with the possibility to change parameters of affine transformations leads to an infinite number of
+of possibilities for each flame.
+
+====== Types of nonlinear transformations_
+Currently, there are about 800 nonlinear transformations included into JWildfire.
+
+It would go beyond the scope of this manual to describe them. In many cases, the description would be very
+technical and would not help much (in contrast to just trying them out).
+
+But it has turned out that there are some categories of nonlinear transformations which are well understood.
+You can restrict the selection of nonlinear transformations by using these categories.
+Each nonlinear transformation can have more of one of the following categories:
+
+- *Blur*: creates a blur-effect, for example a _gaussian_blur_.
+- *2D*: a transformation which is restricted to the x- and y-axis.
+- *ZTransform*: a transformation which is specialized to transform to z-axis, for example _zblur_.
+- *3D*: a transformation which transforms all three coordinates.
+- *DC*: a transformation which also changes the color-index (and overrides the default algorithm to calculate colors).
+- *Simulation*: a more complex simulation, for example a snowflake-generator.
+- *Base shape*: a transformation which creates a base-shape, for example _square_.
+- *Pre*: a transformation which has the *Pre*-priority
+- *PrePost*: a transformation which has the *PrePost*-priority
+- *Post*: a transformation which has the *Post*-priority
+- *Crop*: a cropping transformation
+- *Edit formula/code*: a transformation where you can actually enter code or a formula to customize it.
+- *Escape-time fractal*: a transformation which computes an escape-time fractal, for example: _fract_mandelbrot_.
+- *Supports external shapes*: a transformation which can be customized by using external resources like images, svg's or meshes.
+
+====== Filtering nonlinear transformations
+Currently, there are about 800 nonlinear transformations included. Sometimes this is just too much, even to play around.
+You can reduce this list by using _Filter_ option.
+
+The _Filter_ option consists of two drop-down lists, where you can choose up two _Variation profiles_:
+
+ - when the *first* _Variation profiles_ is selected, only the variations are displayed which are inside the selected profile.
+ - when *two* _Variation profiles_ are selected, only the variations are displayed which are inside the both profiles.
+ - the *second* drop-down list alternatively allows to select an *_inversed variation profile_*.
+When you select an *_inversed variation profile_* in the *second* option, only variations are displayed which are
+inside the first selected _Variation profile_, but not in the _inversed variation profile_.
+
+[.thumb]
+image::nonlinear_variations_filter.jpg[scaledwidth=50%]
+
+Examples:
+
+- no _variation profile_ is selected: all variations are displayed
+- the _Blur_ _variation profile_ is selected as *first* option, *second* option is empty: only blur-variations are displayed
+- the _Blur_ _variation profile_ is selected as *first* option, the _3D_ *_variation profile_ is selected as *second* option: only blur-variations, which are also 3D-variations, are displayed
+- the _Blur_ _variation profile_ is selected as *first* option, the _!=3D_ *_variation profile_ is selected as *second* option: only blur-variations, which are _not_ 3D-variations, are displayed
+
+The _variation profiles_ may be customized freely. See the next sub-section.
+
+====== Editing _Variation profiles_
+[.thumb]
+image::nonlinear_edit_variation_profiles.jpg[scaledwidth=75%]
+You may edit the supplied _Variation profiles_ freely.
+
+Per profile these are the options to specify the _Profile type_:
+
+- *Include variations*: specify which variations you want to _include_.
+- *Exclude variations*: specify which variations you want to _exclude_.
+- *Include types*: specify a list of _variation types_. Each variation which satisfies this selection will be included.
+- *Exclude types*: specify a list of _variation types_. Each variation which satisfies this selection will be excluded.
 
 ===== _Xaos_ tab
 _Xaos_ is a synonym for _relative weights_. Since "Xaos" is much shorter, it was used in the user interface.
@@ -1936,7 +2034,7 @@ by double-clicking at a script.
 JWF-scripts are written in the Java-language and can use most of language-features offered by
 Java 1.4. So you could also read external files, access ressources from the internet,
 open custom-windows etc.
-There are also several possibilities to interact with the <<main_editor, Main Editor>>,
+There are also several possibilities to interact with the <<fractal_flame_editor, Main Editor>>,
 for example, to modify the currently edited flame and to refresh the preview.
 
 ===== _Scripts_ libary
@@ -2432,7 +2530,7 @@ choosing _Fractal flames: Flame browser_ from the _Windows_ menu.
 
 On the right side of the window you can execute one of the following actions on the selected flame:
 
- - *To Editor*: load the selected flame into the <<main_editor, _Main Editor_>>
+ - *To Editor*: load the selected flame into the <<fractal_flame_editor, _Main Editor_>>
  - *To Batch Renderer*: send the selected flame into the <<batch_renderer, _Batch renderer_>>
  - *To Mesh Gen*: send the selected flame into the <<mesh_generator, _Mesh generator_>>
  - *Delete*: delete the selected flame
@@ -2451,7 +2549,7 @@ by selecting _Flame fractals: Easy movie maker_ from the _Windows_ menu.
 It combines three types of animation:
 
  - the keyframe-based animation of a fractal flame itself. You set up these kinds of animations in the
-<<main_editor, Main Editor>>
+<<fractal_flame_editor, Main Editor>>
  - transitions between two fractal flames
  - global animation scripts, for example, a movement of the camera
 
@@ -2459,7 +2557,7 @@ You can even generate random movies, which is an experimental feature.
 
 === _Thumbnail ribbon_
 There is a thumbnail ribbon on the left, which holds all currently loaded movies.
-(This is very similar to the thumbnail ribbon inside <<main_editor, Main Editor>>, which hold all currently loaded flames.)
+(This is very similar to the thumbnail ribbon inside <<fractal_flame_editor, Main Editor>>, which hold all currently loaded flames.)
 You may select a movie by double-clicking at its thumbnail.
 
 === Functions at the main button bar (at the top)
@@ -2529,13 +2627,13 @@ results, even if they were not what was expected.
 
 These are the actions you can perform at the animated flame level:
 
- - *_E_* (Edit): transfers the current flame to the <<main_editor, Main Editor>>
- - *_R_* (Replace): replaces the current flame with the currently loaded flame of the <<main_editor, Main Editor>>.
+ - *_E_* (Edit): transfers the current flame to the <<fractal_flame_editor, Main Editor>>
+ - *_R_* (Replace): replaces the current flame with the currently loaded flame of the <<fractal_flame_editor, Main Editor>>.
 In combination with the _E_ button this allows easy post-editing of a flame.
  - *_D_* (Delete): Removes the current flame from the movie
 
 ==== _Add from Editor_ button
-Appends the currently loaded flame in the <<main_editor, Main Editor>> to the movie.
+Appends the currently loaded flame in the <<fractal_flame_editor, Main Editor>> to the movie.
 
 ==== _Add from Clipboard_ button
 Appends a flame from the Clipboard to the movie.
