@@ -954,7 +954,7 @@ public class VariationFuncList {
     
     registerVariationFunc(DC_PortalFunc.class);  
     registerVariationFunc(KaplanFunc.class); 
-    registerVariationFunc(kaleidoImgFunc.class);
+    registerVariationFunc(KaleidoImgFunc.class);
 	  
     registerVariationFunc(CropMandelbulb3dFunc.class);
     registerVariationFunc(CropMandelbox3dFunc.class);
