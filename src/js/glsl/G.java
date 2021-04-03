@@ -151,7 +151,7 @@ public class G {
 	if (k < 0.0)
 	    R = new vec2(0.0); // or genDType(0.0)
 	else
-	    R =  I.multiply(eta).minus(N.multiply((eta * dot(N, I) + Math.sqrt(k))));
+	    R =  I.multiply(eta).minus(N.multiply((eta * dot(N, I) + MathLib.sqrt(k))));
 
 	//The input parameters I and N should be normalized in order to 
 	//achieve the desired result.
@@ -169,7 +169,7 @@ public class G {
 	if (k < 0.0)
 	    R = new vec3(0.0); // or genDType(0.0)
 	else
-	    R =  I.multiply(eta).minus(N.multiply((eta * dot(N, I) + Math.sqrt(k))));
+	    R =  I.multiply(eta).minus(N.multiply((eta * dot(N, I) + MathLib.sqrt(k))));
 
 	//The input parameters I and N should be normalized in order to 
 	//achieve the desired result.
@@ -196,7 +196,7 @@ public class G {
 		
 		public static  double atan(double n, double d)
 		{
-			return Math.atan(n/d);
+			return MathLib.atan(n/d);
 		}
 
 		public static   double atan2(double y, double x) {
@@ -216,48 +216,48 @@ public class G {
 		
 		public  static double sqrt(double a)
 		{
-			return Math.sqrt(a);
+			return MathLib.sqrt(a);
 		}
 		
 		public  static vec2 sqrt(vec2 a)
 		{
 			vec2 vret=new vec2(0.0);
-			vret.x=Math.sqrt(a.x);
-			vret.y=Math.sqrt(a.y);
+			vret.x=MathLib.sqrt(a.x);
+			vret.y=MathLib.sqrt(a.y);
 			return vret;
 		}
 		
 		public  static vec3 sqrt(vec3 a)
 		{
 			vec3 vret=new vec3(0.0);
-			vret.x=Math.sqrt(a.x);
-			vret.y=Math.sqrt(a.y);
-			vret.z=Math.sqrt(a.z);
+			vret.x=MathLib.sqrt(a.x);
+			vret.y=MathLib.sqrt(a.y);
+			vret.z=MathLib.sqrt(a.z);
 			return vret;
 		}
 		
 		public  static vec4 sqrt(vec4 a)
 		{
 			vec4 vret=new vec4(0.0);
-			vret.x=Math.sqrt(a.x);
-			vret.y=Math.sqrt(a.y);
-			vret.z=Math.sqrt(a.z);
-			vret.w=Math.sqrt(a.w);
+			vret.x=MathLib.sqrt(a.x);
+			vret.y=MathLib.sqrt(a.y);
+			vret.z=MathLib.sqrt(a.z);
+			vret.w=MathLib.sqrt(a.w);
 			return vret;
 		}
 		
 		
 		public static   double length(vec2 a)
 		{
-			return Math.sqrt(a.x*a.x+a.y*a.y);
+			return MathLib.sqrt(a.x*a.x+a.y*a.y);
 		}
 		public static   double length(vec3 a)
 		{
-			return Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z);
+			return MathLib.sqrt(a.x*a.x+a.y*a.y+a.z*a.z);
 		}
 		public static   double length(vec4 a)
 		{
-			return  Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z+ a.w*a.w);
+			return  MathLib.sqrt(a.x*a.x+a.y*a.y+a.z*a.z+ a.w*a.w);
 		}
 
 		public static   double abs(double v)
@@ -319,19 +319,19 @@ public class G {
 		public static   double distance(vec2 v1,vec2 v2)
 		{
 			vec2 dif=v1.minus(v2);
-			return Math.sqrt(dif.x*dif.x+dif.y*dif.y);
+			return MathLib.sqrt(dif.x*dif.x+dif.y*dif.y);
 		}
 
 		public static   double distance(vec3 v1,vec3 v2)
 		{
 			vec3 dif=v1.minus(v2);
-			return Math.sqrt(dif.x*dif.x+dif.y*dif.y + dif.z*dif.z);
+			return MathLib.sqrt(dif.x*dif.x+dif.y*dif.y + dif.z*dif.z);
 		}
 		
 		public static   double distance(vec4 v1,vec4 v2)
 		{
 			vec4 dif=v1.minus(v2);
-			return Math.sqrt(dif.x*dif.x+dif.y*dif.y + dif.z*dif.z + dif.w*dif.w);
+			return MathLib.sqrt(dif.x*dif.x+dif.y*dif.y + dif.z*dif.z + dif.w*dif.w);
 		}
 		
 		
@@ -362,91 +362,91 @@ public class G {
 		
 		public static double pow(double x,double y)
 		{
-			return  Math.pow(x,y);
+			return  MathLib.pow(x,y);
 		}
 		
 		public static vec2 pow(vec2 x,vec2 y)
 		{
 
-			double xr= Math.pow(x.x,y.x);
-			double yr= Math.pow(x.y,y.y);
+			double xr= MathLib.pow(x.x,y.x);
+			double yr= MathLib.pow(x.y,y.y);
 			return new vec2(xr,yr);
 		}
 
 		public static   vec3 pow(vec3 x,vec3 y)
 		{
-			double xr= Math.pow(x.x,y.x);
-			double yr= Math.pow(x.y,y.y);
-			double zr= Math.pow(x.z,y.z);
+			double xr= MathLib.pow(x.x,y.x);
+			double yr= MathLib.pow(x.y,y.y);
+			double zr= MathLib.pow(x.z,y.z);
 			return new vec3(xr,yr,zr);
 		}
 		
 		public static   vec4 pow(vec4 x,vec4 y)
 		{
-			double xr= Math.pow(x.x,y.x);
-			double yr= Math.pow(x.y,y.y);
-			double zr= Math.pow(x.z,y.z);
-			double wr= Math.pow(x.w,y.w);
+			double xr= MathLib.pow(x.x,y.x);
+			double yr= MathLib.pow(x.y,y.y);
+			double zr= MathLib.pow(x.z,y.z);
+			double wr= MathLib.pow(x.w,y.w);
 			return new vec4(xr,yr,zr,wr);
 		}
 		
 		public static double exp(double x)
 		{
-			return  Math.exp(x);
+			return  MathLib.exp(x);
 		}
 		
 		public static vec2 exp(vec2 x)
 		{
 
-			double xr= Math.exp(x.x);
-			double yr= Math.exp(x.y);
+			double xr= MathLib.exp(x.x);
+			double yr= MathLib.exp(x.y);
 			return new vec2(xr,yr);
 		}
 
 		public static   vec3 exp(vec3 x)
 		{
-			double xr= Math.exp(x.x);
-			double yr= Math.exp(x.y);
-			double zr= Math.exp(x.z);
+			double xr= MathLib.exp(x.x);
+			double yr= MathLib.exp(x.y);
+			double zr= MathLib.exp(x.z);
 			return new vec3(xr,yr,zr);
 		}
 		
 		public static   vec4 exp(vec4 x)
 		{
-			double xr= Math.exp(x.x);
-			double yr= Math.exp(x.y);
-			double zr= Math.exp(x.z);
-			double wr= Math.exp(x.w);
+			double xr= MathLib.exp(x.x);
+			double yr= MathLib.exp(x.y);
+			double zr= MathLib.exp(x.z);
+			double wr= MathLib.exp(x.w);
 			return new vec4(xr,yr,zr,wr);
 		}
 		
 		 public static double exp2(double x)
 		 {
-		 	return  Math.pow(2.,x);
+		 	return  MathLib.pow(2.,x);
 		 }
 
 		  public static vec2 exp2(vec2 x)
 		 {
 
-		 	double xr= Math.pow(2.0,x.x);
-		 	double yr= Math.pow(2.0,x.y);
+		 	double xr= MathLib.pow(2.0,x.x);
+		 	double yr= MathLib.pow(2.0,x.y);
 		 	return new vec2(xr,yr);
 		 }
 
 		  public static vec3 exp2(vec3 x)
 		 {
-		 	double xr= Math.pow(2.0,x.x);
-		 	double yr= Math.pow(2.0,x.y);
-		 	double zr= Math.pow(2.0,x.z);
+		 	double xr= MathLib.pow(2.0,x.x);
+		 	double yr= MathLib.pow(2.0,x.y);
+		 	double zr= MathLib.pow(2.0,x.z);
 		 	return new vec3(xr,yr,zr);
 		 }
 
 		  public static vec4 exp2(vec4 x)
 		 {
-		 	double xr= Math.pow(2.0,x.x);
-		 	double yr= Math.pow(2.0,x.y);
-		 	double zr= Math.pow(2.0,x.z);
-		 	double wr= Math.pow(2.0,x.w);
+		 	double xr= MathLib.pow(2.0,x.x);
+		 	double yr= MathLib.pow(2.0,x.y);
+		 	double zr= MathLib.pow(2.0,x.z);
+		 	double wr= MathLib.pow(2.0,x.w);
 		 	return new vec4(xr,yr,zr,wr);
 		 }
 		
@@ -519,7 +519,7 @@ public class G {
 
 
 		public static    double log2(double d) {
-			return Math.log(d)/Math.log(2.0);
+			return MathLib.log(d)/MathLib.log(2.0);
 		}
 
 		public static   double smoothstep(double edge0,double edge1, double x)
@@ -1085,65 +1085,65 @@ public class G {
 		
 		public static   double sin(double x)
 		{
-			return Math.sin(x);
+			return MathLib.sin(x);
 		}
 
 		public static   vec2 sin(vec2 x)
 		{
 			vec2 vret=new vec2(0.0);
-			vret.x=Math.sin(x.x);
-			vret.y=Math.sin(x.y);
+			vret.x=MathLib.sin(x.x);
+			vret.y=MathLib.sin(x.y);
 			return vret;
 		}
 
 		public static   vec3 sin(vec3 a)
 		{
 			vec3 vret=new vec3(0.0);
-			vret.x=Math.sin(a.x);
-			vret.y=Math.sin(a.y);
-			vret.z=Math.sin(a.z);
+			vret.x=MathLib.sin(a.x);
+			vret.y=MathLib.sin(a.y);
+			vret.z=MathLib.sin(a.z);
 			return vret;
 		}
 
 		public static   vec4 sin(vec4 a)
 		{
 			vec4 vret=new vec4(0.0);
-			vret.x=Math.sin(a.x);
-			vret.y=Math.sin(a.y);
-			vret.z=Math.sin(a.z);
-			vret.w=Math.sin(a.w);
+			vret.x=MathLib.sin(a.x);
+			vret.y=MathLib.sin(a.y);
+			vret.z=MathLib.sin(a.z);
+			vret.w=MathLib.sin(a.w);
 			return vret;
 		}
 		
 		public static   double cos(double x)
 		{
-			return Math.cos(x);
+			return MathLib.cos(x);
 		}
 		
 		public static   vec2 cos(vec2 x)
 		{
 			vec2 vret=new vec2(0.0);
-			vret.x=Math.cos(x.x);
-			vret.y=Math.cos(x.y);
+			vret.x=MathLib.cos(x.x);
+			vret.y=MathLib.cos(x.y);
 			return vret;
 		}
 
 		public static   vec3 cos(vec3 a)
 		{
 			vec3 vret=new vec3(0.0);
-			vret.x=Math.cos(a.x);
-			vret.y=Math.cos(a.y);
-			vret.z=Math.cos(a.z);
+			vret.x=MathLib.cos(a.x);
+			vret.y=MathLib.cos(a.y);
+			vret.z=MathLib.cos(a.z);
 			return vret;
 		}
 
 		public static   vec4 cos(vec4 a)
 		{
 			vec4 vret=new vec4(0.0);
-			vret.x=Math.cos(a.x);
-			vret.y=Math.cos(a.y);
-			vret.z=Math.cos(a.z);
-			vret.w=Math.cos(a.w);
+			vret.x=MathLib.cos(a.x);
+			vret.y=MathLib.cos(a.y);
+			vret.z=MathLib.cos(a.z);
+			vret.w=MathLib.cos(a.w);
 			return vret;
 		}
 		
@@ -1166,8 +1166,8 @@ public class G {
 			tmp=tmp.minus(new vec2(0.5));
 
 
-			vec2 tmp1 =  new mat2(Math.cos(_angle),-Math.sin(_angle),
-					Math.sin(_angle),Math.cos(_angle)).times(tmp); // m[2,2]*v[2]  linear algebra
+			vec2 tmp1 =  new mat2(MathLib.cos(_angle),-MathLib.sin(_angle),
+					MathLib.sin(_angle),MathLib.cos(_angle)).times(tmp); // m[2,2]*v[2]  linear algebra
 			tmp = tmp1.plus(new vec2(0.5));
 			return tmp;
 		}
@@ -1237,7 +1237,7 @@ public class G {
 
 		public static   double random (vec2 st)
 		{
-			return fract(Math.sin(dot(new vec2(st.x,st.y),new vec2(12.9898,78.233)))*43758.5453123);
+			return fract(MathLib.sin(dot(new vec2(st.x,st.y),new vec2(12.9898,78.233)))*43758.5453123);
 		}
 
 		public static   vec2 random2( vec2 p ) {
@@ -1255,7 +1255,7 @@ public class G {
 
 				if (dot(z,z) > 4.) {
 					double s = .125662 * (double) i;
-					vec3 tmp = new vec3(Math.cos(s + .9), Math.cos(s + .3), Math.cos(s + .2));
+					vec3 tmp = new vec3(MathLib.cos(s + .9), MathLib.cos(s + .3), MathLib.cos(s + .2));
 					vec3 tmp1= new vec3( tmp.multiply(0.4).add( .6));
 					return tmp1;
 				}
@@ -1265,7 +1265,7 @@ public class G {
 
 		public static   vec2 B(vec2 a) 
 		{ 
-			return new vec2(Math.log(length(a)),atan2(a.y,a.x)-6.3); 
+			return new vec2(MathLib.log(length(a)),atan2(a.y,a.x)-6.3); 
 		}
 
 		public static   vec3 F(vec2 E,double _time)
@@ -1276,11 +1276,11 @@ public class G {
 			for(int i=0; i<i_max; i++)
 			{
 				vec2 tmp= B( new vec2(e_.x,Math.abs(e_.y)));
-				e_=tmp.plus( new vec2(.1*Math.sin(_time/3.)-.1,5.+.1*Math.cos(_time/5.)));
+				e_=tmp.plus( new vec2(.1*MathLib.sin(_time/3.)-.1,5.+.1*MathLib.cos(_time/5.)));
 				c += length(e_);
 			}
 			double d = log2(log2(c*.05))*6.;
-			return new vec3(.7+Math.tan(.7*Math.cos(d)),.5+.5*Math.cos(d-.7),.7+Math.sin(.7*Math.cos(d-.7)));
+			return new vec3(.7+MathLib.tan(.7*MathLib.cos(d)),.5+.5*MathLib.cos(d-.7),.7+MathLib.sin(.7*MathLib.cos(d-.7)));
 		}
 
 
@@ -1299,7 +1299,7 @@ public class G {
 			vec2 p = floor(x);
 			vec2 f = fract(x);
 
-			double k = 1.0+63.0*Math.pow(1.0-v,4.0);
+			double k = 1.0+63.0*MathLib.pow(1.0-v,4.0);
 
 			double va = 0.0;
 			double wt = 0.0;
@@ -1309,7 +1309,7 @@ public class G {
 					vec3 o = hash3(p.plus(g)).multiply( new vec3(u,u,1.0));
 					vec2 r = g.minus(f).plus(new vec2( o.x,o.y));
 					double d = dot(r,r);
-					double ww = Math.pow( 1.0-smoothstep(0.0,1.414,Math.sqrt(d)), k );
+					double ww = MathLib.pow( 1.0-smoothstep(0.0,1.414,MathLib.sqrt(d)), k );
 					va += o.z*ww;
 					wt += ww;
 				}
@@ -1359,8 +1359,8 @@ public class G {
 			double a = 0.5;
 			vec2 shift = new vec2(100.0);
 			// Rotate to reduce axial bias
-			mat2 rot = new mat2(Math.cos(0.5), Math.sin(0.5),
-					-Math.sin(0.5), Math.cos(0.50));
+			mat2 rot = new mat2(MathLib.cos(0.5), MathLib.sin(0.5),
+					-MathLib.sin(0.5), MathLib.cos(0.50));
 			for (int i = 0; i < 5; ++i) {
 				v += a * noise(_st);
 
@@ -1428,29 +1428,29 @@ public class G {
 
 		public static   vec2 cpow(vec2 b, vec2 e){
 			double ab = carg(b);
-			double lgb = Math.log(b.x*b.x + b.y*b.y) / 2.0;
-			double lr = Math.exp(lgb*e.x - ab*e.y);
+			double lgb = MathLib.log(b.x*b.x + b.y*b.y) / 2.0;
+			double lr = MathLib.exp(lgb*e.x - ab*e.y);
 			double cis = lgb*e.y + ab*e.x;
-			return new vec2(Math.cos(cis)*lr, Math.sin(cis)*lr);
+			return new vec2(MathLib.cos(cis)*lr, MathLib.sin(cis)*lr);
 		}
 
 		public static   vec2 cexp(vec2 z){
-			return new vec2(Math.cos(z.y),Math.sin(z.y)).multiply( Math.exp(z.x));
+			return new vec2(MathLib.cos(z.y),MathLib.sin(z.y)).multiply( MathLib.exp(z.x));
 		}
 
 		public static   vec2 clog(vec2 z){
-			return new vec2(Math.log(z.x*z.x + z.y*z.y) / 2.0, carg(z));
+			return new vec2(MathLib.log(z.x*z.x + z.y*z.y) / 2.0, carg(z));
 		}
 
 		public static   vec2 f( vec2 p, double _time) { // complex function to graph
-			p = new vec2(2.0).multiply( cpow(p, new vec2(3., 0.))).minus( new vec2(0.1).multiply(p)).plus( new vec2(0.04 + 0.03*Math.sin(_time*0.2), +0.02*Math.cos(_time*0.46)));
+			p = new vec2(2.0).multiply( cpow(p, new vec2(3., 0.))).minus( new vec2(0.1).multiply(p)).plus( new vec2(0.04 + 0.03*MathLib.sin(_time*0.2), +0.02*MathLib.cos(_time*0.46)));
 			p = cmul(p, cexp(new vec2(0, _time)));
 			return p;
 		}
 
 		public static   vec2 Kscope(vec2 uv, double k) {
 			double angle = Math.abs (mod (atan2 (uv.y, uv.x), 2.0 * k) - k) + 0.1*(0.0);
-			return new vec2(length(uv)).multiply(new vec2(Math.cos(angle), Math.sin(angle)));
+			return new vec2(length(uv)).multiply(new vec2(MathLib.cos(angle), MathLib.sin(angle)));
 		} 	
 
 		public static vec3 colorize(double t, vec3 a, vec3 b, vec3 c, vec3 d) {
@@ -1460,8 +1460,8 @@ public class G {
 		}
 
 		public static double v(vec2 coord, double k, double s, double rot) {
-		    double cx = Math.cos(rot), sy = Math.sin(rot);
-		    return 0.0 + 0.5 * Math.cos((cx * coord.x + sy * coord.y) * k + s);
+		    double cx = MathLib.cos(rot), sy = MathLib.sin(rot);
+		    return 0.0 + 0.5 * MathLib.cos((cx * coord.x + sy * coord.y) * k + s);
 		}
 		
 /*		public vec3 getRGBColor(int i,int j)
@@ -1506,7 +1506,7 @@ public class G {
 
 	   
 	public static double cosh(double val) {
-		  double tmp = Math.exp(val);
+		  double tmp = MathLib.exp(val);
 		  return (tmp + 1.0 / tmp) / 2.0;
 		}
 		 
@@ -1516,7 +1516,7 @@ public class G {
 		}
 		 
 	public static double sinh(double val) {
-		  double tmp = Math.exp(val);
+		  double tmp = MathLib.exp(val);
 		  return (tmp - 1.0 / tmp) / 2.0;
 		}
 
@@ -1578,26 +1578,26 @@ public class G {
 		/// Computes `e^(c)`, where `e` is the base of the natural logarithm.
 	public static vec2 c_exp(vec2 c) 
 		{
-		  return c_from_polar(Math.exp(c.x), c.y);
+		  return c_from_polar(MathLib.exp(c.x), c.y);
 		}
 
 
 		/// Raises a doubleing point number to the complex power `c`.
 	public static vec2 c_exp(double base, vec2 c) 
 		{
-		  return c_from_polar(pow(base, c.x), c.y * Math.log(base));
+		  return c_from_polar(pow(base, c.x), c.y * MathLib.log(base));
 		}
 
 		/// Computes the principal value of natural logarithm of `c`.
 	public static vec2 c_ln(vec2 c) {
 		  vec2 polar = c_to_polar(c);
-		  return new vec2(Math.log(polar.x), polar.y);
+		  return new vec2(MathLib.log(polar.x), polar.y);
 		}
 
 		/// Returns the logarithm of `c` with respect to an arbitrary base.
 	public static vec2 c_log(vec2 c, double base) {
 		  vec2 polar = c_to_polar(c);
-		  return new vec2(Math.log(polar.x)/Math.log(base), polar.y/Math.log(base));
+		  return new vec2(MathLib.log(polar.x)/MathLib.log(base), polar.y/MathLib.log(base));
 		}
 
 	public static vec2 c_sqrt(vec2 c) {
@@ -1616,7 +1616,7 @@ public class G {
 		  vec2 polar = c_to_polar(c);
 		  return c_from_polar(
 		     pow(polar.x, e.x) * exp(-e.y * polar.y),
-		     e.x * polar.y + e.y * Math.log(polar.x)
+		     e.x * polar.y + e.y * MathLib.log(polar.x)
 		  );
 		}
 

@@ -14,6 +14,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -22,7 +23,6 @@ import js.glsl.mat3;
 import js.glsl.vec3;
 
 import org.jwildfire.base.Tools;
-import  org.jwildfire.base.mathlib.Complex;
 
 
 public class PostAmazingSurfCropFunc extends VariationFunc {
@@ -32,13 +32,13 @@ private static final String PARAM_ITERATIONS = "iterations";
 private static final String PARAM_BAILOUT = "bailout";
 private static final String PARAM_SCALEX = "scaleX";
 private static final String PARAM_SCALEY = "scaleY";
-private static final String PARAM_SCALEZ = "ScaleZ";
+private static final String PARAM_SCALEZ = "scaleZ";
 private static final String PARAM_SCOLOR = "color";
-private static final String PARAM_MODE = "ASurf";
+private static final String PARAM_MODE = "mode";
 private static final String PARAM_ANGLE = "angle";
-private static final String PARAM_ROTVX = "vX";
-private static final String PARAM_ROTVY = "vY";
-private static final String PARAM_ROTVZ = "vZ";
+private static final String PARAM_ROTVX = "rot_x";
+private static final String PARAM_ROTVY = "rot_y";
+private static final String PARAM_ROTVZ = "rot_z";
 private static final String PARAM_MINR = "minR";
 private static final String PARAM_MAXR = "maxR";
 
@@ -51,9 +51,9 @@ private double scalez = 1.0;
 private double pcolor = 1.0;
 private int mode = 1;
 private double angle = 0.0;
-private double vX = 0.0;
-private double vY = 0.0;
-private double vZ = 1.0;
+private double rotX = 0.0;
+private double rotY = 0.0;
+private double rotZ = 1.0;
 private double minRR = 0.25;
 private double maxRR = 1.0;
 
@@ -143,9 +143,9 @@ double x1 = x;
 double y1 = y;
 double z1 = z;
 
-double rr = Math.sqrt(x*x + y*y + z*z);
+double rr = MathLib.sqrt(x*x + y*y + z*z);
 
-vec3 rotvec=new vec3(vX,vY,vZ);
+vec3 rotvec=new vec3(rotX, rotY, rotZ);
 mat3 rot = rotationMatrix3(G.normalize(rotvec), angle);
 
 vec3 p=new vec3(x,y,z);
@@ -196,7 +196,7 @@ public String[] getParameterNames() {
 
 @Override
 public Object[] getParameterValues() {
-  return new Object[] {iterations, bailout,scalex,scaley,scalez,pcolor,mode, angle,vX,vY,vZ,minRR,maxRR};
+  return new Object[] {iterations, bailout,scalex,scaley,scalez,pcolor,mode, angle, rotX, rotY, rotZ,minRR,maxRR};
 }
 
 @Override
@@ -218,11 +218,11 @@ public void setParameter(String pName, double pValue) {
   else if (PARAM_ANGLE.equalsIgnoreCase(pName))
 	    angle = pValue; 
   else if (PARAM_ROTVX.equalsIgnoreCase(pName))
-	    vX = pValue;    
+	    rotX = pValue;
 else if (PARAM_ROTVY.equalsIgnoreCase(pName))
-		vY = pValue;    
+		rotY = pValue;
 else if (PARAM_ROTVZ.equalsIgnoreCase(pName))
-	    vZ = pValue;   
+	    rotZ = pValue;
 else if (PARAM_MINR.equalsIgnoreCase(pName))
 	minRR = pValue;    
 else if (PARAM_MAXR.equalsIgnoreCase(pName))
