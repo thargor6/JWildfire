@@ -43,7 +43,7 @@ import java.util.Map;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
 
-public class kaleidoImgFunc  extends VariationFunc{ 
+public class KaleidoImgFunc  extends VariationFunc{ 
 private static final long serialVersionUID = 1L;
 
 
@@ -680,14 +680,15 @@ public void setParameter(String pName, double pValue) {
   else if (PARAM_RESETZ.equalsIgnoreCase(pName))
     resetZ = (int) Tools.limitValue(pValue, 0 , 1);
   else if (PARAM_TYPE.equalsIgnoreCase(pName))
-	    type = (int) Tools.limitValue(pValue, -1 , 5);
+	    type = (int) Tools.limitValue(pValue, -1 , 13);
   else if (PARAM_NRADIUS.equalsIgnoreCase(pName))
 	    nradius = (int) Tools.limitValue(pValue, 1 , 50);
   else if (PARAM_A.equalsIgnoreCase(pName))
 		    a = pValue;
-	  else if (PARAM_B.equalsIgnoreCase(pName))
+  else if (PARAM_B.equalsIgnoreCase(pName))
 		    b = pValue;
-    throw new IllegalArgumentException(pName);
+  else
+       throw new IllegalArgumentException(pName);
 }
 
 
