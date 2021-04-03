@@ -953,7 +953,7 @@ public class VariationFuncList {
     
     registerVariationFunc(DC_PortalFunc.class);  
     registerVariationFunc(KaplanFunc.class); 
-    registerVariationFunc(kaleidoImgFunc.class);
+    registerVariationFunc(KaleidoImgFunc.class);
 	  
     registerVariationFunc(PostMandelbulb3dCropFunc.class);
     registerVariationFunc(PostMandelbox3dCropFunc.class);
@@ -967,8 +967,8 @@ public class VariationFuncList {
     registerVariationFunc(PostBristorbrotCropFunc.class); 
     registerVariationFunc(PostBenesiCropFunc.class);
     registerVariationFunc(PostCoastalbrotCropFunc.class);
-    registerVariationFunc(PostAmazingSurfCropFunc.class);
-	   
+    registerVariationFunc(PostAmazingSurfCropFunc.class);    
+    registerVariationFunc(DC_GenericMandelbrootFunc.class);    
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
