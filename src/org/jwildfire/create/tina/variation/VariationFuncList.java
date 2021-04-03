@@ -968,8 +968,8 @@ public class VariationFuncList {
     registerVariationFunc(PostBristorbrotCropFunc.class); 
     registerVariationFunc(PostBenesiCropFunc.class);
     registerVariationFunc(PostCoastalbrotCropFunc.class);
-    registerVariationFunc(PostAmazingSurfCropFunc.class);
-	   
+    registerVariationFunc(PostAmazingSurfCropFunc.class);    
+    registerVariationFunc(DC_GenericMandelbrootFunc.class);    
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
