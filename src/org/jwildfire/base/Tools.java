@@ -59,9 +59,9 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  private static final String APP_VERSION = "V6.30 (20.03.2021)";
+  private static final String APP_VERSION = "V6.40 BETA (03.04.2021)";
 
-  public static final boolean STEAM_EDITION = true;
+  public static final boolean STEAM_EDITION = false;
   public static final boolean SPECIAL_VERSION = false;
 
   public static final int MAX_SPATIAL_OVERSAMPLING = 6;
@@ -699,7 +699,7 @@ public class Tools {
 
   public static final int OSTYPE_MACOS_VERSION_X = 10;
   // public static final int OSTYPE_MACOS_SUBVERSION_HIGH_SIERRA = 13;
-  // public static final int OSTYPE_MACOS_SUBVERSION_MOJAVE = 14;
+  public static final int OSTYPE_MACOS_SUBVERSION_MOJAVE = 14;
   public static final int OSTYPE_MACOS_SUBVERSION_CATALINA = 15;
 
   // Because native file dialogs crash on Mojave
@@ -709,8 +709,14 @@ public class Tools {
     return (majorVersion < OSTYPE_MACOS_VERSION_X) || (majorVersion == OSTYPE_MACOS_VERSION_X && minorVersion<OSTYPE_MACOS_SUBVERSION_CATALINA);
   }
 
+  public static boolean isMacOsMojave() {
+    int majorVersion = getOSVersion(0);
+    int minorVersion = getOSVersion(1);
+    return Tools.OSType.MAC == Tools.getOSType() && majorVersion == OSTYPE_MACOS_VERSION_X && minorVersion==OSTYPE_MACOS_SUBVERSION_MOJAVE;
+  }
+
   public static boolean ensureSpecialMacOSFileAccessHandling() {
-    return (Tools.OSType.MAC == Tools.getOSType()) && !isMacOsBeforeCatalina();
+    return (Tools.OSType.MAC == Tools.getOSType())/* && !isMacOsBeforeCatalina()*/;
   }
 
   public static String getPathRelativeToCodeSource(String path) {

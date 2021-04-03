@@ -91,13 +91,15 @@ public class FileDialogTools {
       Frame frame, Component centerPanel, String defaultFilename) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a flame-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new FlameFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new FlameFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (defaultFilename != null && defaultFilename.length() > 0) {
         try {
           fileDialog.setDirectory(new File(defaultFilename).getAbsoluteFile().getParent());
@@ -168,13 +170,15 @@ public class FileDialogTools {
   public static File selectFlameFileForSave(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save flame-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new FlameFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new FlameFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getOutputFlamePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getOutputFlamePath());
@@ -244,13 +248,15 @@ public class FileDialogTools {
       Frame frame, Component centerPanel, String previousGradientPath) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a map-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new MapFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new MapFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (previousGradientPath != null) {
         try {
           fileDialog.setDirectory(previousGradientPath);
@@ -337,13 +343,15 @@ public class FileDialogTools {
   public static File selectSoundFileForOpen(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a sound-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new SoundFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new SoundFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getInputSoundFilePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getInputSoundFilePath());
@@ -382,13 +390,15 @@ public class FileDialogTools {
   public static List<File> selectFlameFilesForOpen(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open flame-files...");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new FlameFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new FlameFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getInputFlamePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getInputFlamePath());
@@ -434,13 +444,15 @@ public class FileDialogTools {
   public static File selectJWFDanceFileForOpen(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a JWFDance-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new JWFDanceFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new JWFDanceFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getInputJWFMoviePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getInputJWFMoviePath());
@@ -477,13 +489,15 @@ public class FileDialogTools {
   public static File selectJWFDanceFileForSave(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save JWFDance-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new JWFDanceFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new JWFDanceFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getOutputJWFMoviePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getOutputJWFMoviePath());
@@ -521,14 +535,16 @@ public class FileDialogTools {
       Frame frame, Component centerPanel, String defaultExtension, String defaultFilename) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open an image");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new ImageFileFilter().accept(new File(dir, name))
-                  || new HDRImageFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new ImageFileFilter().accept(new File(dir, name))
+                    || new HDRImageFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (defaultFilename != null && defaultFilename.length() > 0) {
         try {
           fileDialog.setDirectory(new File(defaultFilename).getAbsoluteFile().getParent());
@@ -592,14 +608,16 @@ public class FileDialogTools {
       Frame frame, Component centerPanel, String defaultExtension) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save an image");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new ImageFileFilter().accept(new File(dir, name))
-                  || new HDRImageFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new ImageFileFilter().accept(new File(dir, name))
+                    || new HDRImageFileFilter().accept(new File(dir, name));
+              }
+            });
+       }
       if (Prefs.getPrefs().getOutputImagePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getOutputImagePath());
@@ -655,13 +673,15 @@ public class FileDialogTools {
       Frame frame, Component centerPanel, String defaultExtension) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save pointcloud-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new PointCloudOutputFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new PointCloudOutputFileFilter().accept(new File(dir, name));
+              }
+            });
+        }
       if (Prefs.getPrefs().getTinaMeshPath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getTinaMeshPath());
@@ -707,13 +727,15 @@ public class FileDialogTools {
   public static File selectMeshFileForSave(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save mesh-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new MeshFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new MeshFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getTinaMeshPath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getTinaMeshPath());
@@ -750,13 +772,15 @@ public class FileDialogTools {
   public static File selectMeshFileForOpen(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open mesh-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new MeshFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new MeshFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getTinaMeshPath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getTinaMeshPath());
@@ -793,13 +817,15 @@ public class FileDialogTools {
   public static File selectSvgFileForOpen(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open svg-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new SvgFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new SvgFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getTinaSVGPath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getTinaSVGPath());
@@ -916,13 +942,15 @@ public class FileDialogTools {
   public static File selectJWFRenderFileForSave(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save render-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new JWFRenderFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new JWFRenderFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getOutputFlamePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getOutputFlamePath());
@@ -960,13 +988,15 @@ public class FileDialogTools {
   public static File selectJWFRenderFileForOpen(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open render-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new JWFRenderFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new JWFRenderFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getInputFlamePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getInputFlamePath());
@@ -1005,14 +1035,16 @@ public class FileDialogTools {
       Frame frame, Component centerPanel, String defaultExtension) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Render an image/video");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new ImageFileFilter().accept(new File(dir, name))
-                  || new VideoFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new ImageFileFilter().accept(new File(dir, name))
+                    || new VideoFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getOutputImagePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getOutputImagePath());
@@ -1064,13 +1096,15 @@ public class FileDialogTools {
   public static File selectAnbFileForSave(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Render an ANB-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new ANBFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new ANBFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getOutputImagePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getOutputImagePath());
@@ -1107,13 +1141,15 @@ public class FileDialogTools {
   public static File selectMp4FileForSave(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Render a MP4-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new VideoFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new VideoFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getOutputImagePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getOutputImagePath());
@@ -1150,13 +1186,15 @@ public class FileDialogTools {
   public static File selectFlameSequenceFileForSave(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save flame-file-sequence");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new FlameFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new FlameFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getMovieFlamesPath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getMovieFlamesPath());
@@ -1192,13 +1230,15 @@ public class FileDialogTools {
       Frame frame, Component centerPanel, String defaultFilename) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Open a jwfmovie-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new JWFMovieFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new JWFMovieFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getInputJWFMoviePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getInputJWFMoviePath());
@@ -1234,13 +1274,15 @@ public class FileDialogTools {
   public static File selectJWFMovieFileForSave(Frame frame, Component centerPanel) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       FileDialog fileDialog = new FileDialog(frame, "Save jwfmovie-file");
-      fileDialog.setFilenameFilter(
-          new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-              return new JWFMovieFileFilter().accept(new File(dir, name));
-            }
-          });
+      if (!Tools.isMacOsMojave()) {
+        fileDialog.setFilenameFilter(
+            new FilenameFilter() {
+              @Override
+              public boolean accept(File dir, String name) {
+                return new JWFMovieFileFilter().accept(new File(dir, name));
+              }
+            });
+      }
       if (Prefs.getPrefs().getOutputJWFMoviePath() != null) {
         try {
           fileDialog.setDirectory(Prefs.getPrefs().getOutputJWFMoviePath());

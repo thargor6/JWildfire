@@ -1709,7 +1709,7 @@ Each nonlinear transformation can have more of one of the following categories:
 - *Crop*: a cropping transformation.
 - *Edit formula/code*: a transformation where you can actually enter code or a formula to customize it.
 - *Escape-time fractal*: a transformation which computes an escape-time fractal, for example: _fract_mandelbrot_.
-- *Supports external shapes*: a transformation which can be customized by using external resources like images, svg's or meshes.
+- *Supports external shapes*: a transformation which can be customized by using external resources like images, .svg-files or meshes.
 
 ====== Filtering nonlinear transformations
 Currently, there are about 800 nonlinear transformations included. Sometimes this is just too much, even to play around.
