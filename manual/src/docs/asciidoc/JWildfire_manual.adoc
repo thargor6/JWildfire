@@ -40,7 +40,7 @@ Thanks to the whole fractal art community for their neverending enthusiasm which
 == _Main_ menu
 After launching the program the <<fractal_flame_editor, Fractal-Flame Editor>> is opened automatically,
 because it is the main module of JWildfire.
-There are additional modules and usefull functions which can be reached from with the _Main_ menu.
+There are additional modules and useful functions which can be reached from with the _Main_ menu.
 
 The _Main_ menu contains the following items:
 
@@ -71,9 +71,9 @@ The _Main_ menu contains the following items:
 
  - *Help*: some useful informations and the official documentation
  ** *User manual*: the official user manual (the file you are currently reading)
- ** *System information*: opens a popup to display some usefull information about your system related  to JWildfire, for example, available memory
+ ** *System information*: opens a popup to display some useful information about your system related  to JWildfire, for example, available memory
  ** *Welcome to Jwildfire*: an ancient Welcome-dialog with some useful links, not available in the _Steam Edition_ of JWildfire
- ** *List of changes*: displays the ever-grwowing list of changes. It is a recommended read after each release of the software.
+ ** *List of changes*: displays the ever-growing list of changes. It is a recommended read after each release of the software.
  ** *GPU rendering*: some compact documentation about <<gpu_rendering, GPU-rendering>>
  ** *Supported AI-Post-Denoisers*: some compact documentation about <<ai_based_denoiser, _AI-based denoisers_>>
  ** *Tip of the day*: a small popup which shows small tips at the startup of JWildfire
@@ -137,8 +137,8 @@ The progress bar indicates the current render progress in the following cases:
 - rendering an image or movie by using <<render_image_movie, _Render image/movie_>> button
 
 ===== _Turn grid on/off_
-Tuns on or off a grid which may help to align controls. Note that this grid can be moved (see "Edit view of the controls" below), so is intended for control
-alignment, not image alignment.
+Turns on or off a grid which may help to align controls. Note that this grid can be
+moved (see <<edit_view_of_controls, _Edit view of the controls_>>), so is intended for control alignment, not image alignment.
 
 ===== _Turn guides on/off_
 Turns on or off "artistic guides" for
@@ -210,6 +210,7 @@ In this mode you may freely edit the affine transform by dragging the three corn
 of the triangle-controls.
 This way you can easily create a free combination of translation, rotation and shear.
 
+[#edit_view_of_controls]
 ===== _Edit view of the controls_
 In this mode you edit the appearance of the controls. This doesn't change the flame;
 only how the controls look. It can be used to see controls that are outside the window
@@ -491,7 +492,7 @@ Selects the shape of the bokeh-effect
 - *SineBlur*: a popular circular bokeh
 - *StarBlur*: tiny stars
 - *Taurus*: another unusual, but interesting shape
-- *Snowflake*: a complex snowflake, created wtih the algorithm described in the
+- *Snowflake*: a complex snowflake, created with the algorithm described in the
 paper "A local cellular model for snow crystal growth" by Clifford A. Reiter.
 - *SubFlame*: This is the most versatile option: You may use any other fractal as bokeh-style.
 
@@ -820,6 +821,7 @@ the denoiser or just want to denoise some non-Jwildfire-images.
 Please note: It is recommended to use PNG as the file-format, other formats may work as well, but are not
 guaranteed to work. Eventually, you will need to convert the image before denoising it.
 
+[#gradient_tab]
 ==== _Gradient_ tab
 At the gradient tab you will find numerous options to create and modify the gradients of your fractals.
 Note: gradients are sometimes also referred as "palette" or "color palette".
@@ -893,7 +895,7 @@ The gradient-library contains of two parts:
   so that they are not lost when you update JWildfire. You must specify this path in the
   <<preferences, _Preferences_>> by setting the property *tinaGradientPath*.
 
-User-defined gradients may be structurized in sub-folders in order to make them more easily accessible.
+User-defined gradients may be structured in sub-folders in order to make them more easily accessible.
 
 ===== _Create new_ subtab
 [.thumb]
@@ -914,7 +916,7 @@ You may choose on of the following gradient generators:
  - *(All)*: meta-random-gradient-generator which randomly chooses a random-gradient-generator to create the gradient
  - *Strong hue*: creates a smooth  gradient with strong colors
  - *Stripes*: creates a gradient with many regular color changes, having a "stripy" look
- - *Monochrome*: creates a smooth and monochrome radient
+ - *Monochrome*: creates a smooth and monochrome gradient
  - *Smooth*: creates a smooth gradient with primarily pastel colors
  - *Bold*: creates a non-smooth gradient with large blocks of strong colors
  - *Two colors*: creates a smooth gradient by fading two colors into each other
@@ -1166,7 +1168,7 @@ These are the options:
 
  - *Off*: don't calculate hard shadows. This is the default setting.
  - *Fast*: classic hard shadows
- - *Smooth*: a modification of hard shadows which smoothes them at the edges.
+ - *Smooth*: a modification of hard shadows which smooths them at the edges.
 Produces artifacts sometimes, in which case you should use *Fast* shadows.
 
 ====== _Smooth radius_
@@ -1242,7 +1244,7 @@ Select the light source you want to edit.
 Add a light source.
 
 ====== _Del_ button
-Remove the currently selected lightsource.
+Remove the currently selected light source.
 
 ====== _Altitude_
 Changes the light direction by altering the angle between the light and the z-axis.
@@ -1257,10 +1259,10 @@ Color of the light, used in the calculating the diffuse component of reflection.
 Choose if this light should cast shadows or not. Affects only hard shadows.
 
 ====== _Light intensity_
-Intensity of the lightsource.
+Intensity of the light source.
 
 ====== _Shadow intensity_
-Intensity of the shadow cast by this lightsource.
+Intensity of the shadow cast by this light source.
 
 ===== _ZBuffer_ subtab
 [.thumb]
@@ -1447,6 +1449,7 @@ Layers have the following properties which you can modify:
 ===== Hiding/Showing layers
 It may be important to show/hide certain layers to help focus your editing. There
 are two useful functions to support this workflow:
+
  - *Hide all others*: Hides all layers except the currently selected one.
  - *Show all*: makes all layers visible.
 
@@ -1463,9 +1466,11 @@ and you will be able to drag, rotate and scale the fractal by using the mouse.
 If you work with 3D-fractals you may also want to modify the fractal along the z-axis. This is also
 easily done using the final transform, but you have to add variations which perform the desired
 transforms as:
+
  - *post_rotate_x* and *post_rotate_y*
  - *post_ztranslate_wf*
- - *post_zscale_wf* etc.
+ - *post_zscale_wf*
+ - *affine3D*
 
 ===== Layer indicators
 There are two indicators to help you to work with layers:
@@ -1528,8 +1533,8 @@ Here you can choose the type of mutation to be executed:
  - *Weighting field*: add randomized weighting-field-effects
  - *All*: randomly select one of the above mutations. This is the default option.
 
- - *User1*, *User2*, *User3*: user-defined lists of mutations. You may customize them in the <<preferences, _Preferences_>> by
-editing the properties *tinaMutaGenMutationTypesUser1*, *tinaMutaGenMutationTypesUser2* and *tinaMutaGenMutationTypesUser3*
+ - *User1* to *User3*: user-defined lists of mutations. You may customize them in the <<preferences, _Preferences_>> by
+editing the properties *tinaMutaGenMutationTypesUser(N)*.
 
 ==== _Batch size_
 Here you can specify the number of quick mutations to create.
@@ -1548,7 +1553,7 @@ You do this by adding and modifying transformations.
 ===== _Theory_
 It is beyond the scope of this book to explain exactly how transformations work and how fractal flames
 are generated in general.
-If you are interested in the math behind fractal flames, a very good ressource
+If you are interested in the math behind fractal flames, a very good resource
 is the dissertation by Scott Draves, the inventor of the fractal flame
 itself: https://flam3.com/flame_draves.pdf
 
@@ -1651,12 +1656,12 @@ that is very fast to compute. But, these are not true fractal flames.
 ====== _Nonlinear transformations_
 The primary invention of Scott Draves, when creating the idea of fractal flames, was not only allow "classic"
 affine transformations, but also allowing arbitrary transformations.
-Mathematically spoken, this is more complex, but the basic is easy understand:
+These can be mathematically complex, but the basics are easy to understand.
 
 - do not only allow transformations of the type rotation, translation, shear or reflections
 - but do allow more generic transformations, which still allow that the basic algorithm works.
 For example, a transformation which sets any value to 0, will probably not lead to any interesting results.
-But a transformation which moves a point along a gentle wave might as valid as a transformation which moves
+But a transformation which moves a point along a gentle wave might be as valid as a transformation which moves
 a point along a line, but lead to much more interesting results.
 
 So, a good way of thinking about nonlinear transforms is that they add small details to otherwise more
@@ -1665,20 +1670,20 @@ So, a good way of thinking about nonlinear transforms is that they add small det
 ====== _Different names for nonlinear transformations_
 There are different names for nonlinear transformations:
 
- - *nonlinear transformation*: this is the prefered name
+ - *nonlinear transformation*: this is the preferred name
  - *variations*: this is shorter and also common
  - *plugins*: because in some programs they are supplied as plugins which can be loaded at runtime. JWildfire
 also supports the creation of some kind of plugins by using the _wf_custom_ or _wf_custom_full_-variation.
-But this is intended only for exploration of some new ideas. Afte exploration they are included
+But this is intended only for exploration of some new ideas. After exploration they are included
 in the main code base, hence in JWildfire you usually do not find the term "plugin".
 
 ====== _Superimposition of nonlinear transformations_
 You can add up to 12 nonlinear transformations on this tab. These will all be overlaid.
 Most of the nonlinear transformations have a lot of parameters.
-Some of them really a lot, they can be thought as complete independant simulating programs.
+Some of them really a lot, they can be thought as complete independent simulating programs.
 
 The possibility of changing these parameters together with the superposition of different nonlinear transformations
-together with the possibility to change parameters of affine transformations leads to an infinite number of
+together with the possibility to change parameters of affine transformations leads to an infinite number
 of possibilities for each flame.
 
 ====== Types of nonlinear transformations_
@@ -1698,10 +1703,10 @@ Each nonlinear transformation can have more of one of the following categories:
 - *DC*: a transformation which also changes the color-index (and overrides the default algorithm to calculate colors).
 - *Simulation*: a more complex simulation, for example a snowflake-generator.
 - *Base shape*: a transformation which creates a base-shape, for example _square_.
-- *Pre*: a transformation which has the *Pre*-priority
-- *PrePost*: a transformation which has the *PrePost*-priority
-- *Post*: a transformation which has the *Post*-priority
-- *Crop*: a cropping transformation
+- *Pre*: a transformation which has the *Pre*-priority.
+- *PrePost*: a transformation which has the *PrePost*-priority.
+- *Post*: a transformation which has the *Post*-priority.
+- *Crop*: a cropping transformation.
 - *Edit formula/code*: a transformation where you can actually enter code or a formula to customize it.
 - *Escape-time fractal*: a transformation which computes an escape-time fractal, for example: _fract_mandelbrot_.
 - *Supports external shapes*: a transformation which can be customized by using external resources like images, svg's or meshes.
@@ -1714,9 +1719,9 @@ The _Filter_ option consists of two drop-down lists, where you can choose up two
 
  - when the *first* _Variation profiles_ is selected, only the variations are displayed which are inside the selected profile.
  - when *two* _Variation profiles_ are selected, only the variations are displayed which are inside the both profiles.
- - the *second* drop-down list alternatively allows to select an *_inversed variation profile_*.
-When you select an *_inversed variation profile_* in the *second* option, only variations are displayed which are
-inside the first selected _Variation profile_, but not in the _inversed variation profile_.
+ - the *second* drop-down list alternatively allows to select an *_inverted variation profile_* (prefixed by "!=" in the list).
+When you select an *_inverted variation profile_* in the *second* option, only variations are displayed which are
+inside the first selected _Variation profile_, but not in the _inverted variation profile_.
 
 [.thumb]
 image::nonlinear_variations_filter.jpg[scaledwidth=50%]
@@ -1741,6 +1746,52 @@ Per profile these are the options to specify the _Profile type_:
 - *Exclude variations*: specify which variations you want to _exclude_.
 - *Include types*: specify a list of _variation types_. Each variation which satisfies this selection will be included.
 - *Exclude types*: specify a list of _variation types_. Each variation which satisfies this selection will be excluded.
+
+====== Adding nonlinear transformations
+You can add up to 12 nonlinear transformations to each of the transformations of your fractal.
+Therefore, there are 12 fixed slots on the _Nonlinear_ tab where you can select the name of the desired nonlinear
+transformation from a drop-down list.
+
+[.thumb]
+image::nonlinear_transformations.jpg[scaledwidth=50%]
+
+*Hint: If you know the beginning of the name, you can enter it in the selection list. The corresponding entry will then be selected.*
+For example: typing s-u-b-f will select _subflame_wf_-variation.
+
+====== Removing nonlinear transformations
+There is a special empty entry in the drop-down list. It is the top entry and should be used if you want to
+remove a specific nonlinear transformation from your fractal.
+
+When you select this entry the corresponding variations will be removed and the following variations (if any) will move up.
+
+[.thumb]
+image::nonlinear_transformations_remove.jpg[scaledwidth=50%]
+
+====== Editing nonlinear transformations
+At each variation-slow there are the following options to edit the nonlinear transformation:
+
+ - a _numeric field_ right of the name: this is the *amount* of this nonlinear transformation.
+ - a _drop-down list_ below the name: here you can select a *parameter* of this nonlinear transformation you want to edit.
+Some nonlinear transformations have no parameters. In this case the _drop-down list_ is empty.
+ - a _numeric field_ right of the *parameter* _drop-down list_: this is the amount of the currently selected parameter.
+ - a small _yellow/gray_ toggle button left of the name: use this button to make this transformation a _pre_-transformation.
+Any non-linear transformation having the prefix "pre_" in the name usually is a _pre_-transformation by convention. In this case
+the button will be active. You may change it to use this transformation as a _non-_pre_-transformation.
+ - a small _yellow/gray_ toggle button right of the name: use this button to make this transformation a _post_-transformation.
+Any non-linear transformation having the prefix "post_" in the name usually is a _post_-transformation by convention. In this case
+the button will be active. You may change it to use this transformation as a _non-_post_-transformation.
+ - a small _green arrow_ button left of the *parameter* _drop-down list_: Here you can show/hide an optional parameter panel,
+with which you can control all parameters of the currently selected variation with separate sliders. Since this takes up a lot of space,
+it can be switched on/off separately for each variant.
+
+[.thumb]
+image::nonlinear_transformations_params.jpg[scaledwidth=50%]
+
+ - an _arrow_ button right of the *amount* field: here you can move this variation up one position.
+ - small _cog_ button right of the *parameter *amount*: some variations have not only numeric parameters. In this case
+you will need to click at this button to open a popup which allows to edit the corresponding parameter.
+For example, the _svg_wf_ variation has a _svg_ parameter that points to an external *.svg* file.
+If you click the _cog_ button with the parameter selected, you get a file selection dialog.
 
 ===== _Xaos_ tab
 _Xaos_ is a synonym for _relative weights_. Since "Xaos" is much shorter, it was used in the user interface.
@@ -1768,7 +1819,7 @@ the probability that this combination will be executed in the iteration process:
 
 So, a relative weight of 0 is much easier to understand than the other values. Luckily, finding the right combinations
 where it makes sense to use 0 as the _relative weight_ has the biggest impact on the fractal images.
-All the other possiblities are also very interesting, but lead to much more subtle differences (in the most of the cases).
+All the other possibilities are also very interesting, but lead to much more subtle differences (in the most of the cases).
 
 ====== _View as "to"_
 Controls which values of the _relative weights_ matrix are displayed in the table.
@@ -1809,15 +1860,15 @@ For example, having again three transformations *1* and *2* and *3*:
 - you should now see that the value at the first row *2 from 1* is 0
 
 *Please note that switching the view mode does not affect the order of execution of transformations (relative weights)
-in any way. It are only different views of the same thing.*
+in any way. They are only different views of the same thing.*
 
 ====== _0_ button
 Sets the currently selected _relative weight_ to 0. Entering a numerical value would have the same effect, but
-invoking the button is thought to be easier.
+clicking the button is easier.
 
 ====== _1_ button
 Sets the currently selected _relative weight_ to 1. Entering a numerical value would have the same effect, but
-invoking the button is thought to be easier.
+clicking the button is easier.
 
 ====== _Reset_ button
 Resets all the _relative weights_ of the currently selected transformation (to the numerical value 1).
@@ -1838,7 +1889,7 @@ These are the options:
 - *None*: does not change the point's color; it will be the same as the input point.
 This is the default for final transforms since using a different type would reduce the color range.
 - *Diffusion*: is the default flame coloring type invented by Scott Draves and used in all flame fractal programs and
-is the default for normal transforms. It is based on a gradient, which can be selected and edited in the _Gradient_ tab,
+is the default for normal transforms. It is based on a gradient, which can be selected and edited in the <<gradient_tab, _Gradient_ tab>>,
 and uses an index to the gradient between 0 (leftmost color) and 1 (rightmost color) to set the flame colors.
 There are two controls: _Color_ and _Speed_.
  ** _Color_ specifies the target gradient index for the transform. On each iteration,
@@ -1849,7 +1900,7 @@ the color won't change. Negative Speed values will move it more than halfway (mo
 moves all the way; the new color will be the gradient color matching the Color value.
 
 - *Target*: ignores the gradient. The Color setting is a target color instead of a target gradient index.
-On each iteration, the point's color will be be interpolated between the current color and the target color.
+On each iteration, the point's color will be interpolated between the current color and the target color.
 _Speed_ works in the same way as DIFFUSION:
 
  ** 0 will make the color halfway between the current and target colors,
@@ -1864,10 +1915,10 @@ The point's color is interpolated with the target color as with *Target* rather 
 _Color_ determines the starting point and _Speed_ controls how far along the gradient each unit of distance moves from there.
 Like other coloring types, Speed -1 sets the color to the specified color.
 But the input color is ignored, so unlike the other coloring types, Speed 1 will still change the color.
-*Distance* is especially effective for coloring flames made with a single non-blur transform, which are otherwise
+*Distance* is especially effective for coloring flames made with a single non-base-shape transform, which are otherwise
 quite difficult to color.
 
- - *Cyclic*: uses the grad1ient, but simply shifts the gradient index right the amount specified by Speed.
+ - *Cyclic*: uses the gradient, but simply shifts the gradient index right the amount specified by Speed.
 If it goes off the end of the gradient, it wraps around to the other side. *Cyclic* will not converge to a color when iterated,
 so doesn't work as the only coloring type in a flame; some other iterated transform needs to use *Diffusion* to get a stable
 color that *Cyclic* can use as a starting point.
@@ -1881,7 +1932,7 @@ These are the options:
 
 - *Normal*: each iteration point contributes to the fractal without any modification.
 - *Hidden*: the contribution of the currently selected transformation is invisible (not drawn).
-- *Opaque*: the contribution of the currently selected transformation is faded out by taking into account the_Opacity_ parameter.
+- *Opaque*: the contribution of the currently selected transformation is faded out by taking into account the _Opacity_ parameter.
 Any value between 0 and 1 is possible, including the two extremes:
 
  ** 0 means minimum Opacity, this is equal to using the *Hidden* setting.
@@ -1932,7 +1983,7 @@ Creates a random local gamma effect:
 - when the _Whole fractal_ checkbox is not checked, a random local gamma effect is only applied to the current selected transformation.
 
 ===== _Reset all_ button
-Removes the weighting field:
+Removes the local gamma effect:
 
 - when the _Whole fractal_ checkbox is checked, the local gamma effect for each transformation of the fractal is removed.
 - when the _Whole fractal_ checkbox is not checked, only the local gamma effect for the current selected transformation is removed.
@@ -1986,11 +2037,11 @@ A value of 0 means no influence by a weighting field.
 
 ===== _Var param 1_/_Var param 2_/_Var param 3_
 You can define up three parameters of nonlinear transformations which may be affected by the
-weighting field. The numerical field specifies the magnitude, in the drop-down list you select the name of the paramter.
+weighting field. The numerical field specifies the magnitude, in the drop-down list you select the name of the parameter.
 A value of 0 means no influence by a weighting field.
 
 ===== _Jitter amount_
-Overall strength (amplitude) of the weighting field.
+Strength of noise to add after the transformation. A value of 0 means don't add additional noise.
 
 ===== _Seed_
 Parameter to randomize the shape of the noise. Different values lead to different distributions.
@@ -2029,35 +2080,36 @@ At this tab you can manage JWF-scripts and organize custom buttons which allow e
 certain scripts.
 
 Custom-buttons are completely optional. You can also execute scripts directly from the _Scripts_ library
-by double-clicking at a script.
+by double-clicking at a script name.
 
 JWF-scripts are written in the Java-language and can use most of language-features offered by
-Java 1.4. So you could also read external files, access ressources from the internet,
+Java 1.4. So you could also read external files, access resources from the internet,
 open custom-windows etc.
 There are also several possibilities to interact with the <<fractal_flame_editor, Main Editor>>,
 for example, to modify the currently edited flame and to refresh the preview.
 
-===== _Scripts_ libary
+===== _Scripts_ library
 The scripts-library contains of two parts:
+
 - built-in scripts: those are installed together with the program and can not be modified in any way
 - your own scripts. They are located in a folder outside the JWildfire-installation-drawer,
 so that they are not lost when you update JWildfire. You must specify this path in the
 <<preferences, _Preferences_>> by setting the property *tinaJWFScriptPath*.
 
-User-defined scripts may be structured in sub-folders in order to make them easier accessible.
+User-defined scripts may be structured in sub-folders in order to make them easier to find.
 
 ===== _Import script_ button
 Import a script from an external file. The following file-types are supported:
 
 - a single *.java*-file containing the script-code
-- a *.zip*-archieve containing the script-toger together with additional files or folders.
+- a *.zip*-archive containing the script-code together with additional files or folders.
 
 When you download scripts from the internet, for example, from https://www.jwfsanctuary.club, they usually come
 as .zip-file.
 
 ===== _New_ button
-Create a new script from scratch. This is rarely used, it is often more useful to duplicate
-an existing script or to create a script form a flame and then to modify it.
+Create a new script from scratch. This is rarely used; it is usually easier to duplicate
+an existing script or to create a script from a flame and then to modify it.
 
 ===== _Dupl_ button
 Duplicates the currently selected script.
@@ -2067,16 +2119,17 @@ This is a very useful function to get started with creating scripts. It creates 
 which contains all the Java-code to create the currently selected flame.
 
 This has the following purposes:
+
 - you have a working script which actually produces something with a single button-click
-- by modiyfing certain parts you can programmatically create similar flames
+- by modifying certain parts you can programmatically create similar flames
 
 ===== Creating flame-randomizers
 This function also creates code, which randomizes certain parameters at the level
 of each transform. This code is inactive by default.
-So, the generated flames by this script will alsways look the same until you
+So, the generated flames by this script will always look the same until you
 modify the script. This is intended, because randomizing a random selection of
 parameters usually does not lead to interesting results. So you must find out by yourself,
-which parameters are good fro randomizing a flame and which are not. This always depends
+which parameters are good for randomizing a flame and which are not. This always depends
 on the type of fractal and small differences between flames may affect this behavior in
 a very strong way.
 
@@ -2118,7 +2171,7 @@ Create a <<macro_buttons, _Macro button_>> in the bottom area of the preview to 
 You can remove this button using the _Delete_-button at the <<macro_buttons, _Macro buttons_ subtab>>.
 
 ===== _Scan_ button
-Rescans the script-library. This is only necessary when you modified files outside from JWildfire or changed
+Rescans the script-library. This is only necessary when you modified files outside JWildfire or changed
 the library-path in the _Preferences_.
 
 ===== _Run_ button
@@ -2128,7 +2181,8 @@ Runs the currently selected script.
 Opens a popup-window to edit the currently selected script.
 
 ===== _Description_
-You can enter a description of your script as plain text. Here you can give hints for usage or place copyright information.
+Shows a description of the script, which might contain hints for usage or copyright information.
+Use the Edit button to edit the text.
 
 ===== _Code preview_
 Shows the code of the script. Because this area is too small for making changes there is a separate _Edit_ button
@@ -2136,17 +2190,22 @@ to edit the script.
 
 [#macro_buttons]
 ===== _Macro buttons_
-At this tab you can create and modify so-called _Macro buttons_. A _Macro button_ is a button which executes a
+At this tab you can control so-called _Macro buttons_. A _Macro button_ is a button which executes a
 script. Scripts are also called _Macros_, hence the name.
 
+Macro buttons appear either below or to the right side of the Preview/Editor area,
+depending on the *tinaMacroButtonsVertical* setting in _Preferences_.
+
+Add a new Macro button by selecting a script and clicking the _Btn_ button as described above.
+
 ====== _Macro buttons_ table
-In this table all _Macro Buttons_ are displayed and you can also edit the label and shorthint of each button.
+In this table all _Macro Buttons_ are displayed and you can also edit the label and short hint of each button.
 
 ====== _Up_ button
-Moves the selected entry on position up. The corresponding button will move one position to the left.
+Moves the selected entry one position up. The corresponding button will move one position to the left.
 
 ====== _Down_ button
-Moves the selected entry on position down. The corresponding button will move one position to the right.
+Moves the selected entry one position down. The corresponding button will move one position to the right.
 
 ====== _Delete_ button
 Deletes the currently selected _Macro button_.
@@ -2245,7 +2304,7 @@ There are the following options:
 - *(All)*: meta-random-gradient-generator which randomly chooses a random-gradient-generator to create the gradient
 - *Strong hue*: creates a smooth  gradient with strong colors
 - *Stripes*: creates a gradient with many regular color changes, having a "stripy" look
-- *Monochrome*: creates a smooth and monochrome radient
+- *Monochrome*: creates a smooth and monochrome gradient
 - *Smooth*: creates a smooth gradient with primarily pastel colors
 - *Bold*: creates a non-smooth gradient with large blocks of strong colors
 - *Two colors*: creates a smooth gradient by fading two colors into each other
@@ -2705,8 +2764,8 @@ Global <<fps, fps-setting>> of the movie.
 ==== Motion blur length
 Global <<motion_blur_length, motion blur length>> of the whole movie.
 
-==== Motion blur timestep
-Global <<motion_blur_time_step, Motion blur timestep>> of the whole movie.
+==== Motion blur time step
+Global <<motion_blur_time_step, Motion blur time step>> of the whole movie.
 
 === Preview
 You can preview the animation at any time by hitting the _Play_ button in the middle of the window.
@@ -2760,6 +2819,7 @@ You can define any number of motions, for example:
 - a rotation with frequency x
 - "beat" data of a certain channel from the FFT
 - a manually created motion curve using the spline-editor
+
 [.thumb]
 image::dancing_flames_add_motion.jpg[scaledwidth=30%]
 
@@ -2770,6 +2830,7 @@ image::dancing_flames_motions.jpg[scaledwidth=50%]
 
 ==== Flame properties
 Each flame has many properties. Most of them can be easily be animated, for example:
+
  - camera angle or
  - zoom factor of transform 2 or
  - Julia index of the Julian variation in the final transform.
@@ -2778,6 +2839,7 @@ You don't need to know all of these, they can be accessed through a tree-view in
 image::dancing_flames_properties.jpg[scaledwidth=50%]
 
 Each fractal flame has its own top-level-folder in this view. There are sub-folders for:
+
  - each *transform*,
  - each *final transform* and
  - *gradient* parameters.
@@ -2852,7 +2914,7 @@ To switch between flames just select them from the list-box in the project area 
 
 ====  Recording a show
 To record a show just enable the _Record show_ checkbox and start the show. Now any user action
-(currently only switching between flames) is recorded accordingly to your fps setting.
+(currently only switching between flames) is recorded according to your fps setting.
 
 After finishing the show (by pressing the _Stop show_ button) you will be prompted for an output path.
 Just choose a directory and specify a base-name for the flame files to be generated.
@@ -2936,7 +2998,7 @@ But please be aware, that this is currently very limited and does not work well 
 You should test it with a single flame before GPU-rendering a longer batch.
 
 === _Show image_ button
-Loads and displays the corrsponding image of the currently selected flame, if already rendered.
+Loads and displays the corresponding image of the currently selected flame, if already rendered.
 
 === _Render_ button
 Starts the rendering batch.
@@ -3022,7 +3084,7 @@ Downsample the slices by this factor to reduce noise. Reduces resolution, but in
 ===== _Spatial filter radius_
 Filter-radius used for downsampling.
 
-===== _Brighness threshold_
+===== _Brightness threshold_
 Brightness level at which the object is actually seen. Increasing this value may
 also help to reduce background noise, but can also lead to loss of details.
 

@@ -25,7 +25,8 @@ V6.40 (xx.04.2021)
      -tunnel,
      -kaleidoimg,
      -dc_portal,
-     -kaplan by by Jesus Sosa
+     -kaplan,
+     -dc_gmandelbroot by by Jesus Sosa
      -crop_mandelbulb3d,
      -crop_mandelbox3d by Whittaker Courtney
      -post_aexion_crop,
