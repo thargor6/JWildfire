@@ -31,22 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
-import javax.swing.JApplet;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -846,6 +831,10 @@ public class JWildfire extends JApplet {
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
         setUserLookAndFeel();
+        UIManager.getLookAndFeelDefaults()
+                .put("defaultFont", Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 12));
+
+
         application = new JWildfire();
         application.initUI();
         application.getMainFrame().setVisible(true);

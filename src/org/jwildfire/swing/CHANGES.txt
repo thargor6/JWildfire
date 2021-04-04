@@ -36,6 +36,7 @@ V6.40 (xx.04.2021)
      -post_bulbtorus_crop,
      -post_coastalbrot_crop by by Jesus Sosa
  - improved the "Affine3D"-random-flame-generator
+ - slightly improved the speed of "glsl_"- and similar variations
  - slightly improved the speed when chosing a random variation (from within a random-flame-generator or Mutation)
  - moved the "ZBuffer"-subtab from the "DOF / Bokeh"-tab to the "3D rendering"-tab
  - removed the advanced code-editor (using jsyntaxpane-1.1.5), which was not properly working in
@@ -44,6 +45,7 @@ V6.40 (xx.04.2021)
    where removed from the Preferences.
    Recommended Alternative: use Visual Studio Code for editing complex scripts (https://code.visualstudio.com/download)
  - removed the "Variations settings"-window which was superseeded by the new variation profiles
+ - fix: file dialogs in macOS Mojave now are the native file dialogs, so you can access files outside the sandbox
  - fix: a bug regarding macOS which prevented that path-settings where correctly saved in the Preferences
  - fix: name of parameter "type" was wrong in "cut_booleans"-variation, by Brad Stefanov
  - fix: QuickMutations now inherit the zoom-factor, quality and spatial oversampling settings form the original flame
@@ -51,6 +53,7 @@ V6.40 (xx.04.2021)
  - fix: regarding of priority in the post_falloff2-variation
  - fix: initialize width and height for new flames, by Rick Sidwell
  - fix: a bug where changing a post-affine-transformation-value was not properly updated and the change was lost when saving and re-loading the flame
+ - fix: sets a default font for the UI during early startup. On macOS Big Sur some parts of the UI were reported to use a strange font sometimes.
 
 V6.22 (16.01.2021)
  - reduced flickering of the main preview
