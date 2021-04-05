@@ -94,7 +94,12 @@ public class JWFScriptUtils {
               "SX 4 I need love", "SX 5 I need patience", "SX 6 I need Tweaks", "SX 7 I make you wonder", "SX hole2Split",
               "SX jispostz", "SX LoonieSplit", "SX octagon2Split", "SX rings2Split", "SX squarize2Split", "SX tancos2Split",
 
+              "TM Atan", "TM DC_Cyl", "TM Hyperbolic", "TM Mcarpet", "TM Plane",
+              "TM Atan 1xFinal", "TM DC_Cyl 1xFinal", "TM Hyperbolic 1xFinal", "TM Mcarpet 1xFinal", "TM Plane 1xFinal",
+              "TM Atan 2xFinals", "TM DC_Cyl 2xFinals", "TM Hyperbolic 2xFinals", "TM Mcarpet 2xFinals", "TM Plane 2xFinals",
+
               "Wedge_Sph_Marble",
+              "Yummy Gnarls BS",
 
               "YU-", "YU--Choose", "YU--cot", "YU--coth", "YU--cothtest", "YU--csc",
               "YU--csch", "YU--curl", "YU--curlZO", "YU--foci", "YU--ho", "YU--invpolar",

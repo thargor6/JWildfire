@@ -35,6 +35,9 @@ V6.40 (xx.04.2021)
      -post_bristorbrot_crop,
      -post_bulbtorus_crop,
      -post_coastalbrot_crop by by Jesus Sosa
+ - new internal scripts
+     - "Tile Maker" (which is a whole family of scripts) by Missy Gainer
+     - "Yummy Gnarls" by Brad Stefanov
  - improved the "Affine3D"-random-flame-generator
  - slightly improved the speed of "glsl_"- and similar variations
  - slightly improved the speed when chosing a random variation (from within a random-flame-generator or Mutation)
