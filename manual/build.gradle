@@ -27,7 +27,7 @@ asciidoctorPdf {
         'sourcedir': project.sourceSets.main.java.srcDirs[0],
         'endpoint-url': 'https://jwildfire.overwhale.com/',
         'source-highlighter': 'rouge',
-        'imagesdir': './images',
+        'imagesdir': './',
         'toc': 'left',
         'icons': 'font',
         'idprefix': '',

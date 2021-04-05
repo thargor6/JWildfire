@@ -4,14 +4,14 @@
 :toc:
 :toclevels: 4
 
-:title-page-background-image: image::front_cover.jpg[scaledwidth=50%]
+:title-page-background-image: image::images/front_cover.jpg[scaledwidth=50%]
 
 = JWildfire users manual
 Copyright (C) 2021 by Andreas Maschke
 
 == Introduction
 [.thumb]
-image::JWildfire.jpg[scaledwidth=75%]
+image::images/JWildfire.jpg[scaledwidth=75%]
 
 Welcome to JWildfire and this user manual!
 
@@ -81,7 +81,7 @@ The _Main_ menu contains the following items:
 [#fractal_flame_editor]
 == Fractal-Flame Editor
 [.thumb]
-image::main_editor_with_regions.jpg[scaledwidth=75%]
+image::images/main_editor_with_regions.jpg[scaledwidth=75%]
 The Fractal-Flame Editor is the core part of JWildfire.
 Here you create random flames or fine-tune your artwork.
 It consists of the following parts:
@@ -105,7 +105,7 @@ However, there are much more precise ways and many other ways to modify a fracta
 
 ==== Quick buttons on the top of the preview area
 [.thumb]
-image::editor_buttons_top.jpg[scaledwidth=50%]
+image::images/editor_buttons_top.jpg[scaledwidth=50%]
 
 These buttons primarily control the previewing/editing options.
 
@@ -179,7 +179,7 @@ This button allows you to switch easily between these two options.
 
 ==== Quick buttons on the right of the preview area
 [.thumb]
-image::editor_buttons_right.jpg[scaledwidth=50%]
+image::images/editor_buttons_right.jpg[scaledwidth=50%]
 These buttons primarily control the type of editing and refreshing the preview.
 
 
@@ -278,7 +278,7 @@ Because this function is of such importance, is has been placed in a prominent p
 
 ==== Quick buttons on the left of the preview area
 [.thumb]
-image::editor_buttons_left.jpg[scaledwidth=50%]
+image::images/editor_buttons_left.jpg[scaledwidth=50%]
 In this area you find some quick-buttons to reach other modules of JWildfire and the Undo/Redo-buttons.
 
 ===== _Interactive renderer_
@@ -325,7 +325,7 @@ Solid rendering can be used to create really unusual and interesting things.
 Here is a render of the "classic" Mandelbulb (thanks to Whittaker Courtney for the idea):
 
 [.thumb]
-image::jwf_mandelbulb.jpg[scaledwidth=50%]
+image::images/jwf_mandelbulb.jpg[scaledwidth=50%]
 
 ===== _Animations controls on/off_
 Using this button you may turn on or off animation controls.
@@ -333,7 +333,7 @@ You may set up your preference for this setting in the <<preferences, _Preferenc
 
 === _Thumbnail ribbon_
 [.thumb]
-image::thumbnail_ribbon.jpg[scaledwidth=50%]
+image::images/thumbnail_ribbon.jpg[scaledwidth=50%]
 
 The thumbnail ribbon holds thumbnails of all the flames you currently are editing.
 After starting the program, some random flames are generated and displayed in the thumbnail ribbon.
@@ -351,7 +351,7 @@ By changing the value of this checkbox you change the selected state of the thum
 Selection of individual flames is only important for saving and deleting.
 
 [.thumb]
-image::thumbnail_ribbon_select_menu.jpg[scaledwidth=50%]
+image::images/thumbnail_ribbon_select_menu.jpg[scaledwidth=50%]
 
 By pressing the right mouse-button on top of this checkbox you can open a pop-up menu
 to change the selection for all flames inside the _thumbnail ribbon_:
@@ -367,7 +367,7 @@ By pressing this button you may delete the corresponding flame from the _thumbna
 Since this can not be undone, a popup will appear to confirm the action.
 
 [.thumb]
-image::thumbnail_ribbon_delete_menu.jpg[scaledwidth=50%]
+image::images/thumbnail_ribbon_delete_menu.jpg[scaledwidth=50%]
 
 By pressing the right mouse-button on top of this button you can open a pop-up menu
 to delete a number of flames from the _thumbnail ribbon_:
@@ -384,7 +384,7 @@ which details are computed.
 
 ==== _Camera_ tab
 [.thumb]
-image::camera_tab.jpg[scaledwidth=75%]
+image::images/camera_tab.jpg[scaledwidth=75%]
 
 With these controls you can control the camera-view. You can rotate and move the camera freely and zoom in/out.
 
@@ -441,7 +441,7 @@ JWildfire can simulate some bokeh effects in conjunction with DOF.
 
 ===== _DOF_ subtab
 [.thumb]
-image::dof_tab.jpg[scaledwidth=75%]
+image::images/dof_tab.jpg[scaledwidth=75%]
 
 This tab contains some of the more basic settings regarding to DOF.
 
@@ -522,7 +522,7 @@ filename *_dof_0023.flame*.
 
 ===== _Post bokeh_ subtab
 [.thumb]
-image::dof_post_bokeh_tab.jpg[scaledwidth=75%]
+image::images/dof_post_bokeh_tab.jpg[scaledwidth=75%]
 At this tab you can select options to create bokeh-like effects when using solid rendering.
 Those options are only available in solid rendering and are limited to the bokeh-related options
 which are available for regular flames.
@@ -544,7 +544,7 @@ Intensity level of the original image for placing bokeh "seeds". The larger the 
 
 ===== _Post blur_ subtab
 [.thumb]
-image::dof_post_blur_tab.jpg[scaledwidth=75%]
+image::images/dof_post_blur_tab.jpg[scaledwidth=75%]
 
 Post-blur is not technically a DOF-effect, but it creates a type of blur, therefore it is located at this tab.
 It is not a popular option and primarily resides here for backwards compatibility.
@@ -563,7 +563,7 @@ Strength of diminishing of the effect dependent of the distance to the center of
 
 ==== _Coloring_ tab
 [.thumb]
-image::coloring_tab.jpg[scaledwidth=75%]
+image::images/coloring_tab.jpg[scaledwidth=75%]
 At this tab you may edit numerous coloring/tonemapping options to turn your fractals into real artworks.
 
 ===== _Brightness_
@@ -638,7 +638,7 @@ JWildfire (in the top area of the preview-window).
 [#anti_aliasing_filter_tab]
 ==== _Anti-Aliasing/Filter_ tab
 [.thumb]
-image::antialiasing_tab.jpg[scaledwidth=75%]
+image::images/antialiasing_tab.jpg[scaledwidth=75%]
 At this tab you find some very important settings which help to improve the visual quality or "cleanliness"
 of your fractal artworks.
 For details about filtering see the sub-section <<how_filtering_works, _Filter kernel preview/How filtering works_>>.
@@ -694,7 +694,7 @@ of the final pixel usually should have an important influence.
 
 ====== _Example: Gaussian-filter_
 [.thumb]
-image::filter_preview_gaussian.jpg[scaledwidth=75%]
+image::images/filter_preview_gaussian.jpg[scaledwidth=75%]
 The Gaussian-filter is a very popular filter for smoothing. You can understand this behavior in
 the preview:
 
@@ -704,14 +704,14 @@ the preview:
 
 ====== _Example: Mitchell-filter_
 [.thumb]
-image::filter_preview_mitchell.jpg[scaledwidth=75%]
+image::images/filter_preview_mitchell.jpg[scaledwidth=75%]
 The Mitchell-filter is a very popular filter for sharpening.
 In comparison to a smoothing filter, it has small areas with negative contributions, which
 cause the sharpening effect.
 
 ====== _Example: Box-filter_
 [.thumb]
-image::filter_preview_box.jpg[scaledwidth=75%]
+image::images/filter_preview_box.jpg[scaledwidth=75%]
 
 The box-filter is a special filter because it creates averages from a number of samples.
 You can see this clearly in the preview, having only bars of the same size, i.e. each sample has the
@@ -754,7 +754,7 @@ are indicated red.
 [#adaptive_filter_preview]
 ===== _Adaptive filter preview_
 [.thumb]
-image::filtering_show_indicator.jpg[scaledwidth=75%]
+image::images/filtering_show_indicator.jpg[scaledwidth=75%]
 By enabling the small checkbox labelled "Indicator" and re-rendering the preview (Click the Render image preview button
 on the right of the preview area.) you get a visualization of the different areas detected by the _Adaptive filter_ .
 
@@ -763,7 +763,7 @@ on the right of the preview area.) you get a visualization of the different area
  - *blue*: areas with low density (which are also smoothed)
 
 [.thumb]
-image::preview_sharpness_indicator.jpg[scaledwidth=75%]
+image::images/preview_sharpness_indicator.jpg[scaledwidth=75%]
 
 ===== _Antialiasing amount_
 Antialiasing is a technique to defend hard (or "jagged") lines or isolated pixels which seem too important.
@@ -828,7 +828,7 @@ Note: gradients are sometimes also referred as "palette" or "color palette".
 
 ===== _General controls_ subtab
 [.thumb]
-image::gradient_tab_general_controls.jpg[scaledwidth=75%]
+image::images/gradient_tab_general_controls.jpg[scaledwidth=75%]
 The gradient-tab contains both some general controls and some sub-tabs. The former are described in this
 sub-chapter.
 
@@ -884,7 +884,7 @@ final coloring of the fractal.
 
 ===== _Gradient library_ subtab
 [.thumb]
-image::gradient_library_tab.jpg[scaledwidth=75%]
+image::images/gradient_library_tab.jpg[scaledwidth=75%]
 
 At this tab you can select pre-saved gradients and apply them to your fractal by just clicking
 at them.
@@ -899,7 +899,7 @@ User-defined gradients may be structured in sub-folders in order to make them mo
 
 ===== _Create new_ subtab
 [.thumb]
-image::gradient_create_tab.jpg[scaledwidth=75%]
+image::images/gradient_create_tab.jpg[scaledwidth=75%]
 
 At this tab you can create gradients using various options.
 The most common use is to create random-gradients by selecting one of the sophisticated built-in
@@ -962,7 +962,7 @@ Imports an image and creates a gradient from the most frequent colors found in t
 
 ===== _Curve editor_ subtab
 [.thumb]
-image::gradient_curve_editor_tab.jpg[scaledwidth=75%]
+image::images/gradient_curve_editor_tab.jpg[scaledwidth=75%]
 
 Color curves are an alternative way to edit gradients.
 Using color curves usually gives much more control over the final result because it allows
@@ -1000,7 +1000,7 @@ into a line with maximum intensity)
 
 ===== _Modify gradient_ subtab
 [.thumb]
-image::gradient_modify_tab.jpg[scaledwidth=75%]
+image::images/gradient_modify_tab.jpg[scaledwidth=75%]
 At this tab you can modify the gradient globally.
 Please note that this does not take into account color-curves, so they will be out of sync, if any.
 
@@ -1031,7 +1031,7 @@ finalize those changes by actually applying them to the gradient.
 
 ===== _Balancing_ subtab
 [.thumb]
-image::gradient_balancing_tab.jpg[scaledwidth=75%]
+image::images/gradient_balancing_tab.jpg[scaledwidth=75%]
 At this tab you can modify the colors of the gradient by applying typical color balancing operations.
 Please note, that this does not take into account color-curves, so they will be out of sync, if any.
 
@@ -1066,7 +1066,7 @@ finalize those changes by actually applying them to the gradient.
 
 ===== _Color map_ subtab
 [.thumb]
-image::gradient_colormap_tab.jpg[scaledwidth=75%]
+image::images/gradient_colormap_tab.jpg[scaledwidth=75%]
 This tab has a new feature which lets you use an image as a gradient.
 It works well only for flat fractals.
 When coloring the fractal it takes into account both the position at the (x,y)-plane and the local
@@ -1113,7 +1113,7 @@ Solid rendering can be used to create really unusual and interesting things.
 
 ===== _Ambient shadows_ subtab
 [.thumb]
-image::3drendering_ambient_shadows_tab.jpg[scaledwidth=75%]
+image::images/3drendering_ambient_shadows_tab.jpg[scaledwidth=75%]
 Ambient shadow calculation is an effective method for approximating more complex physical processes
 that cause the image to be darker in small corner ends or crevices.
 
@@ -1158,7 +1158,7 @@ This is in no way physically correct, but can help to generate more dramatic eff
 
 ===== _Hard shadows_ subtab
 [.thumb]
-image::3drendering_hard_shadows_tab.jpg[scaledwidth=75%]
+image::images/3drendering_hard_shadows_tab.jpg[scaledwidth=75%]
 At this tab you can configure classic hard shadows which are generated with the help of shadow maps.
 
 Hard and ambient shadows can be used at the same time and work well together.
@@ -1187,7 +1187,7 @@ can be bypassed. The bias value must not necessarily high when there are a large
 
 ===== _Material settings_ subtab
 [.thumb]
-image::3drendering_material_tab.jpg[scaledwidth=75%]
+image::images/3drendering_material_tab.jpg[scaledwidth=75%]
 Here you can set up the materials of your fractal.
 Fractals can have any number of materials, which are selected by
 a material-index similar to colors by the color-index.
@@ -1232,7 +1232,7 @@ Amount of light emitted by the reflection map.
 
 ===== _Light settings_ subtab
 [.thumb]
-image::3drendering_light_settings_tab.jpg[scaledwidth=75%]
+image::images/3drendering_light_settings_tab.jpg[scaledwidth=75%]
 At this subtab you may set up directional light sources for solid rendering.
 
 You may have as many light sources as you want.
@@ -1266,7 +1266,7 @@ Intensity of the shadow cast by this light source.
 
 ===== _ZBuffer_ subtab
 [.thumb]
-image::3drendering_zbuffer_tab.jpg[scaledwidth=75%]
+image::images/3drendering_zbuffer_tab.jpg[scaledwidth=75%]
 When rendering in solid mode, you may also export an additional z-buffer-image.
 The settings on this tab help to customize the creation of this z-buffer.
 
@@ -1724,7 +1724,7 @@ When you select an *_inverted variation profile_* in the *second* option, only v
 inside the first selected _Variation profile_, but not in the _inverted variation profile_.
 
 [.thumb]
-image::nonlinear_variations_filter.jpg[scaledwidth=50%]
+image::images/nonlinear_variations_filter.jpg[scaledwidth=50%]
 
 Examples:
 
@@ -1737,7 +1737,7 @@ The _variation profiles_ may be customized freely. See the next sub-section.
 
 ====== Editing _Variation profiles_
 [.thumb]
-image::nonlinear_edit_variation_profiles.jpg[scaledwidth=75%]
+image::images/nonlinear_edit_variation_profiles.jpg[scaledwidth=75%]
 You may edit the supplied _Variation profiles_ freely.
 
 Per profile these are the options to specify the _Profile type_:
@@ -1753,7 +1753,7 @@ Therefore, there are 12 fixed slots on the _Nonlinear_ tab where you can select 
 transformation from a drop-down list.
 
 [.thumb]
-image::nonlinear_transformations.jpg[scaledwidth=50%]
+image::images/nonlinear_transformations.jpg[scaledwidth=50%]
 
 *Hint: If you know the beginning of the name, you can enter it in the selection list. The corresponding entry will then be selected.*
 For example: typing s-u-b-f will select _subflame_wf_-variation.
@@ -1765,7 +1765,7 @@ remove a specific nonlinear transformation from your fractal.
 When you select this entry the corresponding variations will be removed and the following variations (if any) will move up.
 
 [.thumb]
-image::nonlinear_transformations_remove.jpg[scaledwidth=50%]
+image::images/nonlinear_transformations_remove.jpg[scaledwidth=50%]
 
 ====== Editing nonlinear transformations
 At each variation-slow there are the following options to edit the nonlinear transformation:
@@ -1785,7 +1785,7 @@ with which you can control all parameters of the currently selected variation wi
 it can be switched on/off separately for each variant.
 
 [.thumb]
-image::nonlinear_transformations_params.jpg[scaledwidth=50%]
+image::images/nonlinear_transformations_params.jpg[scaledwidth=50%]
 
  - an _arrow_ button right of the *amount* field: here you can move this variation up one position.
  - small _cog_ button right of the *parameter *amount*: some variations have not only numeric parameters. In this case
@@ -2252,7 +2252,7 @@ use the following setup:
  - *tinaRandomBatchBGColorBlue*: *75*
 
 [.thumb]
-image::rnd_flame_gen_mandala.jpg[scaledwidth=75%]
+image::images/rnd_flame_gen_mandala.jpg[scaledwidth=75%]
 
 ==== _Rnd flame-generator_
 
@@ -2449,7 +2449,7 @@ will still render the quicksave you did sent to the _Batch renderer_ before.
 [#mutagen_module]
 == _MutaGen_ module
 [.thumb]
-image::MutaGen.jpg[scaledwidth=75%]
+image::images/MutaGen.jpg[scaledwidth=75%]
 
 In this module you may create mutations of a certain flame in an interactive way.
 Open the MutaGen module by selecting _Fractal flames: MutaGen_ from the _Windows_ menu.
@@ -2467,7 +2467,7 @@ See the section about <<quick_mutation_types, _Quick mutation types_>> for a des
 [#interactive_renderer_module]
 == _Interactive Renderer_ module
 [.thumb]
-image::interactive_renderer.jpg[scaledwidth=75%]
+image::images/interactive_renderer.jpg[scaledwidth=75%]
 
 The _Interactive Renderer_ is an alternative rendering module which focuses on rendering a single image
 (In contrast, the <<batch_renderer, _Batch Renderer_>> focuses on rendering multiple images).
@@ -2578,7 +2578,7 @@ Select the random-flame-generator used to generate a random-fractal-flame when u
 [#flame_browser_module]
 == Flame Browser
 [.thumb]
-image::flame_browser.jpg[scaledwidth=75%]
+image::images/flame_browser.jpg[scaledwidth=75%]
 
 The flame-browser can help you to get an overview of the fractal flames you have created over the time.
 It can scan a base-folder for flame-files and will display them as thumbnails in reverse chronological order.
@@ -2600,7 +2600,7 @@ On the right side of the window you can execute one of the following actions on 
 [#easy_movie_maker_module]
 == _Easy Movie Maker_ module
 [.thumb]
-image::easy_movie_maker.jpg[scaledwidth=75%]
+image::images/easy_movie_maker.jpg[scaledwidth=75%]
 With the _Easy Movie Maker_ you can create animations consisting of multiple flames.
 Open the Easy Movie Maker module by clicking the Easy Movie Maker button on the left of the preview area or
 by selecting _Flame fractals: Easy movie maker_ from the _Windows_ menu.
@@ -2782,7 +2782,7 @@ the fractal flame at the current morphing-state.
 [#dancing_flames_module]
 == _Dancing flames_ module
 [.thumb]
-image::dancing_flames.jpg[scaledwidth=75%]
+image::images/dancing_flames.jpg[scaledwidth=75%]
 
 The dancing-flames-module is another experimental feature of JWildfire.
 Open the Dancing flames module by selecting _Fractal flames: Dancing flames_ from the _Windows_ menu.
@@ -2821,12 +2821,12 @@ You can define any number of motions, for example:
 - a manually created motion curve using the spline-editor
 
 [.thumb]
-image::dancing_flames_add_motion.jpg[scaledwidth=30%]
+image::images/dancing_flames_add_motion.jpg[scaledwidth=30%]
 
 Each motion has special parameters which can be accessed through a property table. There are
 some parameters which can found by all motion-types.
 [.thumb]
-image::dancing_flames_motions.jpg[scaledwidth=50%]
+image::images/dancing_flames_motions.jpg[scaledwidth=50%]
 
 ==== Flame properties
 Each flame has many properties. Most of them can be easily be animated, for example:
@@ -2836,7 +2836,7 @@ Each flame has many properties. Most of them can be easily be animated, for exam
  - Julia index of the Julian variation in the final transform.
 You don't need to know all of these, they can be accessed through a tree-view in the graphical interface.
 [.thumb]
-image::dancing_flames_properties.jpg[scaledwidth=50%]
+image::images/dancing_flames_properties.jpg[scaledwidth=50%]
 
 Each fractal flame has its own top-level-folder in this view. There are sub-folders for:
 
@@ -2848,14 +2848,14 @@ Each fractal flame has its own top-level-folder in this view. There are sub-fold
 To actually animate a fractal flame we must connect properties to motions.
 Any motion can be connected with a number of fractal properties from any flame of the project.
 [.thumb]
-image::dancing_flames_motion_links.jpg[scaledwidth=50%]
+image::images/dancing_flames_motion_links.jpg[scaledwidth=50%]
 
 ==== Motion hierarchies
 In certain cases it may make sense to group motions together. For example, to have a "rougher" motion (like a
 motion curve which describes a basic rotation) where a "small" motion (like "beat") is added.
 To achieve this, you may choose a parent for any motion.
 [.thumb]
-image::dancing_flames_motion_hierarchy.jpg[scaledwidth=50%]
+image::images/dancing_flames_motion_hierarchy.jpg[scaledwidth=50%]
 
 A motion having a parent can not explicitly be linked to a flame property (because it is already linked
 implicitly through its parent).
@@ -2933,7 +2933,7 @@ The recommended way is to use the <<batch_renderer, Batch renderer>> to perform 
 [#batch_renderer]
 == _Batch renderer_ module
 [.thumb]
-image::batch_renderer.jpg[scaledwidth=75%]
+image::images/batch_renderer.jpg[scaledwidth=75%]
 
 The batch renderer is designed to render fractal flames in the background (for example overnight).
 Therefore it is well suited to render frames for animations or images with large resolution,
@@ -3006,7 +3006,7 @@ Starts the rendering batch.
 [#quilt_renderer]
 == _Quilt Renderer_ module
 [.thumb]
-image::quilt_renderer.jpg[scaledwidth=75%]
+image::images/quilt_renderer.jpg[scaledwidth=75%]
 
 The _Quilt Renderer_ allows you to render flames in nearly unlimited size.
 This works by splitting the whole image into tiles.
@@ -3029,7 +3029,7 @@ result with endless details.
 [#mesh_generator]
 == _Mesh generator_ module
 [.thumb]
-image::mesh_generator.jpg[scaledwidth=75%]
+image::images/mesh_generator.jpg[scaledwidth=75%]
 Using the _mesh generator_ you can turn your fractals into _polygonal meshes_ or _point clouds_.
 Open the Mesh generator module by selecting _Fractal flames: Mesh generator_ from the _Windows_ menu.
 
@@ -3179,7 +3179,7 @@ Values in the range of 300 to 2000 are typical.
 [#gpu_rendering]
 == _GPU render_ module
 [.thumb]
-image::gpu_render.jpg[scaledwidth=75%]
+image::images/gpu_render.jpg[scaledwidth=75%]
 
 GPU rendering in JWildfire is enabled by integrating FAEngine, an GPU-rendering-engine,
 created by Steven Brodhead.
@@ -3269,7 +3269,7 @@ Also, be sure to have OpenCl-drivers for your graphics card installed.
 [#iflames_module]
 == _IFlames_ module
 [.thumb]
-image::iflames.jpg[scaledwidth=75%]
+image::images/iflames.jpg[scaledwidth=75%]
 
 This is an experimental application which combines particle simulation and fractal flames.
 
@@ -3291,7 +3291,7 @@ There are about 350-parameters to change, many of them may be animated:
 [#preferences]
 == _Preferences_ window
 [.thumb]
-image::preferences.jpg[scaledwidth=75%]
+image::images/preferences.jpg[scaledwidth=75%]
 
 In the _Preferences_-window you may customize JWildfire to your needs.
 Open it by choosing _Preferences_ from the _Settings_ menu.
@@ -3302,7 +3302,7 @@ You may edit a property by double-clicking at the value in the 2nd column of the
 Each property has a small description which is displayed at the bottom of the window.
 
 [.thumb]
-image::preferences_property_description.jpg[scaledwidth=75%]
+image::images/preferences_property_description.jpg[scaledwidth=75%]
 
 Depending on the type of parameters, there are special parameter-editors available.
 You reach them by double-clicking at the value in the 2nd column of the table, for example:
@@ -3312,7 +3312,7 @@ You reach them by double-clicking at the value in the 2nd column of the table, f
 the folder manually or select the folder using a folder-dialog.
 
 [.thumb]
-image::preferences_choose_path.jpg[scaledwidth=75%]
+image::images/preferences_choose_path.jpg[scaledwidth=75%]
 
 
 Some properties may be changed "on the fly", while others will need a restart of JWildfire in order
