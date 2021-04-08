@@ -269,6 +269,11 @@ public class FlameMorphService {
     res.setBalanceGreen(morphValue(pFlame1.getBalanceGreen(), pFlame2.getBalanceGreen(), fScl));
     res.setBalanceBlue(morphValue(pFlame1.getBalanceBlue(), pFlame2.getBalanceBlue(), fScl));
     res.setWhiteLevel(morphValue(pFlame1.getWhiteLevel(), pFlame2.getWhiteLevel(), fScl));
+    res.setPostSymmetryCentreX(morphValue(pFlame1.getPostSymmetryCentreX(), pFlame2.getPostSymmetryCentreX(), fScl));
+    res.setPostSymmetryCentreY(morphValue(pFlame1.getPostSymmetryCentreY(), pFlame2.getPostSymmetryCentreY(), fScl));
+    res.setPostSymmetryDistance(morphValue(pFlame1.getPostSymmetryDistance(), pFlame2.getPostSymmetryDistance(), fScl));
+    res.setPostSymmetryOrder(morphValue(pFlame1.getPostSymmetryOrder(), pFlame2.getPostSymmetryOrder(), fScl));
+    res.setPostSymmetryRotation(morphValue(pFlame1.getPostSymmetryRotation(), pFlame2.getPostSymmetryRotation(), fScl));
   }
 
   private static XForm morphXForms(Prefs pPrefs, XForm pXForm1, XForm pXForm2, double pFScl, int pFrame, int pFrames, boolean pCompat) {
