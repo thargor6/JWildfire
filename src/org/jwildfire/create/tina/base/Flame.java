@@ -236,11 +236,21 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double postBlurFallOff;
 
   private PostSymmetryType postSymmetryType;
+  @AnimAware
   private int postSymmetryOrder;
+  private final MotionCurve postSymmetryOrderCurve = new MotionCurve();
+  @AnimAware
   private double postSymmetryCentreX;
+  private final MotionCurve postSymmetryCentreXCurve = new MotionCurve();
+  @AnimAware
   private double postSymmetryCentreY;
+  private final MotionCurve postSymmetryCentreYCurve = new MotionCurve();
+  @AnimAware
   private double postSymmetryDistance;
+  private final MotionCurve postSymmetryDistanceCurve = new MotionCurve();
+  @AnimAware
   private double postSymmetryRotation;
+  private final MotionCurve postSymmetryRotationCurve = new MotionCurve();
 
   private Stereo3dMode stereo3dMode;
   private double stereo3dAngle;
@@ -852,10 +862,15 @@ public class Flame implements Assignable<Flame>, Serializable {
 
     postSymmetryType = pFlame.postSymmetryType;
     postSymmetryOrder = pFlame.postSymmetryOrder;
+    postSymmetryOrderCurve.assign(pFlame.postSymmetryOrderCurve);
     postSymmetryCentreX = pFlame.postSymmetryCentreX;
+    postSymmetryCentreXCurve.assign(pFlame.postSymmetryCentreXCurve);
     postSymmetryCentreY = pFlame.postSymmetryCentreY;
+    postSymmetryCentreYCurve.assign(pFlame.postSymmetryCentreYCurve);
     postSymmetryDistance = pFlame.postSymmetryDistance;
+    postSymmetryDistanceCurve.assign(pFlame.postSymmetryDistanceCurve);
     postSymmetryRotation = pFlame.postSymmetryRotation;
+    postSymmetryRotationCurve.assign(pFlame.postSymmetryRotationCurve);
 
     stereo3dMode = pFlame.stereo3dMode;
     stereo3dAngle = pFlame.stereo3dAngle;
@@ -978,9 +993,12 @@ public class Flame implements Assignable<Flame>, Serializable {
         (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) || (fps != pFlame.fps) ||
         (fabs(motionBlurTimeStep - pFlame.motionBlurTimeStep) > EPSILON) || (fabs(motionBlurDecay - pFlame.motionBlurDecay) > EPSILON) ||
         (frame != pFlame.frame) || (frameCount != pFlame.frameCount) ||
-        (postSymmetryType != pFlame.postSymmetryType) || (postSymmetryOrder != pFlame.postSymmetryOrder) ||
-        (fabs(postSymmetryCentreX - pFlame.postSymmetryCentreX) > EPSILON) || (fabs(postSymmetryCentreY - pFlame.postSymmetryCentreY) > EPSILON) ||
-        (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) ||
+        (postSymmetryType != pFlame.postSymmetryType) ||
+        (postSymmetryOrder != pFlame.postSymmetryOrder) || !postSymmetryOrderCurve.isEqual(pFlame.postSymmetryOrderCurve) ||
+        (fabs(postSymmetryCentreX - pFlame.postSymmetryCentreX) > EPSILON) || !postSymmetryCentreXCurve.isEqual(pFlame.postSymmetryCentreXCurve) ||
+        (fabs(postSymmetryCentreY - pFlame.postSymmetryCentreY) > EPSILON) || !postSymmetryCentreYCurve.isEqual(pFlame.postSymmetryCentreYCurve) ||
+        (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) || !postSymmetryDistanceCurve.isEqual(pFlame.postSymmetryDistanceCurve) ||
+        (fabs(postSymmetryRotation - pFlame.postSymmetryRotation) > EPSILON) || !postSymmetryRotationCurve.isEqual(pFlame.postSymmetryRotationCurve) ||
         (stereo3dMode != pFlame.stereo3dMode) || (fabs(stereo3dAngle - pFlame.stereo3dAngle) > EPSILON) ||
         (fabs(stereo3dEyeDist - pFlame.stereo3dEyeDist) > EPSILON) || (stereo3dLeftEyeColor != pFlame.stereo3dLeftEyeColor) ||
         (stereo3dRightEyeColor != pFlame.stereo3dRightEyeColor) || (stereo3dInterpolatedImageCount != pFlame.stereo3dInterpolatedImageCount) ||

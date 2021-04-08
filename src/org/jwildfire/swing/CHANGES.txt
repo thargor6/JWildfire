@@ -50,6 +50,8 @@ V6.50 (xx.04.2021)
    Recommended Alternative: use Visual Studio Code for editing complex scripts (https://code.visualstudio.com/download)
  - removed the "Variations settings"-window which was superseded by the new variation profiles
  - flame-morphing now also takes into account post-symmetry
+ - added motion-curves for post-symmetry-related settings
+ - added a new mode variable to the glitchy2-variation
  - fix: file dialogs in macOS Mojave now are the native file dialogs, so you can access files outside the sandbox
  - fix: a bug regarding macOS which prevented that path-settings where correctly saved in the Preferences
  - fix: name of parameter "type" was wrong in "cut_booleans"-variation, by Brad Stefanov

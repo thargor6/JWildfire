@@ -16689,6 +16689,12 @@ public class MainEditorFrame extends JFrame {
       postSymmetryDistanceREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postSymmetryDistanceREd.setEditable(true);
       postSymmetryDistanceREd.setBounds(102, 31, 100, 24);
+      postSymmetryDistanceREd.setMotionPropertyName("postSymmetryDistance");
+      postSymmetryDistanceREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
       postSymmetryDistanceREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -16758,6 +16764,12 @@ public class MainEditorFrame extends JFrame {
       postSymmetryRotationREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postSymmetryRotationREd.setEditable(true);
       postSymmetryRotationREd.setBounds(102, 56, 100, 24);
+      postSymmetryRotationREd.setMotionPropertyName("postSymmetryRotation");
+      postSymmetryRotationREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
       postSymmetryRotationREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -16837,6 +16849,12 @@ public class MainEditorFrame extends JFrame {
       postSymmetryOrderREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postSymmetryOrderREd.setEditable(true);
       postSymmetryOrderREd.setBounds(532, 6, 100, 24);
+      postSymmetryOrderREd.setMotionPropertyName("postSymmetryOrder");
+      postSymmetryOrderREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
       postSymmetryOrderREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -16906,6 +16924,12 @@ public class MainEditorFrame extends JFrame {
       postSymmetryCentreXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postSymmetryCentreXREd.setEditable(true);
       postSymmetryCentreXREd.setBounds(532, 31, 100, 24);
+      postSymmetryCentreXREd.setMotionPropertyName("postSymmetryCentreX");
+      postSymmetryCentreXREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
       postSymmetryCentreXREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -17003,6 +17027,12 @@ public class MainEditorFrame extends JFrame {
       postSymmetryCentreYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postSymmetryCentreYREd.setEditable(true);
       postSymmetryCentreYREd.setBounds(532, 56, 100, 24);
+      postSymmetryCentreYREd.setMotionPropertyName("postSymmetryCentreY");
+      postSymmetryCentreYREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
       postSymmetryCentreYREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {

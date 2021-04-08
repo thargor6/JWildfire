@@ -184,6 +184,12 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
     res.add(data.tinaSolidRenderingLightAltitudeREd);
     res.add(data.tinaSolidRenderingLightAzimuthREd);
+
+    res.add(data.postSymmetryOrderREd);
+    res.add(data.postSymmetryDistanceREd);
+    res.add(data.postSymmetryRotationREd);
+    res.add(data.postSymmetryCentreXREd);
+    res.add(data.postSymmetryCentreYREd);
     return res;
   }
 
