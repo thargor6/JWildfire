@@ -24,7 +24,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Glitchy2Func extends VariationFunc {
 	private static final long serialVersionUID = 1L;
-
+	private static final String PARAM_MODE = "mode";
 	private static final String PARAM_LR_SPIN = "lr_spin";
 	private static final String PARAM_LR_X = "lr_x";
 	private static final String PARAM_LR_SHIFTX = "lr_shiftx";
@@ -78,7 +78,7 @@ public class Glitchy2Func extends VariationFunc {
 	private static final String PARAM_UL_IM_C = "ul_im_c";
 	private static final String PARAM_UL_IM_D = "ul_im_d";
 
-	private static final String[] paramNames = { PARAM_LR_SPIN, PARAM_LR_X, PARAM_LR_SHIFTX, PARAM_LR_Y,
+	private static final String[] paramNames = { PARAM_MODE, PARAM_LR_SPIN, PARAM_LR_X, PARAM_LR_SHIFTX, PARAM_LR_Y,
 			PARAM_LR_SHIFTY, PARAM_LR_RE_A, PARAM_LR_RE_B, PARAM_LR_RE_C, PARAM_LR_RE_D, PARAM_LR_IM_A, PARAM_LR_IM_B,
 			PARAM_LR_IM_C, PARAM_LR_IM_D, PARAM_UR_SPIN, PARAM_UR_X, PARAM_UR_SHIFTX, PARAM_UR_Y, PARAM_UR_SHIFTY,
 			PARAM_UR_RE_A, PARAM_UR_RE_B, PARAM_UR_RE_C, PARAM_UR_RE_D, PARAM_UR_IM_A, PARAM_UR_IM_B, PARAM_UR_IM_C,
@@ -87,6 +87,7 @@ public class Glitchy2Func extends VariationFunc {
 			PARAM_UL_SPIN, PARAM_UL_X, PARAM_UL_SHIFTX, PARAM_UL_Y, PARAM_UL_SHIFTY, PARAM_UL_RE_A, PARAM_UL_RE_B,
 			PARAM_UL_RE_C, PARAM_UL_RE_D, PARAM_UL_IM_A, PARAM_UL_IM_B, PARAM_UL_IM_C, PARAM_UL_IM_D };
 
+	private int mode = 0;
 	private double lr_spin = 1.0;
 	private double lr_x = 0.0;
 	private double lr_shiftx = 0.0;
@@ -235,7 +236,15 @@ public class Glitchy2Func extends VariationFunc {
 			count += 1;
 
 		}
-
+		if (mode != 0) {
+		if (count == 0) { // point isn't in any quadrant
+			pVarTP.x += pAmount / pAffineTP.y;
+			pVarTP.y += pAmount / pAffineTP.x;
+		} else {
+			pVarTP.x += pAmount / y / count;
+			pVarTP.y += pAmount / x / count;
+		}
+		} else {
 		if (count == 0) { // point isn't in any quadrant
 			pVarTP.x += pAmount * pAffineTP.x;
 			pVarTP.y += pAmount * pAffineTP.y;
@@ -243,7 +252,7 @@ public class Glitchy2Func extends VariationFunc {
 			pVarTP.x += pAmount * x / count;
 			pVarTP.y += pAmount * y / count;
 		}
-
+		}
 		if (pContext.isPreserveZCoordinate()) {
 			pVarTP.z += pAmount * pAffineTP.z;
 		}
@@ -257,7 +266,7 @@ public class Glitchy2Func extends VariationFunc {
 
 	@Override
 	public Object[] getParameterValues() {
-		return new Object[] { lr_spin, lr_x, lr_shiftx, lr_y, lr_shifty, lr_re_a, lr_re_b, lr_re_c, lr_re_d, lr_im_a,
+		return new Object[] { mode,  lr_spin, lr_x, lr_shiftx, lr_y, lr_shifty, lr_re_a, lr_re_b, lr_re_c, lr_re_d, lr_im_a,
 				lr_im_b, lr_im_c, lr_im_d, ur_spin, ur_x, ur_shiftx, ur_y, ur_shifty, ur_re_a, ur_re_b, ur_re_c,
 				ur_re_d, ur_im_a, ur_im_b, ur_im_c, ur_im_d, ll_spin, ll_x, ll_shiftx, ll_y, ll_shifty, ll_re_a,
 				ll_re_b, ll_re_c, ll_re_d, ll_im_a, ll_im_b, ll_im_c, ll_im_d, ul_spin, ul_x, ul_shiftx, ul_y,
@@ -266,7 +275,10 @@ public class Glitchy2Func extends VariationFunc {
 
 	@Override
 	public void setParameter(String pName, double pValue) {
-		if (PARAM_LR_SPIN.equalsIgnoreCase(pName))
+
+		if (PARAM_MODE.equalsIgnoreCase(pName))
+			mode = (int) limitVal(pValue, 0, 1);
+		else if (PARAM_LR_SPIN.equalsIgnoreCase(pName))
 			lr_spin = pValue;
 		else if (PARAM_LR_X.equalsIgnoreCase(pName))
 			lr_x = pValue;
@@ -392,7 +404,7 @@ public class Glitchy2Func extends VariationFunc {
 		ul_pz_sin = sin(ul_spin * M_PI_2);
 		ul_pz_cos = cos(ul_spin * M_PI_2);
 	}
-
+	
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
