@@ -31,7 +31,7 @@ Have fun!
 Andreas Maschke, Grambek (Germany) 2021
 
 === Acknowledgement
-Thanks to Brad Stefanov, Nancy Pierce, my wife Patricia Maschke, and Rick Sidwell for their valuable
+Thanks to Brad Stefanov, D. Aaron Sawyer, Nancy Pierce, my wife Patricia Maschke, and Rick Sidwell for their valuable
 comments and suggestions for improving this document.
 
 Thanks to the whole fractal art community for their neverending enthusiasm which always pushes me forward.
@@ -3036,25 +3036,25 @@ Open the Mesh generator module by selecting _Fractal flames: Mesh generator_ fro
 === Generating _Polygonal meshes_ by slicing the fractal in _Voxel stacks_
 The creation of solid meshes will not work well on all types of fractals and will
 require some patience and experience to get nice results.
-But once you have generated a nice mesh object, you may use it in any 3d-software
-or even try to 3d-print it.
+But once you have generated a nice mesh object, you may use it in any 3D software
+or even try to 3D print it.
 
 In JWildfire the process of generating _Polygonal meshes_ requires two steps:
 
 - creating a number of slices through the fractal. (These slices are called _Voxel stacks_
-because they have both a fixed a resolution (like pixels in a image) and a certain depth.
-So each slice contains pixels with a depth, which are three-dimensional pixels, called _Voxels_.
+because they have both a fixed a resolution (like picture elements or pixels in a image) and a certain depth.
+So each slice contains pixels with a depth, which are three-dimensional pixels, called Volume elements, or _Voxels_.
 And these slices stacked together build a representation of the object, hence the name _Voxel stack_.)
 - building a _polygonal mesh_ from all these slices using the popular _Marching Cubes Algorithm_.
 
 ==== _Total number of slices_
-Sets the number of slices to be rendered which represents the voxel-resolution in z-direction.
+Sets the number of slices to be rendered which represents the voxel resolution in the z-direction.
 
 ==== _Render width_
-Sets the render-resolution in x-direction which represents the voxel-resolution in x-direction.
+Sets the render resolution in the x-direction which represents the voxel resolution in the x-direction.
 
 ==== _Render height_
-Sets the render-resolution in y-direction which represents the voxel-resolution in y-direction.
+Sets the render resolution in the y-direction which represents the voxel resolution in the y-direction.
 
 ==== _Slices per pass_
 With this setting you can improve the speed of the scanning process in a significant way but at a
@@ -3063,7 +3063,7 @@ When you have enough memory you can even set this to the _Total number of slices
 to create all slices at once.
 
 *Please note, that these three values should match the shape of the desired object.*
-For example, if you have a very thin, but very tall object, you may want a much higher resolution into z-direction.
+For example, if you have a very thin but very tall object, you may want a much higher resolution into z-direction.
 
 ==== _Generate_ (_Voxel stack_)
 When the _Output type_ is set to *Voxelstack*, this will generate a batch of grayscale images
@@ -3181,19 +3181,19 @@ Values in the range of 300 to 2000 are typical.
 [.thumb]
 image::images/gpu_render.jpg[scaledwidth=75%]
 
-GPU rendering in JWildfire is enabled by integrating FAEngine, an GPU-rendering-engine,
+GPU rendering in JWildfire is enabled by integrating FAEngine, a GPU-rendering-engine
 created by Steven Brodhead.
 
 === Limitations
 Currently, the engine is limited in terms of features (for example, supported variations) and
 supported frameworks, but it actually works. And, it works very well.
 
-For now, it only supports the Windows-platform, uses OpenCl and has a very limited
-set of features (in comparison to the full JWildfire application, for example, 3D-rendering
+For now, it only supports the Windows platform, uses OpenCl and has a very limited
+set of features (in comparison to the full JWildfire application, for example, 3D rendering
 is completely missed).
 
 === Requirements
-You will need a modern graphics card with plenty of memory to make out the most of this
+You will need a modern graphics card with plenty of memory to make the best use of this
 stuff.
 
 === Installation
@@ -3203,19 +3203,19 @@ update it more often than the main JWildfire application, if required.
 The overall installation is simple:
 
  . Download the recent FACLRender-package from http://www.andreas-maschke.com/
- . Extract the download *.zip-file to some permanent path on your hard-disk, preferably
+ . Extract the download *.zip-file to some permanent path on your hard disk, preferably
 not on the Desktop, for example, on D:\Program Files\FACLRender.
 If you look into this folder, you should see the file FACLRender.exe
- . Start JWildfire and open the <<preferences, _Preferences_>>-window. Locate the parameter
+ . Start JWildfire and open the <<preferences, _Preferences_>> window. Locate the parameter
 *tinaFACLRenderPath* and enter the path to the folder which contains the FACLRender.exe.
 In this example, enter "D:\Program Files\FACLRender".
-  . Press the "Save and Close"-button and exit JWildfire.
+  . Press the "Save and Close" button and exit JWildfire.
  . Start JWildfire again, now you should see a new entry "Fractal flames: GPU render"
 in the <<main_menu, main Window-menu>>.
 
 ==== Self-Test
-To test the GPU-rendering itself (and to simplify further troubleshooting), please invoke
-the self-test. Just enter the directory where you installed FACLRender and open the sub-folder
+To test the GPU rendering itself (and to simplify further troubleshooting), please invoke
+the self-test. Just enter the directory where you installed FACLRender and open the subfolder
 "selftest" ( In this example "D:\Program Files\FACLRender\selftest" ).
 Double-click at the selftest.bat. If everything works as expected, you should see that a
 file with the name "selftest.png" was created. Otherwise, the console output hopefully helps to solve the
@@ -3226,7 +3226,7 @@ Use the "GPU renderer"-window to play with flames. This window works similar to 
 Interactive renderer; you may import flames from the editor or load them from your hard disk.
 
 Most flames will not work flawlessy, as most flames have at least one feature which is not
-supported by GPU-rendering at this time. But, of course, you will still be able to create endless
+supported by GPU rendering at this time. But, of course, you will still be able to create endless
 beautiful flames.
 
 === Using the "Linear Only"-random-flame-generator
@@ -3239,7 +3239,7 @@ When FACLRender is properly integrated into JWildfire, a new "GPU" button will a
 You may use it to render whole batches by using the GPU.
 But, before you render a huge sequence, you should be sure that the flames do not use
 features which are not supported by FACLRender. You may quickly do so by transferring
-one of the flames to the "GPU renderer"-window and see if it works.
+one of the flames to the "GPU renderer" window and see if it works.
 
 === Troubleshooting
 If rendering fails, you should check if the FACLRender.exe can detect any devices (or is
@@ -3275,7 +3275,7 @@ This is an experimental application which combines particle simulation and fract
 
 It requires a rather powerful computer, especially when you want to animate the iflames.
 
-There are about 350-parameters to change, many of them may be animated:
+There are about 350 parameters to change, many of them may be animated:
 
 - *Edge-finding*: controls where to place base-shapes
 - *Global structure*: controls the global structure of the resulting iflame
@@ -3297,7 +3297,7 @@ In the _Preferences_-window you may customize JWildfire to your needs.
 Open it by choosing _Preferences_ from the _Settings_ menu.
 
 The customizable properties are key-value pairs which are displayed in one large table.
-You may edit a property by double-clicking at the value in the 2nd column of the table.
+You may edit a property by double-clicking the value in the 2nd column of the table.
 
 Each property has a small description which is displayed at the bottom of the window.
 
@@ -3305,11 +3305,11 @@ Each property has a small description which is displayed at the bottom of the wi
 image::images/preferences_property_description.jpg[scaledwidth=75%]
 
 Depending on the type of parameters, there are special parameter-editors available.
-You reach them by double-clicking at the value in the 2nd column of the table, for example:
+You reach them by double-clicking the value in the 2nd column of the table, for example:
 
  - for color-parameters a color-selection-dialog is available,
  - for folder-parameters (for example, to select the gradient-folder) you can both enter
-the folder manually or select the folder using a folder-dialog.
+the folder manually or select the folder using folder-dialog.
 
 [.thumb]
 image::images/preferences_choose_path.jpg[scaledwidth=75%]
@@ -3372,11 +3372,7 @@ Example file:
 [Application]
 app.name=JWildfire
 app.version=6.40
-app.runtime=$ROOTDIR\runtime
-app.identifier=org.jwildfire.swing
-app.classpath=$ROOTDIR\app\j-wildfire.jar
-app.mainjar=$ROOTDIR\app\j-wildfire.jar
-app.mainclass=org.jwildfire.swing.JWildfire
+...
 
 [JavaOptions]
 -splash:app/splash.png
@@ -3400,7 +3396,7 @@ If you want to increase this to 32 GB, you just would change the line to:
 
 === Restrictions
 ==== Steam Edition (Windows only)
-There are no restrictions. The Windows-based version of JWildfire currently has the most rich feature-set.
+There are no restrictions. The Windows-based version of JWildfire currently has the richest feature set.
 
 ==== App Store Edition (Mac only)
 On the Mac platform there are the following restrictions:
@@ -3415,7 +3411,7 @@ available on the Mac platform.
 
 ==== Linux Version
 There is no special Linux version, but the free version from the official website https://jwildfire.overwhale.com
-does also work on Linux. To make it work, you must install a Java Virtual machine.
+does also work on Linux. To make it work, you must install a Java Virtual Machine (JVM).
 
 Then there are the following restrictions:
 
@@ -3424,7 +3420,7 @@ Then there are the following restrictions:
 - LeapMotion-controller-support has not been tested, but probably will not work.
 
 == FAQ (frequently asked questions)
-Here are answers to some popular questions which I get very often. They seem not fit well into
+Here are answers to some popular questions which I get very often. They did not fit well into
 the other chapters, so I collected them in this section.
 
 [#max_mem]
@@ -3469,11 +3465,11 @@ Yes.
 
 You can literally render in any resolution, also 8k:
 
-- by rendering a single image at once. The maximum render size is only restricted by your available memory.
+- by rendering a single image at once. The maximum render size is limited only by your available memory.
 (For really huge images, you may need patience too.)
 - by using the <<quilt_renderer, _Quilt-renderer_>>-module you may render really huge images in smaller parts,
 which are then assembled together. The maximum render size is also limited by memory. But often, you will
-get other problems before reaching the memory-limit in JWildfire. For example, some image files can
+get other problems before reaching the memory limit in JWildfire. For example, some image files can
 be very big (I have tested with sizes up to 1 GB), and it is hard to find software that can process such large images.
 
 === Can I render images with removed/transparent background?
@@ -3490,7 +3486,7 @@ to generate an image. There are multiple options you can specify for rendering (
 which may allow you to get different images out of one fractal flame.
 
 === Is it possible to render flames at higher resolutions than inside JWildfire?
-There are no restrictions regarding render size which could resolved by an external
+There are no restrictions regarding render size which must be resolved by an external
 application for rendering. The only limitation is memory.
 See <<rendering_in_4k, Are 4k renders possible?>> for more information.
 
@@ -3523,8 +3519,8 @@ set the following _JVM parameter_:
 ----
 (the lowercase t is correct)
 
-*Please note, that only one of these _JVM parameters_ should be set at the same time.*
+*Please note that only one of these _JVM parameters_ should be set at the same time.*
 
 The location of these _JVM Parameters_ is platform-specific.
-Please see the section <<platform_specific_topics, _Platform-specific topics_>> for more informations
+Please see the section <<platform_specific_topics, _Platform-specific topics_>> for more information
 about changing _JVM Parameters_.
