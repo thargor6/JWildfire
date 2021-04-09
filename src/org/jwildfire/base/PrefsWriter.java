@@ -39,6 +39,7 @@ public class PrefsWriter {
       addValue(sb, Prefs.KEY_GENERAL_LOOK_AND_FEEL_THEME, pPrefs.getLookAndFeelTheme());
     }
     addValue(sb, Prefs.KEY_GENERAL_SHOW_TIPS_AT_STARTUP, pPrefs.isShowTipsAtStartup());
+    addValue(sb, Prefs.KEY_GENERAL_SPECIAL_MAC_OS_FILE_HANDLING, pPrefs.isSpecialMacOsFileHandling());
     addValue(sb, Prefs.KEY_GENERAL_LAST_TIP, pPrefs.getLastTip());
     addValue(sb, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_THUMBNAILS, pPrefs.getThumbnailPath());

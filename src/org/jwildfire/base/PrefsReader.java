@@ -124,6 +124,7 @@ public class PrefsReader {
         pPrefs.setMovieFlamesPath(getProperty(props, Prefs.KEY_TINA_PATH_MOVIEFLAMES, pPrefs.getMovieFlamesPath()));
         pPrefs.setSoundFilePath(getProperty(props, Prefs.KEY_GENERAL_PATH_SOUND_FILES, pPrefs.getSoundFilePath()));
         pPrefs.setShowTipsAtStartup(getBooleanProperty(props, Prefs.KEY_GENERAL_SHOW_TIPS_AT_STARTUP, pPrefs.isShowTipsAtStartup()));
+        pPrefs.setSpecialMacOsFileHandling(getBooleanProperty(props, Prefs.KEY_GENERAL_SPECIAL_MAC_OS_FILE_HANDLING, pPrefs.isSpecialMacOsFileHandling()));
         pPrefs.setLastTip(getIntProperty(props, Prefs.KEY_GENERAL_LAST_TIP, pPrefs.getLastTip()));
         pPrefs.setTinaAssociateProfilesWithFlames(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES, pPrefs.isTinaAssociateProfilesWithFlames()));
         pPrefs.setTinaSaveFlamesWhenImageIsSaved(getBooleanProperty(props, Prefs.KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE, pPrefs.isTinaSaveFlamesWhenImageIsSaved()));

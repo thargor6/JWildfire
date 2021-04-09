@@ -59,7 +59,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  private static final String APP_VERSION = "V6.40 BETA (03.04.2021)";
+  private static final String APP_VERSION = "V6.50 (05.04.2021)";
 
   public static final boolean STEAM_EDITION = false;
   public static final boolean SPECIAL_VERSION = false;
@@ -716,7 +716,7 @@ public class Tools {
   }
 
   public static boolean ensureSpecialMacOSFileAccessHandling() {
-    return (Tools.OSType.MAC == Tools.getOSType())/* && !isMacOsBeforeCatalina()*/;
+    return (Tools.OSType.MAC == Tools.getOSType()) && Prefs.getPrefs().isSpecialMacOsFileHandling() /* && !isMacOsBeforeCatalina()*/;
   }
 
   public static String getPathRelativeToCodeSource(String path) {

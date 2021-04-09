@@ -12,12 +12,16 @@ V6.50 (xx.04.2021)
    from your list. (a "Baseshape" is a variation which creates a shape/fractal on its own, like "square")
  - Introducing the first version of an official user manual. It can be reached from within the program under the
    "Help -> User manual" or in the file system inside the lib-subfolder (JWildfire_manual.pdf).
-   Thanks to Brad Stefanov, Nancy Pierce, my wife Patricia Maschke and Rick Sidwell for reviewing it!
+   Thanks to Brad Stefanov, D. Aaron Sawyer, Nancy Pierce, my wife Patricia Maschke and Rick Sidwell for reviewing it!
    The latest version of the manual can also be displayed directly on GitHub: https://github.com/thargor6/JWildfire/blob/master/manual/src/docs/asciidoc/JWildfire_manual.adoc
  - ply/PointCloud-export now generates two additional fields: pscale and intensity
- - started to create an official manual (AsciiDoc-based for simple editing)
  - new property tinaDefaultNewFlameTitle where you can set a default flame title which is assigned when you
    create a new flame by using the "New from Scratch"-button
+ - new property specialMacOsFileHandling in the Preferences to enable special file handling for newer versions of macOS.
+   The default behavior on all platforms is to use the standard Java file dialogs. On macOS, these only allow access within the sandbox.
+   This makes it difficult to share files between JWildfire and other apps. If you enable this option, JWildfire uses native file dialogs on macOS.
+   However, this comes at the price of having to reconfirm each first access to a folder.
+   This new option is enabled by default.
  - folder-parameters in the Preferences (e.g. gradient-folder) can now be entered manually or selected by using a folder-dialog
  - added Alt-F shortcut for Fine edit, by Rick Sidwell
  - new variations

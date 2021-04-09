@@ -43,7 +43,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_LOOK_AND_FEEL_THEME = "general.look_and_feel.theme.3";
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
-
+  static final String KEY_GENERAL_SPECIAL_MAC_OS_FILE_HANDLING = "general.special_mac_os_file_handling";
   static final String KEY_GENERAL_SHOW_TIPS_AT_STARTUP = "general.show_tips_at_startup";
   static final String KEY_GENERAL_LAST_TIP = "general.last_tip";
 
@@ -208,6 +208,12 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Show tips at startup", category = PropertyCategory.GENERAL)
   private boolean showTipsAtStartup = true;
+
+  @Property(
+      description =
+          "Enable special file handling for newer versions of macOS. The default behavior on all platforms is to use the standard Java file dialogs. On macOS, these only allow access within the sandbox. This makes it difficult to share files between JWildfire and other apps. If you enable this option, JWildfire uses native file dialogs on macOS. However, this comes at the price of having to reconfirm each first access to a folder.",
+      category = PropertyCategory.GENERAL)
+  private boolean specialMacOsFileHandling = true;
 
   @Property(description = "Last tip shown at startup", category = PropertyCategory.GENERAL)
   private int lastTip = 0;
@@ -534,7 +540,7 @@ public class Prefs extends ManagedObject {
 
   private String getDefaultHomeDir() {
     File homeDir = new File(System.getProperty("user.home"));
-    if(Tools.ensureSpecialMacOSFileAccessHandling()) {
+    if(Tools.OSType.MAC == Tools.getOSType()) {
       String path = homeDir.getAbsolutePath();
       if(path.contains("Library/Containers/com.overwhale.JWildfire")) {
         String fixedPath = path.substring(0, path.indexOf("/Library/"));
@@ -853,6 +859,7 @@ public class Prefs extends ManagedObject {
     tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
     tinaFontScale = pSrc.tinaFontScale;
     showTipsAtStartup = pSrc.showTipsAtStartup;
+    specialMacOsFileHandling = pSrc.specialMacOsFileHandling;
     lastTip = pSrc.lastTip;
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
     tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
@@ -1629,6 +1636,15 @@ public class Prefs extends ManagedObject {
   public void setShowTipsAtStartup(boolean showTipsAtStartup) {
     this.showTipsAtStartup = showTipsAtStartup;
   }
+
+  public boolean isSpecialMacOsFileHandling() {
+    return specialMacOsFileHandling;
+  }
+
+  public void setSpecialMacOsFileHandling(boolean specialMacOsFileHandling) {
+    this.specialMacOsFileHandling = specialMacOsFileHandling;
+  }
+
 
   public int getLastTip() {
     return lastTip;
