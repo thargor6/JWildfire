@@ -24,7 +24,6 @@ import js.glsl.G;
 import js.glsl.vec3;
 import js.glsl.vec4;
 
-import org.joml.Math;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.Complex;
 
