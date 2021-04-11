@@ -56,6 +56,7 @@ V6.50 (11.04.2021)
  - flame-morphing now also takes into account post-symmetry
  - added motion-curves for post-symmetry-related settings
  - added a new mode variable to the glitchy2-variation
+ - progressive preview update is disabled by default on macOS now
  - fix: file dialogs in macOS Mojave now are the native file dialogs, so you can access files outside the sandbox
  - fix: a bug regarding macOS which prevented that path-settings where correctly saved in the Preferences
  - fix: name of parameter "type" was wrong in "cut_booleans"-variation, by Brad Stefanov

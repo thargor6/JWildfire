@@ -112,7 +112,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RANDOMBATCH_REFRESH_TYPE = "tina.random_batch.refresh_type";
 
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_COLOR = "tina.editor.controls.with_color.3";
-  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW = "tina.editor.progressive_preview";
+  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW = "tina.editor.progressive_preview.1";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_TIME = "tina.editor.progressive_preview.max_render_time.4";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_QUALITY = "tina.editor.progressive_preview.max_render_quality.3";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_ANTIALIASING = "tina.editor.controls.with_antialising.2";
@@ -288,7 +288,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaEditorControlsWithColor = true;
 
   @Property(description = "Turn on progressive preview-display in the main-editor by default", category = PropertyCategory.TINA)
-  private boolean tinaEditorProgressivePreview = true;
+  private boolean tinaEditorProgressivePreview = Tools.OSType.MAC != Tools.getOSType();
 
   @Property(description = "Maximum render-time for the progressive preview-display", category = PropertyCategory.TINA)
   private double tinaEditorProgressivePreviewMaxRenderTime = 25.0;
