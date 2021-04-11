@@ -34,13 +34,13 @@ Andreas Maschke, Grambek (Germany) 2021
 Thanks to Brad Stefanov, D. Aaron Sawyer, Nancy Pierce, my wife Patricia Maschke, and Rick Sidwell for their valuable
 comments and suggestions for improving this document.
 
-Thanks to the whole fractal art community for their neverending enthusiasm which always pushes me forward.
+Thanks to the whole fractal art community for their never-ending enthusiasm which always pushes me forward.
 
 [#main_menu]
 == _Main_ menu
 After launching the program the <<fractal_flame_editor, Fractal-Flame Editor>> is opened automatically,
 because it is the main module of JWildfire.
-There are additional modules and useful functions which can be reached from with the _Main_ menu.
+There are additional modules and useful functions which can be reached from the _Main_ menu.
 
 The _Main_ menu contains the following items:
 
@@ -49,7 +49,7 @@ The _Main_ menu contains the following items:
  ** *Open image*: open an image-file and display it in a separate window
  ** *Quit JWildfire*: quits the program
 
- - *Window*: to open/close the various modules of JWildfire (an opened module is indicated by a small checkmark left of the menu item. If it is not visible it might be in background.)
+ - *Window*: to open/close the various modules of JWildfire (An opened module is indicated by a small checkmark left of the menu item. If it is not visible it might be in background.)
  ** *Fractal flames: Editor*: open the <<fractal_flame_editor, Fractal-Flame Editor>>
  ** *Fractal flames: MutaGen*: open the <<mutagen_module, MutaGen>> module
  ** *Fractal flames: Interactive renderer*: open the <<interactive_renderer_module, Interactive renderer>>
@@ -60,7 +60,7 @@ The _Main_ menu contains the following items:
  ** *Fractal flames: Quilt renderer*: open the <<quilt_renderer, Quilt renderer>>
  ** *Fractal flames: Mesh generator*: open the <<mesh_generator, Mesh generator>>
  ** *Fractal flames: GPU render*: open the <<gpu_rendering, GPU renderer>>
- ** *Fractal flames: Help*: open a popup which displays some helpful informations regarding fractal flame
+ ** *Fractal flames: Help*: open a popup which displays some helpful information regarding fractal flame
  ** *IFlames*: open the <<iflames_module, IFlames>> module
  ** *Image processing*: open a popup which offers some image-processing possibilities. Goes back to the old Amiga days.
  ** *Formula explorer*: open a popup which contains a simple function plotter
@@ -69,11 +69,11 @@ The _Main_ menu contains the following items:
  ** *Preferences*: open the <<preferences, _Preferences_>>-window
  ** *Startup settings (Steam)*: only available in the _Steam version_: opens a window to edit the <<jvm_startup_parameters, Startup options>> for the _Steam Edition_ of JWildfire
 
- - *Help*: some useful informations and the official documentation
+ - *Help*: some useful information and the official documentation
  ** *User manual*: the official user manual (the file you are currently reading)
- ** *System information*: opens a popup to display some useful information about your system related  to JWildfire, for example, available memory
- ** *Welcome to Jwildfire*: an ancient Welcome-dialog with some useful links, not available in the _Steam Edition_ of JWildfire
- ** *List of changes*: displays the ever-growing list of changes. It is a recommended read after each release of the software.
+ ** *System information*: opens a popup to display some useful information about your system relating  to JWildfire, for example, available memory
+ ** *Welcome to JWildfire*: an ancient Welcome-dialog with some useful links, not available in the _Steam Edition_ of JWildfire
+ ** *List of changes*: displays the ever growing list of changes. It is a recommended read after each release of the software.
  ** *GPU rendering*: some compact documentation about <<gpu_rendering, GPU-rendering>>
  ** *Supported AI-Post-Denoisers*: some compact documentation about <<ai_based_denoiser, _AI-based denoisers_>>
  ** *Tip of the day*: a small popup which shows small tips at the startup of JWildfire
@@ -82,9 +82,9 @@ The _Main_ menu contains the following items:
 == Fractal-Flame Editor
 [.thumb]
 image::images/main_editor_with_regions.jpg[scaledwidth=75%]
-The Fractal-Flame Editor is the core part of JWildfire.
+The Fractal-Flame Editor is the heart of JWildfire.
 Here you create random flames or fine-tune your artwork.
-It consists of the following parts:
+It consists of the following elements:
 
 . *Preview/Editor Area*
 . *Thumbnail ribbon*
@@ -92,16 +92,16 @@ It consists of the following parts:
 . *Flame settings*
 . *Global functions*
 
-You find a description of each part as separate sub-chapter in this manual.
+You will find a description of each of these elements as a separate sub-chapter in this manual.
 
-Most controls have tool tips, short descriptions that appear when you hover
+Most controls have tool tips; short descriptions that appear when you hover
 over them for a second.
 
 === Preview/Editor area
 This area is both for previewing fractals and editing them in realtime.
 The most simple and intuitive way to edit a fractal is to drag or rotate one of the
 visible controls on top of the fractal (usually in the shape of triangles).
-However, there are much more precise ways and many other ways to modify a fractal flame.
+However, there are also many other precise ways to modify a fractal flame.
 
 ==== Quick buttons on the top of the preview area
 [.thumb]
@@ -117,17 +117,18 @@ then the displayed grid may change/deform much more.
 
 ===== _Display/hide transparency_
 Switch preview-rendering with transparent background on or off.
-Please note, that this only affects the preview display and not the transparency setting of the flame itself.
+Please note that this only affects the preview display and not the transparency setting of the flame itself.
 
 ===== _Fine edit_
-Turn on or off "fine editing". Fine editing means that changes are less sensitive to changes using mouse or touchpad to allow editing with a higher grade of detail.
+Turn on or off "fine editing". Fine editing means that changes are less sensitive to the mouse
+or touchpad which allows for editing with a higher level of detail.
 
 [#realtime_preview]
 ===== _Realtime_
 Turns progressive rendering of the preview on or off. Progressive rendering means
 that the image starts to render in very low quality and improves with time.
 Usually this works well, and allows for fluid editing.
-On slower machines (for example, notebooks), this may cause a heavy load, and on some fractals it may cause flickering.
+On slower machines (for example notebooks), this may cause a heavy load, and on some fractals it may cause flickering.
 Turning it off will produce a render preview of a lower (non-progressive) quality.
 
 ===== _Progress bar_
@@ -225,7 +226,7 @@ See "Turn grid on/off" above.
 [#edit_focus_point]
 ===== _Edit focus point_
 Edit the focus-point (parameters FocusX, FocusY and FocusZ at
-the <<dof_bokeh_tab, "DOF/Bokeh -> DOF" - tab>>) using the mouse
+the <<dof_bokeh_tab, "DOF/Bokeh -> DOF" - tab>>) using the mouse.
 
 - by dragging the mouse with the left mouse-button pressed, you change FocusX- and FocusY-parameters
 - using the mouse-wheel you change the FocusZ-parameter
@@ -250,7 +251,7 @@ On the left side, you see the original image, on the right side of the split ind
 see the denoised image.
 This button only appears if an AI denoiser is selected in the <<anti_aliasing_filter_tab, Anti-Aliasing/Filter tab>>.
 
-This function uses the current preview. So it is often recommended to re-render the preview in
+This function uses the current preview. So it is recommended to re-render the preview in
 higher quality before invoking it.
 
 ===== _External render preview_
@@ -272,7 +273,7 @@ to which the parameter change is applied is used.
 This is especially helpful when progressive rendering is off (see the _Realtime_ button), where the
 preview has very low quality.
 
-So, especially when fine-tuning colors, it is recommended to re-render the preview in higher quality
+Therefore, when fine-tuning colors, it is recommended to re-render the preview in higher quality
 using this button before changing the settings.
 Because this function is of such importance, is has been placed in a prominent place.
 
@@ -310,7 +311,7 @@ Create a snapshot of the current flame. This is an identical copy with new undo-
 ===== _Title_
 Sets the title of the current flame. This is a good place to also put copyright information
 or to add your name (as the author of the artwork).
-You can set a default title for flames, which are created using the
+You can set a default title for flames which are created using the
 <<new_from_scratch, _New from Scratch_>>-button, by setting the
 property *tinaDefaultNewFlameTitle* in the <<preferences, _Preferences_>>-window.
 
@@ -318,7 +319,7 @@ property *tinaDefaultNewFlameTitle* in the <<preferences, _Preferences_>>-window
 Switch between "classic" rendering and solid rendering.
 
 Solid rendering basically works by treating each sample of the fractal flame as a solid particle.
-The sum of all of these particles make up a larger solid shape.
+The sum of all of these particles makes up a larger solid shape.
 This works only for certain types of flame fractals.
 It may fail if the structure is too thin or is in general too "chaotic" or too blurry.
 Solid rendering can be used to create really unusual and interesting things.
@@ -434,7 +435,7 @@ Position of the camera in z-direction.
 [#dof_bokeh_tab]
 ==== _DOF/Bokeh_ tab
 DOF (Depth Of Field) is the blurring of parts of the flame based on the distance from the camera.
-Whether to use it is very personal. Some people like it a lot (including myself),
+Whether to use it is a personal decision. Some people like it a lot (including myself),
 some people do not like it at all. So, this sub-chapter describes a rather "special" topic.
 Bokeh refers to the shape of out-of-focus points of light in a real camera.
 JWildfire can simulate some bokeh effects in conjunction with DOF.
@@ -459,7 +460,7 @@ Measure of the sharp area around the focus point.
 Measure of the falloff of the sharp area around the focus point.
 
 ====== _Camera dist_
-Only applies to the classic mode and is a measure of the distance of the camera to the focus point.
+Only applies to the classic mode and is a measure of the distance from the camera to the focus point.
 
 ====== _FocusX_
 X-position of the focus point (a point which is sharp). May also be edited interactively in the preview area
@@ -475,26 +476,26 @@ Z-position of the focus point (a point which is sharp). May also be edited inter
 
 ===== _Bokeh_ subtab
 At this tab you can select options to create bokeh-like styles of DOF-effects.
-Those options are not available when using solid rendering. For solid rendering there is an option to
-apply post-bokeh effects, but those are limited in comparison to the options you find at this tab.
+These options are not available when using solid rendering. For solid rendering there is an option to
+apply post-bokeh effects, but these are limited in comparison to the options you find at this tab.
 
 ====== _Shape_
 Selects the shape of the bokeh-effect
 
 - *Bubble*: the typical and default shape
-- *Cannabiscurve*: some nice-looking organic shape
+- *Cannabiscurve*: some nice-looking organic shapes
 - *Cloverleaf*
 - *Flower*
 - *Heart*: little hearts, makes nice Valentine-cards
 - *NBlur*: has some interesting options to create very different shapes
 - *Perlin Noise*: an unusual but interesting style
-- *Rect*: very simple but effective style.You can also create "rain"-like scenes with this
+- *Rect*: very simple but effective style. You can also create "rain"-like scenes with this
 - *SineBlur*: a popular circular bokeh
 - *StarBlur*: tiny stars
-- *Taurus*: another unusual, but interesting shape
+- *Taurus*: another unusual but interesting shape
 - *Snowflake*: a complex snowflake, created with the algorithm described in the
 paper "A local cellular model for snow crystal growth" by Clifford A. Reiter.
-- *SubFlame*: This is the most versatile option: You may use any other fractal as bokeh-style.
+- *SubFlame*: This is the most versatile option: you may use any other fractal as bokeh-style.
 
 ====== _Scale_
 Global scale of the bokeh-shapes.
@@ -513,7 +514,7 @@ Not all parameters of a variation are exposed to the bokeh-style of the same nam
 
 ====== Flame (for the Sub-Flame-bokeh-style)
 This parameter selects the flame you want to use as bokeh-style.
-It is a number, starting with 1. Before you can use a flame as bokeh-style, you must save it to your default
+It is a number, starting at 1. Before you can use a flame as bokeh-style, you must save it to your default
 flame-folder by using a filename in the form *"_dof_XXXX.flame"*, where XXXX corresponds to the number
 you select here.
 For example, when you enter "23" as parameter flame, JWildfire will look for a flame-file with the
@@ -524,7 +525,7 @@ filename *_dof_0023.flame*.
 [.thumb]
 image::images/dof_post_bokeh_tab.jpg[scaledwidth=75%]
 At this tab you can select options to create bokeh-like effects when using solid rendering.
-Those options are only available in solid rendering and are limited to the bokeh-related options
+These options are only available in solid rendering and are limited to the bokeh-related options
 which are available for regular flames.
 
 ====== _Bokeh intensity_
@@ -540,7 +541,7 @@ Type of bokeh-shape. The default setting produces "classic" flat circular shapes
 Intensity of the bokeh in comparison the the original image.
 
 ====== _Bokeh activation_
-Intensity level of the original image for placing bokeh "seeds". The larger the value the more seeds, the more bokeh.
+Intensity level of the original image for placing bokeh "seeds". The larger the value, the more seeds and the more bokeh.
 
 ===== _Post blur_ subtab
 [.thumb]
@@ -575,7 +576,7 @@ of the fractals which would otherwise be hidden.
 
 ===== _Gamma_
 Gamma correction level. Small values (below 2.5) increase the brightness of already bright areas and darken
-already dark areas, causing some kind of glowing effect.
+already dark areas, causing a kind of glowing effect.
 
 ===== _Gamma threshold_
 A density-threshold defining when to apply the gamma correction. In areas with a density below the
@@ -584,7 +585,7 @@ correction is applied. Playing with this value may also help to increase details
 
 ===== _Contrast_
 Overall contrast level of the fractal per default maximum contrast. In the most cases it should not be
-necessary to alter this value, because lowering the contrast usually leads only to less appealing images.
+necessary to alter this value, because lowering the contrast usually leads to less appealing images.
 
 ===== _Red balance_
 Overall red balance of the image. A convenient option for fine-tuning the final result without the
@@ -613,7 +614,7 @@ need to change the gradient.
 
 ===== _Bg color_
 Background-color which is mixed with the fractal in the foreground to create a smooth looking final result.
-There are the following options:
+The options are:
 
 - *Single color*: one single color for the whole background
 - *Gradient 2x2*: create a background by blending 4 colors at the corners of a rectangle
@@ -621,7 +622,7 @@ There are the following options:
 
 ===== _Bg image_
 Background image which is mixed with the fractal in the foreground to create a smooth looking final result.
-Please note, that a background image has higher priority than a background color.
+Please note that a background image has higher priority than a background color.
 Therefore, if the background image and the background color are chosen, only the background image is rendered.
 
 ===== _Fg opacity_
@@ -632,7 +633,7 @@ Lower values make the foreground less transparent, but may increase antialiasing
 Turns rendering with transparent background (alpha channel) on or off. This option is usually used when you
 want to use your fractal images inside other software packages like Adobe Photoshop to compose a final
 artwork out of different images or parts.
-Please note, that you may also activate a preview of the background-transparency in
+Please note that you may also activate a preview of the background-transparency in
 JWildfire (in the top area of the preview-window).
 
 [#anti_aliasing_filter_tab]
@@ -644,19 +645,19 @@ of your fractal artworks.
 For details about filtering see the sub-section <<how_filtering_works, _Filter kernel preview/How filtering works_>>.
 
 ===== _Spatial oversampling_
-Factor of spatial oversampling. Spatial oversampling works by internally rendering an image of larger size
+Factor of spatial oversampling. Spatial oversampling works by internally rendering an image of a larger size
 and then creating a final of (usually) better quality by taking all this additional information into account.
 
  - a value of 1 means no spatial oversampling
  - a value of 2 means rendering internally an image of double size (double the width and double the height,
-so it requires about 4 times of the memory)
+so it requires about 4 times the memory)
 - a value of 3 means rendering internally an image of triple size (triple the width and triple the height,
-so it requires about 9 times of the memory)
+so it requires about 9 times the memory)
 
 The recommended value is 2.
 
 Please note that, while higher levels of spatial oversampling require much more memory, they do not need much
-higher rendering time.
+higher rendering times.
 
 ===== _Filtering_
 Global filtering strategy for building the final image by taking into account the fractal iteration information:
@@ -666,7 +667,7 @@ Global filtering strategy for building the final image by taking into account th
  - *Adaptive*: tries to sharpen details, while smoothing "unsharp" areas as well as areas with low density
 
 ===== _Filter kernel_
-Select the filter kernel to apply. There are different choices, depending on the selected _Filtering_ option.
+Select the filter kernel you wish to apply. There are different choices, depending on the selected _Filtering_ option.
 
 The following values are recommended (but feel free to play with other settings as well):
 
@@ -684,7 +685,7 @@ called samples.
 One pixel of the final image is usually calculated considering several raw pixels that are in close proximity
 to the source pixel. Here, a kind of averaging of all pixel values around the middle pixel takes place,
 which ultimately leads to an improved quality of the final image (than if only one raw pixel per final
-pixel would be considered).
+pixel was considered).
 
 The filter-kernel-preview in the middle of the _Anti-Aliasing/Filter_ - tab shows a visual representation of
 this behavior. Higher bars correspond to a higher influence of a sample, while lower bars correspond to a lower
@@ -695,12 +696,12 @@ of the final pixel usually should have an important influence.
 ====== _Example: Gaussian-filter_
 [.thumb]
 image::images/filter_preview_gaussian.jpg[scaledwidth=75%]
-The Gaussian-filter is a very popular filter for smoothing. You can understand this behavior in
+The Gaussian-filter is a very popular filter for smoothing. You can view this behavior in
 the preview:
 
  - the middle sample has the largest influence.
  - samples which have a certain distance to  the center, have a smaller influence.
- - this influence is smaller the more far the sample is.
+ - this influence is smaller the more distant the sample is.
 
 ====== _Example: Mitchell-filter_
 [.thumb]
@@ -722,7 +723,7 @@ A numerical value indicating the size of the effective filter kernel around each
 A value of 0 means no filter kernel at all, higher values lead to a growing of the filter kernel, you
 can see this very well in the filter-kernel-preview.
 
-Useful values are in the range of 0.5 ... 1.5, depending on the filter kernel and amount of spatial oversampling.
+Useful values are in the range of 0.5 to 1.5, depending on the filter kernel and amount of spatial oversampling.
 
 ===== _Sharpness indicator_
 This value helps the Adaptive filter to decide which portions of the image should be sharpened and
@@ -748,15 +749,15 @@ This is a very abstract value, but there is a preview-mode which helps to visual
 This feature is described in the sub-section <<adaptive_filter_preview, _Adaptive filter preview_>>.
 
 ===== _Flat preview_
-Displays a flat preview of the filter-kernel. In this type of view negative values (which are typical for sharpening filters)
-are indicated red.
+Displays a flat preview of the filter-kernel. In this type of view, negative values (which are typical for sharpening filters)
+are colored red.
 
 [#adaptive_filter_preview]
 ===== _Adaptive filter preview_
 [.thumb]
 image::images/filtering_show_indicator.jpg[scaledwidth=75%]
-By enabling the small checkbox labelled "Indicator" and re-rendering the preview (Click the Render image preview button
-on the right of the preview area.) you get a visualization of the different areas detected by the _Adaptive filter_ .
+By enabling the small checkbox labelled "Indicator" and re-rendering the preview (click the Render image preview button
+on the right of the preview area), you get a visualization of the different areas detected by the _Adaptive filter_ .
 
  - *red*: sharp areas
  - *green*: smooth areas
@@ -787,10 +788,10 @@ Type of AI-based denoiser applied to the final image:filtering_show_indicator.jp
  - *None*: no post-denoiser
 
 While not mandatory for rendering single images, these AI-based denoisers are extremely
-helpful when it comes to render animations. By using an AI-based denoiser you can cut down
+helpful when it comes to rendering animations. By using an AI-based denoiser you can cut down
 rendering times significantly, by factors of 10 or more.
 
-This works by choosing a very low render quality in JWildfire (for example, lower than normal by factor 10)
+This works by choosing a very low render quality in JWildfire (for example, lower than normal by a factor 10)
 and then "completing" those usually noisy images by using the AI-based denoiser.
 It is amazing how well this works.
 When you then finally assemble a compressed video sequence, you usually can see no difference when compared to rendering all the frames in high quality.
@@ -804,8 +805,8 @@ You can preview this feature using the _AI Denoiser preview_ button in the previ
 This option is only available when choosing the OptiX denoiser. See _AI-based denoiser_ for details.
 It defines a blend between the original (noisy) image and the denoised image.
 
- - a value of 0 means that the original image is not blended with the denoised image at all, showing only the denoised image
- - a value of 0.5 would mean that there will be created an average of the original and the denoised image.
+ - a value of 0 means that the original image is not blended with the denoised image at all, showing only the denoised image.
+ - a value of 0.5 means the original image is an average of the original and denoised images.
 
 Usually, small values in the range between 0 and 0.2 are recommended.
 
@@ -856,7 +857,7 @@ This is a non-destructive operation. Colors, which are "moving out" at one end o
 are "moving in" on the other side.
 
 ====== _Rnd shift_ button
-Applies a randomly chosen _Shift_ value
+Applies a randomly chosen _Shift_ value.
 
 ====== _Rnd clr_ button
 Sets the _Color_-parameters of all transformations of the fractal to a random value.
@@ -887,8 +888,7 @@ final coloring of the fractal.
 image::images/gradient_library_tab.jpg[scaledwidth=75%]
 
 At this tab you can select pre-saved gradients and apply them to your fractal by just clicking
-at them.
-The gradient-library contains of two parts:
+on them. The gradient-library contains of two parts:
 
 - in-built gradients: those are installed together with the program and can not be modified in any way
 - your own gradients. They are located in a folder outside the JWildfire-installation-drawer,
@@ -911,26 +911,25 @@ Each new gradient is a separate entry in the undo-history of the currently selec
 cycle through all the generated gradients by using the _Undo_ and _Redo_ button.
 
 ====== _Gradient generator_
-You may choose on of the following gradient generators:
+You may choose one of the following gradient generators:
 
  - *(All)*: meta-random-gradient-generator which randomly chooses a random-gradient-generator to create the gradient
  - *Strong hue*: creates a smooth  gradient with strong colors
- - *Stripes*: creates a gradient with many regular color changes, having a "stripy" look
+ - *Stripes*: creates a gradient with many regular color changes giving a "stripy" look
  - *Monochrome*: creates a smooth and monochrome gradient
  - *Smooth*: creates a smooth gradient with primarily pastel colors
  - *Bold*: creates a non-smooth gradient with large blocks of strong colors
  - *Two colors*: creates a smooth gradient by fading two colors into each other
  - *Uniform curves*: creates a random color curve with evenly distributed base colors and then
- derives the gradient from it. Using this generator you have both a gradient and
+ derives the gradient from it. When using this generator, you have both a gradient and
 matching color curves.
  - *Uneven curves*: creates a random color curve with unevenly distributed base colors.
-Using this generator you have both a gradient and matching color curves.
-This setting creates usually the most interesting and versatile gradient together with the
+When using this generator, you have both a gradient and matching color curves.
+This setting usually creates the most interesting and versatile gradient together with the
 corresponding color curves and is the default.
 
 ====== _Random points_
 Number of random base colors to derive a gradient from. The more base colors, the higher the number of colors in the final gradient.
-
 
 Please note, that this setting is not respected by all
 random-gradient-generators (e. g. _Two colors_ will always only use two colors).
@@ -945,10 +944,10 @@ random-gradient-generators (e. g. _Bold_ will never fade colors).
 Distributes the base colors over the size of gradient in a uniform way.
 
 ====== _Base colors_ table
-In this table you can manually edit the base colors after a gradient was created.
+In this table you can manually edit the base colors after a gradient is created.
 
-Please note, that those base colors are not saved. So you can only edit them
-at the time you create gradients, but not after saving and loading a flame.
+Please note that these base colors are not saved, so you can only edit them
+at the time you create a gradient and not after saving and loading a flame.
 
 ====== _Create similar gradient_ button
 Creates another random gradient which has similar colors to the current gradient,
@@ -974,19 +973,18 @@ Internally, each gradient consist both of the "classic" part of the gradient and
 curves: *hue*, *saturation* and *luminosity*.
 Those curves belong to the flames, and are also stored within the flame-files.
 
-When loading an older flame-file without those curves, or assigning a "classic" gradient
+When loading an older flame-file without these curves, or assigning a "classic" gradient
 to a flame, the color curves are approximated.
 Usually, this  is only a very raw approximation, but this is absolutely intended.
-To reach a very accurate approximation, it would require to have many of curve-points,
+To reach a very accurate approximation, it would require many of curve-points,
 which would make the curve very hard to edit.
-Therefore, the goal of the raw approximation is to make the actual editing easier.
+Therefore, the goal of the raw approximation is to make the actual editing easier and
+not to have an exact synchronisation between gradient and color curves.
+Color curves are meant as a powerful additional tool which are useful in very many cases,
+but might not be useful in every case. For example, a gradient consisting of many small bands of color cannot be well described by a color curve.
 
-There is no exact synchronisation between gradient and colors curves in order to not break existing flames and concepts.
-Instead, it is meant as a powerful additional tool, which is useful in very many cases,
-but might not be useful in every case.
-
-When you start to edit one of the curves the gradient is synchronized to the shape of the curves.
-When you save and re-load a flame you can continue the editing of the curves.
+When you start to edit one of the curves, the gradient is synchronized to the shape of the curves.
+When you save and re-load a flame, you can continue the editing of the curves.
 
 Each curve has a toolbar with little buttons to help with editing:
 
@@ -995,14 +993,14 @@ Each curve has a toolbar with little buttons to help with editing:
   - create line-shaped curve at the bottom (constant zero intensity)
   - create line-shaped curve at the middle (constant half intensity)
   - mirror the curve at the vertical axis
-  - mirror the curve at the horizontal axis (for example, to turn a constant line of zero intensity
+  - mirror the curve at the horizontal axis (for example, turn a constant line of zero intensity
 into a line with maximum intensity)
 
 ===== _Modify gradient_ subtab
 [.thumb]
 image::images/gradient_modify_tab.jpg[scaledwidth=75%]
 At this tab you can modify the gradient globally.
-Please note that this does not take into account color-curves, so they will be out of sync, if any.
+Please note that this does not take into account color curves, so any color curves will be out of sync.
 
 ===== _Swap RGB_
 Swaps the color channels which changes the finally colors dramatically.
@@ -1025,7 +1023,7 @@ Mirrors the positions of the colors (last color will be first and vice versa).
 Sorts the colors by hue and brightness.
 
 ===== _Apply all current modifications_ button
-All of the above options are "non-destructive" which mean they do not actually modify the gradient,
+All of the above options are "non-destructive", which means they do not actually modify the gradient,
 but are applied dynamically. By using the _Apply all current modifications_ button, you can
 finalize those changes by actually applying them to the gradient.
 
@@ -1033,7 +1031,7 @@ finalize those changes by actually applying them to the gradient.
 [.thumb]
 image::images/gradient_balancing_tab.jpg[scaledwidth=75%]
 At this tab you can modify the colors of the gradient by applying typical color balancing operations.
-Please note, that this does not take into account color-curves, so they will be out of sync, if any.
+Please note that this does not take into account color-curves, so any color-curves will be out of sync.
 
 ===== _Red_
 Change the red color balance.
@@ -1060,9 +1058,9 @@ Apply an overall gamma correction.
 Change the overall brightness.
 
 ===== _Apply all current balancing-options_ button
-All of the above options are "non-destructive" which mean they do not actually modify the gradient,
+All of the above options are "non-destructive", which means they do not actually modify the gradient,
 but are applied dynamically. By using the _Apply all current balancing-options_ button, you can
-finalize those changes by actually applying them to the gradient.
+finalize these changes by actually applying them to the gradient.
 
 ===== _Color map_ subtab
 [.thumb]
@@ -1094,7 +1092,7 @@ Vertical offset of the image map.
 Vertical sizing of the image map.
 
 ===== _Remove image_
-Remove the selected color map (and revert to use a regular gradient for coloring).
+Remove the selected color map (and revert to using a regular gradient for coloring).
 
 [#solid_rendering]
 ==== _3D rendering_ tab
@@ -1103,7 +1101,7 @@ This is also an experimental feature of JWildfire.
 
 Solid rendering basically works by treating each sample of the fractal flame
 as a solid particle.
-The sum of all of these particles make up a larger solid shape.
+The sum of all of these particles makes up a larger solid shape.
 This feature works well for only certain types of flame fractals and needs more rendering time
 than "classic" fractal flames.
 
@@ -1136,7 +1134,7 @@ If changed after a preview render, the results are seen immediately in the previ
 ====== _Search radius_
 Distance to search for ambient occlusions.
 Affects both the quality and the overall appearance of the ambient shadows.
-Optimum values depends on the individual fractal. The default value should work not too bad in most cases, though.
+Optimum values depends on the individual fractal. The default value should work not too badly in most cases, though.
 
 ====== _Blur radius_
 Blur amount of ambient shadows. A value of 0 means no blur at all, which would look very unnatural.
@@ -1153,8 +1151,8 @@ Number of samples in azimuth-search-direction. Higher values increase both quali
 and rendering time.
 
 ====== _Affect diffuse_
-An experimental option to that allows ambient shadows to influence diffuse lighting.
-This is in no way physically correct, but can help to generate more dramatic effects.
+An experimental option that allows ambient shadows to influence diffuse lighting.
+This is not physically correct, but can help to generate more dramatic effects.
 
 ===== _Hard shadows_ subtab
 [.thumb]
@@ -1168,7 +1166,7 @@ These are the options:
 
  - *Off*: don't calculate hard shadows. This is the default setting.
  - *Fast*: classic hard shadows
- - *Smooth*: a modification of hard shadows which smooths them at the edges.
+ - *Smooth*: a modification of hard shadows that smooths the edges.
 Produces artifacts sometimes, in which case you should use *Fast* shadows.
 
 ====== _Smooth radius_
@@ -1178,12 +1176,12 @@ Radius for smoothing hard shadows.
 Resolution of the shadow map. The higher the resolution, the higher the quality of
 the shadows, but the higher the memory consumption.
 
-Please note, that a shadow map is required for each lightsource. So, having many light sources
-may increase memory consumption indirectly, when using shadow maps.
+Please note that a shadow map is required for each light source. So, having many light sources
+may increase memory consumption indirectly when using shadow maps.
 
 ====== _Shadowmap bias_
-Sometimes shadow maps produces little stripy artifacts. By setting a small bias value those artifacts
-can be bypassed. The bias value must not necessarily high when there are a large number of artifacts.
+Sometimes shadow maps produce little stripy artifacts. By setting a small bias value those artifacts
+can be bypassed. The bias value is not necessarily high when there are a large number of artifacts.
 
 ===== _Material settings_ subtab
 [.thumb]
@@ -1199,7 +1197,7 @@ Here you select the material you want to edit.
 Create a new material.
 
 ====== _Del_ button
-Delete the currently selected material. Use with caution as this will renumber the remaining materials but not references to them.
+Delete the currently selected material. Use with caution as this will renumber the remaining materials but will not reference them.
 
 ====== _Diffuse_
 Amount of diffuse reflection, which is light reflected from a rough surface.
@@ -1222,7 +1220,7 @@ Controls how the material reflects diffuse light.
 Color of specular reflections.
 
 ====== _Reflection map_
-Allows mapping an image as environment which is reflected on the object surface.
+Allows mapping of an image as an environment which is then reflected on the object's surface.
 
 ====== _Refl mapping_
 The function used to map the image to the environment.
@@ -1253,7 +1251,7 @@ Changes the light direction by altering the angle between the light and the z-ax
 Changes the light direction by altering the angle between the light and the yz-plane.
 
 ====== _Light color_
-Color of the light, used in the calculating the diffuse component of reflection.
+Color of the light, used for calculating the diffuse component of reflection.
 
 ====== _Cast shadows_
 Choose if this light should cast shadows or not. Affects only hard shadows.
@@ -1268,14 +1266,14 @@ Intensity of the shadow cast by this light source.
 [.thumb]
 image::images/3drendering_zbuffer_tab.jpg[scaledwidth=75%]
 When rendering in solid mode, you may also export an additional z-buffer-image.
-The settings on this tab help to customize the creation of this z-buffer.
+The settings on this tab helps to customize the creation of this z-buffer.
 
 Hint: To export a z-buffer, you must activate the option _with Z-Buffer_ in the _Quality_-profile you are using.
 See the sub-section about <<quality_profiles, _Quality Profiles_>> for more details.
 
 ====== _ZBuffer scale_
 Affects the amplitude of the z-shift/depth-effect caused by the z-buffer.
-The higher the value, the more dramatic the depth-effect caused by this z-buffer.
+The higher the value, the more dramatic the depth-effect caused by the z-buffer.
 If positive, close areas are light and far areas are dark. If negative, close areas are dark and far areas are light.
 
 ====== _ZBuffer bias_
@@ -1297,7 +1295,7 @@ Sets the type of Stereo3D mode:
 
  - *None*: no Stereo3D rendering.
  - *Anaglyph*: the classic way to generate a Stereo3D image: creates one image for each eye,
-turns them into gray, turns the gray into two different monochrome tones, and merge
+turns them into gray, turns the gray into two different monochrome tones, and then merges
 those two images together.
 Creates one image per frame.
 Requires special 3d glasses with the matching colors to view the image.
@@ -1339,10 +1337,10 @@ Color of the left-eye-image in anaglyph mode. Same options as for the left eye.
 Number of interpolated images which are created for each eye in _Interpolated Images_ mode.
 
 ===== Swap sides
-When checked, swaps the images for the left eye with the image for the right eye.
+When checked, swaps the image for the left eye with the image for the right eye.
 Side-by-side stereo images are normally designed for parallel viewing.
 Checking this box creates stereo images for cross-eyed viewing.
-For some people is easier to see the 3D-effect this way, while for others is easier the
+For some people is easier to see the 3D-effect this way, while for others it is easier the
 other way.
 
 ==== _Post symmetry_ tab
@@ -1369,7 +1367,7 @@ Measure of the distance between the object and the mirror.
 Rotation angle of the mirror.
 
 ==== Symmetry order (only for Point-symmetry)
-Order of the symmetry. Can be thought as the number of copies which are placed around the
+Order of the symmetry. Can be thought of as the number of copies which are placed around the
 symmetry center.
 
 ==== CentreX
@@ -1444,7 +1442,7 @@ Layers have the following properties which you can modify:
  - *Visible*: this property controls if the currently selected layer is rendered or not
  - *Weight*: this property controls the intensity/weight of the current layer.
 1 is normal, lower values darkens the layer, higher values make it lighter.
- - *Density*: this property controls the density of the layer: 1 for full density to 0 for no density.
+ - *Density*: this property controls the density of the layer: 1 (full density) to 0 (no density).
 
 ===== Hiding/Showing layers
 It may be important to show/hide certain layers to help focus your editing. There
@@ -1528,7 +1526,7 @@ Here you can choose the type of mutation to be executed:
  - *Local gamma*: add randomized local-gamma-effects
  - *Random gradient*: create a new random gradient
  - *Random parameter*: change some randomly selected parameters of randomly selected variations
- - *Random ztransform*: randomly change parameters of the affine component primarily affection the z-axis of a randomly selected transform
+ - *Random ztransform*: randomly change parameters of the affine component primarily affecting the z-axis of a randomly selected transform
  - *Similar gradient*: create a similar gradient
  - *Weighting field*: add randomized weighting-field-effects
  - *All*: randomly select one of the above mutations. This is the default option.
@@ -1621,8 +1619,8 @@ an affine transformation is a possible combination of
 - reflection
 
 Affine transformations are represented by the controls you see in the preview
-area. So, at the _affine_ tab you can perform the same changes like dragging controls in the
-preview, but in a more precise way.
+area. So, on the _affine_ tab, you can make the same changes that preview control dragging does,
+but in a more precise way.
 
 ===== _Post TF_ button
 Switches between editing the regular component of a transform the <<post_transform, post-transform>>-component.
@@ -1654,15 +1652,15 @@ This works by using _linear_ as "nonlinear" transformation (for each transformat
 that is very fast to compute. But, these are not true fractal flames.
 
 ====== _Nonlinear transformations_
-The primary invention of Scott Draves, when creating the idea of fractal flames, was not only allow "classic"
-affine transformations, but also allowing arbitrary transformations.
+The primary invention of Scott Draves, when creating the idea of fractal flames, was not only to allow "classic"
+affine transformations, but also to allow arbitrary transformations.
 These can be mathematically complex, but the basics are easy to understand.
 
 - do not only allow transformations of the type rotation, translation, shear or reflections
-- but do allow more generic transformations, which still allow that the basic algorithm works.
+- but do allow more generic transformations, which will still allow that the basic algorithm to work.
 For example, a transformation which sets any value to 0, will probably not lead to any interesting results.
-But a transformation which moves a point along a gentle wave might be as valid as a transformation which moves
-a point along a line, but lead to much more interesting results.
+A transformation that undulates a point could be just as valid as a transformation that moves a point along
+a line, but lead to much more interesting results.
 
 So, a good way of thinking about nonlinear transforms is that they add small details to otherwise more
 "straight" transformations like a rotation.
@@ -1674,31 +1672,31 @@ There are different names for nonlinear transformations:
  - *variations*: this is shorter and also common
  - *plugins*: because in some programs they are supplied as plugins which can be loaded at runtime. JWildfire
 also supports the creation of some kind of plugins by using the _wf_custom_ or _wf_custom_full_-variation.
-But this is intended only for exploration of some new ideas. After exploration they are included
+But this is intended only for exploration of some new ideas. After exploration, they are included
 in the main code base, hence in JWildfire you usually do not find the term "plugin".
 
 ====== _Superimposition of nonlinear transformations_
 You can add up to 12 nonlinear transformations on this tab. These will all be overlaid.
-Most of the nonlinear transformations have a lot of parameters.
-Some of them really a lot, they can be thought as complete independent simulating programs.
+Most of the nonlinear transformations have many parameters; some really have a lot; and some can be
+thought of as complete independent simulating programs.
 
-The possibility of changing these parameters together with the superposition of different nonlinear transformations
-together with the possibility to change parameters of affine transformations leads to an infinite number
+The possibility of changing these parameters together with the superposition of different nonlinear transformations,
+together with the possibility of changing parameters of the affine transformations, leads to an infinite number
 of possibilities for each flame.
 
 ====== Types of nonlinear transformations_
-Currently, there are about 800 nonlinear transformations included into JWildfire.
+Currently, there are about 800 nonlinear transformations included in JWildfire.
 
-It would go beyond the scope of this manual to describe them. In many cases, the description would be very
+It is beyond the scope of this manual to describe them. In many cases, the description would be very
 technical and would not help much (in contrast to just trying them out).
 
 But it has turned out that there are some categories of nonlinear transformations which are well understood.
 You can restrict the selection of nonlinear transformations by using these categories.
-Each nonlinear transformation can have more of one of the following categories:
+Each nonlinear transformation can have one or more of the following categories:
 
 - *Blur*: creates a blur-effect, for example a _gaussian_blur_.
 - *2D*: a transformation which is restricted to the x- and y-axis.
-- *ZTransform*: a transformation which is specialized to transform to z-axis, for example _zblur_.
+- *ZTransform*: a transformation which is specialized to transform to the z-axis, for example _zblur_.
 - *3D*: a transformation which transforms all three coordinates.
 - *DC*: a transformation which also changes the color-index (and overrides the default algorithm to calculate colors).
 - *Simulation*: a more complex simulation, for example a snowflake-generator.
@@ -1709,43 +1707,43 @@ Each nonlinear transformation can have more of one of the following categories:
 - *Crop*: a cropping transformation.
 - *Edit formula/code*: a transformation where you can actually enter code or a formula to customize it.
 - *Escape-time fractal*: a transformation which computes an escape-time fractal, for example: _fract_mandelbrot_.
-- *Supports external shapes*: a transformation which can be customized by using external resources like images, .svg-files or meshes.
+- *Supports external shapes*: a transformation which can be customized by using external resources such as images, .svg-files or meshes.
 
 ====== Filtering nonlinear transformations
-Currently, there are about 800 nonlinear transformations included. Sometimes this is just too much, even to play around.
-You can reduce this list by using _Filter_ option.
+Currently, there are about 800 nonlinear transformations included in JWildfire.
+Sometimes this is just too much, even just to play around with. You can reduce this list by using the _Filter_ option.
 
-The _Filter_ option consists of two drop-down lists, where you can choose up two _Variation profiles_:
+The _Filter_ option consists of two drop-down lists where you can choose up two _Variation profiles_:
 
- - when the *first* _Variation profiles_ is selected, only the variations are displayed which are inside the selected profile.
- - when *two* _Variation profiles_ are selected, only the variations are displayed which are inside the both profiles.
- - the *second* drop-down list alternatively allows to select an *_inverted variation profile_* (prefixed by "!=" in the list).
-When you select an *_inverted variation profile_* in the *second* option, only variations are displayed which are
-inside the first selected _Variation profile_, but not in the _inverted variation profile_.
+ - when the *first* _Variation profiles_ is selected, only the variations which are inside the selected profile are displayed.
+ - when *two* _Variation profiles_ are selected, only the variations which are inside the both profiles are displayed.
+ - the *second* drop-down list alternatively allows you to select an *_inverted variation profile_* (prefixed by "!=" in the list).
+When you select an *_inverted variation profile_* in the *second* option, only variations which are
+inside the first selected _Variation profile_, but not in the _inverted variation profile_, are displayed.
 
 [.thumb]
 image::images/nonlinear_variations_filter.jpg[scaledwidth=50%]
 
 Examples:
 
-- no _variation profile_ is selected: all variations are displayed
-- the _Blur_ _variation profile_ is selected as *first* option, *second* option is empty: only blur-variations are displayed
-- the _Blur_ _variation profile_ is selected as *first* option, the _3D_ *_variation profile_ is selected as *second* option: only blur-variations, which are also 3D-variations, are displayed
-- the _Blur_ _variation profile_ is selected as *first* option, the _!=3D_ *_variation profile_ is selected as *second* option: only blur-variations, which are _not_ 3D-variations, are displayed
+- if no _variation profile_ is selected: all variations are displayed.
+- if the _Blur_ _variation profile_ is selected as the *first* option and the *second* option is empty, then only blur-variations are displayed.
+- if the _Blur_ _variation profile_ is selected as the *first* option and the _3D_ _variation profile_ is selected as the *second* option, then only blur-variations which are also 3D-variations are displayed.
+- if the _Blur_ _variation profile_ is selected as the *first* option and the _!=3D_ _variation profile_ is selected as the *second* option, then only blur-variations which are _not_ 3D-variations are displayed.
 
 The _variation profiles_ may be customized freely. See the next sub-section.
 
 ====== Editing _Variation profiles_
 [.thumb]
 image::images/nonlinear_edit_variation_profiles.jpg[scaledwidth=75%]
-You may edit the supplied _Variation profiles_ freely.
+You may edit the _Variation profiles_ freely.
 
-Per profile these are the options to specify the _Profile type_:
+For each profile, these are the options to specify the _Profile type_:
 
 - *Include variations*: specify which variations you want to _include_.
 - *Exclude variations*: specify which variations you want to _exclude_.
-- *Include types*: specify a list of _variation types_. Each variation which satisfies this selection will be included.
-- *Exclude types*: specify a list of _variation types_. Each variation which satisfies this selection will be excluded.
+- *Include types*: specify a list of _variation types_. Each variation that satisfies this selection will be included.
+- *Exclude types*: specify a list of _variation types_. Each variation thar satisfies this selection will be excluded.
 
 ====== Adding nonlinear transformations
 You can add up to 12 nonlinear transformations to each of the transformations of your fractal.
@@ -1800,26 +1798,26 @@ But the term _relative weights_ is much easier to understand:
 - Each transformation has an attached _weight_. This is an numerical value and controls how often the
 transformation is invoked in the iteration process. This weight is called an _absolute weight_.
 ** When using only _absolute weights_, no attention is paid to the execution order of the transformations.
-- It has been observed, that execution order of certain transformations can lead to important and interesting
+- It has been observed that the execution order of certain transformations can lead to important and interesting
 changes of the structure of the fractal.
 ** The basic idea behind _relative weights_ is to promote certain execution orders and prevent other execution orders.
 
 ====== _Relative weights_ table
-The _relative weights_ are basically a matrix. On this tab you edit the part of this matrix that concerns
+The _relative weights_ are basically a matrix. Using this tab you can edit the part of this matrix that concerns
 the currently selected transformation.
 
-For each combination of this transformation with any other transformation of the fractal, this table describes
-the probability that this combination will be executed in the iteration process:
+For each combination of the chosen transformation with all of the other transformations of the fractal, this table describes
+the probability that a certain combination will be executed in the iteration process:
 
 - the first column contains the order of execution of two of these transformations.
-- the second column contains the corresponding probability that order of execution actually can happen:
+- the second column contains the corresponding probability that the order of execution actually can happen:
 
 ** a value of 0 means that it does not happen at all.
 ** a value of 1 is the default value. The actual probability is not 100%, but depends on the distribution of the _absolute weights_.
 
 So, a relative weight of 0 is much easier to understand than the other values. Luckily, finding the right combinations
 where it makes sense to use 0 as the _relative weight_ has the biggest impact on the fractal images.
-All the other possibilities are also very interesting, but lead to much more subtle differences (in the most of the cases).
+All the other possibilities are also very interesting, but lead to much more subtle differences (in most of the cases).
 
 ====== _View as "to"_
 Controls which values of the _relative weights_ matrix are displayed in the table.
@@ -1827,7 +1825,7 @@ The _View as "to"_ option shows the transitions from the currently selected tran
 This includes the transformation itself, which can be a bit confusing at first. But calling the same transformation
 again after this transformation has already been called is a perfectly valid and common behavior.
 
-For example, having three transformations *1* and *2* and *3*, the table will show:
+For example, having three transformations, *1* and *2* and *3*, the table will show:
 
 - *1 to 1* and *1 to 2* and *1 to 3* when transform *1* is selected,
 - *2 to 1* and *2 to 2* and *2 to 3* when transform *2* is selected,
@@ -1841,7 +1839,7 @@ The _View as "from"_ option shows the transitions from any other transformation 
 This includes the transformation itself, which can be a bit confusing at first. But calling the same transformation
 again after this transformation has already been called is a perfectly valid and common behavior.
 
-For example, having three transformations *1* and *2* and *3*, the table will show:
+For example, having three transformations, *1* and *2* and *3*, the table will show:
 
 - *1 from 1* and *1 from 2* and *1 from 3* when transform *1* is selected,
 - *2 from 1* and *2 from 2* and *2 from 3* when transform *2* is selected,
@@ -1852,7 +1850,7 @@ Note: changing the view mode does not affect the actual _relative weights_.
 ====== _View as "to"_ vs _View as "from"_
 The values displayed in these two views are in some way inverses of each other.
 
-For example, having again three transformations *1* and *2* and *3*:
+For example, having again three transformations, *1* and *2* and *3*:
 
 - select transformation *1*
 - in _View as "to"_ select the row *1 to 2* and press the _0_ button (setting this _relative weight_ to 0)
@@ -1860,7 +1858,7 @@ For example, having again three transformations *1* and *2* and *3*:
 - you should now see that the value at the first row *2 from 1* is 0
 
 *Please note that switching the view mode does not affect the order of execution of transformations (relative weights)
-in any way. They are only different views of the same thing.*
+in any way. It's just different views of the same thing.*
 
 ====== _0_ button
 Sets the currently selected _relative weight_ to 0. Entering a numerical value would have the same effect, but
@@ -1892,7 +1890,7 @@ This is the default for final transforms since using a different type would redu
 is the default for normal transforms. It is based on a gradient, which can be selected and edited in the <<gradient_tab, _Gradient_ tab>>,
 and uses an index to the gradient between 0 (leftmost color) and 1 (rightmost color) to set the flame colors.
 There are two controls: _Color_ and _Speed_.
- ** _Color_ specifies the target gradient index for the transform. On each iteration,
+ ** _Color_ specifies the target gradient index for the transform. With each iteration,
 the index for the point will move towards the target index.
  ** _Speed_ controls how fast it moves; 0 will move the index halfway between the current and target indices.
 Higher values will move it less than halfway (more slowly); the highest value of 1 means it won't move at all;
@@ -1913,14 +1911,14 @@ The point's color is interpolated with the target color as with *Target* rather 
 
  - *Distance*: uses the gradient indexed by the distance the transform moved the point.
 _Color_ determines the starting point and _Speed_ controls how far along the gradient each unit of distance moves from there.
-Like other coloring types, Speed -1 sets the color to the specified color.
-But the input color is ignored, so unlike the other coloring types, Speed 1 will still change the color.
+Like other coloring types, a Speed of -1 sets the color to the specified color.
+But the input color is ignored, so unlike the other coloring types, a Speed of 1 will still change the color.
 *Distance* is especially effective for coloring flames made with a single non-base-shape transform, which are otherwise
 quite difficult to color.
 
- - *Cyclic*: uses the gradient, but simply shifts the gradient index right the amount specified by Speed.
+ - *Cyclic*: uses the gradient, but simply shifts the gradient index right by the amount specified by Speed.
 If it goes off the end of the gradient, it wraps around to the other side. *Cyclic* will not converge to a color when iterated,
-so doesn't work as the only coloring type in a flame; some other iterated transform needs to use *Diffusion* to get a stable
+therefore it doesn't work as the only coloring type in a flame; some other iterated transform needs to use *Diffusion* to get a stable
 color that *Cyclic* can use as a starting point.
 Normally, Speed is set to m/n, where m and n are small integers; this makes the colors cycle through n gradient colors,
 and is especially useful for coloring tilings.
@@ -1958,7 +1956,7 @@ The basic idea behind the extension of this algorithm was to change similar colo
 - *Hue*
 
 Therefore, on this tab you will find pairs of parameters: the parameter itself and its rate of change, e.g. _Gamma_ and _Gamma Spd_.
-The parameters _Gamma_ and _Gamma Spd_ where the first, hence the name of the tab.
+The parameters _Gamma_ and _Gamma Spd_ were the first, hence the name of the tab.
 
 And because this kind of effect is local (changes with each iteration), it is called a *local color change*.
 Again, because the change in _gamma_ was the first change introduced, these effects are called *local gamma* effects.
@@ -1989,10 +1987,10 @@ Removes the local gamma effect:
 - when the _Whole fractal_ checkbox is not checked, only the local gamma effect for the current selected transformation is removed.
 
 ===== _Whole fractal_ checkbox
-Affects how the _Randomize all_ button and the _Reset all_ button work, please see above.
+Affects how the _Randomize all_ button and the _Reset all_ button will work, please see above.
 
 ===== _WField_ tab
-Weighting fields are a nice artistic tool to create very organic-looking fractals,
+Weighting fields are a nice artistic tool that can be used to create very organic-looking fractals,
 
 The basic idea is to add some kind of "natural disturbance" at the transform-level to the flame-fractals.
 This is done in a non-destructive way, i.e. without changing the actual flame. This makes it very easy and intuitive to
@@ -2009,7 +2007,7 @@ Currently, the following fractal-parameters may be affected by a weighting-field
 
 ===== _Weighting field_ drop-down list
 Type of the weighting field to apply to the currently selected transformation.
-There are the following choices:
+These are the choices:
 
 - *None*: no weighting field
 - *Cellular Noise*: apply a weighting field using the _cellular noise algorithm_. This produces
@@ -2022,17 +2020,17 @@ The word "fractal" here means applying the same type of noise multiple times at 
 - *Image Map*: apply a weighting field using the levels of red color channel of the given image map.
 
 ===== _Input coordinate_ drop-down list
-Sets the position where the weight field is calculated. There are the following options:
+Sets the position where the weight field is calculated. These are the options:
 
 - *Position*: Position of the current iteration point before applying the affine transform
 - *Affine*: Position of the current iteration point after applying the affine transform
 
 ===== _Var amounts_
-Strength with which the magnitude (also called _amount_) of the nonlinear variations is influenced by the weighting field.
+Strength by which the magnitude (also called _amount_) of the nonlinear variations is influenced by the weighting field.
 A value of 0 means no influence by a weighting field.
 
 ===== _Color amount_
-Strength with which the color-calculation is influenced by the weighting field.
+Strength by which the color-calculation is influenced by the weighting field.
 A value of 0 means no influence by a weighting field.
 
 ===== _Var param 1_/_Var param 2_/_Var param 3_
@@ -2070,7 +2068,7 @@ Hint: On small monitors this button might be hidden per default. You can resize 
 Removes the weighting field:
 
 - when the _Whole fractal_ checkbox is checked, the weighting field for each transformation of the fractal is removed.
-- when the _Whole fractal_ checkbox is not checked, only the weighting field for the current selected transformation is removed.
+- when the _Whole fractal_ checkbox is not checked, only the weighting field for the currently selected transformation is removed.
 
 ===== _Whole fractal_ checkbox
 Affects how the _Randomize all_ button and the _Reset all_ button work, please see above.
@@ -2082,8 +2080,8 @@ certain scripts.
 Custom-buttons are completely optional. You can also execute scripts directly from the _Scripts_ library
 by double-clicking at a script name.
 
-JWF-scripts are written in the Java-language and can use most of language-features offered by
-Java 1.4. So you could also read external files, access resources from the internet,
+JWF-scripts are written in the Java-language and can use most of the language-features offered by
+Java 1.4. Therefore you could also read external files, access resources from the internet,
 open custom-windows etc.
 There are also several possibilities to interact with the <<fractal_flame_editor, Main Editor>>,
 for example, to modify the currently edited flame and to refresh the preview.
@@ -2091,8 +2089,8 @@ for example, to modify the currently edited flame and to refresh the preview.
 ===== _Scripts_ library
 The scripts-library contains of two parts:
 
-- built-in scripts: those are installed together with the program and can not be modified in any way
-- your own scripts. They are located in a folder outside the JWildfire-installation-drawer,
+- built-in scripts: these are installed together with the program and can not be modified in any way.
+- your own scripts: these are located in a folder outside the JWildfire-installation-drawer,
 so that they are not lost when you update JWildfire. You must specify this path in the
 <<preferences, _Preferences_>> by setting the property *tinaJWFScriptPath*.
 
@@ -2104,12 +2102,12 @@ Import a script from an external file. The following file-types are supported:
 - a single *.java*-file containing the script-code
 - a *.zip*-archive containing the script-code together with additional files or folders.
 
-When you download scripts from the internet, for example, from https://www.jwfsanctuary.club, they usually come
-as .zip-file.
+When you download scripts from the internet, for example from https://www.jwfsanctuary.club, they usually come
+as .zip-files.
 
 ===== _New_ button
 Create a new script from scratch. This is rarely used; it is usually easier to duplicate
-an existing script or to create a script from a flame and then to modify it.
+an existing script or to create a script from a flame and then modify it.
 
 ===== _Dupl_ button
 Duplicates the currently selected script.
@@ -2120,17 +2118,17 @@ which contains all the Java-code to create the currently selected flame.
 
 This has the following purposes:
 
-- you have a working script which actually produces something with a single button-click
-- by modifying certain parts you can programmatically create similar flames
+- you have a working script which actually produces something with a single button-click, and
+- by modifying certain parts you can programmatically create similar flames.
 
 ===== Creating flame-randomizers
 This function also creates code, which randomizes certain parameters at the level
 of each transform. This code is inactive by default.
-So, the generated flames by this script will always look the same until you
-modify the script. This is intended, because randomizing a random selection of
-parameters usually does not lead to interesting results. So you must find out by yourself,
+The generated flames of this script will always look the same until you
+modify the script. This is intentional, because randomizing a random selection of
+parameters usually does not lead to interesting results. Therefore you must find out for yourself,
 which parameters are good for randomizing a flame and which are not. This always depends
-on the type of fractal and small differences between flames may affect this behavior in
+on the type of fractal, and small differences between flames may affect this behavior in
 a very strong way.
 
 You can find the inactive code by looking for comments like this:
@@ -2155,15 +2153,15 @@ If you now _comment in_ the 3rd line, you apply a rotation by an angle which is 
 ----
 XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
 ----
-The expression *360.0*Math.random()* calculates a random value in the range of 0..360, which
+The expression *360.0*Math.random()* calculates a random value between 0 and 360, which
 differs each time you execute the script. So you will get a different fractal flame
 each time you execute the script.
 
-When you see, that this leads to interesting effects, you may leave it that way and work at another transformation,
+If you see that this leads to interesting effects, you may leave it that way and work at another transformation or,
 otherwise you could uncomment another line of this pre-generated code. You can also play with the values, for example,
 to replace the *360* by some smaller value when the rotations are too large.
-Of course, you can combine all of this code-fragments freely and also add your won code.
-But, a rule of thumb is, that many large changes at a fractal flame at the same time
+Of course, you can combine all of these code-fragments freely and also add your own code.
+A rule of thumb is that many large changes at a fractal flame at the same time
 do not lead to interesting results. In many cases you will not have any visible result at all.
 
 ===== _Btn_ button
@@ -2171,14 +2169,14 @@ Create a <<macro_buttons, _Macro button_>> in the bottom area of the preview to 
 You can remove this button using the _Delete_-button at the <<macro_buttons, _Macro buttons_ subtab>>.
 
 ===== _Scan_ button
-Rescans the script-library. This is only necessary when you modified files outside JWildfire or changed
+Rescans the script-library. This is only necessary when you modified files from outside JWildfire or changed
 the library-path in the _Preferences_.
 
 ===== _Run_ button
 Runs the currently selected script.
 
 ===== _Edit_ button
-Opens a popup-window to edit the currently selected script.
+Opens a pop-up window to edit the currently selected script.
 
 ===== _Description_
 Shows a description of the script, which might contain hints for usage or copyright information.
@@ -2202,27 +2200,28 @@ Add a new Macro button by selecting a script and clicking the _Btn_ button as de
 In this table all _Macro Buttons_ are displayed and you can also edit the label and short hint of each button.
 
 ====== _Up_ button
-Moves the selected entry one position up. The corresponding button will move one position to the left.
+Moves the button in the user-interface one position to the left.
 
 ====== _Down_ button
-Moves the selected entry one position down. The corresponding button will move one position to the right.
+Moves the button in the user-interface one position to the right.
 
 ====== _Delete_ button
 Deletes the currently selected _Macro button_.
 
 === Global functions
-At this area you find global functions as well as the very often used ones.
+In this section you will find global functions that are used very often. For example, loading and saving flame files or generating
+random flames.
 
 ==== _Random batch_ button
 Creates a new batch of random flames and displays them in the _thumbnail ribbon_.
-This is probably one of the most popular features of JWildfire; because using this function
+This is probably one of the most popular features of JWildfire because using this function
 allows you to create endless beauty in a very relaxing way. It is also very unlikely that you will
 ever generate two fractals which look exactly the same, so it's likely that you
 will be surprised by new and interesting results even after years of using the program.
 
 
-Please note, that this will, per default, remove any previously loaded flames together
-with their undo-history from memory. So, any change you did not save, will be lost.
+Please note that this will, per default, remove any previously loaded flames together
+with their undo-history from memory. So, any changes you did not save will be lost.
 You can change this behavior by editing the parameter *tinaRandomBatchRefreshType* in
 the <<preferences, _Preferences_>>.
 
@@ -2256,15 +2255,15 @@ image::images/rnd_flame_gen_mandala.jpg[scaledwidth=75%]
 
 ==== _Rnd flame-generator_
 
-Choose here the random-flame-generator used to generate a batch of random flames.
+Here you can choose the random-flame-generator that will be used to generate a batch of random flames.
 A random-flame-generator is a set of instructions to generate a skeleton of a certain type of fractal
 and fill this skeleton with random values or random sub-structures.
-What works well and what does not work depends on the type of fractals. Sometimes it's just the
-random change of a single number, sometimes a random transformation or formula is inserted.
+What works well and what does not work well depends on the type of fractals. Sometimes the result is just the
+random change of a single number, or sometimes a random transformation or formula is inserted.
 
 Typically, the JWildfire random-flame-generators employ the strategy of using some well explained
-ranges of parameters together with a large degree of freedom. This way you get very often a pleasing result,
-and you may get some new variations which you never saw before (or which you may never have been tried before at all).
+ranges of parameters together with a large degree of freedom. This way you can often get a very pleasing result,
+and you may encounter some new variations/shapes which you have never seen or tried before.
 
 There are two types of random-flame-generators:
 
@@ -2274,13 +2273,13 @@ There are two types of random-flame-generators:
 ===== The special "All"-random-flame-generator
 The most common random-flame-generator is the default generator named "All".
 It is a meta-random-flame-generator and contains all the other random-flame-generators.
-When it generates a random flame, it selects randomly one of those internal generators
+When it generates a random flame, it randomly selects one of those internal generators
 to do the actual work.
 By choosing "(All)" you will get the most diverse results.
 
 ==== Rnd Symmetry
-Sets the random-symmetry-generator used for generating random flames.
-A random-symmetry randomly sets post-symmetry-options of the random flames.
+Sets the random-symmetry-generator for generating random flames.
+This generator randomly sets post-symmetry-options of the random flames.
 
 These are the options:
 
@@ -2288,16 +2287,16 @@ These are the options:
  - *XAxis*: a random x-axis-symmetry
  - *YAxis*: a random y-axis-symmetry
  - *Point*: a random point-axis-symmetry
- - *(All)*: randomly selects a random-symmetry-generator to generate post-symmetry
+ - *(All)*: randomly selects a random-symmetry-generator of generating post-symmetry
  - *(All, sparse)*: like *(All)*, but with reduced probability to generate post-symmetry at all
 
-The default value is *(All, sparse)*, which means to randomly create random symmetry of all types,
+The default value is *(All, sparse)*, which means it will randomly create random symmetry of all types,
 but only a few random flames.
 
 See the section about _Post symmetry_ for more details about the types of post-symmetry and related parameters.
 
 ==== Rnd Gradient
-Set the random-gradient-generator used for generating random flames.
+Set the random-gradient-generator for generating random flames.
 
 There are the following options:
 
@@ -2309,16 +2308,16 @@ There are the following options:
 - *Bold*: creates a non-smooth gradient with large blocks of strong colors
 - *Two colors*: creates a smooth gradient by fading two colors into each other
 - *Uniform curves*: creates a random color curve with evenly distributed base colors and then
-derives the gradient from it. Using this generator you have both a gradient and
+derives the gradient from it. Using this generator will give both a gradient and
 matching color curves.
 - *Uneven curves*: creates a random color curve with unevenly distributed base colors.
-Using this generator you have both a gradient and matching color curves.
+Using this generator will give both a gradient and matching color curves.
 
 The default setting is _Uneven curves_, which creates usually the most interesting and
-versatile gradients together with the corresponding color curves.
+versatile gradients together with corresponding color curves.
 
 ==== Rnd WField
-Set the random-weighting-field-generator used for generating random flames.
+Set the random-weighting-field-generator for generating random flames.
 
 These are the options:
 
@@ -2327,9 +2326,9 @@ These are the options:
  - *Fractal Noise*: create random weighting-fields using fractal noise, like Perlin fractal noise.
 Fractal noise means to apply one type of noise multiple times at different scales.
  - *Image Map*: create random weighting-fields using an image map.
-Per default always the same fixed internal map is used. You can change it by editing the flame afterwards.
+By default, the same fixed internal map is always used. You can change it by editing the flame afterwards.
  - *(All)*: randomly selects a random-weighting-field-generator to generate weighting-fields
- - *(All, sparse)*: like *(All)*, but with reduced probability to generate weighting-fields at all
+ - *(All, sparse)*: like *(All)*, but with reduced probability of generating weighting-fields at all
 
 [#new_from_scratch]
 ==== New from scratch
@@ -2340,13 +2339,13 @@ manually "from scratch", hence the name.
 Load a flame which was stored in the clipboard.
 
 In social-media it is common to exchange flame-files in text-form by posting them. When loading such a flame
-you usually copy the text and the use the _From clipboard_ button to load into JWildfire.
+you usually copy the text and the use the _From clipboard_ button to load it into JWildfire.
 
 ==== Load flame
 Load a flame from a file and display it in the _Thumbnail ribbon_.
 
-Flame files can also contain a batch of flames. In this case each flame from the flame-batch-file will be
-imported as an individual flame, which is displayed as an individual thumbnail in the _Thumbnail ribbon_.
+Flame files can also contain a batch of flames. In this case, each flame from the flame-batch-file will be
+imported as an individual flame which is displayed as an individual thumbnail in the _Thumbnail ribbon_.
 Each individual flame  of such a batch also has its own undo-history.
 
 ==== To clipboard
@@ -2384,7 +2383,7 @@ When you click the Render image/movie button, you will be prompted for the filen
 The extension determines whether to render an image or movie. Use .png or .jpg to render an image, or .mp4 to render a movie.
 
 The rendering runs in the background and can be cancelled at anytime. But, you can not render
-more than one flame at a time at this place. For rendering multiple images see the section
+more than one flame at a time here. For rendering multiple images see the section
 about <<batch_renderer, _Batch renderer_>>.
 
 ==== _Render resolution_ drop-down list
@@ -2399,9 +2398,9 @@ For example, when you select a profile with same width and height, you will have
 [#resolution_profiles]
 ==== Edit _resolution profiles_
 Edit the list of resolution profiles by clicking the button to the right of the render resolution drop down list.
-In this popup-window you may alter existing _resolution profiles_ as well as create your own.
+In this pop-up window you may alter existing _resolution profiles_ as well as create your own.
 
-There are the following parameters:
+These are the parameters:
 
  - *Width* x *Height*: image resolution
  - *Default profile*: one profile can be defined as the default profile. The profile is chosen when you start JWildfire.
@@ -2411,7 +2410,7 @@ Here you choose the desired render quality as well as some output options by cho
 JWildfire comes with some predefined _quality profiles_, but you can also customize them.
 
 Especially when using an AI-based post-denoiser, you may want to revisit your quality profiles.
-Such a denoiser can help to create visual appealing results with much lower quality settings
+Such a denoiser can help to create visually appealing results with much lower quality settings
 in order to reduce render times. The default settings were designed to be used without such a denoiser.
 See the sub-chapter _AI-based denoiser_ for more details.
 
@@ -2441,10 +2440,10 @@ Quick-saves the currently selected fractal flame and sends it to the <<batch_ren
 
 Please note, that this does not actually render the fractal flame.
 You must later open the _Batch renderer_ and invoke the rendering process.
-So, it is just a shortcut to simplify adding fractal flames to the rendering batch.
+Therefore, it is just a shortcut to simplify adding fractal flames to the rendering batch.
 
 Hint: when you continue to  edit the fractal flame and create a quicksave again, the _Batch renderer_
-will still render the quicksave you did sent to the _Batch renderer_ before.
+will still render the earlier quicksave you sent to the <<batch_renderer, _Batch renderer_>>.
 
 [#mutagen_module]
 == _MutaGen_ module
@@ -2456,7 +2455,7 @@ Open the MutaGen module by selecting _Fractal flames: MutaGen_ from the _Windows
 
 There are several mutation types affecting different "genes" (types of flame properties).
 Those mutations are applied at two levels: generation A (8 new fractals from the base flame)
-and generation B (16 new fractals from generation A), generating total of 24 new flames at each mutation step.
+and generation B (16 new fractals from generation A), generating a total of 24 new flames at each mutation step.
 
 You can easily exchange fractals between the main editor and the new module at any time.
 
@@ -2470,15 +2469,15 @@ See the section about <<quick_mutation_types, _Quick mutation types_>> for a des
 image::images/interactive_renderer.jpg[scaledwidth=75%]
 
 The _Interactive Renderer_ is an alternative rendering module which focuses on rendering a single image
-(In contrast, the <<batch_renderer, _Batch Renderer_>> focuses on rendering multiple images).
+in contrast to the <<batch_renderer, _Batch Renderer_>> which renders multiple images.
 Open the Interactive Renderer module by clicking the Interactive Renderer button on the left of the preview area or
 by selecting _Fractal flames: Interactive renderer_ from the _Windows_ menu.
 
 The _Interactive Renderer_ has three main purposes:
 
- - allows the user to watch the rendering process for important artwork and let it render "until it is done"
- - explore random fractal flames and watch them get rendered and become clearer and clearer. This may be very relaxing
- - explore the fractal rendering process in general
+ - allows the user to watch the rendering process for important artwork to let it render "until it is done".
+ - explore random fractal flames and watch them get rendered and become clearer and clearer. This may be very relaxing.
+ - explore the fractal rendering process in general.
 
 === Saving the image while rendering
 While rendering is in progress you may save a snapshot of the current image at any time.
@@ -2489,12 +2488,12 @@ an intended workflow.
 Statistics about the current quality level and predictions when new quality levels will be reached
 are shown in the top left of the Interactive Renderer window.
 
-You may toggle viewing of Stats of when you are not interested in them by clicking the Stats button.
+You may toggle viewing of Stats off when you are not interested in them by clicking the Stats button.
 This will slightly improve render performance.
 
 === Preview
 While previewing the image during rendering is a key-feature of the _Interactive Renderer_, it also
-slows down rendering. For most of the flames the slowdown can be neglected, but there can be
+slows down rendering. For most of the flames the slowdown will be negligible, but there can be
 a significant slowdown for some flames.
 So you may want to alternate between faster rendering for a short period and monitoring the
 render progress using the Preview button.
@@ -2502,31 +2501,31 @@ render progress using the Preview button.
 === From Editor
 Imports the currently edited fractal flame from the _Main Editor_ and starts rendering it.
 
-*Please beware, that this will cancel any ongoing render and you will lose any unsaved results.*
+*Please note that this will cancel any ongoing render and you will lose any unsaved results.*
 
 === From Clipboard
 Imports a fractal flame from the clipboard and starts rendering it.
 
-*Please beware, that this will cancel any ongoing rendering and you will lose any unsaved results.*
+*Please note that this will cancel any ongoing rendering and you will lose any unsaved results.*
 
 === Load flame
-Loads a fractal flame from a flame starts rendering it.
+Loads a fractal flame from a flame and starts rendering it.
 
-*Please beware, that this will cancel any ongoing rendering and you will lose any unsaved results.*
+*Please note that this will cancel any ongoing rendering and you will lose any unsaved results.*
 
 === Resume render
 Loads a previously saved <<render_state, _Render State_>> and starts rendering it.
 
-*Please beware, that this will cancel any ongoing rendering and you will lose any unsaved results.*
+*Please note that this will cancel any ongoing rendering and you will lose any unsaved results.*
 
 === Stop
 Stops the current ongoing rendering process.
 
-*Please beware, that the render can not be resumed. You must save the <<render_state, _Render State_>>
+*Please note that the render can not be resumed. You must save the <<render_state, _Render State_>>
 before stopping the render when you want to be able to continue a render.*
 
 === 1:2
-Sets the render size to the half of the currently selected render size. Can help to get a quick preview
+Sets the render size to one half of the currently selected render size. Can help to get a quick preview
 when rendering at very large resolutions.
 
 === 1:4
@@ -2534,7 +2533,7 @@ Sets the render size to one quarter of the currently selected render size. Can h
 when rendering at very large resolutions.
 
 === Full
-Use the full render resolution of the selected <<resolution_profiles, _Resolution Profile_>>.
+Uses the full render resolution of the selected <<resolution_profiles, _Resolution Profile_>>.
 This is the default setting.
 
 === Resolution
@@ -2547,7 +2546,7 @@ Save the current state in a proprietary format. You may load this file later to 
 at exactly the same step.
 
 === Save image
-Create a snapshot of the current render and save it as image.
+Create a snapshot of the current render and save it as an image.
 
 === Z (Save Z-Buffer)
 Create a snapshot of the current render and save it as a z-buffer. Currently, z-buffers are only
@@ -2570,7 +2569,7 @@ Save the currently rendered flame to file.
 === Next (random flame)
 Creates a random flame and starts rendering it.
 
-*Please beware that this will cancel any ongoing rendering and you will lose any unsaved results.*
+*Please note that this will cancel any ongoing rendering and you will lose any unsaved results.*
 
 === Random generator
 Select the random-flame-generator used to generate a random-fractal-flame when using the _Next_ button.
@@ -2687,7 +2686,7 @@ results, even if they were not what was expected.
 These are the actions you can perform at the animated flame level:
 
  - *_E_* (Edit): transfers the current flame to the <<fractal_flame_editor, Main Editor>>
- - *_R_* (Replace): replaces the current flame with the currently loaded flame of the <<fractal_flame_editor, Main Editor>>.
+ - *_R_* (Replace): replaces the current flame with the currently loaded flame in the <<fractal_flame_editor, Main Editor>>.
 In combination with the _E_ button this allows easy post-editing of a flame.
  - *_D_* (Delete): Removes the current flame from the movie
 
@@ -2702,15 +2701,15 @@ Loads a flame from a file and appends it to the movie.
 
 ==== _Up_ button
 Moves the currently selected animated flame one position up (to the left). The currently selected flame is
-indicated by a filled circular control right of the _D_ button.
+indicated by a filled circular control to the right of the _D_ button.
 
 ==== _Down_ button
 Moves the currently selected animated flame one position down (to the right). The currently selected flame is
-indicated by a filled circular control right of the _D_ button.
+indicated by a filled circular control to the right of the _D_ button.
 
 ==== _Remove flame_ button
 Removes the currently selected animated flame from the movie. The currently selected flame is
-indicated by a filled circular control right of the _D_ button.
+indicated by a filled circular control to the right of the _D_ button.
 
 ==== _Remove all_ button
 Removes all flames from the movie.
@@ -2727,7 +2726,7 @@ These are the options (which may be combined freely):
 or _Bank_-parameter of the flame
 - *Move CamX/CamY/CamZ*: a movement of the camera into the x-, y- or z-direction in the form of a sine-wave (moving gently back and forth)
 
-By changing the numerical value (to the right of each script slot) you may change the strength of the effect.
+By changing the numerical value (to the right of each script slot) you change the strength of the effect.
 
 === _XForm (animation) scripts_
 Lets you apply up to 12 flame transformations to the whole movie, i.e. those scripts are applied to
@@ -2755,7 +2754,7 @@ Here you can specify the overall animation speed (_frames per second_) and set u
 for the whole movie.
 
 ==== Total frame count
-Displays the total frame count which is calculated according to the inividual settings of the
+Displays the total frame count which is calculated according to the individual settings of the
 animated flames.
 
 ==== Frames per second
@@ -2808,9 +2807,9 @@ accurate frame rate
 The basic concept of the animations in the dancing-flame-module is both very versatile and very simple
 and contains four building blocks:
 
- - *motions*,
- - *flame properties*,
- - *motion links* and
+ - *motions*
+ - *flame properties*
+ - *motion links*
  - *motion hierarchies*.
 
 ==== Motions
@@ -2831,17 +2830,18 @@ image::images/dancing_flames_motions.jpg[scaledwidth=50%]
 ==== Flame properties
 Each flame has many properties. Most of them can be easily be animated, for example:
 
- - camera angle or
- - zoom factor of transform 2 or
+ - camera angle
+ - zoom factor of transform 2
  - Julia index of the Julian variation in the final transform.
+
 You don't need to know all of these, they can be accessed through a tree-view in the graphical interface.
 [.thumb]
 image::images/dancing_flames_properties.jpg[scaledwidth=50%]
 
 Each fractal flame has its own top-level-folder in this view. There are sub-folders for:
 
- - each *transform*,
- - each *final transform* and
+ - each *transform*
+ - each *final transform*
  - *gradient* parameters.
 
 ==== Motion links
@@ -2902,7 +2902,7 @@ animation is always created at the true fps setting, even for slow machines.
 
 ==== Adjusting the speed of the realtime-preview
 You can improve the speed of the realtime-preview by decreasing its size.
-You can do this in real-time by modifying the slider of _border size_.
+You can do this in real-time by modifying the _border size_ slider.
 
 ==== Switching between flames during the show
 You may switch between the flames of your flame pool during the show at any time.
@@ -2919,15 +2919,15 @@ To record a show just enable the _Record show_ checkbox and start the show. Now 
 After finishing the show (by pressing the _Stop show_ button) you will be prompted for an output path.
 Just choose a directory and specify a base-name for the flame files to be generated.
 
-Now JWildfire recalculates the show again at accurate FPS setting and produces the flame-files which
+Now JWildfire recalculates the show again at the desired FPS setting and produces the flame-files which
 have to be rendered later to create the movie. Depending on the length of your show and the FPS
-setting this may take a while and produce lots of files.
+setting, this may take a while and produce lots of files.
 Please note that it is very important not to interrupt this process in order to create very accurate timing.
 It's best to leave your computer alone, especially if you have a rather slow system.
 
 ==== Rendering the flames
 The project, until now, was free from any output resolution settings and only fractal flames
-where generated. You can render them using any resolution and quality settings later.
+were generated. You can render them using any resolution and quality settings later.
 The recommended way is to use the <<batch_renderer, Batch renderer>> to perform final rendering.
 
 [#batch_renderer]
@@ -2949,11 +2949,11 @@ flame-file*. This makes it easy for the _Batch renderer_ to recognize images tha
 All flames are displayed in a large table which has some editable columns:
 
  - *custom size*: here you can enter a custom resolution when it differs from the main
-resolution selected in this this window. The format is *<width>x<height>*, for example: *1920x1080*.
+resolution selected in this window. The format is *<width>x<height>*, for example: *1920x1080*.
  - *custom quality*: here you can enter a custom quality when it differs from the main
 quality selected in this window. The format is a numerical value, for example: *500* for a decent
 quality level.
- - *render animation*: when you enter here a "1", JWildfire creates a whole .mp4-animation instead of
+ - *render animation*: if you enter "1" here, JWildfire creates a whole .mp4-animation instead of
 a single .png-image. You can cancel and continue this at the frame level of the animation.
 When cancelling the rendering of an mp4-animation, you can continue it later at the
 frame you cancelled it.
@@ -2973,16 +2973,16 @@ Remove the currently selected flame from the _render jobs_ table. This does not 
 the flame file.
 
 === _Remove All_ button
-Removes all flames from the _render jobs_ table. This does not delete any flame file.
+Removes all flames from the _render jobs_ table. This does not delete any flame files.
 
 === _Settings: Resolution profile_
-Select the <<resolution_profiles, Resolution profile>> which is used for rendering
+Select the <<resolution_profiles, Resolution profile>> to be used for rendering
 each entry the of _render jobs_ table.
 If you want to use a different resolution for certain flames, you may override this
 setting by editing the column *custom size* for the individual flames.
 
 === _Settings: Quality profile_
-Select the <<quality_profiles, Quality profile>> which is used for rendering
+Select the <<quality_profiles, Quality profile>> to be used for rendering
 each entry the of _render jobs_ table.
 If you want to use a different quality setting for certain flames, you may override this
 setting by editing the column *custom quality* for the individual flames.
@@ -2994,7 +2994,7 @@ You can change this by activating this checkbox.
 === _GPU_ toggle button
 This toggle is only enabled when <<gpu_rendering, _GPU rendering_>> is configured on your system.
 When you activate this button, all images are rendered using the _GPU renderer_.
-But please be aware, that this is currently very limited and does not work well for many fractal flames.
+But please be aware that this is currently very limited and does not work well for many fractal flames.
 You should test it with a single flame before GPU-rendering a longer batch.
 
 === _Show image_ button
@@ -3008,21 +3008,21 @@ Starts the rendering batch.
 [.thumb]
 image::images/quilt_renderer.jpg[scaledwidth=75%]
 
-The _Quilt Renderer_ allows you to render flames in nearly unlimited size.
+The _Quilt Renderer_ allows you to render flames of nearly unlimited size.
 This works by splitting the whole image into tiles.
 Open the Quilt renderer module by selecting _Fractal Flames: Quilt renderer_ from the _Windows_ menu.
 
 You may freely specify how the tiles are generated, for example, splitting the image in 3x2 tiles or 8 vertical stripes.
 
-Each of the rendered tiles is a valid image. So, even if JWildfire would finally fail to assemble the tiles into one
+Each of the rendered tiles is a valid image. So, even if JWildfire failed to assemble the tiles into one
 final image (due to memory restrictions), you could perform this step using external image-processing-software,
 which is more optimized to handle large images.
 Images with a size up to 32K (30720x17280) were tested without any problems so far.
 
 You can cancel/resume the rendering-process at tile-level.
 
-Please note: Due to the nature of the fractal-flame-algorithm, the rendering of each tile may take as long as you
-would render the whole image at once. So, this method is not efficient, but effective.
+Please note: Due to the nature of the fractal-flame-algorithm, the rendering of each tile may take as long as rendering the entire image.
+So, this method is not efficient, but it is effective.
 A 16K render on a modern computer can take about 12 hours, but you will usually get an awesome
 result with endless details.
 
@@ -3042,7 +3042,7 @@ or even try to 3D print it.
 In JWildfire the process of generating _Polygonal meshes_ requires two steps:
 
 - creating a number of slices through the fractal. (These slices are called _Voxel stacks_
-because they have both a fixed a resolution (like picture elements or pixels in a image) and a certain depth.
+because they have both a fixed resolution (like picture elements or pixels in a image) and a certain depth.
 So each slice contains pixels with a depth, which are three-dimensional pixels, called Volume elements, or _Voxels_.
 And these slices stacked together build a representation of the object, hence the name _Voxel stack_.)
 - building a _polygonal mesh_ from all these slices using the popular _Marching Cubes Algorithm_.
@@ -3059,10 +3059,10 @@ Sets the render resolution in the y-direction which represents the voxel resolut
 ==== _Slices per pass_
 With this setting you can improve the speed of the scanning process in a significant way but at a
 cost to consumed memory.
-When you have enough memory you can even set this to the _Total number of slices_
+If you have enough memory you can even set this to the _Total number of slices_
 to create all slices at once.
 
-*Please note, that these three values should match the shape of the desired object.*
+*Please note that these three values should match the shape of the desired object.*
 For example, if you have a very thin but very tall object, you may want a much higher resolution into z-direction.
 
 ==== _Generate_ (_Voxel stack_)
@@ -3189,15 +3189,14 @@ Currently, the engine is limited in terms of features (for example, supported va
 supported frameworks, but it actually works. And, it works very well.
 
 For now, it only supports the Windows platform, uses OpenCl and has a very limited
-set of features (in comparison to the full JWildfire application, for example, 3D rendering
-is completely missed).
+set of features (in comparison to the full JWildfire application); for example, there is no 3D-rendering.
 
 === Requirements
-You will need a modern graphics card with plenty of memory to make the best use of this
-stuff.
+You will need a modern graphics card with plenty of memory to get the best use of this
+engine.
 
 === Installation
-The FAEngine comes as a separate package, you must download separately. This enables us to
+The FAEngine comes as a separate package you must download separately. This enables us to
 update it more often than the main JWildfire application, if required.
 
 The overall installation is simple:
@@ -3218,8 +3217,7 @@ To test the GPU rendering itself (and to simplify further troubleshooting), plea
 the self-test. Just enter the directory where you installed FACLRender and open the subfolder
 "selftest" ( In this example "D:\Program Files\FACLRender\selftest" ).
 Double-click at the selftest.bat. If everything works as expected, you should see that a
-file with the name "selftest.png" was created. Otherwise, the console output hopefully helps to solve the
-problem.
+file with the name "selftest.png" was created. Otherwise, the console output hopefully will help to solve any problems.
 
 === Rendering flames using the GPU
 Use the "GPU renderer"-window to play with flames. This window works similar to the
@@ -3236,7 +3234,7 @@ and see how it performs. Add some features and see if it is still supported by G
 
 === Batch rendering
 When FACLRender is properly integrated into JWildfire, a new "GPU" button will appear in the <<batch_renderer, Batch-renderer>>.
-You may use it to render whole batches by using the GPU.
+You may use it to render whole batches using the GPU.
 But, before you render a huge sequence, you should be sure that the flames do not use
 features which are not supported by FACLRender. You may quickly do so by transferring
 one of the flames to the "GPU renderer" window and see if it works.
@@ -3261,7 +3259,7 @@ useful information displayed here.
 ==== Visual C++ Redistributable for Visual Studio 2015
 If some *.dlls are missing, installing the the
   "Visual C++ Redistributable for Visual Studio 2015"-Kit
-from Microsoft will help in the most cases.
+from Microsoft will help in most cases.
 
 ==== OpenCl drivers
 Also, be sure to have OpenCl-drivers for your graphics card installed.
@@ -3305,9 +3303,9 @@ Each property has a small description which is displayed at the bottom of the wi
 image::images/preferences_property_description.jpg[scaledwidth=75%]
 
 Depending on the type of parameters, there are special parameter-editors available.
-You reach them by double-clicking the value in the 2nd column of the table, for example:
+You reach them by double-clicking the value in the 2nd column of the table. For example:
 
- - for color-parameters a color-selection-dialog is available,
+ - for color-parameters a color-selection-dialog is available.
  - for folder-parameters (for example, to select the gradient-folder) you can both enter
 the folder manually or select the folder using folder-dialog.
 
