@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -42,8 +42,10 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class FlamesGPURenderController {
+public class FlamesGPURenderController implements FlameChangeOberserver {
+
   private enum State {
     RENDERING,
     IDLE
@@ -68,6 +70,8 @@ public class FlamesGPURenderController {
   private final JPanel progressPanel;
   private JScrollPane imageScrollPane;
   private final JTextArea statsTextArea;
+  private final JTextArea gpuFlameParamsTextArea;
+  private final JCheckBox editorAutoSyncCheckBox;
   private SimpleImage image;
   private Flame currFlame;
   private boolean refreshing = false;
@@ -97,7 +101,9 @@ public class FlamesGPURenderController {
       JLabel pGpuRenderInfoLbl,
       JPanel pProgressPanel,
       JButton pFromEditorButton,
-      JCheckBox pAiPostDenoiserDisableCheckbox) {
+      JCheckBox pAiPostDenoiserDisableCheckbox,
+      JTextArea pGpuFlameParamsTextArea,
+      JCheckBox pEditorAutoSyncCheckBox) {
 
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
@@ -116,6 +122,8 @@ public class FlamesGPURenderController {
     gpuRenderInfoLbl = pGpuRenderInfoLbl;
     progressPanel = pProgressPanel;
     aiPostDenoiserDisableCheckbox = pAiPostDenoiserDisableCheckbox;
+    gpuFlameParamsTextArea = pGpuFlameParamsTextArea;
+    editorAutoSyncCheckBox = pEditorAutoSyncCheckBox;
 
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     interactiveQualityProfileCmb = pInteractiveQualityProfileCmb;
@@ -201,6 +209,7 @@ public class FlamesGPURenderController {
   public void fromClipboardButton_clicked() {
     Flame newFlame = null;
     try {
+      disableAutoSync();
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
       Transferable clipData = clipboard.getContents(clipboard);
       if (clipData != null) {
@@ -226,6 +235,13 @@ public class FlamesGPURenderController {
     }
   }
 
+  private void disableAutoSync() {
+    if (editorAutoSyncCheckBox.isSelected()) {
+      editorAutoSyncCheckBox.setSelected(false);
+      autoSyncCheckbox_clicked();
+    }
+  }
+
   private void setupProfiles(Flame pFlame) {
     if (prefs.isTinaAssociateProfilesWithFlames()) {
       if (pFlame.getResolutionProfile() != null) {
@@ -244,6 +260,7 @@ public class FlamesGPURenderController {
 
   public void loadFlameButton_clicked() {
     try {
+      disableAutoSync();
       File file =
           FileDialogTools.selectFlameFileForOpen(
               parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), null);
@@ -305,12 +322,14 @@ public class FlamesGPURenderController {
 
     @Override
     public void run() {
+      boolean keepFlameFileOnError = true;
       failed = false;
       try {
         try {
           File tmpFile =
               File.createTempFile(
                   System.currentTimeMillis() + "_" + Thread.currentThread().getId(), ".flam3");
+          boolean hasError=false;
           try {
             new FACLFlameWriter().writeFlame(getCurrFlame(), tmpFile.getAbsolutePath());
             long t0 = System.currentTimeMillis();
@@ -347,6 +366,7 @@ public class FlamesGPURenderController {
                   gpuRenderInfoLbl.setText(
                       "Elapsed: " + Tools.doubleToString((t1 - t0) / 1000.0) + "s");
                 } else {
+                  hasError = true;
                   throw new Exception(
                       "Invalid image size <"
                           + img.getImageWidth()
@@ -355,6 +375,7 @@ public class FlamesGPURenderController {
                           + ">");
                 }
               } else {
+                hasError = true;
                 statsTextArea.setText(
                     (renderResult.getMessage() != null ? renderResult.getMessage() : "")
                         + "\n\n"
@@ -376,8 +397,10 @@ public class FlamesGPURenderController {
               }
             }
           } finally {
-            if (!tmpFile.delete()) {
-              tmpFile.deleteOnExit();
+            if (!(hasError && keepFlameFileOnError)) {
+              if (!tmpFile.delete()) {
+                tmpFile.deleteOnExit();
+              }
             }
           }
         } catch (Throwable ex) {
@@ -527,8 +550,17 @@ public class FlamesGPURenderController {
   }
 
   public void fromEditorButton_clicked() {
+    importFlameFromMainEditor(false);
+  }
+
+  private void importFlameFromMainEditor(boolean onlyWhenChanged) {
     try {
       Flame newFlame = parentCtrl.exportFlame();
+      if(onlyWhenChanged && newFlame!=null && currFlame!=null) {
+        if(newFlame.isEqual(currFlame)) {
+          return;
+        }
+      }
       if (newFlame != null) {
         currFlame = newFlame;
         enableControls();
@@ -566,6 +598,9 @@ public class FlamesGPURenderController {
       showLoaderLabel(true);
     } else {
       showLoaderLabel(false);
+      if(changeCounter.getAndSet(0)>0) {
+        fromEditorButton_clicked();
+      }
     }
   }
 
@@ -587,4 +622,28 @@ public class FlamesGPURenderController {
     progressPanel.validate();
     progressPanel.repaint();
   }
+
+  public void autoSyncCheckbox_clicked() {
+    if(editorAutoSyncCheckBox.isSelected()) {
+      parentCtrl.registerFlameChangeObserver(this);
+      if(parentCtrl.exportFlame()!=null) {
+        importFlameFromMainEditor(true);
+      }
+    }
+    else {
+      parentCtrl.unregisterFlameChangeObserver(this);
+    }
+  }
+
+  private AtomicInteger changeCounter = new AtomicInteger(0);
+
+  @Override
+  public void updateFlame(Flame flame) {
+    changeCounter.incrementAndGet();
+    if (state == State.IDLE && changeCounter.get() > 0) {
+      changeCounter.set(0);
+      importFlameFromMainEditor(true);
+    }
+  }
+
 }

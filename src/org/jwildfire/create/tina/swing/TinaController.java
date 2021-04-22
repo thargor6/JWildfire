@@ -178,6 +178,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private final FrameControlsUtil frameControlsUtil;
 
+  private final List<FlameChangeOberserver> flameChangeOberservers = new ArrayList<>();
+
   public TinaController(final TinaControllerParameter parameterObject) {
     frameControlsUtil = new FrameControlsUtil(this);
     nonlinearControls = new NonlinearControlsDelegate(this, data.variationControlsDelegates);
@@ -1358,6 +1360,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender, boolean pAllowUseCache) {
     flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale, pReRender, pAllowUseCache);
+    if(pQuickRender && !pMouseDown) {
+      for(FlameChangeOberserver observer:flameChangeOberservers) {
+        new Thread(() -> { observer.updateFlame(getCurrFlame()); }).start();
+      }
+    }
   }
 
   public void fastRefreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
@@ -6854,6 +6861,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     variationProfilesController.refreshControls();
     variationProfilesFrame.setVisible(true);
     variationProfilesFrame.toFront();
+  }
+
+  public void registerFlameChangeObserver(FlameChangeOberserver observer) {
+    if(!flameChangeOberservers.contains(observer)) {
+      flameChangeOberservers.add(observer);
+    }
+  }
+
+  public void unregisterFlameChangeObserver(FlameChangeOberserver observer) {
+    flameChangeOberservers.remove(observer);
   }
 
 }

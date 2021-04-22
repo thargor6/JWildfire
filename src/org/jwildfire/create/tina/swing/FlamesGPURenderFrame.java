@@ -37,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.WindowConstants;
@@ -63,7 +64,7 @@ public class FlamesGPURenderFrame extends JFrame {
    * @return void
    */
   private void initialize() {
-    this.setSize(917, 600);
+    this.setSize(1086, 697);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT + 200, JWildfire.DEFAULT_WINDOW_TOP + 80));
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -136,14 +137,17 @@ public class FlamesGPURenderFrame extends JFrame {
   private JPanel panel_33;
   private JPanel panel_34;
   private JPanel panel_35;
-  private JPanel panel_17;
   private JPanel panel_110;
   private JToggleButton interactiveFullSizeButton;
   private JToggleButton interactiveQuarterSizeButton;
   private JPanel panel;
-  private JButton interactiveSaveZBufferButton;
   private JLabel lblGpuRenderInfo;
   private JCheckBox aiPostDenoiserDisableCheckbox;
+  private JPanel panel_1;
+  private JTabbedPane tabbedPane;
+  private JScrollPane scrollPane;
+  private JTextArea flameParamsTextArea;
+  private JCheckBox autoSyncCheckbox;
 
   private JPanel getInteractiveNorthPanel() {
     if (interactiveNorthPanel == null) {
@@ -153,7 +157,7 @@ public class FlamesGPURenderFrame extends JFrame {
       interactiveNorthPanel.setSize(new Dimension(0, 42));
       interactiveNorthPanel.setLayout(new BoxLayout(interactiveNorthPanel, BoxLayout.X_AXIS));
       interactiveNorthPanel.add(getPanel_27());
-      interactiveNorthPanel.add(getPanel_17());
+      interactiveNorthPanel.add(getPanel_1());
       interactiveNorthPanel.add(getPanel_28());
       interactiveNorthPanel.add(getPanel_32());
       interactiveNorthPanel.add(getPanel_33());
@@ -287,10 +291,12 @@ public class FlamesGPURenderFrame extends JFrame {
   private JSplitPane getInteractiveCenterSplitPane() {
     if (interactiveCenterSplitPane == null) {
       interactiveCenterSplitPane = new JSplitPane();
+      interactiveCenterSplitPane.setMinimumSize(new Dimension(320, 30));
+      interactiveCenterSplitPane.setPreferredSize(new Dimension(320, 30));
       interactiveCenterSplitPane.setDividerSize(6);
       interactiveCenterSplitPane.setLeftComponent(getInteractiveCenterSouthPanel());
       interactiveCenterSplitPane.setRightComponent(getInteractiveCenterTopPanel());
-      interactiveCenterSplitPane.setDividerLocation(200);
+      interactiveCenterSplitPane.setDividerLocation(256);
     }
     return interactiveCenterSplitPane;
   }
@@ -308,7 +314,7 @@ public class FlamesGPURenderFrame extends JFrame {
     if (interactiveCenterSouthPanel == null) {
       interactiveCenterSouthPanel = new JPanel();
       interactiveCenterSouthPanel.setLayout(new BorderLayout(0, 0));
-      interactiveCenterSouthPanel.add(getInteractiveStatsScrollPane(), BorderLayout.CENTER);
+      interactiveCenterSouthPanel.add(getTabbedPane(), BorderLayout.CENTER);
     }
     return interactiveCenterSouthPanel;
   }
@@ -551,14 +557,8 @@ public class FlamesGPURenderFrame extends JFrame {
     return panel_35;
   }
 
-  private JPanel getPanel_17() {
-    if (panel_17 == null) {
-      panel_17 = new JPanel();
-      panel_17.setMinimumSize(new Dimension(110, 10));
-      panel_17.setMaximumSize(new Dimension(150, 32767));
-      panel_17.setLayout(new BoxLayout(panel_17, BoxLayout.X_AXIS));
-    }
-    return panel_17;
+  public void setTinaController(TinaController tinaController) {
+    this.tinaController = tinaController;
   }
 
   private JPanel getPanel_110() {
@@ -576,10 +576,6 @@ public class FlamesGPURenderFrame extends JFrame {
       panel_110.add(lblGpuRenderInfo);
     }
     return panel_110;
-  }
-
-  public void setTinaController(TinaController tinaController) {
-    this.tinaController = tinaController;
   }
 
   public JToggleButton getInteractiveFullSizeButton() {
@@ -639,13 +635,69 @@ public class FlamesGPURenderFrame extends JFrame {
     if (aiPostDenoiserDisableCheckbox == null) {
       aiPostDenoiserDisableCheckbox = new JCheckBox("Denoiser OFF");
       aiPostDenoiserDisableCheckbox.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      aiPostDenoiserDisableCheckbox.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getGpuRendererCtrl().changeRenderSizeButton_clicked();
-        }
-      });
+      aiPostDenoiserDisableCheckbox.addActionListener(
+          new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              if (tinaController != null && tinaController.getGpuRendererCtrl() != null) {
+                tinaController.getGpuRendererCtrl().changeRenderSizeButton_clicked();
+              }
+            }
+          });
       aiPostDenoiserDisableCheckbox.setToolTipText("Disable AI-Post-Denoiser, in case it is enabled in the flame-parameters");
     }
     return aiPostDenoiserDisableCheckbox;
+  }
+
+  private JPanel getPanel_1() {
+    if (panel_1 == null) {
+      panel_1 = new JPanel();
+      panel_1.setMaximumSize(new Dimension(200, 32767));
+      panel_1.setMinimumSize(new Dimension(100, 10));
+      panel_1.setLayout(null);
+
+      autoSyncCheckbox = new JCheckBox("AutoSync");
+      autoSyncCheckbox.setToolTipText("Automatic synchronization of the flame in the main editor with the GPU renderer");
+      autoSyncCheckbox.setFont(null);
+      autoSyncCheckbox.setBounds(0, 28, 82, 18);
+      autoSyncCheckbox.addActionListener(
+              new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                  if (tinaController != null && tinaController.getGpuRendererCtrl() != null) {
+                    tinaController.getGpuRendererCtrl().autoSyncCheckbox_clicked();
+                  }
+                }
+              });
+      panel_1.add(autoSyncCheckbox);
+    }
+    return panel_1;
+  }
+
+  private JTabbedPane getTabbedPane() {
+    if (tabbedPane == null) {
+      tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+      tabbedPane.addTab("GPU render info", null, getInteractiveStatsScrollPane(), null);
+      tabbedPane.addTab("GPU flame params", null, getScrollPane(), null);
+    }
+    return tabbedPane;
+  }
+
+  private JScrollPane getScrollPane() {
+    if (scrollPane == null) {
+      scrollPane = new JScrollPane();
+      scrollPane.setViewportView(getFlameParamsTextArea());
+    }
+    return scrollPane;
+  }
+
+  JTextArea getFlameParamsTextArea() {
+    if (flameParamsTextArea == null) {
+      flameParamsTextArea = new JTextArea();
+      flameParamsTextArea.setEditable(false);
+    }
+    return flameParamsTextArea;
+  }
+
+  public JCheckBox getAutoSyncCheckbox() {
+    return autoSyncCheckbox;
   }
 }
