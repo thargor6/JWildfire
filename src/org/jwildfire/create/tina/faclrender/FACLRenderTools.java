@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,16 +19,24 @@ package org.jwildfire.create.tina.faclrender;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.launcher.StreamRedirector;
 
 public class FACLRenderTools {
   private static boolean faclRenderChecked = false;
   private static boolean faclRenderAvalailable = false;
 
+  private static String cudaLibrary= null;
+  private static boolean cudaLibraryChecked = false;
+
   private static final String FACLRENDER_EXE = "FACLRender.exe";
+  private static final String CUDA_LIBRARY = "cudaLibrary.xml";
 
   public static boolean isFaclRenderAvalailable() {
     if (!faclRenderChecked) {
@@ -45,6 +53,32 @@ public class FACLRenderTools {
       }
     }
     return faclRenderAvalailable;
+  }
+
+ public static String getCudaLibrary() {
+    if(!cudaLibraryChecked) {
+      cudaLibraryChecked = true;
+      File file = new File(Prefs.getPrefs().getTinaFACLRenderPath(), CUDA_LIBRARY);
+      if(file.exists()) {
+        try {
+          String content = Tools.readUTF8Textfile(file.getAbsolutePath());
+          if(content.contains("<variationSet")) {
+            cudaLibrary = content;
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return cudaLibrary;
+ }
+
+  public static boolean isExtendedFaclRender() {
+    return isFaclRenderAvalailable() && getCudaLibrary()!=null;
+  }
+
+  public static boolean isUsingCUDA() {
+    return isFaclRenderAvalailable() && Prefs.getPrefs().getTinaFACLRenderOptions()!=null && Prefs.getPrefs().getTinaFACLRenderOptions().contains("-cuda");
   }
 
   private static void launchSync(String[] pCmd) {
