@@ -78,8 +78,6 @@ import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.base.VariationProfile;
-import org.jwildfire.base.VariationProfileRepository;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.SequenceOutputType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
@@ -7584,7 +7582,8 @@ public class MainEditorFrame extends JFrame {
           gpuRendererFrame.getInteractiveHalveSizeButton(), gpuRendererFrame.getInteractiveQuarterSizeButton(),
           gpuRendererFrame.getInteractiveFullSizeButton(), gpuRendererFrame.getInteractiveResolutionProfileCmb(),
           gpuRendererFrame.getInteractiveQualityProfileCmb(), gpuRendererFrame.getLblGpuRenderInfo(), gpuRendererFrame.getPanel_32(),
-          gpuRendererFrame.getInteractiveLoadFlameFromMainButton(), gpuRendererFrame.getAiPostDenoiserDisableCheckbox()));
+          gpuRendererFrame.getInteractiveLoadFlameFromMainButton(), gpuRendererFrame.getAiPostDenoiserDisableCheckbox(),
+          gpuRendererFrame.getFlameParamsTextArea(), gpuRendererFrame.getAutoSyncCheckbox()));
       tinaController.getGpuRendererCtrl().enableControls();
 
       JComboBox[] globalScriptCmbArray = {
@@ -10069,6 +10068,22 @@ public class MainEditorFrame extends JFrame {
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 36));
       motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
+
+      tinaSendToGPURenderButton = new JButton();
+      tinaSendToGPURenderButton.setToolTipText("Send the currently selected flame to the GPU renderer");
+      tinaSendToGPURenderButton.setText("Browse");
+      tinaSendToGPURenderButton.setPreferredSize(new Dimension(72, 24));
+      tinaSendToGPURenderButton.setMnemonic(KeyEvent.VK_G);
+      tinaSendToGPURenderButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
+      tinaSendToGPURenderButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+      tinaSendToGPURenderButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.appendToMovieButton_actionPerformed(e);
+        }
+      });
+
+      centerWestPanel.add(tinaSendToGPURenderButton);
+
       //motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/videocut.png")));
     }
     return centerWestPanel;
@@ -13181,6 +13196,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox tinaVariationProfile1Cmb;
   private JComboBox tinaVariationProfile2Cmb;
   private JButton tinaVariationProfileEditBtn;
+  private JButton tinaSendToGPURenderButton;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -24460,5 +24476,9 @@ public class MainEditorFrame extends JFrame {
 
   public JButton tinaVariationProfileEditBtn() {
     return tinaVariationProfileEditBtn;
+  }
+
+  public JButton getTinaSendToGPURenderButton() {
+    return tinaSendToGPURenderButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -44,7 +44,7 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FlamesGPURenderController implements FlameChangeOberserver {
+public class FlamesGPURenderController implements FlameChangeOberserver, MessageLogger {
 
   private enum State {
     RENDERING,
@@ -331,7 +331,8 @@ public class FlamesGPURenderController implements FlameChangeOberserver {
                   System.currentTimeMillis() + "_" + Thread.currentThread().getId(), ".flam3");
           boolean hasError=false;
           try {
-            FACLFlameWriter gpuFlameWriter = new FACLFlameWriter();
+            statsTextArea.setText("");
+            FACLFlameWriter gpuFlameWriter = new FACLFlameWriter(FlamesGPURenderController.this);
             String gpuFlameParams = gpuFlameWriter.getFlameXML(getCurrFlame());
             gpuFlameParamsTextArea.setText(gpuFlameParams);
             gpuFlameWriter.writeFlame(gpuFlameParams, tmpFile.getAbsolutePath());
@@ -342,7 +343,7 @@ public class FlamesGPURenderController implements FlameChangeOberserver {
             try {
               if (renderResult.getReturnCode() == 0) {
                 if (renderResult.getMessage() != null) {
-                  statsTextArea.setText(renderResult.getMessage() + "\n");
+                  statsTextArea.append(renderResult.getMessage() + "\n");
                 }
                 if (!aiPostDenoiserDisableCheckbox.isSelected()
                     && !AIPostDenoiserType.NONE.equals(getCurrFlame().getAiPostDenoiser())) {
@@ -647,6 +648,11 @@ public class FlamesGPURenderController implements FlameChangeOberserver {
       changeCounter.set(0);
       importFlameFromMainEditor(true);
     }
+  }
+
+  @Override
+  public void logMessage(String message) {
+    statsTextArea.append(message);
   }
 
 }

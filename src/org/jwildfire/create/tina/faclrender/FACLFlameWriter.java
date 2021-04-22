@@ -29,8 +29,18 @@ import org.jwildfire.create.tina.io.AbstractFlameWriter;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder.Attribute;
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.swing.MessageLogger;
 
 public class FACLFlameWriter extends AbstractFlameWriter {
+  private final MessageLogger logger;
+
+  public FACLFlameWriter() {
+    this(null);
+  }
+
+  public FACLFlameWriter(MessageLogger logger) {
+    this.logger = logger;
+  }
 
   public void writeFlame(Flame pFlame, String pFilename) throws Exception {
     writeFlame(getFlameXML(pFlame), pFilename);
@@ -94,7 +104,12 @@ public class FACLFlameWriter extends AbstractFlameWriter {
           }
         }
         if(!found) {
-          System.err.println("Did not find variation code for \"" + varname + "\"");
+          String msg = "Could not find variation code for \"" + varname + "\"\n";
+          if(logger!=null) {
+            logger.logMessage(msg);
+          } else {
+            System.err.println(msg);
+          }
         }
       }
       xb.endElement("variationSet");
@@ -157,8 +172,8 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     }
   }
 
-  private final static Set<String> MANDATORY_VARIATIONS = new HashSet<>(Arrays.asList("pre_matrix2d", "matrix2d", "post_matrix2d",
-          "pre_matrix3d", "matrix3d", "post_matrix3d"));
+  private final static Set<String> MANDATORY_VARIATIONS = new HashSet<>(Arrays.asList("pre_matrix2d", "matrix2d", "post_matrix2d"/*,
+          "pre_matrix3d", "matrix3d", "post_matrix3d"*/));
 
   private static Set<String> extractVariationNames(Flame pFlame) {
     Set<String> res = new HashSet<>();
