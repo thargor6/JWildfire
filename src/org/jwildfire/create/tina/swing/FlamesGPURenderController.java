@@ -331,7 +331,10 @@ public class FlamesGPURenderController implements FlameChangeOberserver {
                   System.currentTimeMillis() + "_" + Thread.currentThread().getId(), ".flam3");
           boolean hasError=false;
           try {
-            new FACLFlameWriter().writeFlame(getCurrFlame(), tmpFile.getAbsolutePath());
+            FACLFlameWriter gpuFlameWriter = new FACLFlameWriter();
+            String gpuFlameParams = gpuFlameWriter.getFlameXML(getCurrFlame());
+            gpuFlameParamsTextArea.setText(gpuFlameParams);
+            gpuFlameWriter.writeFlame(gpuFlameParams, tmpFile.getAbsolutePath());
             long t0 = System.currentTimeMillis();
             FACLRenderResult renderResult =
                 FACLRenderTools.invokeFACLRender(tmpFile.getAbsolutePath(), width, height, quality);

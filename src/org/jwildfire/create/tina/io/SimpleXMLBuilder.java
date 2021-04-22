@@ -176,6 +176,13 @@ public class SimpleXMLBuilder {
       return value;
     }
 
+    @Override
+    public String toString() {
+      return "Attribute{" +
+              "name='" + name + '\'' +
+              ", value=" + value +
+              '}';
+    }
   }
 
   public void addContent(String pContent) {
