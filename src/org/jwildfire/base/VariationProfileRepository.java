@@ -23,18 +23,31 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class VariationProfileRepository {
   private static final VariationProfileFilter EMPTY_FILTER = new EmptyVariationProfile();
 
   static {
     if(Prefs.getPrefs().getVariationProfiles().isEmpty()) {
-      Prefs.getPrefs().setVariationProfiles(sortEntries(createDefaultProfiles()));
-      try {
-        new PrefsWriter().writePrefs(Prefs.getPrefs());
-      } catch (Exception e) {
-        e.printStackTrace();
+      setNewProfiles(createDefaultProfiles());
+    }
+    else if(Prefs.getPrefs().getTinaFACLRenderPath()!=null && !Prefs.getPrefs().getTinaFACLRenderPath().isEmpty()) {
+      VariationProfile gpuProfile = createSupportsGPUProfile();
+      if(!Prefs.getPrefs().getVariationProfiles().stream().filter( p -> gpuProfile.getName().equals(p.getName())).findAny().isPresent()) {
+        List<VariationProfile> profiles = Prefs.getPrefs().getVariationProfiles().stream().map( p -> p.makeCopy()).collect(Collectors.toList());
+        profiles.add(gpuProfile);
+        setNewProfiles(profiles);
       }
+    }
+  }
+
+  private static void setNewProfiles(List<VariationProfile> newProfiles) {
+    Prefs.getPrefs().setVariationProfiles(sortEntries(newProfiles));
+    try {
+      new PrefsWriter().writePrefs(Prefs.getPrefs());
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 
@@ -78,6 +91,7 @@ public class VariationProfileRepository {
     res.add(createZTransformProfile());
     res.add(createEscapeTimeFractalProfile());
     res.add(createSupportsExternalShapesProfile());
+    res.add(createSupportsGPUProfile());
     return res;
   }
 
@@ -190,6 +204,14 @@ public class VariationProfileRepository {
     res.setName("Ext. images/shapes");
     res.setVariationProfileType(VariationProfileType.INCLUDE_TYPES);
     res.getVariationTypes().add(VariationFuncType.VARTYPE_SUPPORTS_EXTERNAL_SHAPES);
+    return res;
+  }
+
+  private static VariationProfile createSupportsGPUProfile() {
+    VariationProfile res = new VariationProfile();
+    res.setName("Supports GPU");
+    res.setVariationProfileType(VariationProfileType.INCLUDE_TYPES);
+    res.getVariationTypes().add(VariationFuncType.VARTYPE_SUPPORTS_GPU);
     return res;
   }
 

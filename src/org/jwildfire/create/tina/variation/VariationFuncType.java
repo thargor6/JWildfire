@@ -106,7 +106,7 @@ public enum VariationFuncType {
       return "Supports external shapes";
     }
   },
-  VARTYPE_GPU {
+  VARTYPE_SUPPORTS_GPU {
     @Override
     public String getCaption() {
       return "Supports GPU";
