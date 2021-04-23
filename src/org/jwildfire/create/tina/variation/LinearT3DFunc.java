@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 
-public class LinearT3DFunc extends VariationFunc {
+public class LinearT3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWX = "powX";
@@ -84,7 +84,14 @@ public class LinearT3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_GPU};
   }
 
+  @Override
+  // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+  public String getGPUCode(FlameTransformationContext context) {
+    return "__px += (__x < 0.f ? -1.f : 1.f) * powf(fabsf(__x), varpar->linearT3D_powX) * varpar->linearT3D;\n"
+         + "__py += (__y < 0.f ? -1.f : 1.f) * powf(fabsf(__y), varpar->linearT3D_powY) * varpar->linearT3D;\n"
+         + "__pz += (__z < 0.f ? -1.f : 1.f) * powf(fabsf(__z), varpar->linearT3D_powY) * varpar->linearT3D;";
+  }
 }

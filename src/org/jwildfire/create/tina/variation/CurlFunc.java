@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 
-public class CurlFunc extends VariationFunc {
+public class CurlFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_C1 = "c1";
@@ -72,7 +72,17 @@ public class CurlFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float re = 1.f + varpar->curl_c1 * __x + varpar->curl_c2 * (__x * __x - __y * __y);\n"
+        + "float im = varpar->curl_c1 * __y + 2.f * varpar->curl_c2 * __x * __y;\n"
+        + "float r = varpar->curl / (re * re + im * im);\n"
+        + "__px += (__x * re + __y * im) * r;\n"
+        + "__py += (__y * re - __x * im) * r;\n"
+        + (context.isPreserveZCoordinate() ?
+         "__pz += varpar->curl * __z;\n" : "");
+  }
 }

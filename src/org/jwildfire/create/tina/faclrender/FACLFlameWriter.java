@@ -16,11 +16,9 @@
 */
 package org.jwildfire.create.tina.faclrender;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.kitfox.svg.A;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -31,7 +29,7 @@ import org.jwildfire.create.tina.io.SimpleXMLBuilder.Attribute;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.swing.MessageLogger;
 
-public class FACLFlameWriter extends AbstractFlameWriter implements VariationnameTransformer {
+public class FACLFlameWriter extends AbstractFlameWriter {
   private final MessageLogger logger;
 
   public FACLFlameWriter() {
@@ -52,6 +50,7 @@ public class FACLFlameWriter extends AbstractFlameWriter implements Variationnam
 
   public String getFlameXML(Flame pFlame) throws Exception {
     Flame transformedFlame = transformFlame(pFlame);
+
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     List<SimpleXMLBuilder.Attribute<?>> flamesAttrList = new ArrayList<>();
     flamesAttrList.add(new Attribute<String>("name", ""));
@@ -61,46 +60,47 @@ public class FACLFlameWriter extends AbstractFlameWriter implements Variationnam
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = filterFlameAttrList(createFlameAttributes(transformedFlame, xb));
     Layer layer = transformedFlame.getFirstLayer();
-    String varSetUuid;
-    Set<String> variationNames;
+    VariationSet variationSet;
     if (FACLRenderTools.isExtendedFaclRender() && FACLRenderTools.isUsingCUDA()) {
-      variationNames = extractVariationNames(transformedFlame);
-      varSetUuid =
-              UUID.nameUUIDFromBytes(
-                      generateVariationsKey(variationNames).getBytes(StandardCharsets.UTF_8))
-                      .toString().toUpperCase();
-      attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", varSetUuid));
+      variationSet = new VariationSet(transformedFlame);
+      attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", variationSet.getUuid()));
     }
     else {
-      varSetUuid = null;
-      variationNames = null;
+      variationSet = null;
     }
 
     xb.beginElement("flame", attrList);
     // XForm
     for (XForm xForm : layer.getXForms()) {
-      xb.emptyElement("xform", filterXFormAttrList( createXFormAttrList(xb, layer, xForm, this) ) );
+      xb.emptyElement("xform", filterXFormAttrList( createXFormAttrList(xb, layer, xForm, variationSet) ) );
     }
     // FinalXForms
     for (XForm xForm : layer.getFinalXForms()) {
-      xb.emptyElement("finalxform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm, this)));
+      xb.emptyElement("finalxform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm, variationSet)));
     }
     // Gradient
     addGradient(xb, layer);
     xb.endElement("flame");
     // VariationSet
-    if(varSetUuid!=null) {
-      xb.beginElement("variationSet", createVariationSetAttrList(xb, transformedFlame, variationNames, varSetUuid));
+    if(variationSet!=null) {
+      xb.beginElement("variationSet", createVariationSetAttrList(xb, transformedFlame, variationSet.getVariationNames(), variationSet.getUuid()));
       String cudaLibrary = FACLRenderTools.getCudaLibrary();
-      for(String varname: variationNames) {
+      for(String varname: variationSet.getVariationNames()) {
         boolean found = false;
-        int startIdx = cudaLibrary.indexOf("<variation name=\""+varname+"\"");
-        if(startIdx>0) {
-          int endIdx = cudaLibrary.indexOf("</variation>", startIdx);
-          if(endIdx>startIdx) {
-            String varEntry = cudaLibrary.substring(startIdx, endIdx + 12);
-            xb.addContent(varEntry);
-            found = true;
+        String code = variationSet.getCode(varname);
+        if(code!=null) {
+          xb.addContent(code);
+          found=true;
+        }
+        if(!found) {
+          int startIdx = cudaLibrary.indexOf("<variation name=\""+varname+"\"");
+          if(startIdx>0) {
+            int endIdx = cudaLibrary.indexOf("</variation>", startIdx);
+            if(endIdx>startIdx) {
+              String varEntry = cudaLibrary.substring(startIdx, endIdx + 12);
+              xb.addContent(varEntry);
+              found = true;
+            }
           }
         }
         if(!found) {
@@ -127,10 +127,6 @@ public class FACLFlameWriter extends AbstractFlameWriter implements Variationnam
     res.add(xb.createAttr("uuid", varSetUuid));
     res.add(xb.createAttr("structName", "varpar"));
     return res;
-  }
-
-  private String generateVariationsKey(Set<String> variationNames) {
-    return variationNames.stream().sorted().collect(Collectors.joining("#"));
   }
 
   // remove unnecessary xform-attributes
@@ -170,33 +166,6 @@ public class FACLFlameWriter extends AbstractFlameWriter implements Variationnam
       attrList.add(new Attribute<String>("rgb", rgbStr));
       xb.simpleElement("color", null, attrList);
     }
-  }
-
-  private final static Set<String> MANDATORY_VARIATIONS = new HashSet<>(Arrays.asList("pre_matrix2d", "matrix2d", "post_matrix2d",
-          "pre_matrix3d", "matrix3d", "post_matrix3d"));
-
-  private Set<String> extractVariationNames(Flame pFlame) {
-    Set<String> res = new HashSet<>();
-    pFlame.getFirstLayer().getXForms().forEach(xf -> {
-      for(int i=0;i<xf.getVariationCount();i++) {
-        res.add(transformVariationName(xf.getVariation(i).getFunc().getName()));
-      }
-    });
-    pFlame.getFirstLayer().getFinalXForms().forEach(xf -> {
-      for(int i=0;i<xf.getVariationCount();i++) {
-        res.add(transformVariationName(xf.getVariation(i).getFunc().getName()));
-      }
-    });
-    res.addAll(MANDATORY_VARIATIONS);
-    return res;
-  }
-
-  @Override
-  public String transformVariationName(String name) {
-    if(name.equals("linear3D")) {
-      return "jwf_linear3D";
-    }
-    return name;
   }
 
 

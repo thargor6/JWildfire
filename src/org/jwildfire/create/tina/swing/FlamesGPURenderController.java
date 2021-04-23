@@ -380,7 +380,7 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
                 }
               } else {
                 hasError = true;
-                statsTextArea.setText(
+                statsTextArea.append("\n\n" +
                     (renderResult.getMessage() != null ? renderResult.getMessage() : "")
                         + "\n\n"
                         + (renderResult.getCommand() != null ? renderResult.getCommand() : ""));
@@ -414,7 +414,7 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
       } finally {
         setState(State.IDLE);
         if (failed) {
-          statsTextArea.setText(Tools.getStacktrace(error));
+          statsTextArea.append("\n\n"+Tools.getStacktrace(error));
         }
       }
     }
