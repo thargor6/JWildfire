@@ -59,6 +59,7 @@ import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
+import org.jwildfire.create.tina.faclrender.VariationnameTransformer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
@@ -67,7 +68,7 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class AbstractFlameWriter {
 
-  protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder xb, Layer layer, XForm xForm) throws Exception {
+  protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder xb, Layer layer, XForm xForm, VariationnameTransformer variationnameTransformer) throws Exception {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(xb.createAttr("weight", xForm.getWeight()));
     if (xForm.getColorType() != ColorType.UNSET) attrList.add(xb.createAttr(AbstractFlameReader.ATTR_COLOR_TYPE, xForm.getColorType().toString()));
@@ -158,7 +159,9 @@ public class AbstractFlameWriter {
       Variation v = xForm.getVariation(vIdx);
       VariationFunc func = v.getFunc();
 
-      String fName = namesMaker.makeUnique(func.getName());
+      String funcname = variationnameTransformer!=null ? variationnameTransformer.transformVariationName(func.getName()) : func.getName();
+
+      String fName = namesMaker.makeUnique(funcname);
 
       attrList.add(xb.createAttr(fName, v.getAmount()));
       attrList.add(xb.createAttr(fName + "_" + AbstractFlameReader.ATTR_FX_PRIORITY, v.getPriority()));

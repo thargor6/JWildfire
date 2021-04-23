@@ -31,7 +31,7 @@ import org.jwildfire.create.tina.io.SimpleXMLBuilder.Attribute;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.swing.MessageLogger;
 
-public class FACLFlameWriter extends AbstractFlameWriter {
+public class FACLFlameWriter extends AbstractFlameWriter implements VariationnameTransformer {
   private final MessageLogger logger;
 
   public FACLFlameWriter() {
@@ -79,11 +79,11 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     xb.beginElement("flame", attrList);
     // XForm
     for (XForm xForm : layer.getXForms()) {
-      xb.emptyElement("xform", filterXFormAttrList( createXFormAttrList(xb, layer, xForm) ) );
+      xb.emptyElement("xform", filterXFormAttrList( createXFormAttrList(xb, layer, xForm, this) ) );
     }
     // FinalXForms
     for (XForm xForm : layer.getFinalXForms()) {
-      xb.emptyElement("finalxform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm)));
+      xb.emptyElement("finalxform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm, this)));
     }
     // Gradient
     addGradient(xb, layer);
@@ -172,24 +172,32 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     }
   }
 
-  private final static Set<String> MANDATORY_VARIATIONS = new HashSet<>(Arrays.asList("pre_matrix2d", "matrix2d", "post_matrix2d"/*,
-          "pre_matrix3d", "matrix3d", "post_matrix3d"*/));
+  private final static Set<String> MANDATORY_VARIATIONS = new HashSet<>(Arrays.asList("pre_matrix2d", "matrix2d", "post_matrix2d",
+          "pre_matrix3d", "matrix3d", "post_matrix3d"));
 
-  private static Set<String> extractVariationNames(Flame pFlame) {
+  private Set<String> extractVariationNames(Flame pFlame) {
     Set<String> res = new HashSet<>();
     pFlame.getFirstLayer().getXForms().forEach(xf -> {
       for(int i=0;i<xf.getVariationCount();i++) {
-        res.add(xf.getVariation(i).getFunc().getName());
+        res.add(transformVariationName(xf.getVariation(i).getFunc().getName()));
       }
     });
     pFlame.getFirstLayer().getFinalXForms().forEach(xf -> {
       for(int i=0;i<xf.getVariationCount();i++) {
-        res.add(xf.getVariation(i).getFunc().getName());
+        res.add(transformVariationName(xf.getVariation(i).getFunc().getName()));
       }
     });
     res.addAll(MANDATORY_VARIATIONS);
     return res;
   }
 
-  
+  @Override
+  public String transformVariationName(String name) {
+    if(name.equals("linear3D")) {
+      return "jwf_linear3D";
+    }
+    return name;
+  }
+
+
 }

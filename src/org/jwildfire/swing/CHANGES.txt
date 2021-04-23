@@ -1,3 +1,17 @@
+V7.00 (xx.xx.202x)
+ - Created a new extended mode for running the external GPU renderer which provides the actual code for the actually used variations (on a per flame basis).
+   This needs more time to initialize than the regular mode, because the variation code must be compiled for each individual set of variations.
+   The goal behind this is to allow support for more complex/beautiful flames in the GPU renderer.
+
+   Currently, the usage of the renderer is very limited because it used only the internal pre-defined variation set for "classic" flam3-variations.
+   There is also some other "3d-standard set" of variations, which also could be used (but which did never work for me). But, also in this mode would be very limited, because it would only use these fixed variations.
+
+   On the other side, it would be impossible to create a variation set which contains all gpu-supported variations. They would be too many, and compilation at the device would fail or even crash the whole system.
+   Therefore, the idea to compile the variations needed for each flame individually. This makes the rendering startup slower, but this would only affect gpu-flame-realtime editing, which is not supported in JWildfire. And when rendering final images a few seconds more for initialization would not make much difference.
+ - added a new tab in the GPU renderer for viewing the generated gpu-flame-parameters
+ - displaying the name of variations where no code could be found
+ - added a new option to enable automatic synchronization of changes between the Main Editor and GPU renderer
+
 V6.50 (11.04.2021)
  - Introducing variation-filters, based on variation-profiles and variation-types.
    They will improve usability a lot by simplifying the selection of variations/"plugins" by selecting

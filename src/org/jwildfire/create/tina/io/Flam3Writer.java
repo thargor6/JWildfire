@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -35,11 +35,11 @@ public class Flam3Writer extends AbstractFlameWriter {
     xb.beginElement("flame", attrList);
     // XForm
     for (XForm xForm : layer.getXForms()) {
-      xb.emptyElement("xform", createXFormAttrList(xb, layer, xForm));
+      xb.emptyElement("xform", createXFormAttrList(xb, layer, xForm, null));
     }
     // FinalXForms
     for (XForm xForm : layer.getFinalXForms()) {
-      xb.emptyElement("finalxform", createXFormAttrList(xb, layer, xForm));
+      xb.emptyElement("finalxform", createXFormAttrList(xb, layer, xForm, null));
     }
     addPalette(xb, layer);
     xb.endElement("flame");
