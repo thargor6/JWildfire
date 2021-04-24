@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class LissajousFunc extends VariationFunc {
+public class LissajousFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_TMIN = "tmin";
@@ -97,7 +97,18 @@ public class LissajousFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float t = (varpar->lissajous_tmax - varpar->lissajous_tmin)*RANDFLOAT() + varpar->lissajous_tmin;\n"
+        + "float y0 = RANDFLOAT() - 0.5f;\n"
+        + "float x1 = sinf(varpar->lissajous_a * t + varpar->lissajous_d);\n"
+        + "float y1 = sinf(varpar->lissajous_b * t);\n"
+        + "__px += varpar->lissajous * (x1 + varpar->lissajous_c*t + varpar->lissajous_e*y0);\n"
+        + "__py += varpar->lissajous * (y1 + varpar->lissajous_c*t + varpar->lissajous_e*y0);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->lissajous*__z;\n" : "");
+  }
 }

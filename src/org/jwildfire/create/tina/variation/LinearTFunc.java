@@ -86,8 +86,8 @@ public class LinearTFunc extends VariationFunc  implements SupportsGPU {
   }
 
   @Override
-  // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
   public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "__px += (__x < 0.f ? -1.f : 1.f) * powf(fabsf(__x), varpar->linearT_powX) * varpar->linearT;\n"
         + "__py += (__y < 0.f ? -1.f : 1.f) * powf(fabsf(__y), varpar->linearT_powY) * varpar->linearT;\n"
         + (context.isPreserveZCoordinate() ? "__pz += varpar->linearT*__z;" : "");

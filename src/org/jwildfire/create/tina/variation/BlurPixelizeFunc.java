@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.floor;
 
-public class BlurPixelizeFunc extends VariationFunc {
+public class BlurPixelizeFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SIZE = "size";
@@ -80,7 +80,20 @@ public class BlurPixelizeFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float inv_size = 1.f/varpar->blur_pixelize_size;\n"
+        + "float v = varpar->blur_pixelize * varpar->blur_pixelize_size;\n"
+        + "\n"
+        + "float x0 = floorf(__x*inv_size);\n"
+        + "float y0 = floorf(__y*inv_size);\n"
+        + "\n"
+        + "__px += v * (x0 + varpar->blur_pixelize_scale * (RANDFLOAT() - 0.5f) + 0.5f);\n"
+        + "__py += v * (y0 + varpar->blur_pixelize_scale * (RANDFLOAT() - 0.5f) + 0.5f);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->blur_pixelize*__z;\n" : "");
+  }
 }

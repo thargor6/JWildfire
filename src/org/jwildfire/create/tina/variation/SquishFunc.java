@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.floor;
 
-public class SquishFunc extends VariationFunc {
+public class SquishFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -113,7 +113,72 @@ public class SquishFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "    float x = fabsf(__x);\n"
+        + "    float y = fabsf(__y);\n"
+        + "    float s;\n"
+        + "    float p;\n"
+        + "    float x2, y2;\n"
+        + "    float inv_power = 1.0 / (float) varpar->squish_power;\n"
+        + "\n"
+        + "    if ( x > y)\n"
+        + "    {\n"
+        + "        s = x;\n"
+        + "\n"
+        + "        if( __x > 0.0f)\n"
+        + "        {\n"
+        + "            p = __y;\n"
+        + "        }\n"
+        + "        else\n"
+        + "        {\n"
+        + "            p = 4.0f * s - __y;\n"
+        + "        }\n"
+        + "    }\n"
+        + "    else\n"
+        + "    {\n"
+        + "        s = y;\n"
+        + "        if( __y > 0.0f)\n"
+        + "        {\n"
+        + "            p = 2.0f * s - __x;\n"
+        + "        }\n"
+        + "        else\n"
+        + "        {\n"
+        + "            p = 6.0f * s + __x;\n"
+        + "        }\n"
+        + "    }\n"
+        + "\n"
+        + "    p = inv_power * (p + 8.0f * s * floorf(varpar->squish_power * RANDFLOAT()));\n"
+        + "\n"
+        + "    if( p <= 1.0f* s )\n"
+        + "    {\n"
+        + "        __px += varpar->squish * s;\n"
+        + "        __py += varpar->squish * p;\n"
+        + "    }\n"
+        + "    else if( p <= 3.0f * s)\n"
+        + "    {\n"
+        + "        __px += varpar->squish * ( 2.0f * s - p);\n"
+        + "        __py += varpar->squish * (s);\n"
+        + "    }\n"
+        + "    else if( p <= 5.0f * s)\n"
+        + "    {\n"
+        + "        __px -= varpar->squish * (s);\n"
+        + "        __py += varpar->squish * ( 4.0f * s - p);\n"
+        + "    }\n"
+        + "    else if( p <= 7.0f * s)\n"
+        + "    {\n"
+        + "        __px -= varpar->squish * (6.0f * s - p);\n"
+        + "        __py -= varpar->squish * (s);\n"
+        + "    }\n"
+        + "    else\n"
+        + "    {\n"
+        + "        __px += varpar->squish * (s);\n"
+        + "        __py -= varpar->squish * ( 8.0f * s - p);\n"
+        + "    }\n"
+        + (context.isPreserveZCoordinate() ? "    __pz += varpar->squish*__z;\n": "");
+  }
 }

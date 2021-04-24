@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class LazyTravisFunc extends VariationFunc {
+public class LazyTravisFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SPIN_IN = "spin_in";
@@ -158,7 +158,130 @@ public class LazyTravisFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "    float spin_in = 4.0f * varpar->lazyTravis_spin_in;\n"
+        + "    float spin_out = 4.0f * varpar->lazyTravis_spin_out;\n"
+        + "    float x = fabsf(__x);\n"
+        + "    float y = fabsf(__y);\n"
+        + "    float s;\n"
+        + "    float p;\n"
+        + "    float x2, y2;\n"
+        + "    \n"
+        + "    if( x > varpar->lazyTravis || y > varpar->lazyTravis)\n"
+        + "    {\n"
+        + "        if ( x > y)\n"
+        + "        {\n"
+        + "            s = x;\n"
+        + "\n"
+        + "            if( __x > 0.0f)\n"
+        + "            {\n"
+        + "                p = s + __y + s * spin_out;\n"
+        + "            }\n"
+        + "            else\n"
+        + "            {\n"
+        + "                p = 5.0 * s - __y + s * spin_out;\n"
+        + "            }\n"
+        + "        }\n"
+        + "        else\n"
+        + "        {\n"
+        + "            s = y;\n"
+        + "            if( __y > 0.0f)\n"
+        + "            {\n"
+        + "                p = 3.0 * s - __x + s * spin_out;\n"
+        + "            }\n"
+        + "            else\n"
+        + "            {\n"
+        + "                p = 7.0 * s + __x + s * spin_out;\n"
+        + "            }\n"
+        + "        }\n"
+        + "\n"
+        + "        p = fmodf(p, s * 8.0f);\n"
+        + "\n"
+        + "        if( p <= 2.0 * s)\n"
+        + "        {\n"
+        + "            x2 = s + varpar->lazyTravis_space ;\n"
+        + "            y2 = -(1.0 * s - p);\n"
+        + "            y2 = y2 + y2 / s * varpar->lazyTravis_space;\n"
+        + "        }\n"
+        + "        else if( p <= 4.0f * s)\n"
+        + "        {\n"
+        + "            \n"
+        + "            y2 = s + varpar->lazyTravis_space;\n"
+        + "            x2 = ( 3.0 * s - p);\n"
+        + "            x2 = x2 + x2 / s * varpar->lazyTravis_space;\n"
+        + "        }\n"
+        + "        else if( p <= 6.0f * s)\n"
+        + "        {\n"
+        + "            x2 =  -(s + varpar->lazyTravis_space);\n"
+        + "            y2 = ( 5.0f * s - p);\n"
+        + "            y2 = y2 + y2 / s * varpar->lazyTravis_space;\n"
+        + "        }\n"
+        + "        else\n"
+        + "        {\n"
+        + "            y2 = -(s + varpar->lazyTravis_space);\n"
+        + "            x2 = -(7.0f * s - p);\n"
+        + "            x2 = x2 + x2 / s * varpar->lazyTravis_space;\n"
+        + "        }\n"
+        + "\n"
+        + "        __px += varpar->lazyTravis *  x2;\n"
+        + "        __py += varpar->lazyTravis *  y2;\n"
+        + "    }\n"
+        + "    else\n"
+        + "    {\n"
+        + "        if ( x > y)\n"
+        + "        {\n"
+        + "            s = x;\n"
+        + "    \n"
+        + "            if( __x > 0.0f)\n"
+        + "            {\n"
+        + "                p = s + __y + s * spin_in;\n"
+        + "            }\n"
+        + "            else\n"
+        + "            {\n"
+        + "                p = 5.0f * s - __y + s * spin_in;\n"
+        + "            }\n"
+        + "        }\n"
+        + "        else\n"
+        + "        {\n"
+        + "            s = y;\n"
+        + "            if( __y > 0.0f)\n"
+        + "            {\n"
+        + "                p = 3.0f * s - __x + s * spin_in;\n"
+        + "            }\n"
+        + "            else\n"
+        + "            {\n"
+        + "                p = 7.0f * s + __x + s * spin_in;\n"
+        + "            }\n"
+        + "        }\n"
+        + "        \n"
+        + "        p = fmodf(p, s * 8.0f);\n"
+        + "        \n"
+        + "        if( p <= 2.0f * s)\n"
+        + "        {\n"
+        + "            __px += varpar->lazyTravis * s;\n"
+        + "            __py -= varpar->lazyTravis * (s - p);\n"
+        + "        }\n"
+        + "        else if( p <= 4.0f * s)\n"
+        + "        {\n"
+        + "            __px += varpar->lazyTravis * ( 3.0f * s - p);\n"
+        + "            __py += varpar->lazyTravis * s;\n"
+        + "        }\n"
+        + "        else if( p <= 6.0f * s)\n"
+        + "        {\n"
+        + "            __px -= varpar->lazyTravis * s;\n"
+        + "            __py += varpar->lazyTravis * ( 5.0f * s - p);\n"
+        + "        }\n"
+        + "        else\n"
+        + "        {\n"
+        + "            __px -= varpar->lazyTravis * (7.0f * s - p);\n"
+        + "            __py -= varpar->lazyTravis * s;\n"
+        + "        }\n"
+        + "    }\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->lazyTravis*__z;\n" : "");
+  }
 }
