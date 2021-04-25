@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 
-public class BlurFunc extends SimpleVariationFunc {
+public class BlurFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private DoubleWrapperWF sina = new DoubleWrapperWF();
@@ -48,7 +48,17 @@ public class BlurFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BLUR};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BLUR, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float r = RANDFLOAT() * (PI + PI);\n"
+        + "float sina, cosa;\n"
+        + "sincosf(r, &sina, &cosa);\n"
+        + "float r2=varpar->blur * RANDFLOAT();\n"
+        + "__px += r2 * cosa;\n"
+        + "__py += r2 * sina;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->blur*__z;\n" : "");
+  }
 }

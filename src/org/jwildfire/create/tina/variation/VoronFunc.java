@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.floor;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-public class VoronFunc extends VariationFunc {
+public class VoronFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_K = "k";
@@ -129,6 +129,54 @@ public class VoronFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int i,j,l,K,M,M1,N,N1;\n"
+        + "int n, dX;\n"
+        + "float R,Rmin,OffsetX,OffsetY,X0,Y0,X,Y,DiscretNoise;\n"
+        + "float AM = 1.f/2147483647.f;\n"
+        + "Rmin=20.f;\n"
+        + "M=(int)floorf(__x/varpar->voron_step);\n"
+        + "N=(int)floorf(__y/varpar->voron_step);\n"
+        + "for (i=-1; i<2; i++)\n"
+        + "{\n"
+        + "    M1=M+i;\n"
+        + "    for (j=-1; j<2; j++)\n"
+        + "    {\n"
+        + "        N1=N+j;\n"
+        + "        dX = 19*M1+257*N1+varpar->voron_xseed;\n"
+        + "        n = (dX<<13) ^ dX;\n"
+        + "        DiscretNoise = (( (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff)*AM);\n"
+        + "        K=(1+(int)floorf(varpar->voron_num*DiscretNoise));\n"
+        + "        for (l=0; l<K; l++)\n"
+        + "        {\n"
+        + "            dX=l+64*M1+15*N1+varpar->voron_xseed;\n"
+        + "            n = (dX<<13) ^ dX;\n"
+        + "            DiscretNoise = (( (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff)*AM);\n"
+        + "            X=(DiscretNoise+M1)*varpar->voron_step;\n"
+        + "            dX=l+21*M1+33*N1+varpar->voron_yseed;\n"
+        + "            n = (dX<<13) ^ dX;\n"
+        + "            DiscretNoise = (( (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff)*AM);\n"
+        + "            Y=(DiscretNoise+N1)*varpar->voron_step;\n"
+        + "        \n"
+        + "            OffsetX=__x-X;\n"
+        + "            OffsetY=__y-Y;\n"
+        + "        \n"
+        + "            R=sqrtf(OffsetX*OffsetX+OffsetY*OffsetY);\n"
+        + "        \n"
+        + "            if (R<Rmin) {\n"
+        + "                Rmin=R;\n"
+        + "                X0=X;\n"
+        + "                Y0=Y;\n"
+        + "            }\n"
+        + "        }\n"
+        + "    }\n"
+        + "}\n"
+        + "__px += varpar->voron*(varpar->voron_k*(__x-X0)+X0);\n"
+        + "__py += varpar->voron*(varpar->voron_k*(__y-Y0)+Y0);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->voron*__z;\n" : "");
   }
 }

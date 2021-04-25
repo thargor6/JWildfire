@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Disc2Func extends VariationFunc {
+public class Disc2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ROT = "rot";
@@ -101,7 +101,25 @@ public class Disc2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float sinadd, cosadd;\n"
+        + "sincosf(varpar->disc2_twist, &sinadd, &cosadd);\n"
+        + "cosadd -= 1.f;\n"
+        + "if (fabsf(varpar->disc2_twist)>2.f*PI)\n"
+        + "{\n"
+        + "    float sign = varpar->disc2_twist >= 0.f ? 1.f : -1.f;\n"
+        + "    float k = 1.f+ varpar->disc2_twist-sign*2.f*PI;\n"
+        + "    sinadd *= k;\n"
+        + "    cosadd *= k;\n"
+        + "}\n"
+        + "float t = varpar->disc2_rot*PI*(__x+__y);\n"
+        + "__px += varpar->disc2*__phi*(sinf(t)+cosadd)/PI;\n"
+        + "__py += varpar->disc2*__phi*(cosf(t)+sinadd)/PI;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->disc2*__z;\n" : "");
+  }
 }
