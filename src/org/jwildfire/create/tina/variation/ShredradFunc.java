@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class ShredradFunc extends VariationFunc {
+public class ShredradFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_N = "n";
@@ -83,7 +83,26 @@ public class ShredradFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float sa = 2.f*M_PI_F / varpar->shredrad_n;\n"
+        + "float sw = varpar->shredrad_width;\n"
+        + "float vv = varpar->shredrad;\n"
+        + "\n"
+        + "float ang = atan2f(__y, __x);\n"
+        + "float rad = sqrtf(__x * __x + __y * __y);\n"
+        + "float xang = (ang + 9.42477796077f + sa / 2.f) / sa;\n"
+        + "float zang = ((xang - (int)xang) * sw + (int)xang) * sa - M_PI_F - sa / 2.f * sw;\n"
+        + "\n"
+        + "float s, c;\n"
+        + "sincosf(zang,  &s, &c);\n"
+        + "\n"
+        + "__px += vv * rad * c;\n"
+        + "__py += vv * rad * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->shredrad * __z;\n" : "");
+  }
 }

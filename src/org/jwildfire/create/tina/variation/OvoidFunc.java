@@ -19,28 +19,52 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 
-public class HeartFunc extends SimpleVariationFunc implements SupportsGPU {
+public class OvoidFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
+
+  private static final String PARAM_X = "x";
+  private static final String PARAM_Y = "y";
+  private static final String[] paramNames = {PARAM_X, PARAM_Y};
+
+  private double x = 1.0;
+  private double y = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    double angle = pAffineTP.getPrecalcAtan();
-    double sinr = sin(r * angle);
-    double cosr = cos(r * angle);
-    r *= pAmount;
-    pVarTP.x += r * sinr;
-    pVarTP.y -= r * cosr;
+    double T = pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + SMALL_EPSILON;
+    double r = pAmount / T;
+    pVarTP.x += pAffineTP.x * r * x;
+    pVarTP.y += pAffineTP.y * r * y;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 
   @Override
+  public String[] getParameterNames() {
+    return paramNames;
+  }
+
+  @Override
+  public Object[] getParameterValues() {
+    return new Object[]{x, y};
+  }
+
+  @Override
+  public void setParameter(String pName, double pValue) {
+    if (PARAM_X.equalsIgnoreCase(pName))
+      x = pValue;
+    else if (PARAM_Y.equalsIgnoreCase(pName))
+      y = pValue;
+    else
+      throw new IllegalArgumentException(pName);
+  }
+
+  @Override
   public String getName() {
-    return "heart";
+    return "ovoid";
   }
 
   @Override
@@ -51,8 +75,10 @@ public class HeartFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->heart*__r*sinf(__phi*__r);\n"
-        + "__py += -varpar->heart*__r*cosf(__phi*__r);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->heart*__z;\n" : "");
+    return "float T = __r2 + epsilon;\n"
+        + "float r = varpar->ovoid / T;\n"
+        + "__px += __x * r * varpar->ovoid_x;\n"
+        + "__py += __y * r * varpar->ovoid_y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->ovoid * __z;" : "");
   }
 }

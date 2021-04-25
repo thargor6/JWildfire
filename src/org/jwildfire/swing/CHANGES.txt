@@ -12,6 +12,9 @@ V7.00 (xx.xx.202x)
  - displaying the name of variations where no code could be found
  - added a new option to enable automatic synchronization of changes between the Main Editor and GPU renderer
 
+ - new variations:
+   - ovoid by Rob Richards
+
 V6.50 (11.04.2021)
  - Introducing variation-filters, based on variation-profiles and variation-types.
    They will improve usability a lot by simplifying the selection of variations/"plugins" by selecting

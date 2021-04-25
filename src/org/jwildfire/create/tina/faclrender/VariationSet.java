@@ -21,6 +21,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.SupportsGPU;
 import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -94,7 +95,7 @@ public class VariationSet implements VariationnameTransformer {
   }
 
   private String generateVariationsKey(FlameTransformationContext transformCtx, Set<String> variationNames) {
-    return "V6"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
+    return "V20"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
   }
 
   public Set<String> getVariationNames() {
@@ -111,7 +112,11 @@ public class VariationSet implements VariationnameTransformer {
        String code = ((SupportsGPU)func).getGPUCode(transformCtx);
        code=code.replace("->"+variationName, "->"+transformedName);
        StringBuilder sb = new StringBuilder();
-       sb.append("<variation name=\""+transformedName+"\" dimension=\"3d\">\n");
+       sb.append("<variation name=\""+transformedName+"\" dimension=\"3d\"");
+      if (Arrays.asList(func.getVariationTypes()).contains(VariationFuncType.VARTYPE_DC)) {
+        sb.append(" directColor=\"yes\"");
+       }
+       sb.append(">\n");
        for(String param: func.getParameterNames()) {
          sb.append("<parameter name=\""+param+"\" variation=\""+transformedName+"\"/>\n");
        }
