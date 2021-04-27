@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
-public class Rings2Func extends VariationFunc {
+public class Rings2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_VAL = "val";
@@ -78,8 +78,23 @@ public class Rings2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float l = sqrtf(__x * __x + __y * __y);\n"
+        + "float _dx = varpar->rings2_val * varpar->rings2_val ADD_EPSILON;\n"
+        + " if (_dx == 0.f || l == 0.f) {\n"
+        + "    return;\n"
+        + " }\n"
+        + " float r = varpar->rings2 * (2.f - _dx * ((int) ((l / _dx + 1.f) / 2.f) * 2.f / l + 1.f));\n"
+        + "\n"
+        + "    __px += r * __x;\n"
+        + "    __py += r * __y;\n"
+        + "\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->rings2 * __z;\n" : "");
+  }
 
 }

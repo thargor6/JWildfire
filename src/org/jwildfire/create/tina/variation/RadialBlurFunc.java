@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class RadialBlurFunc extends VariationFunc {
+public class RadialBlurFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private final double gauss_rnd[] = new double[4];
@@ -88,7 +88,22 @@ public class RadialBlurFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BLUR};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BLUR, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float rndG = RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f;\n"
+            + "float sina, cosa;\n"
+            + "sincosf(varpar->radial_blur_angle * PI * 0.5f, &sina, &cosa);\n"
+            + "float spin = varpar->radial_blur * sina;\n"
+            + "float zoom = varpar->radial_blur * cosa;\n"
+            + "float ra = sqrtf(__x * __x + __y * __y);\n"
+            + "float  alpha = atan2f(__y, __x) + spin * rndG;\n"
+            + "sincosf(alpha, &sina, &cosa);\n"
+            + "float rz = zoom * rndG - 1.0f;\n"
+            + "__px += ra * cosa + rz * __x;\n"
+            + "__py += ra * sina + rz * __y;\n"
+            + (context.isPreserveZCoordinate() ? "__pz += varpar->radial_blur*__z;\n" : "");
+  }
 }

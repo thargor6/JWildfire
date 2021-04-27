@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class PDJFunc extends VariationFunc {
+public class PDJFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
@@ -81,4 +81,11 @@ public class PDJFunc extends VariationFunc {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "__px += varpar->pdj*(sinf(varpar->pdj_a*__y)-cosf(varpar->pdj_b*__x));\n"
+        + "__py += varpar->pdj*(sinf(varpar->pdj_c*__x)-cosf(varpar->pdj_d*__y));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->pdj*__z;\n" : "");
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class ConicFunc extends VariationFunc {
+public class ConicFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ECCENTRICITY = "eccentricity";
@@ -70,7 +70,17 @@ public class ConicFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float rn;\n"
+        + "rn = RANDFLOAT();\n"
+        + "float rnew = varpar->conic*(rn-varpar->conic_holes)*varpar->conic_eccentricity/(1.f+varpar->conic_eccentricity*__x*__rinv)*__rinv;\n"
+        + "__px += rnew*__x;\n"
+        + "__py += rnew*__y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->conic*__z;\n" : "");
+  }
 }
