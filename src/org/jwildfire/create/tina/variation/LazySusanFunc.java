@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class LazySusanFunc extends VariationFunc {
+public class LazySusanFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SPACE = "space";
@@ -99,7 +99,28 @@ public class LazySusanFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float x0 = __x-varpar->lazysusan_x;\n"
+        + "float y0 = __y+varpar->lazysusan_y;\n"
+        + "float r0 = sqrtf(x0*x0+y0*y0);\n"
+        + "if (r0<varpar->lazysusan)\n"
+        + "{\n"
+        + "    float a = atan2f(y0,x0)+varpar->lazysusan_spin+varpar->lazysusan_twist*(varpar->lazysusan-r0);\n"
+        + "    r0 = varpar->lazysusan*r0;\n"
+        + "    __px += r0*cosf(a)+varpar->lazysusan_x;\n"
+        + "    __py += r0*sinf(a)-varpar->lazysusan_y;\n"
+        + "}\n"
+        + "else\n"
+        + "{\n"
+        + "    r0 = varpar->lazysusan*(1.f+varpar->lazysusan_space/r0);\n"
+        + "    __px += r0*x0 + varpar->lazysusan_x;\n"
+        + "    __py += r0*y0 - varpar->lazysusan_y;\n"
+        + "}\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->lazysusan*__z;\n" : "");
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.fmod;
 
-public class ModulusFunc extends VariationFunc {
+public class ModulusFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
@@ -91,7 +91,28 @@ public class ModulusFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float xr = 2.f*varpar->modulus_x;\n"
+        + "float yr = 2.f*varpar->modulus_y;\n"
+        + "\n"
+        + "if (__x > varpar->modulus_x)\n"
+        + "    __px += varpar->modulus*(-varpar->modulus_x + fmodf(__x + varpar->modulus_x, xr));\n"
+        + "else if (__x < -varpar->modulus_x)\n"
+        + "    __px += varpar->modulus*( varpar->modulus_x - fmodf(varpar->modulus_x - __x, xr));\n"
+        + "else\n"
+        + "    __px += varpar->modulus*__x;\n"
+        + "\n"
+        + "if (__y > varpar->modulus_y)\n"
+        + "    __py += varpar->modulus*(-varpar->modulus_y + fmodf(__y + varpar->modulus_y, yr));\n"
+        + "else if (__y < -varpar->modulus_y)\n"
+        + "    __py += varpar->modulus*( varpar->modulus_y - fmodf(varpar->modulus_y - __y, yr));\n"
+        + "else\n"
+        + "    __py += varpar->modulus*__y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->modulus*__z;\n" : "");
+  }
 }

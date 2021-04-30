@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class OscilloscopeFunc extends VariationFunc {
+public class OscilloscopeFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SEPARATION = "separation";
@@ -105,7 +105,29 @@ public class OscilloscopeFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float tpf = 2.f*PI*varpar->oscilloscope_frequency;\n"
+        + "float t = varpar->oscilloscope_amplitude*expf(-fabsf(__x)*varpar->oscilloscope_damping)*cosf(tpf*__x)+varpar->oscilloscope_separation;\n"
+        + "__px += varpar->oscilloscope*__x;\n"
+        + "if (fabsf(__y) <= t)\n"
+        + "    __py -= varpar->oscilloscope*__y;\n"
+        + "else\n"
+        + "    __py += varpar->oscilloscope*__y;\n"
+        + "    __3D_SUPPORT_ONLY__\n"
+        + "    __pz += varpar->oscilloscope*__z;\n"
+        + "    ]]>\n"
+        + "    </source>\n"
+        + "</variation>\n"
+        + "<variation name=\"polar2\" default=\"0.f\" >\n"
+        + "    <source license=\"GNU/GPLv3\">\n"
+        + "    <![CDATA[\n"
+        + "__px += varpar->polar2*__phi/PI;\n"
+        + "__py += varpar->polar2*0.5f*logf(__r2)/PI;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->polar2*__z;\n" : "");
+  }
 }

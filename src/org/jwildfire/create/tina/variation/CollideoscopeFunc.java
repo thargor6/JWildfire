@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CollideoscopeFunc extends VariationFunc {
+public class CollideoscopeFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
@@ -105,6 +105,40 @@ public class CollideoscopeFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float _kn_pi = (float) varpar->collideoscope_num * M_1_PI_F;\n"
+        + "float _pi_kn = M_PI_F / (float) varpar->collideoscope_num;\n"
+        + "float _ka    = M_PI_F * varpar->collideoscope_a;\n"
+        + "float _ka_kn = _ka / (float) varpar->collideoscope_num;\n"
+        + "float a = atan2f(__y, __x);\n"
+        + "float r = varpar->collideoscope * __r;\n"
+        + "int alt;\n"
+        + "\n"
+        + "if (a >= 0.f) {\n"
+        + "    alt = (int) (a * _kn_pi);\n"
+        + "    if (alt % 2 == 0)\n"
+        + "        a = alt * _pi_kn + fmodf(_ka_kn + a, _pi_kn);\n"
+        + "    else\n"
+        + "        a = alt * _pi_kn + fmodf(-_ka_kn + a, _pi_kn);\n"
+        + "}\n"
+        + "else {\n"
+        + "    alt = (int) (-a * _kn_pi);\n"
+        + "    if (alt % 2 == 1)\n"
+        + "        a = -(alt * _pi_kn + fmodf(-_ka_kn - a, _pi_kn));\n"
+        + "    else\n"
+        + "        a = -(alt * _pi_kn + fmodf(_ka_kn - a, _pi_kn));\n"
+        + "}\n"
+        + "\n"
+        + "float s, c;\n"
+        + "sincosf(a,  &s, &c);\n"
+        + "\n"
+        + "__px += r * c;\n"
+        + "__py += r * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->collideoscope*__z;\n" : "");
   }
 }

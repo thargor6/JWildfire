@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SuperShapeFunc extends VariationFunc {
+public class SuperShapeFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RND = "rnd";
@@ -103,7 +103,21 @@ public class SuperShapeFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float t1 = fabsf(cosf((varpar->super_shape_m*__theta+PI)*.25f));\n"
+        + "float t2 = fabsf(sinf((varpar->super_shape_m*__theta+PI)*.25f));\n"
+        + "t1 = powf(t1,varpar->super_shape_n2);\n"
+        + "t2 = powf(t2,varpar->super_shape_n3);\n"
+        + "float rn;\n"
+        + "rn = RANDFLOAT();\n"
+        + "float rnew = varpar->super_shape*((varpar->super_shape_rnd*rn+(1.f-varpar->super_shape_rnd)*__r-varpar->super_shape_holes)*powf(t1+t2,-1.f/(varpar->super_shape_n1))*__rinv);\n"
+        + "__px += rnew*__x;\n"
+        + "__py += rnew*__y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->super_shape*__z;\n" : "");
+  }
 }

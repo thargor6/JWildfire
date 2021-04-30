@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class GaussianBlurFunc extends SimpleVariationFunc {
+public class GaussianBlurFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -44,7 +44,18 @@ public class GaussianBlurFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float rn1;\n"
+        + "rn1 = RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f;\n"
+        + "float rn2;\n"
+        + "rn2 = RANDFLOAT();\n"
+        + "__px += varpar->gaussian_blur*rn1*cosf(2.f*PI*rn2);\n"
+        + "__py += varpar->gaussian_blur*rn1*sinf(2.f*PI*rn2);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->gaussian_blur*__z;\n" : "");
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.exp;
 
-public class CurveFunc extends VariationFunc {
+public class CurveFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_XAMP = "xamp";
@@ -90,7 +90,16 @@ public class CurveFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float pc_xlen = varpar->curve_xlength*varpar->curve_xlength;\n"
+        + "float pc_ylen = varpar->curve_ylength*varpar->curve_ylength;\n"
+        + "__px += varpar->curve*(__x+varpar->curve_xamp*expf(-__y*__y/pc_xlen));\n"
+        + "__py += varpar->curve*(__y+varpar->curve_yamp*expf(-__x*__x/pc_ylen));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->curve*__z;\n" : "");
+  }
 }

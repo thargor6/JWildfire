@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class EscherFunc extends VariationFunc {
+public class EscherFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_BETA = "beta";
@@ -81,7 +81,18 @@ public class EscherFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float vc = 0.5f*(1.f+cosf(varpar->escher_beta));\n"
+        + "float vd = 0.5f*sinf(varpar->escher_beta);\n"
+        + "float m = varpar->escher*expf(vc*0.5f*logf(__r2)-vd*__theta);\n"
+        + "float n = vc*__theta+vd*0.5f*logf(__r2);\n"
+        + "__px += m*cosf(n);\n"
+        + "__py += m*sinf(n);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->escher*__z;\n" : "");
+  }
 }

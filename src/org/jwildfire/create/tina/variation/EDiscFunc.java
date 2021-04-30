@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class EDiscFunc extends SimpleVariationFunc {
+public class EDiscFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -60,7 +60,26 @@ public class EDiscFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float q1 = sqrtf(__r2+1.f+2.f*__x);\n"
+        + "float q2 = sqrtf(__r2+1.f-2.f*__x);\n"
+        + "float xmax = 0.5f*(q1+q2);\n"
+        + "float a1 = logf(xmax+sqrtf(xmax-1.f));\n"
+        + "float a2 = -acosf(__x/xmax);\n"
+        + "float w = varpar->edisc/11.57034632f;\n"
+        + "float snv = sinf(a1);\n"
+        + "float csv = cosf(a1);\n"
+        + "float snhu = sinhf(a2);\n"
+        + "float cshu = coshf(a2);\n"
+        + "if (__y > 0.f)\n"
+        + "    snv = -snv;\n"
+        + "__px += w*cshu*csv;\n"
+        + "__py += w*snhu*snv;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->edisc*__z;\n" : "");
+  }
 }
