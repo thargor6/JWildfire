@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class BlurZoomFunc extends VariationFunc {
+public class BlurZoomFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_LENGTH = "length";
@@ -72,7 +72,16 @@ public class BlurZoomFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BLUR};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BLUR, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float _z = 1.f + varpar->blur_zoom_length * RANDFLOAT();\n"
+        + "\n"
+        + "__px += varpar->blur_zoom * ((__x - varpar->blur_zoom_x) * _z + varpar->blur_zoom_x);\n"
+        + "__py += varpar->blur_zoom * ((__y + varpar->blur_zoom_y) * _z - varpar->blur_zoom_y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->blur_zoom*__z;\n" : "");
+  }
 }

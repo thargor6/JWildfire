@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class HeartWFFunc extends VariationFunc {
+public class HeartWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scale_x";
@@ -99,7 +99,30 @@ public class HeartWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float nx, t;\n"
+        + "if (__phi < 0) {\n"
+        + "    t = -__phi / PI * 60.f * varpar->heart_wf_scale_r_left - varpar->heart_wf_shift_t;\n"
+        + "    if (t > 60.f)\n"
+        + "        t = 60.f;\n"
+        + "    nx = -0.001f * (-t * t + 40.f * t + 1200.f) * sinf(PI * t / 180.f) * __r;\n"
+        + "}\n"
+        + "else {\n"
+        + "    t = __phi / PI * 60.f * varpar->heart_wf_scale_r_right - varpar->heart_wf_shift_t;\n"
+        + "    if (t > 60.f)\n"
+        + "        t = 60.f;\n"
+        + "    nx = 0.001f * (-t * t + 40.f * t + 1200.f) * sinf(PI * t / 180.f) * __r;\n"
+        + "}\n"
+        + "float ny = -0.001f * (-t * t + 40.f * t + 400.f) * cosf(PI * t / 180.f) * __r;\n"
+        + "nx *= varpar->heart_wf_scale_x;\n"
+        + "__px += varpar->heart_wf * nx;\n"
+        + "__py += varpar->heart_wf * ny;\n"
+        + "\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->heart_wf * __z;\n" : "");
+  }
 }

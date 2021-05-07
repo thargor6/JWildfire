@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class FarBlurFunc extends VariationFunc {
+public class FarBlurFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
@@ -114,7 +114,23 @@ public class FarBlurFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BLUR};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BLUR, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float su, cu, sv, cv;\n"
+        + "float rn1 = RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f;\n"
+        + "float dx = __px - varpar->farblur_x_origin;\n"
+        + "float dy = __py - varpar->farblur_y_origin;\n"
+        + "float dz = __pz - varpar->farblur_z_origin;\n"
+        + "float r = varpar->farblur * (dx*dx + dy*dy + dz*dz) * rn1;\n"
+        + "sincosf(RANDFLOAT() * 2.f*PI,  &su, &cu);\n"
+        + "sincosf(RANDFLOAT() * 2.f*PI,  &sv, &cv);\n"
+        + "\n"
+        + "__px += varpar->farblur_x * r * sv * cu;\n"
+        + "__py += varpar->farblur_y * r * sv * su;\n"
+        + "__pz += varpar->farblur_z * r * cv;\n";
+  }
 }

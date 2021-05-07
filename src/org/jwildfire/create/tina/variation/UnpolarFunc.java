@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class UnpolarFunc extends SimpleVariationFunc {
+public class UnpolarFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -52,6 +52,20 @@ public class UnpolarFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float vvar = varpar->unpolar * M_1_PI_F;\n"
+        + "float r = expf(__y);\n"
+        + "float c;\n"
+        + "float s;\n"
+        + "sincosf(__x, &s, &c);\n"
+        + "            \n"
+        + "__px += 0.5f * vvar * r * c;\n"
+        + "__py += 0.5f * vvar * r * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->unpolar*__z;\n" : "");
   }
 }

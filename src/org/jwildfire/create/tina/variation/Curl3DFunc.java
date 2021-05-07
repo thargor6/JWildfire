@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class Curl3DFunc extends VariationFunc {
+public class Curl3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CX = "cx";
@@ -90,7 +90,17 @@ public class Curl3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float  c2 = varpar->curl3D_cx*varpar->curl3D_cx + varpar->curl3D_cy*varpar->curl3D_cy + varpar->curl3D_cz*varpar->curl3D_cz;\n"
+        + "float r2 = __x*__x + __y*__y + __z*__z;\n"
+        + "float r  = varpar->curl3D / (r2*c2 + 2.f*varpar->curl3D_cx*__x - 2.f*varpar->curl3D_cy*__y + 2.f*varpar->curl3D_cz*__z + 1.f);\n"
+        + "__px += r * (__x + varpar->curl3D_cx*r2);\n"
+        + "__py += r * (__y - varpar->curl3D_cy*r2);\n"
+        + "__pz += r * (__z + varpar->curl3D_cz*r2);\n";
+  }
 }

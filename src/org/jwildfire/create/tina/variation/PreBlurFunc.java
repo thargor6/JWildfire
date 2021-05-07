@@ -69,7 +69,7 @@ public class PreBlurFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float rndG = varpar->pre_blur*(RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f);\n"
+    return "float rndG = varpar->pre_blur*(RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-3.f);\n"
         + "float rndA = RANDFLOAT()*2.f*PI;\n"
         + "__x += rndG*cosf(rndA);\n"
         + "__y += rndG*sinf(rndA);\n"

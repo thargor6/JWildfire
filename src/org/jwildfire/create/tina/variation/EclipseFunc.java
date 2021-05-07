@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class EclipseFunc extends VariationFunc {
+public class EclipseFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHIFT = "shift";
@@ -87,7 +87,36 @@ public class EclipseFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float c_2;\n"
+        + "float x;\n"
+        + "if (fabsf(__y) <= varpar->eclipse)\n"
+        + "{\n"
+        + "    c_2 = sqrtf( varpar->eclipse*varpar->eclipse - __y*__y);\n"
+        + "    if ( fabsf(__x)  <= c_2)\n"
+        + "    {\n"
+        + "        x = __x + varpar->eclipse_shift * varpar->eclipse;\n"
+        + "        if ( fabsf(x) >= c_2)\n"
+        + "            __px -= varpar->eclipse * __x;\n"
+        + "        else\n"
+        + "            __px += varpar->eclipse * x;\n"
+        + "    }\n"
+        + "    else\n"
+        + "    {\n"
+        + "        __px += varpar->eclipse * __x;\n"
+        + "    }\n"
+        + "    __py += varpar->eclipse * __y;\n"
+        + "}\n"
+        + "else\n"
+        + "{\n"
+        + "    __px += varpar->eclipse * __x;\n"
+        + "    __py += varpar->eclipse * __y;\n"
+        + "}\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->eclipse * __z;\n" : "");
+  }
 }
