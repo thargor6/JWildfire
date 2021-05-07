@@ -68,7 +68,7 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class AbstractFlameWriter {
 
-  protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder xb, Layer layer, XForm xForm, VariationnameTransformer variationnameTransformer) throws Exception {
+  protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder xb, Layer layer, XForm xForm, VariationnameTransformer variationnameTransformer, boolean includeVariations) throws Exception {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(xb.createAttr("weight", xForm.getWeight()));
     if (xForm.getColorType() != ColorType.UNSET) attrList.add(xb.createAttr(AbstractFlameReader.ATTR_COLOR_TYPE, xForm.getColorType().toString()));
@@ -154,55 +154,56 @@ public class AbstractFlameWriter {
       }
     }
 
-    UniqueNamesMaker namesMaker = new UniqueNamesMaker();
-    for (int vIdx = 0; vIdx < xForm.getVariationCount(); vIdx++) {
-      Variation v = xForm.getVariation(vIdx);
-      VariationFunc func = v.getFunc();
+    if(includeVariations) {
+      UniqueNamesMaker namesMaker = new UniqueNamesMaker();
+      for (int vIdx = 0; vIdx < xForm.getVariationCount(); vIdx++) {
+        Variation v = xForm.getVariation(vIdx);
+        VariationFunc func = v.getFunc();
 
-      String funcname = variationnameTransformer!=null ? variationnameTransformer.transformVariationName(func.getName()) : func.getName();
+        String funcname = variationnameTransformer!=null ? variationnameTransformer.transformVariationName(func.getName()) : func.getName();
 
-      String fName = namesMaker.makeUnique(funcname);
+        String fName = namesMaker.makeUnique(funcname);
 
-      attrList.add(xb.createAttr(fName, v.getAmount()));
-      attrList.add(xb.createAttr(fName + "_" + AbstractFlameReader.ATTR_FX_PRIORITY, v.getPriority()));
-      // params
-      {
-        String params[] = func.getParameterNames();
-        if (params != null) {
-          Object vals[] = func.getParameterValues();
-          for (int i = 0; i < params.length; i++) {
-            if (vals[i] instanceof Integer) {
-              attrList.add(xb.createAttr((fName + "_" + params[i]), (Integer) vals[i]));
-            }
-            else if (vals[i] instanceof Double) {
-              attrList.add(xb.createAttr((fName + "_" + params[i]), (Double) vals[i]));
-            }
-            else {
-              throw new IllegalStateException();
-            }
-            MotionCurve curve = v.getMotionCurve(params[i]);
-            if (curve != null) {
-              writeMotionCurve(xb, attrList, fName + "_" + params[i], curve);
+        attrList.add(xb.createAttr(fName, v.getAmount()));
+        attrList.add(xb.createAttr(fName + "_" + AbstractFlameReader.ATTR_FX_PRIORITY, v.getPriority()));
+        // params
+        {
+          String params[] = func.getParameterNames();
+          if (params != null) {
+            Object vals[] = func.getParameterValues();
+            for (int i = 0; i < params.length; i++) {
+              if (vals[i] instanceof Integer) {
+                attrList.add(xb.createAttr((fName + "_" + params[i]), (Integer) vals[i]));
+              }
+              else if (vals[i] instanceof Double) {
+                attrList.add(xb.createAttr((fName + "_" + params[i]), (Double) vals[i]));
+              }
+              else {
+                throw new IllegalStateException();
+              }
+              MotionCurve curve = v.getMotionCurve(params[i]);
+              if (curve != null) {
+                writeMotionCurve(xb, attrList, fName + "_" + params[i], curve);
+              }
             }
           }
         }
-      }
-      // curves
-      List<String> blackList = Collections.emptyList();
-      writeMotionCurves(v, xb, attrList, fName + "_", blackList);
-      // ressources
-      {
-        String ressNames[] = func.getRessourceNames();
-        if (ressNames != null) {
-          byte vals[][] = func.getRessourceValues();
-          for (int i = 0; i < ressNames.length; i++) {
-            String hexStr = vals[i] != null && vals[i].length > 0 ? Tools.byteArrayToHexString(vals[i]) : "";
-            attrList.add(xb.createAttr((fName + "_" + ressNames[i]), hexStr));
+        // curves
+        List<String> blackList = Collections.emptyList();
+        writeMotionCurves(v, xb, attrList, fName + "_", blackList);
+        // ressources
+        {
+          String ressNames[] = func.getRessourceNames();
+          if (ressNames != null) {
+            byte vals[][] = func.getRessourceValues();
+            for (int i = 0; i < ressNames.length; i++) {
+              String hexStr = vals[i] != null && vals[i].length > 0 ? Tools.byteArrayToHexString(vals[i]) : "";
+              attrList.add(xb.createAttr((fName + "_" + ressNames[i]), hexStr));
+            }
           }
         }
       }
     }
-
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_XY_COEFS, xForm.getXYCoeff00() + " " + xForm.getXYCoeff01() + " " + xForm.getXYCoeff10() + " " + xForm.getXYCoeff11() + " " + xForm.getXYCoeff20() + " " + xForm.getXYCoeff21()));
     if (xForm.isHasXYPostCoeffs()) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_XY_POST, xForm.getXYPostCoeff00() + " " + xForm.getXYPostCoeff01() + " " + xForm.getXYPostCoeff10() + " " + xForm.getXYPostCoeff11() + " " + xForm.getXYPostCoeff20() + " " + xForm.getXYPostCoeff21()));

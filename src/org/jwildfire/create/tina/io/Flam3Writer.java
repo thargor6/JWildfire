@@ -35,11 +35,11 @@ public class Flam3Writer extends AbstractFlameWriter {
     xb.beginElement("flame", attrList);
     // XForm
     for (XForm xForm : layer.getXForms()) {
-      xb.emptyElement("xform", createXFormAttrList(xb, layer, xForm, null));
+      xb.emptyElement("xform", createXFormAttrList(xb, layer, xForm, null, true));
     }
     // FinalXForms
     for (XForm xForm : layer.getFinalXForms()) {
-      xb.emptyElement("finalxform", createXFormAttrList(xb, layer, xForm, null));
+      xb.emptyElement("finalxform", createXFormAttrList(xb, layer, xForm, null, true));
     }
     addPalette(xb, layer);
     xb.endElement("flame");

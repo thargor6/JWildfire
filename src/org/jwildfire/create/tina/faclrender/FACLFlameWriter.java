@@ -28,6 +28,8 @@ import org.jwildfire.create.tina.io.SimpleXMLBuilder;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder.Attribute;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.swing.MessageLogger;
+import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class FACLFlameWriter extends AbstractFlameWriter {
   private final MessageLogger logger;
@@ -72,11 +74,19 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     xb.beginElement("flame", attrList);
     // XForm
     for (XForm xForm : layer.getXForms()) {
-      xb.emptyElement("xform", filterXFormAttrList( createXFormAttrList(xb, layer, xForm, variationSet) ) );
+      xb.beginElement("xform", filterXFormAttrList( createXFormAttrList(xb, layer, xForm, null, false) ) );
+      for(int priority: extractVariationPriorities(xForm)) {
+        xb.emptyElement("variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
+      }
+      xb.endElement("xform");
     }
     // FinalXForms
     for (XForm xForm : layer.getFinalXForms()) {
-      xb.emptyElement("finalxform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm, variationSet)));
+      xb.beginElement("finalxform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)));
+      for(int priority: extractVariationPriorities(xForm)) {
+        xb.emptyElement("variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
+      }
+      xb.endElement("finalxform");
     }
     // Gradient
     addGradient(xb, layer);
@@ -116,6 +126,74 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     }
     xb.endElement("Flames");
     return xb.buildXML();
+  }
+
+  private List<Attribute<?>> createVariationGroupAttrList(SimpleXMLBuilder xb, int priority, XForm xForm, VariationnameTransformer variationnameTransformer) {
+    List<Attribute<?>> attrList = new ArrayList<>();
+    attrList.add(new Attribute<String>("normal", "1" /*priority >= 0 ? "1" : "0"*/));
+
+    Set<String> varNames = new HashSet<>();
+    for (int vIdx = 0; vIdx < xForm.getVariationCount(); vIdx++) {
+      Variation v = xForm.getVariation(vIdx);
+      if (v.getPriority() == priority) {
+        VariationFunc func = v.getFunc();
+        String transformedFuncName;
+        String uniqueFuncName;
+        int funcNameCounter = 1;
+        {
+          transformedFuncName =
+              variationnameTransformer != null
+                  ? variationnameTransformer.transformVariationName(func.getName())
+                  : func.getName();
+          while (true) {
+            uniqueFuncName = transformedFuncName + "-" + funcNameCounter;
+            if (!varNames.contains(uniqueFuncName)) {
+              varNames.add(uniqueFuncName);
+              break;
+            } else {
+              funcNameCounter++;
+            }
+          }
+        }
+
+        attrList.add(xb.createAttr(transformedFuncName /* uniqueFuncName*/, v.getAmount()));
+        // params
+        {
+          String params[] = func.getParameterNames();
+          if (params != null) {
+            Object vals[] = func.getParameterValues();
+            for (int i = 0; i < params.length; i++) {
+              if (vals[i] instanceof Integer) {
+                attrList.add(xb.createAttr((transformedFuncName + "_" + params[i]/*+"-"+funcNameCounter*/), (Integer) vals[i]));
+              }
+              else if (vals[i] instanceof Double) {
+                attrList.add(xb.createAttr((transformedFuncName + "_" + params[i]/*+"-"+funcNameCounter*/), (Double) vals[i]));
+              }
+              else {
+                throw new IllegalStateException();
+              }
+            }
+          }
+        }
+
+
+
+      }
+    }
+
+    return attrList;
+  }
+
+  private List<Integer> extractVariationPriorities(XForm xForm) {
+    List<Integer> res = new ArrayList<>();
+    for(int i=0;i<xForm.getVariationCount();i++) {
+      Integer boxedVal=xForm.getVariation(i).getPriority();
+      if(!res.contains(boxedVal)) {
+        res.add(boxedVal);
+      }
+    }
+    res.sort(Integer::compareTo);
+    return res;
   }
 
   private List<Attribute<?>> createVariationSetAttrList(SimpleXMLBuilder xb, Flame pFlame, Set<String> variationNames, String varSetUuid) {

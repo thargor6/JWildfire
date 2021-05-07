@@ -41,8 +41,8 @@ public class VariationSet implements VariationnameTransformer {
     initVariationNames(flame);
   }
 
-  private final static Set<String> MANDATORY_VARIATIONS = new HashSet<>(Arrays.asList(/*"pre_matrix2d", "matrix2d", "post_matrix2d",*/
-          "pre_matrix3d", "matrix3d", "post_matrix3d"));
+  private final static Set<String> MANDATORY_VARIATIONS = new HashSet<>(Arrays.asList(/*"linear3D"*/ /*"pre_matrix2d", "matrix2d", "post_matrix2d",*/
+        /*  "pre_matrix3d", "matrix3d", "post_matrix3d"*/));
 
   private void initVariationNames(Flame pFlame) {
     variationNames.clear();
@@ -66,7 +66,7 @@ public class VariationSet implements VariationnameTransformer {
       supportingVariations.put(fName, func);
     }
     if (supportingVariations.containsKey(fName)) {
-      String transformedName = "jwf_"+fName.replace("_","");
+      String transformedName = fName.replace(" ", "_"); //"jwf_"+fName.replace("_","");
       transformedNames.put(fName, transformedName);
       invTransformedNames.put(transformedName, fName);
     }
@@ -95,7 +95,7 @@ public class VariationSet implements VariationnameTransformer {
   }
 
   private String generateVariationsKey(FlameTransformationContext transformCtx, Set<String> variationNames) {
-    return "V20"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
+    return "V001"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
   }
 
   public Set<String> getVariationNames() {
