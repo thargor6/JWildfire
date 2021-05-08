@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-public class SeparationFunc extends VariationFunc {
+public class SeparationFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
@@ -89,7 +89,18 @@ public class SeparationFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float sx2 = varpar->separation_x*varpar->separation_x;\n"
+        + "float sy2 = varpar->separation_y*varpar->separation_y;\n"
+        + "float signX = __x >= 0.f ? 1.f : -1.f;\n"
+        + "float signY = __y >= 0.f ? 1.f : -1.f;\n"
+        + "__px += varpar->separation*(signX*sqrtf(__x*__x+sx2)-__x*varpar->separation_xinside);\n"
+        + "__py += varpar->separation*(signY*sqrtf(__y*__y+sy2)-__y*varpar->separation_yinside);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->separation*__z;\n" : "");
+  }
 }

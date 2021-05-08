@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class BWraps7Func extends VariationFunc {
+public class BWraps7Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CELLSIZE = "cellsize";
@@ -169,6 +169,56 @@ public class BWraps7Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "   float radius = 0.5f * (varpar->bwraps7_cellsize / (1.0f + varpar->bwraps7_space * varpar->bwraps7_space));\n"
+        + "    float _g2 = varpar->bwraps7_gain * varpar->bwraps7_gain ADD_EPSILON;\n"
+        + "    float max_bubble = _g2 * radius;\n"
+        + "    if (max_bubble > 2.0f) {\n"
+        + "      max_bubble = 1.0f;\n"
+        + "    } else {\n"
+        + "      max_bubble *= 1.0f / ((max_bubble * max_bubble) / 4.0f + 1.0f);\n"
+        + "    }\n"
+        + "    float _r2 = radius * radius;\n"
+        + "    float _rfactor = radius / max_bubble;"
+        + "    float Vx, Vy;\n"
+        + "    float Cx, Cy;\n"
+        + "    float Lx, Ly;\n"
+        + "    float r, theta, s, c;\n"
+        + "    Vx = __x;\n"
+        + "    Vy = __y;\n"
+        + "    if (fabs(varpar->bwraps7_cellsize) < epsilon) {\n"
+        + "      __px += varpar->bwraps7 * Vx;\n"
+        + "      __py += varpar->bwraps7 * Vy;\n"
+        + "    }\n"
+        + "    else {\n"
+        + "      Cx = (floorf(Vx / varpar->bwraps7_cellsize) + 0.5f) * varpar->bwraps7_cellsize;\n"
+        + "      Cy = (floorf(Vy / varpar->bwraps7_cellsize) + 0.5f) * varpar->bwraps7_cellsize;\n"
+        + "      Lx = Vx - Cx;\n"
+        + "      Ly = Vy - Cy;\n"
+        + "      if ((Lx * Lx + Ly * Ly) > _r2) {\n"
+        + "        __px += varpar->bwraps7 * Vx;\n"
+        + "        __py += varpar->bwraps7 * Vy;\n"
+        + "      }\n"
+        + "      else {\n"
+        + "        Lx *= _g2;\n"
+        + "        Ly *= _g2;\n"
+        + "        r = _rfactor / ((Lx * Lx + Ly * Ly) / 4.0f + 1.0f);\n"
+        + "        Lx *= r;\n"
+        + "        Ly *= r;\n"
+        + "        r = (Lx * Lx + Ly * Ly) / _r2;\n"
+        + "        theta = varpar->bwraps7_inner_twist * (1.0f - r) + varpar->bwraps7_outer_twist * r;\n"
+        + "        s = sinf(theta);\n"
+        + "        c = cosf(theta);\n"
+        + "        Vx = Cx + c * Lx + s * Ly;\n"
+        + "        Vy = Cy - s * Lx + c * Ly;\n"
+        + "        __px += varpar->bwraps7 * Vx;\n"
+        + "        __py += varpar->bwraps7 * Vy;\n"
+        + "      }\n"
+        + "    }\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->bwraps7 * __z;\n" : "");
   }
 }

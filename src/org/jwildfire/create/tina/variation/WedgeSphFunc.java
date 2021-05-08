@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class WedgeSphFunc extends VariationFunc {
+public class WedgeSphFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ANGLE = "angle";
@@ -90,6 +90,19 @@ public class WedgeSphFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float rinv_eps = 1.f/sqrtf(__r2 ADD_EPSILON);\n"
+        + "float a = __theta+varpar->wedge_sph_swirl*rinv_eps;\n"
+        + "float c = floorf((varpar->wedge_sph_count*a+PI)*0.5f/PI);\n"
+        + "float comp_fac = 1.f-varpar->wedge_sph_angle*varpar->wedge_sph_count*0.5f/PI;\n"
+        + "a = a*comp_fac+c*varpar->wedge_sph_angle;\n"
+        + "__px += varpar->wedge_sph*(rinv_eps+varpar->wedge_sph_hole)*cosf(a);\n"
+        + "__py += varpar->wedge_sph*(rinv_eps+varpar->wedge_sph_hole)*sinf(a);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->wedge_sph*__z;\n" : "");
   }
 }

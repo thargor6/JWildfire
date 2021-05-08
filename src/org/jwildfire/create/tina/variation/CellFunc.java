@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.floor;
 
-public class CellFunc extends VariationFunc {
+public class CellFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SIZE = "size";
@@ -97,7 +97,42 @@ public class CellFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float inv_cell_size = 1.0f / varpar->cell_size;\n" +
+            "\n" +
+            "    /* calculate input cell */\n" +
+            "    int x = (int) floorf(__x * inv_cell_size);\n" +
+            "    int y = (int) floorf(__y * inv_cell_size);\n" +
+            "\n" +
+            "    /* Offset from cell origin */\n" +
+            "    float dx = __x - x * varpar->cell_size;\n" +
+            "    float dy = __y - y * varpar->cell_size;\n" +
+            "\n" +
+            "    /* interleave cells */\n" +
+            "    if (y >= 0) {\n" +
+            "      if (x >= 0) {\n" +
+            "        y *= 2;\n" +
+            "        x *= 2;\n" +
+            "      } else {\n" +
+            "        y *= 2;\n" +
+            "        x = -(2 * x + 1);\n" +
+            "      }\n" +
+            "    } else {\n" +
+            "      if (x >= 0) {\n" +
+            "        y = -(2 * y + 1);\n" +
+            "        x *= 2;\n" +
+            "      } else {\n" +
+            "        y = -(2 * y + 1);\n" +
+            "        x = -(2 * x + 1);\n" +
+            "      }\n" +
+            "    }\n" +
+            "\n" +
+            "    __px += varpar->cell * (dx + x * varpar->cell_size);\n" +
+            "    __py -= varpar->cell * (dy + y * varpar->cell_size);\n" +
+            (context.isPreserveZCoordinate()? "__z += varpar->cell * __z;": "");
+  }
 }
