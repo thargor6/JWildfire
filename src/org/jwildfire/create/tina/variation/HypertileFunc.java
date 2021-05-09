@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class HypertileFunc extends VariationFunc {
+public class HypertileFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_P = "p";
@@ -103,7 +103,33 @@ public class HypertileFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float pa = 2.f*M_PI_F / varpar->hypertile_p;\n"
+        + "float qa = 2.f*M_PI_F / varpar->hypertile_q;\n"
+        + "float r = (1.f - cosf(pa)) / (cosf(pa) + cosf(qa)) + 1.f;\n"
+        + "if (r > 0.f)\n"
+        + "    r = 1.f / sqrtf(r);\n"
+        + "else\n"
+        + "    r = 1.f;\n"
+        + "\n"
+        + "float cosa;\n"
+        + "float sina;\n"
+        + "sincosf(varpar->hypertile_n * pa, &sina, &cosa);\n"
+        + "float re = r * cosa;\n"
+        + "float im = r * sina;\n"
+        + "float a  = __x + re;\n"
+        + "float b  = __y - im;\n"
+        + "float c  = re*__x - im*__y + 1.f;\n"
+        + "float d  = re*__y + im*__x;\n"
+        + "float vr = varpar->hypertile / (c*c + d*d);\n"
+        + "\n"
+        + "__px += vr * (a*c + b*d);\n"
+        + "__py += vr * (b*c - a*d);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->hypertile*__z;\n" : "");
+  }
 }

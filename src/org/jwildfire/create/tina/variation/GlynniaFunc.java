@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-public class GlynniaFunc extends SimpleVariationFunc {
+public class GlynniaFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -88,7 +88,46 @@ public class GlynniaFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float vvar2 = varpar->glynnia*rsqrtf(2.f);\n"
+        + "float r = __r;\n"
+        + "if( r > 1.f)\n"
+        + "{\n"
+        + "    if( RANDFLOAT() > 0.5f)\n"
+        + "    {\n"
+        + "        float d = sqrtf(r + __x);\n"
+        + "        __px += vvar2 * d;\n"
+        + "        __py += -vvar2 / d * __y;\n"
+        + "    }\n"
+        + "    else\n"
+        + "    {\n"
+        + "        float d = r + __x;\n"
+        + "        r = varpar->glynnia / sqrtf(r * (__y*__y + d*d));\n"
+        + "        __px += r * d;\n"
+        + "        __py += r * __y;\n"
+        + "    }\n"
+        + "    }\n"
+        + "    else\n"
+        + "    {\n"
+        + "    if( RANDFLOAT() > 0.5f)\n"
+        + "    {\n"
+        + "        float d = sqrtf(r + __x);\n"
+        + "        __px -= vvar2 * d;\n"
+        + "        __py -= vvar2 / d * __y;\n"
+        + "    }\n"
+        + "    else\n"
+        + "    {\n"
+        + "        float d = r + __x;\n"
+        + "        r = varpar->glynnia / sqrtf(r * (__y*__y + d*d));\n"
+        + "        __px -= r * d;\n"
+        + "        __py += r * __y;\n"
+        + "    }\n"
+        + "}\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->glynnia*__z;\n" : "");
+  }
 }

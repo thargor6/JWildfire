@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class WedgeJuliaFunc extends VariationFunc {
+public class WedgeJuliaFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -90,6 +90,25 @@ public class WedgeJuliaFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float wedgeJulia_cf = 1.f-varpar->wedge_julia_angle*varpar->wedge_julia_count*0.5f/PI;\n"
+        + "float wedgeJulia_rN = fabsf(varpar->wedge_julia_power);\n"
+        + "float wedgeJulia_cn = varpar->wedge_julia_dist/varpar->wedge_julia_power/2.f;\n"
+        + "float r = varpar->wedge_julia*powf(__r2, wedgeJulia_cn);\n"
+        + "int t_rnd = (int)(wedgeJulia_rN*RANDFLOAT());\n"
+        + "float a = (__theta+2.f*PI*t_rnd)/varpar->wedge_julia_power;\n"
+        + "float c = floorf((varpar->wedge_julia_count*a+PI)*0.5f/PI);\n"
+        + "a = a*wedgeJulia_cf+c*varpar->wedge_julia_angle;\n"
+        + "float sa = sinf(a);\n"
+        + "float ca = cosf(sa);\n"
+        + "__px += r*ca;\n"
+        + "__py += r*sa;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->wedge_julia*__z;\n" : "");
   }
 }
+
+

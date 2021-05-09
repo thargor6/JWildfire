@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class MobiusFunc extends VariationFunc {
+public class MobiusFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RE_A = "re_a";
@@ -109,7 +109,21 @@ public class MobiusFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float re_u = varpar->mobius_re_a * __x - varpar->mobius_im_a * __y + varpar->mobius_re_b;\n"
+        + "float im_u = varpar->mobius_re_a * __y + varpar->mobius_im_a * __x + varpar->mobius_im_b;\n"
+        + "float re_v = varpar->mobius_re_c * __x - varpar->mobius_im_c * __y + varpar->mobius_re_d;\n"
+        + "float im_v = varpar->mobius_re_c * __y + varpar->mobius_im_c * __x + varpar->mobius_im_d;\n"
+        + "float d    = (re_v * re_v + im_v * im_v);\n"
+        + "\n"
+        + "float rad_v = varpar->mobius / d;\n"
+        + "__px += rad_v * (re_u * re_v + im_u * im_v);\n"
+        + "__py += rad_v * (im_u * re_v - re_u * im_v);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->mobius*__z;\n" : "");
+  }
 }
