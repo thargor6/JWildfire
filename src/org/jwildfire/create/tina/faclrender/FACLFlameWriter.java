@@ -213,7 +213,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
           "mod_hue", "mod_hue_speed"));
 
   private List<Attribute<?>> filterXFormAttrList(List<Attribute<?>> pSrc) {
-    return pSrc.stream().filter(a ->  !a.getName().endsWith("fx_priority") && !a.getName().startsWith("wfield_") && !XFORM_ATTR_BLACKLIST.contains(a.getName())).collect(Collectors.toList());
+    return pSrc.stream().filter(a ->  !a.getName().endsWith("fx_priority") && !a.getName().startsWith("wfield_") &&  !a.getName().contains("Curve_") && !XFORM_ATTR_BLACKLIST.contains(a.getName())).collect(Collectors.toList());
   }
 
   // remove unnecessary flame-attributes
@@ -224,7 +224,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
           "fps", "zbuffer_scale", "zbuffer_bias", "zbuffer_filename", "low_density_brightness", "balancing_red",
           "balancing_green", "balancing_blue"));
   private List<Attribute<?>> filterFlameAttrList(List<Attribute<?>> pSrc) {
-    return pSrc.stream().filter(a -> !a.getName().startsWith("grad_edit_") && !a.getName().startsWith("cam_dof_") && !a.getName().startsWith("post_symmetry_") && !FLAME_ATTR_BLACKLIST.contains(a.getName())).collect(Collectors.toList());
+    return pSrc.stream().filter(a -> !a.getName().startsWith("grad_edit_") && !a.getName().contains("Curve_") && !a.getName().startsWith("post_symmetry_") && !FLAME_ATTR_BLACKLIST.contains(a.getName())).collect(Collectors.toList());
   }
 
   // apply some FACLRender-specific changes

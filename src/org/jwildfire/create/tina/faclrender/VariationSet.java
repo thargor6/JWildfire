@@ -41,6 +41,7 @@ public class VariationSet implements VariationnameTransformer {
     initVariationNames(flame);
   }
 
+  // TODO remove
   private final static Set<String> MANDATORY_VARIATIONS = new HashSet<>(Arrays.asList(/*"linear3D"*/ /*"pre_matrix2d", "matrix2d", "post_matrix2d",*/
         /*  "pre_matrix3d", "matrix3d", "post_matrix3d"*/));
 
@@ -66,7 +67,8 @@ public class VariationSet implements VariationnameTransformer {
       supportingVariations.put(fName, func);
     }
     if (supportingVariations.containsKey(fName)) {
-      String transformedName = fName.replace(" ", "_"); //"jwf_"+fName.replace("_","");
+      // required, because some variation names are reserved words or functions in CUDA, e.g. "log" or "sin"
+      String transformedName = "jwf_"+fName;
       transformedNames.put(fName, transformedName);
       invTransformedNames.put(transformedName, fName);
     }
@@ -95,7 +97,7 @@ public class VariationSet implements VariationnameTransformer {
   }
 
   private String generateVariationsKey(FlameTransformationContext transformCtx, Set<String> variationNames) {
-    return "V001"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
+    return "V023"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
   }
 
   public Set<String> getVariationNames() {
