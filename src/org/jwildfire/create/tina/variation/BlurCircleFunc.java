@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.M_PI_4;
 import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 
-public class BlurCircleFunc extends SimpleVariationFunc {
+public class BlurCircleFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private DoubleWrapperWF sina = new DoubleWrapperWF();
@@ -76,7 +76,31 @@ public class BlurCircleFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float x2 = 2.f * RANDFLOAT() - 1.f;\n"
+        + "float y2 = 2.f * RANDFLOAT() - 1.f;\n"
+        + "float absx = fabsf(x2);\n"
+        + "float absy = fabsf(y2);\n"
+        + "float side, perimeter, cosa;\n"
+        + "\n"
+        + "if (absx >= absy) {\n"
+        + "    perimeter = (x2 >= absy ? absx + y2 : 5.f * absx - y2);\n"
+        + "    side = absx;\n"
+        + "}\n"
+        + "else {\n"
+        + "    perimeter = (y2 >= absx ? 3.f * absy - x2 : 7.f * absy + x2);\n"
+        + "    side = absy;\n"
+        + "}\n"
+        + "float r = varpar->blur_circle * side;\n"
+        + "float sina;\n"
+        + "sincosf(M_PI_4_F * perimeter / side - M_PI_4_F, &sina, &cosa);\n"
+        + "__px += r * cosa;\n"
+        + "__py += r * sina;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->blur_circle*__z;\n" : "");
+  }
 }

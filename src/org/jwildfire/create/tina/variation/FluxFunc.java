@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class FluxFunc extends VariationFunc {
+public class FluxFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SPREAD = "spread";
@@ -72,7 +72,20 @@ public class FluxFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float xpw = __x + varpar->flux;\n"
+        + "float xmw = __x - varpar->flux;\n"
+        + "float avgr = varpar->flux * (2.f + varpar->flux_spread) *\n"
+        + "    sqrtf(sqrtf(__y * __y + xpw * xpw) / sqrtf(__y * __y + xmw * xmw));\n"
+        + "float avga = (atan2f(__y, xmw) - atan2f(__y, xpw)) * 0.5f;\n"
+        + "        \n"
+        + "__px += avgr * cosf(avga);\n"
+        + "__py += avgr * sinf(avga);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->flux*__z;\n" : "");
+  }
 }

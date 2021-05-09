@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class BlurLinearFunc extends VariationFunc {
+public class BlurLinearFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_LENGTH = "length";
@@ -80,7 +80,18 @@ public class BlurLinearFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float cosa;\n"
+        + "float sina;\n"
+        + "sincosf(varpar->blur_linear_angle, &sina, &cosa);\n"
+        + "float r    = varpar->blur_linear_length * RANDFLOAT();\n"
+        + "__px += varpar->blur_linear * (__x + r * cosa);\n"
+        + "__py += varpar->blur_linear * (__y + r * sina);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->blur_linear*__z;\n" : "");
+  }
 }

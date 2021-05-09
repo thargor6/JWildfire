@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Julia3DFunc extends VariationFunc {
+public class Julia3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -145,7 +145,24 @@ public class Julia3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float n = roundf(varpar->julia3D_power);\n"
+        + "n = n == 0.f ? 1.f : n;\n"
+        + "float absn = fabsf(n);\n"
+        + "float cn = (1.f/n - 1.f) / 2.f;\n"
+        + "float _z = __z / absn;\n"
+        + "float r = varpar->julia3D * powf(__r2 + __z*__z, cn);\n"
+        + "float tmp = r * __r;\n"
+        + "float cosa;\n"
+        + "float sina;\n"
+        + "sincosf((atan2f(__y, __x) + 2.f*M_PI_F*(roundf(RANDFLOAT()*absn-0.5f)))/n, &sina, &cosa);\n"
+        + "__px += tmp*cosa;\n"
+        + "__py += tmp*sina;\n"
+        + "__pz += r*_z;";
+  }
 }

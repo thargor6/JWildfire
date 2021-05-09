@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class SpirographFunc extends VariationFunc {
+public class SpirographFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
@@ -102,7 +102,21 @@ public class SpirographFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float d1 = (varpar->spirograph_tmax - varpar->spirograph_tmin) * RANDFLOAT() + varpar->spirograph_tmin;\n"
+        + "float d2 = (varpar->spirograph_ymax - varpar->spirograph_ymin) * RANDFLOAT() + varpar->spirograph_ymin;\n"
+        + "float e  = varpar->spirograph_a + varpar->spirograph_b;\n"
+        + "float f  = e / varpar->spirograph_b * d1;\n"
+        + "float d3 = e * cosf(d1) - varpar->spirograph_c1 * cosf(f);\n"
+        + "float d4 = e * sinf(d1) - varpar->spirograph_c2 * sinf(f);\n"
+        + "\n"
+        + "__px += varpar->spirograph * (d3 + varpar->spirograph_d * cosf(d1) + d2);\n"
+        + "__py += varpar->spirograph * (d4 + varpar->spirograph_d * sinf(d1) + d2);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->spirograph*__z;\n" : "");
+  }
 }

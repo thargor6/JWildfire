@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class AugerFunc extends VariationFunc {
+public class AugerFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_FREQ = "freq";
@@ -83,7 +83,18 @@ public class AugerFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float s = sinf(varpar->auger_freq*__x);\n"
+        + "float t = sinf(varpar->auger_freq*__y);\n"
+        + "float dx = __x + varpar->auger_weight*(varpar->auger_scale*t/2.f+fabsf(__x)*t);\n"
+        + "float dy = __y + varpar->auger_weight*(varpar->auger_scale*s/2.f+fabsf(__y)*s);\n"
+        + "__px += varpar->auger*(__x+varpar->auger_sym*(dx-__x));\n"
+        + "__py += varpar->auger*dy;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->auger*__z;\n" : "");
+  }
 }

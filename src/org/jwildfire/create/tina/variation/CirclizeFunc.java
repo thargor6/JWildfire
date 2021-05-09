@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CirclizeFunc extends VariationFunc {
+public class CirclizeFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_HOLE = "hole";
@@ -92,7 +92,31 @@ public class CirclizeFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float weight_4_pi = varpar->circlize * 1.27323954f;\n"
+        + "float absx = fabsf(__x);\n"
+        + "float absy = fabsf(__y);\n"
+        + "float side, perimeter, cosa;\n"
+        + "\n"
+        + "if (absx >= absy) {\n"
+        + "    perimeter = (__x >= absy ? absx + __y : 5.f * absx - __y);\n"
+        + "    side = absx;\n"
+        + "}\n"
+        + "else {\n"
+        + "    perimeter = (__y >= absx ? 3.f * absy - __x : 7.f * absy + __x);\n"
+        + "    side = absy;\n"
+        + "}\n"
+        + "float r = weight_4_pi * side + varpar->circlize_hole;\n"
+        + "float sina;\n"
+        + "sincosf(M_PI_4_F * perimeter / side - M_PI_4_F, &sina, &cosa);\n"
+        + "\n"
+        + "__px += r * cosa;\n"
+        + "__py += r * sina;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->circlize*__z;\n" : "");
+  }
 }
