@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class TargetFunc extends VariationFunc {
+public class TargetFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_EVEN = "even";
@@ -98,7 +98,30 @@ public class TargetFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float t_size_2 = 0.5f * varpar->target_size;\n"
+        + "float a = atan2f(__y, __x);\n"
+        + "    float r = sqrtf(__x*__x + __y*__y);\n"
+        + "    float t = logf(r);\n"
+        + "    if (t < 0.0f)\n"
+        + "      t -= t_size_2;\n"
+        + "\n"
+        + "    t = fmodf(fabsf(t), varpar->target_size);\n"
+        + "\n"
+        + "    if (t < t_size_2)\n"
+        + "      a += varpar->target_even;\n"
+        + "    else\n"
+        + "      a += varpar->target_odd;\n"
+        + "\n"
+        + "    float s = sinf(a);\n"
+        + "    float c = cosf(a);\n"
+        + "\n"
+        + "    __px += r * c;\n"
+        + "    __py += r * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->target*__z;\n" : "");
+  }
 }

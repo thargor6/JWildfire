@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class TargetSpFunc extends VariationFunc {
+public class TargetSpFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_EVEN = "twist";
@@ -105,7 +105,32 @@ public class TargetSpFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float t_size_2 = 0.5f * varpar->target_sp_size;\n"
+        + "float _rota = PI * varpar->target_sp_twist;\n"
+        + "float _rotb = -PI + _rota;\n"
+        + "float a = atan2f(__y, __x);\n"
+        + "    float r = sqrtf(__x*__x + __y*__y);\n"
+        + "    float t = varpar->target_sp_tightness * logf(r) + varpar->target_sp_n_of_sp * (a + PI) / PI;\n"
+        + "    if (t < 0.0)\n"
+        + "      t -= t_size_2;\n"
+        + "\n"
+        + "    t = fmodf(fabsf(t), varpar->target_sp_size);\n"
+        + "\n"
+        + "    if (t < t_size_2)\n"
+        + "      a += _rota;\n"
+        + "    else\n"
+        + "      a += _rotb;\n"
+        + "\n"
+        + "    float s = sinf(a);\n"
+        + "    float c = cosf(a);\n"
+        + "\n"
+        + "    __px += r * c;\n"
+        + "    __py += r * s;\n"
+        + (context.isPreserveZCoordinate() ? "\"__pz += varpar->target_sp*__z;\\n\"" : "");
+  }
 }

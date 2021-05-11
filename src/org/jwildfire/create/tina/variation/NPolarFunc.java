@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class NPolarFunc extends VariationFunc {
+public class NPolarFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PARITY = "parity";
@@ -99,7 +99,31 @@ public class NPolarFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float vvar   = varpar->npolar/M_PI_F;\n"
+        + "float vvar2  = 0.5f *vvar;\n"
+        + "float absN   = fabsf(varpar->npolar_n);\n"
+        + "float cN     = 0.5f*varpar->npolar_n;\n"
+        + "int isodd    = ((int)fabsf(varpar->npolar_parity))%2;\n"
+        + "\n"
+        + "float x    = isodd != 0 ? __x : vvar*__phi;\n"
+        + "float y    = isodd != 0 ? __y : vvar2*logf(__r2);\n"
+        + "float angle = (atan2f(y, x) + 2.f*M_PI_F * roundf(RANDFLOAT() * absN - 0.5f))/varpar->npolar_n;\n"
+        + "float r    = varpar->npolar * powf(x*x + y*y, cN) * (isodd == 0 ? 1.f : varpar->npolar_parity);\n"
+        + "float cosa;\n"
+        + "float sina;\n"
+        + "sincosf(angle, &sina, &cosa);\n"
+        + "cosa *= r; sina *= r;\n"
+        + "x = isodd != 0 ? cosa : (vvar2*logf(cosa*cosa + sina*sina));\n"
+        + "y = isodd != 0 ? sina : (vvar*atan2f(cosa, sina));\n"
+        + "\n"
+        + "__px += x;\n"
+        + "__py += y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->npolar*__z;\n" : "");
+  }
 }
