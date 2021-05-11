@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Affine3DFunc extends VariationFunc {
+public class Affine3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_TRANSLATE_X = "translateX";
@@ -67,7 +67,7 @@ public class Affine3DFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // based on "affine3D" of Framelet
+    // based on "affine3D" of Flamelet
     if (_hasShear) {
       pVarTP.x += pAmount * (_cosZ * (_cosY * (shearXY * scaleY * pAffineTP.y + shearXZ * scaleZ * pAffineTP.z + scaleX * pAffineTP.x) + _sinY * (_sinX * (shearYX * scaleX * pAffineTP.x + shearYZ * scaleZ * pAffineTP.z + scaleY * pAffineTP.y) + _cosX * (shearZX * scaleX * pAffineTP.x + shearZY * scaleY * pAffineTP.y + scaleZ * pAffineTP.z))) - _sinZ * (_cosX * (shearYX * scaleX * pAffineTP.x + shearYZ * scaleZ * pAffineTP.z + scaleY * pAffineTP.y) - _sinX * (shearZX * scaleX * pAffineTP.x + shearZY * scaleY * pAffineTP.y + scaleZ * pAffineTP.z)) + translateX);
       pVarTP.y += pAmount * (_sinZ * (_cosY * (shearXY * scaleY * pAffineTP.y + shearXZ * scaleZ * pAffineTP.z + scaleX * pAffineTP.x) + _sinY * (_sinX * (shearYX * scaleX * pAffineTP.x + shearYZ * scaleZ * pAffineTP.z + scaleY * pAffineTP.y) + _cosX * (shearZX * scaleX * pAffineTP.x + shearZY * scaleY * pAffineTP.y + scaleZ * pAffineTP.z))) + _cosZ * (_cosX * (shearYX * scaleX * pAffineTP.x + shearYZ * scaleZ * pAffineTP.z + scaleY * pAffineTP.y) - _sinX * (shearZX * scaleX * pAffineTP.x + shearZY * scaleY * pAffineTP.y + scaleZ * pAffineTP.z)) + translateY);
@@ -149,6 +149,31 @@ public class Affine3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float xa = varpar->affine3D_rotateX * PI / 180.0f;\n"
+        + " float _sinX = sinf(xa);\n"
+        + " float _cosX = cosf(xa);\n"
+        + " float ya = varpar->affine3D_rotateY * PI / 180.0f;\n"
+        + " float _sinY = sinf(ya);\n"
+        + " float _cosY = cosf(ya);\n"
+        + " float za = varpar->affine3D_rotateZ * PI / 180.0f;\n"
+        + " float _sinZ = sinf(za);\n"
+        + " float _cosZ = cosf(za);\n"
+        + " float EPSILON = 1.0e-6f;\n"
+        + " bool _hasShear = fabsf(varpar->affine3D_shearXY) > EPSILON || fabsf(varpar->affine3D_shearXZ) > EPSILON || fabsf(varpar->affine3D_shearYX) > EPSILON ||\n"
+        + "            fabsf(varpar->affine3D_shearYZ) > EPSILON || fabsf(varpar->affine3D_shearZX) > EPSILON || fabsf(varpar->affine3D_shearZY) > EPSILON;"
+        + "if (_hasShear) {\n"
+        + "  __px += varpar->affine3D * (_cosZ * (_cosY * (varpar->affine3D_shearXY * varpar->affine3D_scaleY * __y + varpar->affine3D_shearXZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleX * __x) + _sinY * (_sinX * (varpar->affine3D_shearYX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearYZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleY * __y) + _cosX * (varpar->affine3D_shearZX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearZY * varpar->affine3D_scaleY * __y + varpar->affine3D_scaleZ * __z))) - _sinZ * (_cosX * (varpar->affine3D_shearYX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearYZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleY * __y) - _sinX * (varpar->affine3D_shearZX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearZY * varpar->affine3D_scaleY * __y + varpar->affine3D_scaleZ * __z)) + varpar->affine3D_translateX);\n"
+        + "  __py += varpar->affine3D * (_sinZ * (_cosY * (varpar->affine3D_shearXY * varpar->affine3D_scaleY * __y + varpar->affine3D_shearXZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleX * __x) + _sinY * (_sinX * (varpar->affine3D_shearYX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearYZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleY * __y) + _cosX * (varpar->affine3D_shearZX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearZY * varpar->affine3D_scaleY * __y + varpar->affine3D_scaleZ * __z))) + _cosZ * (_cosX * (varpar->affine3D_shearYX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearYZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleY * __y) - _sinX * (varpar->affine3D_shearZX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearZY * varpar->affine3D_scaleY * __y + varpar->affine3D_scaleZ * __z)) + varpar->affine3D_translateY);\n"
+        + "  __pz += varpar->affine3D * (-_sinY * (varpar->affine3D_shearXY * varpar->affine3D_scaleY * __y + varpar->affine3D_shearXZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleX * __x) + _cosY * (_sinX * (varpar->affine3D_shearYX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearYZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleY * __y) + _cosX * (varpar->affine3D_shearZX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearZY * varpar->affine3D_scaleY * __y + varpar->affine3D_scaleZ * __z)) + varpar->affine3D_translateZ);\n"
+        + "} else {\n"
+        + "  __px += varpar->affine3D * (_cosZ * (_cosY * varpar->affine3D_scaleX * __x + _sinY * (_cosX * varpar->affine3D_scaleZ * __z + _sinX * varpar->affine3D_scaleY * __y)) - _sinZ * (_cosX * varpar->affine3D_scaleY * __y - _sinX * varpar->affine3D_scaleZ * __z) + varpar->affine3D_translateX);\n"
+        + "  __py += varpar->affine3D * (_sinZ * (_cosY * varpar->affine3D_scaleX * __x + _sinY * (_cosX * varpar->affine3D_scaleZ * __z + _sinX * varpar->affine3D_scaleY * __y)) + _cosZ * (_cosX * varpar->affine3D_scaleY * __y - _sinX * varpar->affine3D_scaleZ * __z) + varpar->affine3D_translateY);\n"
+        + "  __pz += varpar->affine3D * (-_sinY * varpar->affine3D_scaleX * __x + _cosY * (_cosX * varpar->affine3D_scaleZ * __z + _sinX * varpar->affine3D_scaleY * __y) + varpar->affine3D_translateZ);\n"
+        + "}\n";
   }
 }

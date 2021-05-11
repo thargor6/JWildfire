@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -17,7 +17,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class SplitsFunc extends VariationFunc {
+public class SplitsFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
@@ -94,7 +94,27 @@ public class SplitsFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return " if (__x >= 0.f) {\n" +
+            "      __px += varpar->splits * (__x + varpar->splits_x);\n" +
+            "      __py += varpar->splits * (varpar->splits_rshear);\n" +
+            "    } else {\n" +
+            "      __px += varpar->splits * (__x - varpar->splits_x);\n" +
+            "      __py -= varpar->splits * (varpar->splits_lshear);\n" +
+            "    }\n" +
+            "\n" +
+            "    if (__y >= 0.f) {\n" +
+            "      __py += varpar->splits * (__y + varpar->splits_y);\n" +
+            "      __px += varpar->splits * (varpar->splits_ushear);\n" +
+            "    } else {\n" +
+            "      __py += varpar->splits * (__y - varpar->splits_y);\n" +
+            "      __px -= varpar->splits * (varpar->splits_dshear);\n" +
+            "    }"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->splits*__z;\n" : "");
+  }
 }
+

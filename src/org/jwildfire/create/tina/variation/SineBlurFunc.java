@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SineBlurFunc extends VariationFunc {
+public class SineBlurFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_POWER = "power";
@@ -71,7 +71,20 @@ public class SineBlurFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float power = varpar->sineblur_power;\n"
+        + "    if (power < 0.0f)\n"
+        + "      power = 0.0f;\n"
+        + "    float ang = RANDFLOAT() * 2.0f*PI;\n"
+        + "    float r = varpar->sineblur * (power == 1.0f ? acosf(RANDFLOAT() * 2.0f - 1.0f) / PI : acosf(expf(logf(RANDFLOAT()) * power) * 2.0f - 1.0f) / PI);\n"
+        + "    float s = sinf(ang);\n"
+        + "    float c = cosf(ang);\n"
+        + "    __px += r * c;\n"
+        + "    __py += r * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->sineblur*__z;\n" : "");
+  }
 }

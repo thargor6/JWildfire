@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class EpispiralFunc extends VariationFunc {
+public class EpispiralFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_N = "n";
@@ -87,7 +87,23 @@ public class EpispiralFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float theta = atan2f(__y, __x);\n"
+        + "    float t = -varpar->epispiral_holes;\n"
+        + "    if (fabsf(varpar->epispiral_thickness) > 1.0e-6f) {\n"
+        + "      float d = cosf(varpar->epispiral_n * theta);\n"
+        + "      t += (RANDFLOAT() * varpar->epispiral_thickness) * (1.0 / d);\n"
+        + "    } else {\n"
+        + "      float d = cosf(varpar->epispiral_n * theta);\n"
+        + "      t += 1.0 / d;\n"
+        + "    }\n"
+        + "    __px += varpar->epispiral * t * cosf(theta);\n"
+        + "    __py += varpar->epispiral * t * sinf(theta);\n"
+        + (context.isPreserveZCoordinate() ? "    __pz += varpar->epispiral*__z;\n" : "");
+  }
 }

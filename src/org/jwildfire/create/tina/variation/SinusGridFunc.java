@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class SinusGridFunc extends VariationFunc {
+public class SinusGridFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_AMPX = "ampx";
@@ -93,7 +93,26 @@ public class SinusGridFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float ax = varpar->sinusgrid_ampx;\n"
+        + "float ay = varpar->sinusgrid_ampy;\n"
+        + "float fx = varpar->sinusgrid_freqx * 2.f*M_PI_F;\n"
+        + "float fy = varpar->sinusgrid_freqy * 2.f*M_PI_F;\n"
+        + "fx = fx == 0.f ? 1.e-10f : fx;\n"
+        + "fy = fy == 0.f ? 1.e-10f : fy;\n"
+        + "\n"
+        + "float sx = -1.f * cosf(__x * fx);\n"
+        + "float sy = -1.f * cosf(__y * fy);\n"
+        + "float tx = __x + ax * (sx-__x);\n"
+        + "float ty = __y + ay * (sy-__y);\n"
+        + "\n"
+        + "__px += varpar->sinusgrid*tx;\n"
+        + "__py += varpar->sinusgrid*ty;\n"
+        + "__pz += varpar->sinusgrid*__z;\n";
+  }
 }

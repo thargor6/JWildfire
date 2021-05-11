@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-public class BarycentroidFunc extends VariationFunc {
+public class BarycentroidFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
@@ -114,7 +114,28 @@ public class BarycentroidFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return " float dot00 = varpar->barycentroid_a * varpar->barycentroid_a + varpar->barycentroid_b * varpar->barycentroid_b;\n"
+        + "    float dot01 = varpar->barycentroid_a * varpar->barycentroid_c + varpar->barycentroid_b * varpar->barycentroid_d;\n"
+        + "    float dot02 = varpar->barycentroid_a * __x + varpar->barycentroid_b * __y;\n"
+        + "    float dot11 = varpar->barycentroid_c * varpar->barycentroid_c + varpar->barycentroid_d * varpar->barycentroid_d;\n"
+        + "    float dot12 = varpar->barycentroid_c * __x + varpar->barycentroid_d * __y;\n"
+        + "\n"
+        + "    float invDenom = 1.0f / (dot00 * dot11 - dot01 * dot01);\n"
+        + "\n"
+        + "    float u = (dot11 * dot02 - dot01 * dot12) * invDenom;\n"
+        + "    float v = (dot00 * dot12 - dot01 * dot02) * invDenom;\n"
+        + "\n"
+        + "    float um = sqrtf(u*u + __x*__x) * (u<0.f ? -1 : u>0.f ? 1 : 0);\n"
+        + "    float vm = sqrtf(v*v + __y*__y) * (v<0.f ? -1 : v>0.f ? 1 : 0);\n"
+        + "\n"
+        + "    __px += varpar->barycentroid * um;\n"
+        + "    __py += varpar->barycentroid * vm;\n"
+        + "\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->barycentroid*__z;\n" : "");
+  }
 }

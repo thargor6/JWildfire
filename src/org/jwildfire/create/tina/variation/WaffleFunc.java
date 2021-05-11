@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class WaffleFunc extends VariationFunc {
+public class WaffleFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SLICES = "slices";
@@ -113,6 +113,40 @@ public class WaffleFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float vcosr = varpar->waffle * cosf(varpar->waffle_rotation);\n"
+        + " float vsinr = varpar->waffle * sinf(varpar->waffle_rotation);\n"
+        + "float a = 0.0, r = 0.0;\n"
+        + "    switch ((int)(RANDFLOAT()*5)) {\n"
+        + "      case 0:\n"
+        + "        a = ((int)(RANDFLOAT()*varpar->waffle_slices) + RANDFLOAT() * varpar->waffle_xthickness) / varpar->waffle_slices;\n"
+        + "        r = ((int)(RANDFLOAT()*varpar->waffle_slices) + RANDFLOAT() * varpar->waffle_ythickness) / varpar->waffle_slices;\n"
+        + "        break;\n"
+        + "      case 1:\n"
+        + "        a = ((int)(RANDFLOAT()*varpar->waffle_slices) + RANDFLOAT()) / varpar->waffle_slices;\n"
+        + "        r = ((int)(RANDFLOAT()*varpar->waffle_slices) + varpar->waffle_ythickness) / varpar->waffle_slices;\n"
+        + "        break;\n"
+        + "      case 2:\n"
+        + "        a = ((int)(RANDFLOAT()*varpar->waffle_slices) + varpar->waffle_xthickness) / varpar->waffle_slices;\n"
+        + "        r = ((int)(RANDFLOAT()*varpar->waffle_slices) + RANDFLOAT()) / varpar->waffle_slices;\n"
+        + "        break;\n"
+        + "      case 3:\n"
+        + "        a = RANDFLOAT();\n"
+        + "        r = ((int)(RANDFLOAT()*varpar->waffle_slices) + varpar->waffle_ythickness + RANDFLOAT() * (1.f - varpar->waffle_ythickness)) / varpar->waffle_slices;\n"
+        + "        break;\n"
+        + "      case 4:\n"
+        + "        a = ((int)(RANDFLOAT()*varpar->waffle_slices) + varpar->waffle_xthickness + RANDFLOAT() * (1.f - varpar->waffle_xthickness)) / varpar->waffle_slices;\n"
+        + "        r = RANDFLOAT();\n"
+        + "        break;\n"
+        + "      default:\n"
+        + "        break;\n"
+        + "    }\n"
+        + "    __px += (vcosr * a + vsinr * r);\n"
+        + "    __py += (-vsinr * a + vcosr * r);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->waffle*__z;\n" : "");
   }
 }
