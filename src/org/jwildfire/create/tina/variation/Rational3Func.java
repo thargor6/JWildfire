@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -33,7 +33,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
  * ----------------------  division line
  * ez^3 + fz^2 + gz + h
  */
-public class Rational3Func extends VariationFunc {
+public class Rational3Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
@@ -129,7 +129,31 @@ public class Rational3Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float xsqr = __x * __x;\n"
+        + "    float ysqr = __y * __y;\n"
+        + "    float xcb = xsqr * __x;\n"
+        + "    float ycb = ysqr * __y;\n"
+        + "    float zt3 = xcb - 3.f * __x * ysqr;\n"
+        + "    float zt2 = xsqr - ysqr;\n"
+        + "    float zb3 = 3.f * xsqr * __y - ycb;\n"
+        + "    float zb2 = 2.f * __x * __y;\n"
+        + "\n"
+        + "    float tr = (varpar->rational3_a * zt3) + (varpar->rational3_b * zt2) + (varpar->rational3_c * __x) + varpar->rational3_d;\n"
+        + "    float ti = (varpar->rational3_a * zb3) + (varpar->rational3_b * zb2) + (varpar->rational3_c * __y);\n"
+        + "\n"
+        + "    float br = (varpar->rational3_e * zt3) + (varpar->rational3_f * zt2) + (varpar->rational3_g * __x) + varpar->rational3_h;\n"
+        + "    float bi = (varpar->rational3_e * zb3) + (varpar->rational3_f * zb2) + (varpar->rational3_g * __y);\n"
+        + "\n"
+        + "    float r3den = 1 / (br * br + bi * bi);\n"
+        + "\n"
+        + "    __px += varpar->rational3 * (tr * br + ti * bi) * r3den;\n"
+        + "    __py += varpar->rational3 * (ti * br - tr * bi) * r3den;\n"
+        + "\n"
+        + (context.isPreserveZCoordinate() ?  "__pz += varpar->rational3 * __z;\n" : "");
+  }
 }

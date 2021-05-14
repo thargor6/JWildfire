@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class Waves2_3DFunc extends VariationFunc {
+public class Waves2_3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_FREQ = "freq";
@@ -68,6 +68,14 @@ public class Waves2_3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float avgxy = (__x + __y) / 2.0f;\n"
+        + "    __px += varpar->waves2_3D * (__x + varpar->waves2_3D_scale * sinf(__y * varpar->waves2_3D_freq));\n"
+        + "    __py += varpar->waves2_3D * (__y + varpar->waves2_3D_scale * sinf(__x * varpar->waves2_3D_freq));\n"
+        + "    __pz += varpar->waves2_3D * (__z + varpar->waves2_3D_scale * sinf(avgxy * varpar->waves2_3D_freq));";
   }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class JuliaQFunc extends VariationFunc {
+public class JuliaQFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -88,7 +88,22 @@ public class JuliaQFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int power = roundf(varpar->juliaq_power)\n;"
+        +  "int divisor = roundf(varpar->juliaq_divisor);\n"
+        + "float half_inv_power = 0.5 * divisor / (float) power;\n"
+        + "float inv_power = divisor / (float) power;\n"
+        + "float inv_power_2pi = 2.0f*PI / (float) power;\n"
+        + "float a = atan2f(__y, __x) * inv_power + (int)(RANDFLOAT() * 10) * inv_power_2pi;\n"
+        + "    float sina = sinf(a);\n"
+        + "    float cosa = cosf(a);\n"
+        + "    float r = varpar->juliaq * powf(__x*__x + __y*__y, half_inv_power);\n"
+        + "    __px += r * cosa;\n"
+        + "    __py += r * sina;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->juliaq*__z;\n" : "");
+  }
 }

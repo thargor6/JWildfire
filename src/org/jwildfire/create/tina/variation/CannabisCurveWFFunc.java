@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CannabisCurveWFFunc extends VariationFunc {
+public class CannabisCurveWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_FILLED = "filled";
@@ -79,7 +79,21 @@ public class CannabisCurveWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float a = __phi;\n"
+        + "float r = (1.f + 9.0f / 10.0f * cosf(8.0f * a)) * (1.f + 1.0f / 10.0f * cosf(24.0f * a)) * (9.0f / 10.0f + 1.0f / 10.0f * cosf(200.0f * a)) * (1.0f + sinf(a));\n"
+        + "a += PI / 2.0f;\n"
+        + "if (roundf(varpar->cannabiscurve_wf_filled) == 1) {\n"
+        + "   r *= RANDFLOAT();\n"
+        + "}\n"
+        + "float nx = sinf(a) * r;\n"
+        + "float ny = cosf(a) * r;\n"
+        + "__px += varpar->cannabiscurve_wf * nx;\n"
+        + "__py += varpar->cannabiscurve_wf * ny;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->cannabiscurve_wf * __z;\n": "");
+  }
 }

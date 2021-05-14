@@ -24,7 +24,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
 
 import org.jwildfire.base.Tools;
 
-public class EllipticFunc extends VariationFunc {
+public class EllipticFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_MODE = "mode";
@@ -82,7 +82,7 @@ public class EllipticFunc extends VariationFunc {
       
       int sign = (pAffineTP.y > 0) ? 1 : -1;
       pVarTP.x += _v * asin(max(-1, min(1, a)));  //asin(clamp(a, -1, 1))
-      pVarTP.y += sign * _v * Math.log1p(xmaxm1 + ssx);      
+      pVarTP.y += sign * _v * Math.log1p(xmaxm1 + ssx);
     } else {  // MODE_ORIGINAL or MODE_MIRRORY
       double tmp = pAffineTP.y * pAffineTP.y + pAffineTP.x * pAffineTP.x + 1.0;
       double x2 = 2.0 * pAffineTP.x;
@@ -137,7 +137,72 @@ public class EllipticFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _v = varpar->elliptic * 2.f / PI;\n"
+            +"int mode = roundf(varpar->elliptic_mode);"
+        +"if (mode == 2) {\n"
+        + "      float sq = __y * __y + __x * __x;\n"
+        + "      float x2 = 2.0f * __x;\n"
+        + "      float xmaxm1 = 0.5 * (elliptic_sqrt1pm1(sq + x2) + elliptic_sqrt1pm1(sq - x2));\n"
+        + "      float ssx = (xmaxm1 < 0) ? 0 : sqrtf(xmaxm1);\n"
+        + "      float a = __x / (1 + xmaxm1);\n"
+        + "      \n"
+        + "      int sign = (__y > 0) ? 1 : -1;\n"
+        + "      __px += _v * asinf(fmaxf(-1.f, fminf(1.f, a)));\n"
+        + "      __py += sign * _v * log1pf(xmaxm1 + ssx);      \n"
+        + "    } else {\n"
+        + "      float tmp = __y * __y + __x * __x + 1.0f;\n"
+        + "      float x2 = 2.0 * __x;\n"
+        + "      float xmax = 0.5 * (sqrtf(tmp + x2) + sqrtf(tmp - x2));\n"
+        + "  \n"
+        + "      float a = __x / xmax;\n"
+        + "      float b = elliptic_sqrt_safe(1.0f - a * a);\n"
+        + "      \n"
+        + "      int sign = (__y > 0) ? 1 : -1;\n"
+        + "      if (mode == 1)\n"
+        + "        sign = (RANDFLOAT() < 0.5) ? 1 : -1;\n"
+        + "  \n"
+        + "      __px += _v * atan2f(a, b);\n"
+        + "      __py += sign * _v * logf(xmax + elliptic_sqrt_safe(xmax - 1.0));\n"
+        + "    }\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->elliptic * __z;\n": "");
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float elliptic_sqrt_safe(float x) {\n"
+        +"  return (x < 1.e-6f) ? 0.0f : sqrtf(x);\n"
+        +"}\n"
+        + "\n"
+        + "__device__ float elliptic_sqrt1pm1(float x) {\n"
+        + "    if (-0.0625f < x && x < 0.0625f)\n"
+        + "    {\n"
+        + "      float num = 0.f;\n"
+        + "      float den = 0.f;\n"
+        + "      num += 1.0f / 32.0f;\n"
+        + "      den += 1.0f / 256.0f;\n"
+        + "      num *= x;\n"
+        + "      den *= x;\n"
+        + "      num += 5.0f / 16.0f;\n"
+        + "      den += 5.0f / 32.0f;\n"
+        + "      num *= x;\n"
+        + "      den *= x;\n"
+        + "      num += 3.0f / 4.0f;\n"
+        + "      den += 15.0f / 16.0f;\n"
+        + "      num *= x;\n"
+        + "      den *= x;\n"
+        + "      num += 1.0f / 2.0f;\n"
+        + "      den += 7.0f / 4.0f;\n"
+        + "      num *= x;\n"
+        + "      den *= x;\n"
+        + "      den += 1.0f;\n"
+        + "      return num / den;\n"
+        + "    }\n"
+        + "    return sqrtf(1.f + x) - 1.f;\n"
+        + "  }\n";
+  }
 }

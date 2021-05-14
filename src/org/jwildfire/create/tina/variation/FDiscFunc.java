@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -26,7 +26,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
  * ported to JWildfire variation by CozyG
  * and enhanced with user-adjustable parameters
  */
-public class FDiscFunc extends VariationFunc {
+public class FDiscFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ASHIFT = "ashift";
@@ -118,7 +118,20 @@ public class FDiscFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "   float afactor = 2.0f*PI / (__r2 + varpar->fdisc_ashift);\n"
+        + "    float r = (atan2f(__y, __x) / PI + varpar->fdisc_rshift) * 0.5f;\n"
+        + "    float xfactor = cosf(afactor + varpar->fdisc_xshift);\n"
+        + "    float yfactor = sinf(afactor + varpar->fdisc_yshift);\n"
+        + "    float pr = varpar->fdisc * r;\n"
+        + "    float prx = pr * xfactor;\n"
+        + "    float pry = pr * yfactor;\n"
+        + "    __px += (varpar->fdisc_term1 * prx) + (varpar->fdisc_term2 * __x * prx) + (varpar->fdisc_term3 * __x * pr) + (varpar->fdisc_term4 * __x);\n"
+        + "    __py += (varpar->fdisc_term1 * pry) + (varpar->fdisc_term2 * __y * pry) + (varpar->fdisc_term3 * __y * pr) + (varpar->fdisc_term4 * __y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->fdisc*__z;\n" : "");
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CPow2Func extends VariationFunc {
+public class CPow2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_R = "r";
@@ -111,7 +111,30 @@ public class CPow2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int range = roundf(varpar->cpow2_range);\n"
+        + "float ang = 2.0f * PI / varpar->cpow2_divisor;\n"
+        + "float c = varpar->cpow2_r * cosf(PI / 2.0f * varpar->cpow2_a) / varpar->cpow2_divisor;\n"
+        + "float d = varpar->cpow2_r * sinf(PI / 2.0f * varpar->cpow2_a) / varpar->cpow2_divisor;\n"
+        + "float half_c = c / 2.0f;\n"
+        + "float half_d = d / 2.0f;\n"
+        + "float inv_range = 0.5f / range;\n"
+        + "float full_range = 2.f * PI * range;\n"
+        + "float a = __theta;\n"
+        + "    int n = (int)(range * RANDFLOAT());\n"
+        + "    if (a < 0) n++;\n"
+        + "    a += 2.f * PI * n;\n"
+        + "    if (cosf(a * inv_range) < RANDFLOAT() * 2.0f - 1.0f)\n"
+        + "      a -= full_range;\n"
+        + "    float lnr2 = logf(__r2);\n"
+        + "    float r = varpar->cpow2 * expf(half_c * lnr2 - d * a);\n"
+        + "    float th = c * a + half_d * lnr2 + ang * floorf(varpar->cpow2_divisor * RANDFLOAT());\n"
+        + "    __px += r * cosf(th);\n"
+        + "    __py += r * sinf(th);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->cpow2*__z;\n" : "");
+  }
 }

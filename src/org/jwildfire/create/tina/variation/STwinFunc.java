@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -28,7 +28,7 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
  *  original Apophysis7X plugin author xyrus02 ?
  *  ported to JWildfire varation by CozyG
  */
-public class STwinFunc extends VariationFunc {
+public class STwinFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_DISTORT = "distort";
@@ -99,7 +99,29 @@ public class STwinFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return " float multiplier = 0.05f;\n"
+        + "  float multiplier2 = 0.0001f;\n"
+        + "  float multiplier3 = 0.1f;"
+        + "float x = __x * varpar->stwin * multiplier;\n"
+        + "    float y = __y * varpar->stwin * multiplier;\n"
+        + "    float x2 = x * x + (varpar->stwin_offset_x2 * multiplier2);\n"
+        + "    float y2 = y * y + (varpar->stwin_offset_y2 * multiplier2);\n"
+        + "\n"
+        + "    float result = (x2 - y2) * sinf(2.0f*PI * varpar->stwin_distort * (x + y + (varpar->stwin_offset_xy * multiplier3)));\n"
+        + "    float divident = x2 + y2;\n"
+        + "    if (divident == 0) {\n"
+        + "      divident = 1.0f;\n"
+        + "    }\n"
+        + "\n"
+        + "    result = result / divident;\n"
+        + "\n"
+        + "    __px += (varpar->stwin * __x) + result;\n"
+        + "    __py += (varpar->stwin * __y) + result;"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->stwin * __z;\n" : "");
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Loonie2Func extends VariationFunc {
+public class Loonie2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SIDES = "sides";
@@ -126,7 +126,51 @@ public class Loonie2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int sides = roundf(varpar->loonie2_sides);\n"
+        + "float _sqrvvar = varpar->loonie2 * varpar->loonie2;\n"
+        + "float a = 2.0f*PI / sides;\n"
+        + "float _sina = sinf(a);\n"
+        + "float _cosa = cosf(a);\n"
+        + "a = -PI*0.5f * varpar->loonie2_star;\n"
+        + "float _sins = sinf(a);\n"
+        + "float _coss = cosf(a);\n"
+        + "a = PI*0.5f * varpar->loonie2_circle;\n"
+        + "float _sinc = sinf(a);\n"
+        + "float _cosc = cosf(a);\n"
+        + "    float xrt = __x, yrt = __y, swp;\n"
+        + "    float r2 = xrt * _coss + fabsf(yrt) * _sins;\n"
+        + "    float circle = sqrtf(xrt*xrt + yrt*yrt);\n"
+        + "    int i;\n"
+        + "    for (i = 0; i < sides - 1; i++) {\n"
+        + "      swp = xrt * _cosa - yrt * _sina;\n"
+        + "      yrt = xrt * _sina + yrt * _cosa;\n"
+        + "      xrt = swp;\n"
+        + "      r2 = fmaxf(r2, xrt * _coss + fabsf(yrt) * _sins);\n"
+        + "    }\n"
+        + "    r2 = r2 * _cosc + varpar->loonie2_circle * _sinc;\n"
+        + "    if (i > 1) {\n"
+        + "      r2 = r2*r2;\n"
+        + "    } else {\n"
+        + "      r2 = fabsf(r2) * r2;\n"
+        + "    }\n"
+        + "\n"
+        + "    if (r2 > 0 && (r2 < _sqrvvar)) {\n"
+        + "      float r = varpar->loonie2 * sqrtf(fabsf(_sqrvvar / r2 - 1.0f));\n"
+        + "      __px += r * __x;\n"
+        + "      __py += r * __y;\n"
+        + "    } else if (r2 < 0) {\n"
+        + "      float r = varpar->loonie2 / sqrtf(fabsf(_sqrvvar / r2) - 1.0f);\n"
+        + "      __px += r * __x;\n"
+        + "      __py += r * __y;\n"
+        + "    } else {\n"
+        + "      __px += varpar->loonie2 * __x;\n"
+        + "      __py += varpar->loonie2 * __y;\n"
+        + "    }"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->loonie2 * __z;\n" : "");
+  }
 }

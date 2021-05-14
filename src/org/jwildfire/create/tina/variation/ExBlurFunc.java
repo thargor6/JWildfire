@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class ExBlurFunc extends VariationFunc {
+public class ExBlurFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_DIST = "dist";
@@ -118,7 +118,34 @@ public class ExBlurFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BLUR};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BLUR, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float rr, theta, phi, su, cu, sv, cv, sru, cru, srv, crv, n, rsrv;\n"
+        + "    float ox, oy, oz;\n"
+        + "    ox = __x - varpar->exblur_x_origin;\n"
+        + "    oy = __y + varpar->exblur_y_origin;\n"
+        + "    oz = __z - varpar->exblur_z_origin;\n"
+        + "    n = ox*ox + oy*oy + oz*oz;\n"
+        + "    rr = varpar->exblur * powf(n, varpar->exblur_dist) * (RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() - 2.0f);\n"
+        + "    theta = atan2f(oy, ox);\n"
+        + "    phi = acosf(oz / sqrtf(n));\n"
+        + "    su = sinf(theta);\n"
+        + "    cu = cosf(theta);\n"
+        + "    sv = sinf(phi);\n"
+        + "    cv = cosf(phi);\n"
+        + "    theta = RANDFLOAT() * 2.0f*PI;\n"
+        + "    sru = sinf(theta);\n"
+        + "    cru = cosf(theta);\n"
+        + "    theta = RANDFLOAT() * 2.0f*PI;\n"
+        + "    srv = sinf(theta);\n"
+        + "    crv = cosf(theta);\n"
+        + "    rsrv = varpar->exblur_r * srv;\n"
+        + "    __px += rr * (sv * cu + rsrv * cru);\n"
+        + "    __py += rr * (sv * su + rsrv * sru);\n"
+        + "    __pz += rr * (cv + varpar->exblur_r * crv);\n";
   }
 
 }

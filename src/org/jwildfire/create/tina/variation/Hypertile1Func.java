@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Hypertile1Func extends VariationFunc {
+public class Hypertile1Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_P = "p";
@@ -101,7 +101,40 @@ public class Hypertile1Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float pa, r;\n"
+        + "int p = roundf(varpar->hypertile1_p);\n"
+        + "int q = roundf(varpar->hypertile1_q);\n"
+        + "pa = 2 * PI / p;\n"
+        + "\n"
+        + "    float r2 = 1.0f - (cosf(2 * PI / p) - 1.f) /\n"
+        + "            (cosf(2 * PI / p) + cosf(2 * PI / q));\n"
+        + "    if (r2 > 0.f)\n"
+        + "      r = 1.0f / sqrtf(r2);\n"
+        + "    else\n"
+        + "      r = 1.0f;\n"
+        +"float rpa = (int)(RANDFLOAT()*10) * pa;\n"
+        + "\n"
+        + "    float sina = sinf(rpa);\n"
+        + "    float cosa = cosf(rpa);\n"
+        + "\n"
+        + "    float re = r * cosa;\n"
+        + "    float im = r * sina;\n"
+        + "\n"
+        + "    float a = __x + re; float b = __y - im;\n"
+        + "\n"
+        + "    float c = re * __x - im * __y + 1.f;\n"
+        + "    float d = re * __y + im * __x;\n"
+        + "\n"
+        + "    float vr = varpar->hypertile1 / (c*c + d*d);\n"
+        + "\n"
+        + "    __px += vr * (a * c + b * d);\n"
+        + "    __py += vr * (b * c - a * d);\n"
+        + "\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->hypertile1*__z;\n" : "");
+  }
 }

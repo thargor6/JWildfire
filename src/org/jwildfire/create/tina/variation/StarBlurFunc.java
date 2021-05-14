@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class StarBlurFunc extends VariationFunc {
+public class StarBlurFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_POWER = "power";
@@ -95,7 +95,32 @@ public class StarBlurFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float power = roundf(varpar->starblur_power);\n" +
+            "float starblur_alpha = PI / power;\n"
+        + "float starblur_length = sqrtf(1.0f + varpar->starblur_range*varpar->starblur_range - 2.0f * varpar->starblur_range * cosf(starblur_alpha));\n"
+        + "starblur_alpha = asinf(sinf(starblur_alpha) * varpar->starblur_range / starblur_length);\n"
+        + "float f = RANDFLOAT() * power * 2.0f;\n"
+        + "    float angle = truncf(f);\n"
+        + "    f = f - angle;\n"
+        + "    float x = f * starblur_length;\n"
+        + "    float z = sqrtf(1.f + x*x - 2.f * x * cosf(starblur_alpha));\n"
+        + "    if (((int) angle) % 2 == 0)\n"
+        + "      angle = 2.0f*PI / (float) power * (((int) angle) / 2) + asinf(sinf(starblur_alpha) * x / z);\n"
+        + "    else\n"
+        + "      angle = 2.0f*PI / (float) power * (((int) angle) / 2) - asinf(sinf(starblur_alpha) * x / z);\n"
+        + "    z = z * sqrtf(RANDFLOAT());\n"
+        + "\n"
+        + "    float ang = angle - PI*0.5f;\n"
+        + "    float s = sinf(ang);\n"
+        + "    float c = cosf(ang);\n"
+        + "\n"
+        + "    __px += varpar->starblur * z * c;\n"
+        + "    __py += varpar->starblur * z * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->starblur*__z;\n" : "");
+  }
 }

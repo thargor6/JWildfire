@@ -18,4 +18,8 @@ package org.jwildfire.create.tina.variation;
 
 public interface SupportsGPU {
   String getGPUCode(FlameTransformationContext context);
+  default String getGPUFunctions(FlameTransformationContext context) {
+    return "";
+  }
+
 }

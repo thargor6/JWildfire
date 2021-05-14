@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class PDJ3DFunc extends VariationFunc {
+public class PDJ3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
@@ -48,9 +48,6 @@ public class PDJ3DFunc extends VariationFunc {
     pVarTP.x += pAmount * (sin(a * pAffineTP.y) - cos(b * pAffineTP.x));
     pVarTP.y += pAmount * (sin(c * pAffineTP.x) - cos(d * pAffineTP.y));
     pVarTP.z += pAmount * (sin(e * pAffineTP.y) - cos(f * pAffineTP.z))*cos(g * pAffineTP.x) + sin(h * pAffineTP.z) ;
-
-    
-
   }
 
   @Override
@@ -92,7 +89,13 @@ public class PDJ3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "   __px += varpar->pdj3D * (sinf(varpar->pdj3D_a * __y) - cosf(varpar->pdj3D_b * __x));\n"
+        + "    __py += varpar->pdj3D * (sinf(varpar->pdj3D_c * __x) - cosf(varpar->pdj3D_d * __y));\n"
+        + "    __pz += varpar->pdj3D * (sinf(varpar->pdj3D_e * __y) - cosf(varpar->pdj3D_f * __z))*cosf(varpar->pdj3D_g * __x) + sinf(varpar->pdj3D_h * __z) ;";
+  }
 }

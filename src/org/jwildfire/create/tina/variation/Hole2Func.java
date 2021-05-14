@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Hole2Func extends VariationFunc {
+public class Hole2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
@@ -118,10 +118,8 @@ public class Hole2Func extends VariationFunc {
       d = pValue;
     else if (PARAM_INSIDE.equalsIgnoreCase(pName))
       inside = limitIntVal(Tools.FTOI(pValue), 0, 1);
-
     else if (PARAM_SHAPE.equalsIgnoreCase(pName))
       shape = limitIntVal(Tools.FTOI(pValue), 0, 9);
-
     else
       throw new IllegalArgumentException(pName);
   }
@@ -133,7 +131,59 @@ public class Hole2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int inside = roundf(varpar->hole2_inside);\n"
+         + "int shape = roundf(varpar->hole2_shape);\n"
+        + "float rhosq = __r2;\n"
+        + "    float theta = __theta * varpar->hole2_d;\n"
+        + "    float delta = powf(theta / PI + 1.0f, varpar->hole2_a) * varpar->hole2_c;\n"
+        + "    float r1 = 1.f;\n"
+        + "\n"
+        + "\n"
+        + "    switch (shape) {\n"
+        + "      case 0:\n"
+        + "        r1 = sqrtf(rhosq) + delta;\n"
+        + "        break;\n"
+        + "      case 1:\n"
+        + "        r1 = sqrtf(rhosq + delta);\n"
+        + "        break;\n"
+        + "      case 2:\n"
+        + "        r1 = sqrtf(rhosq + sinf(varpar->hole2_b * theta) + delta);\n"
+        + "        break;\n"
+        + "      case 3:\n"
+        + "        r1 = sqrtf(rhosq + sinf(theta) + delta);\n"
+        + "        break;\n"
+        + "      case 4:\n"
+        + "        r1 = sqrtf(rhosq + theta*theta - delta + 1.f);\n"
+        + "        break;\n"
+        + "      case 5:\n"
+        + "        r1 = sqrtf(rhosq + fabsf(tanf(theta)) + delta);\n"
+        + "        break;\n"
+        + "      case 6:\n"
+        + "        r1 = sqrtf(rhosq * (1.f + sinf(varpar->hole2_b * theta)) + delta);\n"
+        + "        break;\n"
+        + "      case 7:\n"
+        + "        r1 = sqrtf(rhosq + fabsf(sinf(0.5f * varpar->hole2_b * theta)) + delta);\n"
+        + "        break;\n"
+        + "      case 8:\n"
+        + "        r1 = sqrtf(rhosq + sinf(PI * sinf(varpar->hole2_b * theta)) + delta);\n"
+        + "        break;\n"
+        + "      case 9:\n"
+        + "        r1 = sqrtf(rhosq + (sinf(varpar->hole2_b * theta) + sinf(2 * varpar->hole2_b * theta + PI*0.5f)) / 2.f + delta);\n"
+        + "        break;\n"
+        + "    }\n"
+        + "\n"
+        + "    if (inside != 0)\n"
+        + "      r1 = varpar->hole2 / r1;\n"
+        + "    else\n"
+        + "      r1 = varpar->hole2 * r1;\n"
+        + "\n"
+        + "    __px += r1 * cosf(theta);\n"
+        + "    __py += r1 * sinf(theta);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->hole2 * __z;\n": "");
+  }
 }
