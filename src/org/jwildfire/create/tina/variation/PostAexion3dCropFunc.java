@@ -24,7 +24,6 @@ import js.glsl.G;
 import js.glsl.vec3;
 import js.glsl.vec4;
 
-import org.joml.Math;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.Complex;
 
@@ -149,7 +148,7 @@ public class PostAexion3dCropFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL,VariationFuncType.VARTYPE_DC};
 	}
 
 
