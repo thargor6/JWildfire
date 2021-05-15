@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Fibonacci2Func extends VariationFunc {
+public class Fibonacci2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SC = "sc";
@@ -105,7 +105,24 @@ public class Fibonacci2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float ffive = 0.447213595f;\n"
+        + "float fnatlog = logf(1.61803398f);\n"
+        + "float a = __y * fnatlog;\n"
+        + "float snum1 = sinf(a);\n"
+        + "float cnum1 = cosf(a);\n"
+        + "float b = (__x * PI + __y * fnatlog) * -1.0f;\n"
+        + "float snum2 = sinf(b);\n"
+        + "float cnum2 = cosf(b);\n"
+        + "float eradius1 = varpar->fibonacci2_sc * expf(varpar->fibonacci2_sc2 * (__x * fnatlog));\n"
+        + "float eradius2 = varpar->fibonacci2_sc * expf(varpar->fibonacci2_sc2 * ((__x * fnatlog - __y * PI) * -1));\n"
+        + "__px += varpar->fibonacci2 * (eradius1 * cnum1 - eradius2 * cnum2) * ffive;\n"
+        + "__py += varpar->fibonacci2 * (eradius1 * snum1 - eradius2 * snum2) * ffive;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->fibonacci2 * __z;\n" : "");
+  }
 }
+

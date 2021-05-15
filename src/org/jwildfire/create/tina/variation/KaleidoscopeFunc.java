@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class KaleidoscopeFunc extends VariationFunc {
+public class KaleidoscopeFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PULL = "pull";
@@ -99,7 +99,22 @@ public class KaleidoscopeFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float q = varpar->kaleidoscope_pull;\n"
+        + "float w = varpar->kaleidoscope_rotate;\n"
+        + "float e = varpar->kaleidoscope_line_up;\n"
+        + "float r = varpar->kaleidoscope_x;\n"
+        + "float t = varpar->kaleidoscope_y;\n"
+        + "__px += ((w * __x) *cosf(45.f)- __y *sinf(45.f) +  e ) + r;\n"
+        + "if (__y > 0)\n"
+        + "    __py += (w * __y) * cosf(45.f) + __x *sinf(45.f)  + q + e + t;\n"
+        + "else\n"
+        + "    __py += (w * __y) * cosf(45.f) + __x *sinf(45.f)  - q  - e;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->kaleidoscope * __z;\n" : "");
+  }
 }

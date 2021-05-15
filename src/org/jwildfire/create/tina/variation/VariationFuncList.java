@@ -657,7 +657,7 @@ public class VariationFuncList {
     registerVariationFunc(StarFractalFunc.class);
     registerVariationFunc(TrianTruchetFunc.class);
     registerVariationFunc(ArcTruchetFunc.class);
-    registerVariationFunc(SwirlWFFunc.class);
+    registerVariationFunc(Swirl3DWFFunc.class);
     registerVariationFunc(MandalaFunc.class);
     registerVariationFunc(Mandala2Func.class);
     registerVariationFunc(JacAsnFunc.class);

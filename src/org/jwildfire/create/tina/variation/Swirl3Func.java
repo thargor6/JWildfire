@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Swirl3Func extends VariationFunc {
+public class Swirl3Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHIFT = "shift";
@@ -32,7 +32,6 @@ public class Swirl3Func extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-
     double rad = pAffineTP.getPrecalcSqrt();
     double ang = pAffineTP.getPrecalcAtanYX() + log(rad) * shift;
     double s = sin(ang);
@@ -42,7 +41,6 @@ public class Swirl3Func extends VariationFunc {
     pVarTP.y += pAmount * rad * s;
 
     if (pContext.isPreserveZCoordinate()) pVarTP.z += pAmount * pAffineTP.z;
-
   }
 
   @Override
@@ -70,7 +68,17 @@ public class Swirl3Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float rad = __r;\n"
+        + "float ang = __theta + logf(rad) * varpar->swirl3_shift;\n"
+        + "float s = sinf(ang);\n"
+        + "float c = cosf(ang);\n"
+        + "    __px += varpar->swirl3 * rad * c;\n"
+        + "    __py += varpar->swirl3 * rad * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->swirl3 * __z;\n": "");
+  }
 }
