@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class PostColorScaleWFFunc extends VariationFunc {
+public class PostColorScaleWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scale_x";
@@ -94,8 +94,23 @@ public class PostColorScaleWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "__px += varpar->post_colorscale_wf * varpar->post_colorscale_wf_scale_x * __px;\n"
+        + "__py += varpar->post_colorscale_wf * varpar->post_colorscale_wf_scale_y * __py;\n"
+        + "float dz = __pal * varpar->post_colorscale_wf_scale_z * varpar->post_colorscale_wf + varpar->post_colorscale_wf_offset_z;\n"
+        + "if (roundf(varpar->post_colorscale_wf_reset_z) > 0) {\n"
+        + "  __pz = dz;\n"
+        + "} else {\n"
+        + "  if (roundf(varpar->post_colorscale_wf_sides) > 0) {\n"
+        + "    __pz += dz * RANDFLOAT();\n"
+        + "  } else {\n"
+        + "     __pz += dz;\n"
+        + "  }\n"
+        + "}";
+  }
 }

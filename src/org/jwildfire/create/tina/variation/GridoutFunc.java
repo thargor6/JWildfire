@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -19,7 +19,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.rint;
 
-public class GridoutFunc extends SimpleVariationFunc {
+public class GridoutFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -77,7 +77,58 @@ public class GridoutFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float x = (__x >= 0.f ? (int)(__x + 0.5f) : (int)(__x - 0.5f));\n"
+        + "float y = (__y >= 0.f ? (int)(__y + 0.5f) : (int)(__y - 0.5f));\n"
+        + "\n"
+        + "if (y <= 0.f) {\n"
+        + "    if (x > 0.f) {\n"
+        + "        if (-y >= x) {\n"
+        + "            __px += varpar->gridout * (__x + 1.f);\n"
+        + "            __py += varpar->gridout * __y;\n"
+        + "        } else {\n"
+        + "            __px += varpar->gridout * __x;\n"
+        + "            __py += varpar->gridout * (__y + 1.f);\n"
+        + "        }\n"
+        + "    }\n"
+        + "    else {\n"
+        + "        if (y <= x) {\n"
+        + "            __px += varpar->gridout * (__x + 1.f);\n"
+        + "            __py += varpar->gridout * __y;\n"
+        + "        }\n"
+        + "        else\n"
+        + "        {\n"
+        + "            __px += varpar->gridout * __x;\n"
+        + "            __py += varpar->gridout * (__y - 1.f);\n"
+        + "        }\n"
+        + "    }\n"
+        + "} \n"
+        + "else {\n"
+        + "    if (x > 0.f) {\n"
+        + "        if (y >= x) {\n"
+        + "            __px += varpar->gridout * (__x - 1.f);\n"
+        + "            __py += varpar->gridout * __y;\n"
+        + "        } else {\n"
+        + "            __px += varpar->gridout * __x;\n"
+        + "            __py += varpar->gridout * (__y + 1.f);\n"
+        + "        }\n"
+        + "    }\n"
+        + "    else {\n"
+        + "        if (y > -x) {\n"
+        + "            __px += varpar->gridout * (__x - 1.f);\n"
+        + "            __py += varpar->gridout * __y;\n"
+        + "        }\n"
+        + "        else {\n"
+        + "            __px += varpar->gridout * __x;\n"
+        + "            __py += varpar->gridout * (__y - 1.f);\n"
+        + "        }\n"
+        + "    }\n"
+        + "}\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->gridout*__z;\n" : "");
+  }
 }

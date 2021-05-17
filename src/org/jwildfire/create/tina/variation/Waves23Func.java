@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Waves23Func extends VariationFunc {
+public class Waves23Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
 
@@ -97,6 +97,21 @@ public class Waves23Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float x0 = __x;\n"
+        + "float y0 = __y;\n"
+        + "float mx = y0 * varpar->waves23_freqx / (PI + PI);\n"
+        + "float fx = mx - floorf(mx);\n"
+        + "if (fx > 0.5) fx = 0.5 - fx;\n"
+        + "float my = x0 * varpar->waves23_freqy / (PI + PI);\n"
+        + "float fy = my - floorf(my);\n"
+        + "if (fy > 0.5) fy = 0.5 - fy;\n"
+        + "__px += varpar->waves23 * (x0 + fx * varpar->waves23_scalex);\n"
+        + "__py += varpar->waves23 * (y0 + fy * varpar->waves23_scaley);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->waves23 * __z;\n" : "");
   }
 }

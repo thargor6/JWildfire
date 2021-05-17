@@ -1,16 +1,16 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -19,11 +19,10 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class SwirlWFFunc extends VariationFunc {
+public class Swirl3DWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_N = "n";
-  private static final String PARAM_RADIUS = "r";
 
   private static final String[] paramNames = {PARAM_N};
 
@@ -32,19 +31,13 @@ public class SwirlWFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-
     double rad = pAffineTP.getPrecalcSqrt();
     double ang = pAffineTP.getPrecalcAtanYX();   // + log(rad)*shift;
-
-
-    //   double ang = pContext.random()*360.0;
-    //   double rad=  -1.0 + pContext.random()*2.0;
 
     pVarTP.x += pAmount * (rad * Math.cos(ang));
     pVarTP.y += pAmount * (rad * Math.sin(ang));
     pVarTP.z += pAmount * (Math.sin(6.0 * Math.cos(rad) - N * ang));
     pVarTP.color = Math.abs(Math.sin(6.0 * Math.cos(rad) - N * ang));
-
   }
 
   @Override
@@ -72,7 +65,16 @@ public class SwirlWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float rad = __r;\n"
+            + "float ang = __theta;\n"
+            + "__px += varpar->swirl3D_wf * (rad * cosf(ang));\n"
+            + "__py += varpar->swirl3D_wf * (rad * sinf(ang));\n"
+            + "__pz += varpar->swirl3D_wf * (sinf(6.0f * cosf(rad) - varpar->swirl3D_wf_n * ang));\n"
+            + "__pal = fabsf(sinf(6.0 * cosf(rad) - varpar->swirl3D_wf_n * ang));";
+  }
 }

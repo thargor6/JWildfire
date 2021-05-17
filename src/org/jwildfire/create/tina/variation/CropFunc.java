@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.max;
 import static org.jwildfire.base.mathlib.MathLib.min;
 
-public class CropFunc extends VariationFunc {
+public class CropFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_LEFT = "left";
@@ -117,7 +117,37 @@ public class CropFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float xmin, xmax, ymin, ymax, w, h;\n"
+        + "xmin = fminf(varpar->crop_left, varpar->crop_right);\n"
+        + "ymin = fminf(varpar->crop_top, varpar->crop_bottom);\n"
+        + "xmax = fmaxf(varpar->crop_left, varpar->crop_right);\n"
+        + "ymax = fmaxf(varpar->crop_top, varpar->crop_bottom);\n"
+        + "w = (xmax - xmin) * 0.5f * varpar->crop_scatter_area;\n"
+        + "h = (ymax - ymin) * 0.5f * varpar->crop_scatter_area;\n"
+        + "float x = __x;\n"
+        + "float y = __y;\n"
+        + "if (((x < xmin) || (x > xmax) || (y < ymin) || (y > ymax)) && (roundf(varpar->crop_zero) != 0)) {\n"
+        + "  __px = __py = 0;\n"
+        + "  __doHide = true;\n"
+        + "} else {\n"
+        + "   __doHide = false;\n"
+        + "   if (x < xmin)\n"
+        + "     x = xmin + RANDFLOAT() * w;\n"
+        + "   else if (x > xmax)\n"
+        + "     x = xmax - RANDFLOAT() * w;\n"
+        + "   if (y < ymin)\n"
+        + "     y = ymin + RANDFLOAT() * h;\n"
+        + "   else if (y > ymax)\n"
+        + "     y = ymax - RANDFLOAT() * h;\n"
+        + "  __px = varpar->crop * x;\n"
+        + "  __py = varpar->crop * y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->crop*__z;\n" : "")
+        + "}\n";
+  }
 }

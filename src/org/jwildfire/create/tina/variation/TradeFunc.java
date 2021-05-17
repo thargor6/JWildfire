@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class TradeFunc extends VariationFunc {
+public class TradeFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_R1 = "r1";
@@ -111,6 +111,41 @@ public class TradeFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _c1, _c2;\n"
+        + "_c1 = varpar->trade_r1 + varpar->trade_d1;\n"
+        + "_c2 = varpar->trade_r2 + varpar->trade_d2;\n"
+        + "if (__x > 0.0f) {\n"
+        + "   float r = sqrtf((_c1 - __x)*(_c1 - __x) + __y*__y);\n"
+        + "   if (r <= varpar->trade_r1) {\n"
+        + "     r *= varpar->trade_r2 / varpar->trade_r1;\n"
+        + "     float a = atan2f(__y, _c1 - __x);\n"
+        + "     float s = sinf(a);\n"
+        + "     float c = cosf(a);\n"
+        + "      __px += varpar->trade * (r * c - _c2);\n"
+        + "      __py += varpar->trade * r * s;\n"
+        + "   } else {\n"
+        + "      __px += varpar->trade * __x;\n"
+        + "      __py += varpar->trade * __y;\n"
+        + "   }\n"
+        + "} else {\n"
+        + "   float r = sqrtf((-_c2 - __x)*(-_c2 - __x) + __y*__y);\n"
+        + "   if (r <= varpar->trade_r2) {\n"
+        + "     r *= varpar->trade_r1 / varpar->trade_r2;\n"
+        + "     float a = atan2f(__y, -_c2 - __x);\n"
+        + "     float s = sinf(a);\n"
+        + "     float c = cosf(a);\n"
+        + "     __px += varpar->trade * (r * c + _c1);\n"
+        + "     __py += varpar->trade * r * s;\n"
+        + "   } else {\n"
+        + "     __px += varpar->trade * __x;\n"
+        + "     __py += varpar->trade * __y;\n"
+        + "   }\n"
+        + "}"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->trade * __z;\n" : "");
   }
 }

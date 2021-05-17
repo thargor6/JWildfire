@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Waves22Func extends VariationFunc {
+public class Waves22Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scalex";
@@ -123,6 +123,32 @@ public class Waves22Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float x0 = __x;\n"
+        + "float y0 = __y;\n"
+        + "float sinx;\n"
+        + "float siny;\n"
+        + "int px = roundf(varpar->waves22_powerx);\n"
+        + "int py = roundf(varpar->waves22_powery);\t\n"
+        + "if (varpar->waves22_modex < 0.5f){\n"
+        + "  sinx = sinf(y0 * varpar->waves22_freqx);\n"
+        + "} else {\n"
+        + "  sinx = 0.5f * (1.0f + sinf(y0 * varpar->waves22_freqx));\n"
+        + "}\n"
+        + "float offsetx = (sinx < 0.f ? -1 : 1) * powf(fabsf(sinx), (float)px) * varpar->waves22_scalex;\n"
+        + "if (varpar->waves22_modey < 0.5f){\n"
+        + "  siny = sinf(x0 * varpar->waves22_freqy);\n"
+        + "} else {\n"
+        + "  siny = 0.5f * (1.0f + sinf(x0 * varpar->waves22_freqy));\n"
+        + "}\n"
+        + "float offsety = (siny < 0.f ? -1 : 1) * powf(fabsf(siny), (float)py) * varpar->waves22_scaley;\n"
+        + "__px += varpar->waves22 * (x0 + offsetx);\n"
+        + "__py += varpar->waves22 * (y0 + offsety);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->waves22 * __z;\n" : "");
   }
 }
+
