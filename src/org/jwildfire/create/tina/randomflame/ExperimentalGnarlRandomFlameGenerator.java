@@ -74,12 +74,16 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       xForm.setWeight(wavesWeight);
       double varRnd = Math.random();
       VariationFunc w2;
-      if (Math.random() > 0.5) {
+      if (Math.random() > 0.666) {
         w2 = createExpWaves2Variation(scaleX, scaleY, freqX, freqY, varRnd);
       }
       else {
-        if (Math.random() < 0.25) {
+        double r = Math.random();
+        if (r < 0.25) {
           w2 = GnarlRandomFlameGenerator.createWaves2Variation(scaleX, scaleY, freqX, freqY);
+        }
+        else if(r<0.666)  {
+          w2 = GnarlRandomFlameGenerator.createCrazyWavesVariation(scaleX, scaleY, freqX, freqY);
         }
         else {
           w2 = GnarlRandomFlameGenerator.createWaves2BVariation(scaleX, scaleY, freqX, freqY);

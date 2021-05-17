@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -86,7 +86,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(wavesWeight);
-      VariationFunc w2 = Math.random() > 0.89 ? createWaves2Variation(scaleX, scaleY, freqX, freqY) : createWaves2BVariation(scaleX, scaleY, freqX, freqY);
+      VariationFunc w2 = Math.random() > 0.333 ? (Math.random() > 0.666 ? createWaves2Variation(scaleX, scaleY, freqX, freqY) : createCrazyWavesVariation(scaleX, scaleY, freqX, freqY) ) : createWaves2BVariation(scaleX, scaleY, freqX, freqY);
       xForm.addVariation(1 + Math.random() * 0.001, w2);
 
       String varLst[] = { "blur", "cos", "exp", "exponential", "lazysusan", "ngon", "sech", "sinh", "epispiral_wf", "tanh", "twintrian", "epispiral" };
@@ -236,6 +236,40 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
     w2.setParameter("scalex", scaleX);
     w2.setParameter("freqy", freqY);
     w2.setParameter("scaley", scaleY);
+    return w2;
+  }
+
+  public static VariationFunc createCrazyWavesVariation(double scaleX, double scaleY, double freqX, double freqY) {
+    VariationFunc w2;
+    double r = Math.random();
+    if(r<0.333) {
+      w2 = VariationFuncList.getVariationFuncInstance("waves22", true);
+      w2.setParameter("freqx", freqX);
+      w2.setParameter("scalex", scaleX);
+      w2.setParameter("freqy", freqY);
+      w2.setParameter("scaley", scaleY);
+      w2.setParameter("modex", Math.random()<0.5 ? 1: 1);
+      w2.setParameter("modey", Math.random()<0.5 ? 1: 1);
+      w2.setParameter("powerx", 2.0 + Math.random()* 7.0);
+      w2.setParameter("powery", 2.0 + Math.random()* 7.0);
+    }
+    else if(r<0.666) {
+      w2 = VariationFuncList.getVariationFuncInstance("waves23", true);
+      w2.setParameter("freqx", freqX);
+      w2.setParameter("scalex", scaleX);
+      w2.setParameter("freqy", freqY);
+      w2.setParameter("scaley", scaleY);
+    }
+    else {
+      w2 = VariationFuncList.getVariationFuncInstance("waves42", true);
+      w2.setParameter("freqx", freqX);
+      w2.setParameter("scalex", scaleX);
+      w2.setParameter("freqy", freqY);
+      w2.setParameter("scaley", scaleY);
+      w2.setParameter("cont", Math.random()<0.5 ? 1: 1);
+      w2.setParameter("yfact", 0.1 + Math.random()* 0.9);
+      w2.setParameter("freqx2", 0.5 + Math.random()*0.25);
+    }
     return w2;
   }
 
