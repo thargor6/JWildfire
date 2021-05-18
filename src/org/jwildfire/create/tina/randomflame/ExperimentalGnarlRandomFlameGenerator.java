@@ -240,6 +240,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
         XFormTransformService.scale(xForm, 0.5 + Math.random() * 1.0, true, true);
       }
       xForm.setColorSymmetry(-1);
+      xForm.setColor(Math.random());
     }
     // 3rd XForm
     if (Math.random() > 0.75) {
@@ -253,6 +254,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       XFormTransformService.rotate(xForm, 180 - Math.random() * 360.0);
       XFormTransformService.localTranslate(xForm, 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random());
       xForm.setColorSymmetry(-1);
+      xForm.setColor(Math.random());
     }
     return flame;
   }

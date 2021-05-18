@@ -25,6 +25,9 @@ import org.jwildfire.create.tina.variation.JuliaNFunc;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
+import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+
 public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
@@ -170,6 +173,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
           break;
       }
       xForm.setColorSymmetry(-1);
+      xForm.setColor(Math.random());
     }
     // 3rd XForm
     if (Math.random() > 0.75) {
@@ -180,6 +184,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       XFormTransformService.rotate(xForm, 180 - Math.random() * 360.0);
       XFormTransformService.localTranslate(xForm, 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random());
       xForm.setColorSymmetry(-1);
+      xForm.setColor(Math.random());
     }
     return flame;
   }
@@ -242,7 +247,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
   public static VariationFunc createCrazyWavesVariation(double scaleX, double scaleY, double freqX, double freqY) {
     VariationFunc w2;
     double r = Math.random();
-    if(r<0.333) {
+    if(r<0.25) {
       w2 = VariationFuncList.getVariationFuncInstance("waves22", true);
       w2.setParameter("freqx", freqX);
       w2.setParameter("scalex", scaleX);
@@ -253,12 +258,58 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       w2.setParameter("powerx", 2.0 + Math.random()* 7.0);
       w2.setParameter("powery", 2.0 + Math.random()* 7.0);
     }
-    else if(r<0.666) {
+    else if(r<0.5) {
       w2 = VariationFuncList.getVariationFuncInstance("waves23", true);
       w2.setParameter("freqx", freqX);
       w2.setParameter("scalex", scaleX);
       w2.setParameter("freqy", freqY);
       w2.setParameter("scaley", scaleY);
+    }
+    else if(r<0.75) {
+      w2 = VariationFuncList.getVariationFuncInstance("vibration2", true);
+      w2.setParameter("dir", Math.random() * M_2PI);
+      w2.setParameter("angle", Math.random() * M_2PI);
+      w2.setParameter("freq", 0.5 + Math.random());
+      w2.setParameter("amp", 0.25 + Math.random()*0.5);
+      w2.setParameter("phase", Math.random()*M_PI);
+      w2.setParameter("dir2", Math.random() * M_2PI);
+      w2.setParameter("angle2", Math.random() * M_2PI);
+      w2.setParameter("freq2", 0.5 + Math.random());
+      w2.setParameter("amp2", 0.25 + Math.random()*0.5);
+      w2.setParameter("phase2", Math.random()*M_PI);
+
+      if(Math.random()>0.25) {
+        w2.setParameter("dm", Math.random()*0.1);
+        w2.setParameter("dmfreq", 0.1+Math.random()*0.6);
+      }
+      if(Math.random()>0.25) {
+        w2.setParameter("tm", Math.random()*0.1);
+        w2.setParameter("tmfreq", 0.1+Math.random()*0.6);
+      }
+      if(Math.random()>0.25) {
+        w2.setParameter("fm", Math.random()*0.1);
+        w2.setParameter("fmfreq", 0.1+Math.random()*0.6);
+      }
+      if(Math.random()>0.25) {
+        w2.setParameter("am", Math.random()*0.1);
+        w2.setParameter("amfreq", 0.1+Math.random()*0.6);
+      }
+      if(Math.random()>0.25) {
+        w2.setParameter("d2m", Math.random()*0.1);
+        w2.setParameter("d2mfreq", 0.1+Math.random()*0.6);
+      }
+      if(Math.random()>0.25) {
+        w2.setParameter("t2m", Math.random()*0.1);
+        w2.setParameter("t2mfreq", 0.1+Math.random()*0.6);
+      }
+      if(Math.random()>0.25) {
+        w2.setParameter("f2m", Math.random()*0.1);
+        w2.setParameter("f2mfreq", 0.1+Math.random()*0.6);
+      }
+      if(Math.random()>0.25) {
+        w2.setParameter("a2m", Math.random()*0.1);
+        w2.setParameter("a2mfreq", 0.1+Math.random()*0.6);
+      }
     }
     else {
       w2 = VariationFuncList.getVariationFuncInstance("waves42", true);
