@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class XHeartBlurWFFunc extends VariationFunc {
+public class XHeartBlurWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_ANGLE = "angle";
@@ -94,6 +94,33 @@ public class XHeartBlurWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float rat, cosa, sina;\n"
+        + "float ang = 0.25f*PI + (0.5f * 0.25f*PI * varpar->xheart_blur_wf_angle);\n"
+        + "sina = sinf(ang);\n"
+        + "cosa = cosf(ang);\n"
+        + "rat = 6.f + 2.f * varpar->xheart_blur_wf_ratio;\n"
+        + "float dx = 2.0f - RANDFLOAT() * 4.0f;\n"
+        + "float dy = 2.0f - RANDFLOAT() * 4.0f;\n"
+        + "float r2_4 = dx * dx + dy * dy + 4.f;\n"
+        + "if (fabsf(r2_4) <= 1.e-6f)\n"
+        + "  r2_4 = 1.f;\n"
+        + "float bx = 4.f / r2_4, by = rat / r2_4;\n"
+        + "float x = cosa * (bx * dx) - sina * (by * dy);\n"
+        + "float y = sina * (bx * dx) + cosa * (by * dy);\n"
+        + "if (x > 0) {\n"
+        + "  __px += varpar->xheart_blur_wf * x;\n"
+        + "  __py += varpar->xheart_blur_wf * y;\n"
+        + "} else {\n"
+        + "  __px += varpar->xheart_blur_wf * x;\n"
+        + "  __py += -varpar->xheart_blur_wf * y;\n"
+        + "}\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->xheart_blur_wf * __z;\n" : "");
   }
 }
+
+

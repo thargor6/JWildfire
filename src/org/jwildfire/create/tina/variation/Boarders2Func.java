@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Boarders2Func extends VariationFunc {
+public class Boarders2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_C = "c";
@@ -111,7 +111,46 @@ public class Boarders2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _c, _cl, _cr;\n"
+        + "_c = fabsf(varpar->boarders2_c);\n"
+        + "_cl = fabsf(varpar->boarders2_left);\n"
+        + "_cr = fabsf(varpar->boarders2_right);\n"
+        + "_c = _c == 0 ? 1.e-6f : _c;\n"
+        + "_cl = _cl == 0 ? 1.e-6f : _cl;\n"
+        + "_cr = _cr == 0 ? 1.e-6f : _cr;\n"
+        + "_cl = _c * _cl;\n"
+        + "_cr = _c + (_c * _cr);\n"
+        + "float roundX = rint(__x);\n"
+        + "float roundY = rint(__y);\n"
+        + "float offsetX = __x - roundX;\n"
+        + "float offsetY = __y - roundY;\n"
+        + "if (RANDFLOAT() >= _cr) {\n"
+        + "  __px += varpar->boarders2 * (offsetX * _c + roundX);\n"
+        + "  __py += varpar->boarders2 * (offsetY * _c + roundY);\n"
+        + "} else {\n"
+        + "   if (fabsf(offsetX) >= fabsf(offsetY)) {\n"
+        + "     if (offsetX >= 0.0f) {\n"
+        + "       __px += varpar->boarders2 * (offsetX * _c + roundX + _cl);\n"
+        + "       __py += varpar->boarders2 * (offsetY * _c + roundY + _cl * offsetY / offsetX);\n"
+        + "     } else {\n"
+        + "       __px += varpar->boarders2 * (offsetX * _c + roundX - _cl);\n"
+        + "       __py += varpar->boarders2 * (offsetY * _c + roundY - _cl * offsetY / offsetX);\n"
+        + "      }\n"
+        + "    } else {\n"
+        + "      if (offsetY >= 0.0f) {\n"
+        + "        __py += varpar->boarders2 * (offsetY * _c + roundY + _cl);\n"
+        + "        __px += varpar->boarders2 * (offsetX * _c + roundX + offsetX / offsetY * _cl);\n"
+        + "      } else {\n"
+        + "        __py += varpar->boarders2 * (offsetY * _c + roundY - _cl);\n"
+        + "        __px += varpar->boarders2 * (offsetX * _c + roundX - offsetX / offsetY * _cl);\n"
+        + "      }\n"
+        + "    }\n"
+        + "  }"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->boarders2 * __z;\n": "");
+  }
 }

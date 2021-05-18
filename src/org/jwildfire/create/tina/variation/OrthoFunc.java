@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class OrthoFunc extends VariationFunc {
+public class OrthoFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_IN = "in";
@@ -147,7 +147,88 @@ public class OrthoFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float r, a, ta;\n"
+        + "float xo;\n"
+        + "float ro;\n"
+        + "float c, s;\n"
+        + "float x, y, tc, ts;\n"
+        + "float theta;\n"
+        + "\n"
+        + "r = __x*__x + __y*__y;\n"
+        + "\n"
+        + "    if (r < 1.0) {\n"
+        + "      if (__x >= 0.0) {\n"
+        + "        xo = (r + 1.0) / (2.0 * __x);\n"
+        + "        ro = sqrtf(sqrf(__x - xo) + __y*__y);\n"
+        + "        theta = atan2f(1.0, ro);\n"
+        + "        a = fmodf(varpar->ortho_in * theta + atan2f(__y, xo - __x) + theta, 2.0 * theta) - theta;\n"
+        + "        s = sinf(a);\n"
+        + "        c = cosf(a);\n"
+        + "\n"
+        + "        __px += varpar->ortho * (xo - c * ro);\n"
+        + "        __py += varpar->ortho * s * ro;\n"
+        + "      } else {\n"
+        + "        xo = -(r + 1.0) / (2.0 * __x);\n"
+        + "        ro = sqrtf(sqrf(-__x - xo) + __y*__y);\n"
+        + "        theta = atan2f(1.0, ro);\n"
+        + "        a = fmodf(varpar->ortho_in * theta + atan2f(__y, xo + __x) + theta, 2.0 * theta) - theta;\n"
+        + "        s = sinf(a);\n"
+        + "        c = cosf(a);\n"
+        + "\n"
+        + "        __px -= varpar->ortho * (xo - c * ro);\n"
+        + "        __py += varpar->ortho * s * ro;\n"
+        + "      }\n"
+        + "    } else {\n"
+        + "      r = 1.0 / sqrtf(r);\n"
+        + "      ta = atan2f(__y, __x);\n"
+        + "      ts = sinf(ta);\n"
+        + "      tc = cosf(ta);\n"
+        + "\n"
+        + "      x = r * tc;\n"
+        + "      y = r * ts;\n"
+        + "\n"
+        + "      if (x >= 0.0) {\n"
+        + "        xo = (x*x + y*y + 1.0) / (2.0 * x);\n"
+        + "        ro = sqrtf(sqrf(x - xo) + y*y);\n"
+        + "        theta = atan2f(1.0, ro);\n"
+        + "        a = fmodf(varpar->ortho_out * theta + atan2f(y, xo - x) + theta, 2.0 * theta) - theta;\n"
+        + "        s = sinf(a);\n"
+        + "        c = cosf(a);\n"
+        + "\n"
+        + "        x = (xo - c * ro);\n"
+        + "        y = s * ro;\n"
+        + "        ta = atan2f(y, x);\n"
+        + "        ts = sinf(ta);\n"
+        + "        tc = cosf(ta);\n"
+        + "\n"
+        + "        r = 1.0 / sqrtf(x*x + y*y);\n"
+        + "\n"
+        + "        __px += varpar->ortho * r * tc;\n"
+        + "        __py += varpar->ortho * r * ts;\n"
+        + "      } else {\n"
+        + "        xo = -(x*x + y*y + 1.0) / (2.0 * x);\n"
+        + "        ro = sqrtf(sqrf(-x - xo) + y*y);\n"
+        + "        theta = atan2f(1.0, ro);\n"
+        + "        a = fmodf(varpar->ortho_out * theta + atan2f(y, xo + x) + theta, 2.0 * theta) - theta;\n"
+        + "        s = sinf(a);\n"
+        + "        c = cosf(a);\n"
+        + "\n"
+        + "        x = (xo - c * ro);\n"
+        + "        y = s * ro;\n"
+        + "        ta = atan2f(y, x);\n"
+        + "        ts = sinf(ta);\n"
+        + "        tc = cosf(ta);\n"
+        + "        r = 1.0 / sqrtf(x*x + y*y);\n"
+        + "\n"
+        + "        __px -= varpar->ortho * r * tc;\n"
+        + "        __py += varpar->ortho * r * ts;\n"
+        + "      }\n"
+        + "  }\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->ortho*__z;\n" : "");
+  }
 }

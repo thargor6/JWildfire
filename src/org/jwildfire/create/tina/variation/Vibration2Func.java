@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Vibration2Func extends VariationFunc {
+public class Vibration2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_DIR = "dir";
@@ -218,6 +218,63 @@ public class Vibration2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float d_along_dir = __x * cosf(varpar->vibration2_dir) + __y * sinf(varpar->vibration2_dir);\n"
+        + "float dirL = varpar->vibration2_dir + vibration2_modulate(varpar->vibration2_dm, varpar->vibration2_dmfreq, d_along_dir);\n"
+        + "float angleL = varpar->vibration2_angle + vibration2_modulate(varpar->vibration2_tm, varpar->vibration2_tmfreq, d_along_dir);\n"
+        + "float freqL = vibration2_modulate(varpar->vibration2_fm, varpar->vibration2_fmfreq, d_along_dir) / varpar->vibration2_freq;\n"
+        + "float ampL = varpar->vibration2_amp + varpar->vibration2_amp * vibration2_modulate(varpar->vibration2_am, varpar->vibration2_amfreq, d_along_dir);\n"
+
+        + "\n"
+        + "float total_angle = angleL + dirL;\n"
+        + "float cos_dir = cosf(dirL);\n"
+        + "float sin_dir = sinf(dirL);\n"
+        + "float cos_tot = cosf(total_angle);\n"
+        + "float sin_tot = sinf(total_angle);\n"
+        + "float scaled_freq = varpar->vibration2_freq * 2.0f*PI;\n"
+        + "float phase_shift = 2.0f*PI * varpar->vibration2_phase / varpar->vibration2_freq;\n"
+        + "d_along_dir = __x * cos_dir + __y * sin_dir;\n"
+
+
+        + "float local_amp = ampL * sinf((d_along_dir * scaled_freq) + freqL + phase_shift);\n"
+        + "\n"
+        + "float x = __x + local_amp * cos_tot;\n"
+        + "float y = __y + local_amp * sin_tot;\n"
+        + "\n"
+
+        + "d_along_dir = __x * cosf(varpar->vibration2_dir2) + __y * sinf(varpar->vibration2_dir2);\n"
+        + "dirL = varpar->vibration2_dir2 + vibration2_modulate(varpar->vibration2_d2m, varpar->vibration2_d2mfreq, d_along_dir);\n"
+        + "angleL = varpar->vibration2_angle2 + vibration2_modulate(varpar->vibration2_t2m, varpar->vibration2_t2mfreq, d_along_dir);\n"
+        + "freqL = vibration2_modulate(varpar->vibration2_f2m, varpar->vibration2_f2mfreq, d_along_dir) / varpar->vibration2_freq2;\n"
+        + "ampL = varpar->vibration2_amp2 + varpar->vibration2_amp2 * vibration2_modulate(varpar->vibration2_a2m, varpar->vibration2_a2mfreq, d_along_dir);\n"
+
+        + "\n"
+        + "total_angle = angleL + dirL;\n"
+        + "cos_dir = cosf(dirL);\n"
+        + "sin_dir = sinf(dirL);\n"
+        + "cos_tot = cosf(total_angle);\n"
+        + "sin_tot = sinf(total_angle);\n"
+        + "scaled_freq = varpar->vibration2_freq2 * 2.0f*PI;\n"
+        + "phase_shift = 2.0f*PI * varpar->vibration2_phase2 / varpar->vibration2_freq2;\n"
+        + "d_along_dir = __x * cos_dir + __y * sin_dir;\n"
+        + "local_amp = ampL * sinf((d_along_dir * scaled_freq) + freqL + phase_shift);\n"
+        + "\n"
+        + "x += local_amp * cos_tot;\n"
+        + "y += local_amp * sin_tot;\n"
+        + "\n"
+        + "__px += varpar->vibration2 * x;\n"
+        + "__py += varpar->vibration2 * y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->vibration2 * __z;\n": "");
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float vibration2_modulate(float amp, float freq, float x) {\n"
+        + "    return amp * cosf(x * freq * PI * 2.f);\n"
+        + "}\n";
   }
 }

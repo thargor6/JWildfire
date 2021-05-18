@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.Tools.FTOI;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SuperShape3DFunc extends VariationFunc {
+public class SuperShape3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RHO = "rho";
@@ -181,7 +181,59 @@ public class SuperShape3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float n1n_1, n1n_2, m4_1, m4_2;\n"
+        + "float an2_1, an2_2, bn3_1, bn3_2;\n"
+        + "float rho_pi, phi_pi;\n"
+        + "n1n_1 = (-1.0f / varpar->superShape3d_n1_1);\n"
+        + "n1n_2 = (-1.0f / varpar->superShape3d_n1_2);\n"
+        + "an2_1 = pow(fabsf(1.0f / varpar->superShape3d_a1), varpar->superShape3d_n2_1);\n"
+        + "an2_2 = pow(fabsf(1.0f / varpar->superShape3d_a2), varpar->superShape3d_n2_2);\n"
+        + "bn3_1 = pow(fabsf(1.0f / varpar->superShape3d_b1), varpar->superShape3d_n3_1);\n"
+        + "bn3_2 = pow(fabsf(1.0f / varpar->superShape3d_b2), varpar->superShape3d_n3_2);\n"
+        + "m4_1 = varpar->superShape3d_m1 / 4.0f;\n"
+        + "m4_2 = varpar->superShape3d_m2 / 4.0f;\n"
+        + "rho_pi = varpar->superShape3d_rho * 2.f / PI;\n"
+        + "phi_pi = varpar->superShape3d_phi * 2.f / PI;\n"
+        + "float rho1 = RANDFLOAT() * rho_pi;\n"
+        + "float phi1 = RANDFLOAT() * phi_pi;\n"
+        + "if (RANDFLOAT()<0.5f) {\n"
+        + "  phi1 = (-phi1);\n"
+        + "}\n"
+        + "float sinr = sinf(rho1);\n"
+        + "float cosr = cosf(rho1);\n"
+        + "float sinp = sinf(phi1);\n"
+        + "float cosp = cosf(phi1);\n"
+
+        + "    float msinr, mcosr;\n"
+        + "    {\n"
+        + "      float a = m4_1 * rho1;\n"
+        + "      msinr = sinf(a);\n"
+        + "      mcosr = cosf(a);\n"
+        + "    }\n"
+        + "    float msinp, mcosp;\n"
+        + "    {\n"
+        + "      float a = m4_2 * phi1;\n"
+        + "      msinp = sinf(a);\n"
+        + "      mcosp = cosf(a);\n"
+        + "    }\n"
+        + "    float pr1 = an2_1 * powf(fabsf(mcosr), varpar->superShape3d_n2_1) + bn3_1 * powf(fabsf(msinr), varpar->superShape3d_n3_1);\n"
+        + "    float pr2 = an2_2 * powf(fabsf(mcosp), varpar->superShape3d_n2_2) + bn3_2 * powf(fabsf(msinp), varpar->superShape3d_n3_2);\n"
+        + "    float r1 = powf(pr1, n1n_1) + varpar->superShape3d_spiral * rho1;\n"
+        + "    float r2 = powf(pr2, n1n_2);\n"
+        + "\n"
+        + "    if (roundf(varpar->superShape3d_toroidmap) == 1) {\n"
+        + "      __px += varpar->superShape3d * cosr * (r1 + r2 * cosp);\n"
+        + "      __py += varpar->superShape3d * sinr * (r1 + r2 * cosp);\n"
+        + "      __pz += varpar->superShape3d * r2 * sinp;\n"
+        + "    } else {\n"
+        + "      __px += varpar->superShape3d * r1 * cosr * r2 * cosp;\n"
+        + "      __py += varpar->superShape3d * r1 * sinr * r2 * cosp;\n"
+        + "      __pz += varpar->superShape3d * r2 * sinp;\n"
+        + "    }\n";
+  }
 }

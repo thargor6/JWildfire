@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class DCCylinderFunc extends VariationFunc {
+public class DCCylinderFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_OFFSET = "offset";
@@ -115,7 +115,22 @@ public class DCCylinderFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float ldcs, ldca;\n"
+        + "ldcs = 1.0f / (varpar->dc_cylinder_scale == 0 ? 1.0e-5f : varpar->dc_cylinder_scale);\n"
+        + "ldca = varpar->dc_cylinder_offset * PI;\n"
+        + "float a = RANDFLOAT() * 2.0f*PI;\n"
+        + "float sr = sinf(a);\n"
+        + "float cr = cosf(a);\n"
+        + "float rr = varpar->dc_cylinder_blur * (RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() - 2.0f);\n"
+        + "__px += varpar->dc_cylinder * sinf(__x + rr * sr) * varpar->dc_cylinder_x;\n"
+        + "__py += rr + __y * varpar->dc_cylinder_y;\n"
+        + "__pz += varpar->dc_cylinder * cosf(__x + rr * cr);\n"
+        + "__pal = fmodf(fabsf(0.5f * (ldcs * ((cosf(varpar->dc_cylinder_angle) * __px + sinf(varpar->dc_cylinder_angle) * __py + varpar->dc_cylinder_offset)) + 1.0f)), 1.0);\n";
+  }
 }
+
