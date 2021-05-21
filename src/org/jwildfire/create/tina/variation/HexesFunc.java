@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -31,7 +31,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.*;
 import static org.jwildfire.create.tina.variation.VoronoiTools.*;
 
-public class HexesFunc extends VariationFunc {
+public class HexesFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CELLSIZE = "cellsize";
@@ -239,7 +239,128 @@ public class HexesFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float P[VORONOI_MAXPOINTS][2];\n"
+        + "float DXo, DYo, L, L1, L2, R, s, trgL, Vx, Vy;\n"
+        + "float U[2];\n"
+        + "int Hx, Hy;\n"
+        + "float rotSin = sinf(varpar->hexes_rotate * 2.0f * PI);\n"
+        + "float rotCos = cosf(varpar->hexes_rotate * 2.0f * PI);\n"
+        + "s = varpar->hexes_cellsize;\n"
+        + "if (0.0 != s) {\n"
+        + "  U[_x_] = __x;\n"
+        + "  U[_y_] = __y;\n"
+        + "  Hx = (int)floorf((a_hex * U[_x_] + b_hex * U[_y_]) / s);\n"
+        + "  Hy = (int)floorf((c_hex * U[_x_] + d_hex * U[_y_]) / s);\n"
+        + "  int i = 0;\n"
+        + "  int di, dj;\n"
+        + "  for (di = -1; di < 2; di++) {\n"
+        + "    for (dj = -1; dj < 2; dj++) {\n"
+        + "      hexes_cell_centre(Hx + di, Hy + dj, s, P[i]);\n"
+        + "      i++;\n"
+        + "    }\n"
+        + "  }\n"
+        + "\n"
+        + "  int q = hexes_closest(P, 9, U);\n"
+        + "  Hx += hexes_cell_choice[q][_x_];\n"
+        + "  Hy += hexes_cell_choice[q][_y_];\n"
+        + "  hexes_cell_centre(Hx, Hy, s, P[0]);\n"
+        + "\n"
+        + "  hexes_cell_centre(Hx, Hy + 1, s, P[1]);\n"
+        + "  hexes_cell_centre(Hx + 1, Hy + 1, s, P[2]);\n"
+        + "  hexes_cell_centre(Hx + 1, Hy, s, P[3]);\n"
+        + "  hexes_cell_centre(Hx, Hy - 1, s, P[4]);\n"
+        + "  hexes_cell_centre(Hx - 1, Hy - 1, s, P[5]);\n"
+        + "  hexes_cell_centre(Hx - 1, Hy, s, P[6]);\n"
+        + "\n"
+        + "  L1 = hexes_voronoi(P, 7, 0, U);\n"
+        + "  DXo = U[_x_] - P[0][_x_];\n"
+        + "  DYo = U[_y_] - P[0][_y_];\n"
+        + "  trgL = powf(L1 + 1e-06f, varpar->hexes_power) * varpar->hexes_scale;\n"
+        + "  Vx = DXo * rotCos + DYo * rotSin;\n"
+        + "  Vy = -DXo * rotSin + DYo * rotCos;\n"
+        + "  U[_x_] = Vx + P[0][_x_];\n"
+        + "  U[_y_] = Vy + P[0][_y_];\n"
+        + "  L2 = hexes_voronoi(P, 7, 0, U);\n"
+        + "  L = (L1 > L2) ? L1 : L2;\n"
+        + "  if (L < 0.5f) {\n"
+        + "    R = trgL / L1;\n"
+        + "  } else {\n"
+        + "    if (L > 0.8f) {\n"
+        + "       R = trgL / L2;\n"
+        + "     } else {\n"
+        + "       R = ((trgL / L1) * (0.8f - L) + (trgL / L2) * (L - 0.5f)) / 0.3f;\n"
+        + "     }\n"
+        + "  }\n"
+        + "  Vx *= R;\n"
+        + "  Vy *= R;\n"
+        + "  Vx += P[0][_x_];\n"
+        + "  Vy += P[0][_y_];\n"
+        + "  __px += varpar->hexes * Vx;\n"
+        + "  __py += varpar->hexes * Vy;\n"
+        + "}\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->hexes * __z;\n" : "");
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "#define _x_ 0\n"
+        + "#define _y_ 1\n"
+        + "#define _z_ 2\n"
+        + "#define VORONOI_MAXPOINTS 25\n"
+        + "#define a_hex 1.0f / 3.0f\n"
+        + "#define b_hex 1.7320508075688772935f / 3.0f\n"
+        + "#define c_hex -1.0f / 3.0f\n"
+        + "#define d_hex 1.7320508075688772935f / 3.0f\n"
+        + "#define a_cart 1.5f\n"
+        + "#define b_cart -1.5f\n"
+        + "#define c_cart 1.7320508075688772935f / 2.0f\n"
+        + "#define d_cart 1.7320508075688772935f / 2.0f\n\n"
+        + "__constant__ int hexes_cell_choice[9][2] = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 0}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};\n\n"
+        + "__device__ void hexes_cell_centre(int x, int y, float s, float *V) {\n"
+        + "    V[_x_] = (a_cart * x + b_cart * y) * s;\n"
+        + "    V[_y_] = (c_cart * x + d_cart * y) * s;\n"
+        + "  }\n\n"
+        + "__device__ int hexes_closest(float P[VORONOI_MAXPOINTS][2], int n, float U[]) {\n"
+        + "    float d2;\n"
+        + "    float d2min = 1.0e32f;\n"
+        + "    int j = 0;\n"
+        + "    for (int i = 0; i < n; i++) {\n"
+        + "      d2 = (P[i][_x_] - U[_x_]) * (P[i][_x_] - U[_x_]) + (P[i][_y_] - U[_y_]) * (P[i][_y_] - U[_y_]);\n"
+        + "      if (d2 < d2min) {\n"
+        + "        d2min = d2;\n"
+        + "        j = i;\n"
+        + "      }\n"
+        + "    }\n"
+        + "    return j;\n"
+        + "  }\n"
+        + "\n"
+        + "__device__ float hexes_vratio(float P[], float Q[], float U[]) {\n"
+        + "    float PmQx, PmQy;\n"
+        + "    PmQx = P[_x_] - Q[_x_];\n"
+        + "    PmQy = P[_y_] - Q[_y_];\n"
+        + "    if (0.0f == PmQx && 0.0f == PmQy) {\n"
+        + "      return 1.0f;\n"
+        + "    }\n"
+        + "    return 2.0f * ((U[_x_] - Q[_x_]) * PmQx + (U[_y_] - Q[_y_]) * PmQy) / (PmQx * PmQx + PmQy * PmQy);\n"
+        + "  }\n"
+        + "\n"
+        + "__device__ float hexes_voronoi(float P[VORONOI_MAXPOINTS][2], int n, int q, float U[]) {\n"
+        + "   float ratio;\n"
+        + "   float ratiomax = -1.0e20f;\n"
+        + "   for (int i = 0; i < n; i++) {\n"
+        + "      if (i != q) {\n"
+        + "        ratio = hexes_vratio(P[i], P[q], U);\n"
+        + "        if (ratio > ratiomax) {\n"
+        + "          ratiomax = ratio;\n"
+        + "        }\n"
+        + "      }\n"
+        + "    }\n"
+        + "    return ratiomax;\n"
+        + "  }\n";
+  }
 }
