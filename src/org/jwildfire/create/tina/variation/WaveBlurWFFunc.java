@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class WaveBlurWFFunc extends VariationFunc {
+public class WaveBlurWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_COUNT = "count";
@@ -114,6 +114,41 @@ public class WaveBlurWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float ang = RANDFLOAT() * 2.0f*PI;\n"
+        + " float rnd = 1.0f - 2.0f * RANDFLOAT();\n"
+        + " float r;\n"
+        + "int count = roundf(varpar->waveblur_wf_count);\n "
+        + " if (RANDFLOAT() < 0.5) {\n"
+        + "   r = acosf(rnd) - (roundf(count*RANDFLOAT()) + 1) * PI + varpar->waveblur_wf_phase;\n"
+        + " } else {\n"
+        + "   r = acosf(-rnd) - (roundf(count*RANDFLOAT()) + 1) * PI + varpar->waveblur_wf_phase;\n"
+        + " }\n"
+        + "r *= varpar->waveblur_wf / (varpar->waveblur_wf_count * PI);\n"
+        + "\n"
+        + "float s = sinf(ang);\n"
+        + "float c = cosf(ang);\n"
+        + "__px += r * c;\n"
+        + "__py += r * s;\n"
+        + "if (roundf(varpar->waveblur_wf_direct_color) == 1) {\n"
+        + "  __pal = acosf(rnd) * varpar->waveblur_wf_color_scale + varpar->waveblur_wf_color_offset;\n"
+        + "  if(__pal<0.f) \n"
+        + "    __pal = 0.f;\n"
+        + "  else if(__pal>1.f)\n"
+        +  "   __pal = 1.f;\n"
+        + "}\n"
+        + "if (varpar->waveblur_wf_amplitude_z != 0.0) {\n"
+        + "  float zamp = (cosf(rnd) - 0.5) * varpar->waveblur_wf_amplitude_z;\n"
+        + "  if (fabsf(varpar->waveblur_wf_damping_z) > 1.e-6f) {\n"
+        + "    float dmp = r * varpar->waveblur_wf_damping_z;\n"
+        + "    zamp *= expf(dmp);\n"
+        + "  }\n"
+        + "  __pz += varpar->waveblur_wf * zamp;\n"
+        + "}\n"
+        + "\n";
   }
 }

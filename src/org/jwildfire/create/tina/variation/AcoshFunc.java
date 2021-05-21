@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
 
-public class AcoshFunc extends SimpleVariationFunc {
+public class AcoshFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -53,7 +53,23 @@ public class AcoshFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "Complex z;\n"
+            + "Complex_Init(&z, __x, __y);\n"
+            + "Complex_AcosH(&z);\n"
+            + "Complex_Scale(&z, varpar->acosh * 2.f / PI);\n"
+            + "if(RANDFLOAT()<0.5) {\n"
+            + "  __py += z.im;\n"
+            + "  __px += z.re;\n"
+            + "}\n"
+            + "else {\n"
+            + "  __py += -z.im;\n"
+            + "  __px += -z.re;\n"
+            + "}\n"
+            + (context.isPreserveZCoordinate() ? "__pz += varpar->acosh * __z;\n": "");
+  }
 }
