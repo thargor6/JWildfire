@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class EMotionFunc extends VariationFunc {
+public class EMotionFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_MOVE = "move";
@@ -110,7 +110,40 @@ public class EMotionFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float tmp = __y * __y + __x * __x + 1.0f;\n"
+        + "float tmp2 = 2.0f * __x;\n"
+        + "float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;\n"
+        + "if (xmax < 1.0f)\n"
+        + "  xmax = 1.0f;\n"
+        + "float sinhmu, coshmu;\n"
+        + "float mu = acoshf(xmax);\n"
+        + "float t = __x / xmax;\n"
+        + "if (t > 1.0f)\n"
+        + "  t = 1.0f;\n"
+        + "else if (t < -1.0f)\n"
+        + "  t = -1.0f;\n"
+        + "float nu = acosf(t);\n"
+        + "if (__y < 0.0f)\n"
+        + "  nu *= -1.0f;\n"
+        + "if (nu < 0.0f) {\n"
+        + "  mu += varpar->eMotion_move;\n"
+        + "} else {\n"
+        + "  mu -= varpar->eMotion_move;\n"
+        + "}\n"
+        + "if (mu <= 0.0f) {\n"
+        + "  mu *= -1.0f;\n"
+        + "  nu *= -1.0f;\n"
+        + "}\n"
+        + "nu += varpar->eMotion_rotate;\n"
+        + "sinhmu = sinhf(mu);\n"
+        + "coshmu = coshf(mu);\n"
+        + "__px += varpar->eMotion * coshmu * cosf(nu);\n"
+        + "__py += varpar->eMotion * sinhmu * sinf(nu);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->eMotion * __z;\n": "");
+  }
 }

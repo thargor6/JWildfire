@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Ennepers2Func extends VariationFunc {
+public class Ennepers2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
@@ -75,7 +75,17 @@ public class Ennepers2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float xx = __x;\n"
+        + "float yy = __y;\n"
+        + "float r2 = 1.0f / (xx*xx + yy*yy);\n"
+        + "float dxy = (sqrf(varpar->ennepers2_a * xx) - sqrf(varpar->ennepers2_b * yy));\n"
+        + "__px += varpar->ennepers2 * xx * (varpar->ennepers2_a*varpar->ennepers2_a - dxy * r2 - varpar->ennepers2_c * sqrtf(fabsf(xx)));\n"
+        + "__py += varpar->ennepers2 * yy * (varpar->ennepers2_b*varpar->ennepers2_b - dxy * r2 - varpar->ennepers2_c * sqrtf(fabsf(yy)));\n"
+        + "__pz += varpar->ennepers2 * dxy * 0.5f * sqrtf(r2);";
+  }
 }

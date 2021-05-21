@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
-public class PyramidFunc extends SimpleVariationFunc {
+public class PyramidFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -49,7 +49,20 @@ public class PyramidFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float x = __x;\n"
+        + "x = x * x * x;\n"
+        + "float y = __y;\n"
+        + "y = y * y * y;\n"
+        + "float z = __z;\n"
+        + "z = fabsf(z * z * z);\n"
+        + "float r = varpar->pyramid / (fabsf(x) + fabsf(y) + z + 0.000000001);\n"
+        + "__px += x * r;\n"
+        + "__py += y * r;\n"
+        + "__pz += z * r;\n";
+  }
 }

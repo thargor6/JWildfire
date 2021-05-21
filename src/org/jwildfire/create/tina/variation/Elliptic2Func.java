@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Elliptic2Func extends VariationFunc {
+public class Elliptic2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
 
@@ -132,7 +132,23 @@ public class Elliptic2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _v = varpar->elliptic2 / (PI / varpar->elliptic2_h);\n"
+        + "float tmp = __y * __y + __x * __x + varpar->elliptic2_a1;\n"
+        + "float x2 = varpar->elliptic2_b1 * __x;\n"
+        + "float xmax = varpar->elliptic2_c * (sqrtf(tmp + x2) + sqrtf(tmp - x2));\n"
+        + "float a = __x / xmax * varpar->elliptic2_a2;\n"
+        + "float b = sqrtf_safe(varpar->elliptic2_d - a * a) * varpar->elliptic2_b2;\n"
+        + "float ps = -PI*0.5f * varpar->elliptic2_a3;\n"
+        + "__px += _v * atan2f(a, b) + ps;\n"
+        + "if (RANDFLOAT() < varpar->elliptic2_e)\n"
+        + "  __py += _v * logf(xmax + sqrtf_safe(xmax - varpar->elliptic2_f));\n"
+        + "else\n"
+        + "  __py -= _v * logf(xmax + sqrtf_safe(xmax - varpar->elliptic2_g));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->elliptic2 * __z;\n" : "");
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.fmod;
 
-public class DCCarpetFunc extends VariationFunc {
+public class DCCarpetFunc extends VariationFunc implements SupportsGPU {
 
   private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public class DCCarpetFunc extends VariationFunc {
     pVarTP.x += pAmount * (pXForm.getXYCoeff00() * x + pXForm.getXYCoeff10() * y + pXForm.getXYCoeff20());
     pVarTP.y += pAmount * (pXForm.getXYCoeff01() * x + pXForm.getXYCoeff11() * y + pXForm.getXYCoeff21());
     pVarTP.color = fmod(fabs(pVarTP.color * 0.5 * (1 + h) + x0_xor_y0 * (1 - h) * 0.5), 1.0);
-        if (pContext.isPreserveZCoordinate()) {
+    if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
   }
@@ -83,7 +83,20 @@ public class DCCarpetFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float H = 0.1f * varpar->dc_carpet_origin;\n"
+        + "int x0 = (RANDFLOAT() < 0.5f) ? -1 : 1;\n"
+        + "int y0 = (RANDFLOAT() > 0.5f) ? -1 : 1;\n"
+        + "float x = __x + x0, y = __y + y0;\n"
+        + "float x0_xor_y0 = (float) (x0 ^ y0);\n"
+        + "float h = -H + (1.f - x0_xor_y0) * H;\n"
+        + "__px += varpar->dc_carpet * (xform->a * x + xform->b * y + xform->c);\n"
+        + "__py += varpar->dc_carpet * (xform->d * x + xform->e * y + xform->f);\n"
+        + "__pal = fmodf(fabsf(__pal * 0.5f * (1.f + h) + x0_xor_y0 * (1.f - h) * 0.5f), 1.0f);"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->dc_carpet * __z;\n" : "");
+  }
 }

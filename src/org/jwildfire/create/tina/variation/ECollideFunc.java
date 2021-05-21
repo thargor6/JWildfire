@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class ECollideFunc extends VariationFunc {
+public class ECollideFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_NUM = "num";
@@ -113,7 +113,40 @@ public class ECollideFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _eCa, _eCn_pi, _eCa_eCn, _pi_eCn;\n"
+        + "int num = roundf(varpar->eCollide_num);\n"
+        + "_eCn_pi = (float) num / PI;\n"
+        + "_pi_eCn = PI / (float) num;\n"
+        + "_eCa = PI * varpar->eCollide_a;\n"
+        + "_eCa_eCn = _eCa / num;  float tmp = __y * __y + __x * __x + 1.0f;\n"
+        + "float tmp2 = 2.0f * __x;\n"
+        + "float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;\n"
+        + "float sinnu, cosnu;\n"
+        + "int alt;\n"
+        + "if (xmax < 1.0f)\n"
+        + "  xmax = 1.0f;\n"
+        + "float t = __x / xmax;\n"
+        + "if (t > 1.0f)\n"
+        + "  t = 1.0f;\n"
+        + "else if (t < -1.0f)\n"
+        + "  t = -1.0f;\n"
+        + "float nu = acosf(t);\n"
+        + "alt = (int) (nu * _eCn_pi);\n"
+        + "if (alt % 2 == 0)\n"
+        + "  nu = alt * _pi_eCn + fmodf(nu + _eCa_eCn, _pi_eCn);\n"
+        + "else\n"
+        + "  nu = alt * _pi_eCn + fmodf(nu - _eCa_eCn, _pi_eCn);\n"
+        + "if (__y <= 0.0)\n"
+        + "  nu *= -1.0f;\n"
+        + "sinnu = sinf(nu);\n"
+        + "cosnu = cosf(nu);\n"
+        + "__px += varpar->eCollide * xmax * cosnu;\n"
+        + "__py += varpar->eCollide * sqrtf(xmax - 1.0f) * sqrtf(xmax + 1.0f) * sinnu;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->eCollide * __z;\n" : "");
+  }
 }
