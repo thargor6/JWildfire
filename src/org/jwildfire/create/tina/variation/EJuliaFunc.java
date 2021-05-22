@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class EJuliaFunc extends VariationFunc {
+public class EJuliaFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -121,7 +121,46 @@ public class EJuliaFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int _sign = 1;\n"
+        + "if (varpar->eJulia_power < 0)\n"
+        + "   _sign = -1;\n"
+        + "float r2 = __y * __y + __x * __x;\n"
+        + "float tmp2;\n"
+        + "float x;\n"
+        + "if (_sign == 1)\n"
+        + "  x = __x;\n"
+        + "else {\n"
+        + "  r2 = 1.0f / r2;\n"
+        + "  x = __x * r2;\n"
+        + "}\n"
+        + "float tmp = r2 + 1.0f;\n"
+        + "tmp2 = 2.0f * x;\n"
+        + "float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;\n"
+        + "if (xmax < 1.0f)\n"
+        + "  xmax = 1.0f;\n"
+        + "float sinhmu, coshmu, sinnu, cosnu;\n"
+        + "float mu = acoshf(xmax);\n"
+        + "float t = x / xmax;\n"
+        + "if (t > 1.0f)\n"
+        + "  t = 1.0f;\n"
+        + "else if (t < -1.0f)\n"
+        + "  t = -1.0f;\n"
+        + "float nu = acosf(t);\n"
+        + "if (__y < 0)\n"
+        + "  nu *= -1.0f;\n"
+        + "nu = nu / varpar->eJulia_power + 2.0f*PI / varpar->eJulia_power * floorf(RANDFLOAT() * varpar->eJulia_power);\n"
+        + "mu /= varpar->eJulia_power;\n"
+        + "sinhmu = sinhf(mu);\n"
+        + "coshmu = coshf(mu);\n"
+        + "sinnu = sinf(nu);\n"
+        + "cosnu = cosf(nu);\n"
+        + "__px += varpar->eJulia * coshmu * cosnu;\n"
+        + "__py += varpar->eJulia * sinhmu * sinnu;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->eJulia * __z;\n" : "");
+  }
 }

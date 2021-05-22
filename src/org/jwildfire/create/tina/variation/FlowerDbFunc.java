@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2021 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
+  License, or (at your option) any later version.
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software;
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.Layer;
@@ -12,9 +28,9 @@ import static org.jwildfire.base.mathlib.MathLib.*;
  *  suggested/requested as full variation by Don Town
  *  transcribed, extended, and turned into full variation by CozyG
  *
- *  WARNING: assumes centered on (0,0,0), can disapear if move too far off in pre-transforms etc.
+ *  WARNING: assumes centered on (0,0,0), can disappear if move too far off in pre-transforms etc.
  */
-public class FlowerDbFunc extends VariationFunc {
+public class FlowerDbFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PETALS = "petals";
@@ -101,7 +117,23 @@ public class FlowerDbFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float r = varpar->flower_db * sqrtf(__r2);\n"
+        + "float t = __theta;\n"
+        + "r = r * (fabsf((varpar->flower_db_petal_spread + sinf(varpar->flower_db_petals * t)) * cosf(varpar->flower_db_petal_split * varpar->flower_db_petals * t)));\n"
+        + "__px += sinf(t) * r;\n"
+        + "__py += cosf(t) * r;\n"
+        + "__pz -= varpar->flower_db_stem_thickness * ((2.0f / r) - 1.0f);\n"
+        + "float rnew = sqrtf((__px * __px) + (__py * __py));\n"
+        + "if (rnew > varpar->flower_db_petal_fold_radius) {\n"
+        + "   __pz += (rnew - varpar->flower_db_petal_fold_radius) * varpar->flower_db_petal_fold_strength;\n"
+        + "}\n"
+        + "if ((varpar->flower_db_stem_length != 0) && (__pz <= (-1 * varpar->flower_db_stem_length))) {\n"
+        + "  __pz = (-1 * varpar->flower_db_stem_length);\n"
+        + "}";
+  }
 }
