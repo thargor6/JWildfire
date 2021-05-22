@@ -17,6 +17,7 @@
 
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.create.tina.swing.TinaControllerContextService;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.mesh.*;
 import org.jwildfire.create.tina.variation.plot.*;
@@ -1112,12 +1113,16 @@ public class VariationFuncList {
   }
 
   public static String getRandomVariationname() {
-    int idx =
-            Math.min(
-                    (int) (Math.random() * getRandomVariationnames().size()),
-                    getRandomVariationnames().size() - 1);
-    return getRandomVariationnames().get(idx);
+    if(TinaControllerContextService.getContext().isGpuMode()) {
+      return getRandomVariationname(VariationFuncType.VARTYPE_SUPPORTS_GPU);
+    } else {
+      int idx =
+          Math.min(
+              (int) (Math.random() * getRandomVariationnames().size()),
+              getRandomVariationnames().size() - 1);
+      return getRandomVariationnames().get(idx);
     }
+  }
 
   public static String getRandomVariationname(VariationFuncType variationFuncType) {
     if(variationsByType==null) {

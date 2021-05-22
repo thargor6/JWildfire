@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Loonie_3DFunc extends SimpleVariationFunc {
+public class Loonie_3DFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -30,7 +30,6 @@ public class Loonie_3DFunc extends SimpleVariationFunc {
     double sqrvvar = pAmount * pAmount;
     double efTez = pAffineTP.z;
     double kikr;
-    // TODO: check if this solves certain crashes
     kikr = Math.atan2(pAffineTP.y, pAffineTP.x);
 
     if (efTez == 0.0) {
@@ -60,7 +59,34 @@ public class Loonie_3DFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float sqrvvar = varpar->loonie_3D * varpar->loonie_3D;\n"
+        + "float efTez = __z;\n"
+        + "float kikr;\n"
+        + "kikr = atan2f(__y, __x);\n"
+        + "if (efTez == 0.0) {\n"
+        + "  efTez = kikr;\n"
+        + "}\n"
+        + "float r2 = __x*__x + __y*__y + efTez*efTez;\n"
+        + "if (r2 < 1.e-6f) {\n"
+        + "  __doHide=true;\n"
+        + "}\n"
+        + "else {\n"
+        + "  __doHide = false;\n"
+        + "  if (r2 < sqrvvar) {\n"
+        + "    float r = varpar->loonie_3D * sqrtf(sqrvvar / r2 - 1.0f);\n"
+        + "    __px += r * __x;\n"
+        + "    __py += r * __y;\n"
+        + "    __pz += r * efTez * 0.5;\n"
+        + "  } else {\n"
+        + "     __px += varpar->loonie_3D * __x;\n"
+        + "     __py += varpar->loonie_3D * __y;\n"
+        + "     __pz += varpar->loonie_3D * efTez * 0.5;\n"
+        + "  }\n"
+        + "}\n";
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -27,7 +27,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
  * ported to JWildfire variation by CozyG (and enhanced with several user-adjustable parameters)
  * [used chronologicaldot's JWildfire variation BSplitFunc.java as initial template]
  */
-public class MaskFunc extends VariationFunc {
+public class MaskFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_XSHIFT = "xshift";
@@ -50,6 +50,7 @@ public class MaskFunc extends VariationFunc {
     if (sumsq == 0) {
       pVarTP.doHide = true;
     } else {
+      pVarTP.doHide = false;
       double xfactor = xscale * pAffineTP.x + xshift;
       double yfactor = yscale * pAffineTP.y + yshift;
       pVarTP.x += (pAmount / sumsq) * sin(xfactor) * (cosh(yfactor) + ushift) * sqr(sin(xfactor));
@@ -93,7 +94,21 @@ public class MaskFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float sumsq = __r2;\n"
+        + "if (sumsq == 0) {\n"
+        + "  __doHide = true;\n"
+        + "} else {\n"
+        + "  __doHide = false;\n"
+        + "  float xfactor = varpar->mask_xscale * __x + varpar->mask_xshift;\n"
+        + "  float yfactor = varpar->mask_yscale * __y + varpar->mask_yshift;\n"
+        + "  __px += (varpar->mask / sumsq) * sinf(xfactor) * (coshf(yfactor) + varpar->mask_ushift) * sqrf(sinf(xfactor));\n"
+        + "  __py += (varpar->mask / sumsq) * cosf(xfactor) * (coshf(yfactor) + varpar->mask_ushift) * sqrf(sinf(xfactor));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->mask * __z;\n" : "")
+        + "}\n";
+  }
 }

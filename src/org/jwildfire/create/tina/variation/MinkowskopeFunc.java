@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class MinkowskopeFunc extends VariationFunc {
+public class MinkowskopeFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_SEPARATION = "separation";
   private static final String PARAM_FREQUENCYX = "frequencyx";
@@ -159,7 +159,69 @@ public class MinkowskopeFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _tpf = 0.5f * varpar->minkowskope_frequencyx;\n"
+        + "float _tpf2 = 0.5f * varpar->minkowskope_frequencyy;\n"
+        + "short _noDamping = (fabsf(varpar->minkowskope_damping) <= 1.e-6f) ? 1 : 0;\n"
+        + "short _altWave = (varpar->minkowskope_frequencyx <= 0.0f) ? 1 : 0;\n"
+        + "float t;\n"
+        + "float pt = varpar->minkowskope_perturbation * minkosine(_tpf2 * __y, _altWave);\n"
+        + "if (_noDamping==1) {\n"
+        + "  t = varpar->minkowskope_amplitude * (minkocosine(_tpf * __x + pt, _altWave)) + varpar->minkowskope_separation;\n"
+        + "} else {\n"
+        + "  t = varpar->minkowskope_amplitude * expf(-fabsf(__x) * varpar->minkowskope_damping) * (minkocosine(_tpf * __x + pt, _altWave)) + varpar->minkowskope_separation;\n"
+        + "}\n"
+        + "if (fabsf(__y) <= t) {\n"
+        + "  __px -= varpar->minkowskope * __x;\n"
+        + "  __py -= varpar->minkowskope * __y;\n"
+        + "} else {\n"
+        + "  __px += varpar->minkowskope * __x;\n"
+        + "  __py += varpar->minkowskope * __y;\n"
+        + "}"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->minkowskope * __z;" : "");
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float minkowski(float x) {\n"
+        + "  float p = 0.f;\n"
+        + "  float q = 1.f, r = p + 1.f, s = 1.f, m = 0.f, n = 0.f;\n"
+        + "  float d = 1.f, y = p;\n"
+        + "  for (int it = 0; it < 20; it++)\n"
+        + "    {\n"
+        + "      d = d * 0.5f;\n"
+        + "      m = p + r;\n"
+        + "      n = q + s;\n"
+        + "      if (x < (m / n)) {\n"
+        + "        r = m;\n"
+        + "        s = n;\n"
+        + "      } else {\n"
+        + "        y += d;\n"
+        + "        p = m;\n"
+        + "        q = n;\n"
+        + "      }\n"
+        + "    }\n"
+        + "    return y + d;\n"
+        + "  }\n\n"
+        + "__device__ float minkosine(float x, short _altWave) {\n"
+        + "    float lp = fmodf(fabsf(x),4.f);\n"
+        + "    float p = fmodf(fabsf(x), 2.f);\n"
+        + "    float mink = 0.f;\n"
+        + "    if (p > 1.f) p = 2.f - p;\n"
+        + "    if (_altWave==1)\n"
+        + "      mink = minkowski(p) - p;\n"
+        + "    else\n"
+        + "      mink = minkowski(p);\n"
+        + "    if ((lp < 2.f) ^ (x > 0)) return mink;\n"
+        + "    else return -mink;\n"
+        + "  }\n\n"
+        + "__device__ float minkocosine(float x, short _altWave) {\n"
+        + "    return minkosine(x - 1.f, _altWave);\n"
+        + "}\n";
   }
 }
 

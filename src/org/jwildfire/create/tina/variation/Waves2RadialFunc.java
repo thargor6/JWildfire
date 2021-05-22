@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Waves2RadialFunc extends VariationFunc {
+public class Waves2RadialFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_W2R_SCALEX = "w2r_scalex";
@@ -91,6 +91,18 @@ public class Waves2RadialFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float x0 = __x;\n"
+        + "float y0 = __y;\n"
+        + "float dist = sqrtf(x0*x0 + y0*y0);\n"
+        + "float factor = (dist < varpar->waves2_radial_w2r_distance) ? (dist - varpar->waves2_radial_w2r_null) / (varpar->waves2_radial_w2r_distance - varpar->waves2_radial_w2r_null) : 1.0f;\n"
+        + "factor = (dist < varpar->waves2_radial_w2r_null) ? 0.0 : factor;\n"
+        + "__px += varpar->waves2_radial * (x0 + factor * sinf(y0 * varpar->waves2_radial_w2r_freqx) * varpar->waves2_radial_w2r_scalex);\n"
+        + "__py += varpar->waves2_radial * (y0 + factor * sinf(x0 * varpar->waves2_radial_w2r_freqy) * varpar->waves2_radial_w2r_scaley);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->waves2_radial * __z;\n" : "");
   }
 }
