@@ -7416,7 +7416,7 @@ public class MainEditorFrame extends JFrame {
         getFilterKernelPreviewRootPnl(), getTinaSpatialOversamplingREd(), getTinaSpatialOversamplingSlider(),
         getFilterKernelFlatPreviewBtn(),
         getForegroundOpacityField(), getForegroundOpacitySlider(), getScriptEditBtn(), getRealtimePreviewToggleButton(),
-        getSolidRenderingToggleBtn(), getTinaSolidRenderingEnableAOCBx(), getTinaSolidRenderingAOIntensityREd(),
+        getSolidRenderingToggleBtn(), getGpuModeToggleButton(), getTinaSolidRenderingEnableAOCBx(), getTinaSolidRenderingAOIntensityREd(),
         getTinaSolidRenderingAOIntensitySlider(), getTinaSolidRenderingAOSearchRadiusREd(), getTinaSolidRenderingAOSearchRadiusSlider(),
         getTinaSolidRenderingAOBlurRadiusREd(), getTinaSolidRenderingAOBlurRadiusSlider(), getTinaSolidRenderingAOFalloffREd(),
         getTinaSolidRenderingAOFalloffSlider(), getTinaSolidRenderingAORadiusSamplesREd(), getTinaSolidRenderingAORadiusSamplesSlider(),
@@ -10047,6 +10047,21 @@ public class MainEditorFrame extends JFrame {
       centerWestPanel.add(getSendFlameToIRButton());
       centerWestPanel.add(getTinaAppendToMovieButton());
       centerWestPanel.add(getOpenFlameBrowserButton());
+
+      tinaSendToGPURenderButton = new JButton();
+      tinaSendToGPURenderButton.setToolTipText("Send the currently selected flame to the GPU renderer");
+      tinaSendToGPURenderButton.setText("GPU");
+      tinaSendToGPURenderButton.setPreferredSize(new Dimension(72, 24));
+      tinaSendToGPURenderButton.setMnemonic(KeyEvent.VK_G);
+      tinaSendToGPURenderButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
+      tinaSendToGPURenderButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/opencl.png")));
+      tinaSendToGPURenderButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.appendToMovieButton_actionPerformed(e);
+        }
+      });
+
+      centerWestPanel.add(tinaSendToGPURenderButton);
       centerWestPanel.add(getLabel_5());
       centerWestPanel.add(getUndoButton());
       centerWestPanel.add(getRedoButton());
@@ -10069,20 +10084,17 @@ public class MainEditorFrame extends JFrame {
       motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
 
-      tinaSendToGPURenderButton = new JButton();
-      tinaSendToGPURenderButton.setToolTipText("Send the currently selected flame to the GPU renderer");
-      tinaSendToGPURenderButton.setText("Browse");
-      tinaSendToGPURenderButton.setPreferredSize(new Dimension(72, 24));
-      tinaSendToGPURenderButton.setMnemonic(KeyEvent.VK_G);
-      tinaSendToGPURenderButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      tinaSendToGPURenderButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
-      tinaSendToGPURenderButton.addActionListener(new ActionListener() {
+      gpuModeToggleButton = new JToggleButton();
+      gpuModeToggleButton.setToolTipText("Activate animation controls in order to create animated flames");
+      gpuModeToggleButton.setPreferredSize(new Dimension(72, 36));
+      gpuModeToggleButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      gpuModeToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/opencl.png")));
+      gpuModeToggleButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.appendToMovieButton_actionPerformed(e);
+          tinaController.toggleGpuMode();
         }
       });
-
-      centerWestPanel.add(tinaSendToGPURenderButton);
+      centerWestPanel.add(gpuModeToggleButton);
 
       //motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/videocut.png")));
     }
@@ -13197,6 +13209,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox tinaVariationProfile2Cmb;
   private JButton tinaVariationProfileEditBtn;
   private JButton tinaSendToGPURenderButton;
+  private JToggleButton gpuModeToggleButton;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -22895,9 +22908,8 @@ public class MainEditorFrame extends JFrame {
       solidRenderingToggleBtn = new JToggleButton();
       solidRenderingToggleBtn.setText("3D");
       solidRenderingToggleBtn.setToolTipText("Enable solid rendering");
-      solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 36));
       solidRenderingToggleBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/kwikdisk-4.png")));
-      solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 42));
+      solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 36));
       solidRenderingToggleBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       solidRenderingToggleBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -24480,5 +24492,9 @@ public class MainEditorFrame extends JFrame {
 
   public JButton getTinaSendToGPURenderButton() {
     return tinaSendToGPURenderButton;
+  }
+
+  public JToggleButton getGpuModeToggleButton() {
+    return gpuModeToggleButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

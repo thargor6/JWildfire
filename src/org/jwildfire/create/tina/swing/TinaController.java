@@ -659,6 +659,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.foregroundOpacityField = parameterObject.foregroundOpacityField;
     data.foregroundOpacitySlider = parameterObject.foregroundOpacitySlider;
     data.solidRenderingToggleBtn = parameterObject.solidRenderingToggleBtn;
+    data.gpuModeToggleButton = parameterObject.gpuModeToggleButton;
     data.tinaSolidRenderingEnableAOCBx = parameterObject.tinaSolidRenderingEnableAOCBx;
     data.tinaSolidRenderingAOIntensityREd = parameterObject.tinaSolidRenderingAOIntensityREd;
     data.tinaSolidRenderingAOIntensitySlider = parameterObject.tinaSolidRenderingAOIntensitySlider;
@@ -6873,5 +6874,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     flameChangeOberservers.remove(observer);
   }
 
+  public void toggleGpuMode() {
+    TinaControllerContextService.getContext().setGpuMode(data.gpuModeToggleButton.isSelected());
+  }
 }
 

@@ -464,6 +464,7 @@ public class TinaControllerData {
   public JSlider foregroundOpacitySlider;
 
   public JToggleButton solidRenderingToggleBtn;
+  public JToggleButton gpuModeToggleButton;
   public JCheckBox tinaSolidRenderingEnableAOCBx;
   public JWFNumberField tinaSolidRenderingAOIntensityREd;
   public JSlider tinaSolidRenderingAOIntensitySlider;
