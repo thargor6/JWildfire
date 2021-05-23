@@ -107,8 +107,8 @@ public class Hypertile1Func extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float pa, r;\n"
-        + "int p = roundf(varpar->hypertile1_p);\n"
-        + "int q = roundf(varpar->hypertile1_q);\n"
+        + "int p = lroundf(varpar->hypertile1_p);\n"
+        + "int q = lroundf(varpar->hypertile1_q);\n"
         + "pa = 2 * PI / p;\n"
         + "\n"
         + "    float r2 = 1.0f - (cosf(2 * PI / p) - 1.f) /\n"

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Oscilloscope2Func extends VariationFunc {
+public class Oscilloscope2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_SEPARATION = "separation";
   private static final String PARAM_FREQUENCYX = "frequencyx";
@@ -115,7 +115,28 @@ public class Oscilloscope2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _tpf = 2.0f * PI * varpar->oscilloscope2_frequencyx;\n"
+        + "float    _tpf2 = 2.0f * PI * varpar->oscilloscope2_frequencyy;\n"
+        + "short    _noDamping = fabsf(varpar->oscilloscope2_damping) <= 1.e-6f ? 1 : 0; float t;\n"
+        + "    float pt = varpar->oscilloscope2_perturbation * sinf(_tpf2 * __y);\n"
+        + "    if (_noDamping) {\n"
+        + "      t = varpar->oscilloscope2_amplitude * (cosf(_tpf * __x + pt)) + varpar->oscilloscope2_separation;\n"
+        + "    } else {\n"
+        + "      t = varpar->oscilloscope2_amplitude * expf(-fabsf(__x) * varpar->oscilloscope2_damping) * (cosf(_tpf * __x + pt)) + varpar->oscilloscope2_separation;\n"
+        + "    }\n"
+        + "\n"
+        + "    if (fabsf(__y) <= t) {\n"
+        + "      __px -= varpar->oscilloscope2 * __x;\n"
+        + "      __py -= varpar->oscilloscope2 * __y;\n"
+        + "    } else {\n"
+        + "      __px += varpar->oscilloscope2 * __x;\n"
+        + "      __py += varpar->oscilloscope2 * __y;\n"
+        + "    }\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->oscilloscope2 * __z;\n" : "");
+  }
 }

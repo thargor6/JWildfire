@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class YinYangFunc extends VariationFunc {
+public class YinYangFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
@@ -133,6 +133,52 @@ public class YinYangFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float sina = sinf(PI * varpar->yin_yang_ang1);\n"
+        + "float cosa = cosf(PI * varpar->yin_yang_ang1);\n"
+        + "float sinb = sinf(PI * varpar->yin_yang_ang2);\n"
+        + "float cosb = cosf(PI * varpar->yin_yang_ang2);\n"
+        + "float xx = __x;\n"
+        + "float yy = __y;\n"
+        + "float inv = 1.f;\n"
+        + "float RR = varpar->yin_yang_radius;\n"
+        + "float R2 = (xx * xx + yy * yy);\n"
+        + "if (R2 < 1.0f) {\n"
+        + "  float nx = xx * cosa - yy * sina;\n"
+        + "  float ny = xx * sina + yy * cosa;\n"
+        + "  if (lroundf(varpar->yin_yang_dual_t) == 1 && RANDFLOAT() > 0.5f) {\n"
+        + "    inv = -1.f;\n"
+        + "    RR = 1.f - varpar->yin_yang_radius;\n"
+        + "    nx = xx * cosb - yy * sinb;\n"
+        + "    ny = xx * sinb + yy * cosb;\n"
+        + "  }\n"
+        + "  xx = nx;\n"
+        + "  yy = ny;\n"
+        + "  if (yy > 0) {\n"
+        + "    float t = sqrtf(1.f - yy * yy);\n"
+        + "    float k = xx / t;\n"
+        + "    float t1 = (t - 0.5f) * 2;\n"
+        + "    float alfa = (1.f - k) * 0.5f;\n"
+        + "    float beta = (1.f - alfa);\n"
+        + "    float dx = alfa * (RR - 1.f);\n"
+        + "    float k1 = alfa * (RR) + beta * 1;\n"
+        + "    __px += varpar->yin_yang * (t1 * k1 + dx) * inv;\n"
+        + "    __py += varpar->yin_yang * sqrtf(1 - t1 * t1) * k1 * inv;\n"
+        + "  } else {\n"
+        + "     __px += varpar->yin_yang * (xx * (1.f - RR) + RR) * inv;\n"
+        + "     __py += varpar->yin_yang * (yy * (1.f - RR)) * inv;\n"
+        + "  }\n"
+        + "} else if (lroundf(varpar->yin_yang_outside) == 1) {\n"
+        + "   __px += varpar->yin_yang * __x;\n"
+        + "   __py += varpar->yin_yang * __y;\n"
+        + "} else {\n"
+        + "  __px += 0.0;\n"
+        + "  __py += 0.0;\n"
+        + "}\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->yin_yang * __z;" : "");
   }
 }

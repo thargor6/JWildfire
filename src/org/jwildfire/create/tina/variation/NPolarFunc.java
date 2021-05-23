@@ -113,7 +113,7 @@ public class NPolarFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "float x    = isodd != 0 ? __x : vvar*__phi;\n"
         + "float y    = isodd != 0 ? __y : vvar2*logf(__r2);\n"
-        + "float angle = (atan2f(y, x) + 2.f*M_PI_F * roundf(RANDFLOAT() * absN - 0.5f))/varpar->npolar_n;\n"
+        + "float angle = (atan2f(y, x) + 2.f*M_PI_F * lroundf(RANDFLOAT() * absN - 0.5f))/varpar->npolar_n;\n"
         + "float r    = varpar->npolar * powf(x*x + y*y, cN) * (isodd == 0 ? 1.f : varpar->npolar_parity);\n"
         + "float cosa;\n"
         + "float sina;\n"

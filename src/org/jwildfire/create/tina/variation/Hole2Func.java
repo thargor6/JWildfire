@@ -136,8 +136,8 @@ public class Hole2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int inside = roundf(varpar->hole2_inside);\n"
-         + "int shape = roundf(varpar->hole2_shape);\n"
+    return "int inside = lroundf(varpar->hole2_inside);\n"
+         + "int shape = lroundf(varpar->hole2_shape);\n"
         + "float rhosq = __r2;\n"
         + "    float theta = __theta * varpar->hole2_d;\n"
         + "    float delta = powf(theta / PI + 1.0f, varpar->hole2_a) * varpar->hole2_c;\n"

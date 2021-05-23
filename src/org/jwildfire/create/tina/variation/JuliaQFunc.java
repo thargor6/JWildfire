@@ -93,8 +93,8 @@ public class JuliaQFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int power = roundf(varpar->juliaq_power)\n;"
-        +  "int divisor = roundf(varpar->juliaq_divisor);\n"
+    return "int power = lroundf(varpar->juliaq_power)\n;"
+        +  "int divisor = lroundf(varpar->juliaq_divisor);\n"
         + "float half_inv_power = 0.5 * divisor / (float) power;\n"
         + "float inv_power = divisor / (float) power;\n"
         + "float inv_power_2pi = 2.0f*PI / (float) power;\n"

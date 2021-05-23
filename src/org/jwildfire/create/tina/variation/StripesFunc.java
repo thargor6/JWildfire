@@ -78,8 +78,8 @@ public class StripesFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->stripes*((__x-roundf(__x))*(1.f-varpar->stripes_space)+roundf(__x));\n"
-        + "__py += varpar->stripes*(__y+(__x-roundf(__x))*(__x-roundf(__x))*varpar->stripes_warp);\n"
+    return "__px += varpar->stripes*((__x-lroundf(__x))*(1.f-varpar->stripes_space)+lroundf(__x));\n"
+        + "__py += varpar->stripes*(__y+(__x-lroundf(__x))*(__x-lroundf(__x))*varpar->stripes_warp);\n"
         + (context.isPreserveZCoordinate() ? "__pz += varpar->stripes*__z;\n" : "");
   }
 }

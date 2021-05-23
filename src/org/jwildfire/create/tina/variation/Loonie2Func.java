@@ -131,7 +131,7 @@ public class Loonie2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int sides = roundf(varpar->loonie2_sides);\n"
+    return "int sides = lroundf(varpar->loonie2_sides);\n"
         + "float _sqrvvar = varpar->loonie2 * varpar->loonie2;\n"
         + "float a = 2.0f*PI / sides;\n"
         + "float _sina = sinf(a);\n"

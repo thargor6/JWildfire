@@ -119,7 +119,7 @@ public class ECollideFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float _eCa, _eCn_pi, _eCa_eCn, _pi_eCn;\n"
-        + "int num = roundf(varpar->eCollide_num);\n"
+        + "int num = lroundf(varpar->eCollide_num);\n"
         + "_eCn_pi = (float) num / PI;\n"
         + "_pi_eCn = PI / (float) num;\n"
         + "_eCa = PI * varpar->eCollide_a;\n"

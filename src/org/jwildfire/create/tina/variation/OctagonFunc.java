@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
 
 import org.jwildfire.base.Tools;
 
-public class OctagonFunc extends VariationFunc {
+public class OctagonFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
@@ -178,4 +178,98 @@ public class OctagonFunc extends VariationFunc {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float r = sqrf(__x*__x) + sqrf(__y*__y) + 2.f * __z*__z;\n"
+        + "if (r == 0.0f) r = 1.e-6f;\n"
+        + "float t = fabsf(__x) + fabsf(__y) + 2.f * sqrtf((lroundf(varpar->octagon_mode) > 1) ? fabsf(__z) :  __z);\n"
+        + "if (t == 0.0f) t = 1.e-6f;\n"
+        + "float m = 1.0f;\n"
+        + "short splits = 0;\n"
+        + "switch (lroundf(varpar->octagon_mode)) {\n"
+        + "  case 0:\n"
+        + "    if (r <= varpar->octagon / 2.0f) {\n"
+        + "      m = 1.0f + 1.0f / t;\n"
+        + "      splits = 1;\n"
+        + "    } else {\n"
+        + "       m = 1.0f / r;\n"
+        + "       splits = 0;\n"
+        + "    }\n"
+        + "    break;\n"
+        + "  case 1:\n"
+        + "    if (r <= varpar->octagon / 2.0f) {\n"
+        + "      m = 1.0f + 1.0f / t;\n"
+        + "      splits = 1;\n"
+        + "    } else if (varpar->octagon >= 0) {\n"
+        + "      m = 1.0f / r + 1.0f / t;\n"
+        + "      splits = 1;\n"
+        + "    } else {\n"
+        + "      m = 1.0f + 1.0f / r;\n"
+        + "      splits = 1;\n"
+        + "    }\n"
+        + "    break;\n"
+        + "  case 2:\n"
+        + "    if (r <= varpar->octagon / 2.0f) {\n"
+        + "      m = 1.0f + 1.0f / t;\n"
+        + "      splits = 1;\n"
+        + "    } else {\n"
+        + "      m = 1.0f + 1.0f / r;\n"
+        + "      splits = 0;\n"
+        + "    }\n"
+        + "    break;\n"
+        + "  case 3:\n"
+        + "    if (r <= varpar->octagon / 2.0f) {\n"
+        + "      m = 1.0f / t;\n"
+        + "      splits = 1;\n"
+        + "    } else {\n"
+        + "      m = 1.0f / r;\n"
+        + "      splits = 0;\n"
+        + "    }\n"
+        + "    break;\n"
+        + "  case 4:\n"
+        + "    if (r <= varpar->octagon / 2.0f) {\n"
+        + "      m = 1.0f / r;\n"
+        + "      splits = 1;\n"
+        + "    } else {\n"
+        + "      m = 1.0f / r;\n"
+        + "      splits = 0;\n"
+        + "    }\n"
+        + "    break;\n"
+        + "  case 5:\n"
+        + "    if (t <= varpar->octagon / 2.0f) {\n"
+        + "      m = 1.0f / t;\n"
+        + "      splits = 1;\n"
+        + "    } else {\n"
+        + "      m = 1.0f / r;\n"
+        + "      splits = 0;\n"
+        + "    }\n"
+        + "    break;\n"
+        + "  case 6:\n"
+        + "    if (t <= varpar->octagon / 2.0f) {\n"
+        + "      m = 1.0 + 1.0 / t;\n"
+        + "      splits = 1;\n"
+        + "    } else {\n"
+        + "      m = 1.0 + 1.0 / r;\n"
+        + "      splits = 0;\n"
+        + "    }\n"
+        + "    break;\n"
+        + "}\n"
+        + "__px += varpar->octagon * m * __x;\n"
+        + "__py += varpar->octagon * m * __y;\n"
+        + "__pz += varpar->octagon * m * __z;\n"
+        + "if (splits) {\n"
+        + "  if (__x >= 0.0)\n"
+        + "    __px += varpar->octagon * (__x + varpar->octagon_x);\n"
+        + "  else\n"
+        + "    __px += varpar->octagon * (__x - varpar->octagon_x);\n"
+        + "  if (__y >= 0.0)\n"
+        + "    __py += varpar->octagon * (__y + varpar->octagon_y);\n"
+        + "  else\n"
+        + "    __py += varpar->octagon * (__y - varpar->octagon_y);\n"
+        + "  if (__z >= 0.0)\n"
+        + "    __pz += varpar->octagon * (__z + varpar->octagon_z);\n"
+        + "  else\n"
+        + "    __pz += varpar->octagon * (__z - varpar->octagon_z);\n"
+        + "}\n";
+  }
 }

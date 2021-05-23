@@ -151,7 +151,7 @@ public class Julia3DFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float n = roundf(varpar->julia3D_power);\n"
+    return "float n = lroundf(varpar->julia3D_power);\n"
         + "n = n == 0.f ? 1.f : n;\n"
         + "float absn = fabsf(n);\n"
         + "float cn = (1.f/n - 1.f) / 2.f;\n"
@@ -160,7 +160,7 @@ public class Julia3DFunc extends VariationFunc implements SupportsGPU {
         + "float tmp = r * __r;\n"
         + "float cosa;\n"
         + "float sina;\n"
-        + "sincosf((atan2f(__y, __x) + 2.f*M_PI_F*(roundf(RANDFLOAT()*absn-0.5f)))/n, &sina, &cosa);\n"
+        + "sincosf((atan2f(__y, __x) + 2.f*M_PI_F*(lroundf(RANDFLOAT()*absn-0.5f)))/n, &sina, &cosa);\n"
         + "__px += tmp*cosa;\n"
         + "__py += tmp*sina;\n"
         + "__pz += r*_z;";

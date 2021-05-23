@@ -132,7 +132,7 @@ public class CropFunc extends VariationFunc implements SupportsGPU {
         + "h = (ymax - ymin) * 0.5f * varpar->crop_scatter_area;\n"
         + "float x = __x;\n"
         + "float y = __y;\n"
-        + "if (((x < xmin) || (x > xmax) || (y < ymin) || (y > ymax)) && (roundf(varpar->crop_zero) != 0)) {\n"
+        + "if (((x < xmin) || (x > xmax) || (y < ymin) || (y > ymax)) && (lroundf(varpar->crop_zero) != 0)) {\n"
         + "  __px = __py = 0;\n"
         + "  __doHide = true;\n"
         + "} else {\n"

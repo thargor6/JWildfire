@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 
-public class MobiqFunc extends VariationFunc {
+public class MobiqFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_AT = "qat";
@@ -170,7 +170,44 @@ public class MobiqFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return " float t1 = varpar->mobiq_qat;\n"
+        + "    float t2 = __x;\n"
+        + "    float t3 = varpar->mobiq_qbt;\n"
+        + "    float t4 = varpar->mobiq_qct;\n"
+        + "    float t5 = varpar->mobiq_qdt;\n"
+        + "    float x1 = varpar->mobiq_qax;\n"
+        + "    float x2 = __y;\n"
+        + "    float x3 = varpar->mobiq_qbx;\n"
+        + "    float x4 = varpar->mobiq_qcx;\n"
+        + "    float x5 = varpar->mobiq_qdx;\n"
+        + "    float y1 = varpar->mobiq_qay;\n"
+        + "    float y2 = __z;\n"
+        + "    float y3 = varpar->mobiq_qby;\n"
+        + "    float y4 = varpar->mobiq_qcy;\n"
+        + "    float y5 = varpar->mobiq_qdy;\n"
+        + "    float z1 = varpar->mobiq_qaz;\n"
+        + "    float z3 = varpar->mobiq_qbz;\n"
+        + "    float z4 = varpar->mobiq_qcz;\n"
+        + "    float z5 = varpar->mobiq_qdz;\n"
+        + "\n"
+        + "    float nt = t1 * t2 - x1 * x2 - y1 * y2 + t3;\n"
+        + "    float nx = t1 * x2 + x1 * t2 - z1 * y2 + x3;\n"
+        + "    float ny = t1 * y2 + y1 * t2 + z1 * x2 + y3;\n"
+        + "    float nz = z1 * t2 + x1 * y2 - y1 * x2 + z3;\n"
+        + "    float dt = t4 * t2 - x4 * x2 - y4 * y2 + t5;\n"
+        + "    float dx = t4 * x2 + x4 * t2 - z4 * y2 + x5;\n"
+        + "    float dy = t4 * y2 + y4 * t2 + z4 * x2 + y5;\n"
+        + "    float dz = z4 * t2 + x4 * y2 - y4 * x2 + z5;\n"
+        + "    float ni = varpar->mobiq / (dt*dt + dx*dx + dy*dy + dz*dz);\n"
+        + "\n"
+        + "\n"
+        + "    __px += (nt * dt + nx * dx + ny * dy + nz * dz) * ni;\n"
+        + "    __py += (nx * dt - nt * dx - ny * dz + nz * dy) * ni;\n"
+        + "    __pz += (ny * dt - nt * dy - nz * dx + nx * dz) * ni;\n";
+  }
 }

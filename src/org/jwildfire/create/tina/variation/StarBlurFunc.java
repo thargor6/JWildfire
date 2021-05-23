@@ -100,7 +100,7 @@ public class StarBlurFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float power = roundf(varpar->starblur_power);\n" +
+    return "float power = lroundf(varpar->starblur_power);\n" +
             "float starblur_alpha = PI / power;\n"
         + "float starblur_length = sqrtf(1.0f + varpar->starblur_range*varpar->starblur_range - 2.0f * varpar->starblur_range * cosf(starblur_alpha));\n"
         + "starblur_alpha = asinf(sinf(starblur_alpha) * varpar->starblur_range / starblur_length);\n"

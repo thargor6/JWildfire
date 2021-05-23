@@ -87,7 +87,7 @@ public class CannabisCurveWFFunc extends VariationFunc implements SupportsGPU {
     return "float a = __phi;\n"
         + "float r = (1.f + 9.0f / 10.0f * cosf(8.0f * a)) * (1.f + 1.0f / 10.0f * cosf(24.0f * a)) * (9.0f / 10.0f + 1.0f / 10.0f * cosf(200.0f * a)) * (1.0f + sinf(a));\n"
         + "a += PI / 2.0f;\n"
-        + "if (roundf(varpar->cannabiscurve_wf_filled) == 1) {\n"
+        + "if (lroundf(varpar->cannabiscurve_wf_filled) == 1) {\n"
         + "   r *= RANDFLOAT();\n"
         + "}\n"
         + "float nx = sinf(a) * r;\n"

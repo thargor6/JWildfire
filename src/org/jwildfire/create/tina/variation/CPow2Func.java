@@ -116,7 +116,7 @@ public class CPow2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int range = roundf(varpar->cpow2_range);\n"
+    return "int range = lroundf(varpar->cpow2_range);\n"
         + "float ang = 2.0f * PI / varpar->cpow2_divisor;\n"
         + "float c = varpar->cpow2_r * cosf(PI / 2.0f * varpar->cpow2_a) / varpar->cpow2_divisor;\n"
         + "float d = varpar->cpow2_r * sinf(PI / 2.0f * varpar->cpow2_a) / varpar->cpow2_divisor;\n"

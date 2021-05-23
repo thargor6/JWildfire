@@ -226,7 +226,7 @@ public class SuperShape3DFunc extends VariationFunc implements SupportsGPU {
         + "    float r1 = powf(pr1, n1n_1) + varpar->superShape3d_spiral * rho1;\n"
         + "    float r2 = powf(pr2, n1n_2);\n"
         + "\n"
-        + "    if (roundf(varpar->superShape3d_toroidmap) == 1) {\n"
+        + "    if (lroundf(varpar->superShape3d_toroidmap) == 1) {\n"
         + "      __px += varpar->superShape3d * cosr * (r1 + r2 * cosp);\n"
         + "      __py += varpar->superShape3d * sinr * (r1 + r2 * cosp);\n"
         + "      __pz += varpar->superShape3d * r2 * sinp;\n"
