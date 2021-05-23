@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 
-public class PointGrid3DWFFunc extends VariationFunc {
+public class PointGrid3DWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_XMIN = "xmin";
@@ -136,7 +136,54 @@ public class PointGrid3DWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _dx = (varpar->pointgrid3d_wf_xmax - varpar->pointgrid3d_wf_xmin) / (float) varpar->pointgrid3d_wf_xcount;\n"
+        + "float _dy = (varpar->pointgrid3d_wf_ymax - varpar->pointgrid3d_wf_ymin) / (float) varpar->pointgrid3d_wf_ycount;\n"
+        + "float _dz = (varpar->pointgrid3d_wf_zmax - varpar->pointgrid3d_wf_zmin) / (float) varpar->pointgrid3d_wf_zcount;\n"
+        + "int xIdx = (int)(RANDFLOAT()*varpar->pointgrid3d_wf_xcount);\n"
+        + "int yIdx = (int)(RANDFLOAT()*varpar->pointgrid3d_wf_ycount);\n"
+        + "int zIdx = (int)(RANDFLOAT()*varpar->pointgrid3d_wf_zcount);\n"
+        + "float x = varpar->pointgrid3d_wf_xmin + _dx * xIdx;\n"
+        + "float y = varpar->pointgrid3d_wf_ymin + _dy * yIdx;\n"
+        + "float z = varpar->pointgrid3d_wf_zmin + _dz * zIdx;\n"
+        + "if (varpar->pointgrid3d_wf_distortion > 0) {\n"
+        + "   long xseed = (varpar->pointgrid3d_wf_seed + 1563) * xIdx + zIdx;\n"
+        + "   pointgrid3d_randomize(xseed);\n"
+        + "   float distx = (0.5 - pointgrid3d_random()) * varpar->pointgrid3d_wf_distortion;\n"
+        + "   long yseed = (varpar->pointgrid3d_wf_seed + 6715) * yIdx + xIdx;\n"
+        + "   pointgrid3d_randomize(yseed);\n"
+        + "   float disty = (0.5 - pointgrid3d_random()) * varpar->pointgrid3d_wf_distortion;\n"
+        + "   long zseed = (varpar->pointgrid3d_wf_seed + 4761) * zIdx + yIdx;\n"
+        + "   pointgrid3d_randomize(zseed);\n"
+        + "   float distz = (0.5 - pointgrid3d_random()) * varpar->pointgrid3d_wf_distortion;\n"
+        + "   x += distx;\n"
+        + "   y += disty;\n"
+        + "   z += distz;\n"
+        + "}\n"
+        + "__px += x * varpar->pointgrid3d_wf;\n"
+        + "__py += y * varpar->pointgrid3d_wf;\n"
+        + "__pz += z * varpar->pointgrid3d_wf;\n";
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return
+            "__device__ int pointgrid3d_u = 12244355;\n"
+                    +"__device__ int pointgrid3d_v = 34384;\n\n"
+                    + "__device__ void pointgrid3d_randomize(long seed) {\n"
+                    + "  pointgrid3d_u = (int) (seed << 16);\n"
+                    + "  pointgrid3d_v = (int) (seed << 16) >> 16;"
+                    + "}\n\n"
+                    + "__device__ float pointgrid3d_random() {\n"
+                    + "  pointgrid3d_v = 36969 * (pointgrid3d_v & 65535) + (pointgrid3d_v >> 16);\n"
+                    + "  pointgrid3d_u = 18000 * (pointgrid3d_u & 65535) + (pointgrid3d_u >> 16);\n"
+                    + "  int rnd = (pointgrid3d_v << 16) + pointgrid3d_u;\n"
+                    + "  double res = (float) rnd / (float)0x7fffffff;\n"
+                    + "  return res < 0 ? -res : res;"
+                    + "}\n";
+  }
 }

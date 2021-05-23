@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class ParallelFunc extends VariationFunc {
+public class ParallelFunc extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_X1WIDTH = "x1width";
@@ -153,7 +153,38 @@ public class ParallelFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+    return "float _xr1 = varpar->parallel_x1mod2 * varpar->parallel_x1mod1;\n"
+        + "float _xr2 = varpar->parallel_x2mod2 * varpar->parallel_x2mod1;\n"
+        + "if (RANDFLOAT() < 0.5f) {\n"
+        + "   float x1 = -varpar->parallel_x1width;\n"
+        + "   if (RANDFLOAT() < 0.5)\n"
+        + "     x1 = varpar->parallel_x1width;\n"
+        + "   __px += varpar->parallel_x1tilesize * (__x + roundf(x1 * logf(RANDFLOAT())));\n"
+        + "   if (__y > varpar->parallel_x1mod1) {\n"
+        + "     __py += varpar->parallel_x1height * (-varpar->parallel_x1mod1 + fmodf(__y + varpar->parallel_x1mod1, _xr1)) + varpar->parallel * varpar->parallel_x1move;\n"
+        + "   } else if (__y < -varpar->parallel_x1mod1) {\n"
+        + "     __py += varpar->parallel_x1height * (varpar->parallel_x1mod1 - fmodf(varpar->parallel_x1mod1 - __y, _xr1)) + varpar->parallel * varpar->parallel_x1move;\n"
+        + "   } else {\n"
+        + "    __py += varpar->parallel_x1height * __y + varpar->parallel * varpar->parallel_x1move;\n"
+        + "   }\n"
+        + "} else {\n"
+        + "   float x2 = -varpar->parallel_x2width;\n"
+        + "   if (RANDFLOAT() < 0.5)\n"
+        + "     x2 = varpar->parallel_x2width;\n"
+        + "   __px += varpar->parallel_x2tilesize * (__x + roundf(x2 * logf(RANDFLOAT())));\n"
+        + "   if (__y > varpar->parallel_x2mod1) {\n"
+        + "     __py += varpar->parallel_x2height * (-varpar->parallel_x2mod1 + fmodf(__y + varpar->parallel_x2mod1, _xr2)) - varpar->parallel * varpar->parallel_x2move;\n"
+        + "   } else if (__y < -varpar->parallel_x2mod1) {\n"
+        + "     __py += varpar->parallel_x2height * (varpar->parallel_x2mod1 - fmodf(varpar->parallel_x2mod1 - __y, _xr2)) - varpar->parallel * varpar->parallel_x2move;\n"
+        + "   } else {\n"
+        + "    __py += varpar->parallel_x2height * __y - varpar->parallel * varpar->parallel_x2move;\n"
+        + "   }\n"
+        + "}\n"
+				+ (context.isPreserveZCoordinate() ? "__pz += varpar->parallel * __z;\n" : "");
+	}
 }

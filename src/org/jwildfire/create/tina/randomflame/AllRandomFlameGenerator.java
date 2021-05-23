@@ -22,10 +22,12 @@ import java.util.List;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
+import org.jwildfire.create.tina.swing.TinaControllerContextService;
 
 public class AllRandomFlameGenerator extends RandomFlameGenerator {
   private static List<RandomFlameGenerator> allGenerators;
   private static List<RandomFlameGenerator> simpleGenerators;
+  private static List<RandomFlameGenerator> gpuSupportedGenerators;
   private boolean useSimpleGenerators = false;
 
   static {
@@ -82,20 +84,47 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new TentacleRandomFlameGenerator());
     allGenerators.add(new TileBallRandomFlameGenerator());
     allGenerators.add(new XenomorphRandomFlameGenerator());
+    initSimpleGenerators();
+    initGpuSupportedGenerators();
+  }
 
+  // currently the same as "simple generator", but this might change in the future
+  private static void initGpuSupportedGenerators() {
+    gpuSupportedGenerators  = new ArrayList<RandomFlameGenerator>();
+    gpuSupportedGenerators.addAll(allGenerators);
+    int i = 0;
+    while (i < gpuSupportedGenerators.size()) {
+      Class<?> cls = gpuSupportedGenerators.get(i).getClass();
+      if (LayersRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls) ||
+              WikimediaCommonsRandomFlameGenerator.class.equals(cls) || ColorMapRandomFlameGenerator.class.equals(cls) ||
+              SolidExperimentalRandomFlameGenerator.class.equals(cls) || SolidStunningRandomFlameGenerator.class.equals(cls) ||
+              SolidJulia3DRandomFlameGenerator.class.equals(cls) || SolidShadowsRandomFlameGenerator.class.equals(cls) ||
+              SolidLabyrinthRandomFlameGenerator.class.equals(cls)) {
+        gpuSupportedGenerators.remove(i);
+      }
+      else {
+        i++;
+      }
+    }
+  }
+
+  private static void initSimpleGenerators() {
     simpleGenerators = new ArrayList<RandomFlameGenerator>();
     simpleGenerators.addAll(allGenerators);
     int i = 0;
     while (i < simpleGenerators.size()) {
       Class<?> cls = simpleGenerators.get(i).getClass();
-      if (LayersRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls) ||
-          WikimediaCommonsRandomFlameGenerator.class.equals(cls) || ColorMapRandomFlameGenerator.class.equals(cls) ||
-          SolidExperimentalRandomFlameGenerator.class.equals(cls) || SolidStunningRandomFlameGenerator.class.equals(cls) ||
-          SolidJulia3DRandomFlameGenerator.class.equals(cls) || SolidShadowsRandomFlameGenerator.class.equals(cls) ||
-          SolidLabyrinthRandomFlameGenerator.class.equals(cls)) {
+      if (LayersRandomFlameGenerator.class.equals(cls)
+          || SubFlameRandomFlameGenerator.class.equals(cls)
+          || WikimediaCommonsRandomFlameGenerator.class.equals(cls)
+          || ColorMapRandomFlameGenerator.class.equals(cls)
+          || SolidExperimentalRandomFlameGenerator.class.equals(cls)
+          || SolidStunningRandomFlameGenerator.class.equals(cls)
+          || SolidJulia3DRandomFlameGenerator.class.equals(cls)
+          || SolidShadowsRandomFlameGenerator.class.equals(cls)
+          || SolidLabyrinthRandomFlameGenerator.class.equals(cls)) {
         simpleGenerators.remove(i);
-      }
-      else {
+      } else {
         i++;
       }
     }
@@ -106,7 +135,8 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
     RandomFlameGeneratorState state = super.initState(pPrefs, pRandomGradientGenerator);
-    List<RandomFlameGenerator> generators = useSimpleGenerators ? simpleGenerators : allGenerators;
+    boolean useGpuSupported = TinaControllerContextService.getContext().isGpuMode();
+    List<RandomFlameGenerator> generators = useGpuSupported ? gpuSupportedGenerators : useSimpleGenerators ? simpleGenerators : allGenerators;
     RandomFlameGenerator generator = generators.get((int) (Math.random() * generators.size()));
     RandomFlameGeneratorState subState = generator.initState(pPrefs, pRandomGradientGenerator);
     state.mergeParams(subState);

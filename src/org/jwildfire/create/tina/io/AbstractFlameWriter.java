@@ -551,7 +551,7 @@ public class AbstractFlameWriter {
   }
 
   private void writeMotionCurve(SimpleXMLBuilder xb, List<SimpleXMLBuilder.Attribute<?>> attrList, String pPropertyname, MotionCurve curve) {
-    if (!curve.isEmpty()) {
+    if (!curve.isEmpty() && !(!curve.isEnabled() && curve.getX().length<=1) ) {
       String namePrefix = pPropertyname + "_";
       addMotionCurveAttributes(xb, attrList, namePrefix, curve);
     }
