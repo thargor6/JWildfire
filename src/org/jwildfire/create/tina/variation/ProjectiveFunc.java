@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class ProjectiveFunc extends VariationFunc {
+public class ProjectiveFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "A";
@@ -109,7 +109,14 @@ public class ProjectiveFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float U = varpar->projective_A * __x + varpar->projective_B * __y + varpar->projective_C;\n"
+        + "    __px += varpar->projective * (varpar->projective_A1 * __x + varpar->projective_B1 * __y + varpar->projective_C1) / U;\n"
+        + "    __py += varpar->projective * (varpar->projective_A2 * __x + varpar->projective_B2 * __y + varpar->projective_C2) / U;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->projective * __z;\n" : "");
+  }
 }
