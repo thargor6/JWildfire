@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   Copyright (C) 2016 Nicolaus Anderson
   
@@ -27,7 +27,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
 /**
  * @author eralex61, transcribed by chronologicaldot, fixed by thargor6
  */
-public class MobiusNFunc extends VariationFunc {
+public class MobiusNFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RE_A = "re_a";
@@ -43,7 +43,7 @@ public class MobiusNFunc extends VariationFunc {
 
   private static final String[] params = {PARAM_RE_A, PARAM_RE_B, PARAM_RE_C, PARAM_RE_D, PARAM_IM_A, PARAM_IM_B, PARAM_IM_C, PARAM_IM_D, PARAM_POWER, PARAM_DIST};
 
-  private double realA = 1.0, realB = 0.0, realC = 0.0, realD = 1.0, imagA = 0.0, imagB = 0.0, imagC = 0.0, imagD = 0.0, power = 1.0, dist = 1.0;
+  private double re_a = 1.0, re_b = 0.0, re_c = 0.0, re_d = 1.0, im_a = 0.0, im_b = 0.0, im_c = 0.0, im_d = 0.0, power = 1.0, dist = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -63,10 +63,10 @@ public class MobiusNFunc extends VariationFunc {
     // We perform what appears to be a rotation matrix and shift,
     // letting x and y form a matrix through which we modify the points [realA,imagA] and [realC,imagC]
     //[Ux,Uy] = [x,-y; y,-x]*[realA, imagA] + [realB, imagB]
-    realU = realA * x - imagA * y + realB;
-    imagU = realA * y + imagA * x + imagB;
-    realV = realC * x - imagC * y + realD;
-    imagV = realC * y + imagC * x + imagD;
+    realU = re_a * x - im_a * y + re_b;
+    imagU = re_a * y + im_a * x + im_b;
+    realV = re_c * x - im_c * y + re_d;
+    imagV = re_c * y + im_c * x + im_d;
     radV = sqr(realV) + sqr(imagV);
 
     x = (realU * realV + imagU * imagV) / radV;
@@ -100,7 +100,7 @@ public class MobiusNFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{realA, realB, realC, realD, imagA, imagB, imagC, imagD, power, dist};
+    return new Object[]{re_a, re_b, re_c, re_d, im_a, im_b, im_c, im_d, power, dist};
   }
 
   @Override
@@ -111,21 +111,21 @@ public class MobiusNFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_RE_A.equalsIgnoreCase(pName)) {
-      realA = pValue;
+      re_a = pValue;
     } else if (PARAM_RE_B.equalsIgnoreCase(pName)) {
-      realB = pValue;
+      re_b = pValue;
     } else if (PARAM_RE_C.equalsIgnoreCase(pName)) {
-      realC = pValue;
+      re_c = pValue;
     } else if (PARAM_RE_D.equalsIgnoreCase(pName)) {
-      realD = pValue;
+      re_d = pValue;
     } else if (PARAM_IM_A.equalsIgnoreCase(pName)) {
-      imagA = pValue;
+      im_a = pValue;
     } else if (PARAM_IM_B.equalsIgnoreCase(pName)) {
-      imagB = pValue;
+      im_b = pValue;
     } else if (PARAM_IM_C.equalsIgnoreCase(pName)) {
-      imagC = pValue;
+      im_c = pValue;
     } else if (PARAM_IM_D.equalsIgnoreCase(pName)) {
-      imagD = pValue;
+      im_d = pValue;
     } else if (PARAM_POWER.equalsIgnoreCase(pName)) {
       power = pValue;
     } else if (PARAM_DIST.equalsIgnoreCase(pName)) {
@@ -142,7 +142,38 @@ public class MobiusNFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float power = varpar->mobiusN_power;\n"
+        + "    if (fabsf(power) < 1.0)\n"
+        + "      power = 1.0;\n"
+        + "float realU, imagU, realV, imagV, radV, x, y, z, r, alpha, sina, cosa, n;\n"
+        + "    z = 4.0f * varpar->mobiusN_dist / power;\n"
+        + "    r = powf(__r, z);\n"
+        + "    alpha = atan2f(__y, __x) * power;\n"
+        + "    sina = sinf(alpha);\n"
+        + "    cosa = cosf(alpha);\n"
+        + "    x = r * cosa;\n"
+        + "    y = r * sina;\n"
+        + "    realU = varpar->mobiusN_re_a * x - varpar->mobiusN_im_a * y + varpar->mobiusN_re_b;\n"
+        + "    imagU = varpar->mobiusN_re_a * y + varpar->mobiusN_im_a * x + varpar->mobiusN_im_b;\n"
+        + "    realV = varpar->mobiusN_re_c * x - varpar->mobiusN_im_c * y + varpar->mobiusN_re_d;\n"
+        + "    imagV = varpar->mobiusN_re_c * y + varpar->mobiusN_im_c * x + varpar->mobiusN_im_d;\n"
+        + "    radV = realV*realV + imagV*imagV;\n"
+        + "\n"
+        + "    x = (realU * realV + imagU * imagV) / radV;\n"
+        + "    y = (imagU * realV - realU * imagV) / radV;\n"
+        + "    z = 1.0f / z;\n"
+        + "    r = powf(sqrtf(x*x + y*y), z);\n"
+        + "    n = floorf(power * RANDFLOAT());\n"
+        + "    alpha = (atan2f(y, x) + n * 2.0f*PI) / floorf(power);\n"
+        + "    sina = sinf(alpha);\n"
+        + "    cosa = cosf(alpha);\n"
+        + "    __px += varpar->mobiusN * r * cosa;\n"
+        + "    __py += varpar->mobiusN * r * sina;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->mobiusN * __z;\n" : "");
+  }
 }

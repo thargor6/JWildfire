@@ -1,6 +1,6 @@
 /*
 JWildfire - an image and animation processor written in Java 
-Copyright (C) 1995-2011 Andreas Maschke
+Copyright (C) 1995-2021 Andreas Maschke
 This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
 General Public License as published by the Free Software Foundation; either version 2.1 of the 
 License, or (at your option) any later version.
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class Petal3DFunc extends VariationFunc {
+public class Petal3DFunc extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_MODE = "mode";
@@ -169,7 +169,37 @@ public class Petal3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+    return "float ax = cosf(__x * varpar->petal3D_warp);\n"
+        + "  float bx = (cosf(__x + varpar->petal3D_x1) * cosf(__y + varpar->petal3D_x2)) * (cosf(__x + varpar->petal3D_x3) * cosf(__y + varpar->petal3D_x4))\n"
+        + "    * (cosf(__x + varpar->petal3D_x5) * cosf(__y + varpar->petal3D_x6));\n"
+        + "  float by = (sinf(__x + varpar->petal3D_y1) * cosf(__y + varpar->petal3D_y2)) * (sinf(__x + varpar->petal3D_y3) * cosf(__y + varpar->petal3D_y4))\n"
+        + "    * (sinf(__x + varpar->petal3D_y5) * cosf(__y + varpar->petal3D_y6));\n"
+        + "  float zy = (sinf(__z + varpar->petal3D_z1) * cosf(__y + varpar->petal3D_z2)) * (sinf(__z + varpar->petal3D_z3) * cosf(__y + varpar->petal3D_z4))\n"
+        + "    * (sinf(__z + varpar->petal3D_z5) * cosf(__y + varpar->petal3D_z6));\n"
+        + "  float zx = (sinf(__z + varpar->petal3D_z1) * cosf(__x + varpar->petal3D_z2)) * (sinf(__z + varpar->petal3D_z3) * cosf(__x + varpar->petal3D_z4))\n"
+        + "    * (sinf(__z + varpar->petal3D_z5) * cosf(__x + varpar->petal3D_z6));\n"
+        + "  float yz = (sinf(__y + varpar->petal3D_z1) * cosf(__z + varpar->petal3D_z2)) * (sinf(__y + varpar->petal3D_z3) * cosf(__z + varpar->petal3D_z4))\n"
+        + "    * (sinf(__y + varpar->petal3D_z5) * cosf(__z + varpar->petal3D_z6));\n"
+        + "  float xz = (sinf(__x + varpar->petal3D_z1) * cosf(__z + varpar->petal3D_z2)) * (sinf(__x + varpar->petal3D_z3) * cosf(__z + varpar->petal3D_z4))\n"
+        + "    * (sinf(__x + varpar->petal3D_z5) * cosf(__z + varpar->petal3D_z6));\n"
+        + "  __px += varpar->petal3D * ax * bx;\n"
+        + "  __py += varpar->petal3D * ax * by;\n"
+				+ "  int mode = lroundf(varpar->petal3D_mode);\n"
+        + "  if (mode == 0) {\n"
+        + "   __pz += varpar->petal3D * __z;\n"
+        + "  } else if (mode == 1) {\n"
+        + "   __pz += varpar->petal3D * ax * zx;\n"
+        + "  } else if (mode == 2) {\n"
+        + "   __pz += varpar->petal3D * ax * zy;\n"
+        + "  } else if (mode == 3) {\n"
+        + "   __pz += varpar->petal3D * ax * yz;\n"
+        + "  } else if (mode == 4) {\n"
+        + "   __pz += varpar->petal3D * ax * xz;\n"
+        + "  }\n";
+	}
 }

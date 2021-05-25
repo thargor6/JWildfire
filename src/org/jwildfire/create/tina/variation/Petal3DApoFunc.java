@@ -1,6 +1,6 @@
 /*
 JWildfire - an image and animation processor written in Java 
-Copyright (C) 1995-2011 Andreas Maschke
+Copyright (C) 1995-2021 Andreas Maschke
 This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
 General Public License as published by the Free Software Foundation; either version 2.1 of the 
 License, or (at your option) any later version.
@@ -24,7 +24,7 @@ import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 
-public class Petal3DApoFunc extends VariationFunc {
+public class Petal3DApoFunc extends VariationFunc implements SupportsGPU {
     private static final long serialVersionUID = 1L;
 
     private static final String PARAM_WIDTH = "width";
@@ -135,7 +135,52 @@ public class Petal3DApoFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "     float shaper, shaper2, tmpPY, tmpPZ, tmpSmth;\n"
+        + "      float squeeze;\n"
+        + "      int posNeg = 1;\n"
+        + "      if(RANDFLOAT() < 0.5f)\n"
+        + "      {\n"
+        + "          posNeg = -1;\n"
+        + "      }\n"
+        + "      float styleSign = varpar->petal3D_apo_style >= 0 ? 1.0f : -1.0f;\n"
+        + "      float a = cosf(__x);\n"
+        + "      float bx = (cosf(__x)*cosf(__y))*(cosf(__x)*cosf(__y))*(cosf(__x)*cosf(__y)); \n"
+        + "      float by = (sinf(__x)*cosf(__y))*(sinf(__x)*cosf(__y))*(sinf(__x)*cosf(__y)); \n"
+        + "      __px += varpar->petal3D_apo * a * bx;\n"
+        + "      tmpPY = varpar->petal3D_apo * a * by * varpar->petal3D_apo_width;\n"
+        + "      __py += tmpPY;\n"
+        + "      if(fabsf(varpar->petal3D_apo_scale1)>1.0f)\n"
+        + "      {\n"
+        + "          squeeze = fabsf(varpar->petal3D_apo_scale1)-1.0f;\n"
+        + "          shaper  = (-1*sinf(__x*varpar->petal3D_apo_scale1*PI))*0.5f+(__x*squeeze*0.5f)+sinf(fabsf(__y*varpar->petal3D_apo_scale2*PI)); \n"
+        + "          shaper2 = (-1*sinf(__x*varpar->petal3D_apo_scale1*PI))*0.5f+(__x*squeeze*0.5f)+tmpPY*varpar->petal3D_apo_scale2*0.5f;\n"
+        + "      }\n"
+        + "      else\n"
+        + "      {\n"
+        + "          squeeze = 0.0f;\n"
+        + "          shaper  = (-1*sinf(__x*varpar->petal3D_apo_scale1*PI))*0.5f+sinf(fabsf(__y*varpar->petal3D_apo_scale2*PI));\n"
+        + "          shaper2 = (-1*sinf(__x*varpar->petal3D_apo_scale1*PI))*0.5f+tmpPY*varpar->petal3D_apo_scale2*0.5;\n"
+        + "      }\n"
+        + "      tmpSmth=0.5f-sqrf(varpar->petal3D_apo_style);\n"
+        + "          tmpPZ = shaper;\n"
+        + "      if(fabsf(varpar->petal3D_apo_style)>0.70710678f)\n"
+        + "          {\n"
+        + "              tmpPZ = shaper2*styleSign;\n"
+        + "          }\n"
+        + "          else if(varpar->petal3D_apo_style<0.0)\n"
+        + "              {\n"
+        + "                  tmpPZ = tmpSmth*2.0f*shaper - (1.0f-tmpSmth*2.0f)*shaper2;\n"
+        + "              }\n"
+        + "              else if(varpar->petal3D_apo_style>0.0)\n"
+        + "                  {\n"
+        + "                      tmpPZ = tmpSmth*2.0f*shaper + (1.0f-tmpSmth*2.0f)*shaper2;\n"
+        + "                  }\n"
+        + "      \n"
+        + "      __pz += varpar->petal3D_apo*tmpPZ*varpar->petal3D_apo_Zshape;\n";
+  }
 }

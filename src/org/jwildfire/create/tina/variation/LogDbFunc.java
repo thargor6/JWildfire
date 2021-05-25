@@ -16,7 +16,7 @@
 */
 /*
  JWildfire - an image and animation processor written in Java 
- Copyright (C) 1995-2011 Andreas Maschke
+ Copyright (C) 1995-2021 Andreas Maschke
 
  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
  General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -38,7 +38,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class LogDbFunc extends VariationFunc {
+public class LogDbFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_BASE = "base";
@@ -110,7 +110,30 @@ public class LogDbFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _denom = 0.5;\n"
+        + "    if (varpar->log_db_base > 1.0e-20f)\n"
+        + "      _denom = _denom / logf(2.71828182845905 * varpar->log_db_base);\n"
+        + "    _denom *= varpar->log_db;\n"
+        + "float _fixpe = PI;\n"
+        + "    if (varpar->log_db_fix_period > 1.0e-20f)\n"
+        + "      _fixpe *= varpar->log_db_fix_period;\n"
+        + "    float fix_atan_period = 0.f;\n"
+        + "    int adp;\n"
+        + "    int i;\n"
+        + "    for (i = 0; i < 7; i++) {\n"
+        + "      adp = lroundf(RANDFLOAT()*10.f - 5);\n"
+        + "      if (lroundf(fabsf(adp)) >= 3)\n"
+        + "        adp = 0;\n"
+        + "      fix_atan_period += (float) adp;\n"
+        + "    }\n"
+        + "    fix_atan_period *= _fixpe;\n"
+        + "    __px += _denom * logf(__r2);\n"
+        + "    __py += varpar->log_db * (__theta + fix_atan_period);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->log_db * __z;\n" : "");
+  }
 }
