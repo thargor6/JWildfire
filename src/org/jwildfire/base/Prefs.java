@@ -143,8 +143,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS = "tina.initially_expand_nonlinear_params";
   static final String KEY_TINA_ENABLE_LEAP_MOTION_TAB = "tina.enable_leap_motion_tab";
 
-  static final String KEY_TINA_FACLRENDER_PATH = "tina.faclrender_path";
-  static final String KEY_TINA_FACLRENDER_OPTS = "tina.faclrender_opts";
+  static final String KEY_TINA_FACLRENDER_PATH = "tina.faclrender_path.2";
+  static final String KEY_TINA_FACLRENDER_OPTS = "tina.faclrender_opts.2";
   static final String KEY_TINA_DEFAULT_NEW_FLAME_TITLE = "tina.default.new_flame_title";
 
   static final String KEY_TINA_AUTOLOAD_IMAGES_IN_IR = "tina.autoload_images_in_ir";

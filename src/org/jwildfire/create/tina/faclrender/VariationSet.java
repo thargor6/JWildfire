@@ -92,7 +92,7 @@ public class VariationSet implements VariationnameTransformer {
   }
 
   private String generateVariationsKey(FlameTransformationContext transformCtx, Set<String> variationNames) {
-    return "V024"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
+    return "V011"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
   }
 
   public Set<String> getVariationNames() {
@@ -107,6 +107,7 @@ public class VariationSet implements VariationnameTransformer {
      VariationFunc func = supportingVariations.get(variationName);
      if(func!=null && func instanceof SupportsGPU) {
        String code = ((SupportsGPU)func).getGPUCode(transformCtx);
+       String functions = ((SupportsGPU)func).getGPUFunctions(transformCtx);
        code=code.replace("->"+variationName, "->"+transformedName);
        StringBuilder sb = new StringBuilder();
        sb.append("<variation name=\""+transformedName+"\" dimension=\"3d\"");
@@ -122,6 +123,13 @@ public class VariationSet implements VariationnameTransformer {
        sb.append(code);
        sb.append("]]>\n");
        sb.append("</source>\n");
+       if(functions!=null && !functions.trim().isEmpty()) {
+         sb.append("<functions>\n");
+         sb.append("<![CDATA[\n");
+         sb.append(functions);
+         sb.append("]]>\n");
+         sb.append("</functions>\n");
+       }
        sb.append("</variation>\n");
        return sb.toString();
      }

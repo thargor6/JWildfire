@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -114,6 +114,7 @@ import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
+import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -7416,7 +7417,7 @@ public class MainEditorFrame extends JFrame {
         getFilterKernelPreviewRootPnl(), getTinaSpatialOversamplingREd(), getTinaSpatialOversamplingSlider(),
         getFilterKernelFlatPreviewBtn(),
         getForegroundOpacityField(), getForegroundOpacitySlider(), getScriptEditBtn(), getRealtimePreviewToggleButton(),
-        getSolidRenderingToggleBtn(), getGpuModeToggleButton(), getTinaSolidRenderingEnableAOCBx(), getTinaSolidRenderingAOIntensityREd(),
+        getSolidRenderingToggleBtn(), getGpuModeToggleButton(), getTinaSendToGPURenderButton(), getTinaSolidRenderingEnableAOCBx(), getTinaSolidRenderingAOIntensityREd(),
         getTinaSolidRenderingAOIntensitySlider(), getTinaSolidRenderingAOSearchRadiusREd(), getTinaSolidRenderingAOSearchRadiusSlider(),
         getTinaSolidRenderingAOBlurRadiusREd(), getTinaSolidRenderingAOBlurRadiusSlider(), getTinaSolidRenderingAOFalloffREd(),
         getTinaSolidRenderingAOFalloffSlider(), getTinaSolidRenderingAORadiusSamplesREd(), getTinaSolidRenderingAORadiusSamplesSlider(),

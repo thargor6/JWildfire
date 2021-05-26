@@ -25,6 +25,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.*;
+import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.swing.*;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.image.SimpleImage;
@@ -69,7 +70,7 @@ public class BatchRendererController implements JobRenderThreadController {
     batchRenderOverrideCBx = pBatchRenderOverrideCBx;
     batchRenderShowImageBtn = pBatchRenderShowImageBtn;
     enableOpenClBtn = pEnableOpenClBtn;
-    if (!FACLRenderTools.isFaclRenderAvalailable()) {
+    if (!GPURendererFactory.isAvailable()) {
       enableOpenClBtn.setSelected(false);
       enableOpenClBtn.setEnabled(false);
       enableOpenClBtn.setVisible(false);

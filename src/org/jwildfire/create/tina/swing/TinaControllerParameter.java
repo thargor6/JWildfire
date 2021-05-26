@@ -362,6 +362,7 @@ public class TinaControllerParameter {
   public JButton sendToIRButton;
   public JToggleButton solidRenderingToggleBtn;
   public JToggleButton gpuModeToggleButton;
+  public JButton sendToGPURenderButton;
   public JButton movieButton;
   public JToggleButton transformSlowButton;
   public JToggleButton transparencyButton;
@@ -1218,7 +1219,7 @@ public class TinaControllerParameter {
       JPanel pFilterKernelPreviewRootPnl, JWFNumberField pTinaSpatialOversamplingREd, JSlider pTinaSpatialOversamplingSlider,
       JToggleButton pFilterKernelFlatPreviewBtn, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
       JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton,
-      JToggleButton solidRenderingToggleBtn, JToggleButton gpuModeToggleButton, JCheckBox tinaSolidRenderingEnableSSAOCBx, JWFNumberField tinaSolidRenderingSSAOIntensityREd,
+      JToggleButton solidRenderingToggleBtn, JToggleButton gpuModeToggleButton, JButton sendToGPURenderButton, JCheckBox tinaSolidRenderingEnableSSAOCBx, JWFNumberField tinaSolidRenderingSSAOIntensityREd,
       JSlider tinaSolidRenderingSSAOIntensitySlider, JWFNumberField tinaSolidRenderingAOSearchRadiusREd, JSlider tinaSolidRenderingAOSearchRadiusSlider,
       JWFNumberField tinaSolidRenderingAOBlurRadiusREd, JSlider tinaSolidRenderingAOBlurRadiusSlider, JWFNumberField tinaSolidRenderingAOFalloffREd,
       JSlider tinaSolidRenderingAOFalloffSlider, JWFNumberField tinaSolidRenderingAORadiusSamplesREd, JSlider tinaSolidRenderingAORadiusSamplesSlider,
@@ -1352,6 +1353,7 @@ public class TinaControllerParameter {
     scriptEditBtn = pScriptEditBtn;
     realtimePreviewToggleButton = pRealtimePreviewToggleButton;
     this.solidRenderingToggleBtn = solidRenderingToggleBtn;
+    this.sendToGPURenderButton = sendToGPURenderButton;
     this.gpuModeToggleButton = gpuModeToggleButton;
     this.tinaSolidRenderingEnableAOCBx = tinaSolidRenderingEnableSSAOCBx;
     this.tinaSolidRenderingAOIntensityREd = tinaSolidRenderingSSAOIntensityREd;

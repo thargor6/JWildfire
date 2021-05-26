@@ -35,51 +35,10 @@ public class FACLRenderTools {
   private static String cudaLibrary= null;
   private static boolean cudaLibraryChecked = false;
 
+  private static final String FACLRENDER_PATH = "FACLRender";
+
+
   private static final String FACLRENDER_EXE = "FACLRender.exe";
-  private static final String CUDA_LIBRARY = "cudaLibrary.xml";
-
-  public static boolean isFaclRenderAvalailable() {
-    if (!faclRenderChecked) {
-      faclRenderChecked = true;
-      faclRenderAvalailable = false;
-      String osname = System.getProperty("os.name");
-      if (osname.startsWith("Windows")) {
-        String path = Prefs.getPrefs().getTinaFACLRenderPath();
-        if (path == null) {
-          path = "";
-        }
-        File file = new File(path, FACLRENDER_EXE);
-        faclRenderAvalailable = file.exists();
-      }
-    }
-    return faclRenderAvalailable;
-  }
-
- public static String getCudaLibrary() {
-    if(!cudaLibraryChecked) {
-      cudaLibraryChecked = true;
-      File file = new File(Prefs.getPrefs().getTinaFACLRenderPath(), CUDA_LIBRARY);
-      if(file.exists()) {
-        try {
-          String content = Tools.readUTF8Textfile(file.getAbsolutePath());
-          if(content.contains("<variationSet")) {
-            cudaLibrary = content;
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-    }
-    return cudaLibrary;
- }
-
-  public static boolean isExtendedFaclRender() {
-    return isFaclRenderAvalailable() && getCudaLibrary()!=null;
-  }
-
-  public static boolean isUsingCUDA() {
-    return isFaclRenderAvalailable() && Prefs.getPrefs().getTinaFACLRenderOptions()!=null && Prefs.getPrefs().getTinaFACLRenderOptions().contains("-cuda");
-  }
 
   private static void launchSync(String[] pCmd) {
     Runtime runtime = Runtime.getRuntime();
@@ -110,11 +69,17 @@ public class FACLRenderTools {
 
   private static String getLaunchCmd(String pFlameFilename, int pWidth, int pHeight, int pQuality) {
     StringBuilder cmd = new StringBuilder();
-    String exePath = new File(Prefs.getPrefs().getTinaFACLRenderPath(), FACLRENDER_EXE).getAbsolutePath();
+    String exePath;
+    if(Prefs.getPrefs().getTinaFACLRenderPath()!=null && Prefs.getPrefs().getTinaFACLRenderPath().trim().length()>0) {
+      exePath = new File(Prefs.getPrefs().getTinaFACLRenderPath(), FACLRENDER_EXE).getAbsolutePath();
+    }
+    else {
+      String denoiserPath = Tools.getPathRelativeToCodeSource(FACLRENDER_PATH);
+      exePath=new File(denoiserPath, FACLRENDER_EXE).getAbsolutePath();
+    }
     if (exePath.indexOf(" ") >= 0) {
       exePath = "\"" + exePath + "\"";
     }
-
     cmd.append(exePath);
     cmd.append(" " + String.valueOf(pWidth) + " " + String.valueOf(pHeight));
     String fn = pFlameFilename;
@@ -125,6 +90,12 @@ public class FACLRenderTools {
     cmd.append(" -q " + pQuality);
 
     String opts = Prefs.getPrefs().getTinaFACLRenderOptions();
+    if(opts==null) {
+      opts = "-cuda";
+    }
+    else if(opts.indexOf("-cuda")<0) {
+      opts+=" -cuda";
+    }
     if (opts != null && opts.length() > 0) {
       cmd.append(" " + opts);
     }

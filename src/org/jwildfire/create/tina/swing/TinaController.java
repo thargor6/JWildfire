@@ -53,6 +53,7 @@ import org.jwildfire.create.tina.render.*;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.filter.*;
+import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.script.ScriptParam;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
@@ -660,6 +661,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.foregroundOpacitySlider = parameterObject.foregroundOpacitySlider;
     data.solidRenderingToggleBtn = parameterObject.solidRenderingToggleBtn;
     data.gpuModeToggleButton = parameterObject.gpuModeToggleButton;
+    data.sendToGPURenderButton = parameterObject.sendToGPURenderButton;
     data.tinaSolidRenderingEnableAOCBx = parameterObject.tinaSolidRenderingEnableAOCBx;
     data.tinaSolidRenderingAOIntensityREd = parameterObject.tinaSolidRenderingAOIntensityREd;
     data.tinaSolidRenderingAOIntensitySlider = parameterObject.tinaSolidRenderingAOIntensitySlider;
@@ -899,6 +901,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     registerMotionPropertyControls();
 
     qsaveFilenameGen = new QuickSaveFilenameGen(prefs);
+
+
+    data.gpuModeToggleButton.setVisible(GPURendererFactory.isAvailable());
+    data.sendToGPURenderButton.setVisible(GPURendererFactory.isAvailable());
+
 
     enableUndoControls();
 

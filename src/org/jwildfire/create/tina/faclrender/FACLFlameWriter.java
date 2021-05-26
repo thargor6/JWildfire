@@ -62,14 +62,8 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = filterFlameAttrList(createFlameAttributes(transformedFlame, xb));
     Layer layer = transformedFlame.getFirstLayer();
-    VariationSet variationSet;
-    if (FACLRenderTools.isExtendedFaclRender() && FACLRenderTools.isUsingCUDA()) {
-      variationSet = new VariationSet(transformedFlame);
-      attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", variationSet.getUuid()));
-    }
-    else {
-      variationSet = null;
-    }
+    VariationSet variationSet = new VariationSet(transformedFlame);
+    attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", variationSet.getUuid()));
 
     xb.beginElement("flame", attrList);
     // XForm
@@ -94,24 +88,12 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     // VariationSet
     if(variationSet!=null) {
       xb.beginElement("variationSet", createVariationSetAttrList(xb, transformedFlame, variationSet.getVariationNames(), variationSet.getUuid()));
-      String cudaLibrary = FACLRenderTools.getCudaLibrary();
       for(String varname: variationSet.getVariationNames()) {
         boolean found = false;
         String code = variationSet.getCode(varname);
         if(code!=null) {
           xb.addContent(code);
           found=true;
-        }
-        if(!found) {
-          int startIdx = cudaLibrary.indexOf("<variation name=\""+varname+"\"");
-          if(startIdx>0) {
-            int endIdx = cudaLibrary.indexOf("</variation>", startIdx);
-            if(endIdx>startIdx) {
-              String varEntry = cudaLibrary.substring(startIdx, endIdx + 12);
-              xb.addContent(varEntry);
-              found = true;
-            }
-          }
         }
         if(!found) {
           String msg = "Could not find variation code for \"" + varname + "\"\n";

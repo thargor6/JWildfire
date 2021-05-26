@@ -49,6 +49,7 @@ import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGenerator;
 import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGeneratorList;
+import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.swing.*;
 import org.jwildfire.create.tina.swing.MainEditorFrame;
 
@@ -69,7 +70,7 @@ public class JWildfire extends JApplet {
     mainInternalFrames.add(new DefaultJFrameHolder<>(BatchFlameRendererFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(QuiltFlameRendererFrame.class, this, WindowPrefs.WINDOW_QUILTFLAMERENDERER, "Fractal flames: Quilt renderer"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
-    if (FACLRenderTools.isFaclRenderAvalailable()) {
+    if (GPURendererFactory.isAvailable()) {
       mainInternalFrames.add(new DefaultJFrameHolder<>(FlamesGPURenderFrame.class, this, WindowPrefs.WINDOW_FLAMES_GPU, "Fractal flames: GPU render"));
     }
     mainInternalFrames.add(new DefaultJFrameHolder<>(HelpFrame.class, this, WindowPrefs.WINDOW_HELP, "Fractal flames: Help"));
@@ -211,7 +212,7 @@ public class JWildfire extends JApplet {
       MeshGenInternalFrame meshGenFrame = getJFrame(MeshGenInternalFrame.class);
       InteractiveRendererFrame interactiveRendererFrame = getJFrame(InteractiveRendererFrame.class);
       // create some unregistered window even when FACLRender is not available, in order to avoid further null-checks etc.
-      FlamesGPURenderFrame gpuRendererFrame = FACLRenderTools.isFaclRenderAvalailable() ? getJFrame(FlamesGPURenderFrame.class) : new FlamesGPURenderFrame();
+      FlamesGPURenderFrame gpuRendererFrame = GPURendererFactory.isAvailable() ? getJFrame(FlamesGPURenderFrame.class) : new FlamesGPURenderFrame();
       HelpFrame helpFrame = getJFrame(HelpFrame.class);
 
       MainEditorFrame mainEditorFrame = getJFrame(MainEditorFrame.class);
