@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -27,7 +27,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class Hypertile3D2bFunc extends VariationFunc {
+public class Hypertile3D2bFunc extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_P = "p";
@@ -156,7 +156,43 @@ public class Hypertile3D2bFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+    return "float pa, qa, cx, c2, c2x, s2x, s2y, s2z;\n"
+        + "pa = varpar->hypertile3D2b_b * PI / lroundf(varpar->hypertile3D2b_p);\n"
+        + "  qa = varpar->hypertile3D2b_c * PI / lroundf(varpar->hypertile3D2b_q);\n"
+        + "\n"
+        + "  float r = -(cosf(pa) - varpar->hypertile3D2b_d) / (cosf(pa) + cosf(qa));\n"
+        + "  if (r > 0)\n"
+        + "   r = varpar->hypertile3D2b_e / sqrtf(varpar->hypertile3D2b_f + r);\n"
+        + "  else\n"
+        + "   r = 1.f;\n"
+        + "\n"
+        + "  cx = r;\n"
+        + "  c2 = cx*cx;\n"
+        + "  c2x = varpar->hypertile3D2b_g * cx;\n"
+        + "\n"
+        + "  s2x = varpar->hypertile3D2b_i + cx*cx;\n"
+        + "  s2y = varpar->hypertile3D2b_j - cx*cx;\n"
+        + "  s2z = varpar->hypertile3D2b_k - cx*cx;\n"
+        + "  float r2 = __x*__x + __y*__y + __z*__z;\n"
+        + "\n"
+        + "  float x2cx = c2x * __x;\n"
+        + "\n"
+        + "  float x = __x * s2x - cx * (-r2 - 1);\n"
+        + "  float y = __y * s2y;\n"
+        + "\n"
+        + "  float vr = varpar->hypertile3D2b / (c2 * r2 + x2cx + varpar->hypertile3D2b_h);\n"
+        + "\n"
+        + "  float a = lroundf(RANDFLOAT() * 0x00007fff) * pa;\n"
+        + "  float sina = sinf(a);\n"
+        + "  float cosa = cosf(a);\n"
+        + "\n"
+        + "  __px += vr * (x * cosa + y * sina);\n"
+        + "  __py += vr * (y * cosa - x * sina);\n"
+        + "  __pz += vr * (__z * s2z);\n";
+	}
 }

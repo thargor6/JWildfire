@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Hypertile3D1Func extends VariationFunc {
+public class Hypertile3D1Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_P = "p";
@@ -101,7 +101,42 @@ public class Hypertile3D1Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int p = lroundf(varpar->hypertile3D1_p);\n"
+        + "int q = lroundf(varpar->hypertile3D1_q);\n"
+        +"float pa, qa, r, c2, s2z;\n"
+        + "pa = 2.f * PI / p;\n"
+        + "    qa = 2.f * PI / q;\n"
+        + "\n"
+        + "    r = -(cosf(pa) - 1.f) / (cosf(pa) + cosf(qa));\n"
+        + "    if (r > 0)\n"
+        + "      r = 1.f / sqrtf(1 + r);\n"
+        + "    else\n"
+        + "      r = 1.f;\n"
+        + "\n"
+        + "    c2 = r*r;\n"
+        + "    s2z = 1.f - c2;\n"
+        +"     float a = lroundf(RANDFLOAT() * 0x00007fff) * pa;\n"
+        + "    float sina = sinf(a);\n"
+        + "    float cosa = cosf(a);\n"
+        + "    float cx = r * cosa;\n"
+        + "    float cy = r * sina;\n"
+        + "\n"
+        + "    float s2x = 1.f + cx*cx - cy*cy;\n"
+        + "    float s2y = 1.f + cy*cy - cx*cx;\n"
+        + "\n"
+        + "    float r2 = __x*__x + __y*__y + __z*__z;\n"
+        + "\n"
+        + "    float x2cx = 2.f * cx * __x, y2cy = 2.f * cy * __y;\n"
+        + "\n"
+        + "    float d = varpar->hypertile3D1 / (c2 * r2 + x2cx - y2cy + 1.f);\n"
+        + "\n"
+        + "    __px += d * (__x * s2x - cx * (y2cy - r2 - 1.f));\n"
+        + "    __py += d * (__y * s2y + cy * (-x2cx - r2 - 1.f));\n"
+        + "    __pz += d * (__z * s2z);\n";
+  }
 }

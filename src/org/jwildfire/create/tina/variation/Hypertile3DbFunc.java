@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Hypertile3DbFunc extends VariationFunc {
+public class Hypertile3DbFunc extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_P = "p";
@@ -152,7 +152,41 @@ public class Hypertile3DbFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+    return "float c2x, c2y, c2, s2x, s2y, s2z, cx, cy;\n"
+        + "float pa = varpar->hypertile3Db_b * PI / lroundf(varpar->hypertile3Db_p), qa = varpar->hypertile3Db_c * PI / lroundf(varpar->hypertile3Db_q);\n"
+        + "\n"
+        + "  float r = -(cosf(pa) - varpar->hypertile3Db_d) / (cosf(pa) + cosf(qa));\n"
+        + "  if (r > 0)\n"
+        + "   r = varpar->hypertile3Db_e / sqrtf(varpar->hypertile3Db_f + r);\n"
+        + "  else\n"
+        + "   r = 1.f;\n"
+        + "\n"
+        + "  float na = lroundf(varpar->hypertile3Db_n) * pa;\n"
+        + "\n"
+        + "  cx = r * cosf(na);\n"
+        + "  cy = r * sinf(na);\n"
+        + "\n"
+        + "  c2 = cx*cx + cy*cy;\n"
+        + "\n"
+        + "  c2x = varpar->hypertile3Db_g * cx;\n"
+        + "  c2y = varpar->hypertile3Db_h * cy;\n"
+        + "\n"
+        + "  s2x = varpar->hypertile3Db_i + cx*cx - cy*cy;\n"
+        + "  s2y = varpar->hypertile3Db_j + cy*cy - cx*cx;\n"
+        + "  s2z = varpar->hypertile3Db_k - cy*cy - cx*cx;\n"
+        + "  float r2 = __x*__x + __y*__y + __z*__z;\n"
+        + "\n"
+        + "  float x2cx = c2x * __x, y2cy = c2y * __y;\n"
+        + "\n"
+        + "  float d = varpar->hypertile3Db / (c2 * r2 + x2cx - y2cy + 1.f);\n"
+        + "\n"
+        + "  __px += d * (__x * s2x - cx * (y2cy - r2 - 1.f));\n"
+        + "  __py += d * (__y * s2y + cy * (-x2cx - r2 - 1.f));\n"
+        + "  __pz += d * (__z * s2z);\n";
+	}
 }

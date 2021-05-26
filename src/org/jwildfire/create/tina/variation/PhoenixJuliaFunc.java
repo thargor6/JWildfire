@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PhoenixJuliaFunc extends VariationFunc {
+public class PhoenixJuliaFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -106,7 +106,23 @@ public class PhoenixJuliaFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float  _invN = varpar->phoenix_julia_dist / varpar->phoenix_julia_power;\n"
+        + "float    _inv2PI_N = 2.0f*PI / varpar->phoenix_julia_power;\n"
+        + "float    _cN = varpar->phoenix_julia_dist / varpar->phoenix_julia_power / 2.0f;\n"
+        + "    float preX = __x * (varpar->phoenix_julia_x_distort + 1.0f);\n"
+        + "    float preY = __y * (varpar->phoenix_julia_y_distort + 1.0f);\n"
+        + "\n"
+        + "    float a = atan2f(preY, preX) * _invN + lroundf(0x00007fff * RANDFLOAT()) * _inv2PI_N;\n"
+        + "    float sina = sinf(a);\n"
+        + "    float cosa = cosf(a);\n"
+        + "    float r = varpar->phoenix_julia * powf(__x*__x + __y*__y, _cN);\n"
+        + "    __px += r * cosa;\n"
+        + "    __py += r * sina;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->phoenix_julia * __z;\n" : "");
+  }
 }
