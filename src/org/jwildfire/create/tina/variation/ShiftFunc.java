@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class ShiftFunc extends VariationFunc {
+public class ShiftFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHIFT_X = "shift_x";
@@ -83,7 +83,16 @@ public class ShiftFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float ang = varpar->shift_angle / 180.f * PI;\n"
+        + "    float sn = sinf(ang);\n"
+        + "    float cs = cosf(ang);\n"
+        + "    __px += varpar->shift * (__x + cs * varpar->shift_shift_x - sn * varpar->shift_shift_y);\n"
+        + "    __py += varpar->shift * (__y - cs * varpar->shift_shift_y - sn * varpar->shift_shift_x);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->shift * __z;\n" : "");
+  }
 }

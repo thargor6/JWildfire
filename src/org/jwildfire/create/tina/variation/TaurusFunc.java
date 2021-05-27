@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class TaurusFunc extends VariationFunc {
+public class TaurusFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_R = "r";
@@ -80,6 +80,18 @@ public class TaurusFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float sx = sinf(__x);\n"
+        + "    float cx = cosf(__x);\n"
+        + "    float sy = sinf(__y);\n"
+        + "    float cy = cosf(__y);\n"
+        + "    float ir = (varpar->taurus_inv * varpar->taurus_r) + ((1.0f - varpar->taurus_inv) * (varpar->taurus_r * cosf(varpar->taurus_n * __x)));\n"
+        + "    __px += varpar->taurus * (cx * (ir + sy));\n"
+        + "    __py += varpar->taurus * (sx * (ir + sy));\n"
+        + "    __pz += varpar->taurus * (varpar->taurus_sor * cy) + ((1.0f - varpar->taurus_sor) * __y);\n";
   }
 }

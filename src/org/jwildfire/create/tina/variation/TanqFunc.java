@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class TanqFunc extends SimpleVariationFunc {
+public class TanqFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -55,7 +55,25 @@ public class TanqFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "   float abs_v = hypotf(__y, __z);\n"
+        + "    float s = sinf(__x);\n"
+        + "    float sysz = __y*__y + __z*__z;\n"
+        + "    float ni = varpar->tanq / (__x*__x + sysz);\n"
+        + "    float c = cosf(__x);\n"
+        + "    float sh = sinhf(abs_v);\n"
+        + "    float ch = coshf(abs_v);\n"
+        + "    float C = c * sh / abs_v;\n"
+        + "    float B = -s * sh / abs_v;\n"
+        + "    float stcv = s * ch;\n"
+        + "    float nstcv = -stcv;\n"
+        + "    float ctcv = c * ch;\n"
+        + "    __px += (stcv * ctcv + C * B * sysz) * ni;\n"
+        + "    __py += (nstcv * B * __y + C * __y * ctcv) * ni;\n"
+        + "    __pz += (nstcv * B * __z + C * __z * ctcv) * ni;\n";
+  }
 }
