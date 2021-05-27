@@ -16,6 +16,7 @@
  */
 package org.jwildfire.base;
 
+import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.swing.VariationFuncFilter;
 import org.jwildfire.create.tina.variation.*;
 
@@ -32,7 +33,7 @@ public class VariationProfileRepository {
     if(Prefs.getPrefs().getVariationProfiles().isEmpty()) {
       setNewProfiles(createDefaultProfiles());
     }
-    else if(Prefs.getPrefs().getTinaFACLRenderPath()!=null && !Prefs.getPrefs().getTinaFACLRenderPath().isEmpty()) {
+    else if(GPURendererFactory.isAvailable()) {
       VariationProfile gpuProfile = createSupportsGPUProfile();
       if(!Prefs.getPrefs().getVariationProfiles().stream().filter( p -> gpuProfile.getName().equals(p.getName())).findAny().isPresent()) {
         List<VariationProfile> profiles = Prefs.getPrefs().getVariationProfiles().stream().map( p -> p.makeCopy()).collect(Collectors.toList());

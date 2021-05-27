@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Julia3DZFunc extends VariationFunc {
+public class Julia3DZFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -138,7 +138,24 @@ public class Julia3DZFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int power = lroundf(varpar->julia3Dz_power);\n" +
+            "float absPower, cPower;\n"
+        + "  absPower = fabsf(power);\n"
+        + "  cPower = 1.0f / power * 0.5f;\n"
+        + "    float r2d = __x * __x + __y * __y;\n"
+        + "    float r = varpar->julia3Dz * powf(r2d, cPower);\n"
+        + "\n"
+        + "    int rnd = (int) (RANDFLOAT() * absPower);\n"
+        + "    float angle = (atan2f(__y, __x) + 2.f * PI * rnd) / power;\n"
+        + "    float sina = sinf(angle);\n"
+        + "    float cosa = cosf(angle);\n"
+        + "    __px += r * cosa;\n"
+        + "    __py += r * sina;\n"
+        + "    __pz += r * __z / (sqrtf(r2d) * absPower);\n";
+  }
 }

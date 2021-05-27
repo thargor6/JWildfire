@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Scry2Func extends VariationFunc {
+public class Scry2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SIDES = "sides";
@@ -121,7 +121,51 @@ public class Scry2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _sina, _cosa, _sins, _coss, _sinc, _cosc;\n"
+        + "int sides = lroundf(varpar->scry2_sides);\n"
+        + "float a = 2.0f*PI / sides;\n"
+        + "    _sina = sinf(a);\n"
+        + "    _cosa = cosf(a);\n"
+        + "\n"
+        + "    a = -PI*0.5f * varpar->scry2_star;\n"
+        + "    _sins = sinf(a);\n"
+        + "    _coss = cosf(a);\n"
+        + "\n"
+        + "    a = PI*0.5f * varpar->scry2_circle;\n"
+        + "    _sinc = sinf(a);\n"
+        + "    _cosc = cosf(a);\n"
+        + "    float xrt = __x, yrt = __y, swp;\n"
+        + "    float r2 = xrt * _coss + fabsf(yrt) * _sins;\n"
+        + "    float r1 = 0;\n"
+        + "    float circle = sqrtf(xrt*xrt + yrt*yrt);\n"
+        + "\n"
+        + "    int i;\n"
+        + "\n"
+        + "    for (i = 0; i < sides - 1; i++) {\n"
+        + "      swp = xrt * _cosa - yrt * _sina;\n"
+        + "      yrt = xrt * _sina + yrt * _cosa;\n"
+        + "      xrt = swp;\n"
+        + "\n"
+        + "      r2 = fmaxf(r2, xrt * _coss + fabsf(yrt) * _sins);\n"
+        + "    }\n"
+        + "    r2 = r2 * _cosc + circle * _sinc;\n"
+        + "    r1 = r2;\n"
+        + "    if (i > 1) {\n"
+        + "      r2 = r2*r2;\n"
+        + "    } else {\n"
+        + "      r2 = fabsf(r2) * r2;\n"
+        + "    }\n"
+        + "    float d = (r1 * (r2 + 1.0f / varpar->scry2));\n"
+        + "    if (d != 0) {\n"
+        + "      float r = 1.0f / d;\n"
+        + "      __px += __x * r;\n"
+        + "      __py += __y * r;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->scry2 * __z;\n" : "")
+        + "    }\n";
+  }
 }
