@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class DCGnarlyFunc extends VariationFunc {
+public class DCGnarlyFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_MODE = "mode";
@@ -228,7 +228,78 @@ public class DCGnarlyFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float x0 = __x;\n"
+        + " float y0 = __y;\n"
+        + "    if (varpar->dc_gnarly_blur > 0) {\n"
+        + "      float r = RANDFLOAT() * 2 * PI;\n"
+        + "      float sina = sinf(r);\n"
+        + "      float cosa = cosf(r);\n"
+        + "      r = varpar->dc_gnarly_blur * (RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() - 3.f);\n"
+        + "      x0 += r * cosa;\n"
+        + "      y0 += r * sina;\n"
+        + "    } else if (varpar->dc_gnarly_blur < 0) {\n"
+        + "      x0 += RANDFLOAT() * varpar->dc_gnarly_blur * 2.f - varpar->dc_gnarly_blur;\n"
+        + "      y0 += RANDFLOAT() * varpar->dc_gnarly_blur * 2.f - varpar->dc_gnarly_blur;\n"
+        + "    }\n"
+        + "\n"
+        + "    float x1, y1;\n"
+        + "    switch (lroundf(varpar->dc_gnarly_mode)) {\n"
+        + "      case 1:\n"
+        + "        x1 = cosf(varpar->dc_gnarly_freqx1 * y0 + sinf(varpar->dc_gnarly_freqx2 * (y0 + sinf(varpar->dc_gnarly_freqx3 * y0)))) * varpar->dc_gnarly_scalex;\n"
+        + "        y1 = cosf(varpar->dc_gnarly_freqy1 * x0 + sinf(varpar->dc_gnarly_freqy2 * (x0 + sinf(varpar->dc_gnarly_freqy3 * x0)))) * varpar->dc_gnarly_scaley;\n"
+        + "        break;\n"
+        + "      case 2:\n"
+        + "        x1 = sinf(varpar->dc_gnarly_freqx1 * y0 + sinf(varpar->dc_gnarly_freqx2 * (y0 + cosf(varpar->dc_gnarly_freqx3 * y0)))) * varpar->dc_gnarly_scalex;\n"
+        + "        y1 = sinf(varpar->dc_gnarly_freqy1 * x0 + sinf(varpar->dc_gnarly_freqy2 * (x0 + cosf(varpar->dc_gnarly_freqy3 * x0)))) * varpar->dc_gnarly_scaley;\n"
+        + "        break;\n"
+        + "      case 3:\n"
+        + "        x1 = cosf(varpar->dc_gnarly_freqx1 * y0 + sinf(varpar->dc_gnarly_freqx2 * (x0 + sinf(varpar->dc_gnarly_freqx3 * y0)))) * varpar->dc_gnarly_scalex;\n"
+        + "        y1 = cosf(varpar->dc_gnarly_freqy1 * x0 + sinf(varpar->dc_gnarly_freqy2 * (y0 + sinf(varpar->dc_gnarly_freqy3 * x0)))) * varpar->dc_gnarly_scaley;\n"
+        + "        break;\n"
+        + "      case 4:\n"
+        + "        x1 = sinf(varpar->dc_gnarly_freqx1 * y0 + sinf(sqrtf(fabsf(varpar->dc_gnarly_freqx2 * (y0 + cosf(varpar->dc_gnarly_freqx3 * y0)))))) * varpar->dc_gnarly_scalex;\n"
+        + "        y1 = sinf(varpar->dc_gnarly_freqy1 * x0 + sinf(sqrtf(fabsf(varpar->dc_gnarly_freqy2 * (x0 + cosf(varpar->dc_gnarly_freqy3 * x0)))))) * varpar->dc_gnarly_scaley;\n"
+        + "        break;\n"
+        + "      case 5:\n"
+        + "        x1 = cosf(varpar->dc_gnarly_freqx1 * y0 + asinhf(varpar->dc_gnarly_freqx2 * (y0 + sinf(varpar->dc_gnarly_freqx3 * y0)))) * varpar->dc_gnarly_scalex;\n"
+        + "        y1 = cosf(varpar->dc_gnarly_freqy1 * x0 + asinhf(varpar->dc_gnarly_freqy2 * (x0 + sinf(varpar->dc_gnarly_freqy3 * x0)))) * varpar->dc_gnarly_scaley;\n"
+        + "        break;\n"
+        + "      case 6:\n"
+        + "        x1 = cosf(varpar->dc_gnarly_freqx1 * y0 + tan(varpar->dc_gnarly_freqx2 * (y0 + sinf(varpar->dc_gnarly_freqx3 * y0)))) * varpar->dc_gnarly_scalex;\n"
+        + "        y1 = cosf(varpar->dc_gnarly_freqy1 * x0 + tan(varpar->dc_gnarly_freqy2 * (x0 + sinf(varpar->dc_gnarly_freqy3 * x0)))) * varpar->dc_gnarly_scaley;\n"
+        + "        break;\n"
+        + "      case 7:\n"
+        + "        x1 = sinf(varpar->dc_gnarly_freqx1 * y0 + sinf(sqrf(varpar->dc_gnarly_freqx2 * (y0 + cosf(varpar->dc_gnarly_freqx3 * y0))))) * varpar->dc_gnarly_scalex;\n"
+        + "        y1 = sinf(varpar->dc_gnarly_freqy1 * x0 + sinf(sqrf(varpar->dc_gnarly_freqy2 * (x0 + cosf(varpar->dc_gnarly_freqy3 * x0))))) * varpar->dc_gnarly_scaley;\n"
+        + "        break;\n"
+        + "      case 8:\n"
+        + "        x1 = sinf(varpar->dc_gnarly_freqx1 * y0 + sinf(sqrf(varpar->dc_gnarly_freqx2 * (x0 + cosf(varpar->dc_gnarly_freqx3 * y0))))) * varpar->dc_gnarly_scalex;\n"
+        + "        y1 = sinf(varpar->dc_gnarly_freqy1 * x0 + sinf(sqrf(varpar->dc_gnarly_freqy2 * (y0 + cosf(varpar->dc_gnarly_freqy3 * x0))))) * varpar->dc_gnarly_scaley;\n"
+        + "        break;\n"
+        + "      default:\n"
+        + "        x1 = sinf(varpar->dc_gnarly_freqx1 * y0) * varpar->dc_gnarly_scalex;\n"
+        + "        y1 = sinf(varpar->dc_gnarly_freqy1 * x0) * varpar->dc_gnarly_scaley;\n"
+        + "        break;\n"
+        + "    }\n"
+        + "    float s1 = logf(sqrtf(x1*x1 + y1*y1)) * varpar->dc_gnarly_distort;\n"
+        + "\n"
+        + "    __px += varpar->dc_gnarly * (x0 + x1) / 2;\n"
+        + "    __py += varpar->dc_gnarly * (y0 + y1) / 2;\n"
+        + "\n"
+        + "    if (lroundf(varpar->dc_gnarly_dc) != 0) {\n"
+        + "      __pal = fmodf(fabsf(cosf(x0 + x1 * varpar->dc_gnarly_color1 + s1) + sinf(y0 + y1 * varpar->dc_gnarly_color2 + s1)), varpar->dc_gnarly_fmag);\n"
+        + "    }\n"
+        + "\n"
+        + "    float dz = __pal * varpar->dc_gnarly_scale_z + varpar->dc_gnarly_offset_z;\n"
+        + "    if (lroundf(varpar->dc_gnarly_reset_z) > 0) {\n"
+        + "      __pz = dz;\n"
+        + "    } else {\n"
+        + "      __pz += dz;\n"
+        + "    }\n";
+  }
 }

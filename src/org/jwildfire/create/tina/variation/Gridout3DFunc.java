@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -19,7 +19,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.rint;
 
-public class Gridout3DFunc extends VariationFunc {
+public class Gridout3DFunc extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_XX = "xx";
@@ -214,7 +214,57 @@ public class Gridout3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+    return "  float x = rintf(__x) * varpar->gridout3D_xx;\n"
+        + "  float y = rintf(__y) * varpar->gridout3D_yy;\n"
+        + "  if (y <= 0.0) {\n"
+        + "   if (x > 0.0) {\n"
+        + "    if (-y >= x) {\n"
+        + "     __px += varpar->gridout3D * (__x + varpar->gridout3D_xa);\n"
+        + "     __py += varpar->gridout3D * (__y + varpar->gridout3D_ya);\n"
+        + "     __pz += varpar->gridout3D * (__z + varpar->gridout3D_za);\n"
+        + "    } else {\n"
+        + "     __px += varpar->gridout3D * (__x + varpar->gridout3D_xb);\n"
+        + "     __py += varpar->gridout3D * (__y + varpar->gridout3D_yb);\n"
+        + "     __pz += varpar->gridout3D * (__z + varpar->gridout3D_zb);\n"
+        + "    }\n"
+        + "   } else {\n"
+        + "    if (y <= x) {\n"
+        + "     __px += varpar->gridout3D * (__x + varpar->gridout3D_xc);\n"
+        + "     __py += varpar->gridout3D * (__y + varpar->gridout3D_yc);\n"
+        + "     __pz += varpar->gridout3D * (__z + varpar->gridout3D_zc);\n"
+        + "    } else {\n"
+        + "     __px += varpar->gridout3D * (__x + varpar->gridout3D_xd);\n"
+        + "     __py += varpar->gridout3D * (__y - varpar->gridout3D_yd);\n"
+        + "     __pz += varpar->gridout3D * (__z + varpar->gridout3D_zd);\n"
+        + "    }\n"
+        + "   }\n"
+        + "  } else  {\n"
+        + "   if (x > 0.0) {\n"
+        + "    if (y >= x ) {\n"
+        + "     __px += varpar->gridout3D * (__x - varpar->gridout3D_xe);\n"
+        + "     __py += varpar->gridout3D * (__y + varpar->gridout3D_ye);\n"
+        + "     __pz += varpar->gridout3D * (__z * varpar->gridout3D_ze);\n"
+        + "    } else {\n"
+        + "     __px += varpar->gridout3D * (__x + varpar->gridout3D_xf);\n"
+        + "     __py += varpar->gridout3D * (__y + varpar->gridout3D_yf);\n"
+        + "     __pz += varpar->gridout3D * (__z * varpar->gridout3D_zf);\n"
+        + "    }\n"
+        + "   } else {\n"
+        + "    if (y > -x) {\n"
+        + "     __px += varpar->gridout3D * (__x - varpar->gridout3D_xg);\n"
+        + "     __py += varpar->gridout3D * (__y + varpar->gridout3D_yg);\n"
+        + "     __pz += varpar->gridout3D * (__z * varpar->gridout3D_zg);\n"
+        + "    } else {\n"
+        + "     __px += varpar->gridout3D * (__x + varpar->gridout3D_xh);\n"
+        + "     __py += varpar->gridout3D * (__y - varpar->gridout3D_yh);\n"
+        + "     __pz += varpar->gridout3D * (__z * varpar->gridout3D_zh);\n"
+        + "    }\n"
+        + "   }\n"
+        + "  }\n";
+	}
 }

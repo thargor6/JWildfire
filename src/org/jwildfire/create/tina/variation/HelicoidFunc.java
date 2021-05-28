@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class HelicoidFunc extends VariationFunc {
+public class HelicoidFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_FREQUENCY = "frequency";
 
@@ -57,7 +57,6 @@ public class HelicoidFunc extends VariationFunc {
   public void setParameter(String pName, double pValue) {
     if (PARAM_FREQUENCY.equalsIgnoreCase(pName))
       frequency = pValue;
-
     else
       throw new IllegalArgumentException(pName);
   }
@@ -69,7 +68,16 @@ public class HelicoidFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float range = sqrtf(__x * __x + __y * __y);\n"
+        + "    float s = sinf(__z * (2.0f*PI) * varpar->helicoid_frequency + atan2f(__y, __x));\n"
+        + "    float c = cosf(__z * (2.0f*PI) * varpar->helicoid_frequency + atan2f(__y, __x));\n"
+        + "    __px += varpar->helicoid * c * range;\n"
+        + "    __py += varpar->helicoid * s * range;\n"
+        + "    __pz += varpar->helicoid * __z;\n";
+  }
 }
