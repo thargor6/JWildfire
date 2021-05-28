@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PreCircleCropFunc extends VariationFunc {
+public class PreCircleCropFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
@@ -123,7 +123,50 @@ public class PreCircleCropFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_PRE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_PRE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float ca = fmaxf(-1.0f, fminf(varpar->pre_circlecrop_scatter_area, 1.0f));\n"
+        + "    float x0 = varpar->pre_circlecrop_x;\n"
+        + "    float y0 = varpar->pre_circlecrop_y;\n"
+        + "    float cr = varpar->pre_circlecrop_radius;\n"
+        + "    float vv = varpar->pre_circlecrop;\n"
+        + "\n"
+        + "    __x -= x0;\n"
+        + "    __y -= y0;\n"
+        + "\n"
+        + "    float rad = sqrtf(__x * __x + __y * __y);\n"
+        + "    float ang = atan2f(__y, __x);\n"
+        + "    float rdc = cr + (RANDFLOAT() * 0.5f * ca);\n"
+        + "\n"
+        + "    short esc = rad > cr;\n"
+        + "    short cr0 = lroundf(varpar->pre_circlecrop_zero) == 1;\n"
+        + "\n"
+        + "    float s = sinf(ang);\n"
+        + "    float c = cosf(ang);\n"
+        + "\n"
+        + "    __doHide = false;\n"
+        + "    if (cr0 && esc) {\n"
+        + "      __x = __y = 0;\n"
+        + "      __doHide = true;\n"
+        + "    } else if (cr0 && !esc) {\n"
+        + "      __x = vv * __x + x0;\n"
+        + "      __y = vv * __y + y0;\n"
+        + "    } else if (!cr0 && esc) {\n"
+        + "      __x = vv * rdc * c + x0;\n"
+        + "      __y = vv * rdc * s + y0;\n"
+        + "    } else if (!cr0 && !esc) {\n"
+        + "      __x = vv * __x + x0;\n"
+        + "      __y = vv * __y + y0;\n"
+        + "    }\n"
+            + "__r2 = __x*__x+__y*__y;\n"
+            + "__r = sqrtf(__r2);\n"
+            + "__rinv = 1.f/__r;\n"
+            + "__phi = atan2f(__x,__y);\n"
+            + "__theta = .5f*PI-__phi;\n"
+            + "if (__theta > PI)\n"
+            + "    __theta -= 2.f*PI;";
+  }
 }

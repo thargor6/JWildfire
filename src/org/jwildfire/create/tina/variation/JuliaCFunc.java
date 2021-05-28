@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class JuliaCFunc extends VariationFunc {
+public class JuliaCFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RE = "re";
@@ -93,7 +93,22 @@ public class JuliaCFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float re = 1.0f / (varpar->juliac_re + 1.e-6f);\n"
+        + "    float im = varpar->juliac_im / 100.0f;\n"
+        + "    float arg = atan2f(__y, __x) + fmodf(lroundf(RANDFLOAT()*0x0000ffff), varpar->juliac_re) * 2.0f * PI;\n"
+        + "    float lnmod = varpar->juliac_dist * 0.5f * logf(__x * __x + __y * __y);\n"
+        + "    float a = arg * re + lnmod * im;\n"
+        + "    float s = sinf(a);\n"
+        + "    float c = cosf(a);\n"
+        + "    float mod2 = expf(lnmod * re - arg * im);\n"
+        + "\n"
+        + "    __px += varpar->juliac * mod2 * c;\n"
+        + "    __py += varpar->juliac * mod2 * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->juliac * __z;\n" : "");
+  }
 }

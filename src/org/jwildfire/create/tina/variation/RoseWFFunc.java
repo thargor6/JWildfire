@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class RoseWFFunc extends VariationFunc {
+public class RoseWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_AMP = "amp";
@@ -38,9 +38,7 @@ public class RoseWFFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = pAffineTP.getPrecalcAtan();
-    double r = pAffineTP.getPrecalcSqrt();
-
-    r = amp * cos(waves * a);
+    double r = amp * cos(waves * a);
 
     if (filled == 1) {
       r *= pContext.random();
@@ -85,7 +83,23 @@ public class RoseWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "   float a = __phi;\n"
+        + "    float r = varpar->rose_wf_amp * cosf(lroundf(varpar->rose_wf_waves) * a);\n"
+        + "\n"
+        + "    if (lroundf(varpar->rose_wf_filled) == 1) {\n"
+        + "      r *= RANDFLOAT();\n"
+        + "    }\n"
+        + "\n"
+        + "    float nx = sinf(a) * r;\n"
+        + "    float ny = cosf(a) * r;\n"
+        + "\n"
+        + "    __px += varpar->rose_wf * nx;\n"
+        + "    __py += varpar->rose_wf * ny;\n"
+        + (context.isPreserveZCoordinate() ? "__py += varpar->rose_wf * __z;\n" : "");
+  }
 }

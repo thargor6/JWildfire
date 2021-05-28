@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PostCircleCropFunc extends VariationFunc {
+public class PostCircleCropFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
@@ -123,7 +123,50 @@ public class PostCircleCropFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_BLUR};
   }
 
+  @Override
+  // BROKEN
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float _cA = fmaxf(-1.0f, fminf(varpar->post_circlecrop_scatterarea, 1.f));\n"
+        + "float x0 = varpar->post_circlecrop_x;\n"
+        + "float y0 = varpar->post_circlecrop_y;\n"
+        + "float cr = varpar->post_circlecrop_radius;\n"
+        + "float ca = _cA;\n"
+        + "float vv = varpar->post_circlecrop;\n"
+        + "\n"
+        + "// almost like a pre variation the input points are manipulated\n"
+        + "__px -= x0;\n"
+        + "__py -= y0;\n"
+        + "\n"
+        + "float rad = sqrtf(__px * __px + __py * __py);\n"
+        + "float ang = atan2f(__py, __px);\n"
+        + "float rdc = cr + (RANDFLOAT() * 0.5f * ca);\n"
+        + "\n"
+        + "bool esc = rad > cr;\n"
+        + "bool cr0 = (bool)varpar->post_circlecrop_zero;\n"
+        + "\n"
+        + "float c;\n"
+        + "float s;\n"
+        + "sincosf(ang, &s, &c);\n"
+        + "\n"
+        + "if (cr0 && esc) {\n"
+        + "    __px = __py = 0.f;\n"
+        + "}\n"
+        + "else if (cr0 && !esc) {\n"
+        + "    __px += vv * __px + x0;\n"
+        + "    __py += vv * __py + y0;\n"
+        + "}\n"
+        + "else if (!cr0 && esc) {\n"
+        + "    __px += vv * rdc * c + x0;\n"
+        + "    __py += vv * rdc * s + y0;\n"
+        + "}\n"
+        + "else if (!cr0 && !esc) {\n"
+        + "    __px += vv * __px + x0;\n"
+        + "    __py += vv * __py + y0;\n"
+        + "}\n"
+        + (context.isPreserveZCoordinate() ? "__pz = varpar->post_circlecrop*__pz;\n" : "");
+  }
 }
