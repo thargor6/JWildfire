@@ -79,7 +79,9 @@ public class VariationFuncList {
     aliasMap.put(MobiusNFunc.class, "MobiusN");
     aliasMap.put(Tile_LogFunc.class, "tile_log");
     aliasMap.put(DCTriTileFunc.class, "FiveFold");
-
+    aliasMap.put(Rays1Func.class, "rays_rk1");
+    aliasMap.put(Rays2Func.class, "rays_rk2");
+    aliasMap.put(Rays3Func.class, "rays_rk3");
     //
     registerVariationFunc(LinearFunc.class);
     registerVariationFunc(SphericalFunc.class);
@@ -972,6 +974,7 @@ public class VariationFuncList {
     registerVariationFunc(DC_GenericMandelbrootFunc.class);
 
     registerVariationFunc(OvoidFunc.class);
+    registerVariationFunc(PostPointCropFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
