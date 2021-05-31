@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PrePostAffineFunc extends VariationFunc {
+public class PrePostAffineFunc extends VariationFunc implements SupportsGPU, PrePostVariation {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALE_X = "scale_x";
@@ -160,7 +160,22 @@ public class PrePostAffineFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_PREPOST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_PREPOST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    throw new RuntimeException("GPU code implemented in pre_prepost_affine and post_prepost_affine");
+  }
+
+  @Override
+  public Class<? extends PrePostGPUImplementation> getPreFuncType() {
+    return InternalPrePostAffinePreWFFunc.class;
+  }
+
+  @Override
+  public Class<? extends PrePostGPUImplementation> getPostFuncType() {
+    return InternalPrePostAffinePostWFFunc.class;
+  }
 }

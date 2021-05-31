@@ -28,8 +28,7 @@ import org.jwildfire.create.tina.io.SimpleXMLBuilder;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder.Attribute;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.swing.MessageLogger;
-import org.jwildfire.create.tina.variation.Variation;
-import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.*;
 
 public class FACLFlameWriter extends AbstractFlameWriter {
   private final MessageLogger logger;
@@ -169,9 +168,9 @@ public class FACLFlameWriter extends AbstractFlameWriter {
   private List<Integer> extractVariationPriorities(XForm xForm) {
     List<Integer> res = new ArrayList<>();
     for(int i=0;i<xForm.getVariationCount();i++) {
-      Integer boxedVal=xForm.getVariation(i).getPriority();
-      if(!res.contains(boxedVal)) {
-        res.add(boxedVal);
+      Integer rawPriority=xForm.getVariation(i).getPriority();
+      if(!res.contains(rawPriority)) {
+        res.add(rawPriority);
       }
     }
     res.sort(Integer::compareTo);
@@ -214,7 +213,95 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     Flame flame = pFlame.makeCopy();
     flame.setPixelsPerUnit(flame.getPixelsPerUnit() * flame.getCamZoom());
     flame.setCamZoom(1.0);
+    // split prepost-variations into 2 variations
+    for(Layer layer: flame.getLayers()) {
+      for (XForm xForm : layer.getXForms()) {
+        transformPrePostVars(xForm);
+      }
+      for (XForm xForm : layer.getFinalXForms()) {
+        transformPrePostVars(xForm);
+      }
+    }
     return flame;
+  }
+
+  private void transformPrePostVars(XForm xForm) {
+    Set<Variation> prepostVars=new HashSet<>();
+    int i=0;
+    while(i<xForm.getVariationCount()) {
+      Variation var = xForm.getVariation(i);
+      if((var.getPriority()==-2 || var.getPriority()==2) && var.getFunc() instanceof PrePostVariation) {
+        prepostVars.add(var);
+        xForm.removeVariation(var);
+      }
+      else {
+        i++;
+      }
+    }
+    for(Variation var: prepostVars) {
+      try {
+        if (var.getPriority() == 2 || var.getPriority()==-2) {
+          {
+            Variation pre = var.makeCopy();
+            PrePostGPUImplementation impl;
+            if(var.getPriority() == 2) {
+              impl = ((PrePostVariation)var.getFunc()).getPreFuncType().newInstance();
+              impl.setReversed(false);
+            }
+            else {
+              impl = ((PrePostVariation)var.getFunc()).getPostFuncType().newInstance();
+              impl.setReversed(true);
+            }
+
+            VariationFunc func = (VariationFunc)impl;
+            for(String param: func.getParameterNames()) {
+              Object value = var.getFunc().getParameter(param);
+              if (value != null) {
+                if (value instanceof Integer) {
+                  func.setParameter(param, (Integer)value);
+                }
+                else if (value instanceof Double) {
+                  func.setParameter(param, (Double)value);
+                }
+              }
+            }
+            pre.setFunc(func);
+            pre.setPriority(0);
+            xForm.addVariation(pre);
+          }
+          {
+            Variation post = var.makeCopy();
+            PrePostGPUImplementation impl;
+            if(var.getPriority() == 2) {
+              impl = ((PrePostVariation)var.getFunc()).getPostFuncType().newInstance();
+              impl.setReversed(false);
+            }
+            else {
+              impl = ((PrePostVariation)var.getFunc()).getPreFuncType().newInstance();
+              impl.setReversed(true);
+            }
+            VariationFunc func = (VariationFunc)impl;
+            for(String param: func.getParameterNames()) {
+              Object value = var.getFunc().getParameter(param);
+              if (value != null) {
+                if (value instanceof Integer) {
+                  func.setParameter(param, (Integer)value);
+                }
+                else if (value instanceof Double) {
+                  func.setParameter(param, (Double)value);
+                }
+              }
+            }
+            post.setFunc(func);
+            post.setPriority(1);
+            xForm.addVariation(post);
+          }
+        }
+      }
+      catch(Exception ex) {
+        ex.printStackTrace();
+      }
+    }
   }
 
   private void addGradient(SimpleXMLBuilder xb, Layer layer) {
