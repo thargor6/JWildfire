@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 
-public class CrobFunc extends VariationFunc {
+public class CrobFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_TOP = "top";
@@ -209,7 +209,119 @@ public class CrobFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float top_border, bottom_border, left_border, right_border;\n"
+        + "  float xInterval, yInterval, xInt_2, yInt_2, minInt_2;\n"
+        + "  float x0, y0, x0c, y0c;\n"
+        + "  float setProb, setProbH, setProbQ, setProbTQ, setCompProb, setCompProbH, setCompProbQ, setCompProbTQ;\n"
+        + "float tmp;\n"
+        + "float crob_top = varpar->crob_top;\n"
+        + "float crob_bottom = varpar->crob_bottom;\n"
+        + "float crob_left = varpar->crob_left;\n"
+        + "float crob_right = varpar->crob_right;\n"
+        + "    if (crob_top > crob_bottom) {\n"
+        + "      tmp = crob_top;\n"
+        + "      crob_top = crob_bottom;\n"
+        + "      crob_bottom = tmp;\n"
+        + "    }\n"
+        + "    if (crob_top == crob_bottom) {\n"
+        + "      crob_top = -1.0;\n"
+        + "      crob_bottom = 1.0;\n"
+        + "    }\n"
+        + "    if (crob_left > crob_right) {\n"
+        + "      tmp = crob_left;\n"
+        + "      crob_left = crob_right;\n"
+        + "      crob_right = tmp;\n"
+        + "    }\n"
+        + "    if (crob_left == crob_right) {\n"
+        + "      crob_left = -1.0;\n"
+        + "      crob_right = 1.0;\n"
+        + "    }\n"
+        + "    float directblur = varpar->crob_directBlur;\n"
+        + "    if(directblur<0.0) directblur = 0.0;\n"
+        + "\n"
+        + "    short blur = (varpar->crob_blur != 0) ? 1 : 0;\n"
+        + "    xInterval = fabsf(crob_right - crob_left);\n"
+        + "    yInterval = fabsf(crob_bottom - crob_top);\n"
+        + "    xInt_2 = xInterval / 2.0;\n"
+        + "    yInt_2 = yInterval / 2.0;\n"
+        + "    minInt_2 = (xInt_2 > yInt_2) ? yInt_2 : xInt_2;\n"
+        + "    x0 = crob_right - xInt_2;\n"
+        + "    y0 = crob_top + yInt_2;\n"
+        + "\n"
+        + "    if (xInt_2 > yInt_2) {\n"
+        + "      x0c = crob_right - minInt_2;\n"
+        + "      y0c = y0;\n"
+        + "    } else if (xInt_2 < yInt_2) {\n"
+        + "      x0c = x0;\n"
+        + "      y0c = crob_top + minInt_2;\n"
+        + "    } else {\n"
+        + "      x0c = x0;\n"
+        + "      y0c = y0;\n"
+        + "    }\n"
+        + "\n"
+        + "    setProb = yInterval / (xInterval + yInterval);\n"
+        + "    setProbQ = 0.25 * setProb;\n"
+        + "    setProbH = 0.50 * setProb;\n"
+        + "    setProbTQ = 0.75 * setProb;\n"
+        + "    setCompProb = 1.0 - setProb;\n"
+        + "    setCompProbQ = setProb + 0.25 * setCompProb;\n"
+        + "    setCompProbH = setProb + 0.50 * setCompProb;\n"
+        + "    setCompProbTQ = setProb + 0.75 * setCompProb;\n"
+        + "\n"
+        + "    if (blur == 0) {\n"
+        + "      top_border = crob_top;\n"
+        + "      bottom_border = crob_bottom;\n"
+        + "      left_border = crob_left;\n"
+        + "      right_border = crob_right;\n"
+        + "    } else {\n"
+        + "      top_border = crob_top + minInt_2 * varpar->crob_ratioBlur;\n"
+        + "      bottom_border = crob_bottom - minInt_2 * varpar->crob_ratioBlur;\n"
+        + "      left_border = crob_left + minInt_2 * varpar->crob_ratioBlur;\n"
+        + "      right_border = crob_right - minInt_2 * varpar->crob_ratioBlur;\n"
+        + "    }\n"
+        + "    float gradTmp, secTmp;\n"
+        + "    float xTmp = __x;\n"
+        + "    float yTmp = __y;\n"
+        + "\n"
+        + "    if ((__x < left_border) || (__x > right_border) || (__y < top_border) || (__y > bottom_border)) {\n"
+        + "      if (blur == 0) {\n"
+        + "        xTmp = 0;\n"
+        + "        yTmp = 0;\n"
+        + "      }\n"
+        + "      else {\n"
+        + "        secTmp = RANDFLOAT();\n"
+        + "\n"
+        + "        if (secTmp < setProb) {\n"
+        + "          do {\n"
+        + "            yTmp = crob_top + RANDFLOAT() * yInt_2;\n"
+        + "            xTmp = crob_right - powf(RANDFLOAT(), directblur) * varpar->crob_ratioBlur * minInt_2;\n"
+        + "            gradTmp = (yTmp - y0c) / (xTmp - x0c);\n"
+        + "          } while (gradTmp < -1.0);\n"
+        + "\n"
+        + "          if (secTmp < setProbH) xTmp = crob_left + crob_right - xTmp;\n"
+        + "          if ((secTmp > setProbQ) && (secTmp < setProbTQ)) yTmp = crob_bottom + crob_top - yTmp;\n"
+        + "        }\n"
+        + "\n"
+        + "        else {\n"
+        + "          do {\n"
+        + "            xTmp = crob_right - RANDFLOAT() * xInt_2;\n"
+        + "            yTmp = crob_top + powf(RANDFLOAT(), directblur) * varpar->crob_ratioBlur * minInt_2;\n"
+        + "            gradTmp = (yTmp - y0c) / (xTmp - x0c);\n"
+        + "          } while ((gradTmp <= 0.0) && (gradTmp > -1.0));\n"
+        + "\n"
+        + "          if (secTmp > setCompProbH) yTmp = crob_bottom + crob_top - yTmp;\n"
+        + "          if ((secTmp > setCompProbQ) && (secTmp < setCompProbTQ)) xTmp = crob_left + crob_right - xTmp;\n"
+        + "        }\n"
+        + "      }\n"
+        + "    }\n"
+        + "\n"
+        + "    __px += xTmp;\n"
+        + "    __py += yTmp;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->crob * __z;\n" : "");
+  }
 }

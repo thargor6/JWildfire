@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
@@ -19,18 +19,18 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Inverted_JuliaFunc extends VariationFunc {
+public class Inverted_JuliaFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
-  private static final String PARAM_Y2_MULT = "y2 mult";
-  private static final String PARAM_A2X_MULT = "a2x mult";
-  private static final String PARAM_A2Y_MULT = "a2y mult";
-  private static final String PARAM_A2Y_ADD = "a2y add";
-  private static final String PARAM_COS_MULT = "cos mult";
-  private static final String PARAM_Y_MULT = "y mult";
+  private static final String PARAM_Y2_MULT = "y2_mult";
+  private static final String PARAM_A2X_MULT = "a2x_mult";
+  private static final String PARAM_A2Y_MULT = "a2y_mult";
+  private static final String PARAM_A2Y_ADD = "a2y_add";
+  private static final String PARAM_COS_MULT = "cos_mult";
+  private static final String PARAM_Y_MULT = "y_mult";
   private static final String PARAM_CENTER = "center";
-  private static final String PARAM_X2Y2_ADD = "x2y2 add";
+  private static final String PARAM_X2Y2_ADD = "x2y2_add";
 
   private static final String[] paramNames = {PARAM_POWER, PARAM_Y2_MULT, PARAM_A2X_MULT, PARAM_A2Y_MULT, PARAM_A2Y_ADD, PARAM_COS_MULT, PARAM_Y_MULT, PARAM_CENTER, PARAM_X2Y2_ADD};
   private double power = 0.25;
@@ -107,7 +107,21 @@ public class Inverted_JuliaFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float x = __x;\n"
+        + "    float y = __y;\n"
+        + "    float xs = x * x;\n"
+        + "    float ys = y * y;\n"
+        + "    float z = powf(xs + (ys * varpar->inverted_julia_y2_mult), varpar->inverted_julia_power) + varpar->inverted_julia_x2y2_add;\n"
+        + "\n"
+        + "    float q = atan2f(x * varpar->inverted_julia_a2x_mult, y * varpar->inverted_julia_a2y_mult + varpar->inverted_julia_a2y_add) * 0.5 + PI * (int) (2 * RANDFLOAT());\n"
+        + "\n"
+        + "    __px += varpar->inverted_julia * cosf(z * varpar->inverted_julia_cos_mult) * (sinf(q) / z / varpar->inverted_julia_center);\n"
+        + "    __py += varpar->inverted_julia * cosf(z * varpar->inverted_julia_cos_mult) * (cosf(q) / z / varpar->inverted_julia_center) * varpar->inverted_julia_y_mult;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->inverted_julia * __z;\n" : "");
+  }
 }

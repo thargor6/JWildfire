@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,14 +22,12 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CotqFunc extends SimpleVariationFunc {
+public class CotqFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Cotq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
-
-
     double abs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z);
     double s = sin(pAffineTP.x);
     double c = cos(pAffineTP.x);
@@ -46,8 +44,6 @@ public class CotqFunc extends SimpleVariationFunc {
     pVarTP.x += (stcv * ctcv + C * B * sysz) * ni;
     pVarTP.y -= (nstcv * B * pAffineTP.y + C * pAffineTP.y * ctcv) * ni;
     pVarTP.z -= (nstcv * B * pAffineTP.z + C * pAffineTP.z * ctcv) * ni;
-
-
   }
 
   @Override
@@ -57,7 +53,26 @@ public class CotqFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "   float abs_v = hypotf(__y, __z);\n"
+        + "    float s = sinf(__x);\n"
+        + "    float c = cosf(__x);\n"
+        + "    float sh = sinhf(abs_v);\n"
+        + "    float ch = coshf(abs_v);\n"
+        + "    float sysz = __y*__y + __z*__z;\n"
+        + "    float ni = varpar->cotq / (__x*__x + sysz);\n"
+        + "    float C = c * sh / abs_v;\n"
+        + "    float B = -s * sh / abs_v;\n"
+        + "    float stcv = s * ch;\n"
+        + "    float nstcv = -stcv;\n"
+        + "    float ctcv = c * ch;\n"
+        + "\n"
+        + "    __px += (stcv * ctcv + C * B * sysz) * ni;\n"
+        + "    __py -= (nstcv * B * __y + C * __y * ctcv) * ni;\n"
+        + "    __pz -= (nstcv * B * __z + C * __z * ctcv) * ni;";
+  }
 }

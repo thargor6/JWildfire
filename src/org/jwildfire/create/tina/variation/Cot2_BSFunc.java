@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Cot2_BSFunc extends VariationFunc {
+public class Cot2_BSFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X1 = "x1";
@@ -51,7 +51,6 @@ public class Cot2_BSFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -85,7 +84,18 @@ public class Cot2_BSFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float cotsin = sinf(varpar->cot2_bs_x1 * __x);\n"
+        + "    float cotcos = cosf(varpar->cot2_bs_x2 * __x);\n"
+        + "    float cotsinh = sinhf(varpar->cot2_bs_y1 * __y);\n"
+        + "    float cotcosh = coshf(varpar->cot2_bs_y2 * __y);\n"
+        + "    float cotden = 1.0 / (cotcosh - cotcos);\n"
+        + "    __px += varpar->cot2_bs * cotden * cotsin;\n"
+        + "    __py += varpar->cot2_bs * cotden * -1 * cotsinh;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->cot2_bs * __z;\n" : "");
+  }
 }

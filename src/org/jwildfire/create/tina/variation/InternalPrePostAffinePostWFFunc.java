@@ -109,6 +109,7 @@ public class InternalPrePostAffinePostWFFunc extends VariationFunc implements Pr
 
   @Override
   public void setReversed(boolean reversed) {
+    // TODO not used yet, currently not sure if the reversed state can be achieved at all (some features in regard to pre_post were removed in the past)
     this.reversed = reversed;
   }
 }
