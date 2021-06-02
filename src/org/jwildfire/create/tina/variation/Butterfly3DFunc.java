@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Butterfly3DFunc extends SimpleVariationFunc {
+public class Butterfly3DFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -44,7 +44,16 @@ public class Butterfly3DFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float wx = varpar->butterfly3D * 1.3029400317411197908970256609023;\n"
+        + "    float y2 = __y * 2.0;\n"
+        + "    float r = wx * sqrtf(fabsf(__y * __x) / (1.e-6f + __x * __x + y2 * y2));\n"
+        + "    __px += r * __x;\n"
+        + "    __py += r * y2;\n"
+        + "    __pz += r * fabsf(y2) * sqrtf(__x * __x + __y * __y) / 4.0;\n";
+  }
 }

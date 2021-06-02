@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class BSwirlFunc extends VariationFunc {
+public class BSwirlFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_IN = "in";
@@ -88,7 +88,30 @@ public class BSwirlFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float tau, sigma;\n"
+        + "    float temp;\n"
+        + "    float cosht, sinht;\n"
+        + "    float sins, coss;\n"
+        + "\n"
+        + "    tau = 0.5 * (logf(sqrf(__x + 1.0) + __y*__y) - logf(sqrf(__x - 1.0) + __y*__y));\n"
+        + "    sigma = PI - atan2f(__y, __x + 1.0) - atan2f(__y, 1.0 - __x);\n"
+        + "\n"
+        + "    sigma = sigma + tau * varpar->bSwirl_out + varpar->bSwirl_in / tau;\n"
+        + "\n"
+        + "    sinht = sinhf(tau);\n"
+        + "    cosht = coshf(tau);\n"
+        + "    sins = sinf(sigma);\n"
+        + "    coss = cosf(sigma);\n"
+        + "    temp = cosht - coss;\n"
+        + "    if (temp != 0) {\n"
+        + "      __px += varpar->bSwirl * sinht / temp;\n"
+        + "      __py += varpar->bSwirl * sins / temp;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->bSwirl * __z;\n" : "")
+        + "    }\n";
+  }
 }
