@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class InflateZ_6Func extends SimpleVariationFunc {
+public class InflateZ_6Func extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -40,7 +40,14 @@ public class InflateZ_6Func extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float ang = atan2f(__y, __x);\n"
+        + "    float adf = __y - __x;\n"
+        + "    float kik = ang * sinf(adf);\n"
+        + "    __pz += varpar->inflateZ_6 * (1.5 - acosf(sinf(ang) * kik * 0.5));\n";
+  }
 }
