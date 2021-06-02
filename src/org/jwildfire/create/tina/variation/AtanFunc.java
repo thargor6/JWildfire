@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.M_PI_2;
 import static org.jwildfire.base.mathlib.MathLib.atan;
 
-public class AtanFunc extends VariationFunc {
+public class AtanFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_MODE = "Mode";
@@ -98,7 +98,30 @@ public class AtanFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return " float norm = 1.0 / (PI*0.5f) * varpar->atan;\n"
+        + "    switch (lroundf(varpar->atan_Mode)) {\n"
+        + "      case 0:\n"
+        + "        __px += varpar->atan * __x;\n"
+        + "        __py += norm * atan(varpar->atan_Stretch * __y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->atan * __z;\n" : "")
+        + "        break;\n"
+        + "      case 1:\n"
+        + "        __px += norm * atan(varpar->atan_Stretch * __x);\n"
+        + "        __py += varpar->atan * __y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->atan * __z;\n" : "")
+        + "        break;\n"
+        + "      case 2:\n"
+        + "        __px += norm * atan(varpar->atan_Stretch * __x);\n"
+        + "        __py += norm * atan(varpar->atan_Stretch * __y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->atan * __z;\n" : "")
+        + "        break;\n"
+        + "      default:\n"
+        + "        break;\n"
+        + "    }\n";
+  }
 }

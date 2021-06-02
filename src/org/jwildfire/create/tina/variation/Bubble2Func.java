@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 
-public class Bubble2Func extends VariationFunc {
+public class Bubble2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
@@ -77,7 +77,20 @@ public class Bubble2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float T, r;\n"
+        + "    T = ((__x*__x + __y*__y + __z*__z) / 4.0 + 1.0);\n"
+        + "    r = varpar->bubble2 / T;\n"
+        + "    __px += __x * r * varpar->bubble2_x;\n"
+        + "    __py += __y * r * varpar->bubble2_y;\n"
+        + "    if (__z >= 0.0)\n"
+        + "      __pz += varpar->bubble2 * (__z + varpar->bubble2_z);\n"
+        + "    else\n"
+        + "      __pz += varpar->bubble2 * (__z - varpar->bubble2_z);\n"
+        + "    __pz += __z * r * varpar->bubble2_z;\n";
+  }
 }

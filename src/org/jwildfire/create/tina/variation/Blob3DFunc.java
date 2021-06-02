@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Blob3DFunc extends VariationFunc {
+public class Blob3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_LOW = "low";
@@ -76,8 +76,20 @@ public class Blob3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return " float a = atan2f(__x, __y);\n"
+        + "    float r = sqrtf(__x * __x + __y * __y);\n"
+        + "    r = r * (varpar->blob3D_low + (varpar->blob3D_high - varpar->blob3D_low) * (0.5 + 0.5 * sinf(varpar->blob3D_waves * a)));\n"
+        + "    float nx = sinf(a) * r;\n"
+        + "    float ny = cosf(a) * r;\n"
+        + "    float nz = sinf(varpar->blob3D_waves * a) * r;\n"
+        + "\n"
+        + "    __px += varpar->blob3D * nx;\n"
+        + "    __py += varpar->blob3D * ny;\n"
+        + "    __pz += varpar->blob3D * nz;\n";
+  }
 }

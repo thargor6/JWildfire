@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class BlockYFunc extends VariationFunc {
+public class BlockYFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
@@ -99,7 +99,27 @@ public class BlockYFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float v = varpar->blocky / (PI*0.5f);\n"
+        + "    float T, r;\n"
+        + "    T = ((cosf(__x) + cosf(__y)) / varpar->blocky_mp + 1.0);\n"
+        + "    r = varpar->blocky / T;\n"
+        + "    float tmp = __y*__y + __x*__x + 1.0;\n"
+        + "    float x2 = 2.0 * __x;\n"
+        + "    float y2 = 2.0 * __y;\n"
+        + "    float xmax = 0.5 * (sqrtf(tmp + x2) + sqrtf(tmp - x2));\n"
+        + "    float ymax = 0.5 * (sqrtf(tmp + y2) + sqrtf(tmp - y2));\n"
+        + "    float a = __x / xmax;\n"
+        + "    float b = sqrtf_safe(1.0 - a*a);\n"
+        + "    __px += v * atan2f(a, b) * r * varpar->blocky_x;\n"
+        + "\n"
+        + "    a = __y / ymax;\n"
+        + "    b = sqrtf_safe(1.0 - a*a);\n"
+        + "    __py += v * atan2f(a, b) * r * varpar->blocky_y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->blocky * __z;\n" : "");
+  }
 }

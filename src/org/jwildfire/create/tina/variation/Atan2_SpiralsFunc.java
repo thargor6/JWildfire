@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -19,23 +19,23 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Atan2_SpiralsFunc extends VariationFunc {
+public class Atan2_SpiralsFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_R_MULT = "r mult";
-  private static final String PARAM_R_ADD = "r add";
-  private static final String PARAM_XY2_MULT = "xy2 mult";
-  private static final String PARAM_XY2_ADD = "xy2 add";
-  private static final String PARAM_X_MULT = "x mult";
-  private static final String PARAM_X_ADD = "x add";
-  private static final String PARAM_YX_DIV = "yx div";
-  private static final String PARAM_YX_ADD = "yx add";
-  private static final String PARAM_YY_DIV = "yy div";
-  private static final String PARAM_YY_ADD = "yy add";
-  private static final String PARAM_SIN_ADD = "sin add";
-  private static final String PARAM_Y_MULT = "y mult";
-  private static final String PARAM_R_POWER = "r power";
-  private static final String PARAM_X2Y2_POW = "x2y2 power";
+  private static final String PARAM_R_MULT = "r_mult";
+  private static final String PARAM_R_ADD = "r_add";
+  private static final String PARAM_XY2_MULT = "xy2_mult";
+  private static final String PARAM_XY2_ADD = "xy2_add";
+  private static final String PARAM_X_MULT = "x_mult";
+  private static final String PARAM_X_ADD = "x_add";
+  private static final String PARAM_YX_DIV = "yx_div";
+  private static final String PARAM_YX_ADD = "yx_add";
+  private static final String PARAM_YY_DIV = "yy_div";
+  private static final String PARAM_YY_ADD = "yy_add";
+  private static final String PARAM_SIN_ADD = "sin_add";
+  private static final String PARAM_Y_MULT = "y_mult";
+  private static final String PARAM_R_POWER = "r_power";
+  private static final String PARAM_X2Y2_POW = "x2y2_power";
 
   private static final String[] paramNames = {PARAM_R_MULT, PARAM_R_ADD, PARAM_XY2_MULT, PARAM_XY2_ADD, PARAM_X_MULT, PARAM_X_ADD, PARAM_YX_DIV, PARAM_YX_ADD, PARAM_YY_DIV, PARAM_YY_ADD, PARAM_SIN_ADD, PARAM_Y_MULT, PARAM_R_POWER, PARAM_X2Y2_POW};
   private double r_mult = 1.5;
@@ -51,7 +51,7 @@ public class Atan2_SpiralsFunc extends VariationFunc {
   private double sin_add = 0;
   private double y_mult = 1;
   private double r_power = 0.5;
-  private double x2y2_pow = 1;
+  private double x2y2_power = 1;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -64,7 +64,7 @@ public class Atan2_SpiralsFunc extends VariationFunc {
     double ys = y * y;
 
     // final formulas
-    double xy2 = pow(xs + ys, x2y2_pow);
+    double xy2 = pow(xs + ys, x2y2_power);
     double r = pow(xs + ys, r_power);
 
     double fx = x_mult * atan2(r * r_mult + r_add, xy2 * xy2_mult + xy2_add) + x_add;
@@ -92,7 +92,7 @@ public class Atan2_SpiralsFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{r_mult, r_add, xy2_mult, xy2_add, x_mult, x_add, yx_div, yx_add, yy_div, yy_add, sin_add, y_mult, r_power, x2y2_pow};
+    return new Object[]{r_mult, r_add, xy2_mult, xy2_add, x_mult, x_add, yx_div, yx_add, yy_div, yy_add, sin_add, y_mult, r_power, x2y2_power};
   }
 
   @Override
@@ -124,7 +124,7 @@ public class Atan2_SpiralsFunc extends VariationFunc {
     else if (PARAM_R_POWER.equalsIgnoreCase(pName))
       r_power = pValue;
     else if (PARAM_X2Y2_POW.equalsIgnoreCase(pName))
-      x2y2_pow = pValue;
+      x2y2_power = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -137,7 +137,29 @@ public class Atan2_SpiralsFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float x = __x;\n"
+        + "    float y = __y;\n"
+        + "    float xs = x * x;\n"
+        + "    float ys = y * y;\n"
+        + "    float xy2 = powf(xs + ys, varpar->atan2_spirals_x2y2_power);\n"
+        + "    float r = powf(xs + ys, varpar->atan2_spirals_r_power);\n"
+        + "\n"
+        + "    float fx = varpar->atan2_spirals_x_mult * atan2f(r * varpar->atan2_spirals_r_mult + varpar->atan2_spirals_r_add, xy2 * varpar->atan2_spirals_xy2_mult + varpar->atan2_spirals_xy2_add) + varpar->atan2_spirals_x_add;\n"
+
+        + "    float fy = sinf(atan2f(y / varpar->atan2_spirals_yy_div + varpar->atan2_spirals_yy_add, (x / varpar->atan2_spirals_yx_div) + varpar->atan2_spirals_yx_add) + varpar->atan2_spirals_sin_add) * varpar->atan2_spirals_y_mult;\n"
+        + "\n"
+        + "    if (x >= 0) {\n"
+        + "      __px += varpar->atan2_spirals * (-fx + PI);\n"
+        + "    } else {\n"
+        + "      __px += varpar->atan2_spirals * (fx - PI);\n"
+        + "    }\n"
+        + "\n"
+        + "    __py += varpar->atan2_spirals * fy;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->atan2_spirals * __z;\n" : "");
+  }
 }
