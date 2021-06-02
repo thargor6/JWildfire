@@ -125,5 +125,8 @@ public class SymNetG3Func extends VariationFunc {
   public String getName() {
     return "sym_ng3";
   }
-
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

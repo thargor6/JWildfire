@@ -119,5 +119,8 @@ public class SymBandG1Func extends VariationFunc {
   public String getName() {
     return "sym_bg1";
   }
-
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }

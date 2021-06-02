@@ -126,5 +126,8 @@ public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm
   public String getName() {
     return "sym_bg7";
   }
-
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 }
