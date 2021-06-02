@@ -969,38 +969,6 @@ public class VariationFuncList {
     registerVariationFunc(PostCoastalbrotCropFunc.class);
     registerVariationFunc(PostAmazingSurfCropFunc.class);    
     registerVariationFunc(DC_GenericMandelbrootFunc.class);    
-    
-    
-    registerVariationFunc(SymNetG1Func.class);
-    registerVariationFunc(SymNetG2Func.class);
-    registerVariationFunc(SymNetG3Func.class);
-    registerVariationFunc(SymNetG4Func.class);
-    registerVariationFunc(SymNetG5Func.class);
-    registerVariationFunc(SymNetG6Func.class);
-    registerVariationFunc(SymNetG7Func.class);
-    registerVariationFunc(SymNetG8Func.class);
-    registerVariationFunc(SymNetG9Func.class);
-    registerVariationFunc(SymNetG10Func.class);
-    registerVariationFunc(SymNetG11Func.class);
-    
-    registerVariationFunc(SymNetG12Func.class);
-    
-    registerVariationFunc(SymNetG13Func.class);
-    registerVariationFunc(SymNetG14Func.class);
-    registerVariationFunc(SymNetG15Func.class);
-    
-    registerVariationFunc(SymNetG16Func.class);
-    registerVariationFunc(SymNetG17Func.class);
-    
-    
-    registerVariationFunc(SymBandG1Func.class);
-    registerVariationFunc(SymBandG2Func.class);
-    registerVariationFunc(SymBandG3Func.class);
-    registerVariationFunc(SymBandG4Func.class);
-    registerVariationFunc(SymBandG5Func.class);
-    registerVariationFunc(SymBandG6Func.class);
-    registerVariationFunc(SymBandG7Func.class);
-    
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
