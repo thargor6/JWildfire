@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
 
 
-public class Arcsech2Func extends SimpleVariationFunc {
+public class Arcsech2Func extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -60,8 +60,36 @@ public class Arcsech2Func extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "Complex z;\n"
+        + "Complex_Init(&z, __x, __y);\n"
+        + "Complex_Recip(&z);\n"
+        + "Complex z2;\n"
+        + "Complex_Init(&z2, z.re, z.im);\n"
+        + "Complex_Dec(&z2);\n"
+        + "Complex_Sqrt(&z2);\n"
+        + "Complex z3;\n"
+        +" Complex_Init(&z3, z.re, z.im);\n"
+        + "Complex_Inc(&z3);\n"
+        + "Complex_Sqrt(&z3);\n"
+        + "Complex_Mul(&z3, &z2);\n"
+        + "Complex_Add(&z, &z3);\n"
+        + "Complex_Log(&z);\n"
+        + "Complex_Scale(&z, varpar->arcsech2 * 2.0f / PI);\n"
+        + "\n"
+        + "    __py += z.im;\n"
+        + "    if (z.im < 0) {\n"
+        + "      __px += z.re;\n"
+        + "      __py += 1.0;\n"
+        + "    } else {\n"
+        + "      __px -= z.re;\n"
+        + "      __py -= 1.0;\n"
+        + "    }\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->arcsech2 * __z;\n" : "");
+  }
 }

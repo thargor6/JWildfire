@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class AsteriaFunc extends VariationFunc {
+public class AsteriaFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ALPHA = "alpha";
@@ -100,7 +100,40 @@ public class AsteriaFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float sina = sinf(PI * varpar->asteria_alpha);\n"
+        + "float  cosa = cosf(PI * varpar->asteria_alpha);\n"
+        + "    float x0 = varpar->asteria * __x;\n"
+        + "    float y0 = varpar->asteria * __y;\n"
+        + "    float xx = x0;\n"
+        + "    float yy = y0;\n"
+        + "    float r = xx*xx + yy*yy;\n"
+        + "    xx = sqrf(fabsf(xx) - 1.);\n"
+        + "    yy = sqrf(fabsf(yy) - 1.);\n"
+        + "    float r2 = sqrtf(yy + xx);\n"
+        + "    short in1 = r < 1.f;\n"
+        + "    short out2 = r2 < 1.f;\n"
+        + "    if (in1 && out2)\n"
+        + "      in1 = ((RANDFLOAT()) > 0.35f);\n"
+        + "    else\n"
+        + "      in1 = !in1;\n"
+        + "    if (in1) {\n"
+        + "      __px += x0;\n"
+        + "      __py += y0;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->asteria * __z;\n" : "")
+        + "    } else {\n"
+        + "      xx = x0 * cosa - y0 * sina;\n"
+        + "      yy = x0 * sina + y0 * cosa;\n"
+        + "      float nx = xx / sqrtf(1.f - yy * yy) * (1.f - sqrtf(1.f - sqrf(-fabsf(yy) + 1.f)));\n"
+        + "      xx = nx * cosa + yy * sina;\n"
+        + "      yy = -nx * sina + yy * cosa;\n"
+        + "      __px += xx;\n"
+        + "      __py += yy;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->asteria * __z;\n" : "")
+        + "}\n";
+  }
 }

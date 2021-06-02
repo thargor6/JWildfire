@@ -1,10 +1,24 @@
+/*
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2011 Andreas Maschke
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
+  License, or (at your option) any later version.
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+  You should have received a copy of the GNU Lesser General Public License along with this software;
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class ApocarpetFunc extends SimpleVariationFunc {
+public class ApocarpetFunc extends SimpleVariationFunc implements SupportsGPU {
 
   /**
    * Roger Bagula Function
@@ -71,7 +85,44 @@ public class ApocarpetFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float x = 0, y = 0;\n"
+        + "    float r = 1.0 / (1.0 + sqrtf(2.0));\n"
+        + "    float denom = __x * __x + __y * __y;\n"
+        + "    int weight = (int) (6.0 * RANDFLOAT());\n"
+        + "    switch (weight) {\n"
+        + "      case 0:\n"
+        + "        x = 2.0 * __x * __y / denom;\n"
+        + "        y = (__x * __x - __y * __y) / denom;\n"
+        + "        break;\n"
+        + "      case 1:\n"
+        + "        x = __x * r - r;\n"
+        + "        y = __y * r - r;\n"
+        + "        break;\n"
+        + "      case 2:\n"
+        + "        x = __x * r + r;\n"
+        + "        y = __y * r + r;\n"
+        + "        break;\n"
+        + "      case 3:\n"
+        + "        x = __x * r + r;\n"
+        + "        y = __y * r - r;\n"
+        + "        break;\n"
+        + "      case 4:\n"
+        + "        x = __x * r - r;\n"
+        + "        y = __y * r + r;\n"
+        + "        break;\n"
+        + "      case 5:\n"
+        + "        x = (__x * __x - __y * __y) / denom;\n"
+        + "        y = 2.0 * __x * __y / denom;\n"
+        + "        break;\n"
+        + "    }\n"
+        + "\n"
+        + "    __px += x * varpar->apocarpet_js;\n"
+        + "    __py += y * varpar->apocarpet_js;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->apocarpet_js * __z;\n" : "");
+  }
 }

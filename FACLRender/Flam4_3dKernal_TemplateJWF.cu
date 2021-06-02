@@ -18,12 +18,6 @@ Copyright 2011-2016 Steven Brodhead, Sr., Centcom Inc.
 //     if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 //     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-
-/*
-JWildfire-specific additions contributed by Andreas Maschke
-You can find them by looking for the preprocessor directive JWF_EXTENSIONS
-*/
-
 #define NUM_ITERATIONS 100
 // #define DENSITY_KERNAL_RADIUS 7
 #define DENSITY_KERNAL_RADIUS_16KB 7
@@ -191,7 +185,18 @@ __device__ void Complex_Add(Complex *c, Complex *zz) {
   c->re += zz->re;
   c->im += zz->im;
 }
-  
+
+__device__ void Complex_Mul(Complex *c, Complex *zz) {
+   if (zz->im == 0.0) {
+      Complex_Scale(c, zz->re);
+      return;
+   }
+   float  r2 = c->re * zz->re - c->im * zz->im;
+   float  i2 = c->re * zz->im + c->im * zz->re;
+   c->re = r2;
+   c->im = i2;
+}
+    
   
 __device__ void Complex_One(Complex *c) {
   c->re = 1.0f;
