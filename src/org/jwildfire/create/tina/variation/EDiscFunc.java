@@ -65,21 +65,26 @@ public class EDiscFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float q1 = sqrtf(__r2+1.f+2.f*__x);\n"
-        + "float q2 = sqrtf(__r2+1.f-2.f*__x);\n"
-        + "float xmax = 0.5f*(q1+q2);\n"
-        + "float a1 = logf(xmax+sqrtf(xmax-1.f));\n"
-        + "float a2 = -acosf(__x/xmax);\n"
-        + "float w = varpar->edisc/11.57034632f;\n"
-        + "float snv = sinf(a1);\n"
-        + "float csv = cosf(a1);\n"
-        + "float snhu = sinhf(a2);\n"
-        + "float cshu = coshf(a2);\n"
-        + "if (__y > 0.f)\n"
-        + "    snv = -snv;\n"
-        + "__px += w*cshu*csv;\n"
-        + "__py += w*snhu*snv;\n"
+    return "   float tmp = __r2 + 1.0;\n"
+        + "    float tmp2 = 2.0 * __x;\n"
+        + "    float r1 = sqrtf(tmp + tmp2);\n"
+        + "    float r2 = sqrtf(tmp - tmp2);\n"
+        + "    float xmax = (r1 + r2) * 0.5;\n"
+        + "    float a1 = logf(xmax + sqrtf(xmax - 1.0));\n"
+        + "    float a2 = -acosf(__x / xmax);\n"
+        + "    float w = varpar->edisc / 11.57034632;\n"
+        + "\n"
+        + "    float snv = sinf(a1);\n"
+        + "    float csv = cosf(a1);\n"
+        + "    float snhu = sinhf(a2);\n"
+        + "    float cshu = coshf(a2);\n"
+        + "\n"
+        + "    if (__y > 0.0) {\n"
+        + "      snv = -snv;\n"
+        + "    }\n"
+        + "\n"
+        + "    __px += w * cshu * csv;\n"
+        + "    __py += w * snhu * snv;\n"
         + (context.isPreserveZCoordinate() ? "__pz += varpar->edisc*__z;\n" : "");
   }
 }
