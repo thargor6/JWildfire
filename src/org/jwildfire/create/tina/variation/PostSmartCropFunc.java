@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PostSmartCropFunc extends VariationFunc {
+public class PostSmartCropFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -77,27 +77,29 @@ public class PostSmartCropFunc extends VariationFunc {
             pVarTP.y = post_scrop_y;
             pVarTP.z = post_scrop_z;
             pVarTP.color = post_scrop_c;
-            return;
+          } else {
+            pVarTP.x += post_scrop_x;
+            pVarTP.y += post_scrop_y;
+            pVarTP.z += post_scrop_z;
+            pVarTP.color = post_scrop_c;
           }
-          pVarTP.x += post_scrop_x;
-          pVarTP.y += post_scrop_y;
-          pVarTP.z += post_scrop_z;
-          pVarTP.color = post_scrop_c;
-          return;
+        } else {
+          double a =
+              ((int) (pContext.random() * 2.0)) > 0
+                  ? post_scrop_workpower + (pContext.random() * scatter + offset + edge) * M_PI
+                  : -(pContext.random() * scatter + offset + edge) * M_PI;
+          double s = sin(a);
+          double c = cos(a);
+          if ((_static == 2) || (_static == -1)) {
+            pVarTP.x = pAmount * rad * c;
+            pVarTP.y = pAmount * rad * s;
+            pVarTP.z = pAmount * zi;
+          } else {
+            pVarTP.x += pAmount * rad * c;
+            pVarTP.y += pAmount * rad * s;
+            pVarTP.z += pAmount * zi;
+          }
         }
-        double a = ((int) (pContext.random() * 2.0)) > 0 ? post_scrop_workpower + (pContext.random() * scatter + offset + edge) * M_PI : -(pContext.random() * scatter + offset + edge) * M_PI;
-        double s = sin(a);
-        double c = cos(a);
-        if ((_static == 2) || (_static == -1)) {
-          pVarTP.x = pAmount * rad * c;
-          pVarTP.y = pAmount * rad * s;
-          pVarTP.z = pAmount * zi;
-          return;
-        }
-        pVarTP.x += pAmount * rad * c;
-        pVarTP.y += pAmount * rad * s;
-        pVarTP.z += pAmount * zi;
-        return;
       }
     } else {
       double coeff;
@@ -124,48 +126,45 @@ public class PostSmartCropFunc extends VariationFunc {
             pVarTP.y = post_scrop_y;
             pVarTP.z = post_scrop_z;
             pVarTP.color = post_scrop_c;
-            return;
+          } else {
+            pVarTP.x += post_scrop_x;
+            pVarTP.y += post_scrop_y;
+            pVarTP.z += post_scrop_z;
+            pVarTP.color = post_scrop_c;
           }
+        } else {
+          final double rdc =
+              (cropmode > 0 ? 1 : 0) * xr + coeff * (pContext.random() * scatter + offset);
+          double s = sin(ang);
+          double c = cos(ang);
+          if ((_static == 2) || (_static == -1)) {
+            pVarTP.x = pAmount * rdc * c;
+            pVarTP.y = pAmount * rdc * s;
+            pVarTP.z = pAmount * zi;
+          } else {
+            pVarTP.x += pAmount * rdc * c;
+            pVarTP.y += pAmount * rdc * s;
+            pVarTP.z += pAmount * zi;
+          }
+        }
+      }
+      else {
+        post_scrop_x = pAmount * xi;
+        post_scrop_y = pAmount * yi;
+        post_scrop_z = pAmount * zi;
+        if (cropmode == 2)
+          post_scrop_c = pVarTP.color;
+        if (_static > 0) {
+          pVarTP.x = post_scrop_x;
+          pVarTP.y = post_scrop_y;
+          pVarTP.z = post_scrop_z;
+        } else {
           pVarTP.x += post_scrop_x;
           pVarTP.y += post_scrop_y;
           pVarTP.z += post_scrop_z;
-          pVarTP.color = post_scrop_c;
-          return;
         }
-        final double rdc = (cropmode > 0 ? 1 : 0) * xr + coeff * (pContext.random() * scatter + offset);
-        double s = sin(ang);
-        double c = cos(ang);
-        if ((_static == 2) || (_static == -1)) {
-          pVarTP.x = pAmount * rdc * c;
-          pVarTP.y = pAmount * rdc * s;
-          pVarTP.z = pAmount * zi;
-          return;
-        }
-        pVarTP.x += pAmount * rdc * c;
-        pVarTP.y += pAmount * rdc * s;
-        pVarTP.z += pAmount * zi;
-        return;
       }
     }
-
-    post_scrop_x = pAmount * xi;
-    post_scrop_y = pAmount * yi;
-    post_scrop_z = pAmount * zi;
-    if (cropmode == 2)
-      post_scrop_c = pVarTP.color;
-
-    if (_static > 0) {
-      pVarTP.x = post_scrop_x;
-      pVarTP.y = post_scrop_y;
-      pVarTP.z = post_scrop_z;
-      return;
-    }
-
-    pVarTP.x += post_scrop_x;
-    pVarTP.y += post_scrop_y;
-    pVarTP.z += post_scrop_z;
-    return;
-
   }
 
   @Override
@@ -241,7 +240,140 @@ public class PostSmartCropFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int cropmode = lroundf(varpar->post_smartcrop_cropmode);\n"
+        + "int _static = lroundf(varpar->post_smartcrop_static);\n"
+        + "short post_scrop_mode, post_scrop_radial;\n"
+        + "float post_scrop_workradius, post_scrop_workpower, post_scrop_alpha, post_scrop_roundcoeff;\n"
+        + "float post_scrop_x, post_scrop_y, post_scrop_z, post_scrop_c;\n"
+        + "post_scrop_mode = (varpar->post_smartcrop_power > 0) == (varpar->post_smartcrop_radius > 0);\n"
+        + "    post_scrop_workradius = fabsf(varpar->post_smartcrop_radius);\n"
+        + "    post_scrop_workpower = fabsf(varpar->post_smartcrop_power);\n"
+        + "    if (post_scrop_workpower < 2) {\n"
+        + "      post_scrop_workpower = post_scrop_workpower * PI;\n"
+        + "      post_scrop_radial = 1;\n"
+        + "    } else {\n"
+        + "      post_scrop_radial = 0;\n"
+        + "      post_scrop_alpha = (2.0f*PI) / post_scrop_workpower;\n"
+        + "      post_scrop_roundcoeff = varpar->post_smartcrop_roundstr / sinf(post_scrop_alpha / 2.0) / post_scrop_workpower * 2.0;\n"
+        + "    }\n"
+        + "    post_scrop_x = post_scrop_y = post_scrop_z = post_scrop_c = 0.0;\n"
+        + "   float xi, yi, zi;\n"
+        + "    if (_static == 2) {\n"
+        + "      xi = __px;\n"
+        + "      yi = __py;\n"
+        + "      zi = __pz;\n"
+        + "    } else {\n"
+        + "      xi = __x;\n"
+        + "      yi = __y;\n"
+        + "      zi = __z;\n"
+        + "    }\n"
+        + "\n"
+        + "    float ang = atan2f(yi, xi);\n"
+        + "    float rad = sqrtf(xi * xi + yi * yi);\n"
+        + "\n"
+        + "    if (post_scrop_radial) {\n"
+        + "      float edge = varpar->post_smartcrop_edge * (RANDFLOAT() - 0.5);\n"
+        + "      float xang = ang / (2.0f*PI) + 1 + edge;\n"
+        + "      xang = (xang - (int) xang) * (2.0f*PI);\n"
+        + "      if ((xang > post_scrop_workpower) == post_scrop_mode) {\n"
+        + "        if (cropmode == 2) {\n"
+        + "          if ((_static == 2) || (_static == -1)) {\n"
+        + "            __px = post_scrop_x;\n"
+        + "            __py = post_scrop_y;\n"
+        + "            __pz = post_scrop_z;\n"
+        + "            __pal = post_scrop_c;\n"
+        + "          } else {\n"
+        + "            __px += post_scrop_x;\n"
+        + "            __py += post_scrop_y;\n"
+        + "            __pz += post_scrop_z;\n"
+        + "            __pal = post_scrop_c;\n"
+        + "          }\n"
+        + "        } else {\n"
+        + "          float a =\n"
+        + "              ((int) (RANDFLOAT() * 2.0)) > 0\n"
+        + "                  ? post_scrop_workpower + (RANDFLOAT() * varpar->post_smartcrop_scatter + varpar->post_smartcrop_offset + edge) * PI\n"
+        + "                  : -(RANDFLOAT() * varpar->post_smartcrop_scatter + varpar->post_smartcrop_offset + edge) * PI;\n"
+        + "          float s = sinf(a);\n"
+        + "          float c = cosf(a);\n"
+        + "          if ((_static == 2) || (_static == -1)) {\n"
+        + "            __px = varpar->post_smartcrop * rad * c;\n"
+        + "            __py = varpar->post_smartcrop * rad * s;\n"
+        + "            __pz = varpar->post_smartcrop * zi;\n"
+        + "          } else {\n"
+        + "            __px += varpar->post_smartcrop * rad * c;\n"
+        + "            __py += varpar->post_smartcrop * rad * s;\n"
+        + "            __pz += varpar->post_smartcrop * zi;\n"
+        + "          }\n"
+        + "        }\n"
+        + "      }\n"
+        + "    } else {\n"
+        + "      float coeff;\n"
+        + "      if (varpar->post_smartcrop_distortion == 0.0)\n"
+        + "        coeff = 1;\n"
+        + "      else {\n"
+        + "        float xang = (ang + PI) / post_scrop_alpha;\n"
+        + "        xang = xang - (int) xang;\n"
+        + "        xang = (xang < 0.5) ? xang : 1 - xang;\n"
+        + "        coeff = 1 / cosf(xang * post_scrop_alpha);\n"
+        + "        if (varpar->post_smartcrop_roundstr != 0.0) {\n"
+        + "          float wwidth = ((varpar->post_smartcrop_roundwidth != 1.0) ? expf(logf(xang * 2) * varpar->post_smartcrop_roundwidth) : (xang * 2)) * post_scrop_roundcoeff;\n"
+        + "          coeff = fabsf((1 - wwidth) * coeff + wwidth);\n"
+        + "        }\n"
+        + "        if (varpar->post_smartcrop_distortion != 1.0)\n"
+        + "          coeff = expf(logf(coeff) * varpar->post_smartcrop_distortion);\n"
+        + "      }\n"
+        + "      float xr = coeff * ((varpar->post_smartcrop_edge != 0.0) ? post_scrop_workradius + varpar->post_smartcrop_edge * (RANDFLOAT() - 0.5) : post_scrop_workradius);\n"
+        + "\n"
+        + "      if ((rad > xr) == post_scrop_mode) {\n"
+        + "        if (cropmode == 2) {\n"
+        + "          if ((_static == 2) || (_static == -1)) {\n"
+        + "            __px = post_scrop_x;\n"
+        + "            __py = post_scrop_y;\n"
+        + "            __pz = post_scrop_z;\n"
+        + "            __pal = post_scrop_c;\n"
+        + "          } else {\n"
+        + "            __px += post_scrop_x;\n"
+        + "            __py += post_scrop_y;\n"
+        + "            __pz += post_scrop_z;\n"
+        + "            __pal = post_scrop_c;\n"
+        + "          }\n"
+        + "        } else {\n"
+        + "          float rdc =\n"
+        + "              (cropmode > 0 ? 1 : 0) * xr + coeff * (RANDFLOAT() * varpar->post_smartcrop_scatter + varpar->post_smartcrop_offset);\n"
+        + "          float s = sinf(ang);\n"
+        + "          float c = cosf(ang);\n"
+        + "          if ((_static == 2) || (_static == -1)) {\n"
+        + "            __px = varpar->post_smartcrop * rdc * c;\n"
+        + "            __py = varpar->post_smartcrop * rdc * s;\n"
+        + "            __pz = varpar->post_smartcrop * zi;\n"
+        + "          } else {\n"
+        + "            __px += varpar->post_smartcrop * rdc * c;\n"
+        + "            __py += varpar->post_smartcrop * rdc * s;\n"
+        + "            __pz += varpar->post_smartcrop * zi;\n"
+        + "          }\n"
+        + "        }\n"
+        + "      }\n"
+        + "      else {\n"
+        + "        post_scrop_x = varpar->post_smartcrop * xi;\n"
+        + "        post_scrop_y = varpar->post_smartcrop * yi;\n"
+        + "        post_scrop_z = varpar->post_smartcrop * zi;\n"
+        + "        if (cropmode == 2)\n"
+        + "          post_scrop_c = __pal;\n"
+        + "        if (_static > 0) {\n"
+        + "          __px = post_scrop_x;\n"
+        + "          __py = post_scrop_y;\n"
+        + "          __pz = post_scrop_z;\n"
+        + "        } else {\n"
+        + "          __px += post_scrop_x;\n"
+        + "          __py += post_scrop_y;\n"
+        + "          __pz += post_scrop_z;\n"
+        + "        }\n"
+        + "      }\n"
+        + "    }\n";
+  }
 }

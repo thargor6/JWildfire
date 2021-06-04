@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -25,7 +25,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
  * @author Raykoid666, transcribed and modded by Nic Anderson, chronologicaldot
  * @date July 19, 2014 (transcribe)
  */
-public class BSplitFunc extends VariationFunc {
+public class BSplitFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHIFT_X = "x";
@@ -44,6 +44,9 @@ public class BSplitFunc extends VariationFunc {
       pVarTP.doHide = false;
       pVarTP.x += pAmount / tan(pAffineTP.x + x) * cos(pAffineTP.y + y);
       pVarTP.y += pAmount / sin(pAffineTP.x + x) * (-1 * pAffineTP.y + y);
+      if (pContext.isPreserveZCoordinate()) {
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
     }
   }
 
@@ -74,7 +77,18 @@ public class BSplitFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    if (__x + varpar->bsplit_x == 0 || __x + varpar->bsplit_x == PI) {\n"
+        + "      __doHide = true;\n"
+        + "    } else {\n"
+        + "      __doHide = false;\n"
+        + "      __px += varpar->bsplit / tan(__x + varpar->bsplit_x) * cosf(__y + varpar->bsplit_y);\n"
+        + "      __py += varpar->bsplit / sinf(__x + varpar->bsplit_x) * (-1 * __y + varpar->bsplit_y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->bsplit * __z;\n" : "")
+            + "    }";
+  }
 }
