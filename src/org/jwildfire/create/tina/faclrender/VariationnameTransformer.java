@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.faclrender;
 
+import org.jwildfire.create.tina.variation.VariationFunc;
+
 public interface VariationnameTransformer {
-  String transformVariationName(String varName);
+  String transformVariationName(VariationFunc func);
 }

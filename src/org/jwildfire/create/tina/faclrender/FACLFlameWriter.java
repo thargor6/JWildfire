@@ -51,6 +51,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
 
   public String getFlameXML(Flame pFlame) throws Exception {
     Flame transformedFlame = transformFlame(pFlame);
+    FlameTransformationContext transformationContext = createTransformCtx(transformedFlame);
 
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     List<SimpleXMLBuilder.Attribute<?>> flamesAttrList = new ArrayList<>();
@@ -61,7 +62,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = filterFlameAttrList(createFlameAttributes(transformedFlame, xb));
     Layer layer = transformedFlame.getFirstLayer();
-    VariationSet variationSet = new VariationSet(transformedFlame);
+    VariationSet variationSet = new VariationSet(transformedFlame, transformationContext, logger);
     attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", variationSet.getUuid()));
 
     xb.beginElement("flame", attrList);
@@ -87,21 +88,8 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     // VariationSet
     if(variationSet!=null) {
       xb.beginElement("variationSet", createVariationSetAttrList(xb, transformedFlame, variationSet.getVariationNames(), variationSet.getUuid()));
-      for(String varname: variationSet.getVariationNames()) {
-        boolean found = false;
-        String code = variationSet.getCode(varname);
-        if(code!=null) {
-          xb.addContent(code);
-          found=true;
-        }
-        if(!found) {
-          String msg = "Could not find variation code for \"" + varname + "\"\n";
-          if(logger!=null) {
-            logger.logMessage(msg);
-          } else {
-            System.err.println(msg);
-          }
-        }
+      for(VariationInstance instance: variationSet.getVariationInstances()) {
+        xb.addContent(instance.getTransformedCode(transformationContext));
       }
       xb.endElement("variationSet");
     }
@@ -124,7 +112,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
         {
           transformedFuncName =
               variationnameTransformer != null
-                  ? variationnameTransformer.transformVariationName(func.getName())
+                  ? variationnameTransformer.transformVariationName(func)
                   : func.getName();
           while (true) {
             uniqueFuncName = transformedFuncName + "-" + funcNameCounter;
@@ -315,5 +303,10 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     }
   }
 
+  private FlameTransformationContext createTransformCtx(Flame transformedFlame) {
+    FlameTransformationContext context = new FlameTransformationContext(null, null, 1, 1);
+    context.setPreserveZCoordinate(transformedFlame.isPreserveZ());
+    return context;
+  }
 
 }

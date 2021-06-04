@@ -18,32 +18,29 @@
 package org.jwildfire.create.tina.faclrender;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.swing.MessageLogger;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.SupportsGPU;
 import org.jwildfire.create.tina.variation.VariationFunc;
-import org.jwildfire.create.tina.variation.VariationFuncType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class VariationSet implements VariationnameTransformer {
-  private final Set<String> variationNames =new HashSet<>();
-  private final Map<String, VariationFunc> supportingVariations = new HashMap<>();
-  private Map<String, String> transformedNames = new HashMap<>();
-  private Map<String, String> invTransformedNames = new HashMap<>();
-
+  private final MessageLogger logger;
+  private final List<VariationInstance> variationInstances = new ArrayList<>();
   private final FlameTransformationContext transformCtx;
   private String uuid;
 
-  public VariationSet(Flame flame) {
-    transformCtx = createTransformCtx(flame);
+  public VariationSet(Flame flame, FlameTransformationContext transformCtx, MessageLogger logger) {
+    this.logger = logger;
+    this.transformCtx = transformCtx;
     initVariationNames(flame);
   }
 
   private void initVariationNames(Flame pFlame) {
-    variationNames.clear();
-    supportingVariations.clear();
+    variationInstances.clear();
     pFlame.getFirstLayer().getXForms().forEach(xf -> {
       for(int i=0;i<xf.getVariationCount();i++) {
         addVariation(xf.getVariation(i).getFunc());
@@ -57,83 +54,56 @@ public class VariationSet implements VariationnameTransformer {
   }
 
   private void addVariation(VariationFunc func) {
-    String fName = func.getName();
     if(func instanceof SupportsGPU) {
-      supportingVariations.put(fName, func);
+      if(((SupportsGPU) func).isStateful()) {
+        int count = (int)variationInstances.stream().filter(i -> !i.isSingleton() &&  i.getOriginalName().equals(func.getName())).count();
+        variationInstances.add(new VariationInstance(func, false, count));
+      }
+      else {
+        if(!variationInstances.stream().filter(i -> i.isSingleton() && i.getOriginalName().equals(func.getName())).findAny().isPresent()) {
+          variationInstances.add(new VariationInstance(func, true, -1));
+        }
+      }
     }
-    if (supportingVariations.containsKey(fName)) {
-      // renaming required because some variation names may be reserved words or functions in CUDA, e.g. "log" or "sin"
-      String transformedName = "jwf_"+fName;
-      transformedNames.put(fName, transformedName);
-      invTransformedNames.put(transformedName, fName);
+    else {
+      String msg = "Could not find variation code for \"" + func.getName() + "\"\n";
+      if(logger!=null) {
+        logger.logMessage(msg);
+      } else {
+        System.err.println(msg);
+      }
     }
-    variationNames.add(transformVariationName(func.getName()));
-  }
-
-  private FlameTransformationContext createTransformCtx(Flame transformedFlame) {
-    FlameTransformationContext context = new FlameTransformationContext(null, null, 1, 1);
-    context.setPreserveZCoordinate(transformedFlame.isPreserveZ());
-    return context;
   }
 
   @Override
-  public String transformVariationName(String name) {
-    String transformedName = transformedNames.get(name);
-    return  transformedName!=null ? transformedName : name;
+  public String transformVariationName(VariationFunc func) {
+    if(((SupportsGPU) func).isStateful()) {
+       return variationInstances.stream().filter(i -> i.getFunc() == func).findFirst().get().getTransformedName();
+    }
+    else {
+      return variationInstances.stream().filter(i -> i.getOriginalName().equals(func.getName())).findFirst().get().getTransformedName();
+    }
   }
 
   public String getUuid() {
     if(uuid==null) {
       uuid = UUID.nameUUIDFromBytes(
-              generateVariationsKey(transformCtx, variationNames).getBytes(StandardCharsets.UTF_8))
+              generateVariationsKey(transformCtx, getVariationNames()).getBytes(StandardCharsets.UTF_8))
               .toString().toUpperCase();
     }
     return uuid;
   }
 
   private String generateVariationsKey(FlameTransformationContext transformCtx, Set<String> variationNames) {
-    return "V011"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
+    // TODO remove
+    return  UUID.randomUUID().toString() + "V001"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
   }
 
   public Set<String> getVariationNames() {
-    return variationNames;
+    return variationInstances.stream().map( i-> i.getTransformedName()).collect(Collectors.toSet());
   }
 
-  public String getCode(String transformedName) {
-     String variationName = invTransformedNames.get(transformedName);
-     if(variationName==null) {
-       variationName = transformedName;
-     }
-     VariationFunc func = supportingVariations.get(variationName);
-     if(func!=null && func instanceof SupportsGPU) {
-       String code = ((SupportsGPU)func).getGPUCode(transformCtx);
-       String functions = ((SupportsGPU)func).getGPUFunctions(transformCtx);
-       code=code.replace("->"+variationName, "->"+transformedName);
-       StringBuilder sb = new StringBuilder();
-       sb.append("<variation name=\""+transformedName+"\" dimension=\"3d\"");
-      if (Arrays.asList(func.getVariationTypes()).contains(VariationFuncType.VARTYPE_DC)) {
-        sb.append(" directColor=\"yes\"");
-       }
-       sb.append(">\n");
-       for(String param: func.getParameterNames()) {
-         sb.append("<parameter name=\""+param+"\" variation=\""+transformedName+"\"/>\n");
-       }
-       sb.append("<source>\n");
-       sb.append("<![CDATA[\n");
-       sb.append(code);
-       sb.append("]]>\n");
-       sb.append("</source>\n");
-       if(functions!=null && !functions.trim().isEmpty()) {
-         sb.append("<functions>\n");
-         sb.append("<![CDATA[\n");
-         sb.append(functions);
-         sb.append("]]>\n");
-         sb.append("</functions>\n");
-       }
-       sb.append("</variation>\n");
-       return sb.toString();
-     }
-     return null;
+  public List<VariationInstance> getVariationInstances() {
+    return variationInstances;
   }
-
 }

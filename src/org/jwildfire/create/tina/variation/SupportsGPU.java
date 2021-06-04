@@ -21,4 +21,9 @@ public interface SupportsGPU {
   default String getGPUFunctions(FlameTransformationContext context) {
     return "";
   }
+  // For stateful variants, multiple copies are created, parameterized with %d as placeholder for the instance ID
+  // Example: __post_scrop_x, which is some kind of global variable in the post_point_crop-variation
+  // Instead of naming it __post_scrop_x, we can name it __state%d_post_scrop_x in both in the code and in the declarations.
+  // JWildfire will then create copies of the code and fill the placeholders with instance IDs.
+  default boolean isStateful() { return false; };
 }

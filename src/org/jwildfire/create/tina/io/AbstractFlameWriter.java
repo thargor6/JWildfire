@@ -160,9 +160,9 @@ public class AbstractFlameWriter {
         Variation v = xForm.getVariation(vIdx);
         VariationFunc func = v.getFunc();
 
-        String funcname = variationnameTransformer!=null ? variationnameTransformer.transformVariationName(func.getName()) : func.getName();
+        String funcName = variationnameTransformer!=null ? variationnameTransformer.transformVariationName(func) : func.getName();
 
-        String fName = namesMaker.makeUnique(funcname);
+        String fName = namesMaker.makeUnique(funcName);
 
         attrList.add(xb.createAttr(fName, v.getAmount()));
         attrList.add(xb.createAttr(fName + "_" + AbstractFlameReader.ATTR_FX_PRIORITY, v.getPriority()));
