@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.AbstractFlameWriter;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder;
@@ -200,6 +201,31 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     Flame flame = pFlame.makeCopy();
     flame.setPixelsPerUnit(flame.getPixelsPerUnit() * flame.getCamZoom());
     flame.setCamZoom(1.0);
+    // apply post symmetry by using a final transform
+    switch(flame.getPostSymmetryType()) {
+      case POINT:
+        {
+          PostPointSymmetryWFFunc func = new PostPointSymmetryWFFunc();
+          func.setParameter(PostPointSymmetryWFFunc.PARAM_CENTRE_X, flame.getPostSymmetryCentreX());
+          func.setParameter(PostPointSymmetryWFFunc.PARAM_CENTRE_Y, flame.getPostSymmetryCentreY());
+          func.setParameter(PostPointSymmetryWFFunc.PARAM_ORDER, flame.getPostSymmetryOrder());
+          addPostSymmetryVariation(flame, func, 1.0);
+        }
+        break;
+      case X_AXIS:
+      case Y_AXIS:
+        {
+          PostAxisSymmetryWFFunc func = new PostAxisSymmetryWFFunc();
+          func.setParameter(PostAxisSymmetryWFFunc.PARAM_AXIS, flame.getPostSymmetryType() == PostSymmetryType.X_AXIS ? 0 : 1);
+          func.setParameter(PostAxisSymmetryWFFunc.PARAM_CENTRE_X, flame.getPostSymmetryCentreX());
+          func.setParameter(PostAxisSymmetryWFFunc.PARAM_CENTRE_Y, flame.getPostSymmetryCentreY());
+          func.setParameter(PostAxisSymmetryWFFunc.PARAM_ROTATION, flame.getPostSymmetryRotation());
+          addPostSymmetryVariation(flame, func, flame.getPostSymmetryDistance());
+        }
+        break;
+    }
+    flame.setPostSymmetryType(PostSymmetryType.NONE);
+
     // split prepost-variations into 2 variations
     for(Layer layer: flame.getLayers()) {
       for (XForm xForm : layer.getXForms()) {
@@ -210,6 +236,13 @@ public class FACLFlameWriter extends AbstractFlameWriter {
       }
     }
     return flame;
+  }
+
+  private void addPostSymmetryVariation(Flame flame, VariationFunc func, double amount) {
+    XForm xForm = new XForm();
+    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+    xForm.addVariation(amount, func);
+    flame.getFirstLayer().getFinalXForms().add(xForm);
   }
 
   private void transformPrePostVars(XForm xForm) {

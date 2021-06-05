@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,18 +23,18 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PostAxisSymmetryWFFunc extends VariationFunc {
+public class PostAxisSymmetryWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final int AXIS_X = 0;
   private static final int AXIS_Y = 1;
   private static final int AXIS_Z = 2;
 
-  private static final String PARAM_AXIS = "axis";
-  private static final String PARAM_CENTRE_X = "centre_x";
-  private static final String PARAM_CENTRE_Y = "centre_y";
+  public static final String PARAM_AXIS = "axis";
+  public static final String PARAM_CENTRE_X = "centre_x";
+  public static final String PARAM_CENTRE_Y = "centre_y";
   private static final String PARAM_CENTRE_Z = "centre_z";
-  private static final String PARAM_ROTATION = "rotation";
+  public static final String PARAM_ROTATION = "rotation";
   private static final String PARAM_X1colorshift = "x1colorshift";
   private static final String PARAM_Y1colorshift = "y1colorshift";
   private static final String PARAM_Z1colorshift = "z1colorshift";
@@ -61,7 +61,7 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
       case AXIS_X: {
         double dx, dy;
         dx = pVarTP.x - centre_x;
-        if (Math.random() < 0.5) {
+        if (pContext.random() < 0.5) {
           double ax = centre_x + dx + _halve_dist;
           double ay = pVarTP.y;
           if (_doRotate) {
@@ -91,7 +91,7 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
       case AXIS_Y: {
         double dx, dy;
         dy = pVarTP.y - centre_y;
-        if (Math.random() < 0.5) {
+        if (pContext.random() < 0.5) {
           double ax = pVarTP.x;
           double ay = centre_y + dy + _halve_dist;
           if (_doRotate) {
@@ -122,7 +122,7 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
       default: {
         double dx, dz;
         dz = pVarTP.z - centre_z;
-        if (Math.random() < 0.5) {
+        if (pContext.random() < 0.5) {
           double ax = pVarTP.x;
           double az = centre_z + dz + _halve_dist;
           if (_doRotate) {
@@ -216,7 +216,111 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "  float _sina, _cosa, _halve_dist;\n"
+        + "  short _doRotate;\n"
+        + "float a = varpar->post_axis_symmetry_wf_rotation * (2.0f*PI) / 180.0 / 2.0;\n"
+        + "    _doRotate = fabsf(a) > 1.e-6f;\n"
+        + "\n"
+        + "    _sina = sinf(a);\n"
+        + "    _cosa = cosf(a);\n"
+        + "    _halve_dist = varpar->post_axis_symmetry_wf / 2.0;\n"
+        + "switch (lroundf(varpar->post_axis_symmetry_wf_axis)) {\n"
+        + "      case 0: {\n"
+        + "        float dx, dy;\n"
+        + "        dx = __px - varpar->post_axis_symmetry_wf_centre_x;\n"
+        + "        if (RANDFLOAT() < 0.5) {\n"
+        + "          float ax = varpar->post_axis_symmetry_wf_centre_x + dx + _halve_dist;\n"
+        + "          float ay = __py;\n"
+        + "          if (_doRotate) {\n"
+        + "            dx = ax - varpar->post_axis_symmetry_wf_centre_x;\n"
+        + "            dy = ay - varpar->post_axis_symmetry_wf_centre_y;\n"
+        + "            ax = varpar->post_axis_symmetry_wf_centre_x + dx * _cosa + dy * _sina;\n"
+        + "            ay = varpar->post_axis_symmetry_wf_centre_y + dy * _cosa - dx * _sina;\n"
+        + "          }\n"
+        + "          __px = ax;\n"
+        + "          __py = ay;\n"
+        + "          __pal = fmodf(__pal + varpar->post_axis_symmetry_wf_x1colorshift, 1.0);\n"
+        + "        } else {\n"
+        + "          float bx = varpar->post_axis_symmetry_wf_centre_x - dx - _halve_dist;\n"
+        + "          float by = __py;\n"
+        + "          if (_doRotate) {\n"
+        + "            dx = bx - varpar->post_axis_symmetry_wf_centre_x;\n"
+        + "            dy = by - varpar->post_axis_symmetry_wf_centre_y;\n"
+        + "            bx = varpar->post_axis_symmetry_wf_centre_x + dx * _cosa - dy * _sina;\n"
+        + "            by = varpar->post_axis_symmetry_wf_centre_y + dy * _cosa + dx * _sina;\n"
+        + "          }\n"
+        + "          __px = bx;\n"
+        + "          __py = by;\n"
+        + "          __pal = fmodf(__pal + varpar->post_axis_symmetry_wf_x2colorshift, 1.0);\n"
+        + "        }\n"
+        + "      }\n"
+        + "      break;\n"
+        + "      case 1: {\n"
+        + "        float dx, dy;\n"
+        + "        dy = __py - varpar->post_axis_symmetry_wf_centre_y;\n"
+        + "        if (RANDFLOAT() < 0.5) {\n"
+        + "          float ax = __px;\n"
+        + "          float ay = varpar->post_axis_symmetry_wf_centre_y + dy + _halve_dist;\n"
+        + "          if (_doRotate) {\n"
+        + "            dx = ax - varpar->post_axis_symmetry_wf_centre_x;\n"
+        + "            dy = ay - varpar->post_axis_symmetry_wf_centre_y;\n"
+        + "            ax = varpar->post_axis_symmetry_wf_centre_x + dx * _cosa + dy * _sina;\n"
+        + "            ay = varpar->post_axis_symmetry_wf_centre_y + dy * _cosa - dx * _sina;\n"
+        + "          }\n"
+        + "          __px = ax;\n"
+        + "          __py = ay;\n"
+        + "          __pal = fmodf(__pal + varpar->post_axis_symmetry_wf_y1colorshift, 1.0);\n"
+        + "        } else {\n"
+        + "          float bx = __px;\n"
+        + "          float by = varpar->post_axis_symmetry_wf_centre_y - dy - _halve_dist;\n"
+        + "          if (_doRotate) {\n"
+        + "            dx = bx - varpar->post_axis_symmetry_wf_centre_x;\n"
+        + "            dy = by - varpar->post_axis_symmetry_wf_centre_y;\n"
+        + "            bx = varpar->post_axis_symmetry_wf_centre_x + dx * _cosa - dy * _sina;\n"
+        + "            by = varpar->post_axis_symmetry_wf_centre_y + dy * _cosa + dx * _sina;\n"
+        + "            __pal = fmodf(__pal + varpar->post_axis_symmetry_wf_y2colorshift, 1.0);\n"
+        + "          }\n"
+        + "          __px = bx;\n"
+        + "          __py = by;\n"
+        + "        }\n"
+        + "      }\n"
+        + "      break;\n"
+        + "      case 2:\n"
+        + "      default: {\n"
+        + "        float dx, dz;\n"
+        + "        dz = __pz - varpar->post_axis_symmetry_wf_centre_z;\n"
+        + "        if (RANDFLOAT() < 0.5) {\n"
+        + "          float ax = __px;\n"
+        + "          float az = varpar->post_axis_symmetry_wf_centre_z + dz + _halve_dist;\n"
+        + "          if (_doRotate) {\n"
+        + "            dx = ax - varpar->post_axis_symmetry_wf_centre_x;\n"
+        + "            dz = az - varpar->post_axis_symmetry_wf_centre_z;\n"
+        + "            ax = varpar->post_axis_symmetry_wf_centre_x + dx * _cosa + dz * _sina;\n"
+        + "            az = varpar->post_axis_symmetry_wf_centre_y + dz * _cosa - dx * _sina;\n"
+        + "          }\n"
+        + "          __px = ax;\n"
+        + "          __pz = az;\n"
+        + "          __pal = fmodf(__pal + varpar->post_axis_symmetry_wf_z1colorshift, 1.0);\n"
+        + "        } else {\n"
+        + "          float bx = __px;\n"
+        + "          float bz = varpar->post_axis_symmetry_wf_centre_z - dz - _halve_dist;\n"
+        + "          if (_doRotate) {\n"
+        + "            dx = bx - varpar->post_axis_symmetry_wf_centre_x;\n"
+        + "            dz = bz - varpar->post_axis_symmetry_wf_centre_z;\n"
+        + "            bx = varpar->post_axis_symmetry_wf_centre_x + dx * _cosa - dz * _sina;\n"
+        + "            bz = varpar->post_axis_symmetry_wf_centre_y + dz * _cosa + dx * _sina;\n"
+        + "          }\n"
+        + "          __px = bx;\n"
+        + "          __pz = bz;\n"
+        + "          __pal = fmodf(__pal + varpar->post_axis_symmetry_wf_z2colorshift, 1.0);\n"
+        + "        }\n"
+        + "      }\n"
+        + "      break;\n"
+        + "    }\n";
+  }
 }

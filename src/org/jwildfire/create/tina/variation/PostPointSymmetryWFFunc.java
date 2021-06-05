@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,12 +23,12 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PostPointSymmetryWFFunc extends VariationFunc {
+public class PostPointSymmetryWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_CENTRE_X = "centre_x";
-  private static final String PARAM_CENTRE_Y = "centre_y";
-  private static final String PARAM_ORDER = "order";
+  public static final String PARAM_CENTRE_X = "centre_x";
+  public static final String PARAM_CENTRE_Y = "centre_y";
+  public static final String PARAM_ORDER = "order";
   private static final String PARAM_COLORSHIFT = "colorshift";
   private static final String[] paramNames = {PARAM_CENTRE_X, PARAM_CENTRE_Y, PARAM_ORDER, PARAM_COLORSHIFT};
 
@@ -99,7 +99,27 @@ public class PostPointSymmetryWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int order = lroundf(varpar->post_point_symmetry_wf_order);\n"
+        + "if(order>36) order=36;\n"
+        +"float _sina[36];\n"
+        + "float _cosa[36];\n"
+        + "    float da = (2.0f*PI) / (float) order;\n"
+        + "    float angle = 0.0;\n"
+        + "    for (int i = 0; i < order; i++) {\n"
+        + "      _sina[i] = sinf(angle);\n"
+        + "      _cosa[i] = cosf(angle);\n"
+        + "      angle += da;\n"
+        + "    }\n"
+        + "    float dx = (__px - varpar->post_point_symmetry_wf_centre_x) * varpar->post_point_symmetry_wf;\n"
+        + "    float dy = (__py - varpar->post_point_symmetry_wf_centre_y) * varpar->post_point_symmetry_wf;\n"
+        + "    int idx = lroundf(RANDFLOAT() * (order-1));\n"
+        + "    __px = varpar->post_point_symmetry_wf_centre_x + dx * _cosa[idx] + dy * _sina[idx];\n"
+        + "    __py = varpar->post_point_symmetry_wf_centre_y + dy * _cosa[idx] - dx * _sina[idx];\n"
+        + "    __pal = fmodf(__pal + idx * varpar->post_point_symmetry_wf_colorshift, 1.0);\n";
+  }
 }
