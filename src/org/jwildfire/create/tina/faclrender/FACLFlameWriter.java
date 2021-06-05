@@ -56,7 +56,6 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     List<SimpleXMLBuilder.Attribute<?>> flamesAttrList = new ArrayList<>();
     flamesAttrList.add(new Attribute<String>("name", ""));
-
     xb.beginElement("Flames", flamesAttrList);
 
     // Flame
@@ -64,7 +63,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     Layer layer = transformedFlame.getFirstLayer();
     VariationSet variationSet = new VariationSet(transformedFlame, transformationContext, logger);
     attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", variationSet.getUuid()));
-
+    attrList.add(new SimpleXMLBuilder.Attribute<String>("highlight_power", "-1"));
     xb.beginElement("flame", attrList);
     // XForm
     for (XForm xForm : layer.getXForms()) {
