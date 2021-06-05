@@ -1,3 +1,17 @@
+GPU-TODO:
+ -default setting: denoiser off
+ -gpu render in main window
+ -autosync is buggy (sync too often)
+ -simulate post-symmetry
+ -motion-blur
+ -send a flame to GPU render from main editor
+ -checkbox for gpu rendering in main editor (as rendering default in main editor/batch render)
+ -more coloring settings
+ -raw export and raw tonemapping (optional)
+ -window to display error messages in custom_wf_full-variation
+ -fix pre_post_variations
+ -fix difference between camera
+
 V7.00 (xx.xx.202x)
  - Created a new extended mode for running the external GPU renderer which provides the actual code for the actually used variations (on a per flame basis).
    This needs more time to initialize than the regular mode, because the variation code must be compiled for each individual set of variations.
@@ -12,8 +26,28 @@ V7.00 (xx.xx.202x)
  - displaying the name of variations where no code could be found
  - added a new option to enable automatic synchronization of changes between the Main Editor and GPU renderer
 
+ - behaviour of some variations fixed: the contribution of these was not added to the variation current group, but
+   was overriding all other contributions of the current group:
+     - seashell3D
+     - clifford_js
+     - post_depth
+ - fixed the naming of some parameters (i.e., replaced spaces by underscore) of the following variations:
+     - atan2_spirals
+     - seashell3D
+     - inverted_julia variation
+ - fixed the following variations in order to correctly support the "Preserve Z"-setting:
+     - bsplit
+ - improved the gnarl-random-flame-generators to also use waves22, waves23, waves42 and vibration2 to create more interesting variations of the standard-gnarls
+ - omitting empty motion curves when writing flames to file or clipboard
+
  - new variations:
    - ovoid by Rob Richards
+   - post_point_crop by Whittaker Courtney
+
+  - new family of variations by Jesus Sosa: Symmetries band & network groups variations
+     - Symmetry Band Groups 1 to 7 variations: sym_bg1, sym_bg2, sym_bg3, sym_bg4, sym_bg5, sym_bg6, sym_bg7
+     - Symmetry Network Group 1 to 17 variations: sym_ng1, sym_ng2, sym_ng3, sym_ng4, sym_ng5, sym_ng6, sym_ng7, sym_ng8, sym_ng9, sym_ng10,
+       sym_ng11, sym_ng12, sym_ng13, sym_ng14, sym_ng15, sym_ng16, sym_ng17.
 
 V6.50 (11.04.2021)
  - Introducing variation-filters, based on variation-profiles and variation-types.
