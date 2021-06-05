@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class BCollideFunc extends VariationFunc {
+public class BCollideFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_NUM = "num";
@@ -100,7 +100,38 @@ public class BCollideFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _bCa, _bCn_pi, _bCa_bCn, _pi_bCn;\n"
+        + "int num = lroundf(varpar->bCollide_num);\n"
+        + "    _bCn_pi = (float) num * (1.0f / PI);\n"
+        + "    _pi_bCn = PI / (float) num;\n"
+        + "    _bCa = PI * varpar->bCollide_a;\n"
+        + "    _bCa_bCn = _bCa / (float) num;\n"
+        + "    float tau, sigma;\n"
+        + "    float temp;\n"
+        + "    float cosht, sinht;\n"
+        + "    float sins, coss;\n"
+        + "    int alt;\n"
+        + "\n"
+        + "    tau = 0.5 * (logf(sqrf(__x + 1.0) + __y*__y) - logf(sqrf(__x - 1.0) + __y*__y));\n"
+        + "    sigma = PI - atan2f(__y, __x + 1.0) - atan2f(__y, 1.0 - __x);\n"
+        + "\n"
+        + "    alt = (int) (sigma * _bCn_pi);\n"
+        + "    if (alt % 2 == 0)\n"
+        + "      sigma = alt * _pi_bCn + fmodf(sigma + _bCa_bCn, _pi_bCn);\n"
+        + "    else\n"
+        + "      sigma = alt * _pi_bCn + fmodf(sigma - _bCa_bCn, _pi_bCn);\n"
+        + "    sinht = sinhf(tau);\n"
+        + "    cosht = coshf(tau);\n"
+        + "    sins = sinf(sigma);\n"
+        + "    coss = cosf(sigma);\n"
+        + "    temp = cosht - coss;\n"
+        + "    __px += varpar->bCollide * sinht / temp;\n"
+        + "    __py += varpar->bCollide * sins / temp;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->bCollide * __z;\n" : "");
+  }
 }

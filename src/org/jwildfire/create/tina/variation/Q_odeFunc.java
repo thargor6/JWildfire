@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2018 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class Q_odeFunc extends VariationFunc {
+public class Q_odeFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_Q_ODE01 = "q_ode01";
@@ -125,7 +125,16 @@ public class Q_odeFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    __px += varpar->q_ode_q_ode01 + varpar->q_ode * varpar->q_ode_q_ode02 * __x + varpar->q_ode_q_ode03 * __x * __x;\n"
+        + "    __px += varpar->q_ode_q_ode04 * __x * __y + varpar->q_ode_q_ode05 * __y + varpar->q_ode_q_ode06 * __y * __y;\n"
+        + "    __py += varpar->q_ode_q_ode07 + varpar->q_ode_q_ode08 * __x + varpar->q_ode_q_ode09 * __x * __x;\n"
+        + "    __py += varpar->q_ode_q_ode10 * __x * __y + varpar->q_ode * varpar->q_ode_q_ode11 * __y\n"
+        + "            + varpar->q_ode_q_ode12 * __y * __y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz + = varpar->q_ode * __z;\n" : "");
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class BTransformFunc extends VariationFunc {
+public class BTransformFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ROTATE = "rotate";
@@ -96,7 +96,31 @@ public class BTransformFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float tau, sigma;\n"
+        + "    float temp;\n"
+        + "    float cosht, sinht;\n"
+        + "    float sins, coss;\n"
+        + "\n"
+        + "    tau = 0.5 * (logf(sqrf(__x + 1.0) + __y*__y) - logf(sqrf(__x - 1.0) + __y*__y)) / varpar->bTransform_power + varpar->bTransform_move;\n"
+        + "    sigma = PI - atan2f(__y, __x + 1.0) - atan2f(__y, 1.0 - __x) + varpar->bTransform_rotate;\n"
+        + "    sigma = sigma / varpar->bTransform_power + (2.0f*PI) / varpar->bTransform_power * floorf(RANDFLOAT() * varpar->bTransform_power);\n"
+        + "\n"
+        + "    if (__x >= 0.0)\n"
+        + "      tau += varpar->bTransform_split;\n"
+        + "    else\n"
+        + "      tau -= varpar->bTransform_split;\n"
+        + "    sinht = sinhf(tau);\n"
+        + "    cosht = coshf(tau);\n"
+        + "    sins = sinf(sigma);\n"
+        + "    coss = cosf(sigma);\n"
+        + "    temp = cosht - coss;\n"
+        + "    __px += varpar->bTransform * sinht / temp;\n"
+        + "    __py += varpar->bTransform * sins / temp;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->post_point_crop * __z;\n" : "");
+  }
 }

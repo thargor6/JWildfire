@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Bipolar2Func extends VariationFunc {
+public class Bipolar2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHIFT = "shift";
@@ -114,7 +114,30 @@ public class Bipolar2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float x2y2 = (__x * __x + __y * __y) * varpar->bipolar2_g1;\n"
+        + "    float t = x2y2 + varpar->bipolar2_a;\n"
+        + "    float x2 = varpar->bipolar2_b * __x;\n"
+        + "    float ps = -(PI*0.5f) * varpar->bipolar2_shift;\n"
+        + "    float y = varpar->bipolar2_c * atan2f(varpar->bipolar2_e * __y, x2y2 - varpar->bipolar2_d) + ps;\n"
+        + "\n"
+        + "    if (y > (PI*0.5f)) {\n"
+        + "      y = -(PI*0.5f) + fmodf(y + (PI*0.5f), PI);\n"
+        + "    } else if (y < -(PI*0.5f)) {\n"
+        + "      y = (PI*0.5f) - fmodf((PI*0.5f) - y, PI);\n"
+        + "    }\n"
+        + "\n"
+        + "    float f = t + x2;\n"
+        + "    float g = t - x2;\n"
+        + "\n"
+        + "    if (!((g == 0) || (f / g <= 0))) {\n"
+        + "    __px += varpar->bipolar2 * varpar->bipolar2_f1 * (2.0f / PI) * logf((t + x2) / (t - x2));\n"
+        + "    __py += varpar->bipolar2 * (2.0f / PI) * y * varpar->bipolar2_h;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->bipolar2 * __z;\n" : "")
+        + "}\n";
+  }
 }

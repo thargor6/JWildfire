@@ -18,27 +18,27 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.base.Tools;
 
-public class PostPointCropFunc extends VariationFunc {
+public class PostPointCropFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_X = "x offset";
-  private static final String PARAM_Y = "y offset";
-  private static final String PARAM_Z = "z offset";
-  private static final String PARAM_HIDE = "point hide enable";
-  private static final String PARAM_CROP = "point crop enable";
-  private static final String PARAM_XWIDTH = "x width";
-  private static final String PARAM_YWIDTH = "y width";
-  private static final String PARAM_ZWIDTH = "z width";
+  private static final String PARAM_X = "x_offset";
+  private static final String PARAM_Y = "y_offset";
+  private static final String PARAM_Z = "z_offset";
+  private static final String PARAM_HIDE = "point_hide_enable";
+  private static final String PARAM_CROP = "point_crop_enable";
+  private static final String PARAM_XWIDTH = "x_width";
+  private static final String PARAM_YWIDTH = "y_width";
+  private static final String PARAM_ZWIDTH = "z_width";
 
   private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z, PARAM_HIDE, PARAM_CROP, PARAM_XWIDTH, PARAM_YWIDTH, PARAM_ZWIDTH};
-  private double x = 0.0;
-  private double y = 0.0;
-  private double z = 0.0;
-  private int hide = 1;
-  private int crop = 1;
-  private double xWidth = 0.0;
-  private double yWidth = 0.0;
-  private double zWidth = 0.0;
+  private double x_offset = 0.0;
+  private double y_offset = 0.0;
+  private double z_offset = 0.0;
+  private int point_hide_enable = 1;
+  private int point_crop_enable = 1;
+  private double x_width = 0.0;
+  private double y_width = 0.0;
+  private double z_width = 0.0;
   private double post_scrop_x, post_scrop_y, post_scrop_z, post_scrop_c;
 
   @Override
@@ -50,14 +50,14 @@ public class PostPointCropFunc extends VariationFunc {
     // I'm not sure how exactly it works but it makes an improvement with both implemented.
     // x, y and z are point offsets and the widths are for removing lines.
 
-    boolean zero = pVarTP.x == (0+x) && pVarTP.y == (0+y) && pVarTP.z == (0+z);
-    boolean boundaryX = (pVarTP.x - x) <= xWidth && (pVarTP.x - x) >= -xWidth;
-    boolean boundaryY = (pVarTP.y - y) <= yWidth && (pVarTP.y - y) >= -yWidth;
-    boolean boundaryZ = (pVarTP.z - z) <= zWidth && (pVarTP.z - z) >= -zWidth && pVarTP.z != 0;
+    boolean zero = pVarTP.x == (0+ x_offset) && pVarTP.y == (0+ y_offset) && pVarTP.z == (0+ z_offset);
+    boolean boundaryX = (pVarTP.x - x_offset) <= x_width && (pVarTP.x - x_offset) >= -x_width;
+    boolean boundaryY = (pVarTP.y - y_offset) <= y_width && (pVarTP.y - y_offset) >= -y_width;
+    boolean boundaryZ = (pVarTP.z - z_offset) <= z_width && (pVarTP.z - z_offset) >= -z_width && pVarTP.z != 0;
     boolean boundaries;
 
     // Determines whether to calculate the boundaries based on point or width location.
-    if (xWidth + yWidth + zWidth != 0)
+    if (x_width + y_width + z_width != 0)
     {
       boundaries = boundaryX || boundaryY || boundaryZ;
     }
@@ -68,39 +68,34 @@ public class PostPointCropFunc extends VariationFunc {
 
     // Hide and(or) crop if within boundaries
     if (boundaries) {
-      if (crop == 1)
+      if (point_crop_enable == 1)
       {
         pVarTP.x = post_scrop_x;
         pVarTP.y = post_scrop_y;
         pVarTP.z = post_scrop_z;
         pVarTP.color = post_scrop_c;
       }
-      if (hide == 1)
+      if (point_hide_enable == 1)
       {
         pVarTP.doHide = true;
       }
-      return;
     }
-
-    else
-    {
-      if (hide == 1)
+    else {
+      if (point_hide_enable == 1)
       {
         pVarTP.doHide = false;
       }
-      if (crop == 1)
+      if (point_crop_enable == 1)
       {
         post_scrop_x = pVarTP.x;
         post_scrop_y = pVarTP.y;
         post_scrop_z = pVarTP.z;
         post_scrop_c = pVarTP.color;
       }
+      if (pContext.isPreserveZCoordinate()) {
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
     }
-
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
-
   }
 
   @Override
@@ -110,27 +105,27 @@ public class PostPointCropFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] {x, y, z, hide, crop, xWidth, yWidth, zWidth};
+    return new Object[] {x_offset, y_offset, z_offset, point_hide_enable, point_crop_enable, x_width, y_width, z_width};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_X.equalsIgnoreCase(pName))
-      x = pValue;
+      x_offset = pValue;
     else if (PARAM_Y.equalsIgnoreCase(pName))
-      y = pValue;
+      y_offset = pValue;
     else if (PARAM_Z.equalsIgnoreCase(pName))
-      z = pValue;
+      z_offset = pValue;
     else if (PARAM_HIDE.equalsIgnoreCase(pName))
-      hide = (int) Tools.limitValue(pValue, 0, 1);
+      point_hide_enable = (int) Tools.limitValue(pValue, 0, 1);
     else if (PARAM_CROP.equalsIgnoreCase(pName))
-      crop = (int) Tools.limitValue(pValue, 0, 1);
+      point_crop_enable = (int) Tools.limitValue(pValue, 0, 1);
     else if (PARAM_XWIDTH.equalsIgnoreCase(pName))
-      xWidth = pValue;
+      x_width = pValue;
     else if (PARAM_YWIDTH.equalsIgnoreCase(pName))
-      yWidth = pValue;
+      y_width = pValue;
     else if (PARAM_ZWIDTH.equalsIgnoreCase(pName))
-      zWidth = pValue;
+      z_width = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -142,7 +137,7 @@ public class PostPointCropFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
   @Override
@@ -150,4 +145,59 @@ public class PostPointCropFunc extends VariationFunc {
     return 1;
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "   short zero = __px == (0+ varpar->post_point_crop_x_offset) && __py == (0+ varpar->post_point_crop_y_offset) && __pz == (0+ varpar->post_point_crop_z_offset);\n"
+        + "    short boundaryX = (__px - varpar->post_point_crop_x_offset) <= varpar->post_point_crop_x_width && (__px - varpar->post_point_crop_x_offset) >= -varpar->post_point_crop_x_width;\n"
+        + "    short boundaryY = (__py - varpar->post_point_crop_y_offset) <= varpar->post_point_crop_y_width && (__py - varpar->post_point_crop_y_offset) >= -varpar->post_point_crop_y_width;\n"
+        + "    short boundaryZ = (__pz - varpar->post_point_crop_z_offset) <= varpar->post_point_crop_z_width && (__pz - varpar->post_point_crop_z_offset) >= -varpar->post_point_crop_z_width && __pz != 0;\n"
+        + "    short boundaries;\n"
+        + "\n"
+        + "    if (varpar->post_point_crop_x_width + varpar->post_point_crop_y_width + varpar->post_point_crop_z_width != 0)\n"
+        + "    {\n"
+        + "      boundaries = boundaryX || boundaryY || boundaryZ;\n"
+        + "    }\n"
+        + "    else\n"
+        + "    {\n"
+        + "      boundaries = zero;\n"
+        + "    }\n"
+        + "\n"
+        + "    if (boundaries) {\n"
+        + "      if (varpar->post_point_crop_point_crop_enable == 1)\n"
+        + "      {\n"
+        + "        __px = __jwf%d_post_scrop_x;\n"
+        + "        __py = __jwf%d_post_scrop_y;\n"
+        + "        __pz = __jwf%d_post_scrop_z;\n"
+        + "        __pal = __jwf%d_post_scrop_c;\n"
+        + "      }\n"
+        + "      if (varpar->post_point_crop_point_hide_enable == 1)\n"
+        + "      {\n"
+        + "        __doHide = true;\n"
+        + "      }\n"
+        + "    }\n"
+        + "    else {\n"
+        + "      if (varpar->post_point_crop_point_hide_enable == 1)\n"
+        + "      {\n"
+        + "        __doHide = false;\n"
+        + "      }\n"
+        + "      if (varpar->post_point_crop_point_crop_enable == 1)\n"
+        + "      {\n"
+        + "        __jwf%d_post_scrop_x = __px;\n"
+        + "        __jwf%d_post_scrop_y = __py;\n"
+        + "        __jwf%d_post_scrop_z = __pz;\n"
+        + "        __jwf%d_post_scrop_c = __pal;\n"
+        + "      }\n"
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->post_point_crop * __z;\n" : "")
+        + "    }";
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float __jwf%d_post_scrop_x, __jwf%d_post_scrop_y, __jwf%d_post_scrop_z, __jwf%d_post_scrop_c;\n";
+  }
+
+  @Override
+  public boolean isStateful() {
+    return true;
+  }
 }
