@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class PreCurlFunc extends VariationFunc {
+public class PreCurlFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_C1 = "c1";
@@ -84,7 +84,20 @@ public class PreCurlFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_PRE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_PRE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float x = __x;\n"
+        + "    float y = __y;\n"
+        + "float c2x2 = 2.0 * varpar->pre_curl_c2;\n"
+        + "    float re = 1 + varpar->pre_curl_c1 * x + varpar->pre_curl_c2 * (x * x - y * y);\n"
+        + "    float im = varpar->pre_curl_c1 * y + c2x2 * x * y;\n"
+        + "\n"
+        + "    float r = varpar->pre_curl / (re * re + im * im);\n"
+        + "\n"
+        + "    __x = (x * re + y * im) * r;\n"
+        + "    __y = (y * re - x * im) * r;\n";
+  }
 }
