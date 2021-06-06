@@ -286,7 +286,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
               }
             }
             pre.setFunc(func);
-            pre.setPriority(0);
+            pre.setPriority(-1);
             xForm.addVariation(pre);
           }
           {
