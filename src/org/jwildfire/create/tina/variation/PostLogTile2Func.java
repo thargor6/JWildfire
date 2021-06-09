@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.round;
 
-public class PostLogTile2Func extends VariationFunc {
+public class PostLogTile2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "spreadx";
@@ -29,23 +29,23 @@ public class PostLogTile2Func extends VariationFunc {
 
   private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z};
 
-  private double x = 2.0;
-  private double y = 2.0;
-  private double z = 0.0;
+  private double spreadx = 2.0;
+  private double spready = 2.0;
+  private double spreadz = 0.0;
 
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // Log_tile by Zy0rg implemented into JWildfire by Brad Stefanov
     //converted to a post variation by Whittaker Courtney
 
-    double spreadx = -x;
+    double spreadx = -this.spreadx;
     if (pContext.random() < 0.5)
-      spreadx = x;
-    double spready = -y;
+      spreadx = this.spreadx;
+    double spready = -this.spready;
     if (pContext.random() < 0.5)
-      spready = y;
-    double spreadz = -z;
+      spready = this.spready;
+    double spreadz = -this.spreadz;
     if (pContext.random() < 0.5)
-      spreadz = z;
+      spreadz = this.spreadz;
     pVarTP.x = pAmount * (pVarTP.x + spreadx * round(log(pContext.random())));
     pVarTP.y = pAmount * (pVarTP.y + spready * round(log(pContext.random())));
     pVarTP.z = pAmount * (pVarTP.z + spreadz * round(log(pContext.random())));
@@ -58,17 +58,17 @@ public class PostLogTile2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{x, y, z};
+    return new Object[]{spreadx, spready, spreadz};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_X.equalsIgnoreCase(pName))
-      x = pValue;
+      spreadx = pValue;
     else if (PARAM_Y.equalsIgnoreCase(pName))
-      y = pValue;
+      spready = pValue;
     else if (PARAM_Z.equalsIgnoreCase(pName))
-      z = pValue;
+      spreadz = pValue;
 
     else
       throw new IllegalArgumentException(pName);
@@ -86,7 +86,22 @@ public class PostLogTile2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float spreadx = -varpar->post_log_tile2_spreadx;\n"
+        + "    if (RANDFLOAT() < 0.5)\n"
+        + "      spreadx = varpar->post_log_tile2_spreadx;\n"
+        + "    float spready = -varpar->post_log_tile2_spready;\n"
+        + "    if (RANDFLOAT() < 0.5)\n"
+        + "      spready = varpar->post_log_tile2_spready;\n"
+        + "    float spreadz = -varpar->post_log_tile2_spreadz;\n"
+        + "    if (RANDFLOAT() < 0.5)\n"
+        + "      spreadz = varpar->post_log_tile2_spreadz;\n"
+        + "    __px = varpar->post_log_tile2 * (__px + spreadx * round(logf(RANDFLOAT())));\n"
+        + "    __py = varpar->post_log_tile2 * (__py + spready * round(logf(RANDFLOAT())));\n"
+        + "    __pz = varpar->post_log_tile2 * (__pz + spreadz * round(logf(RANDFLOAT())));\n";
+  }
 }

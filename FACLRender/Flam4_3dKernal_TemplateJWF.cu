@@ -65,6 +65,10 @@ struct  __align__(16) rgba
 #endif
 
 #ifdef JWF_EXTENSIONS
+__device__ float lerpf(float a, float b, float p) {
+    return a + (b - a) * p;
+}
+
 __device__ float sqrtf_safe(float x) {
   if (x <= 0.0f)
     return 0.0f;

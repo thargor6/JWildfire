@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class RippleFunc extends VariationFunc {
+public class RippleFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_FREQUENCY = "frequency";
@@ -148,7 +148,33 @@ public class RippleFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "  float _f, _s, _p, _is, _pxa, _pixa, _vxp;\n"
+        + "  short _fixed_dist_calc;\n"
+        + "_f = varpar->ripple_frequency * 5;\n"
+        + "    float a = varpar->ripple_amplitude * 0.01;\n"
+        + "    _p = varpar->ripple_phase * (2.0f*PI) - PI;\n"
+        + "    _s = varpar->ripple_scale == 0 ? 1.e-6f : varpar->ripple_scale;\n"
+        + "    _is = 1.0 / _s;\n"
+        + "    _vxp = varpar->ripple_velocity * _p;\n"
+        + "    _pxa = _p * a;\n"
+        + "    _pixa = (PI - _p) * a;\n"
+        + "    _fixed_dist_calc = lroundf(varpar->ripple_fixed_dist_calc != 0);\n"
+        + "    float x = (__x * _s) - varpar->ripple_centerx, y = (__y * _s) + varpar->ripple_centery;\n"
+        + "    float d = _fixed_dist_calc ? sqrtf(x * x + y * y) : sqrtf(x * x * y * y);\n"
+        + "    if (d < 1.e-6f)\n"
+        + "      d = 1.e-6f;\n"
+        + "    float nx = x / d, ny = y / d;\n"
+        + "    float wave = cosf(_f * d - _vxp);\n"
+        + "    float d1 = wave * _pxa + d, d2 = wave * _pixa + d;\n"
+        + "    float u1 = (varpar->ripple_centerx + nx * d1), v1 = (-varpar->ripple_centery + ny * d1);\n"
+        + "    float u2 = (varpar->ripple_centerx + nx * d2), v2 = (-varpar->ripple_centery + ny * d2);\n"
+        + "    __px = varpar->ripple * (lerpf(u1, u2, _p)) * _is;\n"
+        + "    __py = varpar->ripple * (lerpf(v1, v2, _p)) * _is;\n"
+        + (context.isPreserveZCoordinate() ? "__pz = varpar->ripple * __z;\n" : "");
+  }
 }
