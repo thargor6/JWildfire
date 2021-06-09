@@ -16,7 +16,7 @@ import js.glsl.vec4;
 
 
 
-public class CutSinCosFunc  extends VariationFunc {
+public class CutSinCosFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_sincos
@@ -162,8 +162,53 @@ public class CutSinCosFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return "float x,y;\n"  
+	  		  + "if(varpar->cut_sincos_mode==0)\n"
+			  + "{\n"
+			  + "  x= __x;\n"
+			  + "  y =__y;\n"
+			  + "}else\n"
+			  + "{\n"
+			  + " x=RANDFLOAT()-0.5;\n"
+			  + " y=RANDFLOAT()-0.5;\n"
+			  + "}\n"
+//			  + "float2 uv= make_float2(x*varpar->cut_sincos_zoom,y*varpar->cut_sincos_zoom);\n"
+              + "float2 uv= make_float2(x,y);\n"
+              + "uv= uv*varpar->cut_sincos_zoom;\n"
+		      + "uv.x+=1.5;\n"
+			  + "uv.y += cos(uv.x*10.0)*0.15;\n"
+			  + "uv.y*=1.5;\n"
+			  + "float r = 7.3;\n"
+			  + "float e = uv.x-varpar->cut_sincos_time*0.5;\n"
+			  + "float t = e + abs(uv.y);\n"
+	  		  + "float f = (1.0+sin(uv.x*3.0))*0.4+0.1;\n"
+			  + "float d = f - abs(fract(t*r) - .5)*2.;\n"
+			  + "float s = smoothstep(0., .05/max(d + .5, 0.), d + .1);\n"
+	          + "float color=sqrt(s);\n"	      
+			  + "__doHide=false;\n"
+			  + "if(varpar->cut_sincos_invert==0)\n"
+			  + "{\n"
+			  + "   if (color>0.0)\n"
+			  + "   { x=0;\n"
+			  + "     y=0;\n"
+			  + "    __doHide = true;\n"
+			  + "   }\n"
+			  + "} else\n"
+			  + "{\n"
+			  + "   if (color<=0.0)\n"
+			  + "   { x=0;\n"
+			  + "     y=0;\n"
+			  + "     __doHide = true;\n"
+			  + "   }\n"
+			  + "}\n"
+			  + "__px = varpar->cut_sincos * x;\n"
+			  + "__py = varpar->cut_sincos * y;\n"
+	          + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_sincos *__z;\n" : "");
+	  }
 }
 
