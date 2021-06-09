@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
 
 
-public class ArctanhFunc extends SimpleVariationFunc {
+public class ArctanhFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -51,7 +51,25 @@ public class ArctanhFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "Complex z;\n"
+            + "Complex_Init(&z, __x, __y);\n"
+            + "Complex z2;\n"
+            + "Complex_Init(&z2, z.re, z.im);\n"
+            + "Complex_Scale(&z2, -1.0f);\n"
+            + "Complex_Inc(&z2);\n"
+            + "Complex z3;\n"
+            + "Complex_Init(&z3, z.re, z.im);\n"
+            + "Complex_Inc(&z3);\n"
+            + "Complex_Div(&z3, &z2);\n"
+            + "Complex_Log(&z3);\n"
+            + "Complex_Scale(&z3, varpar->arctanh * 2.f / PI);\n"
+            + "__px += z3.re;\n"
+            + "__py += z3.im;\n"
+            + (context.isPreserveZCoordinate() ? "__pz += varpar->arctanh * __z;\n": "");
+  }
 }

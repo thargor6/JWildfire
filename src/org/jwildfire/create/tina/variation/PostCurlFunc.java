@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 
-public class PostCurlFunc extends VariationFunc {
+public class PostCurlFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_C1 = "c1";
@@ -87,7 +87,22 @@ public class PostCurlFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _c1 = varpar->post_curl_c1 * varpar->post_curl;\n"
+        + "float _c2 = varpar->post_curl_c2 * varpar->post_curl;\n"
+        + "float    _c22 = 2 * _c2;\n"
+        + "    float x = __px;\n"
+        + "    float y = __py;\n"
+        + "\n"
+        + "    float re = 1 + _c1 * x + _c2 * (x*x - y*y);\n"
+        + "    float im = _c1 * y + _c22 * x * y;\n"
+        + "\n"
+        + "    float r = re*re + im*im + 1.e-6f;\n"
+        + "    __px = (x * re + y * im) / r;\n"
+        + "    __py = (y * re - x * im) / r;\n";
+  }
 }

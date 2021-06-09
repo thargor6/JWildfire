@@ -82,6 +82,7 @@ public class VariationFuncList {
     aliasMap.put(Rays1Func.class, "rays_rk1");
     aliasMap.put(Rays2Func.class, "rays_rk2");
     aliasMap.put(Rays3Func.class, "rays_rk3");
+    aliasMap.put(SquareFunc.class, "blur_square");
     //
     registerVariationFunc(LinearFunc.class);
     registerVariationFunc(SphericalFunc.class);
@@ -1005,6 +1006,7 @@ public class VariationFuncList {
 
     registerVariationFunc(OvoidFunc.class);
     registerVariationFunc(PostPointCropFunc.class);
+    registerVariationFunc(HoleFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

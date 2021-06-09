@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2011 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
+  License, or (at your option) any later version.
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software;
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.mathlib.Complex;
@@ -6,7 +22,7 @@ import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class PlusRecipFunc extends VariationFunc {
+public class PlusRecipFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_AR = "ar";
@@ -76,8 +92,46 @@ public class PlusRecipFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "Complex z;\n"
+            + "Complex_Init(&z, __x, __y);\n"
+            + "Complex k;\n"
+            + "Complex_Init(&k, z.re, z.im);\n"
+            + "Complex a;\n"
+            + "Complex_Init(&a, varpar->plusrecip_ar, varpar->plusrecip_ai);\n"
+            + "float aa = sqrtf(Complex_Mag2eps(&a));\n"
+            + "Complex_Sqr(&k);\n"
+            + "Complex_Sub(&k, &a);\n"
+            + "Complex_Sqrt(&k);\n"
+            + "Complex_Add(&k, &z);\n"
+            + "Complex_Copy(&z, &k);\n"
+            + "Complex_Sqr(&z);\n"
+            + "if(sqrtf(Complex_Mag2eps(&z))<aa) {\n"
+            + "  Complex_Conj(&k);\n"
+            + "  Complex_Scale(&a, -1.0 / aa);\n"
+            + "  Complex_Mul(&k, &a);\n"
+            + "}\n"
+            + "if(k.re < 0) {\n"
+            + "  Complex_Neg(&k);\n"
+            + "}\n"
+            + "Complex_Scale(&k, varpar->plusrecip);\n"
+           + "__px += k.re;\n"
+            + "__py += k.im;\n"
+            + (context.isPreserveZCoordinate() ? "__pz += varpar->plusrecip * __z;\n": "");
+  }
 }
+
+
+
+
+
+
+
+
+
+

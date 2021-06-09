@@ -65,6 +65,10 @@ struct  __align__(16) rgba
 #endif
 
 #ifdef JWF_EXTENSIONS
+__device__ float lerpf(float a, float b, float p) {
+    return a + (b - a) * p;
+}
+
 __device__ float sqrtf_safe(float x) {
   if (x <= 0.0f)
     return 0.0f;
@@ -1235,6 +1239,12 @@ __device__ void Complex_Add(Complex *c, Complex *zz) {
   c->im += zz->im;
 }
 
+__device__ void Complex_Sub(Complex *c, Complex *zz) {
+  c->re -= zz->re;
+  c->im -= zz->im;
+}
+
+
 __device__ void Complex_Mul(Complex *c, Complex *zz) {
    if (zz->im == 0.0) {
       Complex_Scale(c, zz->re);
@@ -1250,6 +1260,10 @@ __device__ void Complex_Mul(Complex *c, Complex *zz) {
 __device__ void Complex_One(Complex *c) {
   c->re = 1.0f;
   c->im = 0.0f;
+}
+
+__device__ void Complex_Conj(Complex *c) {
+  c->im = -c->im;
 }
 
 __device__ float Complex_Radius(Complex *c) {

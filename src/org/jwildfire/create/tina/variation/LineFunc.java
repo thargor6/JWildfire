@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -25,7 +25,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
  * @author Nic Anderson, chronologicaldot
  * @date March 2, 2013
  */
-public class LineFunc extends VariationFunc {
+public class LineFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ANGLE_DELTA = "delta";
@@ -84,7 +84,23 @@ public class LineFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "  float ux = cosf(varpar->line_delta * PI) * cosf(varpar->line_phi * PI);\n"
+        + "    float uy = sinf(varpar->line_delta * PI) * cosf(varpar->line_phi * PI);\n"
+        + "    float uz = sinf(varpar->line_phi * PI);\n"
+        + "\n"
+        + "    float r = sqrtf(ux * ux + uy * uy + uz * uz);\n"
+        + "    ux /= r;\n"
+        + "    uy /= r;\n"
+        + "    uz /= r;\n"
+        + "\n"
+        + "    float rand = RANDFLOAT() * varpar->line;\n"
+        + "    __px += ux * rand;\n"
+        + "    __py += uy * rand;\n"
+        + "    __pz += uz * rand;\n";
+  }
 }
