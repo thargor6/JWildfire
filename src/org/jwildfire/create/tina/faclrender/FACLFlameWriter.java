@@ -144,9 +144,6 @@ public class FACLFlameWriter extends AbstractFlameWriter {
             }
           }
         }
-
-
-
       }
     }
 

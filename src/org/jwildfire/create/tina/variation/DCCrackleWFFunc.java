@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -72,7 +72,18 @@ public class DCCrackleWFFunc extends CrackleFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  protected String applyCellCalculationGPU(FlameTransformationContext context) {
+    return    "    __px += varpar->"+getName()+" * DXo;\n"
+            + "    __py += varpar->"+getName()+" * DYo;\n"
+            + (context.isPreserveZCoordinate() ? "__pz += varpar->"+getName()+" * __z;\n" : "")
+            + "    __pal = L * varpar->"+getName()+"_color_scale + varpar->"+getName()+"_color_offset;\n"
+            + "    if(__pal<0)\n"
+            + "      __pal = 0;\n"
+            + "    else if(__pal>1.f)\n"
+            + "      __pal = 1.f;\n";
   }
 
 }
