@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class DCLinearFunc extends VariationFunc {
+public class DCLinearFunc extends VariationFunc implements SupportsGPU {
 
   private static final long serialVersionUID = 1L;
 
@@ -85,7 +85,17 @@ public class DCLinearFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float ldcs = 1.0 / (varpar->dc_linear_scale == 0.0 ? 10E-6 : varpar->dc_linear_scale);\n"
+        + " __px += varpar->dc_linear * __x;\n"
+        + "    __py += varpar->dc_linear * __y;\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->dc_linear * __z;\n" : "")
+        + "    float s = sinf(varpar->dc_linear_angle);\n"
+        + "    float c = cosf(varpar->dc_linear_angle);\n"
+        + "    __pal = fmodf(fabsf(0.5 * (ldcs * ((c * __px + s * __py + varpar->dc_linear_offset)) + 1.0)), 1.0);";
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class ZTwisterFunc extends VariationFunc {
+public class ZTwisterFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_TWIST = "twist";
@@ -77,6 +77,22 @@ public class ZTwisterFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "   float ez = varpar->ztwister_twist * __pz;\n"
+        + "    if (varpar->ztwister_base != 1.0) {\n"
+        + "      ez = powf(varpar->ztwister_base, ez) - 1;\n"
+        + "    }\n"
+        + "    float sinz = sinf(ez);\n"
+        + "    float cosz = cosf(ez);\n"
+        + "    float nx = __x * cosz - __y * sinz;\n"
+        + "    float ny = __x * sinz + __y * cosz;\n"
+        + "\n"
+        + "    __px += varpar->ztwister * nx;\n"
+        + "    __py += varpar->ztwister * ny;\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->ztwister * __z;\n" : "");
   }
 }

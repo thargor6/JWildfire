@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,9 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 
-//import org.jwildfire.create.tina.base.Layer;
-
-public class DSphericalFunc extends VariationFunc {
+public class DSphericalFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_D_SPHER_WEIGHT = "d_spher_weight";
@@ -35,7 +33,7 @@ public class DSphericalFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // d_spherical by Tatyana Zabanova, https://tatasz.deviantart.com/art/Utilities-Plugin-Pack-684337906
     {
-      if (Math.random() < (d_spher_weight)) {
+      if (pContext.random() < (d_spher_weight)) {
         double r = pAmount / (sqr(pAffineTP.x) + sqr(pAffineTP.y));
         pVarTP.x += pAffineTP.x * r;
         pVarTP.y += pAffineTP.y * r;
@@ -82,7 +80,20 @@ public class DSphericalFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "      if (RANDFLOAT() < (varpar->d_spherical_d_spher_weight)) {\n"
+        + "        float r = varpar->d_spherical / (__x*__x + __y*__y);\n"
+        + "        __px += __x * r;\n"
+        + "        __py += __y * r;\n"
+        + (context.isPreserveZCoordinate() ? "          __pz += varpar->d_spherical * __z;\n" : "")
+        + "      } else {\n"
+        + "        __px += __x * varpar->d_spherical;\n"
+        + "        __py += __y * varpar->d_spherical;\n"
+        + (context.isPreserveZCoordinate() ? "          __pz += varpar->d_spherical * __z;\n" : "")
+        + "    }";
+  }
 }
