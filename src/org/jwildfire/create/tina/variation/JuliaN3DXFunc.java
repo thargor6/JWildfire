@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class JuliaN3DXFunc extends VariationFunc {
+public class JuliaN3DXFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -130,7 +130,39 @@ public class JuliaN3DXFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float absN = fabsf((float) varpar->julian3Dx_power);\n"
+        + "float    cN = (varpar->julian3Dx_dist / varpar->julian3Dx_power - 1.0) / 2.0; \n"
+        + "    float z = __x / absN;\n"
+        + "    float radius_square = __x * __x + __y * __y;\n"
+        + "\n"
+        + "    float radius_out = varpar->julian3Dx * powf(radius_square + z * z, cN);\n"
+        + "\n"
+        + "    __pz += radius_out * z;\n"
+        + "\n"
+        + "    float c00 = varpar->julian3Dx_a;\n"
+        + "    float c01 = varpar->julian3Dx_b;\n"
+        + "    float c10 = varpar->julian3Dx_c;\n"
+        + "    float c11 = varpar->julian3Dx_d;\n"
+        + "    float c20 = varpar->julian3Dx_e;\n"
+        + "    float c21 = varpar->julian3Dx_f;\n"
+        + "\n"
+        + "    float x = c00 * __x + c01 * __y + c20;\n"
+        + "    float y = c10 * __x + c11 * __y + c21;\n"
+        + "\n"
+        + "    float rand = (int) (RANDFLOAT() * absN);\n"
+        + "\n"
+        + "    float alpha = (atan2f(y, x) + (2.0f*PI) * rand) / varpar->julian3Dx_power;\n"
+        + "    float gamma = radius_out * sqrtf(radius_square);\n"
+        + "\n"
+        + "    float sina = sinf(alpha);\n"
+        + "    float cosa = cosf(alpha);\n"
+        + "\n"
+        + "    __px += gamma * cosa;\n"
+        + "    __py += gamma * sina;";
+  }
 }

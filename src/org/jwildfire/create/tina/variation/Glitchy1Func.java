@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
  
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -19,12 +19,11 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import static org.jwildfire.base.mathlib.MathLib.*;
  
 import org.jwildfire.base.Tools;
  
-public class Glitchy1Func extends VariationFunc {
+public class Glitchy1Func extends VariationFunc implements SupportsGPU {
     private static final long serialVersionUID = 1L;
  
     private static final String PARAM_SCALEX = "scale_x";
@@ -196,7 +195,75 @@ public class Glitchy1Func extends VariationFunc {
 
     @Override
     public VariationFuncType[] getVariationTypes() {
-        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
     }
 
+    @Override
+    public String getGPUCode(FlameTransformationContext context) {
+    return "float h = sinf(varpar->glitchy1_angle / 180.0 * PI);\n"
+        + "float k = cosf(varpar->glitchy1_angle / 180.0 * PI);\n"
+        + "float x = __x;\n"
+        + "float y = __y;\n"
+        + "float z = __z;\n"
+        + "int nx = lroundf(varpar->glitchy1_n_x);\n"
+        + "int ny = lroundf(varpar->glitchy1_n_y);\n"
+        + "int nz = lroundf(varpar->glitchy1_n_z);\n"
+        + "int seed = lroundf(varpar->glitchy1_seed);\n"
+        + "        if (varpar->glitchy1_scale_x != 0.0) {\n"
+        + "            int nr = (int) floorf((x - varpar->glitchy1_shift_x) * varpar->glitchy1_scale_x);\n"
+        + "            if (nr >= 0) {\n"
+        + "                if (nr % nx == (nx - 1))\n"
+        + "                    x = 2 * varpar->glitchy1_shift_x - x;\n"
+        + "            } else {\n"
+        + "                if (nr % nx == 0)\n"
+        + "                    x = 2 * varpar->glitchy1_shift_x - x;\n"
+        + "            }\n"
+        + "        }\n"
+        + "        if (varpar->glitchy1_scale_y != 0.0) {\n"
+        + "            int nr = (int) floorf((y - varpar->glitchy1_shift_y) * varpar->glitchy1_scale_y);\n"
+        + "            if (nr >= 0) {\n"
+        + "                if (nr % ny == (ny - 1))\n"
+        + "                    y = 2 * varpar->glitchy1_shift_y - y;\n"
+        + "            } else {\n"
+        + "                if (nr % ny == 0)\n"
+        + "                    y = 2 * varpar->glitchy1_shift_y - y;\n"
+        + "            }\n"
+        + "        }\n"
+        + "        if (varpar->glitchy1_scale_z != 0.0) {\n"
+        + "            int nr = (int) floorf((z - varpar->glitchy1_shift_z) * varpar->glitchy1_scale_z);\n"
+        + "            if (nr >= 0) {\n"
+        + "                if (nr % nz == (nz - 1))\n"
+        + "                    z = 2 * varpar->glitchy1_shift_z - z;\n"
+        + "            } else {\n"
+        + "                if (nr % nz == 0)\n"
+        + "                    z = 2 * varpar->glitchy1_shift_z - z;\n"
+        + "            }\n"
+        + "        }\n"
+        + " \n"
+        + "        float uu = varpar->glitchy1_u * __x;\n"
+        + "        float vv = varpar->glitchy1_v * (k * uu + h * __y);\n"
+        + "        float ww = varpar->glitchy1_w * (k * uu - h * __y);\n"
+        + "        int blocku = (int) floorf(uu * varpar->glitchy1_width);\n"
+        + "        blocku += (2.0 - 4.0 * glitchy1_hash(blocku * seed + 1));\n"
+        + "        int blockv = (int) floorf(vv * varpar->glitchy1_width);\n"
+        + "        blockv += (2.0 - 4.0 * glitchy1_hash(blockv * seed + 1));\n"
+        + "        int blockw = (int) floorf(ww * varpar->glitchy1_width);\n"
+        + "        blockw += (2.0 - 4.0 * glitchy1_hash(blockw * seed + 1));\n"
+        + "        float fLen = (glitchy1_hash(blocku + blockv + blockw * -seed) + glitchy1_hash(blocku + blockv + blockw * seed / 2));\n"
+        + "        __px += varpar->glitchy1 * x * fLen;\n"
+        + "        __py += varpar->glitchy1 * y * fLen;\n"
+        + "        __pz += varpar->glitchy1 * z * fLen;\n";
+    }
+
+    @Override
+    public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float glitchy1_hash(int a) { \n"
+        + "        a = (a ^ 61) ^ (a >> 16);\n"
+        + "        a = a + (a << 3);\n"
+        + "        a = a ^ (a >> 4);\n"
+        + "        a = a * 0x27d4eb2d;\n"
+        + "        a = a ^ (a >> 15);\n"
+        + "        return (float) a / (float) 0x7fffffff;\n"
+        + "    }";
+    }
 }
