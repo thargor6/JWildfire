@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CurlSpFunc extends VariationFunc {
+public class CurlSpFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POW = "pow";
@@ -131,7 +131,51 @@ public class CurlSpFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float c2_x2, dc_adjust, power_inv, power;\n"
+        + "   power = varpar->curl_sp_pow;\n"
+        + "    c2_x2 = 2.0 * varpar->curl_sp_c2;\n"
+        + "    dc_adjust = 0.1 * varpar->curl_sp_dc;\n"
+        + "    power_inv = 1.0 / (power==0 ? 1.e-6f : power);\n"
+        + "    if (power == 0) {\n"
+        + "      power = 1.e-6f;\n"
+        + "    }\n"
+        + "    float x = curl_sp_powq4c(__x, power);\n"
+        + "    float y = curl_sp_powq4c(__y, power);\n"
+        + "    float z = curl_sp_powq4c(__z, power);\n"
+        + "\n"
+        + "    float d = x*x - y*y;\n"
+        + "\n"
+        + "    float re = curl_sp_spread(varpar->curl_sp_c1 * x + varpar->curl_sp_c2 * d, varpar->curl_sp_sx) + 1.0;\n"
+        + "    float im = curl_sp_spread(varpar->curl_sp_c1 * y + c2_x2 * x * y, varpar->curl_sp_sy);\n"
+        + "\n"
+        + "    float c = curl_sp_powq4c(re*re + im*im, power_inv);\n"
+        + "    float r = varpar->curl_sp / c;\n"
+        + "\n"
+        + "    __px += (x * re + y * im) * r;\n"
+        + "    __py += (y * re - x * im) * r;\n"
+        + "    __pz += (z * varpar->curl_sp) / c;\n"
+        + "\n"
+        + "    __pal = __pal + dc_adjust * c;\n"
+        + "    if(__pal<0) __pal=0;\n"
+        + "    else if(__pal > 1.f) __pal = 1.f;";
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float curl_sp_spread(float a, float b) {\n"
+        + "    return (sqrtf(a*a + b*b) * ((a) > 0 ? 1 : -1));\n"
+        + "  }\n"
+        + "__device__ float curl_sp_powq4(float x, float y) {\n"
+        + "    return (powf(fabsf(x), y) * (x<0 ? -1 : x > 0 ? 1: 0));\n"
+        + "  }\n"
+        + "\n"
+        + "__device__ float curl_sp_powq4c(float x, float y) {\n"
+        + "    return ((y) == 1 ? (x) : curl_sp_powq4(x, y));\n"
+        + "  }\n\n";
+  }
 }
