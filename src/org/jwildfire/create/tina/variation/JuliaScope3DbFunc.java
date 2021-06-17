@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class JuliaScope3DbFunc extends VariationFunc {
+public class JuliaScope3DbFunc extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_POWER = "power";
@@ -166,7 +166,40 @@ public class JuliaScope3DbFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+    return "int absPower = lroundf(fabsf(varpar->juliascope3Db_power));\n"
+        + "float cPower = varpar->juliascope3Db_dist / varpar->juliascope3Db_power * 0.5;"
+        + "  float z = __z / absPower + varpar->juliascope3Db_warp;\n"
+        + "  float r2d = __x * __x * varpar->juliascope3Db_za + __y * __y * varpar->juliascope3Db_zb;\n"
+        + "  float rz = varpar->juliascope3Db * varpar->juliascope3Db_zamount * powf(r2d + z * z, cPower * varpar->juliascope3Db_zdist);\n"
+        + "\n"
+        + "  int rnd = (int)(RANDFLOAT() * absPower);\n"
+        + "  float a;\n"
+        + "  if (rnd % 2 == 0)\n"
+        + "   a = (2 * PI * rnd + atan2f(__y, __x)) / varpar->juliascope3Db_power;\n"
+        + "  else\n"
+        + "   a = (2 * PI * rnd - atan2f(__y, __x)) / varpar->juliascope3Db_power;\n"
+        + "\n"
+        + "  float r;\n"
+        + "  if (lroundf(varpar->juliascope3Db_type) != 0) {\n"
+        + "   r = varpar->juliascope3Db * powf(__x*__x + __y*__y + __z*__z, cPower);\n"
+        + "  } else {\n"
+        + "   r = varpar->juliascope3Db * powf(__x*__x + __y*__y, cPower);\n"
+        + "  }\n"
+        + "  float cosa = cosf(a);\n"
+        + "  float sina = sinf(a);\n"
+        + "\n"
+        + "  __px = __px + r * cosa;\n"
+        + "  __py = __py + r * sina;\n"
+        + "  if (lroundf(varpar->juliascope3Db_mode) != 0) {\n"
+        + "   float sincosa = sinf(varpar->juliascope3Db_wave1) * cosf(varpar->juliascope3Db_wave2);\n"
+        + "   __pz += rz * z * sincosa;\n"
+        + "  } else {\n"
+        + "   __pz += rz * z;\n"
+        + "  }\n";
+	}
 }

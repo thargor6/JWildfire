@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,13 +22,12 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SecqFunc extends SimpleVariationFunc {
+public class SecqFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Secq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
-
     double abs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z);
     double s = sin(-pAffineTP.x);
     double c = cos(-pAffineTP.x);
@@ -39,8 +38,6 @@ public class SecqFunc extends SimpleVariationFunc {
     pVarTP.x += c * ch * ni;
     pVarTP.y -= C * pAffineTP.y;
     pVarTP.z -= C * pAffineTP.z;
-
-
   }
 
   @Override
@@ -50,7 +47,20 @@ public class SecqFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float abs_v = hypotf(__y, __z);\n"
+        + "    float s = sinf(-__x);\n"
+        + "    float c = cosf(-__x);\n"
+        + "    float sh = sinhf(abs_v);\n"
+        + "    float ch = coshf(abs_v);\n"
+        + "    float ni = varpar->secq / (__x*__x + __y*__y + __z*__z);\n"
+        + "    float C = ni * s * sh / abs_v;\n"
+        + "    __px += c * ch * ni;\n"
+        + "    __py -= C * __y;\n"
+        + "    __pz -= C * __z;\n";
+  }
 }
