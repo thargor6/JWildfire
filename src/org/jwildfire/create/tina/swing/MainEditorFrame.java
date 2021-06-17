@@ -114,7 +114,6 @@ import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
-import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -10055,10 +10054,10 @@ public class MainEditorFrame extends JFrame {
       tinaSendToGPURenderButton.setPreferredSize(new Dimension(72, 24));
       tinaSendToGPURenderButton.setMnemonic(KeyEvent.VK_G);
       tinaSendToGPURenderButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      tinaSendToGPURenderButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/opencl.png")));
+      tinaSendToGPURenderButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/pill.png")));
       tinaSendToGPURenderButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.appendToMovieButton_actionPerformed(e);
+          tinaController.sendCurrentFlameToGPURenderer();
         }
       });
 
@@ -10086,10 +10085,10 @@ public class MainEditorFrame extends JFrame {
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
 
       gpuModeToggleButton = new JToggleButton();
-      gpuModeToggleButton.setToolTipText("Activate animation controls in order to create animated flames");
+      gpuModeToggleButton.setToolTipText("Toggle prefer GPU mode on/off");
       gpuModeToggleButton.setPreferredSize(new Dimension(72, 36));
       gpuModeToggleButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      gpuModeToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/opencl.png")));
+      gpuModeToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/green_pill.png")));
       gpuModeToggleButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.toggleGpuMode();

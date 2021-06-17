@@ -156,7 +156,7 @@ public class BatchFlameRendererFrame extends JFrame {
       enableOpenClBtn.setPreferredSize(new Dimension(72, 24));
       enableOpenClBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       enableOpenClBtn.setBounds(0, 24, 160, 24);
-      enableOpenClBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/opencl.png")));
+      enableOpenClBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/pill.png")));
       panel_8.add(enableOpenClBtn);
 
       JPanel panel_9 = new JPanel();

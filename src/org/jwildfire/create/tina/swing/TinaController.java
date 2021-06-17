@@ -70,10 +70,7 @@ import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
-import org.jwildfire.swing.ErrorHandler;
-import org.jwildfire.swing.ImagePanel;
-import org.jwildfire.swing.JWildfire;
-import org.jwildfire.swing.MainController;
+import org.jwildfire.swing.*;
 import org.jwildfire.transform.TextTransformer;
 import org.jwildfire.transform.TextTransformer.FontStyle;
 import org.jwildfire.transform.TextTransformer.HAlignment;
@@ -6050,6 +6047,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     catch (Exception ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  public void sendCurrentFlameToGPURenderer() {
+    if(GPURendererFactory.isAvailable()) {
+      desktop.showJFrame(FlamesGPURenderFrame.class);
+      if (getCurrFlame() != null) {
+        gpuRendererCtrl.importFlame(getCurrFlame());
+      }
     }
   }
 

@@ -295,6 +295,11 @@ Automatically adds the currently loaded flame as the first keyframe inside the E
 ===== _Flame Browser_
 Opens the <<flame_browser_module, Flame Browser>>.
 
+===== _GPU render_
+Opens the <<gpu_rendering, GPU render module>>.
+Automatically imports the currently selected flame into the <<gpu_rendering, GPU render module>>
+and starts to render the flame.
+
 ===== _Undo_
 Reverts the latest change to the currently selected flame.
 Each flame has its own undo-history. So undoing a change will not switch between flames.
