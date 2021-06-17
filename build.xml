@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-  <property name="release" value="7.00ALPHA4" />
+  <property name="release" value="7.00ALPHA7" />
   <property name="dist.dir" location="build/dist" />
   <property name="installer.dir" location="build/installer" />
 	<property name="build.dir" location="build/classes" />
@@ -45,6 +45,7 @@
 	<target name="packageJWildfireJar" depends="compile" description="Package the JWildfire jar file">
 		<jar destfile="${jwildfire.jar.name}">
 			<fileset dir="${build.dir}" includes="org/jwildfire/"/>
+      <fileset dir="${src.dir}" includes="logback.xml"/>
       <fileset dir="${src.dir}" includes="com/**/*.properties"/>
       <fileset dir="${src.dir}" includes="com/**/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.xml"/>
@@ -88,6 +89,9 @@
       <zipfileset src="lib/colt-1.2.0.jar"/>
       <zipfileset src="lib/JOCL-0.1.9.jar"/>
       <zipfileset src="lib/vecmath-1.5.1.jar"/>
+      <zipfileset src="lib/logback-classic-1.2.3.jar"/>
+      <zipfileset src="lib/logback-core-1.2.3.jar"/>
+      <zipfileset src="lib/slf4j-api-1.7.25.jar"/>
       <zipfileset src="lib/commons-cli-1.4.jar"/>
       <zipfileset src="lib/jcodec-0.2.6-SNAPSHOT.jar"/>
       <zipfileset src="lib/jcodec-javase-0.2.6-SNAPSHOT.jar"/>
