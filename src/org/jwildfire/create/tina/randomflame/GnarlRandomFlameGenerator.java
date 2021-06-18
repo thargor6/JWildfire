@@ -247,7 +247,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
   public static VariationFunc createCrazyWavesVariation(double scaleX, double scaleY, double freqX, double freqY) {
     VariationFunc w2;
     double r = Math.random();
-    if(r<0.25) {
+    if(r<0.16) {
       w2 = VariationFuncList.getVariationFuncInstance("waves22", true);
       w2.setParameter("freqx", freqX);
       w2.setParameter("scalex", scaleX);
@@ -258,14 +258,14 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       w2.setParameter("powerx", 2.0 + Math.random()* 7.0);
       w2.setParameter("powery", 2.0 + Math.random()* 7.0);
     }
-    else if(r<0.5) {
+    else if(r<0.34) {
       w2 = VariationFuncList.getVariationFuncInstance("waves23", true);
       w2.setParameter("freqx", freqX);
       w2.setParameter("scalex", scaleX);
       w2.setParameter("freqy", freqY);
       w2.setParameter("scaley", scaleY);
     }
-    else if(r<0.75) {
+    else if(r<0.61) {
       w2 = VariationFuncList.getVariationFuncInstance("vibration2", true);
       w2.setParameter("dir", Math.random() * M_2PI);
       w2.setParameter("angle", Math.random() * M_2PI);
@@ -311,6 +311,15 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
         w2.setParameter("a2mfreq", 0.1+Math.random()*0.6);
       }
     }
+    else if(r<0.821) {
+      w2 = VariationFuncList.getVariationFuncInstance("waves4", true);
+      w2.setParameter("freqx", freqX);
+      w2.setParameter("scalex", scaleX);
+      w2.setParameter("freqy", freqY);
+      w2.setParameter("scaley", scaleY);
+      w2.setParameter("cont", Math.random()<0.5 ? 1: 1);
+      w2.setParameter("yfact", 0.1 + Math.random()* 0.49);
+    }
     else {
       w2 = VariationFuncList.getVariationFuncInstance("waves42", true);
       w2.setParameter("freqx", freqX);
@@ -318,7 +327,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       w2.setParameter("freqy", freqY);
       w2.setParameter("scaley", scaleY);
       w2.setParameter("cont", Math.random()<0.5 ? 1: 1);
-      w2.setParameter("yfact", 0.1 + Math.random()* 0.9);
+      w2.setParameter("yfact", 0.1 + Math.random()* 0.59);
       w2.setParameter("freqx2", 0.5 + Math.random()*0.25);
     }
     return w2;

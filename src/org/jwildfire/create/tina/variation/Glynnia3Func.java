@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-public class Glynnia3Func extends VariationFunc {
+public class Glynnia3Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RSCALE = "rscale";
@@ -129,7 +129,51 @@ public class Glynnia3Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _vvar2 = varpar->glynnia3 * sqrtf(2.0) / 2.0;\n"
+        + " float r = varpar->glynnia3_rscale * (sqrtf(__x*__x + __y*__y));\n"
+        + "    float d;\n"
+        + "\n"
+        + "    if (r > varpar->glynnia3_rthresh && __y > varpar->glynnia3_ythresh) {\n"
+        + "      if (RANDFLOAT() > 0.5) {\n"
+        + "        d = varpar->glynnia3_dscale * sqrtf(r + __x);\n"
+        + "        if (d != 0) {\n"
+        + "        __px += _vvar2 * d;\n"
+        + "        __py -= _vvar2 / d * __y;\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->glynnia3 * __z;\n" : "")
+        + "        }\n"
+        + "      } else {\n"
+        + "        d = varpar->glynnia3_dscale * (r + __x);\n"
+        + "        float dx = sqrtf(r * (__y*__y + d*d));\n"
+        + "        if (dx != 0) {\n"
+        + "          r = varpar->glynnia3 / dx;\n"
+        + "          __px += r * d;\n"
+        + "          __py += r * __y;\n"
+            + (context.isPreserveZCoordinate() ? "      __pz += varpar->glynnia3 * __z;\n" : "")
+        + "        }\n"
+        + "      }\n"
+        + "    } else {\n"
+        + "      if (RANDFLOAT() > 0.5) {\n"
+        + "        d = varpar->glynnia3_dscale * sqrtf(r + __x);\n"
+        + "        if (d != 0) {\n"
+        + "          __px -= _vvar2 * d;\n"
+        + "          __py -= _vvar2 / d * __y;\n"
+            + (context.isPreserveZCoordinate() ? "      __pz += varpar->glynnia3 * __z;\n" : "")
+        + "        }\n"
+        + "      } else {\n"
+        + "        d = varpar->glynnia3_dscale * (r + __x);\n"
+        + "        float dx = sqrtf(r * (__y*__y + d*d));\n"
+        + "        if (dx != 0) {\n"
+        + "          r = varpar->glynnia3 / dx;\n"
+        + "          __px -= r * d;\n"
+        + "          __py += r * __y;\n"
+            + (context.isPreserveZCoordinate() ? "      __pz += varpar->glynnia3 * __z;\n" : "")
+        + "        }\n"
+        + "      }\n"
+        + "    }\n";
+  }
 }

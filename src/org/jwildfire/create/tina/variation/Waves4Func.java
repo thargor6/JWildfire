@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Waves4Func extends VariationFunc {
+public class Waves4Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scalex";
@@ -107,6 +107,23 @@ public class Waves4Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "\tfloat x0 = __x;\n"
+        + "\tfloat y0 = __y;\n"
+        + "\t\n"
+        + "\tfloat ax = floorf(y0 * varpar->waves4_freqx / (2.0f*PI));\n"
+        + "\n"
+        + "    ax = sinf(ax * 12.9898 + ax * 78.233 + 1.0 + y0 * 0.001 * varpar->waves4_yfact) * 43758.5453;\n"
+        + "    ax = ax - (int) ax;\n"
+        + "    if (lroundf(varpar->waves4_cont) == 1) ax = (ax > 0.5) ? 1.0 : 0.0;\n"
+        + "\n"
+        + "    \n"
+        + "    __px += varpar->waves4 * (x0 + sinf(y0 * varpar->waves4_freqx) * ax * ax * varpar->waves4_scalex);\n"
+        + "    __py += varpar->waves4 * (y0 + sinf(x0 * varpar->waves4_freqy) * varpar->waves4_scaley);\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->waves4 * __z;\n" : "");
   }
 }

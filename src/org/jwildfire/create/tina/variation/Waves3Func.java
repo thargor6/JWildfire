@@ -6,7 +6,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Waves3Func extends VariationFunc {
+public class Waves3Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scalex";
@@ -83,6 +83,17 @@ public class Waves3Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return " float x0 = __x;\n"
+        + " float y0 = __y;\n"
+        + " float scalexx = 0.5 * varpar->waves3_scalex * (1.0 + sinf(y0 * varpar->waves3_sx_freq));\n"
+        + " float scaleyy = 0.5 * varpar->waves3_scaley * (1.0 + sinf(x0 * varpar->waves3_sy_freq));\n"
+        + "    __px += varpar->waves3 * (x0 + sinf(y0 * varpar->waves3_freqx) * scalexx);\n"
+        + "    __py += varpar->waves3 * (y0 + sinf(x0 * varpar->waves3_freqy) * scaleyy);\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->waves3 * __z;\n" : "");
   }
 }
