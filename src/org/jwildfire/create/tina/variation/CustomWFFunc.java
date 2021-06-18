@@ -19,8 +19,12 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.swing.StandardErrorHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CustomWFFunc extends VariationFunc {
+  private static final Logger logger = LoggerFactory.getLogger(CustomWFFunc.class);
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
@@ -184,11 +188,8 @@ public class CustomWFFunc extends VariationFunc {
     try {
       customFuncRunner = CustomWFFuncRunner.compile(code);
     } catch (Throwable ex) {
-      System.out.println("##############################################################");
-      System.out.println(ex.getMessage());
-      System.out.println("##############################################################");
-      System.out.println(code);
-      System.out.println("##############################################################");
+      logger.error(ex.getMessage(), ex);
+      logger.error(code);
     }
   }
 
@@ -199,6 +200,9 @@ public class CustomWFFunc extends VariationFunc {
         CustomWFFuncRunner.compile(code);
       }
     } catch (Throwable ex) {
+      logger.error(ex.getMessage(), ex);
+      logger.error("#################################### Code:\n");
+      logger.error(code);
       throw new RuntimeException(ex);
     }
   }

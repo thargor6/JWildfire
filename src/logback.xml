@@ -14,8 +14,15 @@
         </encoder>
     </appender>
 
+    <appender name="MESSAGE_LOG" class="org.jwildfire.swing.MessageLogFrameAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <root level="debug">
         <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
+        <appender-ref ref="MESSAGE_LOG" />
     </root>
 </configuration>

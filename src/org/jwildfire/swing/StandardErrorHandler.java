@@ -67,6 +67,7 @@ public class StandardErrorHandler implements ErrorHandler {
             .toByteArray()));
         showErrorDlgStacktraceTextArea.select(0, 0);
       }
+      showErrorDlg.setModal(true);
       showErrorDlg.setVisible(true);
     }
     catch (Throwable ex) {

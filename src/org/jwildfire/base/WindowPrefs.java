@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -51,6 +51,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   public static final String WINDOW_GPU_RENDERING = "GPURENDERING";
   public static final String WINDOW_AI_POST_DENOISER_INFO = "AI_POST_DENOISER_INFO";
   public static final String WINDOW_QUILTFLAMERENDERER = "QUILTFLAMERENDERER";
+  public static final String WINDOW_MESSAGE_LOG = "LOG_MESSAGES";
 
   private int width;
   private int height;

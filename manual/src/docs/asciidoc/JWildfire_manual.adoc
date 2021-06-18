@@ -74,6 +74,7 @@ The _Main_ menu contains the following items:
  ** *System information*: opens a popup to display some useful information about your system relating  to JWildfire, for example, available memory
  ** *Welcome to JWildfire*: an ancient Welcome-dialog with some useful links, not available in the _Steam Edition_ of JWildfire
  ** *List of changes*: displays the ever growing list of changes. It is a recommended read after each release of the software.
+ ** *Message log*: displays a log of all (error)messages which occured during the current session. You may also find a copy of these messages in the file JWildfire.log in your home folder.
  ** *GPU rendering*: some compact documentation about <<gpu_rendering, GPU-rendering>>
  ** *Supported AI-Post-Denoisers*: some compact documentation about <<ai_based_denoiser, _AI-based denoisers_>>
  ** *Tip of the day*: a small popup which shows small tips at the startup of JWildfire

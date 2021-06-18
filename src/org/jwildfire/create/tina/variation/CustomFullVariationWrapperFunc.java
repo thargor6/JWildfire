@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -20,6 +20,8 @@ import org.codehaus.janino.SimpleCompiler;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -27,6 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CustomFullVariationWrapperFunc extends VariationFunc {
+  private static final Logger logger = LoggerFactory.getLogger(CustomFullVariationWrapperFunc.class);
   private static final long serialVersionUID = 1L;
   public static final boolean DEBUG = false;
   private static final String RESSOURCE_CODE = "code_full_variation";
@@ -262,6 +265,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
         this.compile();
       }
     } catch (Throwable ex) {
+      logger.error(ex.getMessage(), ex);
       throw new RuntimeException(ex);
     }
   }
@@ -392,10 +396,9 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
         // should also copy shared resources??
       }
     } catch (Throwable ex) {
-      System.out.println("##############################################################");
-      System.out.println(ex.getMessage());
-      ex.printStackTrace();
-      System.out.println("##############################################################");
+      logger.error(ex.getMessage(), ex);
+      logger.error("#################################### Code:\n");
+      logger.error(code);
       // full_variation = null;
     }
   }

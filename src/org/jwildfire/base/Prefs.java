@@ -1043,6 +1043,7 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_GPU_RENDERING));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_AI_POST_DENOISER_INFO));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_QUILTFLAMERENDERER));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_MESSAGE_LOG));
   }
 
   protected List<WindowPrefs> getWindowPrefs() {
