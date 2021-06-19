@@ -123,7 +123,7 @@ public class FDiscFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "   float afactor = 2.0f*PI / (__r2 + varpar->fdisc_ashift);\n"
+    return "   float afactor = 2.0f*PI / (__r + varpar->fdisc_ashift);\n"
         + "    float r = (atan2f(__y, __x) / PI + varpar->fdisc_rshift) * 0.5f;\n"
         + "    float xfactor = cosf(afactor + varpar->fdisc_xshift);\n"
         + "    float yfactor = sinf(afactor + varpar->fdisc_yshift);\n"
@@ -135,3 +135,4 @@ public class FDiscFunc extends VariationFunc implements SupportsGPU {
         + (context.isPreserveZCoordinate() ? "__pz += varpar->fdisc*__z;\n" : "");
   }
 }
+
