@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class DinisSurfaceWFFunc extends VariationFunc {
+public class DinisSurfaceWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
@@ -69,7 +69,16 @@ public class DinisSurfaceWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "   float u = __x;\n"
+        + "    float v = __y;\n"
+        + "    float sinv = sinf(v);\n"
+        + "    __px += varpar->dinis_surface_wf * varpar->dinis_surface_wf_a * cosf(u) * sinv;\n"
+        + "    __py += varpar->dinis_surface_wf * varpar->dinis_surface_wf_a * sinf(u) * sinv;\n"
+        + "    __pz -= varpar->dinis_surface_wf * (varpar->dinis_surface_wf_a * (cosf(v) + logf(tanf(v / 2.0))) + varpar->dinis_surface_wf_b * u);\n";
+  }
 }

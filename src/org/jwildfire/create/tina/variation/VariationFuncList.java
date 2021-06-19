@@ -83,6 +83,9 @@ public class VariationFuncList {
     aliasMap.put(Rays2Func.class, "rays_rk2");
     aliasMap.put(Rays3Func.class, "rays_rk3");
     aliasMap.put(SquareFunc.class, "blur_square");
+    aliasMap.put(PreBlurFunc.class, "pre_gaussian");
+    aliasMap.put(GaussianBlurFunc.class, "gaussian");
+
     //
     registerVariationFunc(LinearFunc.class);
     registerVariationFunc(SphericalFunc.class);
