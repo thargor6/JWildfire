@@ -163,7 +163,6 @@ public class Affine3DFunc extends VariationFunc implements SupportsGPU {
         + " float za = varpar->affine3D_rotateZ * PI / 180.0f;\n"
         + " float _sinZ = sinf(za);\n"
         + " float _cosZ = cosf(za);\n"
-        + " float EPSILON = 1.0e-6f;\n"
         + " bool _hasShear = fabsf(varpar->affine3D_shearXY) > EPSILON || fabsf(varpar->affine3D_shearXZ) > EPSILON || fabsf(varpar->affine3D_shearYX) > EPSILON ||\n"
         + "            fabsf(varpar->affine3D_shearYZ) > EPSILON || fabsf(varpar->affine3D_shearZX) > EPSILON || fabsf(varpar->affine3D_shearZY) > EPSILON;"
         + "if (_hasShear) {\n"
