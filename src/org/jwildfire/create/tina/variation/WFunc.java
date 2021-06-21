@@ -49,7 +49,7 @@ public class WFunc extends VariationFunc {
   private double star = 0.0;
   private int star_n = 5;
   private double star_slope = 2.0;
-  private double lituus = Math.random() * 0.25;
+  private double lituus = 0.0;
   private double lituus_a = 1.0;
   private double _super = 0.0;
   private double super_m = 1.0;
