@@ -39,7 +39,13 @@ public class DinisSurfaceWFFunc extends VariationFunc implements SupportsGPU {
     double sinv = sin(v);
     pVarTP.x += pAmount * a * cos(u) * sinv;
     pVarTP.y += pAmount * a * sin(u) * sinv;
-    pVarTP.z -= pAmount * (a * (cos(v) + log(tan(v / 2.0))) + b * u);
+    if (fabs(v) > EPSILON) {
+      pVarTP.z += -pAmount * (a * (cos(v) + log(tan(fabs(v) / 2.0))) + b * u);
+      pVarTP.doHide = false;
+    }
+    else {
+      pVarTP.doHide = true;
+    }
   }
 
   @Override
@@ -77,8 +83,13 @@ public class DinisSurfaceWFFunc extends VariationFunc implements SupportsGPU {
     return "   float u = __x;\n"
         + "    float v = __y;\n"
         + "    float sinv = sinf(v);\n"
+        + "    float t=logf(tanf(v / 2.0));\n"
         + "    __px += varpar->dinis_surface_wf * varpar->dinis_surface_wf_a * cosf(u) * sinv;\n"
         + "    __py += varpar->dinis_surface_wf * varpar->dinis_surface_wf_a * sinf(u) * sinv;\n"
-        + "    __pz -= varpar->dinis_surface_wf * (varpar->dinis_surface_wf_a * (cosf(v) + logf(tanf(v / 2.0))) + varpar->dinis_surface_wf_b * u);\n";
+        + " if(fabsf(v)>1.0e-06) {"
+        + "    __pz += -varpar->dinis_surface_wf * (varpar->dinis_surface_wf_a * (cosf(v) +  logf(tanf(fabsf(v) / 2.0))) + varpar->dinis_surface_wf_b * u);\n"
+        + "    __doHide = false;\n"
+        + " }"
+        + " else __doHide=true; \n";
   }
 }
