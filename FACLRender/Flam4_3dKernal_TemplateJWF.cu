@@ -3144,6 +3144,15 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
 
         struct point fromPoint = points[fromPointIndex];
 
+#ifdef JWF_EXTENSIONS
+		if(j==0) {
+            activePoint[index].x = 2.f*randFloat(randStates) - 1.f;
+            activePoint[index].y = 2.f*randFloat(randStates) - 1.f;
+            activePoint[index].z = 0; //2.f*randFloat(randStates) - 1.f;
+		}
+#endif		
+
+
         //Iterate the chosen point and store it back to the pool
         iteratePoint(&d_g_varUsages[varUsagesIndex],
                      varpars,
@@ -3161,7 +3170,7 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
             // test to add back a random point (ala Flam3) to get Flam3 like images in borderline cases
             activePoint[index].x = 2.f*randFloat(randStates) - 1.f;
             activePoint[index].y = 2.f*randFloat(randStates) - 1.f;
-            activePoint[index].z = 0.f; //2.f*randFloat(randStates) - 1.f;
+            activePoint[index].z = 0; //2.f*randFloat(randStates) - 1.f;
             iterations           = 0;
         }
 
@@ -3176,6 +3185,7 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
 #endif
         ++iterations;
         struct point toPoint = activePoint[index]; // capture point state before final xform application
+	
 
         if (iterations >= fuseIterations) { // dont store until fuse for each point is finished
             markedCounts[ix]++;  // keep track of number of iterations that could mark (versus unmarked because of unfused points)
