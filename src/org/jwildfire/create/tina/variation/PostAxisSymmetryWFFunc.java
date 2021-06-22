@@ -57,100 +57,104 @@ public class PostAxisSymmetryWFFunc extends VariationFunc implements SupportsGPU
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    switch (axis) {
-      case AXIS_X: {
-        double dx, dy;
-        dx = pVarTP.x - centre_x;
-        if (pContext.random() < 0.5) {
-          double ax = centre_x + dx + _halve_dist;
-          double ay = pVarTP.y;
-          if (_doRotate) {
-            dx = ax - centre_x;
-            dy = ay - centre_y;
-            ax = centre_x + dx * _cosa + dy * _sina;
-            ay = centre_y + dy * _cosa - dx * _sina;
+    if (fabs(pAmount) > EPSILON) {
+      switch (axis) {
+        case AXIS_X:
+          {
+            double dx, dy;
+            dx = pVarTP.x - centre_x;
+            if (pContext.random() < 0.5) {
+              double ax = centre_x + dx + _halve_dist;
+              double ay = pVarTP.y;
+              if (_doRotate) {
+                dx = ax - centre_x;
+                dy = ay - centre_y;
+                ax = centre_x + dx * _cosa + dy * _sina;
+                ay = centre_y + dy * _cosa - dx * _sina;
+              }
+              pVarTP.x = ax;
+              pVarTP.y = ay;
+              pVarTP.color = fmod(pVarTP.color + x1colorshift, 1.0);
+            } else {
+              double bx = centre_x - dx - _halve_dist;
+              double by = pVarTP.y;
+              if (_doRotate) {
+                dx = bx - centre_x;
+                dy = by - centre_y;
+                bx = centre_x + dx * _cosa - dy * _sina;
+                by = centre_y + dy * _cosa + dx * _sina;
+              }
+              pVarTP.x = bx;
+              pVarTP.y = by;
+              pVarTP.color = fmod(pVarTP.color + x2colorshift, 1.0);
+            }
           }
-          pVarTP.x = ax;
-          pVarTP.y = ay;
-          pVarTP.color = fmod(pVarTP.color + x1colorshift, 1.0);
-        } else {
-          double bx = centre_x - dx - _halve_dist;
-          double by = pVarTP.y;
-          if (_doRotate) {
-            dx = bx - centre_x;
-            dy = by - centre_y;
-            bx = centre_x + dx * _cosa - dy * _sina;
-            by = centre_y + dy * _cosa + dx * _sina;
+          break;
+        case AXIS_Y:
+          {
+            double dx, dy;
+            dy = pVarTP.y - centre_y;
+            if (pContext.random() < 0.5) {
+              double ax = pVarTP.x;
+              double ay = centre_y + dy + _halve_dist;
+              if (_doRotate) {
+                dx = ax - centre_x;
+                dy = ay - centre_y;
+                ax = centre_x + dx * _cosa + dy * _sina;
+                ay = centre_y + dy * _cosa - dx * _sina;
+              }
+              pVarTP.x = ax;
+              pVarTP.y = ay;
+              pVarTP.color = fmod(pVarTP.color + y1colorshift, 1.0);
+            } else {
+              double bx = pVarTP.x;
+              double by = centre_y - dy - _halve_dist;
+              if (_doRotate) {
+                dx = bx - centre_x;
+                dy = by - centre_y;
+                bx = centre_x + dx * _cosa - dy * _sina;
+                by = centre_y + dy * _cosa + dx * _sina;
+                pVarTP.color = fmod(pVarTP.color + y2colorshift, 1.0);
+              }
+              pVarTP.x = bx;
+              pVarTP.y = by;
+            }
           }
-          pVarTP.x = bx;
-          pVarTP.y = by;
-          pVarTP.color = fmod(pVarTP.color + x2colorshift, 1.0);
-        }
+          break;
+        case AXIS_Z:
+        default:
+          {
+            double dx, dz;
+            dz = pVarTP.z - centre_z;
+            if (pContext.random() < 0.5) {
+              double ax = pVarTP.x;
+              double az = centre_z + dz + _halve_dist;
+              if (_doRotate) {
+                dx = ax - centre_x;
+                dz = az - centre_z;
+                ax = centre_x + dx * _cosa + dz * _sina;
+                az = centre_y + dz * _cosa - dx * _sina;
+              }
+              pVarTP.x = ax;
+              pVarTP.z = az;
+              pVarTP.color = fmod(pVarTP.color + z1colorshift, 1.0);
+            } else {
+              double bx = pVarTP.x;
+              double bz = centre_z - dz - _halve_dist;
+              if (_doRotate) {
+                dx = bx - centre_x;
+                dz = bz - centre_z;
+                bx = centre_x + dx * _cosa - dz * _sina;
+                bz = centre_y + dz * _cosa + dx * _sina;
+              }
+              pVarTP.x = bx;
+              pVarTP.z = bz;
+              pVarTP.color = fmod(pVarTP.color + z2colorshift, 1.0);
+            }
+          }
+          break;
       }
-      break;
-      case AXIS_Y: {
-        double dx, dy;
-        dy = pVarTP.y - centre_y;
-        if (pContext.random() < 0.5) {
-          double ax = pVarTP.x;
-          double ay = centre_y + dy + _halve_dist;
-          if (_doRotate) {
-            dx = ax - centre_x;
-            dy = ay - centre_y;
-            ax = centre_x + dx * _cosa + dy * _sina;
-            ay = centre_y + dy * _cosa - dx * _sina;
-          }
-          pVarTP.x = ax;
-          pVarTP.y = ay;
-          pVarTP.color = fmod(pVarTP.color + y1colorshift, 1.0);
-        } else {
-          double bx = pVarTP.x;
-          double by = centre_y - dy - _halve_dist;
-          if (_doRotate) {
-            dx = bx - centre_x;
-            dy = by - centre_y;
-            bx = centre_x + dx * _cosa - dy * _sina;
-            by = centre_y + dy * _cosa + dx * _sina;
-            pVarTP.color = fmod(pVarTP.color + y2colorshift, 1.0);
-          }
-          pVarTP.x = bx;
-          pVarTP.y = by;
-        }
-      }
-      break;
-      case AXIS_Z:
-      default: {
-        double dx, dz;
-        dz = pVarTP.z - centre_z;
-        if (pContext.random() < 0.5) {
-          double ax = pVarTP.x;
-          double az = centre_z + dz + _halve_dist;
-          if (_doRotate) {
-            dx = ax - centre_x;
-            dz = az - centre_z;
-            ax = centre_x + dx * _cosa + dz * _sina;
-            az = centre_y + dz * _cosa - dx * _sina;
-          }
-          pVarTP.x = ax;
-          pVarTP.z = az;
-          pVarTP.color = fmod(pVarTP.color + z1colorshift, 1.0);
-        } else {
-          double bx = pVarTP.x;
-          double bz = centre_z - dz - _halve_dist;
-          if (_doRotate) {
-            dx = bx - centre_x;
-            dz = bz - centre_z;
-            bx = centre_x + dx * _cosa - dz * _sina;
-            bz = centre_y + dz * _cosa + dx * _sina;
-          }
-          pVarTP.x = bx;
-          pVarTP.z = bz;
-          pVarTP.color = fmod(pVarTP.color + z2colorshift, 1.0);
-        }
-      }
-      break;
     }
-
   }
 
   @Override

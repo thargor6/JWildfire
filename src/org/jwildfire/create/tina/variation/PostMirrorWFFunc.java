@@ -20,7 +20,9 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fmod;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 public class PostMirrorWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
@@ -53,6 +55,7 @@ public class PostMirrorWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    if(fabs(pAmount)>EPSILON) {
     if (xaxis > 0 && pContext.random() < 0.5) {
       pVarTP.x = xscale * (-pVarTP.x - xshift);
       pVarTP.y = yscale * pVarTP.y;
@@ -68,7 +71,7 @@ public class PostMirrorWFFunc extends VariationFunc implements SupportsGPU {
     if (zaxis > 0 && pContext.random() < 0.5) {
       pVarTP.z = -pVarTP.z - zshift;
       pVarTP.color = fmod(pVarTP.color + zcolorshift, 1.0);
-    }
+    }}
   }
 
   @Override
