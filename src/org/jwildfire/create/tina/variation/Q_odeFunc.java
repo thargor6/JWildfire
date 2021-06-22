@@ -130,11 +130,11 @@ public class Q_odeFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    __px += varpar->q_ode_q_ode01 + varpar->q_ode * varpar->q_ode_q_ode02 * __x + varpar->q_ode_q_ode03 * __x * __x;\n"
+    return "   __px += varpar->q_ode_q_ode01 + varpar->q_ode * varpar->q_ode_q_ode02 * __x + varpar->q_ode_q_ode03 * __x * __x;\n"
         + "    __px += varpar->q_ode_q_ode04 * __x * __y + varpar->q_ode_q_ode05 * __y + varpar->q_ode_q_ode06 * __y * __y;\n"
         + "    __py += varpar->q_ode_q_ode07 + varpar->q_ode_q_ode08 * __x + varpar->q_ode_q_ode09 * __x * __x;\n"
         + "    __py += varpar->q_ode_q_ode10 * __x * __y + varpar->q_ode * varpar->q_ode_q_ode11 * __y\n"
         + "            + varpar->q_ode_q_ode12 * __y * __y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz + = varpar->q_ode * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->q_ode * __z;\n" : "");
   }
 }
