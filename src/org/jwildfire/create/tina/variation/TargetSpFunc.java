@@ -131,6 +131,6 @@ public class TargetSpFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "    __px += r * c;\n"
         + "    __py += r * s;\n"
-        + (context.isPreserveZCoordinate() ? "\"__pz += varpar->target_sp*__z;\\n\"" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->target_sp*__z;\n" : "");
   }
 }
