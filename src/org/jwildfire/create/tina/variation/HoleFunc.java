@@ -97,6 +97,6 @@ public class HoleFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "__px += r * c;\n"
         + "__py += r * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->hole2 * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += varpar->hole * __z;\n" : "");
   }
 }
