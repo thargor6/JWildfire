@@ -51,7 +51,7 @@ public class LogFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += varpar->log * 0.5f*logf(__r);\n"
+    return "__px += varpar->log * 0.5f*logf(__r2);\n"
         + "__py += varpar->log * __theta;\n"
         + (context.isPreserveZCoordinate() ? "__pz += varpar->log * __z;\n" : "");
   }
