@@ -3105,6 +3105,8 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
 
     uint fromXform = startingXform[warpIndex];
     uint toXform   = 0;
+	
+	
     for (int j = 0; j < NUM_ITERATIONS; j++)
     {
         //Pick xform for this iteration
@@ -3143,15 +3145,6 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
         uint varUsagesIndex  = d_g_varUsageIndexes[r];
 
         struct point fromPoint = points[fromPointIndex];
-
-#ifdef JWF_EXTENSIONS
-		if(j==0) {
-            activePoint[index].x = 2.f*randFloat(randStates) - 1.f;
-            activePoint[index].y = 2.f*randFloat(randStates) - 1.f;
-            activePoint[index].z = 0; //2.f*randFloat(randStates) - 1.f;
-		}
-#endif		
-
 
         //Iterate the chosen point and store it back to the pool
         iteratePoint(&d_g_varUsages[varUsagesIndex],
