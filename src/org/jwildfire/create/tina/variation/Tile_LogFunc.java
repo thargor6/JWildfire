@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.round;
 
-public class Tile_LogFunc extends VariationFunc {
+public class Tile_LogFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_tile_log_spread = "spread";
@@ -70,6 +70,17 @@ public class Tile_LogFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float x = -varpar->tile_log_spread;\n"
+        + "    if (RANDFLOAT() < 0.5)\n"
+        + "      x = varpar->tile_log_spread;\n"
+        + "\n"
+        + "    __px += varpar->tile_log * (__x + roundf(x * logf(RANDFLOAT())));\n"
+        + "    __py += varpar->tile_log * __y;\n"
+        + "    __pz += varpar->tile_log * __z;\n";
   }
 }

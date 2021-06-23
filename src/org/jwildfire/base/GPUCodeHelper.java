@@ -24,54 +24,19 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        "  double _f, _s, _p, _is, _pxa, _pixa, _vxp;\n"
-            + "  boolean _fixed_dist_calc;\n"
-            + "_f = frequency * 5;\n"
-            + "    double a = amplitude * 0.01;\n"
-            + "    _p = phase * M_2PI - M_PI;\n"
+        "    double x = -spread;\n"
+            + "    if (pContext.random() < 0.5)\n"
+            + "      x = spread;\n"
             + "\n"
-            + "    // scale must not be zero\n"
-            + "    _s = scale == 0 ? SMALL_EPSILON : scale;\n"
-            + "\n"
-            + "    // we will need the inverse scale\n"
-            + "    _is = 1.0 / _s;\n"
-            + "\n"
-            + "    // pre-multiply velocity+phase, phase+amplitude and (PI-phase)+amplitude\n"
-            + "    _vxp = velocity * _p;\n"
-            + "    _pxa = _p * a;\n"
-            + "    _pixa = (M_PI - _p) * a;\n"
-            + "    _fixed_dist_calc = fixed_dist_calc != 0;\n"
-            + "    double x = (pAffineTP.x * _s) - centerx, y = (pAffineTP.y * _s) + centery;\n"
-            + "\n"
-            + "    // calculate distance from center but constrain it to EPS\n"
-            + "    double d = _fixed_dist_calc ? sqrt(x * x + y * y) : sqrt(x * x * y * y);\n"
-            + "    if (d < SMALL_EPSILON)\n"
-            + "      d = SMALL_EPSILON;\n"
-            + "\n"
-            + "    // normalize (x,y)\n"
-            + "    double nx = x / d, ny = y / d;\n"
-            + "\n"
-            + "    // calculate cosine wave with given frequency, velocity \n"
-            + "    // and phase based on the distance to center\n"
-            + "    double wave = cos(_f * d - _vxp);\n"
-            + "\n"
-            + "    // calculate the wave offsets\n"
-            + "    double d1 = wave * _pxa + d, d2 = wave * _pixa + d;\n"
-            + "\n"
-            + "    // we got two offsets, so we also got two new positions (u,v)\n"
-            + "    double u1 = (centerx + nx * d1), v1 = (-centery + ny * d1);\n"
-            + "    double u2 = (centerx + nx * d2), v2 = (-centery + ny * d2);\n"
-            + "\n"
-            + "    // interpolate the two positions by the given phase and\n"
-            + "    // invert the multiplication with scale from before\n"
-            + "    pVarTP.x = pAmount * (lerp(u1, u2, _p)) * _is;\n"
-            + "    pVarTP.y = pAmount * (lerp(v1, v2, _p)) * _is;\n";
-    System.err.println(convertCode(code, "ripple", new String[]{"frequency", "velocity", "amplitude", "centerx", "centery", "phase", "scale"}));
+            + "    pVarTP.x += pAmount * (pAffineTP.x + round(x * log(pContext.random())));\n"
+            + "    pVarTP.y += pAmount * pAffineTP.y;\n"
+            + "    pVarTP.z += pAmount * pAffineTP.z;\n";
+    System.err.println(convertCode(code, "tile_log", new String[]{"spread"}));
   }
 
   private String convertCode(String code, String varName, String paramNames[]) {
     // functions
-    String newCode = code.replaceAll("(atan2|asin|sin|acos|lerp|cos|fabs|log|pow|sqrt|sqr|sgn|exp|fmod|sinh|cosh|hypot|rint|trunc|floor)\\(", "$1f(")
+    String newCode = code.replaceAll("(atan2|asin|sin|acos|lerp|cos|fabs|log|pow|sqrt|sqr|sgn|exp|fmod|sinh|round|tan|cosh|hypot|rint|trunc|floor)\\(", "$1f(")
             // pAffineTP.getPrecalcSumsq()
             .replaceAll("pAffineTP\\.getPrecalcSumsq\\(\\)", "__r2")
             // pAffineTP.getPrecalcAtan()

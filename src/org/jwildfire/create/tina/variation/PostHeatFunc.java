@@ -2,7 +2,7 @@ package org.jwildfire.create.tina.variation;
 
 /*
 JWildfire - an image and animation processor written in Java
-Copyright (C) 1995-2011 Andreas Maschke
+Copyright (C) 1995-2021 Andreas Maschke
 
 This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
 General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -27,7 +27,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
  * @author Branden Brown, a.k.a. zephyrtronium, transcribed by Nic Anderson, chronologicaldot
  * @date July 19, 2014 (transcribe)
  */
-public class PostHeatFunc extends VariationFunc {
+public class PostHeatFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_THETA_PERIOD = "theta_period";
@@ -150,7 +150,49 @@ public class PostHeatFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float tx = varpar->post_heat_theta_period == 0 ? 0.0 : 1.0 / varpar->post_heat_theta_period;\n"
+        + "    float px = varpar->post_heat_phi_period == 0 ? 0.0 : 1.0 / varpar->post_heat_phi_period;\n"
+        + "    float rx = varpar->post_heat_r_period == 0 ? 0.0 : 1.0 / varpar->post_heat_r_period;\n"
+        + "    float at, bt, ct, ap, bp, cp, ar, br, cr;\n"
+        + "    at = varpar->post_heat * varpar->post_heat_theta_amp;\n"
+        + "    bt = (2.0f*PI) * tx;\n"
+        + "    ct = varpar->post_heat_theta_phase * tx;\n"
+        + "    ap = varpar->post_heat * varpar->post_heat_phi_amp;\n"
+        + "    bp = (2.0f*PI) * px;\n"
+        + "    cp = varpar->post_heat_phi_phase * px;\n"
+        + "    ar = varpar->post_heat * varpar->post_heat_r_amp;\n"
+        + "    br = (2.0f*PI) * rx;\n"
+        + "    cr = varpar->post_heat_r_phase * rx;\n"
+        + "\n"
+        + "    float r = sqrtf(__px*__px + __py*__py + __pz*__pz);\n"
+        + "\n"
+        + "    float sint, cost, sinp, cosp, atant, acosp;\n"
+        + "\n"
+        + "    atant = atan2f(__py, __px);\n"
+        + "\n"
+        + "    r += ar * sinf(br * r + cr);\n"
+        + "\n"
+        + "    sint = at * sinf(bt * r + ct) + atant;\n"
+        + "    cost = cosf(sint);\n"
+        + "    sint = sinf(sint);\n"
+        + "\n"
+        + "    if (r != 0) {\n"
+        + "      acosp = __pz / r;\n"
+        + "    } else {\n"
+        + "      acosp = 0;\n"
+        + "    }\n"
+        + "\n"
+        + "    sinp = ap * sinf(bp * r + cp) + acosf(acosp);\n"
+        + "    cosp = cosf(sinp);\n"
+        + "    sinp = sinf(sinp);\n"
+        + "\n"
+        + "    __px = r * cost * sinp;\n"
+        + "    __py = r * sint * sinp;\n"
+        + "    __pz = r * cosp;\n";
+  }
 }
