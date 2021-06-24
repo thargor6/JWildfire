@@ -24,14 +24,30 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        "    double x = -spread;\n"
-            + "    if (pContext.random() < 0.5)\n"
-            + "      x = spread;\n"
+        "    double width2 = width * pAmount;\n"
+            + "    double x = pAffineTP.x / width;\n"
+            + "    double aux = 0;\n"
+            + "    if (x > 0.0) {\n"
+            + "      aux = x - (int) x;\n"
+            + "    } else {\n"
+            + "      aux = x + (int) x;\n"
+            + "    }\n"
+            + "    aux = cos(aux * M_PI);\n"
+            + "    double aux2 = 0;\n"
+            + "    if (aux < pContext.random() * 2.0 - 1.0) {\n"
+            + "      if (x > 0) {\n"
+            + "        aux2 = -width2;\n"
+            + "      } else {\n"
+            + "        aux2 = width2;\n"
+            + "      }\n"
+            + "    }\n"
             + "\n"
-            + "    pVarTP.x += pAmount * (pAffineTP.x + round(x * log(pContext.random())));\n"
+            + "    pVarTP.x += pAffineTP.x * pAmount + aux2;\n"
             + "    pVarTP.y += pAmount * pAffineTP.y;\n"
-            + "    pVarTP.z += pAmount * pAffineTP.z;\n";
-    System.err.println(convertCode(code, "tile_log", new String[]{"spread"}));
+            + "    if (pContext.isPreserveZCoordinate()) {\n"
+            + "      pVarTP.z += pAmount * pAffineTP.z;\n"
+            + "    }\n";
+    System.err.println(convertCode(code, "tile_hlp", new String[]{"width"}));
   }
 
   private String convertCode(String code, String varName, String paramNames[]) {

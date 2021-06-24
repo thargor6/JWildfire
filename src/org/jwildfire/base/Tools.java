@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -59,7 +59,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  private static final String APP_VERSION = "V7.00 ALPHA4 (05.06.2021)";
+  private static final String APP_VERSION = "V7.00 ALPHA8 (24.06.2021)";
 
   public static final boolean STEAM_EDITION = false;
   public static final boolean SPECIAL_VERSION = false;
@@ -113,10 +113,6 @@ public class Tools {
     toolPixel.g = pG;
     toolPixel.b = pB;
     return toolPixel.getARGBValue();
-  }
-
-  public static boolean isDebugMode() {
-    return true;
   }
 
   public static Date now() {

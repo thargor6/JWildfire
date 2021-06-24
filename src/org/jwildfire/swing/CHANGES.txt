@@ -27,8 +27,14 @@ V7.00 (xx.xx.202x)
      - inverted_julia variation
  - fixed the following variations in order to correctly support the "Preserve Z"-setting:
      - bsplit
- - improved the gnarl-random-flame-generators to also use waves22, waves23, waves42 and vibration2 to create more interesting variations of the standard-gnarls
+ - fixed a bad behaviour of the dinis_surface_wf variation
+ - changed the initialization behaviour of the w-, x-, y- and z-variation: lituus is initialized to 0 instead to a random number
+ - changed the behaviour of post_axis_symmetry_wf and post_mirror_wf so that it only adds a contribution when the amount-parameter is not equal to zero, for consistency reasons
+ - improved the gnarl-random-flame-generators to also use waves22, waves23, waves4, waves42 and vibration2 to create more interesting variations of the standard-gnarls
  - omitting empty motion curves when writing flames to file or clipboard
+ - removed support for the old FACLRender (which had no special support for JWF and works very limited together with JWildfire) together with the info-window
+   under Help->GPU rendering (please see the users manual for questions regarding GPU rendering)
+ - the AI-Post-Denoise under GPU rendering is turned off by default
 
  - new variations:
    - ovoid by Rob Richards

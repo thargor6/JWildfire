@@ -635,6 +635,7 @@ public class FlamesGPURenderFrame extends JFrame {
     if (aiPostDenoiserDisableCheckbox == null) {
       aiPostDenoiserDisableCheckbox = new JCheckBox("Denoiser OFF");
       aiPostDenoiserDisableCheckbox.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      aiPostDenoiserDisableCheckbox.setSelected(true);
       aiPostDenoiserDisableCheckbox.addActionListener(
           new ActionListener() {
             public void actionPerformed(ActionEvent e) {

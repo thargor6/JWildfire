@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 
 
-public class TileHlpFunc extends VariationFunc {
+public class TileHlpFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_WIDTH = "width";
@@ -85,7 +85,32 @@ public class TileHlpFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float width2 = varpar->tile_hlp_width * varpar->tile_hlp;\n"
+        + "    float x = __x / varpar->tile_hlp_width;\n"
+        + "    float aux = 0;\n"
+        + "    if (x > 0.0) {\n"
+        + "      aux = x - (int) x;\n"
+        + "    } else {\n"
+        + "      aux = x + (int) x;\n"
+        + "    }\n"
+        + "    aux = cosf(aux * PI);\n"
+        + "    float aux2 = 0;\n"
+        + "    if (aux < RANDFLOAT() * 2.0 - 1.0) {\n"
+        + "      if (x > 0) {\n"
+        + "        aux2 = -width2;\n"
+        + "      } else {\n"
+        + "        aux2 = width2;\n"
+        + "      }\n"
+        + "    }\n"
+        + "\n"
+        + "    __px += __x * varpar->tile_hlp + aux2;\n"
+        + "    __py += varpar->tile_hlp * __y;\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->tile_hlp * __z;\n" : "");
   }
 }
 
