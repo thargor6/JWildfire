@@ -19,13 +19,9 @@ package org.jwildfire.create.tina.faclrender;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.launcher.StreamRedirector;
 
 public class FACLRenderTools {
@@ -35,7 +31,7 @@ public class FACLRenderTools {
   private static String cudaLibrary= null;
   private static boolean cudaLibraryChecked = false;
 
-  private static final String FACLRENDER_PATH = "FACLRender";
+  private static final String FACLRENDER_JWF_PATH = "FACLRenderJWF";
 
 
   private static final String FACLRENDER_EXE = "FACLRender.exe";
@@ -69,14 +65,7 @@ public class FACLRenderTools {
 
   private static String getLaunchCmd(String pFlameFilename, int pWidth, int pHeight, int pQuality) {
     StringBuilder cmd = new StringBuilder();
-    String exePath;
-    if(Prefs.getPrefs().getTinaFACLRenderPath()!=null && Prefs.getPrefs().getTinaFACLRenderPath().trim().length()>0) {
-      exePath = new File(Prefs.getPrefs().getTinaFACLRenderPath(), FACLRENDER_EXE).getAbsolutePath();
-    }
-    else {
-      String denoiserPath = Tools.getPathRelativeToCodeSource(FACLRENDER_PATH);
-      exePath=new File(denoiserPath, FACLRENDER_EXE).getAbsolutePath();
-    }
+    String exePath=new File(Tools.getPathRelativeToCodeSource(FACLRENDER_JWF_PATH), FACLRENDER_EXE).getAbsolutePath();
     if (exePath.indexOf(" ") >= 0) {
       exePath = "\"" + exePath + "\"";
     }

@@ -65,12 +65,12 @@ JWildfire.sh
 build_new.xml
 localsrc
 
-FACLRender/*.obj
-FACLRender/*.dll
-FACLRender/*.exe
-FACLRender/*.res
-FACLRender/*.pdb
-FACLRender/FA*
+FACLRenderJWF/*.obj
+FACLRenderJWF/*.dll
+FACLRenderJWF/*.exe
+FACLRenderJWF/*.res
+FACLRenderJWF/*.pdb
+FACLRenderJWF/FA*
 
 /bin/
 /build/

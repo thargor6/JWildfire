@@ -51,7 +51,6 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.xml"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.html"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/CHANGES.txt"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/swing/GPU_RENDERING.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/OptiX_Denoiser.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/OIDN_Denoiser.txt"/>
 	  <fileset dir="${src.dir}" includes="org/jwildfire/icons/**/*.gif"/>
@@ -156,8 +155,8 @@
     <copy todir="${dist.dir}/lib/Denoiser">
        <fileset file="${src.dir}/../Denoiser/**" />
     </copy>
-      <copy todir="${dist.dir}/lib/FACLRender">
-          <fileset file="${src.dir}/../FACLRender/**" />
+      <copy todir="${dist.dir}/lib/FACLRenderJWF">
+          <fileset file="${src.dir}/../FACLRenderJWF/**" />
       </copy>
       <copy todir="${dist.dir}/lib">
           <fileset file="${src.dir}/../manual/build/docs/asciidocPdf/JWildfire_manual.pdf" />

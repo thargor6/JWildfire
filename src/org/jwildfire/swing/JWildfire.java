@@ -114,7 +114,6 @@ public class JWildfire extends JApplet {
     }
     helpInternalFrames.add(new DefaultJFrameHolder<>(ListOfChangesFrame.class, this, WindowPrefs.WINDOW_LIST_OF_CHANGES, "List of changes"));
     helpInternalFrames.add(new DefaultJFrameHolder<>(MessageLogFrame.class, this, WindowPrefs.WINDOW_MESSAGE_LOG, "Message log"));
-    helpInternalFrames.add(new DefaultJFrameHolder<>(GPURenderInfoFrame.class, this, WindowPrefs.WINDOW_GPU_RENDERING, "GPU rendering"));
     helpInternalFrames.add(new DefaultJFrameHolder<>(AIPostDenoiserInfoFrame.class, this, WindowPrefs.WINDOW_AI_POST_DENOISER_INFO, "Supported AI-Post-Denoisers"));
     helpInternalFrames.add(new DefaultJFrameHolder<>(TipOfTheDayFrame.class, this, WindowPrefs.WINDOW_TIPOFTHEDAY, "Tip of the day"));
   }
@@ -183,12 +182,6 @@ public class JWildfire extends JApplet {
       }
      try {
         getJFrame(ListOfChangesFrame.class).initChangesPane();
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-      try {
-        getJFrame(GPURenderInfoFrame.class).initChangesPane();
       }
       catch (Exception ex) {
         ex.printStackTrace();

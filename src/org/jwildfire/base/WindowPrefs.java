@@ -48,7 +48,6 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   public static final String WINDOW_LOOKANDFEEL = "LOOKANDFEEL";
   public static final String WINDOW_FLAMES_GPU = "FLAMESGPU";
   public static final String WINDOW_LIST_OF_CHANGES = "LISTOFCHANGES";
-  public static final String WINDOW_GPU_RENDERING = "GPURENDERING";
   public static final String WINDOW_AI_POST_DENOISER_INFO = "AI_POST_DENOISER_INFO";
   public static final String WINDOW_QUILTFLAMERENDERER = "QUILTFLAMERENDERER";
   public static final String WINDOW_MESSAGE_LOG = "LOG_MESSAGES";

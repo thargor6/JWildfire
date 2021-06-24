@@ -143,7 +143,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS = "tina.initially_expand_nonlinear_params";
   static final String KEY_TINA_ENABLE_LEAP_MOTION_TAB = "tina.enable_leap_motion_tab";
 
-  static final String KEY_TINA_FACLRENDER_PATH = "tina.faclrender_path.2";
   static final String KEY_TINA_FACLRENDER_OPTS = "tina.faclrender_opts.2";
   static final String KEY_TINA_DEFAULT_NEW_FLAME_TITLE = "tina.default.new_flame_title";
 
@@ -232,9 +231,6 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Expand the params in the non-linear tab per default. This is only the initial value, you may expand and collapse the params at any time manually", category = PropertyCategory.TINA)
   private boolean tinaDefaultExpandNonlinearParams = false;
-
-  @Property(description = "Path to the external GPU renderer, currently only Windows-plattforms are supported. The software searches this path at program-start for a file called \"FACLRender.exe\", only when this file exists, the GPU-rendering-window is displayed, a change of this property requires a program-restart.", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
-  private String tinaFACLRenderPath = null;
 
   @Property(description = "Enable the \"Leap Motion\"-tab (because this feature is very rarely used, it is hidden by default. Requires restart of the application after change.)", category = PropertyCategory.TINA)
   private boolean tinaEnableLeapMotionTab = false;
@@ -864,7 +860,6 @@ public class Prefs extends ManagedObject {
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
     tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
     tinaEnableLeapMotionTab = pSrc.tinaEnableLeapMotionTab;
-    tinaFACLRenderPath = pSrc.tinaFACLRenderPath;
     tinaFACLRenderOptions = pSrc.tinaFACLRenderOptions;
     tinaDefaultNewFlameTitle = pSrc.tinaDefaultNewFlameTitle;
 
@@ -1040,7 +1035,6 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LOOKANDFEEL));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FLAMES_GPU));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LIST_OF_CHANGES));
-    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_GPU_RENDERING));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_AI_POST_DENOISER_INFO));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_QUILTFLAMERENDERER));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_MESSAGE_LOG));
@@ -1677,14 +1671,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultExpandNonlinearParams(boolean tinaDefaultExpandNonlinearParams) {
     this.tinaDefaultExpandNonlinearParams = tinaDefaultExpandNonlinearParams;
-  }
-
-  public String getTinaFACLRenderPath() {
-    return tinaFACLRenderPath;
-  }
-
-  public void setTinaFACLRenderPath(String tinaFACLRenderPath) {
-    this.tinaFACLRenderPath = tinaFACLRenderPath;
   }
 
   public String getTinaFACLRenderOptions() {
