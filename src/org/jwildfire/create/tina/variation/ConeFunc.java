@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
@@ -19,7 +19,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.*;
  
-public class ConeFunc extends VariationFunc {
+public class ConeFunc extends VariationFunc implements SupportsGPU {
     private static final long serialVersionUID = 1L;
  
     private static final String PARAM_RADIUS1 = "radius1";
@@ -55,7 +55,6 @@ public class ConeFunc extends VariationFunc {
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
     pVarTP.z += r * height;
- 
     }
  
     @Override
@@ -101,7 +100,17 @@ public class ConeFunc extends VariationFunc {
 
     @Override
     public VariationFuncType[] getVariationTypes() {
-        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE };
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
     }
 
+    @Override
+    public String getGPUCode(FlameTransformationContext context) {
+    return "   float r = varpar->cone / sqrtf(__x * __x *varpar->cone_warp+ __y * __y + varpar->cone_size1)*varpar->cone_size2;\n"
+        + "    float xx = __phi* varpar->cone_radius1 + PI * (int) (varpar->cone_weight * RANDFLOAT())*varpar->cone_radius2;\n"
+        + "    float sina = sinf(xx*varpar->cone_ywave);\n"
+        + "    float cosa = cosf(xx*varpar->cone_xwave);\n"
+        + "    __px += r * cosa;\n"
+        + "    __py += r * sina;\n"
+        + "    __pz += r * varpar->cone_height;";
+    }
 }

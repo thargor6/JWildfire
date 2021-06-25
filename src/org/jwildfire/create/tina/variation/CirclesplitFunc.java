@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CirclesplitFunc extends VariationFunc {
+public class CirclesplitFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_CS_RADIUS = "cs_radius";
   private static final String PARAM_CS_SPLIT = "cs_split";
@@ -85,8 +85,32 @@ public class CirclesplitFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float x0 = __x;\n"
+        + "    float y0 = __y;\n"
+        + "\n"
+        + "    float r = sqrtf(x0*x0 + y0*y0);\n"
+        + "\n"
+        + "    float x1;\n"
+        + "    float y1;\n"
+        + "\n"
+        + "    if (r < varpar->circlesplit_cs_radius - varpar->circlesplit_cs_split) {\n"
+        + "      x1 = x0;\n"
+        + "      y1 = y0;\n"
+        + "    } else {\n"
+        + "      float a = atan2f(y0, x0);\n"
+        + "      float len = r + varpar->circlesplit_cs_split;\n"
+        + "      x1 = cosf(a) * len;\n"
+        + "      y1 = sinf(a) * len;\n"
+        + "    }\n"
+        + "\n"
+        + "    __px += varpar->circlesplit * x1;\n"
+        + "    __py += varpar->circlesplit * y1;\n"
+        + (context.isPreserveZCoordinate()? "      __pz += varpar->circlesplit * __z;\n" : "");
+  }
 }
 

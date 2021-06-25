@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CircleCropFunc extends VariationFunc {
+public class CircleCropFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
@@ -80,7 +80,6 @@ public class CircleCropFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-
   }
 
   @Override
@@ -123,7 +122,46 @@ public class CircleCropFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float cA = fmaxf(-1.0, fminf(varpar->circlecrop_scatter_area, 1.0));\n"
+        + "float x0 = varpar->circlecrop_x;\n"
+        + "    float y0 = varpar->circlecrop_y;\n"
+        + "    float cr = varpar->circlecrop_radius;\n"
+        + "    float ca = cA;\n"
+        + "    float vv = varpar->circlecrop;\n"
+        + "\n"
+        + "    __x -= x0;\n"
+        + "    __y -= y0;\n"
+        + "\n"
+        + "    float rad = sqrtf(__x * __x + __y * __y);\n"
+        + "    float ang = atan2f(__y, __x);\n"
+        + "    float rdc = cr + (RANDFLOAT() * 0.5 * ca);\n"
+        + "\n"
+        + "    short esc = rad > cr;\n"
+        + "    short cr0 = lroundf(varpar->circlecrop_zero) == 1;\n"
+        + "\n"
+        + "    float s = sinf(ang);\n"
+        + "    float c = cosf(ang);\n"
+        + "\n"
+        + "    __doHide = false;\n"
+        + "    if (cr0 && esc) {\n"
+        + "      __px = __py = 0;\n"
+        + "      __doHide = true;\n"
+        + "    } else if (cr0 && !esc) {\n"
+        + "      __px += vv * __x + x0;\n"
+        + "      __py += vv * __y + y0;\n"
+        + "    } else if (!cr0 && esc) {\n"
+        + "      __px += vv * rdc * c + x0;\n"
+        + "      __py += vv * rdc * s + y0;\n"
+        + "    } else if (!cr0 && !esc) {\n"
+        + "      __px += vv * __x + x0;\n"
+        + "      __py += vv * __y + y0;\n"
+        + "    }\n"
+        + "\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->circlecrop * __z;\n" : "");
+  }
 }
