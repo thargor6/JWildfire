@@ -1,28 +1,51 @@
 package org.jwildfire.create.tina.faclrender;
 
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.SupportsGPU;
-import org.jwildfire.create.tina.variation.VariationFunc;
-import org.jwildfire.create.tina.variation.VariationFuncType;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.variation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class VariationInstance {
+  private static final Logger logger = LoggerFactory.getLogger(VariationInstance.class);
   private final String originalName;
   private final int instanceId;
   private final boolean singleton; // one instance per variation set which is the default
   private final String transformedName;
   private final VariationFunc func;
 
-  public VariationInstance(VariationFunc func, boolean singleton, int instanceId) {
-    this.originalName = func.getName();
+  public VariationInstance(FlameTransformationContext transformCtx, VariationFunc func, boolean singleton, int instanceId) {
+    this.originalName = getVariationName(transformCtx, func);
     this.singleton = singleton;
     this.instanceId = instanceId;
     this.func = func;
-    // renaming required because some variation names may be reserved words or functions in CUDA, e.g. "log" or "sin"
-    this.transformedName = (this.singleton ? "jwf_" : String.format("jwf%d_", instanceId)) + this.originalName;
+    String baseVarName;
+    if(func instanceof CustomFullVariationWrapperFunc) {
+      // append random id to enforce that this coe is recompiled each time, because the user may change it
+      baseVarName = this.originalName+"_"+UUID.randomUUID().toString().replaceAll("-","");
+    }
+    else {
+      baseVarName = this.originalName;
+    }
+     // renaming required because some variation names may be reserved words or functions in CUDA, e.g. "log" or "sin"
+    this.transformedName = (this.singleton ? "jwf_" : String.format("jwf%d_", instanceId)) + baseVarName;
+  }
+
+  public static String getVariationName(FlameTransformationContext transformCtx, VariationFunc func) {
+    if(func instanceof CustomFullVariationWrapperFunc) {
+      // compile the custom func in order to get the actual name of the (inner) variation func
+      try {
+        return ((CustomFullVariationWrapperFunc)getInitializedVarFunc(transformCtx, func)).getNameOfWrappedVariation();
+      }
+      catch(Exception ex) {
+        logger.error(ex.getMessage(), ex);
+      }
+    }
+    return func.getName();
   }
 
   public String getOriginalName() {
@@ -51,17 +74,25 @@ public class VariationInstance {
     return String.format(code, args.toArray());
   }
 
+  private static SupportsGPU getInitializedVarFunc(FlameTransformationContext transformCtx, VariationFunc variationFunc) {
+    VariationFunc copy = variationFunc.makeCopy();
+    copy.init(transformCtx, new Layer(), new XForm(), 1.0);
+    return (SupportsGPU)copy;
+  }
+
   public String getTransformedCode(FlameTransformationContext transformCtx) {
-    String gpuCode;
+    String gpuCode, gpuFunctions;
     {
-      String rawGpuCode = ((SupportsGPU) func).getGPUCode(transformCtx);
-      gpuCode = singleton ? rawGpuCode : injectInstanceId(rawGpuCode, instanceId);
-      gpuCode = gpuCode.replace("->"+ originalName, "->"+ transformedName);
-    }
-    String gpuFunctions;
-    {
-      String rawGpuFunctions = ((SupportsGPU) func).getGPUFunctions(transformCtx);
-      gpuFunctions = singleton ? rawGpuFunctions : injectInstanceId(rawGpuFunctions, instanceId);
+      SupportsGPU supportsGPU = VariationInstance.getInitializedVarFunc(transformCtx, func);
+      {
+        String rawGpuCode = supportsGPU.getGPUCode(transformCtx);
+        gpuCode = singleton ? rawGpuCode : injectInstanceId(rawGpuCode, instanceId);
+        gpuCode = gpuCode.replace("->" + originalName, "->" + transformedName);
+      }
+      {
+        String rawGpuFunctions = supportsGPU.getGPUFunctions(transformCtx);
+        gpuFunctions = singleton ? rawGpuFunctions : injectInstanceId(rawGpuFunctions, instanceId);
+      }
     }
     StringBuilder sb = new StringBuilder();
     sb.append("<variation name=\""+ transformedName +"\" dimension=\"3d\"");

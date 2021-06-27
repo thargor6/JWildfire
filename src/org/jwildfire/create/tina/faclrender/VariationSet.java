@@ -57,11 +57,11 @@ public class VariationSet implements VariationnameTransformer {
     if(func instanceof SupportsGPU) {
       if(((SupportsGPU) func).isStateful()) {
         int count = (int)variationInstances.stream().filter(i -> !i.isSingleton() &&  i.getOriginalName().equals(func.getName())).count();
-        variationInstances.add(new VariationInstance(func, false, count));
+        variationInstances.add(new VariationInstance(transformCtx, func, false, count));
       }
       else {
         if(!variationInstances.stream().filter(i -> i.isSingleton() && i.getOriginalName().equals(func.getName())).findAny().isPresent()) {
-          variationInstances.add(new VariationInstance(func, true, -1));
+          variationInstances.add(new VariationInstance(transformCtx, func, true, -1));
         }
       }
     }
@@ -81,7 +81,8 @@ public class VariationSet implements VariationnameTransformer {
        return variationInstances.stream().filter(i -> i.getFunc() == func).findFirst().get().getTransformedName();
     }
     else {
-      return variationInstances.stream().filter(i -> i.getOriginalName().equals(func.getName())).findFirst().get().getTransformedName();
+      String varName = VariationInstance.getVariationName(transformCtx, func);
+      return variationInstances.stream().filter(i -> i.getOriginalName().equals(varName)).findFirst().get().getTransformedName();
     }
   }
 
