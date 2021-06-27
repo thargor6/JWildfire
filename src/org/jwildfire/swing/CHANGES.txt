@@ -1,3 +1,4 @@
+
 V7.00 (xx.xx.202x)
  - Created a new extended mode for running the external GPU renderer which provides the actual code for the actually used variations (on a per flame basis).
    This needs more time to initialize than the regular mode, because the variation code must be compiled for each individual set of variations.
@@ -25,6 +26,7 @@ V7.00 (xx.xx.202x)
      - atan2_spirals
      - seashell3D
      - inverted_julia variation
+     - corners
  - fixed the following variations in order to correctly support the "Preserve Z"-setting:
      - bsplit
  - fixed a bad behaviour of the dinis_surface_wf variation
@@ -36,6 +38,7 @@ V7.00 (xx.xx.202x)
    under Help->GPU rendering (please see the users manual for questions regarding GPU rendering)
  - the AI-Post-Denoise under GPU rendering is turned off by default
 
+ - improved the "Duckies"-random-flame-generator
  - new variations:
    - ovoid by Rob Richards
    - post_point_crop by Whittaker Courtney
