@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.io.AbstractFlameWriter;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder.Attribute;
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.swing.MessageLogger;
 import org.jwildfire.create.tina.variation.*;
 
@@ -333,7 +334,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
   }
 
   private FlameTransformationContext createTransformCtx(Flame transformedFlame) {
-    FlameTransformationContext context = new FlameTransformationContext(null, null, 1, 1);
+    FlameTransformationContext context = new FlameTransformationContext(null, new MarsagliaRandomGenerator(), 1, 1);
     context.setPreserveZCoordinate(transformedFlame.isPreserveZ());
     return context;
   }
