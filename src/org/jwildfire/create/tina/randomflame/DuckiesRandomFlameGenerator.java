@@ -54,10 +54,13 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(1.0 + Math.random() * 100.0);
 
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(Math.random() < 0.8 ? "juliascope" : "julian", true);
+      if(Math.random()>0.75) {
+        xForm.addVariation(0.125 + 0.25 * Math.random(), VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
+      }
       varFunc.setParameter("power", Math.random() < 0.8 ? 2 : 2 + Math.random() * 10.0);
       varFunc.setParameter("dist", Math.random() < 0.8 ? 1.0 : -2.0 + 4.0 * Math.random());
       xForm.addVariation(0.5 + Math.random(), varFunc);
-      xForm.setColorSymmetry(0.5);
+      xForm.setColorSymmetry(0.5+Math.random());
 
       XFormTransformService.rotate(xForm, Math.random() * 360.0, false);
       XFormTransformService.localTranslate(xForm, 1.75 - 3.50 * Math.random(), 0.75 - 5.50 * Math.random(), false);
@@ -73,6 +76,9 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(1.0 + Math.random() * 100.0);
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
       xForm.addVariation(0.25 + 1.25 * Math.random(), varFunc);
+      if(Math.random()>0.5) {
+        xForm.addVariation(0.2 + 0.75 * Math.random(), VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
+      }
 
       XFormTransformService.rotate(xForm, -12.0 + Math.random() * 24.0, true);
       XFormTransformService.localTranslate(xForm, -0.125 + Math.random() * 0.25, -0.125 + Math.random() * 0.25, true);
@@ -88,6 +94,9 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
         xForm.setWeight(0.50 + Math.random() * 50.0);
         varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
         xForm.addVariation(0.125 + 0.75 * Math.random(), varFunc);
+        if(Math.random()>0.5) {
+          xForm.addVariation(0.125 + 0.35 * Math.random(), VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
+        }
 
         XFormTransformService.rotate(xForm, -24.0 + Math.random() * 48.0, true);
         XFormTransformService.localTranslate(xForm, -0.25 + Math.random() * 0.5, -0.25 + Math.random() * 0.5, true);
