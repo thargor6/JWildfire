@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.floor;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-public class CircleRandFunc extends VariationFunc {
+public class CircleRandFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SC = "Sc";
@@ -108,7 +108,43 @@ public class CircleRandFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "   int Seed = lroundf(varpar->circleRand_Seed);\n"
+        + "    float X, Y, U;\n"
+        + "    int M, N;\n"
+        + "    int maxIter = 100;\n"
+        + "    int iter = 0;\n"
+        + "    do {\n"
+        + "      X = varpar->circleRand_X * (1.0 - 2.0 * RANDFLOAT());\n"
+        + "      Y = varpar->circleRand_Y * (1.0 - 2.0 * RANDFLOAT());\n"
+        + "      M = (int) floorf(0.5 * X / varpar->circleRand_Sc);\n"
+        + "      N = (int) floorf(0.5 * Y / varpar->circleRand_Sc);\n"
+        + "      X = X - (M * 2 + 1) * varpar->circleRand_Sc;\n"
+        + "      Y = Y - (N * 2 + 1) * varpar->circleRand_Sc;\n"
+        + "      U = sqrtf(X * X + Y * Y);\n"
+        + "      if (++iter > maxIter) {\n"
+        + "        break;\n"
+        + "      }\n"
+        + "    }\n"
+        + "    while ((circleRand_DiscretNoise2(M + Seed, N) > varpar->circleRand_Dens) || (U > (0.3 + 0.7 * circleRand_DiscretNoise2(M + 10, N + 3)) * varpar->circleRand_Sc));\n"
+        + "\n"
+        + "    __px += varpar->circleRand * (X + (M * 2 + 1) * varpar->circleRand_Sc);\n"
+        + "    __py += varpar->circleRand * (Y + (N * 2 + 1) * varpar->circleRand_Sc);\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->circleRand * __z;\n" : "");
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float circleRand_AM = 1.0 / 2147483647;\n"
+        + "\n"
+        + "__device__ float circleRand_DiscretNoise2(int X, int Y) {\n"
+        + "    int n = X + Y * 57;\n"
+        + "    n = (n << 13) ^ n;\n"
+        + "    return ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) * circleRand_AM;\n"
+        + "  }\n";
+  }
 }

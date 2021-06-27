@@ -24,30 +24,30 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        "    double width2 = width * pAmount;\n"
-            + "    double x = pAffineTP.x / width;\n"
-            + "    double aux = 0;\n"
-            + "    if (x > 0.0) {\n"
-            + "      aux = x - (int) x;\n"
-            + "    } else {\n"
-            + "      aux = x + (int) x;\n"
-            + "    }\n"
-            + "    aux = cos(aux * M_PI);\n"
-            + "    double aux2 = 0;\n"
-            + "    if (aux < pContext.random() * 2.0 - 1.0) {\n"
-            + "      if (x > 0) {\n"
-            + "        aux2 = -width2;\n"
-            + "      } else {\n"
-            + "        aux2 = width2;\n"
+        "    double X, Y, U;\n"
+            + "    int M, N;\n"
+            + "    final int maxIter = 100;\n"
+            + "    int iter = 0;\n"
+            + "    do {\n"
+            + "      X = this.X * (1.0 - 2.0 * pContext.random());\n"
+            + "      Y = this.Y * (1.0 - 2.0 * pContext.random());\n"
+            + "      M = (int) floor(0.5 * X / this.Sc);\n"
+            + "      N = (int) floor(0.5 * Y / this.Sc);\n"
+            + "      X = X - (M * 2 + 1) * this.Sc;\n"
+            + "      Y = Y - (N * 2 + 1) * this.Sc;\n"
+            + "      U = sqrt(X * X + Y * Y);\n"
+            + "      if (++iter > maxIter) {\n"
+            + "        break;\n"
             + "      }\n"
             + "    }\n"
+            + "    while ((DiscretNoise2(M + this.Seed, N) > this.Dens) || (U > (0.3 + 0.7 * DiscretNoise2(M + 10, N + 3)) * this.Sc));\n"
             + "\n"
-            + "    pVarTP.x += pAffineTP.x * pAmount + aux2;\n"
-            + "    pVarTP.y += pAmount * pAffineTP.y;\n"
+            + "    pVarTP.x += pAmount * (X + (M * 2 + 1) * this.Sc);\n"
+            + "    pVarTP.y += pAmount * (Y + (N * 2 + 1) * this.Sc);\n"
             + "    if (pContext.isPreserveZCoordinate()) {\n"
             + "      pVarTP.z += pAmount * pAffineTP.z;\n"
             + "    }\n";
-    System.err.println(convertCode(code, "tile_hlp", new String[]{"width"}));
+    System.err.println(convertCode(code, "circleRand", new String[]{"Sc", "Dens", "X", "Y", "Seed"}));
   }
 
   private String convertCode(String code, String varName, String paramNames[]) {
