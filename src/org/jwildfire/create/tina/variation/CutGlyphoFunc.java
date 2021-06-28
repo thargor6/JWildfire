@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class CutGlyphoFunc  extends VariationFunc {
+public class CutGlyphoFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation : cut_glypho
@@ -170,8 +170,58 @@ public class CutGlyphoFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		float x,y,px_center,py_center;"
+	    		+"		    "
+	    		+"		if( varpar->cut_glypho_mode ==0)"
+	    		+"		{"
+	    		+"		     x= __x;"
+	    		+"		     y =__y;"
+	    		+"		     px_center=0.0;"
+	    		+"		     py_center=0.0;"
+	    		+"		}else"
+	    		+"		{"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;"
+	    		+"		     px_center=0.0;"
+	    		+"		     py_center=0.0;"
+	    		+"		}"
+	    		+"		float2 uv=make_float2(x,y)*( varpar->cut_glypho_zoom );"
+	    		+"	    float color=0.0f;"
+	    		+"	    float m = 0.0f;"
+	    		+"	    float stp = PI/5.0f;"
+	    		+"	    for(float n=1.0f; n<2.5f; n+=0.5f){        "
+	    		+"	        for(float i=0.0001f; i<2.0f*PI; i+=stp){"
+	    		+"	            float2 uvi = uv*(n)+(make_float2(cos(i + n*stp*.5 )*.4, sin(i + n*stp*.5 )*.4));"
+	    		+"	            float l = length(uvi);"
+	    		+"	            m += smoothstep( varpar->cut_glypho_f1  * n, 0.0f, l)* varpar->cut_glypho_f3;"
+	    		+"	        }"
+	    		+"	    }"
+	    		+"	    "
+	    		+"	    m = step( varpar->cut_glypho_f2 , fract(m* varpar->cut_glypho_f3 ));"
+	    		+"	   color = m;"
+	    		+"	   __doHide=false;"
+	    		+"	   if( varpar->cut_glypho_invert ==0)"
+	    		+"		{"
+	    		+"	      if (color==0.0f)"
+	    		+"	      { __px=0;"
+	    		+"	        __py=0;"
+	    		+"	        __doHide = true;"
+	    		+"	      }"
+	    		+"	    } else"
+	    		+"	    {"
+	    		+"	      if (color>0.0f )"
+	    		+"	      { __px=0;"
+	    		+"	        __py=0;"
+	    		+"	        __doHide = true;"
+	    		+"	      }"
+	    		+"	    }"
+	    		+"	    __px = varpar->cut_glypho * (x-px_center);"
+	    		+"	    __py = varpar->cut_glypho * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_glypho * __z;\n" : "");
+	  }
 }
 

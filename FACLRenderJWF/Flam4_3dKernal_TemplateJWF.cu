@@ -1092,19 +1092,15 @@ __device__ float4 pow(float4 x,float4 y)
 	return make_float4(xr,yr,zr,wr);
 }
 
-__device__ float exp(float x)
-{
-	return  expf(x);
-}
 		
-__device__ float2 exp(float2 x)
+__device__ float2 expf(float2 x)
 {
 	float xr= expf(x.x);
 	float yr= expf(x.y);
 	return make_float2(xr,yr);
 }
 
-__device__ float3 exp(float3 x)
+__device__ float3 expf(float3 x)
 {
 	float xr= expf(x.x);
 	float yr= expf(x.y);
@@ -1112,7 +1108,7 @@ __device__ float3 exp(float3 x)
 	return make_float3(xr,yr,zr);
 }
 		
-__device__ float4 exp(float4 x)
+__device__ float4 expf(float4 x)
 {
 	float xr= expf(x.x);
 	float yr= expf(x.y);
@@ -1121,19 +1117,15 @@ __device__ float4 exp(float4 x)
 	return make_float4(xr,yr,zr,wr);
 }
 		
-__device__ float exp2(float x)
-{
- 	return  powf(2.,x);
-}
 
-__device__ float2 exp2(float2 x)
+__device__ float2 exp2f(float2 x)
 {
  	float xr= powf(2.0,x.x);
  	float yr= powf(2.0,x.y);
  	return make_float2(xr,yr);
 }
 
-__device__ float3 exp2(float3 x)
+__device__ float3 exp2f(float3 x)
 {
  	float xr= powf(2.0,x.x);
  	float yr= powf(2.0,x.y);
@@ -1141,7 +1133,7 @@ __device__ float3 exp2(float3 x)
  	return make_float3(xr,yr,zr);
 }
 
-__device__ float4 exp2(float4 x)
+__device__ float4 exp2f(float4 x)
 {
  	float xr= powf(2.0,x.x);
  	float yr= powf(2.0,x.y);
@@ -1156,7 +1148,15 @@ __device__ float log2(float d) {
 
 __device__ float sin(float x)
 {
-	return sinf(x);
+    return sinf(x);
+}
+
+__device__ float2 sinf(float2 x)
+{
+	float v1,v2;
+	v1=sinf(x.x);
+	v2=sinf(x.y);
+	return make_float2(v1,v2);
 }
 
 __device__ float2 sin(float2 x)
@@ -1185,10 +1185,28 @@ __device__ float4 sin(float4 a)
 	v4=sinf(a.w);
 	return make_float4(v1,v2,v3,v4);
 }
+
+__device__ float4 sinf(float4 a)
+{
+	float v1,v2,v3,v4;
+	v1=sinf(a.x);
+	v2=sinf(a.y);
+	v3=sinf(a.z);
+	v4=sinf(a.w);
+	return make_float4(v1,v2,v3,v4);
+}
 		
 __device__ float cos(float x)
 {
 	return cosf(x);
+}
+
+__device__ float2 cosf(float2 x)
+{
+	float v1,v2;
+	v1=cosf(x.x);
+	v2=cosf(x.y);
+	return make_float2(v1,v2);
 }
 
 __device__ float2 cos(float2 x)
@@ -1235,24 +1253,19 @@ __device__ float length(float4 a)
 }
 
 
-__device__ float abs(float v)
-{
-	return (v>=0)?v:-v;
-}
-
 __device__ float2 abs(float2 v)
 {
-	return make_float2(v.x>=0?v.x:-v.x,v.y>=0?v.y:-v.y);
+	return make_float2(fabsf(v.x),fabsf(v.y));
 }
 
 __device__ float3 abs(float3 v)
 {
-	return make_float3(v.x>=0?v.x:-v.x,v.y>=0?v.y:-v.y,v.z>=0?v.z:-v.z);
+	return make_float3(fabsf(v.x),fabsf(v.y),fabsf(v.z));
 }
 
 __device__ float4 abs(float4 v)
 {
-	return make_float4(v.x>=0?v.x:-v.x,v.y>=0?v.y:-v.y,v.z>=0?v.z:-v.z,v.w>=0?v.w:-v.w);
+	return make_float4(fabsf(v.x),fabsf(v.y),fabsf(v.z),fabsf(v.w));
 }
 
 __device__ float sign(float v)
@@ -1300,50 +1313,51 @@ __device__ float3 cross(float3 x,float3 y)
 
 __device__ float mod(float x,float y)
 {
-	return fmodf(x,y);
+	return x- y*floorf(x/y);
 }
 
 __device__ float2 mod(float2 x,float y)
 {
 	float x1,y1;
-	x1=	fmodf(x.x,y);
-	y1=	fmodf(x.y,y);
+	x1=	x.x- y*floorf(x.x/y);
+	y1=	x.y- y*floorf(x.y/y);
 	return make_float2(x1,y1);
 }
 
 __device__ float2 mod(float2 x,float2 y)
 {
+
 	float x1,y1;
-	x1=	fmodf(x.x,y.x);
-	y1=	fmodf(x.y,y.y);
+	x1=	x.x- y.x*floorf(x.x/y.x);
+	y1=	x.y- y.y*floorf(x.y/y.y);
 	return make_float2(x1,y1);
 }
 
 __device__ float3 mod(float3 x,float y)
 {
 	float x1,y1,z1;
-	x1=	fmodf(x.x,y);
-	y1=	fmodf(x.y,y);
-	z1=	fmodf(x.z,y);
+	x1=	x.x- y*floorf(x.x/y);
+	y1=	x.y- y*floorf(x.y/y);
+	z1=	x.z- y*floorf(x.z/y);
 	return make_float3(x1,y1,z1);
 }
 
 __device__ float3 mod(float3 x,float3 y)
 {
 	float x1,y1,z1;
-	x1 = fmodf(x.x,y.x);
-	y1 = fmodf(x.y,y.y);
-	z1 = fmodf(x.z,y.z);
+	x1 = 	x.x- y.x*floorf(x.x/y.x);
+	y1 = 	x.y- y.y*floorf(x.y/y.y);
+	z1 = 	x.z- y.z*floorf(x.z/y.z);
 	return make_float3(x1,y1,z1);
 }
 
 __device__ float4 mod(float4 x,float y)
 {
 	float x1,y1,z1,w1;
-	x1=	fmodf(x.x,y);
-	y1=	fmodf(x.y,y);
-	z1=	fmodf(x.z,y);
-	w1=	fmodf(x.w,y);
+	x1=	x.x- y*floorf(x.x/y);
+	y1=	x.y- y*floorf(x.y/y);
+	z1=	x.z- y*floorf(x.z/y);
+	w1=	x.w- y*floorf(x.w/y);
 	return make_float4(x1,y1,z1,w1);
 }
 __device__ float step(float lim, float x)
@@ -1395,33 +1409,25 @@ __device__ float4 step(float4 lim, float4 x)
 	return make_float4(x1,y1,z1,w1);
 }
 
-__device__ float  floor(float v)
-{
-	return floorf(v);
-}
 		
-__device__ float2 floor(float2 v)
+__device__ float2 floorf(float2 v)
 {
 	return make_float2(floorf(v.x),floorf(v.y));
 }
 
-__device__ float3 floor(float3 v)
+__device__ float3 floorf(float3 v)
 {
 	return make_float3(floorf(v.x),floorf(v.y),floorf(v.z));
 }
 
-__device__ float4 floor(float4 v)
+__device__ float4 floorf(float4 v)
 {
 	return make_float4(floorf(v.x),floorf(v.y),floorf(v.z),floorf(v.w));
 }
 
-__device__ float trunc(float d) 
-{
-	return truncf(d);
-}
+	
 		
-		
-__device__ float2 trunc(float2 v)
+__device__ float2 truncf(float2 v)
 {
 	float x1,y1;
 	x1=truncf(v.x);
@@ -1429,7 +1435,7 @@ __device__ float2 trunc(float2 v)
 	return make_float2(x1,y1);
 }
 
-__device__ float3 trunc(float3 v)
+__device__ float3 truncf(float3 v)
 {
 	float x1,y1,z1;
 	x1=truncf(v.x);
@@ -1438,7 +1444,7 @@ __device__ float3 trunc(float3 v)
 	return make_float3(x1,y1,z1);
 }
 
-__device__ float4 trunc(float4 v)
+__device__ float4 truncf(float4 v)
 {
 	float x1,y1,z1,w1;
 	x1=truncf(v.x);
@@ -1448,12 +1454,8 @@ __device__ float4 trunc(float4 v)
 	return make_float4(x1,y1,z1,w1);
 }
 
-__device__ float round(float d) 
-{
-	return roundf(d);
-}
 		
-__device__ float2 round(float2 v)
+__device__ float2 roundf(float2 v)
 {
 	float x1,y1;
 	x1=roundf(v.x);
@@ -1461,7 +1463,7 @@ __device__ float2 round(float2 v)
 	return make_float2(x1,y1);
 }
 
-__device__ float3 round(float3 v)
+__device__ float3 roundf(float3 v)
 {
 	float x1,y1,z1;
 	x1=roundf(v.x);
@@ -1470,7 +1472,7 @@ __device__ float3 round(float3 v)
 	return make_float3(x1,y1,z1);
 }
 
-__device__ float4 round(float4 v)
+__device__ float4 roundf(float4 v)
 {
 	float x1,y1,z1,w1;
 	x1=roundf(v.x);
@@ -1479,14 +1481,9 @@ __device__ float4 round(float4 v)
 	w1=roundf(v.w);
 	return make_float4(x1,y1,z1,w1);
 }
-
-	__device__ float ceil(float d) 
-{
-	return ceilf(d);
-}
+	
 		
-		
-__device__ float2 ceil(float2 v)
+__device__ float2 ceilf(float2 v)
 {
 	float x1,y1;
 	x1=ceilf(v.x);
@@ -1494,7 +1491,7 @@ __device__ float2 ceil(float2 v)
 	return make_float2(x1,y1);
 }
 
-__device__ float3 ceil(float3 v)
+__device__ float3 ceilf(float3 v)
 {
 	float x1,y1,z1;
 	x1=ceilf(v.x);
@@ -1503,7 +1500,7 @@ __device__ float3 ceil(float3 v)
 	return make_float3(x1,y1,z1);
 }
 
-__device__ float4 ceil(float4 v)
+__device__ float4 ceilf(float4 v)
 {
 	float x1,y1,z1,w1;
 	x1=ceilf(v.x);
@@ -1519,10 +1516,7 @@ __device__ float fract(float x)
 
 __device__ float2 fract(float2 x)
 {
-	double xr,yr;
-	xr=x.x-floorf(x.x);
-	yr=x.y-floorf(x.y);
-	return make_float2(xr,yr);
+	return make_float2(x.x-floorf(x.x),x.y-floorf(x.y));
 }
 
 __device__ float3 fract(float3 x)
@@ -1547,30 +1541,30 @@ __device__ float4 fract(float4 x)
 __device__ float mix(float x,float y, float a)
 {
 	float z;
-	z= (x*(1-a) + y*a);
+	z= (x*(1.0f-a) + y*a);
 	return z;
 }
 
 __device__ float2 mix(float2 x,float2 y, float a)
 {
 	float x1,y1;
-	x1= (x.x*(1-a) + y.x*a);
-	y1= (x.y*(1-a) + y.y*a);
+	x1= (x.x*(1.0f-a) + y.x*a);
+	y1= (x.y*(1.0f-a) + y.y*a);
 	return make_float2(x1,y1);
 }  
 
 __device__ float3 mix(float3 x,float3 y, float a)
 {
-	return make_float3((x.x*(1-a) + y.x*a), (x.y*(1-a) + y.y*a), (x.z*(1-a) + y.z*a));
+	return make_float3((x.x*(1.0f-a) + y.x*a), (x.y*(1.0f-a) + y.y*a), (x.z*(1.0f-a) + y.z*a));
 }  
 
 __device__ float4 mix(float4 x,float4 y, float a)
 {
 	float vx,vy,vz,vw;
-	vx= (x.x*(1-a) + y.x*a);
-	vy= (x.y*(1-a) + y.y*a);
-	vz= (x.z*(1-a) + y.z*a);
-	vw= (x.w*(1-a) + y.w*a);
+	vx= (x.x*(1.0f-a) + y.x*a);
+	vy= (x.y*(1.0f-a) + y.y*a);
+	vz= (x.z*(1.0f-a) + y.z*a);
+	vw= (x.w*(1.0f-a) + y.w*a);
 	return make_float4(vx,vy,vz,vw);
 } 
 
@@ -1613,82 +1607,56 @@ __device__ float smootherstep(float edge0, float edge1, float x) {
 
 __device__ float smoothstep(float edge0, float edge1, float x)
 {
-	x= clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
-	return x * x * (3.0f - 2.0f * x);
+	float t= clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+	return t * t * (3.0f - 2.0f * t);
 }
 
-__device__ float2 smoothstep(float e0,float  e1, float2 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
+__device__ float2 smoothstep(float e0,float e1,float2 x)
 {
-	float x1,y1;
-	x1=smoothstep(e0,e1,x.x);
-	y1=smoothstep(e0,e1,x.y);
-	return make_float2(x1,y1);
+	return make_float2(smoothstep(e0,e1,x.x),smoothstep(e0,e1,x.y));
 }
 		
 		
-__device__ float2 smoothstep(float2 e0,float2 e1, float2 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
+__device__ float2 smoothstep(float2 e0,float2 e1, float2 x) 
 {
-	float x1,y1;
-	x1 =smoothstep(e0.x,e1.x,x.x);
-	y1 =smoothstep(e0.y,e1.y,x.y);
-	return make_float2(x1,y1);
+
+	return make_float2(smoothstep(e0.x,e1.x,x.x),smoothstep(e0.y,e1.y,x.y));
 }
-__device__ float3 smoothstep(float e0,float  e1, float3 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
+__device__ float3 smoothstep(float e0,float  e1, float3 x) 
 {
-	float x1,y1,z1;
-	x1=smoothstep(e0,e1,x.x);
-	y1=smoothstep(e0,e1,x.y);
-	z1=smoothstep(e0,e1,x.z);
-	return make_float3(x1,y1,z1);
+	return make_float3(smoothstep(e0,e1,x.x),smoothstep(e0,e1,x.y),smoothstep(e0,e1,x.z));
 }
 		
-__device__ float3 smoothstep(float3 e0,float3 e1, float3 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
+__device__ float3 smoothstep(float3 e0,float3 e1, float3 x) 
 {
-    float x1,y1,z1;
-	x1=smoothstep(e0.x,e1.x,x.x);
-	y1=smoothstep(e0.y,e1.y,x.y);
-	z1=smoothstep(e0.z,e1.z,x.z);
-	return make_float3(x1,y1,z1);
+	return make_float3(smoothstep(e0.x,e1.x,x.x),smoothstep(e0.y,e1.y,x.y),smoothstep(e0.z,e1.z,x.z));
 }
 
-__device__ float4 smoothstep(float e0,float e1, float4 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
+__device__ float4 smoothstep(float e0,float e1, float4 x) 
 {
-	float x1,y1,z1,w1;
-	x1=smoothstep(e0,e1,x.x);
-	y1=smoothstep(e0,e1,x.y);
-	z1=smoothstep(e0,e1,x.z);
-	w1=smoothstep(e0,e1,x.w);
-	return make_float4(x1,y1,z1,w1);
+	return make_float4(smoothstep(e0,e1,x.x),smoothstep(e0,e1,x.y),smoothstep(e0,e1,x.z),smoothstep(e0,e1,x.w));
 }
 		
-__device__ float4 smoothstep(float4 e0,float4 e1, float4 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
+__device__ float4 smoothstep(float4 e0,float4 e1, float4 x) 
 {
-	float x1,y1,z1,w1;
-	x1=smoothstep(e0.x,e1.x,x.x);
-	y1=smoothstep(e0.y,e1.y,x.y);
-	z1=smoothstep(e0.z,e1.z,x.z);
-	w1=smoothstep(e0.w,e1.w,x.w);
-	return make_float4(x1,y1,z1,w1);
+	return make_float4(smoothstep(e0.x,e1.x,x.x),smoothstep(e0.y,e1.y,x.y),smoothstep(e0.z,e1.z,x.z),smoothstep(e0.w,e1.w,x.w));
 }
 
 __device__ float distance(float2 v1,float2 v2)
 {
-		float2 dif=make_float2(0.0,0.0);
-		dif=v1-v2;
+		float2 dif=v1-v2;
 		return sqrt(dif.x*dif.x+dif.y*dif.y);
 }
 
 __device__ float distance(float3 v1,float3 v2)
 {
-	float3 dif=make_float3(0.0,0.0,0.0);
-	dif=v1-v2;
+	float3 dif=v1-v2;
 	return sqrt(dif.x*dif.x+dif.y*dif.y + dif.z*dif.z);
 }
 
 __device__ float distance(float4 v1,float4 v2)
 {
-	vec4 dif=make_float4(0.0,0.0,0.0,0.0);
-	dif=v1-v2;
+	float4 dif=v1-v2;
 	return sqrt(dif.x*dif.x+dif.y*dif.y + dif.z*dif.z + dif.w*dif.w);
 }
 
@@ -1716,10 +1684,6 @@ __device__ float4 normalize(float4 v1)
 	return make_float4(x,y,z,w);
 }
 
-__device__ float min(float x,float y)
-{
-	return fminf(x,y);
-}
 
 __device__ float2 min(float2 x, float2 y)
 {
@@ -1775,10 +1739,6 @@ __device__ float4 min(float4 x, float y)
 	return make_float4(x1,y1,z1,w1);
 }
 
-__device__ float  max(float x,float y)
-{
-	return fmaxf(x,y);
-}
 
 __device__ float2 max(float2 x,float2 y)
 {
@@ -1807,6 +1767,13 @@ __device__ float4 max(float4 x,float4 y)
 	return make_float4(v1,v2,v3,v4);
 }
 
+__device__ float2 fmaxf(float2 x,float y)
+{
+	float v1,v2;
+	v1=fmaxf(x.x,y);
+	v2=fmaxf(x.y,y);
+	return make_float2(v1,v2);
+}
 __device__ float2 max(float2 x,float y)
 {
 	float v1,v2;
@@ -1984,17 +1951,41 @@ __device__ void division(Mat3 *m, float v) {
   m->a22 /= v;
 }
 
-__device__ float greyscale(unsigned char r,unsigned char  g,unsigned char b)
+struct __align__(8) Mathc {
+	 float a;
+	 float b;
+	 float c;
+	 float d;
+	 float e;
+	 float f;	 
+};
+
+__device__ float greyscale(int r,int  g,int b)
 {
-  unsigned char lum,red,green,blue;
+  int lum,red,green,blue;
   red = (r * 0.299);         
   green = (g * 0.587);         
   blue = (b * 0.114);    
   lum = red + green + blue;    
-  return lum/255;
+  return (float)lum/255.0f;
 }
-//------------------------- JSI ------------------
 
+__device__ int3 dbl2int(float3 theColor)
+  	{
+  		int red   =  max(0, min(255, (int)floorf(theColor.x * 256.0f)));
+  		int green =  max(0, min(255, (int)floorf(theColor.y * 256.0f)));
+  		int blue  =  max(0, min(255, (int)floorf(theColor.z * 256.0f)));
+  		return make_int3(red,green,blue);
+  	}
+	
+	
+__device__ float3  hsv2rgb (float3 c) 
+	{
+	  float4 K = make_float4(1.0f, 2.0f / 3.0f, 1.0f / 3.0f, 3.0f);
+	  float3 p = abs(fract(make_float3(c.x,c.x,c.x)+(make_float3(K.x,K.y,K.z)))*(6.0f)-(make_float3(K.w,K.w,K.w)));
+	  return mix(make_float3(K.x,K.x,K.x), clamp(p - make_float3(K.x,K.x,K.x), 0.0f, 1.0f), c.y)*c.z;
+	}
+//------------------------- JSI ------------------
 
 
 struct __align__(8) Complex

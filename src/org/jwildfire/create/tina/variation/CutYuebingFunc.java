@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  CutYuebingFunc  extends VariationFunc  {
+public class  CutYuebingFunc  extends VariationFunc  implements SupportsGPU {
 
 	/*
 	 * Variation : cut_yuebing
@@ -140,9 +140,45 @@ public class  CutYuebingFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "	  float x,y;  "
+	    		+"		  if( varpar->cut_yuebing_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;		     "
+	    		+"		    }"
+	    		+"			float2 position = make_float2 (x* varpar->cut_yuebing_zoom ,y* varpar->cut_yuebing_zoom ); "
+	    		+"			float duration = sinf( varpar->cut_yuebing_p1 /2.0)* varpar->cut_yuebing_p2 ;"
+	    		+"			float color=0;"
+	    		+"			color += sinf(position.x*position.y*10000. * duration);"
+	    		+"		        "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_yuebing_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color<0.3)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color>=0.3 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_yuebing * x;"
+	    		+"		    __py = varpar->cut_yuebing * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_yuebing * __z;\n" : "");
+	  }
 }
 
 

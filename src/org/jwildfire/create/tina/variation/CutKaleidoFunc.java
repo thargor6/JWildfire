@@ -16,7 +16,7 @@ import js.glsl.vec4;
 
 
 
-public class CutKaleidoFunc  extends VariationFunc {
+public class CutKaleidoFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_kaleido
@@ -190,8 +190,63 @@ public class CutKaleidoFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		    float x,y;"
+	    		+"		    float2 ci[20];"
+	    		+"		    if( varpar->cut_kaleido_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;"
+	    		+"		    }"
+	    		+"		    "
+	    		+"		    float2 uv =make_float2(x* varpar->cut_kaleido_zoom ,y* varpar->cut_kaleido_zoom );"
+	    		+"		    "
+//	    		+"		    cut_kaleido_moveCenters();"
+	    		+"	        for(int i=0; i< varpar->cut_kaleido_n; i++)"
+	    		+"	        {"
+	    		+"	          float fi = 2.0*3.14*((float)i+0.02*varpar->cut_kaleido_time)/(float)(varpar->cut_kaleido_n);"
+	    		+"	          ci[i]= make_float2(0.5*sin(fi), 0.5*cos(fi));"
+	    		+"	        }"
+//	    		+"          float t=  cut_kaleido_avgDistance(uv)"
+				+"	 	    float d = 1.0;"
+				+"	        float k = 100.0+10.0*sin(varpar->cut_kaleido_time/5.0);"
+				+"	        for(int i=0; i<varpar->cut_kaleido_n; i++)    "
+				+"	     	    d+= sin(k*distance(uv,ci[i])); "
+	    		+"			float color = cut_kaleido_distToColor(d/(float)varpar->cut_kaleido_n);"
+	    		+"              	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_kaleido_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_kaleido * x;"
+	    		+"		    __py = varpar->cut_kaleido * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_kaleido * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__	float  cut_kaleido_distToColor (float d)"
+	    		+"{"
+	    		+"	    return (0.0f -cos(d*13.0));"
+	    		+"}";
+	  }	
 }
 

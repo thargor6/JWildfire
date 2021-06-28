@@ -17,7 +17,7 @@ import js.glsl.vec3;
 
 
 
-public class CutSWarpFunc  extends VariationFunc {
+public class CutSWarpFunc  extends VariationFunc implements SupportsGPU{
 
 	/*
 	 * Variation :cut_swarp
@@ -189,8 +189,75 @@ public class CutSWarpFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;  "
+	    		+"		  if( varpar->cut_swarp_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;		     "
+	    		+"		    }"
+	    		+"		    	    "
+	    		+"		    float2 uv = make_float2(x* varpar->cut_swarp_zoom ,y* varpar->cut_swarp_zoom );	"
+	    		+"		    "
+	    		+"		    float2 v0=uv*(5.)+(  cosf(uv*(11.)+( varpar->cut_swarp_time )))+( varpar->cut_swarp_time );"
+	    		+"		    float2 v1=sinf(v0);"
+	    		+"		    float t0=dot(v1, make_float2(0.5,0.5));"
+	    		+"		    uv = uv+(t0*.02);    "
+	    		+"		    uv.y += sinf(uv.x*7. + cos(uv.x*4. +  varpar->cut_swarp_time *2.)*1. +  varpar->cut_swarp_time )*.05;"
+	    		+"		    "
+	    		+"		    float s = (ceilf(uv.x)*2. - 1.);"
+	    		+"		    float m = 6.; "
+	    		+"		    uv.y += s/m;"
+	    		+"		    "
+	    		+"		    float n = 5.; "
+	    		+"		    float k = sinf(s*3.14159/2. + cut_swarp_dist(uv,varpar->cut_swarp_type)*n*m*3.14159/2.);"
+	    		+"		    "
+	    		+"		    float color=sqrt(max(k, 0.));"
+	    		+"		    "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_swarp_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.5)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.5)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_swarp * x;"
+	    		+"		    __py = varpar->cut_swarp * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_swarp * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  "__device__	float  cut_swarp_dist (float2 p,int type)"
+	    		+"	{   "
+	    		+"		float distance=0.0f;"
+	    		+"		if(type==0)"
+	    		+"	      distance= length(p); "
+	    		+"		p = abs(p); "
+	    		+"		if(type==1)"
+	    		+"			distance= max(p.x, p.y); "
+	    		+"		if(type==2)"
+	    		+"			distance=max(p.x*.8660254 + p.y*.5, p.y); "
+	    		+"		if(type==3)"
+	    		+"		    distance=max(max(p.x, p.y), (p.x + p.y)*.7071); "
+	    		+"		return distance;"
+	    		+"	}";
+	  }
 }
 

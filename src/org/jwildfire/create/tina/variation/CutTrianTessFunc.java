@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class CutTrianTessFunc  extends VariationFunc {
+public class CutTrianTessFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_triantess
@@ -308,8 +308,153 @@ double getColor(vec2 pos){
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		float x,y;"
+	    	    +"      float SRadius=0.01f;"
+	            +"      int pParam=3;"
+	            +"      int qParam=3;"
+	            +"      int rParam=4;"    
+//    U,V,W are the 'barycentric' coordinate for the vertex.
+	            +"      float U=varpar->cut_triantess_uBaryc;"
+	            +"      float V=varpar->cut_triantess_vBaryc;"
+	            +"      float W=varpar->cut_triantess_wBaryc;"
+	            +"      float3 nb,nc,p,q;"
+	  	        +"      float3 pA,pB,pC;"
+	  	        +"      float spaceType=0.0f;"
+	  	        +"      float aaScale = 0.0005;"
+	  	        +"      float backGroundColor=1.0f;"
+	  	        +"      float segColor = 0.0f;"
+	  	        
+	    		+"		if( varpar->cut_triantess_mode ==0)"
+	    		+"		{"
+	    		+"			x= __x;"
+	    		+"			y =__y;"
+	    		+"		}else"
+	    		+"		{"
+	    		+"			x=RANDFLOAT()-0.5;"
+	    		+"			y=RANDFLOAT()-0.5;		     "
+	    		+"		}"
+	    		+"		"
+	    		+"		float2 uv=make_float2(x* varpar->cut_triantess_zoom ,y* varpar->cut_triantess_zoom );"
+// init()
+	    		+"		spaceType=(float)(sign(varpar->cut_triantess_qParam*varpar->cut_triantess_rParam+varpar->cut_triantess_pParam*varpar->cut_triantess_rParam+varpar->cut_triantess_pParam*varpar->cut_triantess_qParam-varpar->cut_triantess_pParam*varpar->cut_triantess_qParam*varpar->cut_triantess_rParam));"
+	    		+"		float cospip=cosf(PI/(float)(varpar->cut_triantess_pParam)), sinpip=sinf(PI/(float)(varpar->cut_triantess_pParam));"
+	    		+"		float cospiq=cosf(PI/(float)(varpar->cut_triantess_qParam)), sinpiq=sinf(PI/(float)(varpar->cut_triantess_qParam));"
+	    		+"		float cospir=cosf(PI/(float)(varpar->cut_triantess_rParam)), sinpir=sinf(PI/(float)(varpar->cut_triantess_rParam));"
+	    		+"		float ncsincos=(cospiq+cospip*cospir)/sinpip;"
+//	    		+"		"
+	    		+"		nb=make_float3(-cospip,sinpip,0.);"
+	    		+"		nc=make_float3(-cospir,-ncsincos,sqrt(abs((ncsincos+sinpir)*(-ncsincos+sinpir))));"
+	    		+"		if(spaceType==0.){"
+	    		+"			nc.z=0.25;"
+	    		+"		}"
+	    		+"		pA=make_float3(nb.y*nc.z,-nb.x*nc.z,nb.x*nc.y-nb.y*nc.x);"
+	    		+"		pB=make_float3(0.,nc.z,-nc.y);"
+	    		+"		pC=make_float3(0.,0.,nb.y);"
+	    		+"		q=pA*(U)+(pB*(V))+(pC*(W));"
+	    		+"		p= cut_triantess_hnormalizet (q,spaceType);"
+//	    		
+//	   		    +"		float color=cut_triantess_getColor(uv);"
+                +"	    float color=backGroundColor;"	    		
+	    		+"	    float r=length(uv);"
+	    		+"	    float3 z3=make_float3(uv.x*2.0f , uv.y*2.0f, 1.-spaceType*r*r)*( 1./(1.+spaceType*r*r));"
+	    		+"	    if(spaceType==-1. && r>=1.) "
+	    		+"		   color=backGroundColor;"
+	    		+"	"
+//	    		+"	z3= cut_triantess_fold (z3);"
+	    		
+	    		+"		for(int i=0;i<varpar->cut_triantess_Iters;i++){"
+	    		+"			z3.x=abs(z3.x);"
+	    		+"			float t=-2.*fminf(0.,dot(nb,z3));"
+	    		+"			z3=z3+(nb*(make_float3(1.,1.,spaceType))*(t));"
+	    		+"			t=-2.*fminf(0.,dot(nc,z3));"
+	    		+"			z3=z3+(nc*(make_float3(1.,1.,spaceType))*(t));		"
+	    		+"		}"	    		
+	    		
+	    		+"	"
+//  end fold(z3)
+	    		+"	"
+	    		+"		float ds= cut_triantess_dist2Segments (z3, r , nb, nc,spaceType,p,varpar->cut_triantess_SRadius);"
+	    		+"		color=mix(segColor,color,smoothstep(-1.,1.,ds*0.5/aaScale));"
+	    		+"	"
+	    		+"	if(spaceType==-1.)"
+	    		+"		color=mix(backGroundColor,color,smoothstep(0.,1.,(1.-r)*0.5/aaScale));"	    		
 
+// end getColor(uv)
+	    		+"		__doHide=false;"
+	    		+"		if( varpar->cut_triantess_invert ==0)"
+	    		+"		{"
+	    		+"			if (color>0.0)"
+	    		+"			{ x=0;"
+	    		+"			y=0;"
+	    		+"			__doHide = true;	        "
+	    		+"			}"
+	    		+"		} else"
+	    		+"		{"
+	    		+"			if (color<=0.0)"
+	    		+"			{ x=0;"
+	    		+"			y=0;"
+	    		+"			__doHide = true;"
+	    		+"			}"
+	    		+"		}"
+	    		+"		__px = varpar->cut_triantess * x;"
+	    		+"		__py = varpar->cut_triantess * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_triantess * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  
+	    		 "__device__ float  cut_triantess_hdott (float3 a, float3 b,float spaceType)"
+	    		+"{"
+	    		+"		return dot(make_float2(a.x,a.y),make_float2(b.x,b.y))*(spaceType) + a.z*b.z;"
+	    		+"	}"
+	    		+"__device__ float hlengtht(float3 v, float spaceType){"
+	    		+"		return sqrt(abs( cut_triantess_hdott (v,v,spaceType)));"
+	    		+"	}"
+	    		+ "__device__ float3  cut_triantess_hnormalizet (float3 v,float spaceType)"
+	    		+"  {"  
+	    		+"		float l=1.0f/hlengtht(v,spaceType);"  
+	    		+"		return v*(l);" 
+	    		+"	}"
+	    		+"__device__	float  cut_triantess_hdots (float3 a, float3 b,float spaceType)"
+	    		+ "{"
+	    		+"		return dot(make_float2(a.x,a.y),make_float2(b.x,b.y))+spaceType*a.z*b.z;"
+	    		+"	}"
+	    		+""
+	    		+"__device__ float  cut_triantess_hlengths (float3 v,float spaceType){"
+	    		+"		return sqrt(abs( cut_triantess_hdots (v,v,spaceType)));"
+	    		+"	}"
+	    		+""
+	    		+"__device__	float  cut_triantess_DD (float tha, float r,float spaceType){"
+	    		+"		return tha*(1.+spaceType*r*r)/(1.+spaceType*spaceType*r*tha);"
+	    		+"	}"
+	    		+"__device__	float  cut_triantess_dist2Segment (float3 z, float3 n, float r,float3 p, float SRadius,float spaceType)"
+	    		+ "{"
+	    		+"		Mat2 smat;"
+	    		+"      float2 v1=make_float2( 1.0f                                ,-cut_triantess_hdots (p,n,spaceType));"
+	    		+"      float2 v2=make_float2(-cut_triantess_hdott (p,n,spaceType) ,1.0f                                );"
+	    		+"		Mat2_Init(&smat,v1.x ,v1.y, v2.x,v2.y);"
+	    		+"      float w1=cut_triantess_hdott (z,p,spaceType);"
+	    		+"      float w2=cut_triantess_hdots(z,n,spaceType);"
+	    		+"		float2 v=times(&smat, make_float2(w1,w2));"
+	    		+"		v.y=fminf(0.0f,v.y);"
+	    		+"		"
+	    		+"		float3 pmin= cut_triantess_hnormalizet (  (p*(v.x))+(n*(v.y)), spaceType );"
+	    		+"		float tha= cut_triantess_hlengths (pmin-z,spaceType)/hlengtht(pmin+z , spaceType);"
+	    		+"		return  cut_triantess_DD ((tha-SRadius)/(1.+spaceType*tha*SRadius),r, spaceType);"
+	    		+"	}"
+	    		+"	"
+	    		+"__device__ float  cut_triantess_dist2Segments (float3 z, float r, float3 nb,float3 nc, float spaceType,float3 p,float SRadius)"
+	    		+ "{"
+	    		+"	float da= cut_triantess_dist2Segment (z, make_float3(1.0f,0.0f,0.0f), r,p,SRadius,spaceType);"
+	    		+"	float db= cut_triantess_dist2Segment (z, nb, r,p,SRadius,spaceType);"
+	    		+"	float dc= cut_triantess_dist2Segment (z, nc*(make_float3(1.0f,1.0f,spaceType)), r,p,SRadius,spaceType);	"
+	    		+"	return fminf(fminf(da,db),dc);"
+	    		+"}";
+	  }
 }
 

@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  CutMetaBallsFunc  extends VariationFunc  {
+public class  CutMetaBallsFunc  extends VariationFunc  implements SupportsGPU {
 
 	/*
 	 * Variation : cut_metaballs
@@ -173,9 +173,75 @@ public class  CutMetaBallsFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		    float x,y,px_center,py_center;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_metaballs_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		      px_center=0.0;"
+	    		+"		      py_center=0.0;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT();"
+	    		+"		     y=RANDFLOAT();"
+	    		+"		      px_center=0.5;"
+	    		+"		      py_center=0.5;		     "
+	    		+"		    }"
+	    		+"  "
+	    		+"		    float2 st=make_float2(x* varpar->cut_metaballs_zoom ,y* varpar->cut_metaballs_zoom );"
+	    		+"		    "
+// test random2() method
+//	    		+"		    float2 t0 = cut_metaballs_random2(st);"    		
+//	    		+"		    float color=t0.y;"
+// original code	    		
+   		        +"          float color=0.0f;"
+	    		+"		    float2 i_st = floorf(st);"
+	    		+"		    float2 f_st = fract(st);"
+	    		+"		    float m_dist = 1.0f;  "
+	    		+"		    for (int j= -1; j <= 1; j++ ) {"
+	    		+"		        for (int i= -1; i <= 1; i++ ) {"
+    		    +"		            float2 neighbor = make_float2((float)i,(float)j);"
+	    		+"		            float2 offset = cut_metaballs_random2(i_st+neighbor);"
+	    		+"		            float2 tmp = offset*6.2831f + varpar->cut_metaballs_time;"
+	    		+"		            offset = sinf(tmp)*0.5f + 0.5f;"
+	    		+"		            float2 pos = neighbor + offset - f_st;"
+	    		+"		            float dist = length(pos);"
+	    		+"		            m_dist = fminf(m_dist, m_dist*dist);"
+	    		+"		        }"
+	    		+"		    }"
+	    		+"		    color += step(0.060, m_dist);"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_metaballs_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color==0.0f)"
+	    		+"		      { x=0.0f;"
+	    		+"		        y=0.0f;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color>0.0f )"
+	    		+"			      { x=0.0f;"
+	    		+"			        y=0.0f;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_metaballs * (x-px_center);"
+	    		+"		    __py = varpar->cut_metaballs * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_metaballs * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float2  cut_metaballs_random2 ( float2 p ) {"
+	    		+"  float2 tm=make_float2( dot(p,make_float2(127.1f,311.7f)) , dot(p,make_float2(269.5f,183.3f)) );"
+	    		+"      return fract(sinf(tm)*43758.5453f);"
+	    		+"    }";
+	  }
 }
 
 

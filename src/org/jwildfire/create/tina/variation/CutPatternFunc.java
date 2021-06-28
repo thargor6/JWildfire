@@ -17,7 +17,7 @@ import js.glsl.vec4;
 
 
 
-public class CutPatternFunc  extends VariationFunc {
+public class CutPatternFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_pattern
@@ -223,8 +223,90 @@ public class CutPatternFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		   float x,y;"
+	    		+"		   "
+	    		+"		    if( varpar->cut_pattern_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;"
+	    		+"		    }"
+	    		+"		    "
+	    		+"		     float2 uv = make_float2(x,y)*varpar->cut_pattern_zoom;"
+	    		+"           uv=fract(uv);"
+	    		+"		     uv = cut_pattern_rotateTilePattern(uv);"
+	    		+"		     "
+	    		+"		     float2 pos = make_float2(0.,5.)-( uv);"
+	    		+"		     float radius = length(pos);"
+	    		+"		     float angle = atan2(pos.x,pos.y);"
+	    		+"		     float r = sin(radius*sin(uv.y*PI*5.+ varpar->cut_pattern_time +cos(sin(uv.x*PI*3.)*PI*2.+sin(uv.y*PI*15.)))"
+	    		+"		                   *1.*sin(uv.y*PI+sin(uv.x*PI*5.)));"
+	    		+"		     "
+	    		+"		     float b = cos(r*PI*2.+PI*2.)*0.9+sin(r*PI*2.+PI*2.)*0.7;"
+	    		+"            "
+	    		+"		     float color=b;"
+	    		+"		     "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_pattern_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_pattern * x;"
+	    		+"		    __py = varpar->cut_pattern * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_pattern * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float2  cut_pattern_rotate2D  (float2 _st, float _angle) {"
+	    		+"       struct Mat2 m;"
+	    		+"	    _st =_st-(0.5);"
+	    		+"	     Mat2_Init(&m,cos(_angle),-sin(_angle),"
+	    		+"	                sin(_angle),cos(_angle));"
+	    		+ "     _st=times(&m,_st);"
+	    		+"	    _st =_st+( 0.5);"
+	    		+"	    return _st;"
+	    		+"	}"
+	    		+"   "
+	    		+"__device__	float2  cut_pattern_rotateTilePattern (float2 _st){"
+	    		+"	    "
+	    		+"	    _st =_st*( 2.0);"
+	    		+"	    "
+	    		+"	    float index = 0.0;"
+	    		+"	    index += step(1., mod(_st.x,2.0));"
+	    		+"	    index += step(1., mod(_st.y,2.0))*2.0;"
+	    		+"	    "
+	    		+"	    _st = fract(_st);"
+	    		+"	    "
+	    		+"	    if(index == 0.0){"
+	    		+"	    _st =  cut_pattern_rotate2D (_st,PI*2.*1./4.);"
+	    		+"	    }"
+	    		+"	    else if(index == 1.0){"
+	    		+"	         _st =  cut_pattern_rotate2D (_st,PI*2.*3./4.);"
+	    		+"	    } else if(index == 2.0){"
+	    		+"	         _st =  cut_pattern_rotate2D (_st,PI*2.*1./4.);"
+	    		+"	    } else if(index == 3.0){"
+	    		+"	        _st =  cut_pattern_rotate2D (_st,PI*2.*3./4.);"
+	    		+"	    }"
+	    		+"	    return _st;"
+	    		+"	}";
+	  }	
 }
 

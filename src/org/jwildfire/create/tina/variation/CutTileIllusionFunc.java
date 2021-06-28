@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  CutTileIllusionFunc  extends VariationFunc  {
+public class  CutTileIllusionFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation : cut_tileillusion
@@ -171,9 +171,82 @@ public class  CutTileIllusionFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;  "
+	    		+"		  if( varpar->cut_tileillusion_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;		     "
+	    		+"		    }"
+	    		+"   "
+	    		+"			float2 uv=make_float2(x* varpar->cut_tileillusion_zoom ,y* varpar->cut_tileillusion_zoom );"
+	    		+"		   float y0 = cut_tileillusion_solve(uv.y-3.,uv.y,  floorf(cut_tileillusion_f(uv.y))),"
+	    		+"		           y1 = cut_tileillusion_solve(uv.y,uv.y+3., floorf(cut_tileillusion_f(uv.y))+1.);"
+	    		+"		    uv.y = cut_tileillusion_f(uv.y);"
+	    		+"		    uv.x /= (y1-y0);"
+	    		+"		    float s = mod(floorf(uv.y),2.);"
+	    		+"		    float color = 0.;"
+	    		+"		    if (fract(uv.y)>.05) {"
+	    		+"		    	uv.x +=  varpar->cut_tileillusion_time *sign(s-.5);"
+	    		+"		    	float c = mod(floorf(uv.x)+floor(uv.y),2.);"
+	    		+"		    	color = c;"
+	    		+"		    }"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_tileillusion_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color==0.0)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color>0.0 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_tileillusion * x;"
+	    		+"		    __py = varpar->cut_tileillusion * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_tileillusion * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  "__device__		float  cut_tileillusion_f (float x)"
+	    		+"	{ "
+	    		+"		return x + .1*sinf(1.6*x); "
+	    		+"	}"
+	    		+"__device__	float  cut_tileillusion_solve (float x0,float x1,float y) {"
+	    		+"	    float y0= cut_tileillusion_f (x0), y1= cut_tileillusion_f (x1);"
+	    		+"	    if (y1<y0)"
+	    		+"	    { "
+	    		+"	    	float x2=x1;x1=x0;x0=x2;"
+	    		+"	    	float y2=y1;y1=y0;y0=y2; "
+	    		+"	    }"
+	    		+"	    float xn=0., yn=0.;"
+	    		+"	    for (int i=0; i<20; i++) {"
+	    		+"		    xn = x0 + (x1-x0)/(y1-y0)*(y-y0);"
+	    		+"		    yn= cut_tileillusion_f (xn);"
+	    		+"	        if (yn>y) "
+	    		+"	        { x1=xn; "
+	    		+"	           y1=yn;"
+	    		+"	        } else"
+	    		+"	        { x0=xn;"
+	    		+"	          y0=yn; "
+	    		+"	        }"
+	    		+"	     }"
+	    		+"	    return xn;"
+	    		+"	}";
+	  }
 }
 
 

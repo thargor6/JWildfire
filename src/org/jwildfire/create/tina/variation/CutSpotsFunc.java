@@ -15,7 +15,7 @@ import js.glsl.vec2;
 
 
 
-public class CutSpotsFunc  extends VariationFunc {
+public class CutSpotsFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_spots
@@ -198,8 +198,93 @@ public class CutSpotsFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;  "
+	    		+"		  "
+	    		+"		  if( varpar->cut_spots_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=2.0*RANDFLOAT()-1.0;"
+	    		+"		     y=2.0*RANDFLOAT()-1.0;		     "
+	    		+"		    }"
+	    		+"		    float2 uv =make_float2(x* varpar->cut_spots_zoom *43.0,y* varpar->cut_spots_zoom *43.0);"
+	    		+"            float black=0.0;"
+	    		+"            float white=1.0;"
+	    		+"            float f=cut_spots_fbm(uv);"
+	    		+"            float color=0.0;"
+	    		+"            "
+	    		+"            if(f<0.4)"
+	    		+"            {"
+	    		+"            	float f2=cut_spots_fbm( make_float2(uv.y,uv.x)+(make_float2( 1.0,1.0) )) / 2.25;"
+	    		+"            	color=mix(white, white, cut_spots_remap(0.25, 0.38, 0.0, 1.0, f - 0.06));"
+	    		+"            	if(f<f2)"
+	    		+"            	  color=white;"
+	    		+"            }"
+	    		+"            else"
+	    		+"            {"
+	    		+"              color=black;	"
+	    		+"            }"
+	    		+" 	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_spots_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color==0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color>0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_spots * x;"
+	    		+"		    __py = varpar->cut_spots * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_spots * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  "__device__	float  cut_spots_random  ( float2 st) {"
+	    		+"	    return fract(sinf(dot(make_float2(st.x,st.y), make_float2(12.9898,78.233)))* 43758.5453123);"
+	    		+"	}"
+	    		+"__device__	float  cut_spots_noise  (float2 st) {"
+	    		+"	    float2 i = floorf(st);"
+	    		+"	    float2 f = fract(st);"
+	    		+"	    float a =  cut_spots_random (i);"
+	    		+"	    float b =  cut_spots_random (i+(make_float2(1.0, 0.0)));"
+	    		+"	    float c =  cut_spots_random (i+(make_float2(0.0, 1.0)));"
+	    		+"	    float d =  cut_spots_random (i+(make_float2(1.0, 1.0)));"
+	    		+"	    float2 u = f*(f)*( (make_float2(3.0,3.0)-( f*(2.0))) );"
+	    		+"	   "
+	    		+"	    return mix(a, b, u.x) +"
+	    		+"	            (c - a)* u.y * (1.0 - u.x) +"
+	    		+"	            (d - b) * u.x * u.y;"
+	    		+"	}"
+	    		+"	"
+	    		+"__device__	float  cut_spots_fbm  ( float2 st) {"
+	    		+"	    float value = 0.0;"
+	    		+"	    float amplitude = .5;"
+	    		+"	    float frequency = 0.;"
+	    		+"	    for (int i = 0; i < 6; i++) {"
+	    		+"	        value += amplitude *  cut_spots_noise (st);"
+	    		+"	        st =st*(2.);"
+	    		+"	        amplitude *= .5;"
+	    		+"	    }"
+	    		+"	    return value;"
+	    		+"	}"
+	    		+"__device__	float  cut_spots_remap (float low1, float high1, float low2, float high2, float value) {"
+	    		+"		return low2 + (value - low1) * (high2 - low2) / (high1 - low1);"
+	    		+"	}";
+	  }
 }
 

@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  CutXFunc  extends VariationFunc  {
+public class  CutXFunc  extends VariationFunc  implements SupportsGPU {
 
 	/*
 	 * Variation : cut_x
@@ -152,9 +152,67 @@ public class  CutXFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;  "
+	    		+"		  if( varpar->cut_x_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.50;"
+	    		+"		     y=RANDFLOAT()-0.50;		     "
+	    		+"		    }"
+	    		+"			float2 uv = make_float2 (x,y);"
+	    		+"			uv=uv* varpar->cut_x_zoom ;"
+	    		+"			"
+	    		+"		    float2 st = abs(uv);"
+	    		+"		    float color = 0.0f;"
+	    		+"		    "
+	    		+"		    float line = 0.0f;	 "
+	    		+"		    float movement = 0.0f;"
+	    		+"		    movement =  varpar->cut_x_size ;"
+	    		+"          Mat2 mat;"
+	    		+"          mat=cut_x_rot(PI/4.0f);"
+	    		+"		    st = times(&mat,st);"
+	    		+"		    st = abs(st);"
+	    		+"		    st.y-= movement;"
+	    		+"		    line = smoothstep(0.0,0.009, st.y) ;"
+	    		+"		    color = mix(color,1.,line);    "
+	    		+"		     "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_x_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color<0.1)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color>=0.1 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_x * x;"
+	    		+"		    __py = varpar->cut_x * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_x * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  "__device__ Mat2  cut_x_rot (float a)"
+	    		+"{"
+	    		+ "  Mat2 m;"
+	    		+"   Mat2_Init (&m, cosf(a), -sinf(a), sinf(a), cosf(a));"
+	    		+"   return m;"
+	    		+"}";
+	  }
 }
 
 

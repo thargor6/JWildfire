@@ -15,7 +15,7 @@ import js.glsl.vec2;
 
 
 
-public class CutTruchetFunc  extends VariationFunc {
+public class CutTruchetFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_truchet
@@ -198,9 +198,87 @@ public class CutTruchetFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;  "
+	    		+"		  if( varpar->cut_truchet_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;		     "
+	    		+"		    }"
+	    		+"		 "
+	    		+"		    float2 st =make_float2(x* varpar->cut_truchet_zoom ,y* varpar->cut_truchet_zoom );"
+	    		+"		    float2 h = make_float2(floor(7.* varpar->cut_truchet_seed ),floor(7.* varpar->cut_truchet_seed ));"
+	    		+"			float2 ipos = floor(st+(h*(cut_truchet_random2(h)))); "
+	    		+"			float2 fpos = fract(st+(h*(cut_truchet_random2(h)))); "
+	    		+"		    "
+	    		+"		      float2 tile = cut_truchet_truchetPattern(fpos, cut_truchet_random( ipos));"
+	    		+"		      float color = 0.0;"
+	    		+"		      if( varpar->cut_truchet_type ==0)"
+	    		+"		      { "
+	    		+"		        color = smoothstep(tile.x-0.3,tile.x,tile.y)-"
+	    		+"		                smoothstep(tile.x,tile.x+0.3,tile.y);"
+	    		+"		      } else if( varpar->cut_truchet_type ==1)"
+	    		+"		      { "
+	    		+"		    	  color = (step(length(tile),0.6) -"
+	    		+"		                   step(length(tile),0.4) ) +"
+	    		+"		                  (step(length(tile-(make_float2(1.0f,1.0f))),0.6) -"
+	    		+"		                   step(length(tile-(make_float2(1.0f,1.0f))),0.4) );"
+	    		+"		      } else if( varpar->cut_truchet_type ==2)"
+	    		+"		      {"
+	    		+"		    	  color = step(tile.x,tile.y);"
+	    		+"		      }"
+	    		+"              	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_truchet_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color==0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color>0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_truchet * x;"
+	    		+"		    __py = varpar->cut_truchet * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_truchet * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__  float  cut_truchet_random  (float2 st)"
+	    		+"	{"
+	    		+"		return fract(sinf(dot(make_float2(st.x,st.y),make_float2(12.9898,78.233)))*43758.5453123);"
+	    		+"	}"
+	    		+"__device__  float2  cut_truchet_random2 ( float2 p ) {"
+	    		+"		return fract(sinf(make_float2(dot(p,make_float2(127.1,311.7)),dot(p,make_float2(269.5,183.3))))*(43758.5453));"
+	    		+"	}"
+	    		+"	"
+	    		+"		"
+	    		+"__device__ float2  cut_truchet_truchetPattern ( float2 _st,  float _index)"
+	    		+"	{"
+	    		+"		_index = fract(((_index-0.5)*2.0));"
+	    		+"		if (_index > 0.75) {"
+	    		+"			_st = make_float2(1.0f,1.0f)-(_st);"
+	    		+"		} else if (_index > 0.5) {"
+	    		+"			_st = make_float2(1.-_st.x,_st.y);"
+	    		+"		} else if (_index > 0.25) {"
+	    		+"			_st = make_float2(1.0f,1.0f)-(make_float2(1.0-_st.x,_st.y));"
+	    		+"		}"
+	    		+"		return _st;"
+	    		+"	} ";
+	  }	
 
 }
 

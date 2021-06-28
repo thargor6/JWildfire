@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  CutRGridFunc  extends VariationFunc  {
+public class  CutRGridFunc  extends VariationFunc  implements SupportsGPU {
 
 	/*
 	 * Variation : cut_rgrid
@@ -158,9 +158,66 @@ public class  CutRGridFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;  "
+	    		+"		  if( varpar->cut_rgrid_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;"
+	    		+"		    }"
+	    		+"		    float pi = acosf(-1.);"
+	    		+"			float2 p=make_float2(x* varpar->cut_rgrid_zoom ,y* varpar->cut_rgrid_zoom );"
+	    		+"		    float th = mod( varpar->cut_rgrid_angle  * PI / 180., PI * 2.);"
+	    		+"		    float gridsize = (.5 + fabsf(sin(th * 2.)) * (sqrt(2.) / 2. - .5)) * 2.;"
+	    		+"		    int flip = 0;"
+	    		+"		    if(fract(th / pi + .25) > .5)"
+	    		+"		    {"
+	    		+"		        p = p-(.5);"
+	    		+"		        flip = 1;"
+	    		+"		    }"
+	    		+"		    p = p*(gridsize);"
+	    		+"		    float2 cp = floorf(p/(gridsize));"
+	    		+"		    p = mod(p, gridsize)-(gridsize / 2.);"
+	    		+"		    p = p*(mod(cp, 2.)*( 2.)-( 1.));"
+	    		+"          Mat2 m;"
+	    		+"          Mat2_Init(&m, cos(th), sin(th), -sin(th), cos(th));"
+	    		+"		    p = times(&m,p);"
+	    		+"		    float w =  varpar->cut_rgrid_zoom  / 2000. * 1.5;   "
+	    		+"		    float color = smoothstep(-w, +w, fmaxf(fabsf(p.x), fabsf(p.y)) - .5);"
+	    		+"		    if(flip==1)"
+	    		+"		        color = 1. - color;"
+	    		+"		    if(flip==1 && color < .5 && (fabsf(p.x) - fabsf(p.y)) * sign(fract(th / pi) - .5) > 0.)"
+	    		+"		        color = .4;"
+	    		+"		    if(flip==0 && color < .5 && (mod(cp.x + cp.y, 2.) - .5) > 0.)"
+	    		+"		        color = .4;"
+	    		+"		    "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_rgrid_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color==0.0)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color>0.0 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_rgrid * x;"
+	    		+"		    __py = varpar->cut_rgrid * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_rgrid * __z;\n" : "");
+	  }
 }
 
 

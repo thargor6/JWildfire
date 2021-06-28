@@ -17,7 +17,7 @@ import js.glsl.vec3;
 
 
 
-public class CutSnowflakeFunc  extends VariationFunc {
+public class CutSnowflakeFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_snowflake
@@ -168,8 +168,54 @@ public class CutSnowflakeFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;  "
+	    		+"		  if( varpar->cut_snowflake_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;		     "
+	    		+"		    }"
+	    		+"		    	    "
+	    		+"		    float2 uv = make_float2(x* varpar->cut_snowflake_zoom ,y* varpar->cut_snowflake_zoom );	"
+	    		+"		    float s = .25, f = .0, k = f;"
+	    		+"		    float3 p = make_float3(uv.x,uv.y, sinf( varpar->cut_snowflake_time  * .4) * .5 - .5)*s;"
+	    		+"		        "
+	    		+"		    for( int i=0; i<  varpar->cut_snowflake_level ; i++ )"
+	    		+"		    {"
+	    		+"		           p = abs(p)/(dot(p,p))-1.65;"
+	    		+"		           k = length(p) ;"
+	    		+"		           p = p*(k)+(k);"
+	    		+"		   }"
+	    		+"		   "
+	    		+"		   f = dot(p,p)* s;"
+	    		+"		    float color=f;"
+	    		+"		    "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_snowflake_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.5)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.5)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_snowflake * x;"
+	    		+"		    __py = varpar->cut_snowflake * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_snowflake * __z;\n" : "");
+	  }
 }
 

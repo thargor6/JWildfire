@@ -15,7 +15,8 @@ import js.glsl.vec2;
 
 
 
-public class CutBTreeFunc  extends VariationFunc {
+public class CutBTreeFunc  extends VariationFunc  implements SupportsGPU {
+
 
 	/*
 	 * Variation :cut_btree
@@ -160,8 +161,52 @@ public class CutBTreeFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return  "float x,y;  "
+	    		+"		  if( varpar->cut_btree_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=2.0*RANDFLOAT()-1.0;"
+	    		+"		     y=2.0*RANDFLOAT()-1.0;"
+	    		+"		    }"
+	    		+"		    "
+	    		+"		    float2 w =make_float2(x* varpar->cut_btree_zoom ,y* varpar->cut_btree_zoom );"
+	    		+"		    float2 t = w/w*(fract( varpar->cut_btree_time )) ;"
+	    		+"		    float2 l = w*w*(5.0f)-t;"
+	    		+"		    t=t+1.0;"
+	    		+"		    float2 m = exp2f( ceilf(l) )*t;  "
+	    		+"		    w= fract( m*w.x)-0.5;"
+	    		+"		    float2 t0=sign(w)/(4.);"
+	    		+"			float2 t1=abs( smoothstep(0., 1., fract(l))*t0-w);"
+	    		+"		    float2 t2=( m/t1/(100.0* varpar->cut_btree_thickness));"
+	    		+"		    "
+	    		+"		    float color = t2.y;"
+	    		+"              	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_btree_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.5)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.5)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_btree * x;"
+	    		+"		    __py = varpar->cut_btree * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_btree * __z;\n" : "");
+	  }
 }
 

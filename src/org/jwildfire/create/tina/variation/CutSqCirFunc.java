@@ -22,7 +22,7 @@ import js.glsl.vec4;
 
 
 
-public class  CutSqCirFunc  extends VariationFunc  {
+public class  CutSqCirFunc  extends VariationFunc implements SupportsGPU  {
 	  private static final long serialVersionUID = 1L;
 
 	/*
@@ -143,9 +143,48 @@ public class  CutSqCirFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;  "
+	    		+"		  if( varpar->cut_sqcir_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;		     "
+	    		+"		    }"
+	    		+"		       "
+	    		+"			float2 uv=make_float2(x* varpar->cut_sqcir_zoom ,y* varpar->cut_sqcir_zoom );"
+	    		+"		    int color=0;"
+	    		+"		    float lhs =  pow(abs(uv.x-uv.y),  varpar->cut_sqcir_power ) +   pow(abs(uv.y+uv.x),  varpar->cut_sqcir_power );"
+	    		+"		    float rhs = 1.0f;   "
+	    		+"		    color = (lhs <= rhs)?1:0;"
+	    		+"		    "
+	    		+"		    __doHide=false;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_sqcir_invert ==0)"
+	    		+"		    {"
+	    		+"		      if ( color==0)"
+	    		+"		      { x=0.0f;"
+	    		+"		        y=0.0f;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color==1)"
+	    		+"			      { x=0.0f;"
+	    		+"			        y=0.0f;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_sqcir * x;"
+	    		+"		    __py = varpar->cut_sqcir * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_sqcir * __z;\n" : "");
+	  }
 }
 
 

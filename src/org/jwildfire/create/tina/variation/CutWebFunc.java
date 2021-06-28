@@ -17,7 +17,7 @@ import js.glsl.vec4;
 
 
 
-public class CutWebFunc  extends VariationFunc {
+public class CutWebFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_web
@@ -175,8 +175,64 @@ public class CutWebFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		    float x,y;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_web_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=2.0*RANDFLOAT()-1.0;"
+	    		+"		     y=2.0*RANDFLOAT()-1.0;	     "
+	    		+"		    }"
+	    		+"		    "
+	    		+"    	    float2 u =make_float2(x*0.5f,y*0.5f);"
+	    		+"          float color=cut_web_getColour(u,varpar->cut_web_time,varpar->cut_web_thick);"
+	    		+"              	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_web_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_web * (x);"
+	    		+"		    __py = varpar->cut_web * (y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_web * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__	float2  cut_web_eval ( float2 p, float2 c, float strength )"
+	    		+"	{"
+	    		+"	    p = p-(c);"
+	    		+"	    float l = log( length( p ) );"
+	    		+"	    float ang = atan2( p.y, p.x );"
+	    		+"	    return make_float2( l, ang )*( strength );"
+	    		+"	}"
+	    		+"__device__	float  cut_web_getColour ( float2 p , float time , float thick )"
+	    		+"	{"
+	    		+"      float fac=10.0/(2.0*PI);"
+	    		+"	    float2 ep =  cut_web_eval ( p, make_float2( 0.0, 0.0 ), 1.0 ); "
+	    		+"	    "
+	    		+"	    float d = ep.x * 0.05*fac;"
+	    		+"	    ep = ep+(make_float2(-ep.y,ep.x)*(4.0));"
+	    		+"		float2 si = smoothstep(make_float2(-0.5f*d,-0.5f*d),make_float2(0.5f*d,0.5f*d),abs(mod(ep*(fac)+(time) ,2.0)-(1.))-(thick));  "
+	    		+"	    return 1.- (1.- (si.x+si.y));"
+	    		+"	}";
+	  }	
 }
 

@@ -16,7 +16,7 @@ import js.glsl.vec4;
 
 
 
-public class CutFractalFunc  extends VariationFunc {
+public class CutFractalFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_fractal
@@ -160,8 +160,48 @@ public class CutFractalFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return  "		    float x,y;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_fractal_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5; 		     "
+	    		+"		    }"
+	    		+"		    "
+	    		+"		    float2 c = make_float2(cos( varpar->cut_fractal_time +1.5), sin( varpar->cut_fractal_time +1.8) )*(0.15)-(0.25);"
+	    		+"		    float2 t =make_float2(x* varpar->cut_fractal_zoom ,y* varpar->cut_fractal_zoom );"
+	    		+"            "
+	    		+"          float2 U=make_float2(t.y,t.x);"
+	    		+"          for (int i=0; i<  varpar->cut_fractal_iters ; i++)"
+	    		+"              U = abs(U)*( 0.5/ dot(U, U))+(c);"
+	    		+"            "
+	    		+"          float color=fabsf(dot(U, U) - .01) *2.;"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_fractal_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.5)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.5)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_fractal * (x);"
+	    		+"		    __py = varpar->cut_fractal * (y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_fractal * __z;\n" : "");
+	  }
 }
-

@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class CutAlienTextFunc  extends VariationFunc {
+public class CutAlienTextFunc  extends VariationFunc  implements SupportsGPU {
 
 	/*
 	 * Variation :cut_alientext
@@ -37,7 +37,7 @@ public class CutAlienTextFunc  extends VariationFunc {
 
 	private static final String PARAM_SEED = "seed";	
 	private static final String PARAM_MODE = "mode";
-	private static final String PARAM_SUBDIVS = "subdivisons";
+	private static final String PARAM_SUBDIVS = "subdivisions";
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_INVERT = "invert";
 	
@@ -196,8 +196,89 @@ public class CutAlienTextFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return    "	    float x,y,px_center,py_center,x0=0.0,y0=0.0;\r\n"
+	    		+"		    if( varpar->cut_alientext_mode ==0)\n"
+	    		+"		    {\n"
+	    		+"		      x= __x;\n"
+	    		+"		      y =__y;\n"
+	    		+"		      px_center=0.0;\n"
+	    		+"		      py_center=0.0;\n"
+	    		+"		    }else\n"
+	    		+"		    {\n"
+	    		+"		     x=RANDFLOAT();\n"
+	    		+"		     y=RANDFLOAT();\n"
+	    		+"		      px_center=0.5;\n"
+	    		+"		      py_center=0.5;\n"
+	    		+"		    }\n"
+	    		+"		    \n"
+	    		+"          float2 uv=make_float2(x* varpar->cut_alientext_zoom ,y * varpar->cut_alientext_zoom);\n"
+	    		+"          uv=uv+make_float2(x0,y0);\n"
+	    		+"          uv.y=uv.y-y0;\n"	    		
+	    		+"		    float dims=2.0;\n"
+	    		+"		    float cellRand;\n"
+	    		+"		    float2 ij;\n"
+	    		+"		    \n"
+	    		+"		   	for(int i = 0; i <= varpar->cut_alientext_subdivisions ; i++) { \n"
+	    		+"		        ij =cut_alientext_getCellIJ (uv, dims);\n"
+	    		+"		        cellRand =cut_alientext_random2d (ij);\n"
+	    		+"		        dims *= 2.0;\n"
+	    		+"		        float cellRand2 =cut_alientext_random2d (ij+( 454.4543));\n"
+	    		+"		        if (cellRand2 > 0.3){\n"
+	    		+"		        	break; \n"
+	    		+"		        }\n"
+	    		+"		    }\n"
+	    		+"		   \n"
+	    		+"		    float color =cut_alientext_letter (uv, 1.0 / (dims));\n"
+	    		+"            \n"
+	    		+"		    __doHide=false;\n"
+	    		+"		    if( varpar->cut_alientext_invert ==0)\n"
+	    		+"		    {\n"
+	    		+"		      if (color>0.0)\n"
+	    		+"		      { x=0.0;\n"
+	    		+"		        y=0.0;\n"
+	    		+"		        __doHide = true;	        \n"
+	    		+"		      }\n"
+	    		+"		    } else\n"
+	    		+"		    {\n"
+	    		+"			      if (color<=0.0)\n"
+	    		+"			      { x=0.0;\n"
+	    		+"			        y=0.0;\n"
+	    		+"			        __doHide = true;\n"
+	    		+"			      }\n"
+	    		+"		    }\n"
+	    		+"		    __px = varpar->cut_alientext * (x-px_center);\n"
+	    		+"		    __py = varpar->cut_alientext * (y-py_center);\n"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_alientext * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float cut_alientext_random2d (float2 n) \n"
+	    		+"	{ \n"
+	    		+"		return fract(sin(dot(n, make_float2(129.9898, 4.1414))) * 2398.5453);\n"
+	    		+"	}\n"
+	    		+"\n"
+	    		+"	__device__ float2 cut_alientext_getCellIJ (float2 uv, float gridDims){\n"
+	    		+"		return floorf(uv*(gridDims))/(gridDims);\n"
+	    		+"	}\n"
+	    		+"\n"
+	    		+"__device__ float cut_alientext_letter (float2 coord, float size)\n"
+	    		+"	{\n"
+	    		+"		float2 gp = floorf(coord/(size)*(7.));\n"
+	    		+"		float2 rp = floorf(fract(coord/(size))*(7.)); \n"
+	    		+"		float2 odd = fract(rp*(0.5))*( 2.);\n"
+	    		+"		float rnd = cut_alientext_random2d (gp);\n"
+	    		+"		float c = fmaxf(odd.x, odd.y) * step(0.5, rnd);\n"
+	    		+"		c += fminf(odd.x, odd.y); \n"
+	    		+"		c *= rp.x * (6. - rp.x); \n"
+	    		+"		c *= rp.y * (6. - rp.y);\n"
+	    		+"		return clamp(c, 0., 1.);\n"
+	    		+"	}\n";
+	  }	
 }
 

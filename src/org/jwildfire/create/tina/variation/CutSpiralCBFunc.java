@@ -18,7 +18,7 @@ import js.glsl.vec4;
 
 
 
-public class CutSpiralCBFunc  extends VariationFunc {
+public class CutSpiralCBFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_spiralcb
@@ -164,8 +164,81 @@ public class CutSpiralCBFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		    float x,y,px_center,py_center;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_spiralcb_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=2.0*RANDFLOAT()-1.0;"
+	    		+"		     y=2.0*RANDFLOAT()-1.0;"
+	    		+"		     "
+	    		+"		    }"
+	    		+"		    "
+	    		+"		    float2 uv =make_float2(x* varpar->cut_spiralcb_zoom ,y* varpar->cut_spiralcb_zoom );"
+// test rotate & hill
+//	    		+"   float color=1.0;"
+//	    		+"			Mat2 m;"
+//	    		+"			m= cut_spiralcb_rotate (varpar->cut_spiralcb_time*7.0);"
+//	    		+"			uv = times(&m,uv);"
+//	    		+"	    	float fi = length (uv) * 50.0;"
+//	    		+"          color=cut_spiralcb_hill (0.0, fi/25.0, uv.y);"
+// original code
+                +"		    float color=cut_spiralcb_compute_spiral (uv,  varpar->cut_spiralcb_time );"
+	    		+"              	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_spiralcb_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_spiralcb * x;"
+	    		+"		    __py = varpar->cut_spiralcb * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_spiralcb * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return "__device__ Mat2  cut_spiralcb_rotate (float spin)"
+	    		+" {"
+	    		+"  Mat2 m;"
+	    		+"  Mat2_Init(&m,-sinf(spin),cosf(spin),cosf(spin),sinf(spin));"
+	    		+"  return m;"
+	    		+" }"
+	    		+"		 "
+	    		+"__device__ float  cut_spiralcb_hill  (float t, float w, float p)"
+	    		+"{	"
+	    		+"	 return fminf (step (t-w/2.0,p), 1.0 - step (t+w/2.0,p));"
+	    		+"}"
+	    		+"	  "
+	    		+"__device__ float  cut_spiralcb_compute_spiral  (float2 uv, float time)"
+	    		+"{"
+	    		+"			float fi = length (uv) * 50.0;"
+	    		+"			float g = atan2 (uv.y, uv.x);"
+	    		+"			Mat2 m;"
+	    		+"			m= cut_spiralcb_rotate (time*7.0);"
+	    		+"			uv = times(&m,uv);"
+	    		+"			uv =uv*( sinf (g*15.0));"
+	    		+"          Mat2 m1=cut_spiralcb_rotate  (fi);"
+	    		+"			uv = times(&m1, uv);"
+	    		+"			return mix (1.0, 0.0, fminf (step (0.0, uv.x),  cut_spiralcb_hill (0.0, fi/25.0, uv.y)));"
+	    		+"}";
+	  }
 }
 

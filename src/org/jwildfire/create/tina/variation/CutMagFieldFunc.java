@@ -15,7 +15,7 @@ import js.glsl.vec2;
 
 
 
-public class CutMagFieldFunc  extends VariationFunc {
+public class CutMagFieldFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_magfield
@@ -29,7 +29,7 @@ public class CutMagFieldFunc  extends VariationFunc {
 
 	private static final String PARAM_SEED = "randomize";
 	private static final String PARAM_TIME = "time";
-	private static final String PARAM_DENSITY = "linesDensity";
+	private static final String PARAM_DENSITY = "density";
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_MODE = "mode";
 	private static final String PARAM_INVERT = "invert";
@@ -85,7 +85,7 @@ public class CutMagFieldFunc  extends VariationFunc {
 	  	return v;
 	}
 
-	double calcDerivitive(vec2 v, vec2 p) {
+	double calcDerivative(vec2 v, vec2 p) {
 	    double d = 2. / 600.0;
 		return (
 	          G.length(v.minus(calcVelocity(p.plus(new vec2(0,d)) )))
@@ -123,7 +123,7 @@ public class CutMagFieldFunc  extends VariationFunc {
             // create stripes
             lines = Math.min(lines, 1. - lines) * 2.;
             // thin stripes into lines
-           	lines /= calcDerivitive(v, p) / spacing;
+           	lines /= calcDerivative(v, p) / spacing;
             // maintain constant line width across different screen sizes
            	lines -= 1000.0 * .0005;
             // don't blow out contrast when blending below
@@ -223,8 +223,159 @@ public class CutMagFieldFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;"
+	    		+"		  float spacing =( 1.0f/10.0f)*varpar->cut_magfield_density;"
+	    		+"		  if( varpar->cut_magfield_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=2.0*RANDFLOAT()-1.0;"
+	    		+"		     y=2.0*RANDFLOAT()-1.0;		     "
+	    		+"		    }"
+	    		+"		    "
+	    		+"		    float2 p = make_float2(x* varpar->cut_magfield_zoom ,y* varpar->cut_magfield_zoom );"
+	    		+"		    spacing = 1./(10.*varpar->cut_magfield_density);"
+// test cut_magfield_rand
+//	    		+"          float r =  cut_magfield_rand (1.0f/15.0f)-.5;"
+//              +"          float2 v=p;"
+//              +"          float a = atan2(v.x, v.y) / PI / 2.;"
+//              +"          float lines = fract(a / spacing);"
+//              +"          lines = fminf(lines, 1. - lines) * 2.;"
+//              +"          lines -= 1000.0 * .0005;"
+//              +"          lines = cut_magfield_saturate(lines);"
+//              +"          float disc = length(p) - 1.;"
+//              +"          disc=disc/0.001;"
+//              +"          disc = cut_magfield_saturate(disc);"
+//              +"          lines = mix(1. - lines, lines, disc);"
+//              +"          lines = pow(lines, 1./2.2);"
+// test cut_magfield_force
+//	    		+"          float2 r0 =  cut_magfield_force (p,p-r);"
+//              +"          float2 v=p;"
+//              +"          float a = atan2(v.x, v.y) / PI / 2.;"
+//              +"          float lines = fract(a / spacing);"
+//              +"          lines = fminf(lines, 1. - lines) * 2.;"
+//              +"          lines -= 1000.0 * .0005;"
+//              +"          lines = cut_magfield_saturate(lines);"
+//              +"          float disc = length(p) - 1.;"
+//              +"          disc=disc/0.001;"
+//              +"          disc = cut_magfield_saturate(disc);"
+//              +"          lines = mix(1. - lines, lines, disc);"
+//              +"          lines = pow(lines, 1./2.2);"
+// test cut_magfield_saturate
+//	    		+"          float disc = length(p) - 1.;"
+//	    		+"          disc=disc/0.001;"
+//	    		+"          disc = cut_magfield_saturate(disc);"
+//              +"          float2 v=p;"
+//              +"          float a = atan2(v.x, v.y) / PI / 2.;"
+//              +"          float lines = fract(a / spacing);"
+//              +"          lines = fminf(lines, 1. - lines) * 2.;"
+//              +"          lines -= 1000.0 * .0005;"
+//              +"          lines = cut_magfield_saturate(lines);"
+//              +"          float disc = length(p) - 1.;"
+//              +"          disc=disc/0.001;"
+//              +"          disc = cut_magfield_saturate(disc);"
+//              +"          lines = mix(1. - lines, lines, disc);"
+//              +"          lines = pow(lines, 1./2.2);"
+// test cut_magfield_calcVelocity	    		
+//	    		+"          float2 v = cut_magfield_calcVelocity(p,varpar->cut_magfield_time);"
+//	    		+"          float a = atan2(v.x, v.y) / PI / 2.;"
+//	    		+"          float lines = fract(a / spacing);"
+//	    		+"          lines = fminf(lines, 1. - lines) * 2.;"
+//	    		+"          lines -= 1000.0 * .0005;"
+//	    		+"          lines = cut_magfield_saturate(lines);"
+//	    		+"          float disc = length(p) - 1.;"
+//	    		+"          disc=disc/0.001;"
+//	    		+"          disc = cut_magfield_saturate(disc);"
+//	    		+"          lines = mix(1. - lines, lines, disc);"
+//	    		+"          lines = pow(lines, 1./2.2);"
+// normal code
+	    		+"		    "	            
+	    		+"          float2 v = cut_magfield_calcVelocity(p,varpar->cut_magfield_time);"
+	    		+"          float a = atan2(v.x, v.y) / PI / 2.;"
+	    		+"          float lines = fract(a / spacing);"
+	    		+"          lines = fminf(lines, 1. - lines) * 2.;"   
+	    		+"          lines /= cut_magfield_calcDerivative(v,p,varpar->cut_magfield_time)/spacing;"  
+	    		+"          lines -= 1000.0 * .0005;"
+	    		+"          lines = cut_magfield_saturate(lines);"
+	    		+"          float disc = length(p) - 1.;"
+	    		+"          disc=disc/0.001;"
+	    		+"          disc = cut_magfield_saturate(disc);"
+	    		+"          lines = mix(1. - lines, lines, disc);"
+	    		+"          lines = pow(lines, 1./2.2);"	            
+	    		+"		    float color = lines;" 
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_magfield_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color==0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color>0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_magfield * x;"
+	    		+"		    __py = varpar->cut_magfield * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_magfield * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float  cut_magfield_rand (float n)"
+	    		+"	{"
+	    		+"		return fract(sin(n) * 43758.5453123);"
+	    		+"	}"
+	    		+"	"
+	    		+"__device__ float2  cut_magfield_force (float2 p, float2 a) {"
+	    		+"	  	p = p-a;"
+	    		+"		return p/ dot(p,p);"
+	    		+"	}"
+	    		+"__device__ float2  cut_magfield_calcVelocity (float2 p,float time) {"
+	    		+"	  	float2 v = make_float2(0.0f,0.0f);"
+	    		+"	  	float2 a;"
+	    		+"	  	float o, r, m;"
+	    		+"	 	float s = 1.;"
+	    		+"	  	float limit = 15.;"
+	    		+"	  	for (float i = 0.; i < limit; i++) {"
+	    		+"	    	r =  cut_magfield_rand (i/limit)-.5;"
+	    		+"	    	m =  cut_magfield_rand (i+1.)-.5;"
+	    		+"	    	m *= (time+(23.78*1000.))*2.;"
+	    		+"	    	o = i + r + m;"
+	    		+"	    	a = make_float2("
+	    		+"	      		sin(o / limit * PI * 2.),"
+	    		+"	      		cos(o / limit * PI * 2.)"
+	    		+"	    	);"
+	    		+"	    	s *= -1.;"
+	    		+"	    	v = v-( cut_magfield_force (p, a)*( s));"
+	    		+"	  	}  "
+	    		+"	  	v = normalize(v);"
+	    		+"	  	return v;"
+	    		+"	}"
+	    		+"__device__ float  cut_magfield_calcDerivative (float2 v, float2 p, float time)"
+	    		+"  { float d = 2.0f / 600.0f;"
+	    		+"	   return ("
+	    		+"	            length(v- cut_magfield_calcVelocity (p+ make_float2(0.0f, d   ),time))"
+	    		+"	          + length(v- cut_magfield_calcVelocity (p+ make_float2(d   , 0.0f),time))"
+	    		+"	          + length(v- cut_magfield_calcVelocity (p+ make_float2(d   , d   ),time))"
+	    		+"	          + length(v- cut_magfield_calcVelocity (p+ make_float2(d   ,-d   ),time))"
+	    		+"	          ) / 4.0f;"
+	    		+"	}"
+	    		+"	"
+	    		+"__device__ float  cut_magfield_saturate (float x)"
+	    		+"	{"
+	    		+"		return clamp(x, 0., 1.);"
+	    		+"	}";
+	  }
 }
 

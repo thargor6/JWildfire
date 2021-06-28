@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  CutVasarelyFunc  extends VariationFunc  {
+public class  CutVasarelyFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation : cut_vasarely
@@ -52,10 +52,6 @@ public class  CutVasarelyFunc  extends VariationFunc  {
 
 	private static final String[] additionalParamNames = { PARAM_MODE,PARAM_ZOOM,PARAM_INVERT,PARAM_SIZE};
 
-	public mat2 rot(double a)
-	{
-	 return new mat2 (Math.cos(a), -Math.sin(a), Math.sin(a), Math.cos(a));   
-	}
 
 	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
 		  double x,y;  
@@ -148,9 +144,51 @@ public class  CutVasarelyFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;  "
+	    		+"		  if( varpar->cut_vasarely_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=2.0*RANDFLOAT()-1.0;"
+	    		+"		     y=2.0*RANDFLOAT()-1.00;		     "
+	    		+"		    }"
+	    		+"			float2 uv = make_float2 (x,y);"
+	    		+"			uv=uv*( varpar->cut_vasarely_zoom );"
+	    		+"			"
+	    		+"		    "
+	    		+"		    float l = length(uv);"
+	    		+"		    float b = fmaxf(0.,2.-l/varpar->cut_vasarely_size);"
+	    		+"		    "
+	    		+"		    float color=0.0f;"
+	    		+"		    color  = abs(uv.x)<1.?color-.5-sinf( l * sinf( atan2(uv.y,uv.x) + 1.57 + 4.*b*b)*150.) :color;"
+	    		+"		    color -= abs(uv.x)<1.?color-.5-sinf( l * sinf( atan2(uv.y,uv.x) + 1.57 + 4.*b*b)*150.) :color;"
+	    		+"		    		     "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_vasarely_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color<0.1)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color>=0.1 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_vasarely * x;"
+	    		+"		    __py = varpar->cut_vasarely * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_vasarely * __z;\n" : "");
+	  }
 }
 
 
