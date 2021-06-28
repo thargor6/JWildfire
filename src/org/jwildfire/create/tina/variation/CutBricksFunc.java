@@ -16,7 +16,8 @@ import js.glsl.vec4;
 
 
 
-public class CutBricksFunc  extends VariationFunc {
+public class CutBricksFunc  extends VariationFunc   implements SupportsGPU {
+
 
 	/*
 	 * Variation :cut_bricks
@@ -177,8 +178,64 @@ public class CutBricksFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		    float x,y,px_center,py_center;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_bricks_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		      px_center=0.0;"
+	    		+"		      py_center=0.0;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT();"
+	    		+"		     y=RANDFLOAT();"
+	    		+"		      px_center=0.5;"
+	    		+"		      py_center=0.5;		     "
+	    		+"		    }"
+	    		+"		    "
+	    		+"		    "
+	    		+"		    float2 u =make_float2(x* varpar->cut_bricks_zoom ,y* varpar->cut_bricks_zoom );"
+	    		+"		    u = cut_bricks_brickTile(u);"
+	    		+"			float color = cut_bricks_box(u,make_float2( varpar->cut_bricks_size,varpar->cut_bricks_size ));"
+	    		+"              	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_bricks_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_bricks * (x-px_center);"
+	    		+"		    __py = varpar->cut_bricks * (y-py_center);"
+                + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_bricks * __z;\n" : "");	    
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__	float2  cut_bricks_brickTile (float2 _st){"
+	    		+"	    _st.x += step(1., mod(_st.y,2.0)) * 0.5;"
+	    		+"	    return fract(_st);"
+	    		+"	}"
+	    		+"__device__	float  cut_bricks_box (float2 _st, float2 _size){"
+	    		+"	    _size = make_float2(0.5,0.5)-(_size*(0.5));"
+	    		+"	    float2 uv = smoothstep(_size,_size+(make_float2(1.0e-4,1.0e-4)),_st);"
+	    		+"	    uv = uv*(smoothstep(_size,_size+(make_float2(1e-4,1.0e-4)),make_float2(1.0,1.0)-(_st)));"
+	    		+"	    return uv.x*uv.y;"
+	    		+"	}";
+	  }
 }
 

@@ -18,7 +18,7 @@ import js.glsl.vec4;
 
 
 
-public class CutSpiralFunc  extends VariationFunc {
+public class CutSpiralFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_spiral
@@ -158,8 +158,68 @@ public class CutSpiralFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return  "		    float x,y;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_spiral_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=2.0*RANDFLOAT()-1.0;"
+	    		+"		     y=2.0*RANDFLOAT()-1.0;"
+	    		+"		     "
+	    		+"		    }"
+	    		+"		    "
+	    		+"		    float2 uv =make_float2(x* varpar->cut_spiral_zoom ,y* varpar->cut_spiral_zoom );"
+	    		+"    "
+	    		+"		    int  l = 0;"
+	    		+"		    Mat2 rot = cut_spiral_rot2( varpar->cut_spiral_time );"
+	    		+"		    "
+	    		+"		    for(int i = 0; i < 64; i++) {"
+	    		+"		        "
+	    		+"		        uv = times(&rot, uv);"
+	    		+"		        "
+	    		+"		        if(uv.y > 1.0) {"
+	    		+"		            break;"
+	    		+"		        }"
+	    		+"		        l = l^1;"
+	    		+"		    }"
+	    		+"    	    float color =l; "
+	    		+"			              	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_spiral_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_spiral * x;"
+	    		+"		    __py = varpar->cut_spiral * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_spiral * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  "__device__ Mat2  cut_spiral_rot2 (float spin)"
+	    		+" {"
+	    		+"   Mat2 m;"
+	    		+"	 Mat2_Init(&m,1.1*sin(spin),1.1*cos(spin),-1.1*cos(spin),1.1*sin(spin));"
+	    		+"	 return m;"
+	    		+" }";
+	  }
 }
 

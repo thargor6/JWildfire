@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  CutApollonianFunc  extends VariationFunc  {
+public class  CutApollonianFunc  extends VariationFunc   implements SupportsGPU {
 
 	/*
 	 * Variation : apollonian
@@ -152,9 +152,66 @@ public class  CutApollonianFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;  \n"
+	    		+"		  if( varpar->cut_apollonian_mode ==0)\n"
+	    		+"		    {\n"
+	    		+"		      x= __x;\n"
+	    		+"		      y =__y;\n"
+	    		+"		    }else\n"
+	    		+"		    {\n"
+	    		+"		     x=RANDFLOAT()-0.5;\n"
+	    		+"		     y=RANDFLOAT()-0.5;\n"
+	    		+"		    }\n"
+	    		+"	    \n"
+	    		+"	    float2 p=make_float2(x*varpar->cut_apollonian_zoom,y* varpar->cut_apollonian_zoom );	\n"
+	    		+"		float col=0.0f;\n"
+	    		+"		col =col + cut_apollonian_apollo(p,varpar->cut_apollonian_levels);\n"
+	    		+"		__doHide=false;\n"
+	    		+"		if( varpar->cut_apollonian_invert ==0)\n"
+	    		+"		{\n"
+	    		+"			if (col>0.0f)\n"
+	    		+"			{ x=0.0f;\n"
+	    		+"			  y=0.0f;\n"
+	    		+"			__doHide = true;\n"
+	    		+"			}\n"
+	    		+"		} else\n"
+	    		+"		{\n"
+	    		+"			if (col<=0.0f )\n"
+	    		+"			{ x=0.0f;\n"
+	    		+"			  y=0.0f;\n"
+	    		+"			__doHide = true;\n"
+	    		+"			}\n"
+	    		+"		}\n"
+	    		+"		__px = varpar->cut_apollonian * x;\n"
+	    		+"		__py = varpar->cut_apollonian * y;\n"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_apollonian * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return "	__device__ float  cut_apollonian_apollo (float2 xy,int n)\n"
+	    		+"	{\n"
+	    		+"	    float scale = 1.0;\n"
+	    		+"      float2 p=xy;\n"
+	    		+"	    float t0 = 1.0e20, t1 = 1.0e20;\n"
+	    		+"	    for(int i = 0; i < n; ++i)\n"
+	    		+"	    {\n"
+	    		+"	        p =  fract(p*(0.5)+(+0.5))*(2.0)-(1.0f);\n"
+	    		+"	        float k=(1.34)/dot(p,p);\n"
+	    		+"	        p=p*(k);\n"
+	    		+"	        t0 = min(t0, dot(p,p));\n"
+	    		+"	        t1 = min(t1, max(abs(p.x), abs(p.y)));\n"
+	    		+"	        scale*=k;\n"
+	    		+"	    }\n"
+	    		+"	    float d=0.25*abs(p.y)/scale;\n"
+	    		+"	    d=smoothstep(0.001, 0.002,d);\n"
+	    		+"	    return d;\n"
+	    		+"	}\n";
+	  }
 }
 
 

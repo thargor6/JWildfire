@@ -16,7 +16,7 @@ import js.glsl.vec4;
 
 
 
-public class CutBooleansFunc  extends VariationFunc {
+public class CutBooleansFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_booleans
@@ -165,8 +165,55 @@ public class CutBooleansFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return  "	    float x,y,px_center,py_center,temp;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_booleans_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		      px_center=0.0;"
+	    		+"		      py_center=0.0;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT();"
+	    		+"		     y=RANDFLOAT();"
+	    		+"		      px_center=0.5;"
+	    		+"		      py_center=0.5;		     "
+	    		+"		    }"
+	    		+"		    float2 u =make_float2(x,y );"
+	    		+"          u=u*varpar->cut_booleans_zoom;"
+	    		+"          if( varpar->cut_booleans_type ==0)   "
+	    		+"             temp=((int)u.x )^((int)u.y);            "
+	    		+"          else if( varpar->cut_booleans_type ==1)  "
+	    		+"             temp=((int)u.x )&((int)u.y);"
+	    		+"          else if( varpar->cut_booleans_type ==2)  "
+	    		+"             temp=((int)u.x )|((int)u.y);"
+	    		+"            "
+	    		+"            float color=sin(temp);"
+	    		+"              	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_booleans_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_booleans * (x-px_center);"
+	    		+"		    __py = varpar->cut_booleans * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_booleans * __z;\n" : "");
+	  }
 }
 

@@ -17,7 +17,7 @@ import js.glsl.vec4;
 
 
 
-public class CutJigsawFunc  extends VariationFunc {
+public class CutJigsawFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_jigsaw
@@ -163,8 +163,55 @@ public class CutJigsawFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		    float x,y;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_jigsaw_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;"
+	    		+"		    }"
+	    		+"		    "
+	    		+"    	    float2 u =make_float2(x* varpar->cut_jigsaw_zoom ,y* varpar->cut_jigsaw_zoom )+(make_float2(1.,0.0)*( varpar->cut_jigsaw_time ));"
+	    		+"    	    float2 i = ceilf(u),m = mod(i,2.)-(.5);"
+	    		+"    	    u=u-(i-(0.5));"
+	    		+"            float2 D = dot(m, u) < 0. ? m*(-1.0) : m;           "
+	    		+"    	    "
+	    		+"            float f = dot( abs(u-(D)), make_float2(1.0,1.0)) *.7 -.65; "
+	    		+"            float c = length(u-(D*(.2))) - .2; "
+	    		+"            float d=sin(dot(i,make_float2(27.0f, 57.0f)))*1.0e5;"
+	    		+"            short q= (fract(d)-.5)*D.x < 0.;"
+	    		+"            float t= q ? fmaxf(f,.1-c) : f;"
+	    		+"            float s=fminf(t, c);"
+	    		+"        	            "
+	    		+"            float color=1.0f-s*1.0e4/8.0f;"
+	    		+"              	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_jigsaw_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_jigsaw * (x);"
+	    		+"		    __py = varpar->cut_jigsaw * (y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_jigsaw * __z;\n" : "");
+	  }
 }
 

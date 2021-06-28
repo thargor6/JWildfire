@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class CutFingerPrintFunc  extends VariationFunc {
+public class CutFingerPrintFunc  extends VariationFunc implements SupportsGPU{
 
 	/*
 	 * Variation : cut_fingerprint
@@ -202,8 +202,86 @@ public class CutFingerPrintFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return  "		    float x,y,px_center,py_center;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_fingerprint_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		      px_center=0.0f;"
+	    		+"		      py_center=0.0f;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;"
+	    		+"		      px_center=0.0f;"
+	    		+"		      py_center=0.0f;		     "
+	    		+"		    }"
+	    		+"		    vec3 color=cut_fingerprint_getRGBColor(x,y,varpar);"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_fingerprint_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color.x==0.0f)"
+	    		+"		      { __px=0.0f;"
+	    		+"		        __py=0.0f;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color.x>0.0f)"
+	    		+"			      { __px=0.0f;"
+	    		+"			        __py=0.0f;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_fingerprint * (x-px_center);"
+	    		+"		    __py = varpar->cut_fingerprint * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_fingerprint * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float2  cut_fingerprint_hash2 ( float2 p )"
+	    		+"	{"
+	    		+"		p = make_float2( dot(p,make_float2(63.31,127.63)), dot(p,make_float2(395.467,213.799)) );"
+	    		+"		return fract(sin(p)*(43141.59265))*(2.0)-(1.);"
+	    		+"	}"
+	    		+"	"
+	    		+"__device__ float3  cut_fingerprint_getRGBColor (float xp,float yp, struct VarPar__jwf_cut_fingerprint *varpar)"
+	    		+"	{"
+	    		+"	    "
+	    		+"		float2 uv=make_float2(xp,yp)*(varpar->jwf_cut_fingerprint_zoom);"
+	    		+"	    float3 color=make_float3(0.,0.,0.);"
+
+	    		+"	    float bounds = smoothstep(9.,10.,length(uv*( make_float2(0.7,0.5))));"
+	    		+"	    "
+	    		+"	    float a=0.;"
+	    		+"	    float2 h = make_float2(floor(7.*varpar->jwf_cut_fingerprint_seed), 0.);"
+	    		+"	    for(int i=0; i<50; i++){"
+	    		+"	        float s=sign(h.x);"
+	    		+"	        h =  cut_fingerprint_hash2 (h)*(make_float2(15.,20.));"
+	    		+"	    	a += s*atan2(uv.x-h.x, uv.y-h.y);"
+	    		+"	    }"
+	    		+"	    "
+	    		+"	    "
+	    		+"	    uv = uv+(abs( cut_fingerprint_hash2 (h)));"
+	    		+"	    "
+	    		+"	    a+=atan2(uv.y, uv.x); "
+	    		+"	    "
+	    		+"	    float p=(1.-bounds)*varpar->jwf_cut_fingerprint_width; "
+	    		+"	    float s = min(0.3,p); "
+	    		+"	    float l = length(uv)+0.319*a; "
+	    		+"	    "
+	    		+"	    "
+	    		+"	    float m = mod(l,2.);"
+	    		+"	    float v = (1.-smoothstep(2.-s,2.,m))*smoothstep(p,p+s,m);"
+	    		+"		return make_float3(v,v,v);"
+	    		+"	}";
+	  }
 
 }
 

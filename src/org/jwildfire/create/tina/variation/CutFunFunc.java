@@ -17,7 +17,7 @@ import js.glsl.vec4;
 
 
 
-public class CutFunFunc  extends VariationFunc {
+public class CutFunFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_fun
@@ -181,8 +181,78 @@ public class CutFunFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return  "		    float x,y,px_center,py_center,x0=0.0f,y0=0.0f;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_fun_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		      px_center=0.0;"
+	    		+"		      py_center=0.0;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT();"
+	    		+"		     y=RANDFLOAT();"
+	    		+"		      px_center=0.5;"
+	    		+"		      py_center=0.5;		     "
+	    		+"		    }"
+	    		+"		    	    "
+	    		+"		    float2 uv = make_float2(x* varpar->cut_fun_zoom ,y* varpar->cut_fun_zoom );	"
+	    		+"          float color=cut_fun_hm (make_float2(uv.x+x0,uv.y+y0));"
+	    		+"		     "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_fun_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_fun * (x-px_center);"
+	    		+"		    __py = varpar->cut_fun * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_fun * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  "__device__	float  cut_fun_rand  (float2 co)"
+	    		+"	{ "
+	    		+"		return fract(sin(dot(make_float2(co.x,co.y) ,make_float2(12.9898,78.233))) * 43758.5453); "
+	    		+"	}"
+	    		+"__device__	float   cut_fun_pix (float2 U)"
+	    		+"	{"
+	    		+"		return step(.5,  cut_fun_rand (floorf(U)));"
+	    		+"	}"
+	    		+"__device__	float  cut_fun_hm (float2 uv){"
+	    		+"		"
+	    		+"		float2 nuv = fract(uv)*(2.0)-(1.),"
+	    		+"		     pos = sign(nuv)*(.9);"
+	    		+"		"
+	    		+"		float d = length(nuv),	"
+	    		+"		      v =  cut_fun_pix (uv);"
+	    		+"		"
+	    		+"	    if (d<1.)"
+	    		+"	    	return v;"
+	    		+"		float v0 = v,"
+	    		+"	          v1 =  cut_fun_pix (make_float2(pos.x,0)+(uv)),"
+	    		+"		      v2 =  cut_fun_pix (make_float2(0,pos.y)+(uv));"
+	    		+"		"
+	    		+"		if (v1==v2)	v = (v== cut_fun_pix (uv+(pos)) && v!=v1) ? 0.0f : v1;"
+	    		+"			"
+	    		+"		return mix(v0, v, smoothstep(d,1.,1.01));"
+	    		+"	}" ;
+	  }
 }
 

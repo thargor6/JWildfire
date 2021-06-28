@@ -17,7 +17,7 @@ import js.glsl.vec4;
 
 
 
-public class CutChainsFunc  extends VariationFunc {
+public class CutChainsFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_chains
@@ -152,8 +152,54 @@ public class CutChainsFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+		return	"		    float x,y,px_center,py_center;"
+				+"		    "
+				+"		    if( varpar->cut_chains_mode ==0)"
+				+"		    {"
+				+"		      x= __x;"
+				+"		      y =__y;"
+				+"		      px_center=0.0;"
+				+"		      py_center=0.0;"
+				+"		    }else"
+				+"		    {"
+				+"		     x=RANDFLOAT();"
+				+"		     y=RANDFLOAT();"
+				+"		      px_center=0.5;"
+				+"		      py_center=0.5;		     "
+				+"		    }"
+				+"		    "
+				+"		    "
+				+"		    float2 u =make_float2(x* varpar->cut_chains_zoom ,y* varpar->cut_chains_zoom );"
+				+"            u=u+(make_float2( varpar->cut_chains_shiftX ,varpar->cut_chains_shiftY));"
+				+"    	    float wy = cos(u.y * 12.);"
+				+"    	    float wx = sin(u.x * 15.); "
+				+"    	    float w  = cos(u.x * 30.);"
+				+"    	    float color = smoothstep(-0.25, 0.25,mix(wy + wx, wx*1.4, w * 3.));"
+				+"			              	"
+				+"		    __doHide=false;"
+				+"		    if( varpar->cut_chains_invert ==0)"
+				+"		    {"
+				+"		      if (color>0.0)"
+				+"		      { x=0;"
+				+"		        y=0;"
+				+"		        __doHide = true;	        "
+				+"		      }"
+				+"		    } else"
+				+"		    {"
+				+"			      if (color<=0.0)"
+				+"			      { x=0;"
+				+"			        y=0;"
+				+"			        __doHide = true;"
+				+"			      }"
+				+"		    }"
+				+"		    __px = varpar->cut_chains * (x-px_center);"
+				+"		    __py = varpar->cut_chains * (y-py_center);"
+				+ (context.isPreserveZCoordinate() ? "__pz += varpar->cut_chains * __z;" : "");
+	}
 }
 

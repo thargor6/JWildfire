@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  CutHexDotsFunc  extends VariationFunc  {
+public class  CutHexDotsFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation : cut_hexdots
@@ -139,9 +139,50 @@ public class  CutHexDotsFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;"
+	    		+"		  if( varpar->cut_hexdots_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;"
+	    		+"		    }"
+	    		+"	    "
+	    		+"	    float2 u=make_float2(x* varpar->cut_hexdots_zoom ,y* varpar->cut_hexdots_zoom );"
+	    		+"	    		"
+	    		+"	    float2 s = make_float2(1.0f,1.732f);"
+	    		+"	    float2 a = mod(u,s)*2.0f-s;"
+	    		+"	    float2 b = mod(u+s*0.5f,s)*2.0f-s;"
+	    		+"	    	    	    "
+	    		+"      float col=0.0f;"
+	    		+"      col= 0.8f*fminf(dot(a,a),dot(b,b));"
+	    		+"	    "
+	    		+"		__doHide=false;"
+	    		+"		if( varpar->cut_hexdots_invert ==0)"
+	    		+"		{"
+	    		+"			if (col>varpar->cut_hexdots_size)"
+	    		+"			{ x=0.0f;"
+	    		+"			  y=0.0f;"
+	    		+"			__doHide = true;"
+	    		+"			}"
+	    		+"		} else"
+	    		+"		{"
+	    		+"			if (col<=varpar->cut_hexdots_size)"
+	    		+"			{ x=0.0f;"
+	    		+"			  y=0.0f;"
+	    		+"			__doHide = true;"
+	    		+"		    }"
+	    		+"		}"
+	    		+"		__px = varpar->cut_hexdots * x;"
+	    		+"		__py = varpar->cut_hexdots * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_hexdots * __z;\n" : "");
+	 }
 }
 
 

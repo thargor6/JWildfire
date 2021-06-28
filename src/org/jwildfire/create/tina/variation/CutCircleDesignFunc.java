@@ -17,7 +17,7 @@ import js.glsl.vec3;
 
 
 
-public class CutCircleDesignFunc  extends VariationFunc {
+public class CutCircleDesignFunc  extends VariationFunc implements SupportsGPU{
 
 	/*
 	 * Variation :cut_circdes
@@ -178,8 +178,69 @@ public class CutCircleDesignFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+		return	"		    float x,y,px_center,py_center;"
+				+"		    "
+				+"		    if( varpar->cut_circdes_mode ==0)"
+				+"		    {"
+				+"		      x= __x;"
+				+"		      y =__y;"
+				+"		      px_center=0.0;"
+				+"		      py_center=0.0;"
+				+"		    }else"
+				+"		    {"
+				+"		     x=RANDFLOAT();"
+				+"		     y=RANDFLOAT();"
+				+"		      px_center=0.5;"
+				+"		      py_center=0.5;"
+				+"		    }"
+				+"		    	    "
+				+"		    float2 u = make_float2(x* varpar->cut_circdes_zoom ,y* varpar->cut_circdes_zoom );"
+				+"            u=fract(u)-(0.5);"
+				+"		    float r = .8, d = step(length(u),r);"
+				+"		    for (int i = 0; i < 9; i++)"
+				+"		    {"
+				+"		        r *= .5 + .1 * sin((float)(i) + varpar->cut_circdes_time);"
+				+"		        if ((i % 2) == 0 )"
+				+"		        {"
+				+"		        	d -= step(length(u+make_float2(0, r)), r);"
+				+"		        	d -= step(length(u+make_float2(r, 0)), r);"
+				+"		        	d -= step(length(u-make_float2(0, r)), r);"
+				+"		        	d -= step(length(u-make_float2(r, 0)), r);"
+				+"		        }"
+				+"		        else"
+				+"		        {"
+				+"		            d += step(length(u+(make_float2(0, r))), r);"
+				+"		        	d += step(length(u+(make_float2(r, 0))), r);"
+				+"		        	d += step(length(u-(make_float2(0, r))), r);"
+				+"		        	d += step(length(u-(make_float2(r, 0))), r);"
+				+"		        }"
+				+"		        "
+				+"		    }"
+				+"		    float color=d;"
+				+"		    "
+				+"		    __doHide=false;"
+				+"		    if( varpar->cut_circdes_invert ==0)"
+				+"		    {"
+				+"		      if (color>0.5)"
+				+"		      { x=0;"
+				+"		        y=0;"
+				+"		        __doHide = true;	        "
+				+"		      }"
+				+"		    } else"
+				+"		    {"
+				+"			      if (color<=0.5)"
+				+"			      { x=0;"
+				+"			        y=0;"
+				+"			        __doHide = true;"
+				+"			      }"
+				+"		    }"
+				+"		    __px = varpar->cut_circdes * (x-px_center);"
+				+"		    __py = varpar->cut_circdes * (y-py_center);"
+				+ (context.isPreserveZCoordinate() ? "__pz += varpar->cut_circdes * __z;" : "");
+	}
 }
 

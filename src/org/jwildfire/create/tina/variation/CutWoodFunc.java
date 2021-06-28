@@ -18,7 +18,7 @@ import js.glsl.vec4;
 
 
 
-public class CutWoodFunc  extends VariationFunc {
+public class CutWoodFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_wood
@@ -219,8 +219,101 @@ public class CutWoodFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		    float x,y,px_center,py_center;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_wood_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		      px_center=0.0;"
+	    		+"		      py_center=0.0;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT();"
+	    		+"		     y=RANDFLOAT();"
+	    		+"		      px_center=0.5;"
+	    		+"		      py_center=0.5;		     "
+	    		+"		    }"
+	    		+"		    "
+	    		+"		    float2 st =make_float2(x* varpar->cut_wood_zoom ,y* varpar->cut_wood_zoom );"
+	    		+"            st=st+(make_float2(  varpar->cut_wood_shiftX  ,  varpar->cut_wood_shiftY ));"
+	    		+"    	    float2 sti = floorf(st);"
+	    		+"    	       "
+	    		+"    	    st = cut_wood_twist(st, pow(cut_wood_noise(st,  varpar->cut_wood_freq ),  varpar->cut_wood_smooth ));"
+	    		+"    	    float2 c = fract(st*(make_float2(1.0,  varpar->cut_wood_LineCount )));"
+	    		+"    	    "
+	    		+"    	    float background=0.0;"
+	    		+"    	    float foreground=1.0;"
+	    		+"    	    float color = mix(background, foreground, cut_wood_line(c,  varpar->cut_wood_LineWidth ));"
+//	    		+"			float color=1.0;"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_wood_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (color>0.0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_wood * (x-px_center);"
+	    		+"		    __py = varpar->cut_wood * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_wood * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  "__device__	float  cut_wood_random  (float2 st) {"
+	    		+"	    return fract(sinf(dot(make_float2(st.x,st.y),make_float2(12.9898,78.233)))*43758.5453123);"
+	    		+"	}"
+	    		+"	"
+	    		+"__device__	float  cut_wood_random (float2 st, float seed) {"
+	    		+"	    return fract(sinf(seed + dot(make_float2(st.x,st.y), make_float2(12.9898,78.233)))* 43758.5453123);"
+	    		+"	}"
+	    		+"__device__	float  cut_wood_noise  (float2 c, float density) "
+	    		+ "{"
+	    		+"	    float2 cu = fract(c*(density));"
+	    		+"	    float2 ci = floorf(c*(density));"
+	    		+"	    float bl =  cut_wood_random (ci);"
+	    		+"	    float br =  cut_wood_random (ci+(make_float2(1.0, 0.0)));"
+	    		+"	    float tl =  cut_wood_random (ci+(make_float2(0.0, 1.0)));"
+	    		+"	    float tr =  cut_wood_random (ci+(make_float2(1.0, 1.0)));"
+	    		+"	    cu = smoothstep(0., 1., cu);"
+	    		+"	    float b = mix(bl, br, cu.x);"
+	    		+"	    float t = mix(tl, tr, cu.x);"
+	    		+"	    float v = mix(b, t, cu.y);"
+	    		+"	    return v;"
+	    		+"	}"
+	    		+"__device__	float  cut_wood_line  (float2 c, float width) "
+	    		+"  {"
+	    		+"	    float smoothing = .04;"
+	    		+"	    return smoothstep(.5 - width, .5 - width + smoothing, c.y) - smoothstep(.5 + width - smoothing, .5 + width, c.y);"
+	    		+"	}"
+	    		+"	__device__ Mat2  cut_wood_rotate  (float angle)"
+	    		+"  {"
+	    		+"	    float c = cosf(angle);"
+	    		+"	    float s = sinf(angle);"
+	    		+"      Mat2 mat;"
+	    		+"	    Mat2_Init(&mat,c, -s, s, c);"
+	    		+"      return mat;"
+	    		+"	}"
+	    		+"__device__ float2  cut_wood_twist  (float2 c, float angle)"
+	    		+"  {"
+	    		+"    Mat2 m;"
+	    		+"    m = cut_wood_rotate (angle);"
+	    		+ "   float2 t0= times(&m,c-0.5f);"
+	    		+"	  return t0 + 0.5f;"
+	    		+"	}";
+	  }
 }
 

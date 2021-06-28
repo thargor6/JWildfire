@@ -17,7 +17,7 @@ import js.glsl.vec4;
 
 
 
-public class CutKleinianFunc  extends VariationFunc {
+public class CutKleinianFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_kleinian
@@ -32,7 +32,7 @@ public class CutKleinianFunc  extends VariationFunc {
 	private static final String PARAM_MODE = "mode";
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_BOX = "boxSize";
-	private static final String PARAM_TIME = "param1";
+	private static final String PARAM_TIME = "time";
 	private static final String PARAM_ITERS = "NIters";
 	private static final String PARAM_DX = "Dx";
 	private static final String PARAM_DY = "Dy";
@@ -227,8 +227,100 @@ public class CutKleinianFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		    float x,y;		    "
+	    		+"		    if( varpar->cut_kleinian_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;"
+	    		+"		    }"
+	    		+"		    "
+	    		+"		    float2 uv =make_float2(x* varpar->cut_kleinian_zoom ,y* varpar->cut_kleinian_zoom )-make_float2( varpar->cut_kleinian_Dx , varpar->cut_kleinian_Dy);"
+	    		+"		    "
+	    		+"		    int hit=cut_kleinian_JosKleinian(uv,varpar);"
+	    		+"		                  	"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_kleinian_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (hit==0)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (hit==1)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"          __px = varpar->cut_kleinian * x;"
+	    		+"		    __py = varpar->cut_kleinian * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_kleinian * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float  cut_kleinian_wrap (float x, float a, float s){"
+	    		+"		x -= s; "
+	    		+"		return (x-a*floorf(x/a)) + s;"
+	    		+"	}"
+	    		+"__device__	float2  cut_kleinian_TransA ( float2 z, float a, float b){"
+	    		+"		float iR = 1. / dot(z,z);"
+	    		+"		z = z*(-iR);"
+	    		+"		z.x = -b - z.x; "
+	    		+"		z.y = a + z.y; "
+	    		+"		return z;"
+	    		+"	}"
+	    		+"	"
+	    		+"	"
+	    		+"__device__ int  cut_kleinian_JosKleinian (float2 z,struct VarPar__jwf_cut_kleinian *varpar)"
+	    		+"{"
+	    		+"	  float2 lz = z + make_float2(1.0f,1.0f);"
+	    		+"	  float2 llz= z + make_float2(-1.0f,1.0f);"
+	    		+"	  "
+	    		+"	  int flag=0;"
+	    		+"	  "
+	    		+"	  float KleinR = 1.8462756+(1.958591-1.8462756)*0.5+0.5*(1.958591-1.8462756)*varpar->jwf_cut_kleinian_time;  "
+	    		+"	  float KleinI = 0.09627581+(0.0112786-0.09627581)*0.5+0.5*(0.0112786-0.09627581)*varpar->jwf_cut_kleinian_time;"
+	    		+"	      "
+	    		+"		float a = KleinR;"
+	    		+"	    float b = KleinI;"
+	    		+"		float f = sign(b);    "
+	    		+"		"
+	    		+"		for (int i = 0; i < varpar->jwf_cut_kleinian_NIters ; i++) "
+	    		+"		{"
+	    		+"	        z.x=z.x+f*b/a*z.y;"
+	    		+"			z.x =  cut_kleinian_wrap (z.x, 2. * varpar->jwf_cut_kleinian_boxSize, - varpar->jwf_cut_kleinian_boxSize);"
+	    		+"			z.x=z.x-f*b/a*z.y;"
+	    		+"	     "
+	    		+"	        if  (z.y >= a * 0.5 + f *(2.*a-1.95)/4. * sign(z.x + b * 0.5)* (1. - exp(-(7.2-(1.95-a)*15.)* abs(z.x + b * 0.5))))	"
+	    		+"	        {"
+	    		+"	        	z= make_float2(-b, a)-(z);"
+	    		+"	        }"
+	    		+"	        "
+	    		+"			z= cut_kleinian_TransA (z, a, b);"
+	    		+"			"
+	    		+"	        if(dot(z-(llz),z-(llz)) < 1.0e-6) "
+	    		+"	             break;"
+	    		+"	        "
+	    		+"	        if(z.y<0. || z.y>a)"
+	    		+"	        {"
+	    		+"	        	flag=1;"
+	    		+"	        	break;"
+	    		+"	        }"
+	    		+"	        "
+	    		+"			llz=lz; lz=z;"
+	    		+"		}"
+	    		+"		return flag;"
+	    		+"}";
+	  }
 }
 

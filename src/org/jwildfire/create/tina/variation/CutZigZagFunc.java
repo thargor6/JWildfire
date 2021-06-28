@@ -16,7 +16,7 @@ import js.glsl.vec4;
 
 
 
-public class CutZigZagFunc  extends VariationFunc {
+public class CutZigZagFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :cut_zigzag
@@ -32,8 +32,8 @@ public class CutZigZagFunc  extends VariationFunc {
 
 
 	private static final String PARAM_MODE = "mode";
-	private static final String PARAM_XPAR = "x_par";	
-	private static final String PARAM_YPAR = "y_par";
+	private static final String PARAM_XPAR = "xpar";	
+	private static final String PARAM_YPAR = "ypar";
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_INVERT = "invert";
 	
@@ -48,8 +48,7 @@ public class CutZigZagFunc  extends VariationFunc {
 	private static final String[] additionalParamNames = { PARAM_MODE,PARAM_XPAR,PARAM_YPAR,PARAM_ZOOM,PARAM_INVERT};
 	 
 	
-	public vec2 mirrorTile(vec2 _st, double _zoom){
-	    _st = _st.multiply(zoom);
+	public vec2 mirrorTile(vec2 _st){
 	    if (G.fract(_st.y * 0.5) > 0.5){
 	        _st.x = _st.x+0.5;
 	        _st.y = 1.0-_st.y;
@@ -77,7 +76,7 @@ public class CutZigZagFunc  extends VariationFunc {
 		    
 		    
 		    vec2 st =new vec2(xp,yp);
-		    st = mirrorTile(st.multiply(new vec2(xpar,ypar)),zoom);
+		    st = mirrorTile(st.multiply(new vec2(xpar,ypar)).multiply(zoom));
 		    double x = st.x*2.;
 		    double a = G.floor(1.+Math.sin(x*Math.PI));
 		    double b = G.floor(1.+Math.sin((x+1.)*Math.PI));
@@ -162,8 +161,68 @@ public class CutZigZagFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "	    float xp,yp;"
+	    		+"		    "
+	    		+"		    if( varpar->cut_zigzag_mode ==0)"
+	    		+"		    {"
+	    		+"		      xp= __x;"
+	    		+"		      yp =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     xp=RANDFLOAT()-0.5;"
+	    		+"		     yp=RANDFLOAT()-0.5;"
+	    		+"		    }"
+	    		+"		    "
+	    		+"		    float2 st =make_float2(xp,yp);"
+	    		+"          st=st*varpar->cut_zigzag_zoom;"
+	    		+"          st=st*make_float2(varpar->cut_zigzag_xpar,varpar->cut_zigzag_ypar);"
+	    		+"		    st = cut_zigzag_mirrorTile(st);"
+	    		+"		    float x = st.x*2.0f;"
+	    		+"          float a = floorf(1.0f + sinf( x*PI));"
+	    		+"		    float b = floorf(1.0f + sinf((x+1.0f)*PI));"
+	    		+"		    float f = fract(x);"
+	    		+"		    float color = cut_zigzag_fillY(st,mix(a,b,f),0.01f);"
+	    		+"            "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->cut_zigzag_invert ==0 )"
+	    		+"		    {"
+	    		+"		      if (color>=0.5f)"
+	    		+"		      { xp=0.0f;"
+	    		+"		        yp=0.0f;"
+	    		+"		        __doHide = true;	        "
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<0.5f)"
+	    		+"			      { xp=0.0f;"
+	    		+"			        yp=0.0f;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->cut_zigzag * xp;"
+	    		+"		    __py = varpar->cut_zigzag * yp;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_zigzag * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  "__device__ float2  cut_zigzag_mirrorTile (float2 st)"
+	    		+ "{"
+	    		+"	    if (fract(st.y * 0.5f) > 0.5f)"
+	    		+ "     {"
+	    		+"	        st.x = st.x+0.5;"
+	    		+"	        st.y = 1.0-st.y;"
+	    		+"	    }"
+	    		+"	    return fract(st);"
+	    		+"}"
+	    		+""
+	       	    +"__device__ float  cut_zigzag_fillY (float2 st, float pct,float antia){"
+	    		+"	  return  smoothstep( pct- antia, pct, st.y);"
+	    		+"}";
+	  }	
 }
 

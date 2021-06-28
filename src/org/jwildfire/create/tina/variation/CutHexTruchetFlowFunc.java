@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  CutHexTruchetFlowFunc  extends VariationFunc  {
+public class  CutHexTruchetFlowFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation : cut_hextruchetflow
@@ -148,7 +148,7 @@ public class  CutHexTruchetFlowFunc  extends VariationFunc  {
 		    }
 
 	    uvx= seed*G.sin(seed*180./Math.PI);
-	    uvy= seed*G.sin(seed*180.0/Math.PI); //*0.1+time*0.05;
+	    uvy= uvx;
 			    
         vec2 uv=new vec2(x*zoom-uvx,y*zoom-uvy);
         vec3 color=new vec3(0.0);
@@ -227,9 +227,121 @@ public class  CutHexTruchetFlowFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;"
+	    		+"		  if( varpar->cut_hextruchetflow_mode ==0)"
+	    		+"		    {"
+	    		+"		      x= __x;"
+	    		+"		      y =__y;"
+	    		+"		    }else"
+	    		+"		    {"
+	    		+"		     x=RANDFLOAT()-0.5;"
+	    		+"		     y=RANDFLOAT()-0.5;"
+	    		+"		    }"
+	    		+"			    "
+	    	    +"      float shiftxy= varpar->cut_hextruchetflow_randomize*sin(varpar->cut_hextruchetflow_randomize*180.0f/PI);"
+	    		+"      float2 uv=make_float2(x,y)* varpar->cut_hextruchetflow_zoom - make_float2(shiftxy,shiftxy);"
+ 	    		+"      float3 color=make_float3(0.0,0.0,0.0);"
+//	    		+"      float t1= cut_hextruchetflow_Hashfv2  (uv);"
+//	    		+"      float2 t2=cut_hextruchetflow_PixToHex(uv);"
+//	    		+"             uv=cut_hextruchetflow_HexToPix(t2);"
+//	    		+"             t1=cut_hextruchetflow_HexEdgeDist  (uv);"
+//              +"      color=cut_hextruchetflow_ShowScene(uv , varpar->cut_hextruchetflow_grid);"
+   		        +"	    color =  color +  cut_hextruchetflow_ShowScene ( uv + step (1.5, 1.0) ,varpar->cut_hextruchetflow_grid);"
+	    		+"		__doHide=false;"
+	    		+"		if( varpar->cut_hextruchetflow_invert ==0)"
+	    		+"		{"
+	    		+"			if (color.x > 0.9f)"
+	    		+"			{ x=0.0f;"
+	    		+"			  y=0.0f;"
+	    		+"			__doHide = true;"
+	    		+"			}"
+	    		+"		} else"
+	    		+"		{"
+	    		+"			if (color.x<=0.9f)"
+	    		+"			{ x=0.0f;"
+	    		+"			  y=0.0f;"
+	    		+"			__doHide = true;"
+	    		+"			}"
+	    		+"		}"
+	    		+"		__px = varpar->cut_hextruchetflow * x;"
+	    		+"		__py = varpar->cut_hextruchetflow * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_hextruchetflow * __z;\n" : "");
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float2  cut_hextruchetflow_PixToHex  (float2 p)"
+	    		+"	{"
+	    		+"	float sqrt3=1.73205;"
+	    		+"	  float3 c = make_float3(0.0f,0.0f,0.0f), r, dr;"
+	    		+"	  float2 t0=make_float2 ((1./sqrt3) * p.x - (1./3.) * p.y, (2./3.) * p.y);"
+	    		+"	  "
+	    		+"	  c.x =t0.x;"
+	    		+"	  c.z= t0.y;"
+	    		+"	  c.y = - c.x - c.z;"
+	    		+"	  "
+	    		+"	  r = floorf (c+( 0.5));"
+	    		+"	  dr = abs (r-(c));"
+	    		+"	  float3 t1=make_float3(dr.y,dr.z,dr.x);"
+	    		+"	  float3 t2=make_float3(dr.z,dr.x,dr.y);"
+	    		+"	  	  r = r-(step (t1, dr)*( step (t2, dr))*( dot (r, make_float3 (1.0f,1.0f,1.0f))));"
+	    		+"	  "
+	    		+"	  return make_float2(r.x,r.z);"
+	    		+"	}"
+	    		+"   "
+	    		+"__device__ float2  cut_hextruchetflow_HexToPix  (float2 h)"
+	    		+"	{"
+	    		+"	  float sqrt3=1.73205;"
+	    		+"	  return make_float2 (sqrt3 * (h.x + 0.5 * h.y), 1.5 * h.y);"
+	    		+"	}"
+	    		+"   "
+	    		+"__device__ float  cut_hextruchetflow_HexEdgeDist  (float2 p)"
+	    		+"	{"
+	    		+"		float sqrt3=1.73205;"
+	    		+"	    p = abs (p);"
+	    		+"	    return (sqrt3/2.) - p.x + 0.5 * min (p.x - sqrt3 * p.y, 0.);"
+	    		+"	}"
+	    		+"   "
+	    		+"__device__ float  cut_hextruchetflow_Hashfv2  (float2 p)"
+	    		+"	{"
+	    		+"	    return fract (sin (dot (p, make_float2 (37., 39.))) * 43758.54);"
+	    		+"	}"
+	    		+"	"
+	    		+"	__device__ float3  cut_hextruchetflow_ShowScene  (float2 p,int grid)"
+	    		+"	{"
+	    		+"	  float sqrt3=1.73205;"
+	    		+"	  float3 col=make_float3(0.0f,0.0f,0.0f), w=make_float3(0.0f,0.0f,0.0f);"
+	    		+"	  float2 cId, pc;"
+	    		+"	  float2 q;"
+	    		+"	  float dir, a, d;"
+	    		+"	  cId =  cut_hextruchetflow_PixToHex  (p);"
+	    		+"	  pc =  cut_hextruchetflow_HexToPix  (cId);"
+	    		+"	  dir = 2. * step ( cut_hextruchetflow_Hashfv2  (cId), 0.5) - 1.;"
+	    		+"	  float2 t0=pc+(make_float2 (0., - dir));"
+	    		+"	  w.x=t0.x;"
+	    		+"	  w.y=t0.y;"
+	    		+"	  w.z = dot (make_float2(w.x,w.y)-(p) , make_float2(w.x,w.y)-(p) );"
+	    		+"	  "
+	    		+"	  q = pc+ make_float2 (sqrt3/2., 0.5 * dir);"
+	    		+"	  d = dot (q- p, q-p);"
+	    		+"	  if (d < w.z) w = make_float3 (q.x,q.y, d);"
+	    		+"	  q = pc+(make_float2 (- sqrt3/2., 0.5 * dir));"
+	    		+"	  d = dot (q-(p) , q-(p));"
+	    		+"	  if (d < w.z) w = make_float3 (q.x,q.y, d);"
+	    		+"	  w.z = abs (sqrt (w.z) - 0.5);"
+	    		+"	  d =  cut_hextruchetflow_HexEdgeDist  (p-( pc));"
+	    		+"	  if(grid==1)"
+	    		+"	    col = make_float3 (1., 1., 1.)*( mix (1., smoothstep (1.0, 1., d),smoothstep (0.01, 0.02, d)));	  "
+	    		+"	  if (w.z < 0.25) {"
+	    		+"	    col = make_float3 (1., 1., 1.); "
+	    		+"	  }"
+	    		+"	  return col;"
+	    		+"	}";
+	  }	
 }
 
 
