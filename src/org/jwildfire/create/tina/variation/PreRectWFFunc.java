@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class PreRectWFFunc extends VariationFunc {
+public class PreRectWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X0 = "x0";
@@ -85,7 +85,21 @@ public class PreRectWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_PRE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_PRE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float dx = varpar->pre_rect_wf_x1 - varpar->pre_rect_wf_x0;\n"
+        + "float dy = varpar->pre_rect_wf_y1 - varpar->pre_rect_wf_y0;\n"
+        + "__x = varpar->pre_rect_wf * (varpar->pre_rect_wf_x0 + dx * RANDFLOAT());\n"
+        + "__y = varpar->pre_rect_wf * (varpar->pre_rect_wf_y0 + dy * RANDFLOAT());"
+            + "__r2 = __x*__x+__y*__y;\n"
+            + "__r = sqrtf(__r2);\n"
+            + "__rinv = 1.f/__r;\n"
+            + "__phi = atan2f(__x,__y);\n"
+            + "__theta = .5f*PI-__phi;\n"
+            + "if (__theta > PI)\n"
+            + "    __theta -= 2.f*PI;";
+  }
 }

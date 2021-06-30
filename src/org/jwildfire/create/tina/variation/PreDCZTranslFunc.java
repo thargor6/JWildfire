@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 
-public class PreDCZTranslFunc extends VariationFunc {
+public class PreDCZTranslFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X0 = "x0";
@@ -104,7 +104,30 @@ public class PreDCZTranslFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_PRE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_PRE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _x0 = varpar->pre_dcztransl_x0 < varpar->pre_dcztransl_x1 ? varpar->pre_dcztransl_x0 : varpar->pre_dcztransl_x1;\n"
+        + "float _x1 = varpar->pre_dcztransl_x0 > varpar->pre_dcztransl_x1 ? varpar->pre_dcztransl_x0 : varpar->pre_dcztransl_x1;\n"
+        + "float _x1_m_x0 = _x1 - _x0 == 0 ? 1.e-6f : _x1 - _x0;\n"
+        + "    float zf = varpar->pre_dcztransl_factor * (__pal - _x0) / _x1_m_x0;\n"
+        + "    if (lroundf(varpar->pre_dcztransl_clamp) != 0)\n"
+        + "      zf = zf < 0 ? 0 : zf > 1 ? 1 : zf;\n"
+        + "    __x = varpar->pre_dcztransl * __x;\n"
+        + "    __y = varpar->pre_dcztransl * __y;\n"
+        + "\n"
+        + "    if (lroundf(varpar->pre_dcztransl_overwrite) == 0)\n"
+        + "      __z = varpar->pre_dcztransl * __z * zf;\n"
+        + "    else\n"
+        + "      __z = varpar->pre_dcztransl * zf;"
+            + "__r2 = __x*__x+__y*__y;\n"
+            + "__r = sqrtf(__r2);\n"
+            + "__rinv = 1.f/__r;\n"
+            + "__phi = atan2f(__x,__y);\n"
+            + "__theta = .5f*PI-__phi;\n"
+            + "if (__theta > PI)\n"
+            + "    __theta -= 2.f*PI;";
+  }
 }
