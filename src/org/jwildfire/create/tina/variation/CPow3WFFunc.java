@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -31,7 +31,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CPow3WFFunc extends VariationFunc {
+public class CPow3WFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_R = "r";
@@ -162,7 +162,43 @@ public class CPow3WFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float c;\n"
+        + "  float d;\n"
+        + "  float half_c;\n"
+        + "  float half_d;\n"
+        + "  float ang;\n"
+        + "  float inv_spread;\n"
+        + "  float full_spread;\n"
+        + "ang = 2.0 * PI / varpar->cpow3_wf_divisor;\n"
+        + "    c = varpar->cpow3_wf_r * cosf(PI / 2 * varpar->cpow3_wf_a) / varpar->cpow3_wf_divisor;\n"
+        + "    d = varpar->cpow3_wf_r * sinf(PI / 2 * varpar->cpow3_wf_a) / varpar->cpow3_wf_divisor;\n"
+        + "    half_c = c / 2;\n"
+        + "    half_d = d / 2;\n"
+        + "    inv_spread = 0.5 / varpar->cpow3_wf_spread;\n"
+        + "    full_spread = 2 * PI * varpar->cpow3_wf_spread;\n"
+        + " float ai = __theta;\n"
+        + "    float n = RANDFLOAT() * varpar->cpow3_wf_spread;\n"
+        + "    if (varpar->cpow3_wf_discrete_spread >= 1.0) {\n"
+        + "      n = (int) n;\n"
+        + "    }\n"
+        + "    if (ai < 0) {\n"
+        + "      n++;\n"
+        + "    }\n"
+        + "    ai += 2 * PI * n;\n"
+        + "    if (cosf(ai * inv_spread) < (RANDFLOAT() * 2.0 - 1.0)) {\n"
+        + "      ai -= full_spread;\n"
+        + "    }\n"
+        + "    float lnr2 = logf(__r2);\n"
+        + "    float ri = varpar->cpow3_wf * expf(half_c * lnr2 - d * ai);\n"
+        + "    float ang2 = c * ai * half_d * lnr2 * ang * (RANDFLOAT() * varpar->cpow3_wf_spread2 + varpar->cpow3_wf_offset2);\n"
+        + "    __px += ri * cosf(ang2);\n"
+        + "    __py += ri * sinf(ang2);\n"
+        + "\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->cpow3_wf * __z;\n" : "");
+  }
 }
