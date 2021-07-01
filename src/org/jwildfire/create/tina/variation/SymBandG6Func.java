@@ -29,11 +29,11 @@ import static org.jwildfire.base.mathlib.MathLib.round;
 
 import java.util.Random;
 
-public class SymBandG6Func extends VariationFunc {
+public class SymBandG6Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_STEPX   = "StepX";
-  private static final String PARAM_STEPY   = "StepY";
+  private static final String PARAM_STEPX   = "stepx";
+  private static final String PARAM_STEPY   = "stepy";
 
   private static final String[] paramNames = {PARAM_STEPX,PARAM_STEPY};
 
@@ -128,6 +128,34 @@ public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm
   }
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+  
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"Mathc Tx[4]={	{ 1.0 , 0.0 , 0.0  , 0. , 1.0 , 0.0 }, "
+	    		+"		        {-1.0 , 0.0 , 0.0  , 0. ,1.0 , 0.0 }, "
+	    		+"		        { 1.0 , 0.0 , 0.0  , 0. ,-1.0 , 0.0 }, "
+	    		+"		        {-1.0 , 0.0 , 0.0  , 0. ,-1.0 , 0.0 }, "
+	    		+"		      };"
+	    		+"	Tx[0].c =  - varpar->sym_bg6_stepx/2. - 1.0;"
+	    		+"	Tx[0].f =  - varpar->sym_bg6_stepy/2. - 0.5 ;"
+	    		+"	Tx[1].c =    varpar->sym_bg6_stepx/2. + 1.0;"
+	    		+"	Tx[1].f =    varpar->sym_bg6_stepy/2. - 0.5;"
+	    		+"	Tx[2].c =  - varpar->sym_bg6_stepx/2. - 1.0;"
+	    		+"	Tx[2].f =  - varpar->sym_bg6_stepy/2. + 0.5 ;"
+	    		+"	Tx[3].c =    varpar->sym_bg6_stepx/2. + 1.0;"
+	    		+"	Tx[3].f =    varpar->sym_bg6_stepy/2. + 0.5;"	    		
+	    		+"    "
+	    		+"	x= __x;"
+	    		+"  y =__y;"
+	    		+"	        "
+	    		+"  float2 z =make_float2(x,y);"
+	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
+	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
+	    		+"  __px += varpar->sym_bg6 * (f.x);"
+	    		+"  __py += varpar->sym_bg6 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_bg6 * __z;\n" : "");
+	  }
 }

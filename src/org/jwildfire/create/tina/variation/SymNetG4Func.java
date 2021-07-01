@@ -29,13 +29,13 @@ import static org.jwildfire.base.mathlib.MathLib.round;
 
 import java.util.Random;
 
-public class SymNetG4Func extends VariationFunc {
+public class SymNetG4Func extends VariationFunc implements SupportsGPU  {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_SEPX   = "SepX";
-  private static final String PARAM_SEPY   = "SepY";
-  private static final String PARAM_SKEWX   = "SkewX";
-  private static final String PARAM_SKEWY   = "SkewY";
+  private static final String PARAM_SEPX   = "sepx";
+  private static final String PARAM_SEPY   = "sepy";
+  private static final String PARAM_SKEWX   = "stepx";
+  private static final String PARAM_SKEWY   = "stepy";
 
 
   private static final String[] paramNames = {PARAM_SEPX,PARAM_SEPY,PARAM_SKEWX,PARAM_SKEWY};
@@ -143,6 +143,39 @@ public class SymNetG4Func extends VariationFunc {
   }
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+   
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"Mathc Tx[4]={	{ 1.0 , 0.0 , 0.0  , 0. , 1.0 , 0.0 }, "
+	    		+"		        {-1.0 , 0.0 , 0.0  , 0. ,-1.0 , 0.0 }, "
+	    		+"		        { 1.0 , 0.0 , 0.0  , 0. ,-1.0 , 0.0 }, "
+	    		+"		        {-1.0 , 0.0 , 0.0  , 0. , 1.0 , 0.0 }, "
+	   		    +" };"
+	    		+" float sx=varpar->sym_ng4_sepx /2.0;"
+	    		+" float sy=varpar->sym_ng4_sepy /2.0;"
+	    		+" float stpx=varpar->sym_ng4_stepx /2.0;"
+	    		+" float stpy=varpar->sym_ng4_stepy /2.0;"
+	    		
+	    		+"	Tx[0].c =  -sx - 2.0 -stpx;"
+	    		+"	Tx[0].f =   sy - 1.5 -stpy;"
+	    		+"	Tx[1].c =   sx       - stpx;"
+	    		+"	Tx[1].f =  -sy - 0.5 -stpy;"
+	    		+"	Tx[2].c =  -sx       + stpx;"
+	    		+"	Tx[2].f =  -sy + 0.5 + stpy;"
+	    		+"	Tx[3].c =   sx + 2.0 + stpx;"
+	    		+"	Tx[3].f =   sy - 0.5 + stpy;"
+	    		+"    "
+	    		+"	x= __x;"
+	    		+"  y =__y;"
+	    		+"	        "
+	    		+"  float2 z =make_float2(x,y);"
+	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
+	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
+	    		+"  __px += varpar->sym_ng4 * (f.x);"
+	    		+"  __py += varpar->sym_ng4 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_ng4 * __z;\n" : "");
+	  }    
 }
