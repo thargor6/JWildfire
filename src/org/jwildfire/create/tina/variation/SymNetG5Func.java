@@ -29,12 +29,12 @@ import static org.jwildfire.base.mathlib.MathLib.round;
 
 import java.util.Random;
 
-public class SymNetG5Func extends VariationFunc {
+public class SymNetG5Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_SEPX   = "SepX";
-  private static final String PARAM_SEPY   = "SepY";
-  private static final String PARAM_SKEWX   = "SkewX";
+  private static final String PARAM_SEPX    = "sepx";
+  private static final String PARAM_SEPY    = "sepy";
+  private static final String PARAM_SKEWX   = "stepx";
 
 
   private static final String[] paramNames = {PARAM_SEPX,PARAM_SEPY,PARAM_SKEWX};
@@ -134,6 +134,36 @@ public class SymNetG5Func extends VariationFunc {
   }
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+  
+  
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"Mathc Tx[4]={	{ 1.0 , 0.0 , 0.0  , 0. , 1.0 , 0.0 }, "
+	    		+"		        {-1.0 , 0.0 , 0.0  , 0. ,-1.0 , 0.0 }, "
+	    		+"		        { 1.0 , 0.0 , 0.0  , 0. ,-1.0 , 0.0 }, "
+	    		+"		        {-1.0 , 0.0 , 0.0  , 0. , 1.0 , 0.0 }, "
+	   		    +" };"
+	    			    		
+	    		+"	Tx[0].c =  -varpar->sym_ng5_sepx-2.0-varpar->sym_ng5_stepx/2.0;"
+	    		+"	Tx[0].f =   varpar->sym_ng5_sepy-0.5;"
+	    		+"	Tx[1].c =   varpar->sym_ng5_sepx - varpar->sym_ng5_stepx/2.0;"
+	    		+"	Tx[1].f =  -varpar->sym_ng5_sepy-0.5;"
+	    		+"	Tx[2].c =  -varpar->sym_ng5_sepx + varpar->sym_ng5_stepx/2.;"
+	    		+"	Tx[2].f =  -varpar->sym_ng5_sepy-0.5;"
+	    		+"	Tx[3].c =  2.0 + varpar->sym_ng5_sepx + varpar->sym_ng5_stepx/2.0;"
+	    		+"	Tx[3].f =  varpar->sym_ng5_sepy -0.5;"
+	    		+"    "
+	    		+"	x= __x;"
+	    		+"  y =__y;"
+	    		+"	        "
+	    		+"  float2 z =make_float2(x,y);"
+	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
+	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
+	    		+"  __px += varpar->sym_ng5 * (f.x);"
+	    		+"  __py += varpar->sym_ng5 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_ng5 * __z;\n" : "");
+	  } 
 }

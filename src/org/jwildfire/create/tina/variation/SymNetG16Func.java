@@ -26,12 +26,12 @@ import static org.jwildfire.base.mathlib.MathLib.floor;
 
 import java.util.Random;
 
-public class SymNetG16Func extends VariationFunc {
+public class SymNetG16Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_RADIUS = "Prop. Sep.";
-  private static final String PARAM_STEPX = "StepX";
-  private static final String PARAM_STEPY = "StepY";
+  private static final String PARAM_RADIUS = "radius";
+  private static final String PARAM_STEPX = "stepx";
+  private static final String PARAM_STEPY = "stepy";
 
 
   private static final String[] paramNames = {PARAM_RADIUS,PARAM_STEPX,PARAM_STEPY};
@@ -170,6 +170,69 @@ public class SymNetG16Func extends VariationFunc {
   }
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+  
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		
+	    		+"  float spacex=sqrtf(varpar->sym_ng16_radius*varpar->sym_ng16_radius/2.0);"
+	    		+"  float spacey=spacex;"
+	    		+"  float sx=varpar->sym_ng16_stepx/2.0;"
+	    		+"  float sy=varpar->sym_ng16_stepy/2.0;"
+
+	    		+"Mathc Tx[12]={"
+			     +"{ 1.0 , 0.0   , 0.0  , 0.    ,  1.0 , 0.},"
+			     +"{ 0.5 ,-0.866 , 0.0  , 0.866 ,  0.5 , 0.0 },"
+			     +"{-0.5 ,-0.866 , -0. ,  0.866 , -0.50 , 0.}," 
+			     +"{-1.0 , 0.000 , -0. ,  0.000 , -1.00 ,  0.0},"
+			     +"{-0.5 , 0.866 ,  -0.0 ,-0.866,-0.50 ,0.0},"
+			     +"{ 0.5 , 0.866 ,  -0.0 ,-0.866, 0.50 , 0.0},"    
+			     +"{ 1.0 , 0.0   , 0.0  , 0.    ,  1.0 , 0.},"
+			     +"{ 0.5 ,-0.866 , 0.0  , 0.866 ,  0.5 , 0.0 },"
+			     +"{-0.5 ,-0.866 , -0. ,  0.866 , -0.50 , 0.}," 
+			     +"{-1.0 , 0.000 , -0. ,  0.000 , -1.00 ,  0.0},"
+			     +"{-0.5 , 0.866 ,  -0.0 ,-0.866,-0.50 ,0.0},"
+			     +"{ 0.5 , 0.866 ,  -0.0 ,-0.866, 0.50 , 0.0},"
+	    		+"};" 	
+
+	    		+"	Tx[0].c =  - sx;"
+	    		+"	Tx[0].f =  - sy;"
+	    		+"	Tx[1].c =  - sx;"
+	    		+"	Tx[1].f =  - sy;"
+	    		+"	Tx[2].c =  - sx;"
+	    		+"	Tx[2].f =  - sy;"
+	    		+"	Tx[3].c =  - sx;"
+	    		+"	Tx[3].f =  - sy;"	  
+	    		+"	Tx[4].c =  - sx;"
+	    		+"	Tx[4].f =  - sy;"
+	    		+"	Tx[5].c =  - sx;"
+	    		+"	Tx[5].f =  - sy;"
+	    		
+	    		+"	Tx[6].c =    sx;"
+	    		+"	Tx[6].f =    sy;"
+	    		+"	Tx[7].c =    sx;"
+	    		+"	Tx[7].f =    sy;"	
+	    		+"	Tx[8].c =    sx;"
+	    		+"	Tx[8].f =    sy;"
+	    		+"	Tx[9].c =    sx;"
+	    		+"	Tx[9].f =    sy;"
+	    		+"	Tx[10].c =   sx;"
+	    		+"	Tx[10].f =   sy;"
+	    		+"	Tx[11].c =   sx;"
+	    		+"	Tx[11].f =   sy;"	
+	    		+"    "
+	    		+"	x= __x;"
+	    		+"  y =__y;"
+	    		+"	        "
+	    		+"  float2 z =make_float2(x,y);"
+	    		+"	z=z+(make_float2(spacex,spacey));"
+	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
+	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
+	    		+"  __px += varpar->sym_ng16 * (f.x);"
+	    		+"  __py += varpar->sym_ng16 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_ng16 * __z;\n" : "");
+	  }    
 }
+

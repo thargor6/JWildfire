@@ -29,11 +29,11 @@ import static org.jwildfire.base.mathlib.MathLib.round;
 
 import java.util.Random;
 
-public class SymNetG2Func extends VariationFunc {
+public class SymNetG2Func extends VariationFunc implements SupportsGPU{
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_STEPX   = "StepX";
-  private static final String PARAM_STEPY   = "StepY";
+  private static final String PARAM_STEPX   = "stepx";
+  private static final String PARAM_STEPY   = "stepy";
 
 
   private static final String[] paramNames = {PARAM_STEPX,PARAM_STEPY};
@@ -123,6 +123,28 @@ public class SymNetG2Func extends VariationFunc {
   }
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+  
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"Mathc Tx[2]={	{ 1.0 , 0.0 , 0.0  , 0. , 1.0 , 0.0 }, "
+	    		+"		        { 1.0 , 0.0 , 0.0  , 0. ,-1.0 , 0.0 }, "
+	   		    +" };"
+	    		+"	Tx[0].c =  - varpar->sym_ng2_stepx  /2.0;"
+	    		+"	Tx[0].f =  - varpar->sym_ng2_stepy  /2.0;"
+	    		+"	Tx[1].c =    varpar->sym_ng2_stepx  /2.0;"
+	    		+"	Tx[1].f =    varpar->sym_ng2_stepy  /2.0;"
+	    		+"    "
+	    		+"	x= __x;"
+	    		+"  y =__y;"
+	    		+"	        "
+	    		+"  float2 z =make_float2(x,y);"
+	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
+	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
+	    		+"  __px += varpar->sym_ng2 * (f.x);"
+	    		+"  __py += varpar->sym_ng2 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_ng2 * __z;\n" : "");
+	  }  
 }

@@ -26,12 +26,12 @@ import static org.jwildfire.base.mathlib.MathLib.floor;
 
 import java.util.Random;
 
-public class SymNetG10Func extends VariationFunc {
+public class SymNetG10Func extends VariationFunc implements SupportsGPU  {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SPACE = "space";
-  private static final String PARAM_SPACEX = "SpX";
-  private static final String PARAM_SPACEY = "SpY";
+  private static final String PARAM_SPACEX = "spacex";
+  private static final String PARAM_SPACEY = "spacey";
 
   private static final String[] paramNames = {PARAM_SPACE, PARAM_SPACEX,PARAM_SPACEY};
 
@@ -134,6 +134,35 @@ public class SymNetG10Func extends VariationFunc {
   }
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+   
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"Mathc Tx[4]={	{-1.0 , 0.0 , 0.0-varpar->sym_ng10_spacex  ,  0.0 , -1.0  , 0.0          }, "
+	    		+"		        { 0.0 , 1.0 , 0.0         , -1.0 ,  0.0  , 0.0 - varpar->sym_ng10_spacey }, "
+	    		+"		        { 0.0 ,-1.0 , 0.0         ,  1.0 ,  0.0  , 0.0 + varpar->sym_ng10_spacey }, "
+	    		+"		        { 1.0 , 0.0 , 0.0+varpar->sym_ng10_spacex  ,  0.  ,  1.0  , 0.0          }, "
+	    		+"		      };"
+	    		+"	Tx[0].c =  - varpar->sym_ng10_spacex/2.0;"
+	    		+"	Tx[0].f =  - varpar->sym_ng10_spacey/2.0;"
+	    		+"	Tx[1].c =  - varpar->sym_ng10_spacex/2.0;"
+	    		+"	Tx[1].f =  - varpar->sym_ng10_spacey/2.0;"
+	    		+"	Tx[2].c =    varpar->sym_ng10_spacex/2.0;"
+	    		+"	Tx[2].f =    varpar->sym_ng10_spacey/2.0;"
+	    		+"	Tx[3].c =    varpar->sym_ng10_spacex/2.0;"
+	    		+"	Tx[3].f =    varpar->sym_ng10_spacey/2.0;"	    		
+	    		+"    "
+	    		+"	x= __x;"
+	    		+"  y =__y;"
+	    		+"	        "
+	    		+"  float2 z =make_float2(x,y);"
+	    		+"	z=z+(make_float2(varpar->sym_ng10_space,varpar->sym_ng10_space));"
+	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
+	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
+	    		+"  __px += varpar->sym_ng10 * (f.x);"
+	    		+"  __py += varpar->sym_ng10 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_ng10 * __z;\n" : "");
+	  }
 }

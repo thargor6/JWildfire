@@ -26,13 +26,13 @@ import static org.jwildfire.base.mathlib.MathLib.floor;
 
 import java.util.Random;
 
-public class SymNetG8Func extends VariationFunc {
+public class SymNetG8Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SEPX = "sepx";
   private static final String PARAM_SEPY = "sepy";
-  private static final String PARAM_SKEWX = "SkewX";
-  private static final String PARAM_SKEWY = "SkewY";
+  private static final String PARAM_SKEWX = "skewx";
+  private static final String PARAM_SKEWY = "skewy";
   
 
   private static final String[] paramNames = {PARAM_SEPX,PARAM_SEPY,PARAM_SKEWX,PARAM_SKEWY};
@@ -149,6 +149,51 @@ public class SymNetG8Func extends VariationFunc {
   }
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+	    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+  
+
+  
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"Mathc Tx[8]={"
+	    		  +"{  1.0 , 0.0 , 0.0  , 0.0 , -1.0 ,  0.0},"
+	    		  +"{ -1.0 , 0.0 , 0.0  , 0.0 ,  1.0 ,  0.0},"
+	    		  +"{ -1.0 , 0.0 , 0.0  , 0.0 , -1.0 ,  0.0},"
+	    		  +"{  1.0 , 0.0 , 0.0  , 0.0 ,  1.0 ,  0.0},"
+	    		  +"{  1.0 , 0.0 , 0.0  , 0.0 , -1.0 ,  0.0},"
+	    		  +"{ -1.0 , 0.0 , 0.0  , 0.0 ,  1.0 ,  0.0},"
+	    		  +"{ -1.0 , 0.0 , 0.0  , 0.0 , -1.0 ,  0.0},"
+	    		  +"{  1.0 , 0.0 , 0.0  , 0.0 ,  1.0 , -0.0}"
+	   		    +" };"	    		
+	    		
+	    		+"	Tx[0].c =  -1-varpar->sym_ng8_sepx/2.0 -  varpar->sym_ng8_skewx/2.0;"
+	    		+"	Tx[0].f =   -varpar->sym_ng8_sepy/2.0 -varpar->sym_ng8_skewy/2.0;"
+	    		+"	Tx[1].c =    1 + varpar->sym_ng8_sepx/2.-  varpar->sym_ng8_skewx/2.0;"
+	    		+"	Tx[1].f =  varpar->sym_ng8_sepy/2.0-varpar->sym_ng8_skewy/2.0;"
+	    		+"	Tx[2].c =  1. + varpar->sym_ng8_sepx/2.0-  varpar->sym_ng8_skewx/2.0;"
+	    		+"	Tx[2].f =  -varpar->sym_ng8_sepy/2.0-varpar->sym_ng8_skewy/2.0;"
+	    		+"	Tx[3].c =   -1.0 -varpar->sym_ng8_sepx/2.0-  varpar->sym_ng8_skewx/2.0;"
+	    		+"	Tx[3].f =   varpar->sym_ng8_sepy/2.0-varpar->sym_ng8_skewy/2.0;"
+	    		
+	    		+"	Tx[4].c =  -1-varpar->sym_ng8_sepx/2.0 +  varpar->sym_ng8_skewx/2.0;"
+	    		+"	Tx[4].f =   -varpar->sym_ng8_sepy/2.0  +  varpar->sym_ng8_skewy/2.0;"
+	    		+"	Tx[5].c =   1 + varpar->sym_ng8_sepx/2. + varpar->sym_ng8_skewx/2.0;"
+	    		+"	Tx[5].f =  varpar->sym_ng8_sepy/2.0    + varpar->sym_ng8_skewy/2.0;"
+	    		+"	Tx[6].c =  1. + varpar->sym_ng8_sepx/2.0 +varpar->sym_ng8_skewx/2.0;"
+	    		+"	Tx[6].f =  -varpar->sym_ng8_sepy/2.0  + varpar->sym_ng8_skewy/2.0;"
+	    		+"	Tx[7].c =   -1.0 -varpar->sym_ng8_sepx/2.0 + varpar->sym_ng8_skewx/2.0;"
+	    		+"	Tx[7].f =   varpar->sym_ng8_sepy/2.0 + varpar->sym_ng8_skewy/2.0;"
+	    		+"    "
+	    		+"	x= __x;"
+	    		+"  y =__y;"
+	    		+"	        "
+	    		+"  float2 z =make_float2(x,y);"
+	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
+	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
+	    		+"  __px += varpar->sym_ng8* (f.x);"
+	    		+"  __py += varpar->sym_ng8 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_ng8 * __z;\n" : "");
+	  }  
 }
