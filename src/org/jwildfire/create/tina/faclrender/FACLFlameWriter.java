@@ -145,9 +145,17 @@ public class FACLFlameWriter extends AbstractFlameWriter {
             }
           }
         }
+        // extra params
+        {
+          String params[] = ((SupportsGPU)func).getGPUExtraParameterNames();
+          if (params != null) {
+            for (int i = 0; i < params.length; i++) {
+               attrList.add(xb.createAttr((transformedFuncName + "_" + params[i]/*+"-"+funcNameCounter*/), 0.0));
+            }
+          }
+        }
       }
     }
-
     return attrList;
   }
 

@@ -103,6 +103,9 @@ public class VariationInstance {
     for(String param: func.getParameterNames()) {
       sb.append("<parameter name=\""+param+"\" variation=\""+ transformedName +"\"/>\n");
     }
+    for(String param: ((SupportsGPU)func).getGPUExtraParameterNames()) {
+      sb.append("<parameter name=\""+param+"\" variation=\""+ transformedName +"\"/>\n");
+    }
     sb.append("<source>\n");
     sb.append("<![CDATA[\n");
     sb.append(gpuCode);

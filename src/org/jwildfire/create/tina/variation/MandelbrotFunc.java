@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -29,7 +29,7 @@ import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MandelbrotFunc extends VariationFunc {
+public class MandelbrotFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ITER = "iter";
@@ -53,7 +53,7 @@ public class MandelbrotFunc extends VariationFunc {
   private double ymin = -1.2;
   private double ymax = 1.2;
   private int invert = 0;
-  private double skin = 0;
+  private double skin = 0.012;
   private double cx = 0.0;
   private double cy = 0.0;
   private int max_points = -1;
@@ -81,9 +81,10 @@ public class MandelbrotFunc extends VariationFunc {
     } else {
       currIter = iter;
     }
-    while ((inverted && (currIter < iter)) ||
+    int k=0;
+    while ((k++<10) && ((inverted && (currIter < iter)) ||
             ((!inverted) && ((currIter >= iter) ||
-                    ((skin < 1) && (currIter < 0.1 * iter * (1 - skin)))))) {
+                    ((skin < 1) && (currIter < 0.1 * iter * (1 - skin))))))) {
       if ((_x0 == 0) && (_y0 == 0)) {
         // Choose a point at random
         if (max_points > 0) {
@@ -130,6 +131,8 @@ public class MandelbrotFunc extends VariationFunc {
         _y0 = 0;
       }
     }
+    if(k>=10) {x1=y1=50000.0-pContext.random()*100000;};
+
     pVarTP.x += pAmount * (x1 + cx * x); // + FTx^;
     pVarTP.y += pAmount * (y1 + cy * y); // + FTy^;
     pVarTP.z += _z0;
@@ -198,7 +201,69 @@ public class MandelbrotFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return
+         "float _x0 = varpar->mandelbrot_x0;\n"
+         +"float _y0 = varpar->mandelbrot_y0;\n"
+         +"float _z0 = varpar->mandelbrot_z0;\n"
+        + "   float x1 = _x0;\n"
+        + "    float x = _x0;\n"
+        + "    float y1 = _y0;\n"
+        + "    float y = _y0;\n"
+        + "    int currIter;\n"
+        + "\n"
+        + "    short inverted = RANDFLOAT() < varpar->mandelbrot_invert;\n"
+        + "    if (inverted) {\n"
+        + "      currIter = 0;\n"
+        + "    } else {\n"
+        + "      currIter = varpar->mandelbrot_iter;\n"
+        + "    }\n"
+        + "    int k=0;\n"
+        + "    while ((k++<10) && ((inverted && (currIter < varpar->mandelbrot_iter)) ||\n"
+        + "            ((!inverted) && ((currIter >= varpar->mandelbrot_iter) ||\n"
+        + "                    ((varpar->mandelbrot_skin < 1) && (currIter < 0.1 * varpar->mandelbrot_iter * (1 - varpar->mandelbrot_skin))))))) {\n"
+        + "      if ((_x0 == 0) && (_y0 == 0)) {\n"
+        + "          _x0 = (varpar->mandelbrot_xmax - varpar->mandelbrot_xmin) * RANDFLOAT() + varpar->mandelbrot_xmin;\n"
+        + "          _y0 = (varpar->mandelbrot_ymax - varpar->mandelbrot_ymin) * RANDFLOAT() + varpar->mandelbrot_ymin;\n"
+        + "          _z0 = RANDFLOAT() * varpar->mandelbrot_rnd_z_range;\n"
+        + "      } else {\n"
+        + "        _x0 = (varpar->mandelbrot_skin + 0.001) * (RANDFLOAT() - 0.5) + _x0;\n"
+        + "        _y0 = (varpar->mandelbrot_skin + 0.001) * (RANDFLOAT() - 0.5) + _y0;\n"
+        + "      }\n"
+        + "      x1 = _x0;\n"
+        + "      y1 = _y0;\n"
+        + "      x = _x0;\n"
+        + "      y = _y0;\n"
+        + "      currIter = 0;\n"
+        + "      while (((x * x + y * y < 2 * 2) && (currIter < varpar->mandelbrot_iter))) {\n"
+        + "        float xtemp = x * x - y * y + _x0;\n"
+        + "        y = 2.0 * x * y + _y0;\n"
+        + "        x = xtemp;\n"
+        + "        currIter++;\n"
+        + "      }\n"
+        + "      if ((currIter >= varpar->mandelbrot_iter) || (varpar->mandelbrot_skin == 1) || (currIter < 0.1 * (varpar->mandelbrot_iter * (1 - varpar->mandelbrot_skin)))) {\n"
+        + "        _x0 = 0;\n"
+        + "        _y0 = 0;\n"
+        + "      }\n"
+        + "    }\n"
+        + "    if(k>=10) {x1=y1=50000.0-RANDFLOAT()*100000;};\n"
+        + "    __px += varpar->mandelbrot * (x1 + varpar->mandelbrot_cx * x);\n"
+        + "    __py += varpar->mandelbrot * (y1 + varpar->mandelbrot_cy * y);\n"
+        + "    __pz += _z0;\n"
+        + "\n"
+        + "*(&(varpar->mandelbrot_x0))=_x0;\n"
+        + "*(&(varpar->mandelbrot_y0))=_y0;\n"
+        + "*(&(varpar->mandelbrot_z0))=_z0;\n";
+
+  }
+
+  @Override
+  public String[] getGPUExtraParameterNames() {
+    return new String[]{"x0", "y0", "z0"};
   }
 
 }

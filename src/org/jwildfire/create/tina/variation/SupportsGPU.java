@@ -26,4 +26,9 @@ public interface SupportsGPU {
   // Instead of naming it __post_scrop_x, we can name it __state%d_post_scrop_x in both in the code and in the declarations.
   // JWildfire will then create copies of the code and fill the placeholders with instance IDs.
   default boolean isStateful() { return false; };
+
+  default String[] getGPUExtraParameterNames() {
+    return new String[]{};
+  }
+
 }
