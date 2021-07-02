@@ -949,7 +949,7 @@ namespace cudaNoise {
 
 } // namespace
 
-//--------------------------------- JS -----------
+//------------- START of JS CODE--------------------------
 // vector operations 2D,3D, 4D
 
 #define vec2 float2
@@ -1251,7 +1251,6 @@ __device__ float length(float4 a)
 {
 	return  sqrtf(a.x*a.x+a.y*a.y+a.z*a.z+ a.w*a.w);
 }
-
 
 __device__ float2 abs(float2 v)
 {
@@ -1960,6 +1959,13 @@ struct __align__(8) Mathc {
 	 float f;	 
 };
 
+__device__ float2  transfhcf (float2 xy,float a,float b,float c,float d,float e,float f)
+{
+  float xt=a*xy.x+b*xy.y+c;
+  float yt=d*xy.x+e*xy.y+f;
+  return make_float2(xt,yt);
+}
+
 __device__ float greyscale(int r,int  g,int b)
 {
   int lum,red,green,blue;
@@ -1985,7 +1991,7 @@ __device__ float3  hsv2rgb (float3 c)
 	  float3 p = abs(fract(make_float3(c.x,c.x,c.x)+(make_float3(K.x,K.y,K.z)))*(6.0f)-(make_float3(K.w,K.w,K.w)));
 	  return mix(make_float3(K.x,K.x,K.x), clamp(p - make_float3(K.x,K.x,K.x), 0.0f, 1.0f), c.y)*c.z;
 	}
-//------------------------- JSI ------------------
+//------------- END of JS CODE--------------------------
 
 
 struct __align__(8) Complex
