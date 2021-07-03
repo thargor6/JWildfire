@@ -2685,6 +2685,10 @@ __device__ void iteratePoint(struct VariationListNode *varUsageList,
                 struct point *activePoint,
                 unsigned int *randStates,
                 uint *permutations,
+#ifdef JWF_EXTENSIONS
+                float4* palette,
+                uint numColors,
+#endif
                 float4 *gradients)
 {
     unsigned int index = threadIdx.x;
@@ -3153,6 +3157,10 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
                      activePoint,
                      randStates,
                      permutations,
+#ifdef JWF_EXTENSIONS
+                     palette,
+                     numColors,
+#endif
                      gradients);
 
 #ifndef FOR_2D
@@ -3195,6 +3203,10 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
                                  activePoint,
                                  randStates,
                                  permutations,
+#ifdef JWF_EXTENSIONS
+                                 palette,
+                                 numColors,
+#endif
                                  gradients);
 								activePoint[index].pal = pal_save; 
                 }
