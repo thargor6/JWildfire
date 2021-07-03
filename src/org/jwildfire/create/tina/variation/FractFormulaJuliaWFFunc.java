@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XForm;
 
 import java.util.List;
 
-public class FractFormulaJuliaWFFunc extends AbstractFractFormulaWFFunc {
+public class FractFormulaJuliaWFFunc extends AbstractFractFormulaWFFunc implements NotDesiredForGPURendering {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -147,6 +147,11 @@ public class FractFormulaJuliaWFFunc extends AbstractFractFormulaWFFunc {
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_EDIT_FORMULA, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL};
+  }
+
+  @Override
+  public String getDeprecationReason() {
+    return "String-based formula-parsing is too slow, and this variation is used very sparingly (if at all)";
   }
 
 }
