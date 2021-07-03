@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 
 import java.util.List;
 
-public class FractMeteorsWFFunc extends AbstractFractWFFunc {
+public class FractMeteorsWFFunc extends AbstractFractWFFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -76,7 +76,150 @@ public class FractMeteorsWFFunc extends AbstractFractWFFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "if (varpar->fract_meteors_wf_buddhabrot_mode > 0) {\n"
+            + "    float x0=0, y0 = 0;\n"
+            + "    int bb_max_clip_iter = 250;\n"
+            + "    if (varpar->fract_meteors_wf_chooseNewPoint) {\n"
+            + "      for (int i = 0; i < bb_max_clip_iter; i++) {\n"
+            + "        x0 = (varpar->fract_meteors_wf_xmax - varpar->fract_meteors_wf_xmin) * RANDFLOAT() + varpar->fract_meteors_wf_xmin;\n"
+            + "        y0 = (varpar->fract_meteors_wf_ymax - varpar->fract_meteors_wf_ymin) * RANDFLOAT() + varpar->fract_meteors_wf_ymin;\n"
+            + "        if (fract_meteors_wf_preBuddhaIterate(varpar, x0, y0, varpar->fract_meteors_wf_max_iter)) {\n"
+            + "          break;\n"
+            + "        }\n"
+            + "        if (i == bb_max_clip_iter - 1) {\n"
+            + "          __doHide = true;\n"
+            + "          break;\n"
+            + "        }\n"
+            + "      }\n"
+            + "      if(!__doHide) {\n"
+            + "        *(&varpar->fract_meteors_wf_chooseNewPoint) = false;\n"
+            + "        fract_meteors_wf_init(varpar, x0, y0);\n"
+            + "        for (int skip = 0; skip < varpar->fract_meteors_wf_buddhabrot_min_iter; skip++) {\n"
+            + "          fract_meteors_wf_nextIteration(varpar);\n"
+            + "        }\n"
+            + "      }\n"
+            + "    }\n"
+            + "    if(!__doHide) {\n"
+            + "      fract_meteors_wf_nextIteration(varpar);\n"
+            + "      if (varpar->fract_meteors_wf_currIter >= varpar->fract_meteors_wf_maxIter) {\n"
+            + "        *(&varpar->fract_meteors_wf_chooseNewPoint) = true;\n"
+            + "      }\n"
+            + "      __px += varpar->fract_meteors_wf_scale * varpar->fract_meteors_wf * (varpar->fract_meteors_wf_currX + varpar->fract_meteors_wf_offsetx);\n"
+            + "      __py += varpar->fract_meteors_wf_scale * varpar->fract_meteors_wf * (varpar->fract_meteors_wf_currY + varpar->fract_meteors_wf_offsety);\n"
+            + "      __pal += (float) varpar->fract_meteors_wf_currIter / (float) varpar->fract_meteors_wf_maxIter;\n"
+            + "      if (__pal < 0)\n"
+            + "        __pal = 0;\n"
+            + "      else if (__pal > 1.0)\n"
+            + "        __pal = 1.0;\n"
+            + "    }\n"
+            + "}\n"
+            + "else {\n"
+            + "    __doHide = false;\n"
+            + "    float x0 = 0.0, y0 = 0.0;\n"
+            + "    int iterCount = 0;\n"
+            + "    for (int i = 0; i < varpar->fract_meteors_wf_max_clip_iter; i++) {\n"
+            + "      x0 = (varpar->fract_meteors_wf_xmax - varpar->fract_meteors_wf_xmin) * RANDFLOAT() + varpar->fract_meteors_wf_xmin;\n"
+            + "      y0 = (varpar->fract_meteors_wf_ymax - varpar->fract_meteors_wf_ymin) * RANDFLOAT() + varpar->fract_meteors_wf_ymin;\n"
+            + "      iterCount = fract_meteors_wf_iterate(varpar, x0, y0, varpar->fract_meteors_wf_max_iter);\n"
+            + "      if ((varpar->fract_meteors_wf_clip_iter_max < 0 && iterCount >= (varpar->fract_meteors_wf_max_iter + varpar->fract_meteors_wf_clip_iter_max)) || (varpar->fract_meteors_wf_clip_iter_min > 0 && iterCount <= varpar->fract_meteors_wf_clip_iter_min)) {\n"
+            + "        if (i == varpar->fract_meteors_wf_max_clip_iter - 1) {\n"
+            + "          __doHide = true;\n"
+            + "          break;\n"
+            + "        }\n"
+            + "      } else {\n"
+            + "        break;\n"
+            + "      }\n"
+            + "    }\n"
+            + "    if(!__doHide) {\n"
+            + "      __px += varpar->fract_meteors_wf_scale * varpar->fract_meteors_wf * (x0 + varpar->fract_meteors_wf_offsetx);\n"
+            + "      __py += varpar->fract_meteors_wf_scale * varpar->fract_meteors_wf * (y0 + varpar->fract_meteors_wf_offsety);\n"
+            + "      float z;\n"
+            + "      if (lroundf(varpar->fract_meteors_wf_z_logscale) == 1) {\n"
+            + "        z = varpar->fract_meteors_wf_scale * varpar->fract_meteors_wf * (varpar->fract_meteors_wf_scalez / 10 * log10f(1.0 + (float) iterCount / (float) varpar->fract_meteors_wf_max_iter) + varpar->fract_meteors_wf_offsetz);\n"
+            + "        if (varpar->fract_meteors_wf_z_fill > 1.e-6f && RANDFLOAT() < varpar->fract_meteors_wf_z_fill) {\n"
+            + "          float prevZ = varpar->fract_meteors_wf_scale * varpar->fract_meteors_wf * (varpar->fract_meteors_wf_scalez / 10 * log10f(1.0 + (float) (iterCount - 1) / (float) varpar->fract_meteors_wf_max_iter) + varpar->fract_meteors_wf_offsetz);\n"
+            + "          z = (prevZ - z) * RANDFLOAT() + z;\n"
+            + "        }\n"
+            + "      } else {\n"
+            + "        z = varpar->fract_meteors_wf_scale * varpar->fract_meteors_wf * (varpar->fract_meteors_wf_scalez / 10 * ((float) iterCount / (float) varpar->fract_meteors_wf_max_iter) + varpar->fract_meteors_wf_offsetz);\n"
+            + "        if (varpar->fract_meteors_wf_z_fill > 1.e-6f && RANDFLOAT() < varpar->fract_meteors_wf_z_fill) {\n"
+            + "          float prevZ = varpar->fract_meteors_wf_scale * varpar->fract_meteors_wf * (varpar->fract_meteors_wf_scalez / 10 * ((float) (iterCount - 1) / (float) varpar->fract_meteors_wf_max_iter) + varpar->fract_meteors_wf_offsetz);\n"
+            + "          z = (prevZ - z) * RANDFLOAT() + z;\n"
+            + "        }\n"
+            + "      }\n"
+            + "     __pz += z;\n"
+            + "      if (lroundf(varpar->fract_meteors_wf_direct_color) != 0) {\n"
+            + "        __pal += (float) iterCount / (float) varpar->fract_meteors_wf_max_iter;\n"
+            + "        if (__pal > 1.0)\n"
+            + "          __pal -= 1.0;\n"
+            + "        if (__pal < 0)\n"
+            + "          __pal = 0;\n"
+            + "        else if (__pal > 1.0)\n"
+            + "          __pal = 1.0;\n"
+            + "      }\n"
+            + "   }\n"
+            + "}";
+  }
+
+  @Override
+  public String[] getGPUExtraParameterNames() {
+    return new String[]{"chooseNewPoint", "xs", "ys", "currIter", "maxIter", "startX", "startY", "currX", "currY"};
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ void fract_meteors_wf_init(struct VarPar__jwf_fract_meteors_wf *varpar,float pX0, float pY0) {\n"
+        + "    *(&varpar->jwf_fract_meteors_wf_xs) = *(&varpar->jwf_fract_meteors_wf_ys) = 0;\n"
+        + "    *(&varpar->jwf_fract_meteors_wf_startX) = *(&varpar->jwf_fract_meteors_wf_currX) = pX0;\n"
+        + "    *(&varpar->jwf_fract_meteors_wf_startY) = *(&varpar->jwf_fract_meteors_wf_currY) = pY0;\n"
+        + "    *(&varpar->jwf_fract_meteors_wf_currIter) = 0;\n"
+        + "}\n"
+        + "\n"
+        + "__device__ void fract_meteors_wf_setCurrPoint(struct VarPar__jwf_fract_meteors_wf *varpar, float pX, float pY) {\n"
+        + "   *(&varpar->jwf_fract_meteors_wf_currX) = pX;\n"
+        + "   *(&varpar->jwf_fract_meteors_wf_currY) = pY;\n"
+        + "   *(&varpar->jwf_fract_meteors_wf_currIter) = varpar->jwf_fract_meteors_wf_currIter + 1;\n"
+        + "}\n"
+        + "\n"
+        + "__device__ void fract_meteors_wf_nextIteration(struct VarPar__jwf_fract_meteors_wf *varpar) {\n"
+        + "      float x1 = varpar->jwf_fract_meteors_wf_currX;\n"
+        + "      float y1 = varpar->jwf_fract_meteors_wf_currY;\n"
+        + "      *(&varpar->jwf_fract_meteors_wf_xs) = x1 * x1;\n"
+        + "      *(&varpar->jwf_fract_meteors_wf_ys) = y1 * y1;\n"
+        + "      float x2 = (varpar->jwf_fract_meteors_wf_startX * x1 - varpar->jwf_fract_meteors_wf_startY * y1) - (varpar->jwf_fract_meteors_wf_startX * x1 + varpar->jwf_fract_meteors_wf_startY * y1) / (varpar->jwf_fract_meteors_wf_xs + varpar->jwf_fract_meteors_wf_ys);\n"
+        + "      y1 = (varpar->jwf_fract_meteors_wf_startX * y1 + varpar->jwf_fract_meteors_wf_startY * x1) + (varpar->jwf_fract_meteors_wf_startX * y1 - varpar->jwf_fract_meteors_wf_startY * x1) / (varpar->jwf_fract_meteors_wf_xs + varpar->jwf_fract_meteors_wf_ys);\n"
+        + "      x1 = x2;"
+        + "      fract_meteors_wf_setCurrPoint(varpar, x1, y1);\n"
+        + "}\n"
+        + "\n"
+        + "__device__ bool fract_meteors_wf_preBuddhaIterate(struct VarPar__jwf_fract_meteors_wf *varpar, float pStartX, float pStartY, int pMaxIter) {\n"
+        + "     fract_meteors_wf_init(varpar, pStartX, pStartY);\n"
+        + "     int currIter = 0;\n"
+        + "     while ((currIter++ < pMaxIter) && !(varpar->jwf_fract_meteors_wf_xs + varpar->jwf_fract_meteors_wf_ys >= 4.0)) {\n"
+        + "        fract_meteors_wf_nextIteration(varpar);\n"
+        + "     }\n"
+        + "     if (varpar->jwf_fract_meteors_wf_xs + varpar->jwf_fract_meteors_wf_ys >= 4.0) {\n"
+        + "        *(&varpar->jwf_fract_meteors_wf_maxIter) = currIter;\n"
+        + "        return varpar->jwf_fract_meteors_wf_maxIter > varpar->jwf_fract_meteors_wf_buddhabrot_min_iter;\n"
+        + "      } else {\n"
+        + "        return false;\n"
+        + "      }\n"
+        + "}\n"
+        + "\n"
+        + "__device__ int fract_meteors_wf_iterate(struct VarPar__jwf_fract_meteors_wf *varpar,float pStartX, float pStartY, float pMaxIter) {\n"
+        + "    fract_meteors_wf_init(varpar, pStartX, pStartY);\n"
+        + "    int currIter = 0;\n"
+        + "    while ((currIter++ < pMaxIter) && !(varpar->jwf_fract_meteors_wf_xs + varpar->jwf_fract_meteors_wf_ys >= 4.0)) {\n"
+        + "      fract_meteors_wf_nextIteration(varpar);\n"
+        + "    }\n"
+        + "    return currIter;\n"
+        + "}\n";
+  }
+
 
 }
