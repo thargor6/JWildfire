@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class HypershiftFunc extends VariationFunc {
+public class HypershiftFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHIFT = "shift";
@@ -32,7 +32,6 @@ public class HypershiftFunc extends VariationFunc {
   private double stretch = 1.0;
 
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-
     // "Hypershift" variation created by Zy0rg implemented into JWildfire by Brad Stefanov
     double scale = 1 - shift * shift;
     double rad = 1 / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
@@ -44,8 +43,6 @@ public class HypershiftFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
-    // ----------------------------------
-    // ...
   }
 
 
@@ -65,7 +62,6 @@ public class HypershiftFunc extends VariationFunc {
       shift = pValue;
     else if (PARAM_STRETCH.equalsIgnoreCase(pName))
       stretch = pValue;
-
     else
       throw new IllegalArgumentException(pName);
   }
@@ -77,7 +73,18 @@ public class HypershiftFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float scale = 1 - varpar->hypershift_shift * varpar->hypershift_shift;\n"
+        + "    float rad = 1 / (__x * __x + __y * __y);\n"
+        + "    float x = rad * __x + varpar->hypershift_shift;\n"
+        + "    float y = rad * __y;\n"
+        + "    rad = varpar->hypershift * scale / (x * x + y * y);\n"
+        + "    __px += rad * x + varpar->hypershift_shift;\n"
+        + "    __py += rad * y * varpar->hypershift_stretch;\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->hypershift * __z;\n" : "");
+  }
 }
