@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.faclrender;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -29,6 +30,7 @@ import org.jwildfire.create.tina.io.SimpleXMLBuilder;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder.Attribute;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
+import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.swing.MessageLogger;
 import org.jwildfire.create.tina.variation.*;
 
@@ -342,7 +344,8 @@ public class FACLFlameWriter extends AbstractFlameWriter {
   }
 
   private FlameTransformationContext createTransformCtx(Flame transformedFlame) {
-    FlameTransformationContext context = new FlameTransformationContext(null, new MarsagliaRandomGenerator(), 1, 1);
+    FlameRenderer renderer = new FlameRenderer(transformedFlame, Prefs.getPrefs(), false, true);
+    FlameTransformationContext context = new FlameTransformationContext(renderer, new MarsagliaRandomGenerator(), 1, 1);
     context.setPreserveZCoordinate(transformedFlame.isPreserveZ());
     return context;
   }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -32,7 +32,7 @@ import java.util.Map;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class YPlot3DWFFunc extends VariationFunc {
+public class YPlot3DWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PRESET_ID = "preset_id";
@@ -510,4 +510,122 @@ public class YPlot3DWFFunc extends VariationFunc {
       VariationFuncType.VARTYPE_EDIT_FORMULA
     };
   }
+
+  @Override
+  public boolean isStateful() {
+    return true;
+  }
+
+  final int CACHE_SIZE = 512;
+
+  float[][] createCache() {
+    float cache[][]=new float[CACHE_SIZE][CACHE_SIZE];
+    for(int i=0;i<CACHE_SIZE;i++) {
+      double x = _xmin + _dx * i / (double)(CACHE_SIZE - 1);
+      for (int j = 0; j < CACHE_SIZE; j++) {
+        double z = _zmin + _dz * j / (double) (CACHE_SIZE - 1);
+        double y = evaluator.evaluate(x, z);
+        cache[i][j] = (float) y;
+      }
+    }
+    return cache;
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _xmin, _xmax, _dx;\n"
+            + "float _ymin, _ymax, _dy;\n"
+            + "float _zmin, _zmax, _dz;\n"
+            + "float _displ_amount;\n"
+            + "_xmin = varpar->yplot3d_wf_xmin;\n"
+            + "    _xmax = varpar->yplot3d_wf_xmax;\n"
+            + "    if (_xmin > _xmax) {\n"
+            + "      float t = _xmin;\n"
+            + "      _xmin = _xmax;\n"
+            + "      _xmax = t;\n"
+            + "    }\n"
+            + "    _dx = _xmax - _xmin;\n"
+            + "\n"
+            + "    _ymin = varpar->yplot3d_wf_ymin;\n"
+            + "    _ymax = varpar->yplot3d_wf_ymax;\n"
+            + "    if (_ymin > _ymax) {\n"
+            + "      float t = _ymin;\n"
+            + "      _ymin = _ymax;\n"
+            + "      _ymax = t;\n"
+            + "    }\n"
+            + "    _dy = _ymax - _ymin;\n"
+            + "\n"
+            + "    _zmin = varpar->yplot3d_wf_zmin;\n"
+            + "    _zmax = varpar->yplot3d_wf_zmax;\n"
+            + "    if (_zmin > _zmax) {\n"
+            + "      float t = _zmin;\n"
+            + "      _zmin = _zmax;\n"
+            + "      _zmax = t;\n"
+            + "    }\n"
+            + "    _dz = _zmax - _zmin;\n"
+            + "\n"
+            + "float randU = RANDFLOAT();\n"
+            + "float randV = RANDFLOAT();\n"
+            + "float x = _xmin + randU * _dx;\n"
+            + "float z = _zmin + randV * _dz;\n"
+            + "int xidx= (int)(randU * " + (CACHE_SIZE - 1) + ");\n"
+            + "if(xidx>" + (CACHE_SIZE - 2) + ") xidx=" + (CACHE_SIZE - 2)+ ";\n"
+            + "int zidx= (int)(randV * " + (CACHE_SIZE - 1) + ");\n"
+            + "if(zidx>" + (CACHE_SIZE - 2) + ") zidx=" + (CACHE_SIZE - 2)+ ";\n"
+            + "float luy = cache%d_yplot3d_wf[xidx][zidx];\n"
+            + "float ruy = cache%d_yplot3d_wf[xidx+1][zidx];\n"
+            + "float lby = cache%d_yplot3d_wf[xidx][zidx+1];\n"
+            + "float rby = cache%d_yplot3d_wf[xidx+1][zidx+1];\n"
+            + "float u = (randU - xidx/(float)" + (CACHE_SIZE-1) + ")*"+(CACHE_SIZE-1)+";\n"
+            + "float v = (randV - zidx/(float)" + (CACHE_SIZE-1) + ")*"+(CACHE_SIZE-1)+";\n"
+            + "float y = blerpf(luy, ruy, lby, rby, u, v);\n"
+            + "if(lroundf(varpar->yplot3d_wf_direct_color)>0) {\n"
+            + "  switch (lroundf(varpar->yplot3d_wf_color_mode)) {\n"
+            + "        case 0:\n"
+            + "          break;\n"
+            + "        case 2:\n"
+            + "          __pal = (y - _ymin) / _dy;\n"
+            + "          break;\n"
+            + "        case 1:\n"
+            + "          __pal = (x - _xmin) / _dx;\n"
+            + "          break;\n"
+            + "        case 4:\n"
+            + "          __pal = (x - _xmin) / _dx * (z - _zmin) / _dz;\n"
+            + "          break;\n"
+            + "        default:\n"
+            + "        case 3:\n"
+            + "          __pal = (z - _zmin) / _dz;\n"
+            + "          break;\n"
+            + "      }\n"
+            + "      if (__pal < 0.0) __pal = 0.0;\n"
+            + "      else if (__pal > 1.0) __pal = 1.0;\n"
+            + "}\n"
+            + "__px += varpar->yplot3d_wf * x;\n"
+            + "__py += varpar->yplot3d_wf * y;\n"
+            + "__pz += varpar->yplot3d_wf * z;\n";
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    float cache[][] = createCache();
+    StringBuilder sb = new StringBuilder();
+    sb.append("__device__ float cache%d_yplot3d_wf["+cache.length+"]["+cache.length+"] = {\n");
+    for(int i=0;i<cache.length;i++) {
+      sb.append("{");
+      for(int j=0;j<cache.length;j++) {
+        if(i>0 && j%50==0) {
+          sb.append('\n');
+        }
+        sb.append(cache[i][j]);
+        if(j<cache.length-1) {
+          sb.append(", ");
+        }
+      }
+      sb.append(i<cache.length-1 ? "}," : "}\n");
+    }
+    sb.append("};\n\n");
+    return sb.toString();
+  }
+
+
 }

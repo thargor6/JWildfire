@@ -76,6 +76,10 @@ __device__ float lerpf(float a, float b, float p) {
     return a + (b - a) * p;
 }
 
+__device__ float blerpf(float c00, float c10, float c01, float c11, float tx, float ty) {
+    return lerpf(lerpf(c00, c10, tx), lerpf(c01, c11, tx), ty);
+}
+
 //--------------------------------- Noise -----------
 // cudaNoise
 // Library of common 3D noise functions for CUDA kernels

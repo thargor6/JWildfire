@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -32,7 +32,7 @@ import java.util.Map;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class YPlot2DWFFunc extends VariationFunc {
+public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PRESET_ID = "preset_id";
@@ -491,5 +491,106 @@ public class YPlot2DWFFunc extends VariationFunc {
       VariationFuncType.VARTYPE_DC,
       VariationFuncType.VARTYPE_EDIT_FORMULA
     };
+  }
+
+  @Override
+  public boolean isStateful() {
+    return true;
+  }
+
+  final int CACHE_SIZE = 1024;
+
+  float[] createCache() {
+    float cache[]=new float[CACHE_SIZE];
+    for(int i=0;i<CACHE_SIZE;i++) {
+      double x = _xmin + _dx * i / (double)(CACHE_SIZE - 1);
+      double y = evaluator.evaluate(x);
+      cache[i]=(float)y;
+    }
+    return cache;
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _xmin, _xmax, _dx;\n"
+        + "float _ymin, _ymax, _dy;\n"
+        + "float _zmin, _zmax, _dz;\n"
+        + "_xmin = varpar->yplot2d_wf_xmin;\n"
+        + "    _xmax = varpar->yplot2d_wf_xmax;\n"
+        + "    if (_xmin > _xmax) {\n"
+        + "      float t = _xmin;\n"
+        + "      _xmin = _xmax;\n"
+        + "      _xmax = t;\n"
+        + "    }\n"
+        + "    _dx = _xmax - _xmin;\n"
+        + "\n"
+        + "    _ymin = varpar->yplot2d_wf_ymin;\n"
+        + "    _ymax = varpar->yplot2d_wf_ymax;\n"
+        + "    if (_ymin > _ymax) {\n"
+        + "      float t = _ymin;\n"
+        + "      _ymin = _ymax;\n"
+        + "      _ymax = t;\n"
+        + "    }\n"
+        + "    _dy = _ymax - _ymin;\n"
+        + "\n"
+        + "    _zmin = varpar->yplot2d_wf_zmin;\n"
+        + "    _zmax = varpar->yplot2d_wf_zmax;\n"
+        + "    if (_zmin > _zmax) {\n"
+        + "      float t = _zmin;\n"
+        + "      _zmin = _zmax;\n"
+        + "      _zmax = t;\n"
+        + "    }\n"
+        + "    _dz = _zmax - _zmin;\n"
+        + "\n"
+        + "float randU = RANDFLOAT();\n"
+        + "float randV = RANDFLOAT();\n"
+        + "float x = _xmin + randU * _dx;\n"
+        + "float z = _zmin + randV * _dz;\n"
+        + "int xidx= (int)(randU * "
+        + (CACHE_SIZE - 1)
+        + ");\n"
+        + "if(xidx>"
+        + (CACHE_SIZE - 2)
+        + ") xidx="
+        + (CACHE_SIZE - 2)
+        + ";\n"
+        + "float y1 = cache%d_yplot2d_wf[xidx];\n"
+        + "float y2 = cache%d_yplot2d_wf[xidx+1];\n"
+        + "float t = (randU - xidx/(float)" + (CACHE_SIZE-1) + ")*"+(CACHE_SIZE-1)+";\n"
+        + "float y = lerpf(y1, y2, t);\n"
+        + "if(lroundf(varpar->yplot2d_wf_direct_color)>0) {\n"
+        + "  switch (lroundf(varpar->yplot2d_wf_color_mode)) {\n"
+        + "        case 0:\n"
+        + "          break;\n"
+        + "        case 2:\n"
+        + "          __pal = (y - _ymin) / _dy;\n"
+        + "          break;\n"
+        + "        default:\n"
+        + "        case 1:\n"
+        + "          __pal = (x - _xmin) / _dx;\n"
+        + "          break;\n"
+        + "      }\n"
+        + "      if (__pal < 0.0) __pal = 0.0;\n"
+        + "      else if (__pal > 1.0) __pal = 1.0;\n"
+        + "}\n"
+        + "__px += varpar->yplot2d_wf * x;\n"
+        + "__py += varpar->yplot2d_wf * y;\n"
+        + "__pz += varpar->yplot2d_wf * z;\n";
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    float cache[] = createCache();
+    StringBuilder sb = new StringBuilder();
+    sb.append("__constant__ float cache%d_yplot2d_wf["+cache.length+"] = {");
+    for(int i=0;i<cache.length;i++) {
+      if(i%50==0) {
+        sb.append('\n');
+      }
+      sb.append(cache[i]);
+      sb.append(i<cache.length-1 ? ", " : "};");
+    }
+    sb.append("\n\n");
+    return sb.toString();
   }
 }
