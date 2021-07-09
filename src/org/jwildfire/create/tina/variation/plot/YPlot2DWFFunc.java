@@ -24,6 +24,7 @@ import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.*;
 
@@ -489,7 +490,7 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
       VariationFuncType.VARTYPE_3D,
       VariationFuncType.VARTYPE_BASE_SHAPE,
       VariationFuncType.VARTYPE_DC,
-      VariationFuncType.VARTYPE_EDIT_FORMULA
+      VariationFuncType.VARTYPE_EDIT_FORMULA,
       VariationFuncType.VARTYPE_SUPPORTS_GPU    
     };
   }
@@ -497,18 +498,6 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
   @Override
   public boolean isStateful() {
     return true;
-  }
-
-  final int CACHE_SIZE = 1024;
-
-  float[] createCache() {
-    float cache[]=new float[CACHE_SIZE];
-    for(int i=0;i<CACHE_SIZE;i++) {
-      double x = _xmin + _dx * i / (double)(CACHE_SIZE - 1);
-      double y = evaluator.evaluate(x);
-      cache[i]=(float)y;
-    }
-    return cache;
   }
 
   @Override
@@ -547,18 +536,7 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
         + "float randV = RANDFLOAT();\n"
         + "float x = _xmin + randU * _dx;\n"
         + "float z = _zmin + randV * _dz;\n"
-        + "int xidx= (int)(randU * "
-        + (CACHE_SIZE - 1)
-        + ");\n"
-        + "if(xidx>"
-        + (CACHE_SIZE - 2)
-        + ") xidx="
-        + (CACHE_SIZE - 2)
-        + ";\n"
-        + "float y1 = cache%d_yplot2d_wf[xidx];\n"
-        + "float y2 = cache%d_yplot2d_wf[xidx+1];\n"
-        + "float t = (randU - xidx/(float)" + (CACHE_SIZE-1) + ")*"+(CACHE_SIZE-1)+";\n"
-        + "float y = lerpf(y1, y2, t);\n"
+        + "float y = eval%d_yplot2d_wf(x, varpar->yplot2d_wf_param_a, varpar->yplot2d_wf_param_b, varpar->yplot2d_wf_param_c, varpar->yplot2d_wf_param_d, varpar->yplot2d_wf_param_e, varpar->yplot2d_wf_param_f);\n"
         + "if(lroundf(varpar->yplot2d_wf_direct_color)>0) {\n"
         + "  switch (lroundf(varpar->yplot2d_wf_color_mode)) {\n"
         + "        case 0:\n"
@@ -581,17 +559,8 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUFunctions(FlameTransformationContext context) {
-    float cache[] = createCache();
-    StringBuilder sb = new StringBuilder();
-    sb.append("__constant__ float cache%d_yplot2d_wf["+cache.length+"] = {");
-    for(int i=0;i<cache.length;i++) {
-      if(i%50==0) {
-        sb.append('\n');
-      }
-      sb.append(cache[i]);
-      sb.append(i<cache.length-1 ? ", " : "};");
-    }
-    sb.append("\n\n");
-    return sb.toString();
+    return "__device__ float eval%d_yplot2d_wf(float x, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
+           +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(formula) +";\n"
+           +"}\n";
   }
 }

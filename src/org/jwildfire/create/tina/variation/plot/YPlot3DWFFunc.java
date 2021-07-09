@@ -24,6 +24,7 @@ import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.*;
 
@@ -507,7 +508,7 @@ public class YPlot3DWFFunc extends VariationFunc implements SupportsGPU {
       VariationFuncType.VARTYPE_3D,
       VariationFuncType.VARTYPE_BASE_SHAPE,
       VariationFuncType.VARTYPE_DC,
-      VariationFuncType.VARTYPE_EDIT_FORMULA
+      VariationFuncType.VARTYPE_EDIT_FORMULA,
       VariationFuncType.VARTYPE_SUPPORTS_GPU  
     };
   }
@@ -517,27 +518,11 @@ public class YPlot3DWFFunc extends VariationFunc implements SupportsGPU {
     return true;
   }
 
-  final int CACHE_SIZE = 512;
-
-  float[][] createCache() {
-    float cache[][]=new float[CACHE_SIZE][CACHE_SIZE];
-    for(int i=0;i<CACHE_SIZE;i++) {
-      double x = _xmin + _dx * i / (double)(CACHE_SIZE - 1);
-      for (int j = 0; j < CACHE_SIZE; j++) {
-        double z = _zmin + _dz * j / (double) (CACHE_SIZE - 1);
-        double y = evaluator.evaluate(x, z);
-        cache[i][j] = (float) y;
-      }
-    }
-    return cache;
-  }
-
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float _xmin, _xmax, _dx;\n"
             + "float _ymin, _ymax, _dy;\n"
             + "float _zmin, _zmax, _dz;\n"
-            + "float _displ_amount;\n"
             + "_xmin = varpar->yplot3d_wf_xmin;\n"
             + "    _xmax = varpar->yplot3d_wf_xmax;\n"
             + "    if (_xmin > _xmax) {\n"
@@ -569,17 +554,7 @@ public class YPlot3DWFFunc extends VariationFunc implements SupportsGPU {
             + "float randV = RANDFLOAT();\n"
             + "float x = _xmin + randU * _dx;\n"
             + "float z = _zmin + randV * _dz;\n"
-            + "int xidx= (int)(randU * " + (CACHE_SIZE - 1) + ");\n"
-            + "if(xidx>" + (CACHE_SIZE - 2) + ") xidx=" + (CACHE_SIZE - 2)+ ";\n"
-            + "int zidx= (int)(randV * " + (CACHE_SIZE - 1) + ");\n"
-            + "if(zidx>" + (CACHE_SIZE - 2) + ") zidx=" + (CACHE_SIZE - 2)+ ";\n"
-            + "float luy = cache%d_yplot3d_wf[xidx][zidx];\n"
-            + "float ruy = cache%d_yplot3d_wf[xidx+1][zidx];\n"
-            + "float lby = cache%d_yplot3d_wf[xidx][zidx+1];\n"
-            + "float rby = cache%d_yplot3d_wf[xidx+1][zidx+1];\n"
-            + "float u = (randU - xidx/(float)" + (CACHE_SIZE-1) + ")*"+(CACHE_SIZE-1)+";\n"
-            + "float v = (randV - zidx/(float)" + (CACHE_SIZE-1) + ")*"+(CACHE_SIZE-1)+";\n"
-            + "float y = blerpf(luy, ruy, lby, rby, u, v);\n"
+            + "float y = eval%d_yplot3d_wf(x, z, varpar->yplot3d_wf_param_a, varpar->yplot3d_wf_param_b, varpar->yplot3d_wf_param_c, varpar->yplot3d_wf_param_d, varpar->yplot3d_wf_param_e, varpar->yplot3d_wf_param_f);\n"
             + "if(lroundf(varpar->yplot3d_wf_direct_color)>0) {\n"
             + "  switch (lroundf(varpar->yplot3d_wf_color_mode)) {\n"
             + "        case 0:\n"
@@ -608,25 +583,9 @@ public class YPlot3DWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUFunctions(FlameTransformationContext context) {
-    float cache[][] = createCache();
-    StringBuilder sb = new StringBuilder();
-    sb.append("__device__ float cache%d_yplot3d_wf["+cache.length+"]["+cache.length+"] = {\n");
-    for(int i=0;i<cache.length;i++) {
-      sb.append("{");
-      for(int j=0;j<cache.length;j++) {
-        if(i>0 && j%50==0) {
-          sb.append('\n');
-        }
-        sb.append(cache[i][j]);
-        if(j<cache.length-1) {
-          sb.append(", ");
-        }
-      }
-      sb.append(i<cache.length-1 ? "}," : "}\n");
-    }
-    sb.append("};\n\n");
-    return sb.toString();
+    return "__device__ float eval%d_yplot3d_wf(float x, float z, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
+            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(formula) +";\n"
+            +"}\n";
   }
-
 
 }
