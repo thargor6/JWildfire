@@ -560,6 +560,7 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUFunctions(FlameTransformationContext context) {
     return "__device__ float eval%d_yplot2d_wf(float x, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
+           +"  float pi = PI;\n"
            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(formula) +";\n"
            +"}\n";
   }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -23,11 +23,9 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.palette.RenderColor;
-import org.jwildfire.create.tina.variation.ColorMapHolder;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.RessourceType;
-import org.jwildfire.create.tina.variation.VariationFuncType;
+import org.jwildfire.create.tina.variation.*;
 import org.jwildfire.create.tina.variation.mesh.AbstractOBJMeshWFFunc;
 
 import java.util.HashMap;
@@ -36,7 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
+public class IsoSFPlot3DWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PRESET_ID = "preset_id";
@@ -553,7 +551,110 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
       VariationFuncType.VARTYPE_3D,
       VariationFuncType.VARTYPE_BASE_SHAPE,
       VariationFuncType.VARTYPE_DC,
-      VariationFuncType.VARTYPE_EDIT_FORMULA
+      VariationFuncType.VARTYPE_EDIT_FORMULA,
+      VariationFuncType.VARTYPE_SUPPORTS_GPU
     };
   }
+
+  @Override
+  public boolean isStateful() {
+    return true;
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _xmin, _xmax, _dx;\n"
+        + "float _ymin, _ymax, _dy;\n"
+        + "float _zmin, _zmax, _dz;\n"
+        + "_xmin = varpar->isosfplot3d_wf_xmin;\n"
+        + "    _xmax = varpar->isosfplot3d_wf_xmax;\n"
+        + "    if (_xmin > _xmax) {\n"
+        + "      float t = _xmin;\n"
+        + "      _xmin = _xmax;\n"
+        + "      _xmax = t;\n"
+        + "    }\n"
+        + "    _dx = _xmax - _xmin;\n"
+        + "\n"
+        + "    _ymin = varpar->isosfplot3d_wf_ymin;\n"
+        + "    _ymax = varpar->isosfplot3d_wf_ymax;\n"
+        + "    if (_ymin > _ymax) {\n"
+        + "      float t = _ymin;\n"
+        + "      _ymin = _ymax;\n"
+        + "      _ymax = t;\n"
+        + "    }\n"
+        + "    _dy = _ymax - _ymin;\n"
+        + "\n"
+        + "    _zmin = varpar->isosfplot3d_wf_zmin;\n"
+        + "    _zmax = varpar->isosfplot3d_wf_zmax;\n"
+        + "    if (_zmin > _zmax) {\n"
+        + "      float t = _zmin;\n"
+        + "      _zmin = _zmax;\n"
+        + "      _zmax = t;\n"
+        + "    }\n"
+        + "    _dz = _zmax - _zmin;\n"
+        + "\n"
+        + "    __doHide = true;\n"
+        + "    float x = 0.0, y = 0.0, z = 0.0;\n"
+//        + "    int max_iter = lroundf(varpar->isosfplot3d_wf_max_iter);\n"
+// high values lead to strange effects on GPU
+        + "    int max_iter = lroundf(varpar->isosfplot3d_wf_max_iter / 10.0);\n"
+        + "    if(max_iter<3) max_iter=3;\n"
+        + "    else if(max_iter>1000) max_iter=1000;\n"
+        + "    for (int i = 0; i < max_iter; i++) {\n"
+        + "      x = _xmin + RANDFLOAT() * _dx;\n"
+        + "      y = _ymin + RANDFLOAT() * _dy;\n"
+        + "      z = _zmin + RANDFLOAT() * _dz;\n"
+        + "      float e = eval%d_isosfplot3d_wf(x, y, z, varpar->isosfplot3d_wf_param_a, varpar->isosfplot3d_wf_param_b, varpar->isosfplot3d_wf_param_c, varpar->isosfplot3d_wf_param_d, varpar->isosfplot3d_wf_param_e, varpar->isosfplot3d_wf_param_f);\n"
+        + "      if (fabsf(e) <= varpar->isosfplot3d_wf_thickness) {\n"
+        + "        __px += varpar->isosfplot3d_wf * x;\n"
+        + "        __py += varpar->isosfplot3d_wf * y;\n"
+        + "        __pz += varpar->isosfplot3d_wf * z;\n"
+        + "        __doHide = false;\n"
+        + "        break;\n"
+        + "      }\n"
+        + "    }\n"
+        + "if(!__doHide && lroundf(varpar->isosfplot3d_wf_direct_color)>0) {\n"
+        + "  switch (lroundf(varpar->isosfplot3d_wf_color_mode)) {\n"
+            + "        case 3:\n"
+            + "          __pal = (x - _xmin) / _dx;\n"
+            + "          break;\n"
+            + "        case 4:\n"
+            + "          __pal = (y - _ymin) / _dy;\n"
+            + "          break;\n"
+            + "        case 5:\n"
+            + "          __pal = (z - _zmin) / _dz;\n"
+            + "          break;\n"
+            + "        case 0:\n"
+            + "          break;\n"
+            + "        case 1:\n"
+            + "          break;\n"
+            + "        case 2:\n"
+            + "          break;\n"
+            + "        case 6:\n"
+            + "          __pal = (x - _xmin) / _dx * (y - _ymin) / _dy;\n"
+            + "          break;\n"
+            + "        case 7:\n"
+            + "          __pal = (y - _ymin) / _dy * (z - _zmin) / _dz;\n"
+            + "          break;\n"
+            + "        case 8:\n"
+            + "          __pal = (z - _zmin) / _dz * (x - _xmin) / _dx;\n"
+            + "          break;\n"
+            + "        default:\n"
+            + "        case 9:\n"
+            + "          __pal = (x - _xmin) / _dx * (y - _ymin) / _dy * (z - _zmin) / _dz;\n"
+            + "          break;\n"
+        + "      }\n"
+        + "      if (__pal < 0.0) __pal = 0.0;\n"
+        + "      else if (__pal > 1.0) __pal = 1.0;\n"
+        + "}\n";
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float eval%d_isosfplot3d_wf(float x, float y, float z, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
+            +"  float pi = PI;\n"
+            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(formula) +";\n"
+            +"}\n";
+  }
+
 }

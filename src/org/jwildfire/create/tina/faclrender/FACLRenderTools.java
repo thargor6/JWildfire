@@ -119,4 +119,8 @@ public class FACLRenderTools {
     }
   }
 
+  public static String rewriteJavaFormulaForCUDA(String formula) {
+    return formula.replaceAll("(atan2|asin|sin|acos|lerp|cos|fabs|log|pow|sqrt|sqr|sgn|exp|fmod|sinh|round|tan|cosh|hypot|rint|trunc|floor)\\(", "$1f(");
+  }
+
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,6 +24,7 @@ import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.*;
 
@@ -32,7 +33,7 @@ import java.util.Map;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PolarPlot3DWFFunc extends VariationFunc {
+public class PolarPlot3DWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PRESET_ID = "preset_id";
@@ -434,7 +435,94 @@ public class PolarPlot3DWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_EDIT_FORMULA};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_EDIT_FORMULA, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public boolean isStateful() {
+    return true;
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _tmin, _tmax, _dt;\n"
+        + "float _umin, _umax, _du;\n"
+        + "float _rmin, _rmax, _dr;\n"
+        + "_tmin = varpar->polarplot3d_wf_tmin;\n"
+        + "    _tmax = varpar->polarplot3d_wf_tmax;\n"
+        + "    if (_tmin > _tmax) {\n"
+        + "      float t = _tmin;\n"
+        + "      _tmin = _tmax;\n"
+        + "      _tmax = t;\n"
+        + "    }\n"
+        + "    _dt = _tmax - _tmin;\n"
+        + "\n"
+        + "    _umin = varpar->polarplot3d_wf_umin;\n"
+        + "    _umax = varpar->polarplot3d_wf_umax;\n"
+        + "    if (_umin > _umax) {\n"
+        + "      float t = _umin;\n"
+        + "      _umin = _umax;\n"
+        + "      _umax = t;\n"
+        + "    }\n"
+        + "    _du = _umax - _umin;\n"
+        + "\n"
+        + "    _rmin = varpar->polarplot3d_wf_rmin;\n"
+        + "    _rmax = varpar->polarplot3d_wf_rmax;\n"
+        + "    if (_rmin > _rmax) {\n"
+        + "      float t = _rmin;\n"
+        + "      _rmin = _rmax;\n"
+        + "      _rmax = t;\n"
+        + "    }\n"
+        + "    _dr = _rmax - _rmin;\n"
+        + "\n"
+        + "float randT = RANDFLOAT();\n"
+        + "float randU = RANDFLOAT();\n"
+        + "float t = _tmin + randT * _dt;\n"
+        + "float u = _umin + randU * _du;\n"
+        + "float r = eval%d_polarplot3d_wf(t, u, varpar->polarplot3d_wf_param_a, varpar->polarplot3d_wf_param_b, varpar->polarplot3d_wf_param_c, varpar->polarplot3d_wf_param_d, varpar->polarplot3d_wf_param_e, varpar->polarplot3d_wf_param_f);\n"
+        + "float x, y, z;\n"
+        + "if (lroundf(varpar->polarplot3d_wf_cylindrical) == 0) {\n"
+        + "      x = r * sinf(u) * cosf(t);\n"
+        + "      y = r * sinf(u) * sinf(t);\n"
+        + "      z = r * cosf(u);\n"
+        + "    }\n"
+        + "    else {\n"
+        + "      x = r * cosf(t);\n"
+        + "      y = r * sinf(t);\n"
+        + "      z = u;\n"
+        + "}\n"
+        + "if(lroundf(varpar->polarplot3d_wf_direct_color)>0) {\n"
+        + "  switch (lroundf(varpar->polarplot3d_wf_color_mode)) {\n"
+        + "        case 1:\n"
+        + "          __pal = (t - _tmin) / _dt;\n"
+        + "          break;\n"
+        + "        case 2:\n"
+        + "          __pal = (u - _umin) / _du;\n"
+        + "          break;\n"
+        + "        case 3:\n"
+        + "          __pal = (r - _rmin) / _dr;\n"
+        + "          break;\n"
+        + "        case 0:\n"
+        + "          break;\n"
+        + "        default:\n"
+        + "        case 4:\n"
+        + "          __pal = (t - _tmin) / _dt * (u - _umin) / _du;\n"
+        + "          break;\n"
+        + "  };\n"
+        + "  if (__pal < 0.0) __pal = 0.0;\n"
+        + "  else if (__pal > 1.0) __pal = 1.0;\n"
+        + "}\n"
+        + "__px += varpar->polarplot3d_wf * x;\n"
+        + "__py += varpar->polarplot3d_wf * y;\n"
+        + "__pz += varpar->polarplot3d_wf * z;\n";
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float eval%d_polarplot3d_wf(float t, float u, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
+            +"  float pi = PI;\n"
+            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(formula) +";\n"
+            +"}\n";
   }
 
 }

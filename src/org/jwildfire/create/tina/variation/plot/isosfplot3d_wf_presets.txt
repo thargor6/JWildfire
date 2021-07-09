@@ -360,9 +360,7 @@ param_d = 0.02
 
 ##32
 Cool shape 3 Brad Stefanov from http://math.stackexchange.com/questions/46212/interesting-implicit-surfaces-in-mathbbr3
-formula = (pow((pow(x,2)+pow(y,2)-param_a*param_a),2)+ (pow((pow(z,2)-1),2)))*
-(pow((pow(y,2)+pow(z,2)-param_b*param_b),2)+ (pow((pow(x,2)-1),2)))*
-(pow((pow(z,2)+pow(x,2)-param_c*param_c),2)+ (pow((pow(y,2)-1),2)))-0.001
+formula = (pow((pow(x,2)+pow(y,2)-param_a*param_a),2)+ (pow((pow(z,2)-1),2)))*(pow((pow(y,2)+pow(z,2)-param_b*param_b),2)+ (pow((pow(x,2)-1),2)))*(pow((pow(z,2)+pow(x,2)-param_c*param_c),2)+ (pow((pow(y,2)-1),2)))-0.001
 xmin = -pi
 xmax =  pi
 ymin = -pi
@@ -435,7 +433,6 @@ ymax = 3.001
 zmin = -.501
 zmax =  .501
 
-
 ##39
 Letter W Brad Stefanov from http://abdelhamid394.blogspot.com/
 formula =  pow(4*(-fabs(fabs(x)-1)*cos(pi/10)+y*sin(pi/10)+1),2)+pow((2*z),200)+pow((y/3),200)-1
@@ -448,7 +445,6 @@ zmax =  .501
 
 ##40
 Floored V1 Brad Stefanov from https://www.deviantart.com/snicker02/art/Floored--812637142
-
 formula = cos(param_a*floor(x * param_e)) + sin(param_b*floor(y * param_f)) + cos(param_c*floor(z))-param_d
 xmin = -9.0
 xmax =  9.0
@@ -466,7 +462,6 @@ param_f = 1.5
 
 ##41
 Floored V2 Brad Stefanov from https://www.deviantart.com/snicker02/art/Floored-V2-815198935
-
 formula = cos(floor(param_a*floor(x))* param_e) + sin(floor(param_b*floor(y)) * param_f) + cos(floor(param_c*floor(z)) * param_d)
 xmin = -19.0
 xmax =  19.0

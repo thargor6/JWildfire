@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,6 +24,7 @@ import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.*;
 
@@ -32,7 +33,7 @@ import java.util.Map;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PolarPlot2DWFFunc extends VariationFunc {
+public class PolarPlot2DWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PRESET_ID = "preset_id";
@@ -397,7 +398,79 @@ public class PolarPlot2DWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_EDIT_FORMULA};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_EDIT_FORMULA, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public boolean isStateful() {
+    return true;
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _tmin, _tmax, _dt;\n"
+        + "float _rmin, _rmax, _dr;\n"
+        + "float _zmin, _zmax, _dz;\n"
+        + "_tmin = varpar->polarplot2d_wf_tmin;\n"
+        + "    _tmax = varpar->polarplot2d_wf_tmax;\n"
+        + "    if (_tmin > _tmax) {\n"
+        + "      float t = _tmin;\n"
+        + "      _tmin = _tmax;\n"
+        + "      _tmax = t;\n"
+        + "    }\n"
+        + "    _dt = _tmax - _tmin;\n"
+        + "\n"
+        + "    _rmin = varpar->polarplot2d_wf_rmin;\n"
+        + "    _rmax = varpar->polarplot2d_wf_rmax;\n"
+        + "    if (_rmin > _rmax) {\n"
+        + "      float t = _rmin;\n"
+        + "      _rmin = _rmax;\n"
+        + "      _rmax = t;\n"
+        + "    }\n"
+        + "    _dr = _rmax - _rmin;\n"
+        + "\n"
+        + "    _zmin = varpar->polarplot2d_wf_zmin;\n"
+        + "    _zmax = varpar->polarplot2d_wf_zmax;\n"
+        + "    if (_zmin > _zmax) {\n"
+        + "      float t = _zmin;\n"
+        + "      _zmin = _zmax;\n"
+        + "      _zmax = t;\n"
+        + "    }\n"
+        + "    _dz = _zmax - _zmin;\n"
+        + "\n"
+        + "float randU = RANDFLOAT();\n"
+        + "float randV = RANDFLOAT();\n"
+        + "float t = _tmin + randU * _dt;\n"
+        + "float z = _zmin + randV * _dz;\n"
+        + "float r = eval%d_polarplot2d_wf(t, varpar->polarplot2d_wf_param_a, varpar->polarplot2d_wf_param_b, varpar->polarplot2d_wf_param_c, varpar->polarplot2d_wf_param_d, varpar->polarplot2d_wf_param_e, varpar->polarplot2d_wf_param_f);\n"
+        + "float x = r * cosf(t);\n"
+        + "float y = r * sinf(t);\n\n"
+        + "if(lroundf(varpar->polarplot2d_wf_direct_color)>0) {\n"
+        + "  switch (lroundf(varpar->polarplot2d_wf_color_mode)) {\n"
+        + "        case 0:\n"
+        + "          break;\n"
+        + "        case 2:\n"
+        + "          __pal = (r - _rmin) / _dr;\n"
+        + "          break;\n"
+        + "        default:\n"
+        + "        case 1:\n"
+        + "          __pal = (t - _tmin) / _dt;\n"
+        + "          break;\n"
+        + "  };\n"
+        + "  if (__pal < 0.0) __pal = 0.0;\n"
+        + "  else if (__pal > 1.0) __pal = 1.0;\n"
+        + "}\n"
+        + "__px += varpar->polarplot2d_wf * x;\n"
+        + "__py += varpar->polarplot2d_wf * y;\n"
+        + "__pz += varpar->polarplot2d_wf * z;\n";
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float eval%d_polarplot2d_wf(float t, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
+            +"  float pi = PI;\n"
+            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(formula) +";\n"
+            +"}\n";
   }
 
 }

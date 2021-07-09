@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -24,6 +24,7 @@ import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.*;
 
@@ -32,7 +33,7 @@ import java.util.Map;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class ParPlot2DWFFunc extends VariationFunc {
+public class ParPlot2DWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PRESET_ID = "preset_id";
@@ -569,7 +570,89 @@ public class ParPlot2DWFFunc extends VariationFunc {
       VariationFuncType.VARTYPE_3D,
       VariationFuncType.VARTYPE_BASE_SHAPE,
       VariationFuncType.VARTYPE_DC,
-      VariationFuncType.VARTYPE_EDIT_FORMULA
+      VariationFuncType.VARTYPE_EDIT_FORMULA,
+      VariationFuncType.VARTYPE_SUPPORTS_GPU
     };
   }
+
+  @Override
+  public boolean isStateful() {
+    return true;
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return  "float _umin, _umax, _du;\n"
+            + "float _vmin, _vmax, _dv;\n"
+            + "    _umin = varpar->parplot2d_wf_umin;\n"
+            + "    _umax = varpar->parplot2d_wf_umax;\n"
+            + "    if (_umin > _umax) {\n"
+            + "      float t = _umin;\n"
+            + "      _umin = _umax;\n"
+            + "      _umax = t;\n"
+            + "    }\n"
+            + "    _du = _umax - _umin;\n"
+            + "\n"
+            + "    _vmin = varpar->parplot2d_wf_vmin;\n"
+            + "    _vmax = varpar->parplot2d_wf_vmax;\n"
+            + "    if (_vmin > _vmax) {\n"
+            + "      float t = _vmin;\n"
+            + "      _vmin = _vmax;\n"
+            + "      _vmax = t;\n"
+            + "    }\n"
+            + "    _dv = _vmax - _vmin;\n"
+            + "\n"
+            + "float randU, randV;\n"
+            + "if(lroundf(varpar->parplot2d_wf_solid)==0) {\n"
+            + "  randU = __x;\n"
+            + "  randV = __y;\n"
+            + "}\n"
+            + "else {\n"
+            + "  randU = RANDFLOAT();\n"
+            + "  randV = RANDFLOAT();\n"
+            + "}\n"
+            + "float u = _umin + randU * _du;\n"
+            + "float v = _vmin + randV * _dv;\n"
+            + "float x = evalx%d_parplot2d_wf(u, v, varpar->parplot2d_wf_param_a, varpar->parplot2d_wf_param_b, varpar->parplot2d_wf_param_c, varpar->parplot2d_wf_param_d, varpar->parplot2d_wf_param_e, varpar->parplot2d_wf_param_f);\n"
+            + "float y = evaly%d_parplot2d_wf(u, v, varpar->parplot2d_wf_param_a, varpar->parplot2d_wf_param_b, varpar->parplot2d_wf_param_c, varpar->parplot2d_wf_param_d, varpar->parplot2d_wf_param_e, varpar->parplot2d_wf_param_f);\n"
+            + "float z = evalz%d_parplot2d_wf(u, v, varpar->parplot2d_wf_param_a, varpar->parplot2d_wf_param_b, varpar->parplot2d_wf_param_c, varpar->parplot2d_wf_param_d, varpar->parplot2d_wf_param_e, varpar->parplot2d_wf_param_f);\n"
+            + "if(lroundf(varpar->parplot2d_wf_direct_color)>0) {\n"
+            + "  switch (lroundf(varpar->parplot2d_wf_color_mode)) {\n"
+            + "        case 2:\n"
+            + "          __pal = (v - _vmin) / _dv;\n"
+            + "          break;\n"
+            + "        case 1:\n"
+            + "          __pal = (u - _umin) / _du;\n"
+            + "          break;\n"
+            + "        case 0:\n"
+            + "          break;\n"
+            + "        default:\n"
+            + "        case 3:\n"
+            + "          __pal = (v - _vmin) / _dv * (u - _umin) / _du;\n"
+            + "          break;\n"
+            + "  };\n"
+            + "  if (__pal < 0.0) __pal = 0.0;\n"
+            + "  else if (__pal > 1.0) __pal = 1.0;\n"
+            + "}\n"
+            + "__px += varpar->parplot2d_wf * x;\n"
+            + "__py += varpar->parplot2d_wf * y;\n"
+            + "__pz += varpar->parplot2d_wf * z;\n";
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ float evalx%d_parplot2d_wf(float u, float v, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
+            +"  float pi = PI;\n"
+            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(xformula) +";\n"
+            +"}\n"
+            +"__device__ float evaly%d_parplot2d_wf(float u, float v, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
+            +"  float pi = PI;\n"
+            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(yformula) +";\n"
+            +"}\n"
+            +"__device__ float evalz%d_parplot2d_wf(float u, float v, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
+            +"  float pi = PI;\n"
+            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(zformula) +";\n"
+            +"}\n";
+  }
+
 }
