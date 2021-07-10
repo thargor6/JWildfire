@@ -76,7 +76,7 @@ public class VariationSet implements VariationnameTransformer {
         msg+=";\nreason: "+((NotDesiredForGPURendering)func).getDeprecationReason();
       }
       else {
-        msg = String.format("\"%s\" is not supported (yet) on GPU, maybe it will be the future", func.getName());
+        msg = String.format("\"%s\" is not supported (yet) on GPU, maybe it will be in the future", func.getName());
       }
       if(messageLogger !=null) {
         messageLogger.logMessage(msg);
