@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Foci_3DFunc extends SimpleVariationFunc {
+public class Foci_3DFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -53,7 +53,27 @@ public class Foci_3DFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float expx = expf(__x) * 0.5;\n"
+        + "    float expnx = 0.25 / expx;\n"
+        + "    float kikr, boot;\n"
+        + "    boot = __z;\n"
+        + "    kikr = atan2f(__y, __x);\n"
+        + "    if (boot == 0.0) {\n"
+        + "      boot = kikr;\n"
+        + "    }\n"
+        + "    float siny = sinf(__y);\n"
+        + "    float cosy = cosf(__y);\n"
+        + "    float sinz = sinf(boot);\n"
+        + "    float cosz = cosf(boot);\n"
+        + "    float tmp = varpar->foci_3D / (expx + expnx - (cosy * cosz));\n"
+        + "\n"
+        + "    __px += (expx - expnx) * tmp;\n"
+        + "    __py += siny * tmp;\n"
+        + "    __pz += sinz * tmp;\n";
+  }
 }
