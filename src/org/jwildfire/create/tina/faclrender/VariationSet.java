@@ -20,21 +20,25 @@ package org.jwildfire.create.tina.faclrender;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.swing.MessageLogger;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.NotDesiredForGPURendering;
 import org.jwildfire.create.tina.variation.SupportsGPU;
 import org.jwildfire.create.tina.variation.VariationFunc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class VariationSet implements VariationnameTransformer {
-  private final MessageLogger logger;
+  private static final Logger logger = LoggerFactory.getLogger(VariationSet.class);
+  private final MessageLogger messageLogger;
   private final List<VariationInstance> variationInstances = new ArrayList<>();
   private final FlameTransformationContext transformCtx;
   private String uuid;
 
-  public VariationSet(Flame flame, FlameTransformationContext transformCtx, MessageLogger logger) {
-    this.logger = logger;
+  public VariationSet(Flame flame, FlameTransformationContext transformCtx, MessageLogger messageLogger) {
+    this.messageLogger = messageLogger;
     this.transformCtx = transformCtx;
     initVariationNames(flame);
   }
@@ -66,12 +70,18 @@ public class VariationSet implements VariationnameTransformer {
       }
     }
     else {
-      String msg = "Could not find variation code for \"" + func.getName() + "\"\n";
-      if(logger!=null) {
-        logger.logMessage(msg);
-      } else {
-        System.err.println(msg);
+      String msg;
+      if(func instanceof NotDesiredForGPURendering) {
+        msg = String.format("\"%s\" is not supported on GPU", func.getName());
+        msg+=";\nreason: "+((NotDesiredForGPURendering)func).getDeprecationReason();
       }
+      else {
+        msg = String.format("\"%s\" is not supported (yet) on GPU, maybe it will be the future", func.getName());
+      }
+      if(messageLogger !=null) {
+        messageLogger.logMessage(msg);
+      }
+      logger.error(msg);
     }
   }
 

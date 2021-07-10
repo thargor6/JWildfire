@@ -33,16 +33,18 @@ import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.swing.MessageLogger;
 import org.jwildfire.create.tina.variation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FACLFlameWriter extends AbstractFlameWriter {
-  private final MessageLogger logger;
+  private final MessageLogger messageLogger;
 
   public FACLFlameWriter() {
     this(null);
   }
 
-  public FACLFlameWriter(MessageLogger logger) {
-    this.logger = logger;
+  public FACLFlameWriter(MessageLogger messageLogger) {
+    this.messageLogger = messageLogger;
   }
 
   public void writeFlame(Flame pFlame, String pFilename) throws Exception {
@@ -65,7 +67,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = filterFlameAttrList(createFlameAttributes(transformedFlame, xb));
     Layer layer = transformedFlame.getFirstLayer();
-    VariationSet variationSet = new VariationSet(transformedFlame, transformationContext, logger);
+    VariationSet variationSet = new VariationSet(transformedFlame, transformationContext, messageLogger);
     attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", variationSet.getUuid()));
     attrList.add(new SimpleXMLBuilder.Attribute<String>("highlight_power", "-1"));
     xb.beginElement("flame", attrList);

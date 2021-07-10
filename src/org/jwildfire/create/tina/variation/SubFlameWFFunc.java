@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -27,7 +27,7 @@ import java.util.List;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SubFlameWFFunc extends VariationFunc {
+public class SubFlameWFFunc extends VariationFunc implements NotDesiredForGPURendering {
   private static final long serialVersionUID = 1L;
 
   public static final String RESSOURCE_FLAME = "flame";
@@ -419,4 +419,8 @@ public class SubFlameWFFunc extends VariationFunc {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_EXTERNAL_SHAPES};
   }
 
+  @Override
+  public String getDeprecationReason() {
+    return "too complex for GPU, would require some nested GPU renderer which seems not possible now";
+  }
 }
