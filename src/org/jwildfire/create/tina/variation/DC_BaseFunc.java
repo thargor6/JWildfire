@@ -27,8 +27,8 @@ public abstract class DC_BaseFunc  extends VariationFunc {
 	protected static final String PARAM_DC = "ColorOnly";
 	protected static final String PARAM_GRADIENT = "Gradient";
 	
-	protected static final String PARAM_SCALE_Z = "z_scale"; 
-	protected static final String PARAM_OFFSET_Z = "z_offset"; 
+	protected static final String PARAM_SCALE_Z = "scale_z"; 
+	protected static final String PARAM_OFFSET_Z = "offset_z"; 
 	protected static final String PARAM_RESET_Z = "reset_z"; 
 
 	private static final long serialVersionUID = 1L;

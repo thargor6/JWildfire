@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_BooleansFunc  extends DC_BaseFunc {
+public class DC_BooleansFunc  extends DC_BaseFunc  implements SupportsGPU {
 
 	/*
 	 * Variation :dc_booleans
@@ -36,7 +36,7 @@ public class DC_BooleansFunc  extends DC_BaseFunc {
 
 
 	private static final String PARAM_SEED = "randomize";
-	private static final String PARAM_TYPE = "^/&/|";
+	private static final String PARAM_TYPE = "type";
 	private static final String PARAM_ZOOM = "zoom";
 
 	
@@ -67,7 +67,7 @@ public class DC_BooleansFunc  extends DC_BaseFunc {
 	
 	public vec3 getRGBColor(double xp,double yp)
 	{
-
+		double temp=0.0f;
 	    vec2 u =new vec2(xp*zoom,yp*zoom);
         u=u.plus(new vec2(x0,y0));
         
@@ -132,8 +132,92 @@ public class DC_BooleansFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return  " "
+	    		+"float x,y;\n"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"\n"
+	    		+"if( varpar->dc_booleans_ColorOnly ==1)\n"
+	    		+"{\n"
+	    		+"  x=__x;\n"
+	    		+"  y=__y;\n"
+	    		+"}\n"
+	    		+"else\n"
+	    		+"{\n"
+	    		+"  x=RANDFLOAT()-0.5;\n"
+	    		+"  y=RANDFLOAT()-0.5;\n"
+	    		+"}\n"
+	    		+"float2 uv=make_float2(x*varpar->dc_booleans_zoom,y*varpar->dc_booleans_zoom);\n"
+	    		+"color=dc_booleans_getRGBColor(uv,varpar->dc_booleans_type);\n"
+	    		+"if( varpar->dc_booleans_Gradient ==0 )\n"
+	    		+"{\n"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}\n"
+	    		+"else if( varpar->dc_booleans_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+//// read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+                +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+//                +"        int3 palcolor=dbl2int(pal_color3);"
+                // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+                +" }"
+//// use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_booleans_Gradient ==2 )"  
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_booleans*(x);\n"
+	    		+"__py+= varpar->dc_booleans*(y);\n"
+	    		+"float dz = z * varpar->dc_booleans_scale_z + varpar->dc_booleans_offset_z;\n"
+	    		+"if ( varpar->dc_booleans_reset_z  == 1) {\n"
+	    		+"     __pz = dz;\n"
+	    		+"}\n"
+	    		+"else {\n"
+	    		+"   __pz += dz;\n"
+	    		+"}\n";
 
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float3  dc_booleans_getRGBColor (float2 uv, int type)\n"
+	    		+"{\n"
+	    		+"  float2 u =uv;\n"
+	    		+"  float temp=0.0f;\n"
+	    		+"  if(type==0)\n"
+	    		+"     temp=((int)u.x )^((int)u.y);\n"
+	    		+"  else if(type==1)\n"
+	    		+" 	   temp=((int)u.x )&((int)u.y);\n"
+	    		+"  else if(type==2)\n"
+	    		+" 	   temp=((int)u.x )|((int)u.y);\n"
+	    		+"   float3 color= hsv2rgb(make_float3(sin(temp), 1.0f, cos(temp)));\n"
+	    		+"   return color;\n"
+	    		+"}\n";
+	  }
 }
 

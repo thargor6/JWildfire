@@ -17,7 +17,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_LayersFunc  extends DC_BaseFunc {
+public class DC_LayersFunc  extends DC_BaseFunc implements SupportsGPU {
 
 
 	/*
@@ -36,14 +36,10 @@ public class DC_LayersFunc  extends DC_BaseFunc {
 	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_ZOOM = "zoom";
-	private static final String PARAM_RED = "red";
-	private static final String PARAM_GREEN = "green";
-	private static final String PARAM_BLUE = "blue";
-
 
 
 	int N=8;
-	double Amplitud=0.995;
+	double Amplitude=0.995;
 	private int seed = 10000;
 	double time=0.0;
 	double zoom=8.0;
@@ -82,7 +78,7 @@ public class DC_LayersFunc  extends DC_BaseFunc {
 		vec2 p=new vec2(xp,yp).multiply(zoom);
 
 
-		vec2 m = new vec2(2.,1.).multiply(Amplitud* Math.PI);
+		vec2 m = new vec2(2.,1.).multiply(Amplitude* Math.PI);
 
 		
 		vec3 color = new vec3(0.0);
@@ -182,7 +178,7 @@ public class DC_LayersFunc  extends DC_BaseFunc {
 
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return joinArrays(new Object[] { N,Amplitud,seed,time,zoom},super.getParameterValues());
+		return joinArrays(new Object[] { N,Amplitude,seed,time,zoom},super.getParameterValues());
 	}
 
 
@@ -194,7 +190,7 @@ public class DC_LayersFunc  extends DC_BaseFunc {
 		}
 		else if (pName.equalsIgnoreCase(PARAM_AMPLITUDE)) {
 			
-			Amplitud = Tools.limitValue(pValue, 0.0 , 10.0);
+			Amplitude = Tools.limitValue(pValue, 0.0 , 10.0);
 		}
 		else if (PARAM_SEED.equalsIgnoreCase(pName)) 
 		{	   seed =  (int) pValue;
@@ -230,8 +226,113 @@ public class DC_LayersFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_layers_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_layers_zoom;"
+	    		+" color=dc_layers_getRGBColor(uv,varpar->dc_layers_time,varpar->dc_layers_N,"
+	    		+ "                                   varpar->dc_layers_Amplitude);"
+	    		+"if( varpar->dc_layers_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+				+"   __colorA  = 1.0;"
+	    		+"}"
+				+"else if( varpar->dc_layers_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+               +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+               // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+               +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_layers_Gradient ==2 )"
+	    		+"{"
+				+"  int3 icolor=dbl2int(color);"
+	    		+"  z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_layers*x;"
+	    		+"__py+= varpar->dc_layers*y;"
+	    		+"float dz = z * varpar->dc_layers_scale_z + varpar->dc_layers_offset_z;"
+	    		+"if ( varpar->dc_layers_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
 
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+
+	    return   "__device__ float  dc_layers_snoise (float3 v) {"
+	    		+"	return (sinf(v.x*4.)*cosf(v.y*4.)-sinf(v.z*4.));"
+	    		+"}"
+	    		
+	    		+"__device__ float3  dc_layers_rotate (float3 v,float2 r) "
+	    		+"{"
+	    		+"	Mat3 rxmat;"
+	    		+ " Mat3_Init(&rxmat, 1.0,   0.0    ,    0.0    ,"
+	    		+"	                  0.0 ,cosf(r.y),-sinf(r.y),"
+	    		+"			          0.0 ,sinf(r.y), cosf(r.y));"
+	    		+"	Mat3 rymat;"
+	    		+ " Mat3_Init(&rymat, cosf(r.x), 0.0 ,-sinf(r.x),"
+	    		+"			           0.0     , 1.0 ,    0.0  ,"
+	    		+"			          sinf(r.x), 0.0 ,cosf(r.x));"
+	    		+"  float3  vt=times(&rxmat,v);"
+	    		+"	vt = times(&rymat,vt);"
+	    		+"	return vt;"
+	    		+"}"
+
+	    		+"__device__ float3  dc_layers_getRGBColor (float2 p, float time, float N, float Amplitude)"
+	    		+"{"
+	    		+"	float2 m = make_float2(2.0,1.0)*(Amplitude* PI);"
+	    		+"	float3 color = make_float3(0.0,0.0,0.0);"
+	    		+"  float3 tmp=dc_layers_rotate (make_float3(p.x,p.y,1.0),make_float2(m.x,m.y));"
+	    		+"	float3 pos = normalize( tmp );"
+	    		+"	float dist = 0.0;"
+	    		+"	for(int k = 1; k <= N ;k++)"
+	    		+"	{"
+	    		+"		float shell = abs( dc_layers_snoise (pos*((float)k) +  make_float3(time,0.0,0.0)*0.13) );"
+	    		+"		shell = smoothstep(0.25,0.2,shell);"
+	    		+"		dist = fmaxf(dist,shell*(1.-((float)k/8.)));"
+	    		+"	}"
+	    		+"	color = mix(make_float3(1.0, 1.0, 1.0),make_float3(0.0,0.0,0.0),1.0-dist);"
+	    		+"	return color;"
+	    		+"}";
+	  }
 }
 

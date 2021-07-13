@@ -20,7 +20,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_CirclesBlueFunc  extends DC_BaseFunc {
+public class DC_CirclesBlueFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_circlesblue
@@ -33,11 +33,11 @@ public class DC_CirclesBlueFunc  extends DC_BaseFunc {
 	private static final long serialVersionUID = 1L;
 
 
-	private static final String PARAM_SEED = "Seed";
+	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_ZOOM = "zoom";
-	private static final String PARAM_RADIUS = "Radius";
-	private static final String PARAM_BUBLES = "Bubles";
+	private static final String PARAM_RADIUS = "radius";
+	private static final String PARAM_BUBLES = "bubles";
 
 
 
@@ -219,8 +219,90 @@ public class DC_CirclesBlueFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_circlesblue_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_circlesblue_zoom;"
+	    		+"color=dc_circlesblue_getRGBColor(uv,varpar->dc_circlesblue_time,varpar->dc_circlesblue_bubles,varpar->dc_circlesblue_radius);"
+	    		+"if( varpar->dc_circlesblue_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_circlesblue_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+//// read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+                +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+                // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+                +" }"
+//// use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_circlesblue_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_circlesblue*x;"
+	    		+"__py+= varpar->dc_circlesblue*y;"
+	    		+"float dz = z * varpar->dc_circlesblue_scale_z + varpar->dc_circlesblue_offset_z;"
+	    		+"if ( varpar->dc_circlesblue_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	}
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__ float3 dc_circlesblue_getRGBColor (float2 uv, float time,float bubbles, float radius)"
+		    		+"{"
+		    		+"      float3 color=make_float3(0.0f,0.0f,0.0f);"
+					+"	    for (float i=0;i<bubbles;i++)"
+					+"	    {"
+					+"		   float pha = tan(i*6.+1.0)*0.5 + 0.5;"  
+					+"		   float siz = pow( cosf(i*2.4+5.0)*0.5 + 0.5, 4.0 );"  
+					+"		   float pox = cosf(i*3.55+4.1);"
+					+"		   float rad = radius + sinf(i)*0.12+0.08;" 
+					+"		   float2 pos = make_float2( pox+sinf(time/15.+pha+siz),"
+					+ "                                  -1.0-rad + (2.0+2.0*rad)*mod(pha+0.1*(time/5.)*(0.2+0.8*siz),1.0));" 
+					+"     	   float dis = length( uv- pos );" 
+					+"		   float3  col = mix( make_float3(0.1, 0.2, 0.8), make_float3(0.2,0.8,0.6), 0.5+0.5*sinf(i*sinf(time*pox*0.03)+1.9));" 
+					+"		   color = color + (col*(1.- smoothstep( rad*(0.65+0.20*sinf(pox*time)), rad, dis ))*( (1.0 - cosf(pox*time))));"				
+	   				+"      }"  
+	   				+"		return color*0.3;"
+		    		+"}";
+		  }
 }
 

@@ -18,13 +18,17 @@ import js.glsl.vec4;
 
 
 
-public class DC_KaliSetFunc  extends DC_BaseFunc {
+public class DC_KaliSetFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_kaliset
 	 * Date: February 13, 2019
 	 * Jesus Sosa
+	 * 	Credits:	
+	 * inspired by http://www.fractalforums.com/new-theories-and-research/very-simple-formula-for-fractal-patterns/
+	 * a slight(?) different public domain
 	 */
+
 
 
 
@@ -36,8 +40,8 @@ public class DC_KaliSetFunc  extends DC_BaseFunc {
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_N = "N";
 
-	private static final String PARAM_SHIFT_X = "ShiftX";
-	private static final String PARAM_SHIFT_Y = "ShiftY";
+	private static final String PARAM_SHIFT_X = "shiftX";
+	private static final String PARAM_SHIFT_Y = "shiftY";
 
 
 
@@ -229,8 +233,98 @@ public class DC_KaliSetFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_kaliset_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_kaliset_zoom;"
+	    		+"color=dc_kaliset_getRGBColor(uv,varpar->dc_kaliset_time,varpar->dc_kaliset_N,"
+                +"                                varpar->dc_kaliset_shiftX,varpar->dc_kaliset_shiftY);"
+	    		+"if( varpar->dc_kaliset_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_kaliset_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+	    		+" for(int index=0; index<numColors;index++)"
+             +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+             +" }"          
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_kaliset_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_kaliset*x;"
+	    		+"__py+= varpar->dc_kaliset*y;"
+	    		+"float dz = z * varpar->dc_kaliset_scale_z + varpar->dc_kaliset_offset_z;"
+	    		+"if ( varpar->dc_kaliset_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
 
+		 return   "	__device__ float3  dc_kaliset_getRGBColor (float2 v,float time, float N, float shiftx, float shifty)"
+				 +"	{"
+				 +"			float rsum = 0.0;"
+				 +"			float pi2 = 3.6 * 2.0;"
+				 +"			float C = cosf(time/603. * pi2);"
+				 +"			float S = sinf(time/407.4* pi2);"
+				 +"			float2 shift = make_float2(shiftx,shifty);"
+				 +"			float zoom = (time/184.0 + 1.0);"
+				 +"			"
+				 +"			for ( int i = 0; i < N; i++ ){"
+				 +"				float rr = v.x*v.x+v.y*v.y;"
+				 +"				if ( rr > 1.0 ){"
+				 +"					rr = 1.0/rr;"
+				 +"					v.x = v.x * rr;"
+				 +"					v.y = v.y * rr;"
+				 +"				}"
+				 +"				rsum *= 0.99;"
+				 +"				rsum += rr;"
+				 +"				"
+				 +"				v = make_float2( C*v.x-S*v.y, S*v.x+C*v.y )*(zoom)+(shift);"
+				 +"			}"
+				 +"			"
+				 +"			float col = rsum * 0.5;"
+				 +"			return make_float3( cosf(col*1.0), cosf(col*2.0), cosf(col*4.0));"
+				 +"		}";
+	 }
 }
 

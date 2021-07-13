@@ -16,7 +16,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_KaleidoscopicFunc  extends DC_BaseFunc {
+public class DC_KaleidoscopicFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_kaleidoscopic
@@ -29,12 +29,12 @@ public class DC_KaleidoscopicFunc  extends DC_BaseFunc {
 	private static final long serialVersionUID = 1L;
 
 
-	private static final String PARAM_SEED = "Seed";
+	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_TIME = "time";
-	private static final String PARAM_NSIDES = "Sides";
+	private static final String PARAM_NSIDES = "sides";
 	private static final String PARAM_ZOOM = "zoom";
-	private static final String PARAM_P1 = "P1";
-	private static final String PARAM_RADIAL = "Radial";
+	private static final String PARAM_P1 = "p1";
+	private static final String PARAM_RADIAL = "radial";
 
 
 
@@ -248,8 +248,96 @@ public class DC_KaleidoscopicFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_kaleidoscopic_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y);"
+	    		+"color=dc_kaleidoscopic_getRGBColor(uv,varpar->dc_kaleidoscopic_time,varpar->dc_kaleidoscopic_zoom,"
+	    		+"                                     varpar->dc_kaleidoscopic_sides,"
+	    		+ "                                    varpar->dc_kaleidoscopic_radial,varpar->dc_kaleidoscopic_p1);"
+	    		+"if( varpar->dc_kaleidoscopic_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_kaleidoscopic_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+	    		+" for(int index=0; index<numColors;index++)"
+               +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+               +" }"          
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_kaleidoscopic_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_kaleidoscopic*x;"
+	    		+"__py+= varpar->dc_kaleidoscopic*y;"
+	    		+"float dz = z * varpar->dc_kaleidoscopic_scale_z + varpar->dc_kaleidoscopic_offset_z;"
+	    		+"if ( varpar->dc_kaleidoscopic_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
 
+		 return   "	  __device__ float2  dc_kaleidoscopic_smallKoleidoscope ( float2 uv,float time, float sides)"
+				 +"	  {"
+				 +"     float KA = PI / sides;"
+				 +"	    float angle = abs (mod (atan2f(uv.y, uv.x), 2.0 * KA) - KA) + 0.1* time;"
+				 +"	    float2 uvr =  make_float2(cosf(angle), sinf(angle))*(length(uv) );"
+				 +"	    return uvr;"
+				 +"	  }"
+				 
+				 +"	__device__ float3  dc_kaleidoscopic_getRGBColor (float2 uv,float time, float zoom,float sides, float radial, float p1 )"
+				 +"	{"
+				 +"		  if(radial==1)"
+				 +"		     uv= dc_kaleidoscopic_smallKoleidoscope (uv, time, sides);"
+				 +"		  float3 p = make_float3 (uv.x,uv.y,zoom);"
+				 +"		  for (int i = 0; i < 44; i++)"
+				 +"		  {"
+				 +"			  float3 t1=abs(p)/(dot(p,p));"
+				 +"			  float3 t0=t1-(make_float3(1.0,1.02,p1*0.4));"
+				 +"			  float3 t2=make_float3(1.3,0.999,0.678)*abs(t0);"
+				 +"		      p= make_float3(t2.x,t2.z,t2.y);"
+				 +"		  }"
+				 +"		return p;"
+				 +"	}";
+	 }
 }
 

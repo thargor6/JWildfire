@@ -20,7 +20,7 @@ import js.glsl.mat3;
 import js.glsl.mat4;
 
 
-public class DC_GenericMandelbrootFunc  extends DC_BaseFunc {
+public class DC_GenericMandelbrootFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_gmandelbroot
@@ -36,19 +36,19 @@ public class DC_GenericMandelbrootFunc  extends DC_BaseFunc {
 
 
 	private static final String PARAM_RANDOMIZE = "randomize"; 
-	private static final String PARAM_COLORMODE = "color mode"; 
-	private static final String PARAM_ITERS = "Iters"; 
+	private static final String PARAM_COLORMODE = "colormode"; 
+	private static final String PARAM_ITERS = "iters"; 
 	private static final String PARAM_EXPRE = "exp_re";
 	private static final String PARAM_EXPIM = "exp_im";
 	private static final String PARAM_N = "n";
 	private static final String PARAM_M = "m";
-	private static final String PARAM_BSHIP = "burnigShip";
-	private static final String PARAM_CONJ = "Conjugate";
-	private static final String PARAM_JULIA = "Julia";
-	private static final String PARAM_JRE = "Jre";
-	private static final String PARAM_JIM = "Jim";
-	private static final String PARAM_PANX = "PanX";
-	private static final String PARAM_PANY = "PanY";
+	private static final String PARAM_BSHIP = "burnigship";
+	private static final String PARAM_CONJ = "conjugate";
+	private static final String PARAM_JULIA = "julia";
+	private static final String PARAM_JRE = "jre";
+	private static final String PARAM_JIM = "jim";
+	private static final String PARAM_PANX = "panX";
+	private static final String PARAM_PANY = "panY";
 	private static final String PARAM_ZOOM = "zoom"; 
 
 
@@ -395,8 +395,193 @@ public class DC_GenericMandelbrootFunc  extends DC_BaseFunc {
 	
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL,VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-	
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_gmandelbroot_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"    		
+	    		
+	    		+"float2 uv=make_float2(x,y);"
+			    +"   uv  = uv*varpar->dc_gmandelbroot_zoom - make_float2(varpar->dc_gmandelbroot_panX,varpar->dc_gmandelbroot_panY);"
+//				+"  float2 tmp=make_float2(varpar->dc_gmandelbroot_exp_re,varpar->dc_gmandelbroot_exp_im);"
+//				+"  color =  dc_gmandelbroot_gen_mandelbroot (uv,tmp, varpar->dc_gmandelbroot_colormode,varpar->dc_gmandelbroot_iters,"
+//				+"           varpar->dc_gmandelbroot_n              , varpar->dc_gmandelbroot_m,"
+//				+"           varpar->dc_gmandelbroot_burnigship     , varpar->dc_gmandelbroot_conjugate,"
+//				+"           varpar->dc_gmandelbroot_julia          , varpar->dc_gmandelbroot_jre      ,varpar->dc_gmandelbroot_jim);"
+	    		+"   color= dc_gmandelbroot_getRGBColor (uv,varpar->dc_gmandelbroot_colormode,"
+	    		+ "                                         varpar->dc_gmandelbroot_iters,varpar->dc_gmandelbroot_exp_re,varpar->dc_gmandelbroot_exp_im,"
+	    		+ "                                         varpar->dc_gmandelbroot_n    ,varpar->dc_gmandelbroot_m     ,varpar->dc_gmandelbroot_burnigship,"
+	    		+ "                                         varpar->dc_gmandelbroot_conjugate,varpar->dc_gmandelbroot_julia, varpar->dc_gmandelbroot_jre,"
+	    		+"                                          varpar->dc_gmandelbroot_jim);"
+	    		+"if( varpar->dc_gmandelbroot_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_gmandelbroot_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+
+	    		+" for(int index=0; index<numColors;index++)"
+                +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+                
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+                +" }"
+
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_gmandelbroot_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_gmandelbroot*x;"
+	    		+"__py+= varpar->dc_gmandelbroot*y;"
+	    		+"float dz = z * varpar->dc_gmandelbroot_scale_z + varpar->dc_gmandelbroot_offset_z;"
+	    		+"if ( varpar->dc_gmandelbroot_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		 return   "	__device__ float3  dc_gmandelbroot_hsv (float h,float s,float v) "
+				 +"	{"
+				 +"		float3 t1=make_float3(3.,2.,1.);"
+				 +"		t1= t1 + h/3.0;"
+				 +"		float3 t2=fract(t1)*6.0-3.0;"
+				 +"		t2=abs(t2)-1.0;"
+				 +"		t2=clamp(t2,0.,1.);"
+				 +"		return mix(make_float3(3.1,3.1,3.1),t2,s)*v;"
+				 +"	}"
+				 
+				 +"	__device__   float3  dc_gmandelbroot_gen_mandelbroot (float2 p, float2 exp, float colmode, float iters,float n, float m,"
+				 + "                                                      float burningShip, float conjugate, float julia, float jre, float jim )"
+				 +"	{    "
+				 +"		float d=exp.x;"
+				 +"		float k=exp.y;"
+				 +"		float ii=0.0f;"
+				 +"		float r=0.0;"
+				 +"		float f=1.0e20;"
+				 +"		"
+				 +"     float2 z=make_float2(p.x,p.y);"
+				 +"		"
+				 +"		for (int i = 0; i < iters; ++i) {"
+				 +"			if(burningShip==1.0)"
+				 +"				z=make_float2(abs(z.x),abs(z.y));"
+				 +"			if(conjugate==1.0)"
+				 +"				z.y=-z.y;"
+				 +"         float q1=atan2(z.y,z.x);"
+				 +"         r= z.x*z.x + z.y*z.y;"
+				 +"             "
+				 +"         float q2=q1*d + (k/2.0)*logf(r+m) + 2*PI*n;"
+				 +"         float q3=powf(r, d/2.0)/expf(k*q1);"
+				 +"            			"
+				 +"			z = make_float2(q3*cosf(q2),q3*sinf(q2))+p; "
+				 +"			"
+				 +"			if (m==0.0 && julia==0.0) {"
+				 +"				if (i==0) {"
+				 +"				r=0.0;"
+				 +"				z.x = z.x;"
+				 +"				z.y = z.y;"
+				 +"				}"
+				 +"			}"
+				 +"			"
+				 +"			if(julia==1.0)"
+				 +"			{"
+				 +"				z=make_float2(q3*cosf(q2),q3*sinf(q2))+make_float2(jre,jim);"
+				 +"			}"
+				 +"			"
+				 +"			if (r > iters) {"
+				 +"				ii=i;"
+				 +"				break;"
+				 +"			}"
+				 +"		}"
+				 +"		float q=0;"
+				 +"		float rrr=0.0;"
+				 +"		float ggg=0.0;"
+				 +"		float bbb=0.0;"
+				 +"		float3 color=make_float3(0.0,0.0,0.0);"
+				 +"		"
+				 +"		if (d==0.0)"
+				 +"			q=ii*powf(r,0.5)*powf(ii,0.75)/255.;"
+				 +"		else "
+				 +"			q=ii*powf(r,abs(d)/d*0.5)*powf(ii,0.75)/255.;"
+				 +"		"
+				 +"		if(colmode==0.)"
+				 +"		{"
+				 +"		   float s = .125662 *  ii;"
+				 +"		   color = make_float3(cosf(s + .9), cosf(s + .3), cosf(s + .2));"
+				 +"        float3 val= color*0.4 + .6;"
+				 +"		   color= make_float3( val.x,val.y,val.z);"
+				 +"		}"
+				 +"		else if(colmode==1.) {"
+				 +"			float ss  = roundf((powf(1.12,ii)-1.0)/(1.12-1.0));"
+				 +"			 rrr = roundf(ss/256./256.);"
+				 +"			 ggg = roundf((ss-rrr*256.*256.)/256.);"
+				 +"			 bbb = roundf((ss-rrr*256.*256.-ggg*256.));"
+				 +"			float hue = floorf(255.0*ii/iters);"
+				 +"			float saturation = 255.0;"
+				 +"			float value = 0.0;"
+				 +"			if (ii <= iters) value = 255.0;"
+				 +"			color= dc_gmandelbroot_hsv (hue/255.,saturation/255.,value/255.); "
+				 +"		}"
+				 +"		else if(colmode==2.) {"
+				 +"			color= make_float3((rrr*q+z.x*z.x*ii/255.)/255. , (ggg*q-z.y*z.y*ii/255.)/255. , (bbb*q-ii*ii*ii/255.)/255. );"
+				 +"		}"
+				 +"		else if(colmode==3.) {"
+				 +"			color= make_float3((rrr*q+powf(z.x*z.x*ii,0.5)/255.)/255.  , (ggg*q+powf(z.y*z.y*ii,0.5)/255.)/255. , (bbb*q+powf(ii*ii*ii,3)/255.));"
+				 +"		}"
+				 +"		else if(colmode==4.) {"
+				 +"			color=make_float3(ii*powf(r*ii/iters,0.45)/255. , ii*powf(r*ii/iters,0.35)/255. , ii*powf(r*ii/iters,0.25)/255.);"
+				 +"		}"
+				 +"		else if(colmode==5.)"
+				 +"		{"
+				 +"			f=fminf(f, dot(z, z));"
+				 +"			f=1.0+ log2f (f)/16.0;"
+				 +"		    color=make_float3(f,f*f,f*f*f);"
+				 +"		}"
+                 +"		return color;"
+				 +"	}"
+			 
+				 +" __device__  float3 dc_gmandelbroot_getRGBColor (float2 uv,float colmode, float iters, float exp_re, float exp_im,"
+				 +"                                                 float n, float m,float burningship, float conjugate, float julia,"
+				 +"                                                 float jre, float jim)"
+				 +"{"
+				 +"  float3 color=make_float3(0.0,0.0,0.0);"
+				 +"  float2 tmp=make_float2(exp_re,exp_im);"
+				 +"  color =  dc_gmandelbroot_gen_mandelbroot (uv,tmp, colmode,iters, n , m, burningship, conjugate, julia, jre,jim);"
+				 +"  return color;"
+				 +"}";
+	 }	
 }
 

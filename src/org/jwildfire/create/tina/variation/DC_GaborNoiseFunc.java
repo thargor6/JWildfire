@@ -22,7 +22,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_GaborNoiseFunc  extends DC_BaseFunc {
+public class DC_GaborNoiseFunc  extends DC_BaseFunc implements SupportsGPU  {
 
 	/*
 	 * Variation : dc_gabornoise
@@ -140,8 +140,99 @@ public class DC_GaborNoiseFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_gabornoise_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_gabornoise_zoom;"
+	    		+"color=dc_gabornoise_getRGBColor(uv,varpar->dc_gabornoise_time);"
+	    		+"if( varpar->dc_gabornoise_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_gabornoise_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
 
+	    		+" for(int index=0; index<numColors;index++)"
+                +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+                
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+                +" }"
+
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_gabornoise_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_gabornoise*x;"
+	    		+"__py+= varpar->dc_gabornoise*y;"
+	    		+"float dz = z * varpar->dc_gabornoise_scale_z + varpar->dc_gabornoise_offset_z;"
+	    		+"if ( varpar->dc_gabornoise_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		 return  "	__device__ float3  dc_gabornoise_hash(float p)"
+				 +"	{"
+				 +"		return (fract(sinf( (make_float3(63.31,395.467,1)*p) )*(43141.59265))*(2.)-(1.) );"
+				 +"	}"
+				 
+				 +"	__device__ float3  dc_gabornoise_getRGBColor (float2 V,float time)"
+				 +"	{"
+				 +""
+				 +"     float2 U = make_float2( abs(V.x),  V.y )*45.0f;"
+				 +" "
+				 +"	    float3 O=make_float3(0.0f,0.0f,0.0f);"
+				 +"	    float a = 0.0f, s = 1.0f;"
+				 +"	    for(int i=0; i<100; i++){"
+				 +"	        float3 h = dc_gabornoise_hash((float)i)*30.0f;"
+				 +"	        float2 t=make_float2(h.x,h.y);"
+				 +"         Mat2 M;"
+				 +"         float4 ve= make_float4(0.0f,33.0f,11.0f,0.0f)+(cosf( h.z/1.0e2*time));"
+				 +"         Mat2_Init(&M,ve.x,ve.y,ve.z,ve.w);"
+				 +"	        t= times(&M,t);"
+				 +"	        h.x=t.x;h.y=t.y;"
+				 +"	    	a += s * atan2(U.x-h.x, U.y-h.y); "
+				 +"	    }"
+				 +"	    O = cos( make_float3(0.0f,23.0f,21.0f)+a )*0.6+0.6;"
+				 +"		return O;"
+				 +"	}";
+	 }	
 }
 

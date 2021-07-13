@@ -21,10 +21,10 @@ import js.glsl.vec4;
 
 
 
-public class DC_GlyphoFunc  extends DC_BaseFunc {
+public class DC_GlyphoFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
-	 * Variation : dc_sincos
+	 * Variation : dc_glypho
 	 * Autor: Jesus Sosa
 	 * Date: February 13, 2019
 	 * Reference 
@@ -149,8 +149,95 @@ public class DC_GlyphoFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_glypho_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_glypho_zoom;"
+	    		+"color=dc_glypho_getRGBColor(uv,varpar->dc_glypho_time,varpar->dc_glypho_f1,varpar->dc_glypho_f2,varpar->dc_glypho_f3);"
+	    		+"if( varpar->dc_glypho_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_glypho_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
 
+	    		+" for(int index=0; index<numColors;index++)"
+                +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+                
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+                +" }"
+
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_glypho_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_glypho*x;"
+	    		+"__py+= varpar->dc_glypho*y;"
+	    		+"float dz = z * varpar->dc_glypho_scale_z + varpar->dc_glypho_offset_z;"
+	    		+"if ( varpar->dc_glypho_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "	__device__ float3  dc_glypho_getRGBColor (float2 uv, float time, float f1,float f2,float f3)"
+	    		+"	{"
+	    		+"	    float3 color=make_float3(0.0,0.0,0.0);"
+	    		+"	    float m = 0.;"
+	    		+"	    float stp = PI/5.;"
+	    		+"	    float odd = -1.;"
+	    		+"	    for(float n=1.; n<2.5; n+=0.5){        "
+	    		+"	        odd *= -1.;"
+	    		+"	        float t = time * odd * .3;"
+	    		+"	        for(float i=0.0001; i<2.*PI; i+=stp){"
+	    		+"	            float2 uvi = uv*(n)+(make_float2(cosf(i + n*stp*.5 + t)*.4, sinf(i + n*stp*.5 + t)*.4));"
+	    		+"	            float l = length(uvi);"
+	    		+"	            m += smoothstep(f1 * n, .0, l)*f3;        "
+	    		+"	        }"
+	    		+"	    }"
+	    		+"	    m = step(f2, fract(m*f3));"
+	    		+"	   color = make_float3(1.* m, 1.0*m , 1.0*m);"
+	    		+"	   return color;"
+	    		+"	}";
+	  }
 }
 
