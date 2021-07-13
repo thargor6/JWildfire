@@ -18,7 +18,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_ButerfliesFunc  extends VariationFunc {
+public class DC_ButerfliesFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_butterflies
@@ -39,9 +39,9 @@ public class DC_ButerfliesFunc  extends VariationFunc {
 	private static final String PARAM_GREEN = "green";
 	private static final String PARAM_BLUE = "blue";
 	protected static final String PARAM_DC = "ColorOnly";
-	private static final String PARAM_GRADIENT = "gradient";
-	protected static final String PARAM_SCALE_Z = "z_scale"; 
-	protected static final String PARAM_OFFSET_Z = "z_offset"; 
+	private static final String PARAM_GRADIENT = "Gradient";
+	protected static final String PARAM_SCALE_Z = "scale_z"; 
+	protected static final String PARAM_OFFSET_Z = "offset_z"; 
 	protected static final String PARAM_RESET_Z = "reset_z"; 
 	
 	int seed=1000;
@@ -347,8 +347,161 @@ public class DC_ButerfliesFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_butterflies_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_butterflies_zoom;"
+	    		+"color=dc_butterflies_getRGBColor(uv,varpar->dc_butterflies_time,varpar->dc_butterflies_red,varpar->dc_butterflies_green,varpar->dc_butterflies_blue);"
+	    		+"if( varpar->dc_butterflies_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_butterflies_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
 
+	    		+" for(int index=0; index<numColors;index++)"
+                +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+                
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+                +" }"
+
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_butterflies_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_butterflies*x;"
+	    		+"__py+= varpar->dc_butterflies*y;"
+	    		+"float dz = z * varpar->dc_butterflies_scale_z + varpar->dc_butterflies_offset_z;"
+	    		+"if ( varpar->dc_butterflies_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		 return  "__device__  float2  dc_butterflies_cadd ( float2 a, float s ) {"
+				 +"	  return make_float2( a.x+s, a.y ); "
+				 +"	  }"
+				 
+				 +"__device__  float2  dc_butterflies_cmul ( float2 a, float2 b )  {"
+				 +"	  return make_float2( a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x );"
+				 +"  }"
+				 
+				 +"__device__  float2  dc_butterflies_cdiv ( float2 a, float2 b )  {"
+				 +"	  float d = dot(b,b); "
+				 +"	  return make_float2( dot(a,b), a.y*b.x - a.x*b.y )/(d);"
+				 +"  }"
+				 
+				 +"__device__  float2  dc_butterflies_csqr ( float2 a ) {"
+				 +"	  return make_float2(a.x*a.x-a.y*a.y, 2.0*a.x*a.y ); "
+				 +"}"
+				 
+				 +"__device__  float2  dc_butterflies_csqrt ( float2 z ) {"
+				 +"	  float m = length(z);"
+				 +"	  return sqrt( make_float2(m+z.x, m-z.x)*(0.5) )*(make_float2( 1.0, sign(z.y) )); "
+				 +"}"
+				 
+				 +"__device__  float2  dc_butterflies_conj ( float2 z )"
+				 +"  { "
+				 +"	  return make_float2(z.x,-z.y); "
+				 +"  }"
+				 
+				 +"__device__  float2  dc_butterflies_cpow ( float2 z, float n ) { "
+				 +"	  float r = length( z );"
+				 +"	  float a = atan2( z.y, z.x ); "
+				 +"	  return make_float2( cosf(a*n), sinf(a*n) )*(pow( r, n )); "
+				 +"}"
+				 
+				 +"__device__ float2  dc_butterflies_cexp ( float2 z) {"
+				 +"	  return make_float2( cosf(z.y), sinf(z.y) )*(exp( z.x )); "
+				 +"}"
+				 
+				 +"__device__  float2  dc_butterflies_clog ( float2 z) {"
+				 +"	  return make_float2( 0.5*logf(z.x*z.x+z.y*z.y), atan2(z.y,z.x)); "
+				 +"  }"
+				 
+				 +"__device__  float2  dc_butterflies_csin ( float2 z) { "
+				 +"	  float r = exp(z.y);"
+				 +"	  return make_float2((r+1.0/r)*sinf(z.x),(r-1.0/r)*cosf(z.x))*(0.5);"
+				 +"  }"
+				 
+				 +"__device__  float2  dc_butterflies_ccos ( float2 z) {"
+				 +"	  float r = exp(z.y);"
+				 +"	  return make_float2((r+1.0/r)*cosf(z.x),-(r-1.0/r)*sinf(z.x))*(0.5);"
+				 +"  }"
+				 
+				 +"__device__  float2  dc_butterflies_func ( float2 x ,float time, float2 z0 ){"
+				 +"	  return  dc_butterflies_csin ( dc_butterflies_cpow (x+(z0),-4.))-( x*(0.9*(1.0+2.0*sinf(0.1*time))))+( z0)  ;"
+				 +"	}"
+				 
+				 +"__device__  float3 dc_butterflies_getRGBColor  (float2 uv, float time, float red, float green, float blue){"
+				 +"     float range =4.0;"
+				 +"		float2 z = uv;"
+				 +"		float2 z0=uv;"
+				 +"		float g = 1.0e10;"
+				 +"		float k=100.0;"
+				 +"		float dz;"
+				 +"		for(int i=0; i<100; i++ )"
+				 +"		{"
+				 +"			float2 prevz=z;"
+				 +"			"
+				 +"			z = dc_butterflies_func ( z, time, z0 );"
+				 +"			g = fminf( g, dot(z-(1.0),z-(1.0)) );"
+				 +"			"
+				 +"			dz = dot(z-(prevz),z-(prevz));		"
+				 +"			if( dz<0.00001 ){"
+				 +"				k = dz/0.00001;"
+				 +"				z = z*(k)+(prevz*(1.0-k));"
+				 +"				k= k+ (float)i;"
+				 +"				break;"
+				 +"			}"
+				 +"			if( dz>10000.0 ){"
+				 +"				k = 10000.0/dz;"
+				 +"				z = z*(k)+(prevz*((1.0-k)));"
+				 +"				k= k+(float)i;"
+				 +"				break;"
+				 +"			} "
+				 +"		}"
+				 +"		"
+				 +"		float3 color = sinf(make_float3(red,green,blue)+(2.3+logf(g*abs(z.y*z.x))))*(0.5)+(0.5); "
+				 +"	    return color;"
+				 +"}";
+	 }	
 }
 

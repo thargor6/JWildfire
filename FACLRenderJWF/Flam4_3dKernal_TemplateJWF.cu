@@ -1967,6 +1967,29 @@ struct __align__(8) Mathc {
 	 float f;	 
 };
 
+__device__ Mat3 rotEuler (float3 s) {
+		float 	sa = sinf(s.x),
+		ca = cosf(s.x),
+		sb = sinf(s.y),
+		cb = cosf(s.y),
+		sc = sinf(s.z),
+		cc = cosf(s.z);
+		Mat3 M;
+		Mat3_Init (&M,make_float3(cb*cc, -cb*sc, sb),
+		              make_float3(sa*sb*cc+ca*sc, -sa*sb*sc+ca*cc, -sa*cb),
+		              make_float3(-ca*sb*cc+sa*sc, ca*sb*sc+sa*cc, ca*cb)  );
+	return M;
+}
+
+__device__ float distance_color(float p_red,float p_green,float p_blue,float red,float green,float blue)
+{
+	float dist_r = fabsf(p_red - red);
+	float dist_g = fabsf(p_green - green);
+	float dist_b = fabsf(p_blue - blue);
+	float dist_3d_sqd = (dist_r * dist_r) + (dist_g * dist_g) + (dist_b * dist_b);
+	return dist_3d_sqd;
+}
+
 __device__ float2  transfhcf (float2 xy,float a,float b,float c,float d,float e,float f)
 {
   float xt=a*xy.x+b*xy.y+c;

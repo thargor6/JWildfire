@@ -17,7 +17,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_HoshiFunc  extends DC_BaseFunc {
+public class DC_HoshiFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_hoshi
@@ -30,11 +30,11 @@ public class DC_HoshiFunc  extends DC_BaseFunc {
 	private static final long serialVersionUID = 1L;
 
 
-	private static final String PARAM_SEED = "Seed";
+	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_TIME = "time";
-	private static final String PARAM_STEPS = "Steps";
-	private static final String PARAM_SCALE = "Scale";
-	private static final String PARAM_TRANSLATE = "Translate";
+	private static final String PARAM_STEPS = "steps";
+	private static final String PARAM_SCALE = "scale";
+	private static final String PARAM_TRANSLATE = "translate";
 
 
 
@@ -220,8 +220,108 @@ public class DC_HoshiFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_hoshi_ColorOnly ==1)"
+	    		+"{"
+	    		+"   x=__x;"
+	    		+"   y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"    x=2.0*RANDFLOAT()-1.0;"
+	    		+"    y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y);"
+	    		+"color=dc_hoshi_getRGBColor(uv,varpar->dc_hoshi_time,varpar->dc_hoshi_steps,varpar->dc_hoshi_scale,varpar->dc_hoshi_translate);"
+	    		+"if( varpar->dc_hoshi_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_hoshi_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
 
+	    		+" for(int index=0; index<numColors;index++)"
+               +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+               
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+               +" }"
+
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_hoshi_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_hoshi*x;"
+	    		+"__py+= varpar->dc_hoshi*y;"
+	    		+"float dz = z * varpar->dc_hoshi_scale_z + varpar->dc_hoshi_offset_z;"
+	    		+"if ( varpar->dc_hoshi_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+
+	  }
+	 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "	__device__ float3  dc_hoshi_hsv (float h,float s,float v) "
+	    		+"	{"
+	    		+"		float3 t1=make_float3(3.,2.,1.);"
+	    		+"		t1=t1 + h/3.0;"
+	    		+"		float3 t2=fract(t1)*6.0-3.0;"
+	    		+"		t2=abs(t2)-1.0;"
+	    		+"		t2=clamp(t2,0.,1.);"
+	    		+"		return mix(make_float3(3.1,3.1,3.1),t2,s)*v;"
+	    		+"	}"
+	    		
+	    		+"	__device__ float2  dc_hoshi_rotate (float2 p, float a){"
+	    		+"		return make_float2(p.x*cosf(a)-p.y*sinf(a), p.x*sinf(a)+p.y*cosf(a));"
+	    		+"	}"
+	    		
+	    		+"	__device__ float3  dc_hoshi_getRGBColor (float2 p,float time, float steps,float scale,float translate)"
+	    		+"	{"
+	    		+"		p = p*0.182;"
+	    		+"		float2 fold=make_float2(-0.5,-0.5);"
+	    		+"		float x = p.y;"
+	    		+"		p = abs(mod(p, 4.0)-2.0);"
+	    		+"		for(int i = steps ; i > 0; i--){"
+	    		+"			p = abs(p- fold)+fold;"
+	    		+"			p = p*(scale)-( translate);"
+	    		+"			p =  dc_hoshi_rotate (p, PI/(0.10+sinf(time*0.0005+(float)i*0.5000001)*0.4999+0.5+(10./time)+sinf(time)/100.));"
+	    		+"		}"
+	    		+"		float i = x*x + atan2(p.y, p.x) + time*0.02;"
+	    		+"		float h = floorf(i*4.0)/8.0 + 1.107;"
+	    		+"		h += smoothstep(-0.1, 0.8, mod(i*2.0/5.0, 1.0/4.0)*900.0)/0.010 - 0.5;"
+	    		+"		float3 color= dc_hoshi_hsv (h, 1.0, smoothstep(-3.0, 3.0, length(p)*1.0));"
+	    		+"		return color;"
+	    		+"	}";
+	  }
 }
 

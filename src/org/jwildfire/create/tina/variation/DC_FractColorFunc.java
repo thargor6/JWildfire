@@ -26,7 +26,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_FractColorFunc  extends DC_BaseFunc {
+public class DC_FractColorFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation :dc_fractcolor
@@ -42,9 +42,9 @@ public class DC_FractColorFunc  extends DC_BaseFunc {
 
 	private static final String PARAM_SEED= "randomize";
 	private static final String PARAM_TIME= "time";
-	private static final String PARAM_XPAR = "xPar";
-	private static final String PARAM_YPAR = "yPar";
-	private static final String PARAM_ITERS= "Iters";
+	private static final String PARAM_XPAR = "xpar";
+	private static final String PARAM_YPAR = "ypar";
+	private static final String PARAM_ITERS= "iters";
 	private static final String PARAM_ZOOM = "zoom";
 
  	
@@ -142,8 +142,88 @@ public class DC_FractColorFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	public String getGPUCode(FlameTransformationContext context) {
+		   return   "float x,y;"
+		    		+"float3 color=make_float3(1.0,1.0,0.0);"
+		    		+"float z=0.5;"
+		    		+"if( varpar->dc_fractcolor_ColorOnly ==1)"
+		    		+"{"
+		    		+"  x=__x;"
+		    		+"  y=__y;"
+		    		+"}"
+		    		+"else"
+		    		+"{"
+		    		+"  x=2.0*RANDFLOAT()-1.0;"
+		    		+"  y=2.0*RANDFLOAT()-1.0;"
+		    		+"}"
+		    		+"float2 uv=make_float2(x,y)*varpar->dc_fractcolor_zoom;"
+		    		+"color=dc_fractcolor_getRGBColor(uv,varpar->dc_fractcolor_xpar,varpar->dc_fractcolor_ypar,varpar->dc_fractcolor_time,varpar->dc_fractcolor_iters);"
+		    		+"if( varpar->dc_fractcolor_Gradient ==0 )"
+		    		+"{"
+		    		+"   __useRgb  = true;"
+		    		+"   __colorR  = color.x;"
+		    		+"   __colorG  = color.y;"
+		    		+"   __colorB  = color.z;"
+		    		+"   __colorA  = 1.0;"
+		    		+"}"
+		    		+"else if( varpar->dc_fractcolor_Gradient ==1 )"  
+		    		+"{"
+		    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+		    		+"float4 simcol=pal_color;"
+		    		+"float diff=1000000000.0f;"
 
+		    		+" for(int index=0; index<numColors;index++)"
+	                +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+		    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+	                
+		        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+		        	+ "   if (diff >dvalue) "
+		        	+ "    {" 
+		        	+"	     diff = dvalue;" 
+		        	+"       simcol=pal_color;" 
+		        	+"	   }"
+	                +" }"
+
+		    		+"   __useRgb  = true;"
+		    		+"   __colorR  = simcol.x;"
+		    		+"   __colorG  = simcol.y;"
+		    		+"   __colorB  = simcol.z;"
+		    		+"   __colorA  = 1.0;"
+		    		+"}"
+		    		+"else if( varpar->dc_fractcolor_Gradient ==2 )"
+		    		+"{"
+		    		+"  int3 icolor=dbl2int(color);"
+		    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+		    		+"  __pal=z;"
+		    		+"}"
+		    		+"__px+= varpar->dc_fractcolor*x;"
+		    		+"__py+= varpar->dc_fractcolor*y;"
+		    		+"float dz = z * varpar->dc_fractcolor_scale_z + varpar->dc_fractcolor_offset_z;"
+		    		+"if ( varpar->dc_fractcolor_reset_z  == 1) {"
+		    		+"     __pz = dz;"
+		    		+"}"
+		    		+"else {"
+		    		+"   __pz += dz;"
+		    		+"}";
+		}
+	
+		 public String getGPUFunctions(FlameTransformationContext context) {
+			 return   "	__device__ float3  dc_fractcolor_getRGBColor (float2 uv, float xpar, float ypar, float time,float iters)"
+					 +"	{"
+					 +"		float2 m=make_float2(xpar,ypar);"
+					 +"		float blue=1.5*m.x + 0.04*sinf(time);"
+					 +"     float3 col=make_float3(uv.x,uv.y,blue);"	
+					 +"      for(int i=0;i<(int)iters;i++)"
+					 +"      {"
+					 +"         float3 tmp=abs(make_float3(col.x,col.y,col.z)/(dot(col,col))-(make_float3(1.0,1.0,m.y*.3)))*(make_float3(1.3, 1.0, 0.777));"
+					 +"         col.x=tmp.x;"
+					 +"         col.y=tmp.z;"
+					 +"         col.z=tmp.y;"
+					 + "     }"
+					 +"		return col;"
+					 +"	}";
+		 }	
 }
 

@@ -13,7 +13,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_MandalaFunc  extends DC_BaseFunc {
+public class DC_MandalaFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_mandala
@@ -249,8 +249,139 @@ public class DC_MandalaFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_mandala_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y);"
+	    		+" color=dc_mandala_getRGBColor(uv,varpar->dc_mandala_mX,varpar->dc_mandala_mY,"
+	    		+ "                                   varpar->dc_mandala_scale,varpar->dc_mandala_sides,varpar->dc_mandala_multiply,"
+	    		+ "                                   varpar->dc_mandala_loops, varpar->dc_mandala_iR,varpar->dc_mandala_iG,"
+	    		+ "                                   varpar->dc_mandala_iB );"
+	    		+"if( varpar->dc_mandala_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+				+"   __colorA  = 1.0;"
+	    		+"}"
+				+"else if( varpar->dc_mandala_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+              +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+              // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+              +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_mandala_Gradient ==2 )"
+	    		+"{"
+				+"  int3 icolor=dbl2int(color);"
+	    		+"  z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_mandala*x;"
+	    		+"__py+= varpar->dc_mandala*y;"
+	    		+"float dz = z * varpar->dc_mandala_scale_z + varpar->dc_mandala_offset_z;"
+	    		+"if ( varpar->dc_mandala_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
 
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+
+	    return   "__device__ float2 dc_mandala_kscope(float2 uv, float k)"
+	    		+"{"
+	    		+"   float t= mod ( atan2 (uv.y, uv.x) , 2.0f * k);"
+	    		+"	 float angle = fabsf ( t - k);"
+	    		+"   float t4=length(uv);"
+	    		+"   float2 t1=make_float2(t4,t4);"
+	    		+"   float2 t3=make_float2(cosf(angle), sinf(angle) );"
+	    		+"   float2 t2 = t1 * t3;"
+	    		+"	 return t2;"
+	    		+"}"
+	    		
+	    		+"__device__ float3  dc_mandala_getRGBColor (float2 xc,float mX, float mY, float scale, float sides, float multiply, float loops, float iR, float iG, float iB)"
+	    		+" {"
+	    		+"     float rcpi=0.318309886183791f;"
+	    		+"     float2 uv=make_float2(0.0,0.0);"
+	    		+"     	uv.x = (5.5-scale)*(xc.x);"
+	    		+"     	uv.y = (5.5-scale)*(xc.y );"
+	    		+"     		      	"
+	    		+"    	float k = PI / sides;"
+	    		+"      float2 s = dc_mandala_kscope(uv,k);"
+	    		+"      float2 t = dc_mandala_kscope(s,k);"
+	    		+"      float v = dot(t,s);"
+	    		+"    	float2 u = mix(s,t,cosf(v));"
+	    		+"    	"
+	    		+"    	if (multiply>0.0)"
+	    		+"    	{"
+	    		+"          float2 t1=make_float2(u.y,u.x);"
+	    		+"          float2 t2=mod(t1, multiply);"
+	    		+"          float2 t3=make_float2(-u.x,-u.y);"
+	    		+"          float2 t4=make_float2(u.y,u.x);"
+	    		+"          float2 t5= t4+ (mod(t2,t3));"
+	    		+"          u=make_float2(t5.y,t5.x);"
+	    		+"    	}"
+	    		+"      float3 p = make_float3 (u.x, u.y , mX*v);"
+	    		+"      for (int l = 0; l < 73; l++) {"
+	    		+"      	if ((float)l > loops)"
+	    		+"      	{"
+	    		+"      	  break;"
+	    		+"          }"
+	    		+"      	float3 t1= make_float3(1.3,0.999, 0.678);"
+	    		+"          float3 t2= abs(p)/(dot(p,p))-(make_float3(1.0,1.02, mY*rcpi) );"
+	    		+"          float3 t3= abs(t2);"
+	    		+"          float3 t4=t1*(t3);"
+	    		+"          p=make_float3(t4.x,t4.z,t4.y);"
+	    		+"      }"
+	    		+"      if (iR==1.)"
+	    		+"      { "
+	    		+"        p.x = 1.0-p.x; "
+	    		+"      }"
+	    		+"      if (iG==1.)"
+	    		+"      {"
+	    		+"        p.y = 1.0-p.y;"
+	    		+"      }"
+	    		+"      if (iB==1.)"
+	    		+"      {"
+	    		+"        p.z = 1.0-p.z;"
+	    		+"      }      "
+	    		+"      return p;"
+	    		+" }";
+	  }
 }
 

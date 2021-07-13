@@ -22,7 +22,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_HexagonsFunc  extends DC_BaseFunc {
+public class DC_HexagonsFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_hexagons
@@ -214,8 +214,112 @@ public class DC_HexagonsFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_hexagons_ColorOnly ==1)"
+	    		+"{"
+	    		+"   x=__x;"
+	    		+"   y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"   if(varpar->dc_hexagons_shape==0)"
+	    		+"   {"
+	    		+"       x=2.0*RANDFLOAT()-1.0;"
+	    		+"       y=2.0*RANDFLOAT()-1.0;"
+	    		+"   }"
+	    		+"   else"
+	    		+"   {"  
+                +"      float r= 2.0*RANDFLOAT() + 2.0*RANDFLOAT();"
+	    		+"      r = (r > 2.0) ? 4.0 - r : r;"  
+	    		+"      float theta= RANDFLOAT()*2.0*PI;"
+	    		+"      float s=sinf(theta);"
+	    		+"      float c=cosf(theta);"
+	    		+"      x=0.5*r*s;"
+	    		+"      y=0.5*r*c;"
+	    		+"   }"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_hexagons_zoom;"
+	    		+"color=dc_hexagons_getRGBColor(uv,varpar->dc_hexagons_time);"
+	    		+"if( varpar->dc_hexagons_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_hexagons_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
 
+	    		+" for(int index=0; index<numColors;index++)"
+                +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+                
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+                +" }"
+
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_hexagons_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_hexagons*x;"
+	    		+"__py+= varpar->dc_hexagons*y;"
+	    		+"float dz = z * varpar->dc_hexagons_scale_z + varpar->dc_hexagons_offset_z;"
+	    		+"if ( varpar->dc_hexagons_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "	__device__ float  dc_hexagons_hex (float2 p) "
+	    		+"	{"
+	    		+"	    p.x *= 0.57735*2.0;"
+	    		+"		p.y += mod(floorf(p.x), 2.0)*0.5;"
+	    		+"		p = abs((mod(p, 1.0)-(0.5)));"
+	    		+"		return abs(fmaxf(p.x*1.5 + p.y, p.y*2.0) - 1.0);"
+	    		+"	}"
+	    		
+	    		+"	__device__ float3  dc_hexagons_getRGBColor (float2 p, float time)"
+	    		+"	{"
+	    		+"      float col=0.2;"
+	    		+"		float s = sinf(-dot(p, p) / 64.0 + time * 4.0);"
+	    		+"		s = powf(abs(s), 0.5) * sign(s);"
+	    		+"		float  r = .35 + .25 * s;"
+	    		+"		float t = powf(abs(sinf(time * 4.)), 0.2) * sign(sinf(time * 4.));"
+	    		+"		t *= 10.25;"
+	    		+"       Mat2 M;"
+	    		+ "      Mat2_Init(&M,cosf(t), -sinf(t), sinf(t), cosf(t));"
+	    		+"		 p = times(&M,p);"
+	    		+"      float tmp=smoothstep(r - 0.1 , r + 0.1 ,  dc_hexagons_hex (p));"
+	    		+"		float3 color= make_float3(tmp,tmp,tmp);"
+	    		+"      return color;"
+	    		+"	}";
+	  }
 }
 

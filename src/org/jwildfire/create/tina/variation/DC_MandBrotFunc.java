@@ -17,7 +17,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_MandBrotFunc  extends  DC_BaseFunc {
+public class DC_MandBrotFunc  extends  DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_mandbrot
@@ -192,8 +192,121 @@ public class DC_MandBrotFunc  extends  DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_mandbrot_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_mandbrot_zoom;"
+	    		+" color=dc_mandbrot_getRGBColor(uv,varpar->dc_mandbrot_time,varpar->dc_mandbrot_N,"
+	    		+ "                                   varpar->dc_mandbrot_nIters,varpar->dc_mandbrot_Complexity,"
+	    		+ "                                   varpar->dc_mandbrot_red,varpar->dc_mandbrot_green,"
+	    		+ "                                   varpar->dc_mandbrot_blue );"
+	    		+"if( varpar->dc_mandbrot_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+				+"   __colorA  = 1.0;"
+	    		+"}"
+				+"else if( varpar->dc_mandbrot_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+             +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+             // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+             +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_mandbrot_Gradient ==2 )"
+	    		+"{"
+				+"  int3 icolor=dbl2int(color);"
+	    		+"  z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_mandbrot*x;"
+	    		+"__py+= varpar->dc_mandbrot*y;"
+	    		+"float dz = z * varpar->dc_mandbrot_scale_z + varpar->dc_mandbrot_offset_z;"
+	    		+"if ( varpar->dc_mandbrot_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
 
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+
+	    return   "__device__ float3 dc_mandbrot_mandelbrot(float2 p, float nIters, float red, float green, float blue) {"
+	    		+"    	  float2 s = p;"
+	    		+"    	  float d = 0.0, l;"
+	    		+"    	  for (int i = 0; i < nIters; i++) {"
+	    		+"    	    s = make_float2(s.x * s.x - s.y * s.y + p.x , 2.0 * s.x * s.y + p.y);"
+	    		+"    	    l = length(s);"
+	    		+"    	    d += l + 0.5;"
+	    		+"    	    if (l > 2.0)"
+	    		+"    	    	return make_float3(sinf(d *red), sinf(d *green ), sinf(d *blue));"
+	    		+"    	  }"
+	    		+"    	  return make_float3(0.0,0.0,0.0);"
+	    		+"}"
+	    		
+	    		+"__device__ float2 dc_mandbrot_fractalize2 (float2 p, float time, float N, float complexity)"
+	    		+"{"
+	    		+"    float s = 0.5f;"
+	    		+" 	  float cs = cosf(time);"
+	    		+"    float sn = sinf(time);"
+	    		+"    Mat2 rot;"
+	    		+"    Mat2_Init(&rot,cs, sn, -sn, cs);"
+	    		+"    for (int i = 0; i < (int) N ; i++)"
+	    		+ "   {"
+	    		+"    	p = abs(p)/ dot(p, p) - s;"
+	    		+"    	p = times(&rot,p);"
+	    		+"    	s *= complexity;"
+	    		+"    }"
+	    		+"    return p;"
+	    		+"}"
+	    		
+	    		+"__device__ float3  dc_mandbrot_getRGBColor (float2 p,float time, float N, float nIters, float Complexity, float red,float green, float blue )"
+	    		+"{"
+	    		+"		float t=time/65.*10.;"
+	    		+"		float3 col=make_float3(0.0,0.0,0.0);"
+	    		+"			p = p*(fract(t * .0001) * 100. + 1.);"
+	    		+"			p =  dc_mandbrot_fractalize2 (p,t, N, Complexity);"
+	    		+"		  float f = sinf(t * 0.10 + 99.0) * 0.5 + 0.5;"
+	    		+"		  p = p*(powf(1.5, f * (-31.0)));"
+	    		+"		  p = p+make_float2(-1.002029, 0.303864);"
+	    		+"		  col =  make_float3(1.0,1.0,1.0)- dc_mandbrot_mandelbrot(p, nIters, red,green,blue);"
+	    		+"		return col;"
+	    		+"}";
+	  }
 }
 

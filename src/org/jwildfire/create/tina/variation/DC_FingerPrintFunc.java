@@ -21,10 +21,10 @@ import js.glsl.vec4;
 
 
 
-public class DC_FingerPrintFunc  extends DC_BaseFunc {
+public class DC_FingerPrintFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
-	 * Variation : dc_sincos
+	 * Variation : dc_fingerprint
 	 * Autor: Jesus Sosa
 	 * Date: February 13, 2019
 	 * Reference 
@@ -153,8 +153,104 @@ public class DC_FingerPrintFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_fingerprint_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_fingerprint_zoom;"
+	    		+"color=dc_fingerprint_getRGBColor(uv,varpar->dc_fingerprint_time,varpar->dc_fingerprint_width);"
+	    		+"if( varpar->dc_fingerprint_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_fingerprint_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+
+	    		+" for(int index=0; index<numColors;index++)"
+                +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+                
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+                +" }"
+
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_fingerprint_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_fingerprint*x;"
+	    		+"__py+= varpar->dc_fingerprint*y;"
+	    		+"float dz = z * varpar->dc_fingerprint_scale_z + varpar->dc_fingerprint_offset_z;"
+	    		+"if ( varpar->dc_fingerprint_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	}
+		 public String getGPUFunctions(FlameTransformationContext context) {
+//			 return "";
+			 return   "	__device__ float2  dc_fingerprint_hash2 ( float2 p )"
+					 +"	{"
+					 +"		p = make_float2( dot(p,make_float2(63.31,127.63)), dot(p,make_float2(395.467,213.799)) );"
+					 +"		return fract(sinf(p)*(43141.59265))*(2.0)-(1.);"
+					 +"	}"
+					 +"		"
+					 +"	__device__ float3  dc_fingerprint_getRGBColor (float2 uv,float time, float width)"
+					 +"	{"
+					 +"	    float3 color=make_float3(0.0f,0.0f,0.0f);"
+					 +"	    float bounds = smoothstep(9.,10.,length(uv*( make_float2(0.7,0.5))));"
+					 +"	    "
+					 +"	    float a=0.;"
+					 +"	    float2 h = make_float2(floorf(7.*time), 0.);"
+					 +"	    for(int i=0; i<50; i++){"
+					 +"	        float s=sign(h.x);"
+					 +"	        h =  dc_fingerprint_hash2 (h)*(make_float2(15.,20.));"
+					 +"	    	a += s*atan2(uv.x-h.x, uv.y-h.y);"
+					 +"	    }"
+					 +"	    uv = uv+(abs( dc_fingerprint_hash2 (h)));"
+					 +"	    "
+					 +"	    a+=atan2(uv.y, uv.x); "
+					 +"	    "
+					 +"	    float p=(1.-bounds)*width; "
+					 +"	    float s = fminf(0.3,p); "
+					 +"	    float l = length(uv)+0.319*a; "
+					 +"	    float m = mod(l,2.);"
+					 +"	    float v = (1.-smoothstep(2.-s,2.,m))*smoothstep(p,p+s,m);"
+					 +"		return make_float3(v,v,v);"
+					 +"	}";
+		 }	
 }
 

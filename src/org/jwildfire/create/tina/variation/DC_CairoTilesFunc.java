@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_CairoTilesFunc  extends DC_BaseFunc {
+public class DC_CairoTilesFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_cairotiles
@@ -155,8 +155,106 @@ public class DC_CairoTilesFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_cairotiles_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_cairotiles_zoom;"
+	    		+"color=dc_cairotiles_getRGBColor(uv,varpar->dc_cairotiles_time,varpar->dc_cairotiles_zoom);"
+	    		+"if( varpar->dc_cairotiles_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_cairotiles_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+               +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+               // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+               +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_cairotiles_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_cairotiles*x;"
+	    		+"__py+= varpar->dc_cairotiles*y;"
+	    		+"float dz = z * varpar->dc_cairotiles_scale_z + varpar->dc_cairotiles_offset_z;"
+	    		+"if ( varpar->dc_cairotiles_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		 return   "__device__ float3 dc_cairotiles_getRGBColor (float2 uv, float time,float zoom)"
+				+"{"				
+			    +"  float3 color=make_float3(0.0,0.0,0.0);"  
+			    +"  float th = mod(time * PI / 5., PI * 2.);"
+			    +"  float gridsize = (.5 + abs(sinf(th * 2.)) * (sqrt(2.) / 2. - .5)) * 2.;"
+			    +"  int flip = 0;"
+			    +"  if(fract(th / PI + .25) > .5)"
+			    +"  {"
+			    +"    uv = uv-.5;"
+			    +"    flip = 1;"
+			    +"  }"
+			    +"  uv = uv*gridsize;"
+			    +"  float2 cp = floorf(uv/gridsize);"
+			    +"  uv = mod(uv, gridsize)-(gridsize / 2.);"
+			    +"  uv = uv*(mod(cp, 2.)* 2.- 1.);"
+			    +"  Mat2 m;"
+			    +"  Mat2_Init(&m,cosf(th), sinf(th), -sinf(th), cosf(th));"
+			    +"  uv = times(&m,uv);"
+				+"  float w = zoom / 2000. * 1.5;"
+				+"  float a = smoothstep(-w, +w, fmaxf(abs(uv.x), abs(uv.y)) - .5);"
+				+"  if(flip==1)"
+				+"    a = 1. - a;"
+				+"  if(flip==1 && a < .5 && (abs(uv.x) - abs(uv.y)) * sign(fract(th / PI) - .5) > 0.)"
+				+"    a = .4;"
+				+"  if(flip==0 && a < .5 && (mod(cp.x + cp.y, 2.) - .5) > 0.)"
+				+"    a = .4;"
+				+"  float frac=1.0f/2.2;"
+				+"  color = pow(make_float3(a,a,a), make_float3(frac,frac,frac));"
+				+"	return color;"
+		        +"}";
+	 }	
+ }	 
+	 
 
-}
 

@@ -18,10 +18,10 @@ import js.glsl.vec3;
 
 
 
-public class DC_InversionFunc  extends DC_BaseFunc {
+public class DC_InversionFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
-	 * Variation : dc_apollonian
+	 * Variation : dc_inversion
 	 * Autor: Jesus Sosa
 	 * Date: February 12, 2019 
 	 */
@@ -32,9 +32,9 @@ public class DC_InversionFunc  extends DC_BaseFunc {
 
 	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_TIME = "time";
-	private static final String PARAM_ITERS = "Iterations";
-	private static final String PARAM_VSCALEX = "ScaleX";
-	private static final String PARAM_VSCALEY = "ScaleY";
+	private static final String PARAM_ITERS = "iterations";
+	private static final String PARAM_VSCALEX = "scaleX";
+	private static final String PARAM_VSCALEY = "scaleY";
 
 
 
@@ -252,8 +252,113 @@ public class DC_InversionFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_inversion_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y);"
+	    		+"color=dc_inversion_getRGBColor(uv,varpar->dc_inversion_time,varpar->dc_inversion_iterations,varpar->dc_inversion_scaleX,varpar->dc_inversion_scaleY);"
+	    		+"if( varpar->dc_inversion_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_inversion_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
 
+	    		+" for(int index=0; index<numColors;index++)"
+               +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+               
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+               +" }"
+
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_inversion_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_inversion*x;"
+	    		+"__py+= varpar->dc_inversion*y;"
+	    		+"float dz = z * varpar->dc_inversion_scale_z + varpar->dc_inversion_offset_z;"
+	    		+"if ( varpar->dc_inversion_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+
+		 return   "__device__ float2  dc_inversion_CircleInversion (float2 vPos, float2 vOrigin, float fRadius)"
+				 +"{"
+				 +"	float2 vOP = vPos-vOrigin;"
+				 +"	   vOrigin = vOrigin- vOP * fRadius * fRadius / dot(vOP, vOP);"
+				 +"    vOrigin.x += sinf(vOrigin.x * 0.001) / cosf(vOrigin.y * 0.001);"
+				 +"    vOrigin.y += sinf(vOrigin.x * 0.001) * cosf(vOrigin.y * 0.001);"
+				 +"    return vOrigin;"
+				 +"}"
+				 
+				 +"__device__	float  dc_inversion_Parabola ( float x, float n )"
+				 +"{"
+				 +"	    return powf( 3.0*x*(1.0-x), n );"
+				 +"}"
+
+				 +"__device__ float3 dc_inversion_getRGBColor (float2 v, float time, float iterations, float scaleX, float scaleY)"
+				 +"{"
+				 +" float2 vScale  = make_float2(scaleX,scaleY);"
+				 +"	float2 vOffset = make_float2( sinf(time * 0.123), atanf(time * 0.0567));"
+				 +"	float l = 0.0;"
+				 +"	float minl = 10000.0;"
+				 +"	for(int i=0; i<iterations; i++)"
+				 +"	{"
+				 +"		v.x = abs(v.x);"
+				 +"		v = v*vScale +  vOffset;"
+				 +"		v =  dc_inversion_CircleInversion (v, make_float2(0.5f, 0.5f), 0.9f);"
+				 +"		l = length(v*v);"
+				 +"		minl = fminf(l, minl);"
+				 +"	}"
+				 +"	float t = 2.1 + time * 0.025;"
+				 +"	float3 vBaseColour = normalize(make_float3(sinf(t * 1.790), sinf(t * 1.345), sinf(t * 1.123))*0.5+ 0.5);"
+				 +"		"
+				 +"	float fBrightness = 11.0;"
+				 +"	float3 vColour = vBaseColour*( l * l * fBrightness);"
+				 +"	minl =  dc_inversion_Parabola (minl, 5.0);"
+				 +"	vColour = vColour*(minl + 0.14);"
+				 +"	vColour = make_float3(1.0,1.0,1.0) - expf(vColour*(-1.0));"
+				 +"	return vColour;"
+				 +"}";
+	 }
 }
 

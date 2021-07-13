@@ -16,7 +16,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_DucksFunc  extends DC_BaseFunc {
+public class DC_DucksFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_ducks
@@ -209,8 +209,104 @@ public class DC_DucksFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	
+	public String getGPUCode(FlameTransformationContext context) {
+	   return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_ducks_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_ducks_zoom;"
+	    		+"color=dc_ducks_getRGBColor(uv,varpar->dc_ducks_time);"
+	    		+"if( varpar->dc_ducks_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_ducks_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
 
+	    		+" for(int index=0; index<numColors;index++)"
+                +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+                
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+                +" }"
+
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_ducks_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_ducks*x;"
+	    		+"__py+= varpar->dc_ducks*y;"
+	    		+"float dz = z * varpar->dc_ducks_scale_z + varpar->dc_ducks_offset_z;"
+	    		+"if ( varpar->dc_ducks_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	}
+	
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		 return   "	  __device__ float2  dc_ducks_Bfunc (float2 a)"
+				 +"	  {"
+				 +"	    return make_float2(logf(length(a)),atan2(a.y,a.x)-6.2);"
+				 +"	  }"
+				 
+				 +"	  __device__ float3  dc_ducks_Ffunc (float2 uv	,float time)"
+				 +"	  {"
+				 +"		float2 e=uv;"
+				 +"		float c=0.0f;"
+				 +"		for(int i=0; i<50; i++)"
+				 +"		{"
+				 +"			float2 tmp= dc_ducks_Bfunc( make_float2(e.x , abs(e.y)));"
+				 +"			e=tmp+( make_float2(.1*sinf(time/3.)-0.1f , 5.0f+0.1f*cosf(time/5.)));"
+				 +"			c += length(e);"
+				 +"		}"
+				 +"		float d = log2(log2(c*.05))*6.;"
+				 +"		float3 flori =make_float3(0.1+.7*sinf(d) , 0.1+.5*sinf(d-.7) , 0.7+0.7*cosf(d-.7) );"
+				 +"		float3 t0= floorf(make_float3(0.5,0.5,0.5)+(flori*(1.1)));"
+				 +"		return (t0/1.1);"
+				 +"	  }"
+				 
+				 +"	__device__ float3  dc_ducks_getRGBColor (float2 uv, float time)"
+				 +"	{"
+				 +"		float t=time*30.0f/65.0f;"
+				 +"		float3 col;"
+				 +"     float3 t0=dc_ducks_Ffunc(uv,t);"				 
+				 +"   	col=make_float3(t0.z,t0.x,t0.y);"
+				 +"		return col;"
+				 +"	}";
+	 }	
 }
 

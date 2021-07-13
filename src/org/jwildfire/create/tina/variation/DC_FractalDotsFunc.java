@@ -11,7 +11,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class DC_FractalDotsFunc  extends DC_BaseFunc {
+public class DC_FractalDotsFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_fractaldots
@@ -25,8 +25,8 @@ public class DC_FractalDotsFunc  extends DC_BaseFunc {
 
 
 	private static final String PARAM_ITERATIONS = "iterations";
-	private static final String PARAM_DOTSIZE = "DotSize";
-	private static final String PARAM_MAXITER = "MaxIterations";
+	private static final String PARAM_DOTSIZE = "dotsize";
+	private static final String PARAM_MAXITER = "maxiterations";
 	private static final String PARAM_COMPLEXITY = "complexity"; 
 	private static final String PARAM_PATTERN = "pattern"; 
 	private static final String PARAM_SPACING = "spacing"; 
@@ -221,8 +221,109 @@ public class DC_FractalDotsFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+	}
+	
+
+	
+	public String getGPUCode(FlameTransformationContext context) {
+	 return	 "float x,y;"
+			+"	    		float3 color=make_float3(1.0,1.0,0.0);"
+			+"	    		float z=0.5;"
+			+"	    		if( varpar->dc_fractaldots_ColorOnly ==1)"
+			+"	    		{"
+			+"	    		  x=__x;"
+			+"	    		  y=__y;"
+			+"	    		}"
+			+"	    		else"
+			+"	    		{"
+			+"	    		  x=2.0*RANDFLOAT()-1.0;"
+			+"	    		  y=2.0*RANDFLOAT()-1.0;"
+			+"	    		}"
+			+"	    		float2 uv=make_float2(x,y);"
+			+"	    		color=dc_fractaldots_getRGBColor(uv,varpar->dc_fractaldots_zoom,varpar->dc_fractaldots_iterations,"
+			+"                 varpar->dc_fractaldots_dotsize,varpar->dc_fractaldots_maxiterations,varpar->dc_fractaldots_complexity,"
+			+"                 varpar->dc_fractaldots_pattern,varpar->dc_fractaldots_spacing,varpar->dc_fractaldots_rotate1,"
+			+"                 varpar->dc_fractaldots_rotate2);"
+			+"	    		if( varpar->dc_fractaldots_Gradient ==0 )"
+			+"	    		{"
+			+"	    		   __useRgb  = true;"
+			+"	    		   __colorR  = color.x;"
+			+"	    		   __colorG  = color.y;"
+			+"	    		   __colorB  = color.z;"
+			+"	    		   __colorA  = 1.0;"
+			+"	    		}"
+			+"	    		else if( varpar->dc_fractaldots_Gradient ==1 )"
+			+"	    		{"
+			+"	    		float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+			+"	    		float4 simcol=pal_color;"
+			+"	    		float diff=1000000000.0f;"
+			+""
+			+"	    		 for(int index=0; index<numColors;index++)"
+			+"               {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+			+"	    		        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+			+"               "
+			+"	        	    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+			+"	        	   if (diff >dvalue) "
+			+"	        	    {" 
+			+"	        		     diff = dvalue;"
+			+"	        	       simcol=pal_color;"
+			+"	        		   }"
+			+"                 }"
+			+""
+			+"	    		   __useRgb  = true;"
+			+"	    		   __colorR  = simcol.x;"
+			+"	    		   __colorG  = simcol.y;"
+			+"	    		   __colorB  = simcol.z;"
+			+"	    		   __colorA  = 1.0;"
+			+"	    		}"
+			+"	    		else if( varpar->dc_fractaldots_Gradient ==2 )"
+			+"	    		{"
+			+"	    		  int3 icolor=dbl2int(color);"
+			+"	    		  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+			+"	    		  __pal=z;"
+			+"	    		}"
+			+"	    		__px+= varpar->dc_fractaldots*x;"
+			+"	    		__py+= varpar->dc_fractaldots*y;"
+			+"	    		float dz = z * varpar->dc_fractaldots_scale_z + varpar->dc_fractaldots_offset_z;"
+			+"	    		if ( varpar->dc_fractaldots_reset_z  == 1) {"
+			+"	    		     __pz = dz;"
+			+"	    		}"
+			+"	    		else {"
+			+"	    		   __pz += dz;"
+			+"	    		}";
 	}
 
+	 public String getGPUFunctions(FlameTransformationContext context) {
+	return    "	__device__ float2 dc_fractaldots_rot(float2 uv,float a)"
+			+ "{"
+			+"  float c=cosf(a), s=sinf(a);"
+			+"		return make_float2(uv.x*c-uv.y*s,uv.y*c+uv.x*s);"
+			+"	}"
+			
+			+"	__device__ float3  dc_fractaldots_getRGBColor (float2 uv, float zoom, float iterations, float dotsize,"
+			+ "                                                float maxiterations, float complexity,"
+			+ "                                                float pattern, float spacing, float rotate1, float rotate2)"
+			+"	{"
+			+"	    float circleSize=dotsize/(3.0*powf(2.0,maxiterations));"
+			+"		float3 col=make_float3(0.0,0.0,0.0);"
+			+"		"
+			+"		uv=dc_fractaldots_rot(uv,rotate1);"
+			+"		uv =uv*zoom;"
+			+"		"
+		    +"		float s=spacing;"
+		    +"		for(int i=0;i<maxiterations;i++){"
+		    +"			"
+		    +"			uv=abs(uv)-(s);"
+		    +"			uv = uv-(complexity);"
+		    +"			uv=dc_fractaldots_rot(uv,rotate2);"
+		    +"			s=s/pattern;"
+		    +"			if (iterations < i) "
+		    +"				break;"
+		    +"		}"
+		    +"		"
+		    +"		float c=(length(uv)>circleSize)?0.0:1.0;		"
+		    +"		return make_float3(c,c,c);"
+		    +"	 }";
+	 }
 }
-
