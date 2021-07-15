@@ -1010,6 +1010,12 @@ public class VariationFuncList {
     registerVariationFunc(OvoidFunc.class);
     registerVariationFunc(PostPointCropFunc.class);
     registerVariationFunc(HoleFunc.class);
+    registerVariationFunc(PreFlattenFunc.class);
+    registerVariationFunc(PostFlattenFunc.class);
+    registerVariationFunc(PreDiscFunc.class);
+
+
+
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
