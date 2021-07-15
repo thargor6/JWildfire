@@ -66,8 +66,6 @@ build_new.xml
 localsrc
 
 FACLRenderJWF/*.obj
-FACLRenderJWF/*.dll
-FACLRenderJWF/*.exe
 FACLRenderJWF/*.res
 FACLRenderJWF/*.pdb
 FACLRenderJWF/FA*

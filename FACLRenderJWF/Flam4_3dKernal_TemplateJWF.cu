@@ -2372,6 +2372,7 @@ struct __align__(16) FlameParams
 	int dof_type;
 	float dof_scale;
 	float dof_fade;
+    float balanceRed, balanceGreen, balanceBlue;
 #endif
 };
 

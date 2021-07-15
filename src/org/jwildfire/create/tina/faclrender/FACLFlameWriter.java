@@ -200,8 +200,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
           "filter_sharpness", "filter_low_density", "ai_post_denoiser", "post_optix_denoiser_blend", "background_type",
           "background_ul", "background_ur", "background_ll", "background_lr", "background_cc", "fg_opacity",
           "post_blur_radius", "post_blur_fade", "post_blur_falloff", "mixer_mode", "frame", "frame_count",
-          "fps", "zbuffer_scale", "zbuffer_bias", "zbuffer_filename", "low_density_brightness", "balancing_red",
-          "balancing_green", "balancing_blue"));
+          "fps", "zbuffer_scale", "zbuffer_bias", "zbuffer_filename", "low_density_brightness"));
   private List<Attribute<?>> filterFlameAttrList(List<Attribute<?>> pSrc) {
     return pSrc.stream().filter(a -> !a.getName().startsWith("grad_edit_") && !a.getName().contains("Curve_") && !a.getName().startsWith("post_symmetry_") && !FLAME_ATTR_BLACKLIST.contains(a.getName())).collect(Collectors.toList());
   }
