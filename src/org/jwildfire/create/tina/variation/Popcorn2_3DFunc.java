@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Popcorn2_3DFunc extends VariationFunc {
+public class Popcorn2_3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
@@ -100,7 +100,31 @@ public class Popcorn2_3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float inZ, otherZ, tempTZ, tempPZ, tmpVV;\n"
+        + "inZ    = __z;\n"
+        + "otherZ = __pz;\n"
+        + "\n"
+        + "if (fabsf(varpar->popcorn2_3D) <=1.f)\n"
+        + "    tmpVV = fabsf(varpar->popcorn2_3D)*varpar->popcorn2_3D;\n"
+        + "else\n"
+        + "    tmpVV = varpar->popcorn2_3D;\n"
+        + "if(otherZ == 0.f)\n"
+        + "    tempPZ = tmpVV*sinf(tan(varpar->popcorn2_3D_c))*atan2f(__y,__x);\n"
+        + "else\n"
+        + "    tempPZ = __pz;\n"
+        + "if(inZ == 0.f)\n"
+        + "    tempTZ = tmpVV*sinf(tan(varpar->popcorn2_3D_c))*atan2f(__y,__x);\n"
+        + "else\n"
+        + "    tempTZ = __z;\n"
+        + "\n"
+        + "__px += varpar->popcorn2_3D * 0.5f * (__x + varpar->popcorn2_3D_x * sinf(tan(varpar->popcorn2_3D_c*__y)));\n"
+        + "__py += varpar->popcorn2_3D * 0.5f * (__y + varpar->popcorn2_3D_y * sinf(tan(varpar->popcorn2_3D_c*__x)));\n"
+        + "__pz = tempPZ+tmpVV*(varpar->popcorn2_3D_z*sinf(tan(varpar->popcorn2_3D_c))*tempTZ);\n";
+  }
 }

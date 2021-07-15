@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Julia3DQFunc extends VariationFunc {
+public class Julia3DQFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
@@ -46,6 +46,9 @@ public class Julia3DQFunc extends VariationFunc {
     r *= sqrt(r2d);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -90,7 +93,27 @@ public class Julia3DQFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
-}
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "int power = lroundf(varpar->julia3Dq_power);\n"
+           + "int divisor = lroundf(varpar->julia3Dq_divisor);\n"
+           +"float inv_power, abs_inv_power, half_inv_power, inv_power_2pi;\n"
+        + "inv_power = (float) divisor / (float) power;\n"
+        + "    abs_inv_power = fabsf(inv_power);\n"
+        + "    half_inv_power = 0.5 * inv_power - 0.5;\n"
+        + "    inv_power_2pi = (2.0f*PI) / (float) power;\n"
+        + "    float a = atan2f(__y, __x) * inv_power + (int)(RANDFLOAT() * 0x0001ffff) * inv_power_2pi;\n"
+        + "    float sina = sinf(a);\n"
+        + "    float cosa = cosf(a);\n"
+        + "    float z = __z * abs_inv_power;\n"
+        + "    float r2d = __x*__x + __y*__y;\n"
+        + "    float r = varpar->julia3Dq * powf(r2d + z*z, half_inv_power);\n"
+        + "    __pz += r * z;\n"
+        + "    r *= sqrtf(r2d);\n"
+        + "    __px += r * cosa;\n"
+        + "    __py += r * sina;\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += varpar->julia3Dq * __z;\n" : "");
+  }}

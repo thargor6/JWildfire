@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Hexnix3DFunc extends VariationFunc {
+public class Hexnix3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_MAJP = "majp";
@@ -210,7 +210,141 @@ public class Hexnix3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _seg60x[6];\n"
+        + "float _seg60y[6];\n"
+        + "float _seg120x[3];\n"
+        + "float _seg120y[3];\n"
+        + "    float hlift = sinf(PI / 3.0); \n"
+        + "    _seg60x[0] = 1.0;\n"
+        + "    _seg60x[1] = 0.5;\n"
+        + "    _seg60x[2] = -0.5;\n"
+        + "    _seg60x[3] = -1.0;\n"
+        + "    _seg60x[4] = -0.5;\n"
+        + "    _seg60x[5] = 0.5;\n"
+        + "\n"
+        + "    _seg60y[0] = 0.0;\n"
+        + "    _seg60y[1] = -hlift;\n"
+        + "    _seg60y[2] = -hlift;\n"
+        + "    _seg60y[3] = 0.0;\n"
+        + "    _seg60y[4] = hlift;\n"
+        + "    _seg60y[5] = hlift;\n"
+        + "\n"
+        + "    _seg120x[0] = 0.0; \n"
+        + "    _seg120x[1] = cosf(7.0 * PI / 6.0); \n"
+        + "    _seg120x[2] = cosf(11.0 * PI / 6.0); \n"
+        + "\n"
+        + "    _seg120y[0] = -1.0;\n"
+        + "    _seg120y[1] = 0.5;\n"
+        + "    _seg120y[2] = 0.5;\n"
+        + "    if (lroundf(varpar->hexnix3D_fcycle) > 5) {\n"
+        + "      *(&varpar->hexnix3D_fcycle) = 0;\n"
+        + "      *(&varpar->hexnix3D_rswtch) = (int) truncf(RANDFLOAT() * 3.0); \n"
+        + "    }\n"
+
+
+
+        + "    if (lroundf(varpar->hexnix3D_bcycle) > 2) {\n"
+        + "      *(&varpar->hexnix3D_bcycle) = 0;\n"
+        + "      *(&varpar->hexnix3D_rswtch) = (int) truncf(RANDFLOAT() * 3.0); \n"
+        + "    }\n"
+        + "\n"
+        + "    float lrmaj = varpar->hexnix3D; \n"
+        + "    float smooth = 1.0;\n"
+        + "    float smRotxTP = 0.0;\n"
+        + "    float smRotyTP = 0.0;\n"
+        + "    float smRotxFT = 0.0;\n"
+        + "    float smRotyFT = 0.0;\n"
+        + "    float gentleZ = 0.0;\n"
+        + "\n"
+        + "    if (fabsf(varpar->hexnix3D) <= 0.5) {\n"
+        + "      smooth = varpar->hexnix3D * 2.0;\n"
+        + "    } else {\n"
+        + "      smooth = 1.0;\n"
+        + "    }\n"
+        + "    float boost = 0.0; \n"
+        + "    int posNeg = 1;\n"
+        + "    int loc60;\n"
+        + "    int loc120;\n"
+        + "    float scale = varpar->hexnix3D_scale;\n"
+        + "    float scale3 = varpar->hexnix3D_3side;\n"
+        + "\n"
+        + "    if (RANDFLOAT() < 0.5) {\n"
+        + "      posNeg = -1;\n"
+        + "    }\n"
+        + "\n"
+        + "    \n"
+        + "    int majplane = 0;\n"
+        + "    float abmajp = fabsf(varpar->hexnix3D_majp);\n"
+        + "    if (abmajp <= 1.0) {\n"
+        + "      majplane = 0; \n"
+        + "      boost = 0.0;\n"
+        + "    } else if (abmajp > 1.0 && abmajp < 2.0) {\n"
+        + "      majplane = 1;\n"
+        + "      boost = 0.0;\n"
+        + "    } else {\n"
+        + "      majplane = 2;\n"
+        + "      boost = (abmajp - 2.0) * 0.5; \n"
+        + "    }\n"
+        + "\n"
+        + "    \n"
+        + "    if (majplane == 0) {\n"
+        + "      __pz += smooth * __z * scale * varpar->hexnix3D_zlift; \n"
+        + "    } else if (majplane == 1 && varpar->hexnix3D_majp < 0.0) {\n"
+        + "      if (varpar->hexnix3D_majp < -1.0 && varpar->hexnix3D_majp >= -2.0) {\n"
+        + "        gentleZ = (abmajp - 1.0); \n"
+        + "      } else {\n"
+        + "        gentleZ = 1.0; \n"
+        + "      }\n"
+        + "      \n"
+        + "      if (posNeg < 0) {\n"
+        + "        __pz += -2.0 * (__pz * gentleZ); \n"
+        + "      }\n"
+        + "    }\n"
+        + "    if (majplane == 2 && varpar->hexnix3D_majp < 0.0) {\n"
+        + "      if (posNeg > 0) {\n"
+        + "        __pz += (smooth * (__z * scale * varpar->hexnix3D_zlift + boost));\n"
+        + "      } else {\n"
+        + "        __pz = (__pz - (2.0 * smooth * __pz)) + (smooth * posNeg * (__z * scale * varpar->hexnix3D_zlift + boost));\n"
+        + "      }\n"
+        + "    } else {\n"
+        + "      __pz += smooth * (__z * scale * varpar->hexnix3D_zlift + (posNeg * boost));\n"
+        + "    }\n"
+        + "\n"
+        + "    if (lroundf(varpar->hexnix3D_rswtch) <= 1) {\n"
+        + "      loc60 = (int) truncf(RANDFLOAT() * 6.0); \n"
+        + "      \n"
+        + "      smRotxTP = (smooth * scale * __px * _seg60x[loc60]) - (smooth * scale * __py * _seg60y[loc60]);\n"
+        + "      smRotyTP = (smooth * scale * __py * _seg60x[loc60]) + (smooth * scale * __px * _seg60y[loc60]);\n"
+        + "      smRotxFT = (__x * smooth * scale * _seg60x[loc60]) - (__y * smooth * scale * _seg60y[loc60]);\n"
+        + "      smRotyFT = (__y * smooth * scale * _seg60x[loc60]) + (__x * smooth * scale * _seg60y[loc60]);\n"
+        + "\n"
+        + "      __px = __px * (1.0 - smooth) + smRotxTP + smRotxFT + smooth * lrmaj * _seg60x[loc60];\n"
+        + "      __py = __py * (1.0 - smooth) + smRotyTP + smRotyFT + smooth * lrmaj * _seg60y[loc60];\n"
+        + "\n"
+        + "      *(&varpar->hexnix3D_fcycle) = varpar->hexnix3D_fcycle + 1;\n"
+        + "    } else { \n"
+        + "      loc120 = (int) truncf(RANDFLOAT() * 3.0); \n"
+        + "      \n"
+        + "      smRotxTP = (smooth * scale * __px * _seg120x[loc120]) - (smooth * scale * __py * _seg120y[loc120]);\n"
+        + "      smRotyTP = (smooth * scale * __py * _seg120x[loc120]) + (smooth * scale * __px * _seg120y[loc120]);\n"
+        + "      smRotxFT = (__x * smooth * scale * _seg120x[loc120]) - (__y * smooth * scale * _seg120y[loc120]);\n"
+        + "      smRotyFT = (__y * smooth * scale * _seg120x[loc120]) + (__x * smooth * scale * _seg120y[loc120]);\n"
+        + "\n"
+        + "      __px = __px * (1.0 - smooth) + smRotxTP + smRotxFT + smooth * lrmaj * scale3 * _seg120x[loc120];\n"
+        + "      __py = __py * (1.0 - smooth) + smRotyTP + smRotyFT + smooth * lrmaj * scale3 * _seg120y[loc120];\n"
+        + "\n"
+        + "      *(&varpar->hexnix3D_bcycle) = varpar->hexnix3D_bcycle + 1;\n"
+        + "    }\n";
+  }
+
+  @Override
+  public String[] getGPUExtraParameterNames() {
+    return new String[]{"fcycle", "bcycle", "rswtch"};
   }
 
 }
