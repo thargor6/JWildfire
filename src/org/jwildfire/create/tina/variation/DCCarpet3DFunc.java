@@ -1,7 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
   Copyright (C) 1995-2011 Andreas Maschke
-
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -9,7 +8,6 @@
   This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
   even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
   Lesser General Public License for more details.
-
   You should have received a copy of the GNU Lesser General Public License along with this software; 
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
@@ -40,10 +38,11 @@ public class DCCarpet3DFunc extends VariationFunc {
 	private static final String PARAM_SCALEZ = "scale_z";
 	private static final String PARAM_OFFSETZ = "offset_z";
 	private static final String PARAM_RESETZ = "reset_z";
+                             private static final String PARAM_SIDES = "sides";
 
 	private static final String[] paramNames = { PARAM_ORIGIN, PARAM_COLOR_A, PARAM_COLOR_B, PARAM_COLOR_C,
 			PARAM_COLOR_D, PARAM_COLOR_E, PARAM_COLOR_F, PARAM_STRETCH_X, PARAM_STRETCH_Y, PARAM_SCALE_X, PARAM_SCALE_Y,
-			PARAM_SCALEZ, PARAM_OFFSETZ, PARAM_RESETZ };
+			PARAM_SCALEZ, PARAM_OFFSETZ, PARAM_RESETZ, PARAM_SIDES };
 	private double origin = 0.5;
 	private double color_a = 0.5;
 	private double color_b = 1.0;
@@ -58,6 +57,7 @@ public class DCCarpet3DFunc extends VariationFunc {
 	private double scale_z = 1.0;
 	private double offset_z = 0.0;
 	private double reset_z = 0.0;
+	private double sides = 0.0;
 
 	@Override
 	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP,
@@ -86,7 +86,14 @@ public class DCCarpet3DFunc extends VariationFunc {
 			pVarTP.z = dz;
 		} else {
 			pVarTP.z += dz;
+	       if (sides > 0) {
+		       pVarTP.z += dz * pContext.random();
+	       } else {
+		       pVarTP.z += dz;
+	}
+
 		}
+
 	}
 
 	@Override
@@ -97,7 +104,7 @@ public class DCCarpet3DFunc extends VariationFunc {
 	@Override
 	public Object[] getParameterValues() {
 		return new Object[] { origin, color_a, color_b, color_c, color_d, color_e, color_f, stretch_x, stretch_y,
-				scale_x, scale_y, scale_z, offset_z, reset_z };
+				scale_x, scale_y, scale_z, offset_z, reset_z , sides};
 	}
 
 	@Override
@@ -130,6 +137,8 @@ public class DCCarpet3DFunc extends VariationFunc {
 			offset_z = pValue;
 		else if (PARAM_RESETZ.equalsIgnoreCase(pName))
 			reset_z = pValue;
+		else if (PARAM_SIDES.equalsIgnoreCase(pName))
+      			sides = pValue;
 		else {
 			System.out.println("pName not recognized: " + pName);
 			throw new IllegalArgumentException(pName);
