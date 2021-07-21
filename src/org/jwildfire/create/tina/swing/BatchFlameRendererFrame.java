@@ -21,9 +21,26 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JToggleButton;
+import javax.swing.ListSelectionModel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -62,7 +79,7 @@ public class BatchFlameRendererFrame extends JFrame {
    * @return void
    */
   private void initialize() {
-    this.setSize(600, 620);
+    this.setSize(1083, 710);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(200 + JWildfire.DEFAULT_WINDOW_LEFT, 50 + JWildfire.DEFAULT_WINDOW_TOP));
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -139,9 +156,12 @@ public class BatchFlameRendererFrame extends JFrame {
       batchQualityProfileCmb.setPreferredSize(new Dimension(159, 24));
       batchQualityProfileCmb.setMaximumRowCount(32);
       batchQualityProfileCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      panel_2.add(getPanel());
 
       JPanel panel_8 = new JPanel();
-      panel_8.setMaximumSize(new Dimension(159, 56));
+      panel_8.setPreferredSize(new Dimension(159, 74));
+      panel_8.setMinimumSize(new Dimension(159, 74));
+      panel_8.setMaximumSize(new Dimension(159, 74));
       panel_2.add(panel_8);
       panel_8.setLayout(null);
 
@@ -158,9 +178,10 @@ public class BatchFlameRendererFrame extends JFrame {
       enableOpenClBtn.setBounds(0, 24, 160, 24);
       enableOpenClBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/pill.png")));
       panel_8.add(enableOpenClBtn);
+      panel_8.add(getDisablePostDenoiserBtn());
 
       JPanel panel_9 = new JPanel();
-      panel_9.setMaximumSize(new Dimension(159, 36));
+      panel_9.setMaximumSize(new Dimension(159, 20));
       panel_2.add(panel_9);
 
       batchRenderShowImageBtn = new JButton();
@@ -205,6 +226,8 @@ public class BatchFlameRendererFrame extends JFrame {
   private JCheckBox batchRenderOverrideCBx;
   private JButton batchRenderShowImageBtn;
   private JToggleButton enableOpenClBtn;
+  private JToggleButton disablePostDenoiserBtn;
+  private JPanel panel;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -241,12 +264,11 @@ public class BatchFlameRendererFrame extends JFrame {
       header.addMouseListener(new MouseInputAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          if(e.getClickCount()==2) {
+          if (e.getClickCount() == 2) {
             tinaController.getBatchRendererController().renderBatchJobsTableHeaderClicked();
           }
         }
       });
-
 
     }
     return renderBatchJobsTable;
@@ -440,7 +462,7 @@ public class BatchFlameRendererFrame extends JFrame {
   private JPanel getPanel_20() {
     if (panel_20 == null) {
       panel_20 = new JPanel();
-      panel_20.setMaximumSize(new Dimension(159, 32));
+      panel_20.setMaximumSize(new Dimension(159, 20));
     }
     return panel_20;
   }
@@ -448,7 +470,7 @@ public class BatchFlameRendererFrame extends JFrame {
   private JPanel getPanel_21() {
     if (panel_21 == null) {
       panel_21 = new JPanel();
-      panel_21.setMaximumSize(new Dimension(159, 32));
+      panel_21.setMaximumSize(new Dimension(159, 20));
     }
     return panel_21;
   }
@@ -456,7 +478,7 @@ public class BatchFlameRendererFrame extends JFrame {
   private JPanel getPanel_22() {
     if (panel_22 == null) {
       panel_22 = new JPanel();
-      panel_22.setMaximumSize(new Dimension(32767, 32));
+      panel_22.setMaximumSize(new Dimension(32767, 26));
       panel_22.setLayout(null);
 
       JLabel lblGlobalSettings = new JLabel();
@@ -464,7 +486,7 @@ public class BatchFlameRendererFrame extends JFrame {
       lblGlobalSettings.setPreferredSize(new Dimension(100, 22));
       lblGlobalSettings.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGlobalSettings.setAlignmentX(1.0f);
-      lblGlobalSettings.setBounds(6, 16, 100, 14);
+      lblGlobalSettings.setBounds(6, 10, 100, 14);
       panel_22.add(lblGlobalSettings);
     }
     return panel_22;
@@ -549,5 +571,25 @@ public class BatchFlameRendererFrame extends JFrame {
 
   public JToggleButton getEnableOpenClBtn() {
     return enableOpenClBtn;
+  }
+
+  public JToggleButton getDisablePostDenoiserBtn() {
+    if (disablePostDenoiserBtn == null) {
+      disablePostDenoiserBtn = new JToggleButton();
+      disablePostDenoiserBtn.setToolTipText("Disable AI-Post-Denoiser (even if enabled in flames)");
+      disablePostDenoiserBtn.setText("Disable Denoiser");
+      disablePostDenoiserBtn.setPreferredSize(new Dimension(72, 24));
+      disablePostDenoiserBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      disablePostDenoiserBtn.setBounds(0, 48, 160, 24);
+    }
+    return disablePostDenoiserBtn;
+  }
+
+  private JPanel getPanel() {
+    if (panel == null) {
+      panel = new JPanel();
+      panel.setMaximumSize(new Dimension(159, 18));
+    }
+    return panel;
   }
 }

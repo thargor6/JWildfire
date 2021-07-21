@@ -7284,7 +7284,7 @@ public class MainEditorFrame extends JFrame {
         batchFlameRendererFrame.getBatchRenderFilesRemoveAllButton(), batchFlameRendererFrame.getBatchRenderStartButton(),
         batchFlameRendererFrame.getBatchQualityProfileCmb(), batchFlameRendererFrame.getBatchResolutionProfileCmb(),
         batchFlameRendererFrame.getBatchRenderOverrideCBx(), batchFlameRendererFrame.getBatchRenderShowImageBtn(),
-        batchFlameRendererFrame.getEnableOpenClBtn());
+        batchFlameRendererFrame.getEnableOpenClBtn(), batchFlameRendererFrame.getDisablePostDenoiserBtn());
 
     params.setQuiltFlameRendererParams(quiltFlameRendererFrame.getOpenFlameButton(), quiltFlameRendererFrame.getImportFlameFromEditorButton(),
         quiltFlameRendererFrame.getImportFlameFromClipboardButton(),

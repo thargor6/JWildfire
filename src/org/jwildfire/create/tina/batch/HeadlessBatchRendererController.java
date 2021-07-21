@@ -144,7 +144,7 @@ public class HeadlessBatchRendererController implements JobRenderThreadControlle
     }
     QualityProfile qualpro = new QualityProfile();
     qualpro.setQuality(quality);
-    JobRenderThread job = new JobRenderThread(null, controller, joblist, respro, qualpro, true, false);
+    JobRenderThread job = new JobRenderThread(null, controller, joblist, respro, qualpro, true, false, false);
     job.run();
     System.out.println((System.nanoTime() - start) / 1000 / 1000 + " ms");
   }

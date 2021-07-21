@@ -598,6 +598,7 @@ public class TinaControllerParameter {
   public JCheckBox batchRenderOverrideCBx;
   public JButton batchRenderShowImageBtn;
   public JToggleButton enableOpenClBtn;
+  public JToggleButton disablePostDenoiserBtn;
   public JButton resetCameraSettingsBtn;
   public JButton resetDOFSettingsButton;
   public JButton resetBokehOptionsButton;
@@ -1561,7 +1562,7 @@ public class TinaControllerParameter {
       JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton,
       JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JComboBox pBatchQualityProfileCmb,
       JComboBox pBatchResolutionProfileCmb, JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn,
-      JToggleButton pEnableOpenClBtn) {
+      JToggleButton pEnableOpenClBtn, JToggleButton pDisablePostDenoiserBtn) {
     this.pRenderBatchJobsTable = pRenderBatchJobsTable;
     this.pBatchPreviewRootPanel = pBatchPreviewRootPanel;
     this.pBatchRenderJobProgressBar = pBatchRenderJobProgressBar;
@@ -1578,6 +1579,7 @@ public class TinaControllerParameter {
     batchRenderOverrideCBx = pBatchRenderOverrideCBx;
     batchRenderShowImageBtn = pBatchRenderShowImageBtn;
     enableOpenClBtn = pEnableOpenClBtn;
+    disablePostDenoiserBtn = pDisablePostDenoiserBtn;
   }
 
   public void setQuiltFlameRendererParams(JButton quiltRendererOpenFlameButton, JButton quiltRendererImportFlameFromEditorButton,

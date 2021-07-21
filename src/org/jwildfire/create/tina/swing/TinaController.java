@@ -237,7 +237,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
 
     batchRendererController = new BatchRendererController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel, data,
-        parameterObject.pJobProgressUpdater, parameterObject.batchRenderOverrideCBx, parameterObject.batchRenderShowImageBtn, parameterObject.enableOpenClBtn);
+        parameterObject.pJobProgressUpdater, parameterObject.batchRenderOverrideCBx, parameterObject.batchRenderShowImageBtn, parameterObject.enableOpenClBtn,
+            parameterObject.disablePostDenoiserBtn);
 
     data.quiltRendererOpenFlameButton = parameterObject.quiltRendererOpenFlameButton;
     data.quiltRendererImportFlameFromEditorButton = parameterObject.quiltRendererImportFlameFromEditorButton;

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -22,7 +22,6 @@ import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.*;
 import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
@@ -50,6 +49,7 @@ public class BatchRendererController implements JobRenderThreadController {
   private final JCheckBox batchRenderOverrideCBx;
   private final JButton batchRenderShowImageBtn;
   private final JToggleButton enableOpenClBtn;
+  private final JToggleButton disablePostDenoiserBtn;
 
   public BatchRendererController(
       TinaController pTinaController,
@@ -60,7 +60,8 @@ public class BatchRendererController implements JobRenderThreadController {
       ProgressUpdater pJobProgressUpdater,
       JCheckBox pBatchRenderOverrideCBx,
       JButton pBatchRenderShowImageBtn,
-      JToggleButton pEnableOpenClBtn) {
+      JToggleButton pEnableOpenClBtn,
+      JToggleButton pDisablePostDenoiserBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -70,10 +71,16 @@ public class BatchRendererController implements JobRenderThreadController {
     batchRenderOverrideCBx = pBatchRenderOverrideCBx;
     batchRenderShowImageBtn = pBatchRenderShowImageBtn;
     enableOpenClBtn = pEnableOpenClBtn;
+    disablePostDenoiserBtn = pDisablePostDenoiserBtn;
     if (!GPURendererFactory.isAvailable()) {
+      disablePostDenoiserBtn.setSelected(false);
       enableOpenClBtn.setSelected(false);
       enableOpenClBtn.setEnabled(false);
       enableOpenClBtn.setVisible(false);
+    }
+    else {
+      disablePostDenoiserBtn.setSelected(true);
+      enableOpenClBtn.setSelected(true);
     }
   }
 
@@ -99,7 +106,8 @@ public class BatchRendererController implements JobRenderThreadController {
               (ResolutionProfile) data.batchResolutionProfileCmb.getSelectedItem(),
               (QualityProfile) data.batchQualityProfileCmb.getSelectedItem(),
               batchRenderOverrideCBx.isSelected(),
-              enableOpenClBtn.isSelected());
+              enableOpenClBtn.isSelected(),
+              disablePostDenoiserBtn.isSelected());
       new Thread(jobRenderThread).start();
     }
     enableJobRenderControls();

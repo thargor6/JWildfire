@@ -59,8 +59,9 @@ public class JobRenderThread implements Runnable {
   private final boolean doOverwriteExisting;
   private FlameRenderer renderer;
   private final boolean useOpenCl;
+  private final boolean disablePostDenoiser;
 
-  public JobRenderThread(TinaController pParentCtrl, JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, boolean pDoOverwriteExisting, boolean pUseOpenCl) {
+  public JobRenderThread(TinaController pParentCtrl, JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, boolean pDoOverwriteExisting, boolean pUseOpenCl, boolean pDisablePostDenoiser) {
     parentCtrl = pParentCtrl;
     controller = pController;
     activeJobList = pActiveJobList;
@@ -68,6 +69,7 @@ public class JobRenderThread implements Runnable {
     qualityProfile = pQualityProfile;
     doOverwriteExisting = pDoOverwriteExisting;
     useOpenCl = pUseOpenCl;
+    disablePostDenoiser = pDisablePostDenoiser;
   }
 
   @Override
@@ -162,7 +164,7 @@ public class JobRenderThread implements Runnable {
         if (openClRenderRes.getReturnCode() != 0) {
           throw new Exception(openClRenderRes.getMessage());
         } else {
-          if (!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser())) {
+          if (!disablePostDenoiser && !AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser())) {
             AIPostDenoiserFactory.denoiseImage(openClRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend());
             t1 = Calendar.getInstance().getTimeInMillis();
           }
@@ -176,6 +178,9 @@ public class JobRenderThread implements Runnable {
         }
       }
     } else {
+      if(disablePostDenoiser) {
+        flame.setAiPostDenoiser(AIPostDenoiserType.NONE);
+      }
       flame.setSampleDensity(getSampleDensity(job));
       renderer = new FlameRenderer(flame, Prefs.getPrefs(), flame.isBGTransparency(), false);
       if (updateProgress) {
