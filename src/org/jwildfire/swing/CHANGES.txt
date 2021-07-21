@@ -1,4 +1,3 @@
-
 V7.00 (xx.xx.202x)
  - Created a new extended mode for running the external GPU renderer which provides the actual code for the actually used variations (on a per flame basis).
    This needs more time to initialize than the regular mode, because the variation code must be compiled for each individual set of variations.
@@ -14,8 +13,14 @@ V7.00 (xx.xx.202x)
  - added a new option to enable automatic synchronization of changes between the Main Editor and GPU renderer
  - added a "send flame to GPU render"-button in the main editor
 
+ - added a "Disable Denoiser"-button in the Batch-renderer-window to easily turn off all post-denoising (usually, when using GPU rendering)
+    - GPU-rendering in Batch-rendering is per default on, when GPU rendering is available
+    - Disabling of post-denoiser is also per default on, when GPU rendering is available
+
  - included LogBack as standard-library for logging error-messages and debug-information (the log-file is saved as JWildfire.log in your home drawer)
  - added a new global window ("Message log") for showing the messages of the current session
+
+ - fixed a bug which occurred when importing a flame into the Easy Movie Maker: when the window was too small for holding the preview, the import failed
 
  - behaviour of some variations fixed: the contribution of these was not added to the variation current group, but
    was overriding all other contributions of the current group:
@@ -36,13 +41,17 @@ V7.00 (xx.xx.202x)
  - omitting empty motion curves when writing flames to file or clipboard
  - removed support for the old FACLRender (which had no special support for JWF and works very limited together with JWildfire) together with the info-window
    under Help->GPU rendering (please see the users manual for questions regarding GPU rendering)
- - the AI-Post-Denoise under GPU rendering is turned off by default
+ - slighlty increased the "diversity" of random flame generators
+ - the AI-Post-Denoiser under GPU rendering is turned off by default
 
  - improved the "Duckies"-random-flame-generator
  - new variations:
    - ovoid by Rob Richards
    - post_point_crop by Whittaker Courtney
    - hole
+   - post_flatten and pre_flatten
+   - pre_disc
+   - post_rotate_z
 
   - new family of variations by Jesus Sosa: Symmetries band & network groups variations
      - Symmetry Band Groups 1 to 7 variations: sym_bg1, sym_bg2, sym_bg3, sym_bg4, sym_bg5, sym_bg6, sym_bg7
