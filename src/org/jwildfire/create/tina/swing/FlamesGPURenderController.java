@@ -333,12 +333,13 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
           try {
             statsTextArea.setText("");
             FACLFlameWriter gpuFlameWriter = new FACLFlameWriter(FlamesGPURenderController.this);
-            String gpuFlameParams = gpuFlameWriter.getFlameXML(getCurrFlame());
+            List<Flame> preparedFlames = FACLRenderTools.prepareFlame(getCurrFlame());
+            String gpuFlameParams = gpuFlameWriter.getFlameXML(preparedFlames);
             gpuFlameParamsTextArea.setText(gpuFlameParams);
             gpuFlameWriter.writeFlame(gpuFlameParams, tmpFile.getAbsolutePath());
             long t0 = System.currentTimeMillis();
             FACLRenderResult renderResult =
-                FACLRenderTools.invokeFACLRender(tmpFile.getAbsolutePath(), width, height, quality);
+                FACLRenderTools.invokeFACLRender(tmpFile.getAbsolutePath(), width, height, quality, preparedFlames.size() > 1);
             long t1 = System.currentTimeMillis();
             try {
               if (renderResult.getReturnCode() == 0) {

@@ -154,9 +154,10 @@ public class JobRenderThread implements Runnable {
       try {
         Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
         FileDialogTools.ensureFileAccess(parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), openClFlameFilename);
-        new FACLFlameWriter().writeFlame(newFlame, openClFlameFilename);
+        List<Flame> preparedFlames = FACLRenderTools.prepareFlame(newFlame);
+        new FACLFlameWriter().writeFlame(preparedFlames, openClFlameFilename);
         long t0 = Calendar.getInstance().getTimeInMillis();
-        FACLRenderResult openClRenderRes = FACLRenderTools.invokeFACLRender(openClFlameFilename, width, height, qualityProfile.getQuality());
+        FACLRenderResult openClRenderRes = FACLRenderTools.invokeFACLRender(openClFlameFilename, width, height, qualityProfile.getQuality(), preparedFlames.size() > 1);
         long t1 = Calendar.getInstance().getTimeInMillis();
         if (openClRenderRes.getReturnCode() != 0) {
           throw new Exception(openClRenderRes.getMessage());

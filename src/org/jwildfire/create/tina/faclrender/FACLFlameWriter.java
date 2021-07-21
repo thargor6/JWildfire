@@ -33,8 +33,6 @@ import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.swing.MessageLogger;
 import org.jwildfire.create.tina.variation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FACLFlameWriter extends AbstractFlameWriter {
   private final MessageLogger messageLogger;
@@ -47,52 +45,67 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     this.messageLogger = messageLogger;
   }
 
-  public void writeFlame(Flame pFlame, String pFilename) throws Exception {
-    writeFlame(getFlameXML(pFlame), pFilename);
+  public void writeFlame(List<Flame> pFlames, String pFilename) throws Exception {
+    writeFlame(getFlameXML(pFlames), pFilename);
   }
 
   public void writeFlame(String flameXML, String pFilename) throws Exception {
     Tools.writeUTF8Textfile(pFilename,flameXML);
   }
 
-  public String getFlameXML(Flame pFlame) throws Exception {
-    Flame transformedFlame = transformFlame(pFlame);
-    FlameTransformationContext transformationContext = createTransformCtx(transformedFlame);
-
+  public String getFlameXML(List<Flame> pFlames) throws Exception {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
+
     List<SimpleXMLBuilder.Attribute<?>> flamesAttrList = new ArrayList<>();
     flamesAttrList.add(new Attribute<String>("name", ""));
-    xb.beginElement("Flames", flamesAttrList);
 
-    // Flame
-    List<SimpleXMLBuilder.Attribute<?>> attrList = filterFlameAttrList(createFlameAttributes(transformedFlame, xb));
-    Layer layer = transformedFlame.getFirstLayer();
-    VariationSet variationSet = new VariationSet(transformedFlame, transformationContext, messageLogger);
-    attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", variationSet.getUuid()));
-    attrList.add(new SimpleXMLBuilder.Attribute<String>("highlight_power", "-1"));
-    xb.beginElement("flame", attrList);
-    // XForm
-    for (XForm xForm : layer.getXForms()) {
-      xb.beginElement("xform", filterXFormAttrList( createXFormAttrList(xb, layer, xForm, null, false) ) );
-      for(int priority: extractVariationPriorities(xForm)) {
-        xb.emptyElement("variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
+    xb.beginElement("Flames", flamesAttrList);
+    VariationSet variationSet = null;
+    FlameTransformationContext transformationContext = null;
+    for (Flame currFlame : pFlames) {
+      Flame transformedFlame = transformFlame(currFlame);
+      if (transformationContext == null) {
+        transformationContext = createTransformCtx(transformedFlame);
       }
-      xb.endElement("xform");
-    }
-    // FinalXForms
-    for (XForm xForm : layer.getFinalXForms()) {
-      xb.beginElement("finalxform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)));
-      for(int priority: extractVariationPriorities(xForm)) {
-        xb.emptyElement("variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
+      // Flame
+      List<SimpleXMLBuilder.Attribute<?>> attrList =
+          filterFlameAttrList(createFlameAttributes(transformedFlame, xb));
+      Layer layer = transformedFlame.getFirstLayer();
+      if (variationSet == null) {
+        variationSet = new VariationSet(transformedFlame, transformationContext, messageLogger);
       }
-      xb.endElement("finalxform");
+      attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", variationSet.getUuid()));
+      attrList.add(new SimpleXMLBuilder.Attribute<String>("highlight_power", "-1"));
+      // HACK: misusing the zBufferScale-field because it will never be used by FACLRender, can later easily changed if necessary, by introducing a dedicated field
+      attrList.add(new SimpleXMLBuilder.Attribute<Double>("intensity_adjust", transformedFlame.getZBufferScale()));
+      xb.beginElement("flame", attrList);
+      // XForm
+      for (XForm xForm : layer.getXForms()) {
+        xb.beginElement(
+            "xform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)));
+        for (int priority : extractVariationPriorities(xForm)) {
+          xb.emptyElement(
+              "variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
+        }
+        xb.endElement("xform");
+      }
+      // FinalXForms
+      for (XForm xForm : layer.getFinalXForms()) {
+        xb.beginElement(
+            "finalxform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)));
+        for (int priority : extractVariationPriorities(xForm)) {
+          xb.emptyElement(
+              "variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
+        }
+        xb.endElement("finalxform");
+      }
+      // Gradient
+      addGradient(xb, layer);
+      xb.endElement("flame");
     }
-    // Gradient
-    addGradient(xb, layer);
-    xb.endElement("flame");
     // VariationSet
     if(variationSet!=null) {
-      xb.beginElement("variationSet", createVariationSetAttrList(xb, transformedFlame, variationSet.getVariationNames(), variationSet.getUuid()));
+      xb.beginElement("variationSet", createVariationSetAttrList(xb, variationSet.getUuid()));
       for(VariationInstance instance: variationSet.getVariationInstances()) {
         xb.addContent(instance.getTransformedCode(transformationContext));
       }
@@ -175,7 +188,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     return res;
   }
 
-  private List<Attribute<?>> createVariationSetAttrList(SimpleXMLBuilder xb, Flame pFlame, Set<String> variationNames, String varSetUuid) {
+  private List<Attribute<?>> createVariationSetAttrList(SimpleXMLBuilder xb, String varSetUuid) {
     ArrayList<Attribute<?>> res = new ArrayList<>();
     res.add(xb.createAttr("name", "JWFVarSet_"+varSetUuid));
     res.add(xb.createAttr("version", "1.0"));

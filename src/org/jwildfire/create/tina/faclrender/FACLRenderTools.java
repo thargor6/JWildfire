@@ -19,9 +19,16 @@ package org.jwildfire.create.tina.faclrender;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.render.FlameRendererView;
+import org.jwildfire.create.tina.render.RenderPacket;
 import org.jwildfire.launcher.StreamRedirector;
 
 public class FACLRenderTools {
@@ -63,7 +70,7 @@ public class FACLRenderTools {
     }
   }
 
-  private static String getLaunchCmd(String pFlameFilename, int pWidth, int pHeight, int pQuality) {
+  private static String getLaunchCmd(String pFlameFilename, int pWidth, int pHeight, int pQuality, boolean pMergedRender) {
     StringBuilder cmd = new StringBuilder();
     String exePath=new File(Tools.getPathRelativeToCodeSource(FACLRENDER_JWF_PATH), FACLRENDER_EXE).getAbsolutePath();
     if (exePath.indexOf(" ") >= 0) {
@@ -77,6 +84,9 @@ public class FACLRenderTools {
     }
     cmd.append(" " + fn);
     cmd.append(" -q " + pQuality);
+    if(pMergedRender) {
+      cmd.append(" -merge");
+    }
 
     String opts = Prefs.getPrefs().getTinaFACLRenderOptions();
     if(opts==null) {
@@ -91,7 +101,7 @@ public class FACLRenderTools {
     return cmd.toString();
   }
 
-  public static FACLRenderResult invokeFACLRender(String pFlameFilename, int pWidth, int pHeight, int pQuality) {
+  public static FACLRenderResult invokeFACLRender(String pFlameFilename, int pWidth, int pHeight, int pQuality, boolean pMergedRender) {
     try {
       String outputFilename = Tools.trimFileExt(pFlameFilename) + ".png";
       {
@@ -103,7 +113,7 @@ public class FACLRenderTools {
         }
       }
 
-      String cmd = getLaunchCmd(pFlameFilename, pWidth, pHeight, pQuality);
+      String cmd = getLaunchCmd(pFlameFilename, pWidth, pHeight, pQuality, pMergedRender);
       ByteArrayOutputStream os = new ByteArrayOutputStream();
       int returnCode = launchAsync(cmd, os);
       String msg = new String(os.toByteArray());
@@ -123,4 +133,28 @@ public class FACLRenderTools {
     return formula.replaceAll("(atan2|asin|sin|acos|lerp|cos|fabs|log|pow|sqrt|sqr|sgn|exp|fmod|sinh|round|tan|cosh|hypot|rint|trunc|floor)\\(", "$1f(");
   }
 
+  public static List<Flame> prepareFlame(Flame pFlame) {
+    List<Flame> res = new ArrayList<>();
+    double time = pFlame.getFrame() >= 0 ? pFlame.getFrame() : 0;
+    if (pFlame.getMotionBlurLength() > 0) {
+      double currTime = time + pFlame.getMotionBlurLength() * pFlame.getMotionBlurTimeStep() / 2.0;
+      for (int p = 1; p <= pFlame.getMotionBlurLength(); p++) {
+        currTime -= pFlame.getMotionBlurTimeStep();
+        Flame newFlame = AnimationService.evalMotionCurves(pFlame.makeCopy(), currTime);
+        double brightnessScl = (1.0 - p * p * pFlame.getMotionBlurDecay() * 0.07 / pFlame.getMotionBlurLength());
+        if (brightnessScl < 0.01) {
+          brightnessScl = 0.01;
+        }
+        // HACK: misusing the zBufferScale-field because it will never be used by FACLRender, can later easily changed if necessary, by introducing a dedicated field
+        newFlame.setZBufferScale(brightnessScl);
+        res.add(newFlame);
+      }
+    }
+    else {
+      Flame newFlame=pFlame.makeCopy();
+      newFlame.setLowDensityBrightness(1.0);
+      res.add(AnimationService.evalMotionCurves(newFlame, time));
+    }
+    return res;
+  }
 }

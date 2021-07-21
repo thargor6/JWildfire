@@ -17,6 +17,7 @@
 
 package org.jwildfire.create.tina.faclrender;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.swing.MessageLogger;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -106,8 +107,7 @@ public class VariationSet implements VariationnameTransformer {
   }
 
   private String generateVariationsKey(FlameTransformationContext transformCtx, Set<String> variationNames) {
-    // TODO remove
-    return  UUID.randomUUID().toString() + "V001"+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
+    return (Prefs.getPrefs().isDevelopmentMode() ? UUID.randomUUID().toString() : "V001")+transformCtx.isPreserveZCoordinate() +"#"+variationNames.stream().sorted().collect(Collectors.joining("#"));
   }
 
   public Set<String> getVariationNames() {

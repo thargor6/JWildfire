@@ -2373,6 +2373,7 @@ struct __align__(16) FlameParams
 	float dof_scale;
 	float dof_fade;
     float balanceRed, balanceGreen, balanceBlue;
+	float intensityAdjust;
 #endif
 };
 
@@ -3291,7 +3292,13 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
                 // output = tex1D(texRef,activePoint[threadIdx.x].pal);
 				
 #ifdef JWF_EXTENSIONS
-            } // if(activePoint[index].useRgb) { 
+            } // if(activePoint[index].useRgb) {
+            if(d_g_Flame.intensityAdjust!=1) {
+			  output.x *= d_g_Flame.intensityAdjust;
+			  output.y *= d_g_Flame.intensityAdjust;
+			  output.z *= d_g_Flame.intensityAdjust;
+			  output.w *= d_g_Flame.intensityAdjust;
+			}		
 #endif				
 
 #ifdef USE_ATOMICS

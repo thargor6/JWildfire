@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.swing.FileDialogTools;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.Collections;
 
 public class FACLRendererInterface implements GPURenderer {
   private final String FLAME_XML =
@@ -70,8 +71,8 @@ public class FACLRendererInterface implements GPURenderer {
       File tmpFile = File.createTempFile("jwf", ".flame");
       try {
         FileDialogTools.ensureFileAccess(new Frame(), new JPanel(), tmpFile.getAbsolutePath());
-        new FACLFlameWriter().writeFlame(flame, tmpFile.getAbsolutePath());
-        FACLRenderResult openClRenderRes = FACLRenderTools.invokeFACLRender(tmpFile.getAbsolutePath(), 64, 64, 10);
+        new FACLFlameWriter().writeFlame(Collections.singletonList(flame), tmpFile.getAbsolutePath());
+        FACLRenderResult openClRenderRes = FACLRenderTools.invokeFACLRender(tmpFile.getAbsolutePath(), 64, 64, 10, false);
         if(openClRenderRes.getReturnCode()==0 && openClRenderRes.getOutputFilename()!=null) {
           try {
             new File(openClRenderRes.getOutputFilename()).delete();
