@@ -16,34 +16,26 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PostSpinZFunc extends SimpleVariationFunc implements SupportsGPU {
+public class PostRotateZFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* post_spin_z by Larry Berlin, http://aporev.deviantart.com/art/New-3D-Plugins-136484533?q=gallery%3Aaporev%2F8229210&qo=22 */
-    double y = _pz_cos * pVarTP.y - _pz_sin * pVarTP.x;
-    pVarTP.x = _pz_sin * pVarTP.y + _pz_cos * pVarTP.x;
+    double sina = sin(pAmount * M_PI * 0.5);
+    double cosa = cos(pAmount * M_PI * 0.5);
+    double y = cosa * pVarTP.y - sina * pVarTP.x;
+    pVarTP.x = sina * pVarTP.y + cosa * pVarTP.x;
     pVarTP.y = y;
   }
 
   @Override
   public String getName() {
-    return "post_spin_z";
-  }
-
-  private double _pz_sin, _pz_cos;
-
-  @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    _pz_sin = sin(pAmount * M_PI_2);
-    _pz_cos = cos(pAmount * M_PI_2);
+    return "post_rotate_z";
   }
 
   @Override
@@ -53,15 +45,17 @@ public class PostSpinZFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float _pz_sin = sinf(varpar->post_spin_z * (PI*0.5f));\n"
-        + "    float _pz_cos = cosf(varpar->post_spin_z * (PI*0.5f));\n"
-        + "    float y = _pz_cos * __py - _pz_sin * __px;\n"
-        + "    __px = _pz_sin * __py + _pz_cos * __px;\n"
-        + "    __py = y;\n";
+    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
+    return "float cosa;\n"
+        + "float sina;\n"
+        + "sincosf(varpar->post_rotate_z*M_PI_2_F, &sina, &cosa);\n"
+        + "float y              = cosa*__py - sina*__px;\n"
+        + "__px = sina*__py + cosa*__px;\n"
+        + "__py = y;\n";
   }
 }
