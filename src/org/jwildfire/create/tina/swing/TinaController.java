@@ -893,7 +893,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     messageHelper = new JFrameFlameMessageHelper(mainEditorFrame);
 
     flamePreviewHelper = new FlamePreviewHelper(errorHandler, centerPanel, data.toggleTransparencyButton,
-        data.layerAppendBtn, data.layerPreviewBtn, mainProgressUpdater, this, this,
+        data.layerAppendBtn, data.layerPreviewBtn, data.gpuModeToggleButton, mainProgressUpdater, this, this,
         this, this, messageHelper, this);
 
     registerMotionPropertyControls();

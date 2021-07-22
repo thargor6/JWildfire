@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -370,7 +370,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     flamePropertiesTreeService = new FlamePropertiesTreeService();
 
     flamePreviewHelper = new FlamePreviewHelper(errorHandler, centerPanel, null,
-        null, null, mainProgressUpdater, this, null, null, this, messageHelper, null);
+        null, null, null, mainProgressUpdater, this, null, null, this, messageHelper, null);
     enableControls();
 
     refreshResolutionProfileCmb(resolutionProfileCmb, null);

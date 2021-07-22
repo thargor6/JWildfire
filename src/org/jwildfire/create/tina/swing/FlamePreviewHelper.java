@@ -1,27 +1,20 @@
 /*
-  JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2021 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.swing;
-
-import java.awt.Color;
-import java.awt.Rectangle;
-import java.util.List;
-
-import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -29,21 +22,17 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
-import org.jwildfire.create.tina.render.AbstractRenderThread;
-import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
-import org.jwildfire.create.tina.render.FlameBGColorHandler;
-import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.IterationObserver;
-import org.jwildfire.create.tina.render.ProgressUpdater;
-import org.jwildfire.create.tina.render.RenderInfo;
-import org.jwildfire.create.tina.render.RenderMode;
-import org.jwildfire.create.tina.render.RenderThreads;
-import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.faclrender.FACLFlameWriter;
+import org.jwildfire.create.tina.faclrender.FACLRenderResult;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
+import org.jwildfire.create.tina.render.*;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
+import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.transform.ComposeTransformer;
@@ -53,13 +42,26 @@ import org.jwildfire.transform.TextTransformer.FontStyle;
 import org.jwildfire.transform.TextTransformer.HAlignment;
 import org.jwildfire.transform.TextTransformer.Mode;
 import org.jwildfire.transform.TextTransformer.VAlignment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.util.List;
 
 public class FlamePreviewHelper implements IterationObserver {
+  private static final Logger logger = LoggerFactory.getLogger(FlamePreviewHelper.class);
+
+  private static final int INITIAL_IMAGE_UPDATE_INTERVAL = 5;
+  private static final int IMAGE_UPDATE_INC_INTERVAL = 8;
+  private static final int MAX_UPDATE_INC_INTERVAL = 200;
   private final Prefs prefs;
   private final JPanel centerPanel;
   private final JToggleButton toggleTransparencyButton;
   private final JToggleButton layerAppendBtn;
   private final JToggleButton layerPreviewBtn;
+  private final JToggleButton gpuModeToggleButton;
   private final ProgressUpdater mainProgressUpdater;
   private final FlameHolder flameHolder;
   private final LayerHolder layerHolder;
@@ -68,19 +70,36 @@ public class FlamePreviewHelper implements IterationObserver {
   private final FlamePanelProvider flamePanelProvider;
   private final FlameMessageHelper messageHelper;
   private final RandomBatchHolder randomBatchHolder;
-  private InteractiveRendererDisplayUpdater displayUpdater = new EmptyInteractiveRendererDisplayUpdater();
+  private InteractiveRendererDisplayUpdater displayUpdater =
+      new EmptyInteractiveRendererDisplayUpdater();
   private FlameRenderer renderer;
+  private AbstractRaster prevRaster;
+  private UpdateDisplayThread updateDisplayThread;
+  private Thread updateDisplayExecuteThread;
+  private RenderThreads threads;
+  private RenderThumbnailThread renderThumbnailThread = null;
 
-  public FlamePreviewHelper(ErrorHandler pErrorHandler, JPanel pCenterPanel, JToggleButton pToggleTransparencyButton, JToggleButton pLayerAppendBtn, JToggleButton pLayerPreviewBtn,
-      ProgressUpdater pMainProgressUpdater, FlameHolder pFlameHolder, LayerHolder pLayerHolder,
-      DetachedPreviewProvider pDetachedPreviewProvider, FlamePanelProvider pFlamePanelProvider,
-      FlameMessageHelper pMessageHelper, RandomBatchHolder pRandomBatchHolder) {
+  public FlamePreviewHelper(
+      ErrorHandler pErrorHandler,
+      JPanel pCenterPanel,
+      JToggleButton pToggleTransparencyButton,
+      JToggleButton pLayerAppendBtn,
+      JToggleButton pLayerPreviewBtn,
+      JToggleButton pGpuModeToggleButton,
+      ProgressUpdater pMainProgressUpdater,
+      FlameHolder pFlameHolder,
+      LayerHolder pLayerHolder,
+      DetachedPreviewProvider pDetachedPreviewProvider,
+      FlamePanelProvider pFlamePanelProvider,
+      FlameMessageHelper pMessageHelper,
+      RandomBatchHolder pRandomBatchHolder) {
     prefs = Prefs.getPrefs();
     errorHandler = pErrorHandler;
     centerPanel = pCenterPanel;
     toggleTransparencyButton = pToggleTransparencyButton;
     layerAppendBtn = pLayerAppendBtn;
     layerPreviewBtn = pLayerPreviewBtn;
+    gpuModeToggleButton = pGpuModeToggleButton;
     mainProgressUpdater = pMainProgressUpdater;
     flameHolder = pFlameHolder;
     layerHolder = pLayerHolder;
@@ -103,9 +122,17 @@ public class FlamePreviewHelper implements IterationObserver {
     return !isTransparencyEnabled() && !isDrawFocusPointEnabled(cfg) && cfg.isProgressivePreview();
   }
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender, boolean pAllowUseCache) {
+  public void refreshFlameImage(
+      boolean pQuickRender,
+      boolean pMouseDown,
+      int pDownScale,
+      boolean pReRender,
+      boolean pAllowUseCache) {
     cancelBackgroundRender();
-    if (pQuickRender && detachedPreviewProvider != null && detachedPreviewProvider.getDetachedPreviewController() != null && pDownScale == 1) {
+    if (pQuickRender
+        && detachedPreviewProvider != null
+        && detachedPreviewProvider.getDetachedPreviewController() != null
+        && pDownScale == 1) {
       detachedPreviewProvider.getDetachedPreviewController().setFlame(flameHolder.getFlame());
     }
 
@@ -127,16 +154,13 @@ public class FlamePreviewHelper implements IterationObserver {
       centerPanel.repaint();
     }
 
-
-
     if (pReRender && isProgressivePreviewEnabled(cfg) && pQuickRender) {
       if (pAllowUseCache) {
         SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale, pAllowUseCache);
         if (img != null) {
           imgPanel.setImage(img);
         }
-      }
-      else {
+      } else {
         startBackgroundRender(imgPanel);
       }
     }
@@ -144,7 +168,6 @@ public class FlamePreviewHelper implements IterationObserver {
     if (cfg.isNoControls()) {
       imgPanel.repaint();
     }
-
 
     if (pQuickRender && !cfg.isNoControls() && randomBatchHolder != null && !pMouseDown) {
       refreshThumbnailAsync();
@@ -168,9 +191,8 @@ public class FlamePreviewHelper implements IterationObserver {
     }
   }
 
-  private AbstractRaster prevRaster;
-
-  public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pAllowUseCache) {
+  public SimpleImage renderFlameImage(
+      boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pAllowUseCache) {
     if (!pAllowUseCache) {
       prevRaster = null;
     }
@@ -181,8 +203,7 @@ public class FlamePreviewHelper implements IterationObserver {
     Rectangle bounds;
     if (pDownScale != 1) {
       bounds = new Rectangle(panelBounds.width / pDownScale, panelBounds.height / pDownScale);
-    }
-    else {
+    } else {
       bounds = panelBounds;
     }
 
@@ -194,109 +215,198 @@ public class FlamePreviewHelper implements IterationObserver {
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       Flame oriFlame = flameHolder.getFlame();
-      Flame flame = oriFlame!=null ? oriFlame.makeCopy() : null;
+      Flame flame = oriFlame != null ? oriFlame.makeCopy() : null;
       if (flame != null) {
-        double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
-        double oldSampleDensity = flame.getSampleDensity();
-        int oldSpatialOversampling = flame.getSpatialOversampling();
-        AIPostDenoiserType oldAIPostDenoiser = flame.getAiPostDenoiser();
-        try {
-          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-          double pixelsPerUnitScale = (wScl + hScl) * 0.5;
-          flame.setPixelsPerUnit(pixelsPerUnitScale * flame.getPixelsPerUnit());
-          if(flame.getPixelsPerUnitCurve().isEnabled()) {
-            flame.getPixelsPerUnitCurve().scale(1.0, pixelsPerUnitScale);
-          }
-          flame.setWidth(info.getImageWidth());
-          flame.setHeight(info.getImageHeight());
-          if(pMouseDown) {
-            flame.setMotionBlurLength(0);
-          }
-
+        if (GPURendererFactory.isAvailable()
+            && gpuModeToggleButton != null
+            && gpuModeToggleButton.isSelected()
+            && !pQuickRender) {
           try {
-            FlameRenderer renderer;
-            if (pQuickRender) {
-              flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-              flame.applyFastOversamplingSettings();
-              flame.setSpatialOversampling(oldSpatialOversampling);
+            final int PROGRESS_STEPS = 50;
+            File tmpFile = File.createTempFile("jwf", ".flame");
+            try {
+              FileDialogTools.ensureFileAccess(
+                  new Frame(), new JPanel(), tmpFile.getAbsolutePath());
+              mainProgressUpdater.initProgress(PROGRESS_STEPS);
+              if(gpuProgressUpdater!=null) {
+                gpuProgressUpdater.signalCancel();
+              }
+              if(gpuProgressUpdater!=null && gpuProgressUpdater.isFinished()) {
+                gpuProgressUpdater = null;
+              }
+              if(gpuProgressUpdater==null) {
+                gpuProgressUpdater = new GpuProgressUpdater(PROGRESS_STEPS);
+                new Thread(gpuProgressUpdater).start();
+              }
+              List<Flame> preparedFlames = FACLRenderTools.prepareFlame(flame);
+              new FACLFlameWriter().writeFlame(preparedFlames, tmpFile.getAbsolutePath());
+              FACLRenderResult openClRenderRes =
+                  FACLRenderTools.invokeFACLRender(
+                      tmpFile.getAbsolutePath(),
+                      width,
+                      height,
+                          prefs.getTinaRenderPreviewQuality(),
+                      preparedFlames.size() > 1);
+              if (openClRenderRes.getReturnCode() != 0) {
+                throw new Exception(openClRenderRes.getMessage());
+              } else {
+                SimpleImage img = new ImageReader().loadImage(openClRenderRes.getOutputFilename());
+                mainProgressUpdater.updateProgress(PROGRESS_STEPS);
+                return img;
+              }
+            } finally {
+              if (!tmpFile.delete()) {
+                tmpFile.deleteOnExit();
+              }
+              if(gpuProgressUpdater!=null) {
+                gpuProgressUpdater.signalCancel();
+              }
             }
-            else {
-              flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-            }
-
-            if (isDrawFocusPointEnabled(cfg)) {
-              renderer = new DrawFocusPointFlameRenderer(flame, prefs, isTransparencyEnabled());
-            }
-            else {
-              renderer = new FlameRenderer(flame, prefs, isTransparencyEnabled(), false);
-            }
-
-            if (pQuickRender) {
-              renderer.setProgressUpdater(null);
-            }
-            else {
-              renderer.setProgressUpdater(mainProgressUpdater);
-            }
-
-            long t0 = System.currentTimeMillis();
-            renderer.setRenderScale(renderScale);
-
-            RenderedFlame res;
-            if (prevRaster != null && pAllowUseCache) {
-              info.setStoreRaster(false);
-              info.setRestoredRaster(prevRaster);
-              flame.setSampleDensity(prevRaster.getSampleDensity());
-              res = renderer.renderFlame(info);
-            }
-            else {
-              info.setStoreRaster(true);
-              res = renderer.renderFlame(info);
-              prevRaster = res.getRaster();
-            }
-
-            SimpleImage img = res.getImage();
-            long t1 = System.currentTimeMillis();
-            //img.getBufferedImg().setAccelerationPriority(1.0f);
-
-            if (layerAppendBtn != null && layerAppendBtn.isSelected() && !pMouseDown) {
-              showLayerAppendModeIndicator(img);
-            }
-
-            if (layerPreviewBtn != null && layerPreviewBtn.isSelected() && layerHolder != null) {
-              SimpleImage layerImg = createLayerPreview(img, renderScale, width, height);
-              showLayerPreview(img, layerImg, renderScale, width, height);
-            }
-
-            if (pDownScale != 1) {
-              SimpleImage background = new SimpleImage(panelBounds.width, panelBounds.height);
-              ComposeTransformer cT = new ComposeTransformer();
-              cT.setHAlign(ComposeTransformer.HAlignment.CENTRE);
-              cT.setVAlign(ComposeTransformer.VAlignment.CENTRE);
-              cT.setForegroundImage(img);
-              cT.transformImage(background);
-              img = background;
-            }
-
-            if (!cfg.isNoControls() && messageHelper != null) {
-              messageHelper.showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-            }
-
-            return img;
-          }
-          catch (Throwable ex) {
+          } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
             errorHandler.handleError(ex);
           }
-        }
-        finally {
-          flame.setSpatialFilterRadius(oldSpatialFilterRadius);
-          flame.setSampleDensity(oldSampleDensity);
-          flame.setSpatialOversampling(oldSpatialOversampling);
-          flame.setAiPostDenoiser(oldAIPostDenoiser);
+        } else {
+          double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
+          double oldSampleDensity = flame.getSampleDensity();
+          int oldSpatialOversampling = flame.getSpatialOversampling();
+          AIPostDenoiserType oldAIPostDenoiser = flame.getAiPostDenoiser();
+          try {
+            double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+            double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+            double pixelsPerUnitScale = (wScl + hScl) * 0.5;
+            flame.setPixelsPerUnit(pixelsPerUnitScale * flame.getPixelsPerUnit());
+            if (flame.getPixelsPerUnitCurve().isEnabled()) {
+              flame.getPixelsPerUnitCurve().scale(1.0, pixelsPerUnitScale);
+            }
+            flame.setWidth(info.getImageWidth());
+            flame.setHeight(info.getImageHeight());
+            if (pMouseDown) {
+              flame.setMotionBlurLength(0);
+            }
+
+            try {
+              FlameRenderer renderer;
+              if (pQuickRender) {
+                flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
+                flame.applyFastOversamplingSettings();
+                flame.setSpatialOversampling(oldSpatialOversampling);
+              } else {
+                flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
+              }
+
+              if (isDrawFocusPointEnabled(cfg)) {
+                renderer = new DrawFocusPointFlameRenderer(flame, prefs, isTransparencyEnabled());
+              } else {
+                renderer = new FlameRenderer(flame, prefs, isTransparencyEnabled(), false);
+              }
+
+              if (pQuickRender) {
+                renderer.setProgressUpdater(null);
+              } else {
+                renderer.setProgressUpdater(mainProgressUpdater);
+              }
+
+              long t0 = System.currentTimeMillis();
+              renderer.setRenderScale(renderScale);
+
+              RenderedFlame res;
+              if (prevRaster != null && pAllowUseCache) {
+                info.setStoreRaster(false);
+                info.setRestoredRaster(prevRaster);
+                flame.setSampleDensity(prevRaster.getSampleDensity());
+                res = renderer.renderFlame(info);
+              } else {
+                info.setStoreRaster(true);
+                res = renderer.renderFlame(info);
+                prevRaster = res.getRaster();
+              }
+
+              SimpleImage img = res.getImage();
+              long t1 = System.currentTimeMillis();
+              // img.getBufferedImg().setAccelerationPriority(1.0f);
+
+              if (layerAppendBtn != null && layerAppendBtn.isSelected() && !pMouseDown) {
+                showLayerAppendModeIndicator(img);
+              }
+
+              if (layerPreviewBtn != null && layerPreviewBtn.isSelected() && layerHolder != null) {
+                SimpleImage layerImg = createLayerPreview(img, renderScale, width, height);
+                showLayerPreview(img, layerImg, renderScale, width, height);
+              }
+
+              if (pDownScale != 1) {
+                SimpleImage background = new SimpleImage(panelBounds.width, panelBounds.height);
+                ComposeTransformer cT = new ComposeTransformer();
+                cT.setHAlign(ComposeTransformer.HAlignment.CENTRE);
+                cT.setVAlign(ComposeTransformer.VAlignment.CENTRE);
+                cT.setForegroundImage(img);
+                cT.transformImage(background);
+                img = background;
+              }
+
+              if (!cfg.isNoControls() && messageHelper != null) {
+                messageHelper.showStatusMessage(
+                    flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+              }
+
+              return img;
+            } catch (Throwable ex) {
+              errorHandler.handleError(ex);
+            }
+          } finally {
+            flame.setSpatialFilterRadius(oldSpatialFilterRadius);
+            flame.setSampleDensity(oldSampleDensity);
+            flame.setSpatialOversampling(oldSpatialOversampling);
+            flame.setAiPostDenoiser(oldAIPostDenoiser);
+          }
         }
       }
     }
     return null;
+  }
+
+  private GpuProgressUpdater gpuProgressUpdater=null;
+
+  private class GpuProgressUpdater implements Runnable {
+    private final int maxSteps;
+    private boolean cancelSignalled;
+    private boolean finished;
+
+    public GpuProgressUpdater(int maxSteps) {
+      this.maxSteps = maxSteps;
+    }
+
+    public void signalCancel() {
+      cancelSignalled = true;
+    }
+
+    public boolean isFinished() {
+      return finished;
+    }
+
+    @Override
+    public void run() {
+      finished = false;
+      try {
+        for (int i = 0; i < maxSteps; i++) {
+          if (cancelSignalled) {
+            break;
+          }
+          try {
+            mainProgressUpdater.updateProgress(i);
+            Thread.sleep(100);
+          } catch (Throwable ex) {
+            ex.printStackTrace();
+          }
+          if (cancelSignalled) {
+            break;
+          }
+        }
+      } finally {
+        finished = true;
+      }
+    }
   }
 
   public SimpleImage renderAnimFrame(double imageScale, double quality) {
@@ -310,13 +420,13 @@ public class FlamePreviewHelper implements IterationObserver {
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       Flame oriFlame = flameHolder.getFlame();
-      Flame flame = oriFlame!=null ? oriFlame.makeCopy() : null;
+      Flame flame = oriFlame != null ? oriFlame.makeCopy() : null;
       if (flame != null) {
         double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
         double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
         double pixelsPerUnitScale = (wScl + hScl) * 0.5;
         flame.setPixelsPerUnit(pixelsPerUnitScale * flame.getPixelsPerUnit());
-        if(flame.getPixelsPerUnitCurve().isEnabled()) {
+        if (flame.getPixelsPerUnitCurve().isEnabled()) {
           flame.getPixelsPerUnitCurve().scale(1.0, pixelsPerUnitScale);
         }
         flame.setWidth(info.getImageWidth());
@@ -327,10 +437,9 @@ public class FlamePreviewHelper implements IterationObserver {
           FlameRenderer renderer = new FlameRenderer(flame, prefs, isTransparencyEnabled(), false);
           RenderedFlame res = renderer.renderFlame(info);
           SimpleImage img = res.getImage();
-          //img.getBufferedImg().setAccelerationPriority(1.0f);
+          // img.getBufferedImg().setAccelerationPriority(1.0f);
           return img;
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
           errorHandler.handleError(ex);
         }
       }
@@ -347,14 +456,17 @@ public class FlamePreviewHelper implements IterationObserver {
       if (layer.isVisible()) {
         if (onlyVisibleLayer == null) {
           onlyVisibleLayer = layer;
-        }
-        else {
+        } else {
           onlyVisibleLayer = null;
           break;
         }
       }
     }
-    boolean drawSubLayer = flame.getLayers().size() > 1 && layerHolder.getLayer() != null && layerHolder.getLayer() != onlyVisibleLayer && !cfg.isNoControls();
+    boolean drawSubLayer =
+        flame.getLayers().size() > 1
+            && layerHolder.getLayer() != null
+            && layerHolder.getLayer() != onlyVisibleLayer
+            && !cfg.isNoControls();
 
     if (drawSubLayer) {
       Flame singleLayerFlame = new Flame();
@@ -363,10 +475,12 @@ public class FlamePreviewHelper implements IterationObserver {
       singleLayerFlame.getLayers().add(layerHolder.getLayer().makeCopy());
       singleLayerFlame.getFirstLayer().setVisible(true);
       singleLayerFlame.getFirstLayer().setWeight(1.0);
-      RenderInfo lInfo = new RenderInfo(width / 8 * renderScale, height / 8 * renderScale, RenderMode.PREVIEW);
+      RenderInfo lInfo =
+          new RenderInfo(width / 8 * renderScale, height / 8 * renderScale, RenderMode.PREVIEW);
       double lWScl = (double) lInfo.getImageWidth() / (double) singleLayerFlame.getWidth();
       double lHScl = (double) lInfo.getImageHeight() / (double) singleLayerFlame.getHeight();
-      singleLayerFlame.setPixelsPerUnit((lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.5);
+      singleLayerFlame.setPixelsPerUnit(
+          (lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.5);
       singleLayerFlame.setWidth(lInfo.getImageWidth());
       singleLayerFlame.setHeight(lInfo.getImageHeight());
       singleLayerFlame.setSampleDensity(prefs.getTinaRenderRealtimeQuality() * 2.0 / 8.0);
@@ -418,7 +532,8 @@ public class FlamePreviewHelper implements IterationObserver {
     return null;
   }
 
-  private void showLayerPreview(SimpleImage img, SimpleImage layerImg, int renderScale, int width, int height) {
+  private void showLayerPreview(
+      SimpleImage img, SimpleImage layerImg, int renderScale, int width, int height) {
     if (layerImg != null) {
       ComposeTransformer cT = new ComposeTransformer();
       cT.setHAlign(ComposeTransformer.HAlignment.LEFT);
@@ -452,7 +567,8 @@ public class FlamePreviewHelper implements IterationObserver {
     return toggleTransparencyButton != null && toggleTransparencyButton.isSelected();
   }
 
-  public SimpleImage fastRenderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
+  public SimpleImage fastRenderFlameImage(
+      boolean pQuickRender, boolean pMouseDown, int pDownScale) {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
@@ -460,8 +576,7 @@ public class FlamePreviewHelper implements IterationObserver {
     Rectangle bounds;
     if (pDownScale != 1) {
       bounds = new Rectangle(panelBounds.width / pDownScale, panelBounds.height / pDownScale);
-    }
-    else {
+    } else {
       bounds = panelBounds;
     }
 
@@ -471,7 +586,7 @@ public class FlamePreviewHelper implements IterationObserver {
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       Flame oriFlame = flameHolder.getFlame();
-      Flame flame = oriFlame!=null ? oriFlame.makeCopy() : null;
+      Flame flame = oriFlame != null ? oriFlame.makeCopy() : null;
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
@@ -482,7 +597,7 @@ public class FlamePreviewHelper implements IterationObserver {
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
           double pixelsPerUnitScale = (wScl + hScl) * 0.5;
           flame.setPixelsPerUnit(pixelsPerUnitScale * flame.getPixelsPerUnit());
-          if(flame.getPixelsPerUnitCurve().isEnabled()) {
+          if (flame.getPixelsPerUnitCurve().isEnabled()) {
             flame.getPixelsPerUnitCurve().scale(1.0, pixelsPerUnitScale);
           }
           flame.setWidth(info.getImageWidth());
@@ -491,8 +606,7 @@ public class FlamePreviewHelper implements IterationObserver {
             FlameRenderer renderer;
             if (isDrawFocusPointEnabled(cfg)) {
               renderer = new DrawFocusPointFlameRenderer(flame, prefs, isTransparencyEnabled());
-            }
-            else {
+            } else {
               renderer = new FlameRenderer(flame, prefs, isTransparencyEnabled(), false);
             }
             renderer.setProgressUpdater(null);
@@ -501,14 +615,12 @@ public class FlamePreviewHelper implements IterationObserver {
             renderer.setRenderScale(renderScale);
             RenderedFlame res = renderer.renderFlame(info);
             SimpleImage img = res.getImage();
-            //img.getBufferedImg().setAccelerationPriority(1.0f);
+            // img.getBufferedImg().setAccelerationPriority(1.0f);
             return img;
-          }
-          catch (Throwable ex) {
+          } catch (Throwable ex) {
             errorHandler.handleError(ex);
           }
-        }
-        finally {
+        } finally {
           flame.setSampleDensity(oldSampleDensity);
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSpatialOversampling(oldSpatialOversampling);
@@ -519,11 +631,6 @@ public class FlamePreviewHelper implements IterationObserver {
     return null;
   }
 
-  public void setImage(SimpleImage pImage) {
-    FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
-    imgPanel.setImage(pImage);
-  }
-
   public void setDerivedImage(SimpleImage pImage) {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     imgPanel.setDerivedImage(pImage);
@@ -532,8 +639,7 @@ public class FlamePreviewHelper implements IterationObserver {
   public void forceRepaint() {
     try {
       flamePanelProvider.getFlamePanel().paint(flamePanelProvider.getFlamePanel().getGraphics());
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
 
     }
   }
@@ -542,13 +648,8 @@ public class FlamePreviewHelper implements IterationObserver {
     return flamePanelProvider.getFlamePanel().getBounds();
   }
 
-  private UpdateDisplayThread updateDisplayThread;
-  private Thread updateDisplayExecuteThread;
-  private RenderThreads threads;
-
   public void cancelBackgroundRender() {
-    if (threads == null)
-      return;
+    if (threads == null) return;
 
     if (updateDisplayThread != null) {
       updateDisplayThread.cancel();
@@ -616,7 +717,7 @@ public class FlamePreviewHelper implements IterationObserver {
     double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
     double pixelsPerUnitScale = (wScl + hScl) * 0.5;
     flame.setPixelsPerUnit(pixelsPerUnitScale * flame.getPixelsPerUnit());
-    if(flame.getPixelsPerUnitCurve().isEnabled()) {
+    if (flame.getPixelsPerUnitCurve().isEnabled()) {
       flame.getPixelsPerUnitCurve().scale(1.0, pixelsPerUnitScale);
     }
     flame.setWidth(info.getImageWidth());
@@ -627,7 +728,9 @@ public class FlamePreviewHelper implements IterationObserver {
     renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
     renderer.registerIterationObserver(this);
 
-    SimpleImage image = new SimpleImage(pImgPanel.getImage().getImageWidth(), pImgPanel.getImage().getImageHeight());
+    SimpleImage image =
+        new SimpleImage(
+            pImgPanel.getImage().getImageWidth(), pImgPanel.getImage().getImageHeight());
     initImage(image, flame);
 
     displayUpdater = new BufferedInteractiveRendererDisplayUpdater(pImgPanel, image, true);
@@ -645,19 +748,79 @@ public class FlamePreviewHelper implements IterationObserver {
       try {
         SimpleImage bgImg = (SimpleImage) RessourceManager.getImage(flame.getBGImageFilename());
         pImage.fillBackground(bgImg);
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
-    }
-    else {
+    } else {
       new FlameBGColorHandler(flame).fillBackground(pImage);
     }
   }
 
-  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 5;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 8;
-  private final static int MAX_UPDATE_INC_INTERVAL = 200;
+  @Override
+  public void notifyIterationFinished(
+      AbstractRenderThread pEventSource,
+      int pPlotX,
+      int pPlotY,
+      XYZProjectedPoint pProjectedPoint,
+      double pX,
+      double pY,
+      double pZ,
+      double pColorRed,
+      double pColorGreen,
+      double pColorBlue) {
+    displayUpdater.iterationFinished(pEventSource, pPlotX, pPlotY);
+  }
+
+  public void stopPreviewRendering() {
+    cancelBackgroundRender();
+  }
+
+  public SimpleImage getImage() {
+    FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
+    return imgPanel != null ? imgPanel.getImage() : null;
+  }
+
+  public void setImage(SimpleImage pImage) {
+    FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
+    imgPanel.setImage(pImage);
+  }
+
+  private void cancelThumbnailBackgroundRender() {
+    if (renderThumbnailThread != null) {
+      try {
+        renderThumbnailThread.cancel();
+        while (!renderThumbnailThread.isFinished()) {
+          try {
+            Thread.sleep(1);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      } finally {
+        renderThumbnailThread = null;
+      }
+    }
+  }
+
+  private void refreshThumbnailAsync() {
+    cancelThumbnailBackgroundRender();
+    Flame flame = flameHolder.getFlame();
+    List<FlameThumbnail> randomBatch = randomBatchHolder.getRandomBatch();
+    for (int i = 0; i < randomBatch.size(); i++) {
+      Flame bFlame = randomBatch.get(i).getFlame();
+      if (bFlame == flame) {
+        renderThumbnailThread = new RenderThumbnailThread(randomBatch, i);
+        Thread executingThread = new Thread(renderThumbnailThread);
+        executingThread.setPriority(Thread.MIN_PRIORITY);
+        executingThread.start();
+        break;
+      }
+    }
+  }
+
+  public FlamePanelProvider getFlamePanelProvider() {
+    return flamePanelProvider;
+  }
 
   private class UpdateDisplayThread implements Runnable, InteractiveRendererImagePostProcessor {
     private int nextImageUpdate;
@@ -672,9 +835,13 @@ public class FlamePreviewHelper implements IterationObserver {
 
     public UpdateDisplayThread(Flame flame, SimpleImage pImage) {
       Prefs prefs = Prefs.getPrefs();
-      maxPreviewTimeInMilliseconds = Tools.FTOI(prefs.getTinaEditorProgressivePreviewMaxRenderTime() * 1000.0);
-      double renderQualityScale = flame.getLayers().size() * (flame.getSolidRenderSettings().isSolidRenderingEnabled() ? 1.5 : 1.0);
-      maxPreviewQuality = Tools.FTOI(prefs.getTinaEditorProgressivePreviewMaxRenderQuality() * renderQualityScale);
+      maxPreviewTimeInMilliseconds =
+          Tools.FTOI(prefs.getTinaEditorProgressivePreviewMaxRenderTime() * 1000.0);
+      double renderQualityScale =
+          flame.getLayers().size()
+              * (flame.getSolidRenderSettings().isSolidRenderingEnabled() ? 1.5 : 1.0);
+      maxPreviewQuality =
+          Tools.FTOI(prefs.getTinaEditorProgressivePreviewMaxRenderQuality() * renderQualityScale);
       nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
       lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
       image = pImage;
@@ -685,11 +852,13 @@ public class FlamePreviewHelper implements IterationObserver {
         if (threads != null) {
           List<AbstractRenderThread> renderThreads = threads.getRenderThreads();
           if (renderThreads != null && renderThreads.size() > 0) {
-            return renderThreads.get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
+            return renderThreads
+                .get(0)
+                .getTonemapper()
+                .calcDensity(displayUpdater.getSampleCount());
           }
         }
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
       return 0.0;
@@ -703,7 +872,8 @@ public class FlamePreviewHelper implements IterationObserver {
         replaceImageFlag = false;
         while (!cancelSignalled) {
           double currQuality = getCurrQuality();
-          if (currQuality > maxPreviewQuality || System.currentTimeMillis() - t0 > maxPreviewTimeInMilliseconds) {
+          if (currQuality > maxPreviewQuality
+              || System.currentTimeMillis() - t0 > maxPreviewTimeInMilliseconds) {
             cancelSignalled = true;
             for (AbstractRenderThread thread : threads.getRenderThreads()) {
               if (!thread.isFinished()) {
@@ -724,32 +894,31 @@ public class FlamePreviewHelper implements IterationObserver {
                 imgPanel.replaceImage(image);
                 replaceImageFlag = true;
               }
-              currQuality = threads.getRenderThreads().get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
+              currQuality =
+                  threads
+                      .getRenderThreads()
+                      .get(0)
+                      .getTonemapper()
+                      .calcDensity(displayUpdater.getSampleCount());
               if (currQuality > 0.1) {
-                if (currQuality < 0.5)
-                  currQuality *= 10;
-                else if (currQuality < 1.0)
-                  currQuality *= 5;
-                else if (currQuality < 2.0)
-                  currQuality *= 2;
+                if (currQuality < 0.5) currQuality *= 10;
+                else if (currQuality < 1.0) currQuality *= 5;
+                else if (currQuality < 2.0) currQuality *= 2;
                 for (AbstractRenderThread thread : threads.getRenderThreads()) {
                   thread.getTonemapper().setDensity(currQuality);
                 }
                 displayUpdater.updateImage(this);
               }
               nextImageUpdate = lastImageUpdateInterval;
-            }
-            else {
+            } else {
               Thread.sleep(1);
             }
-          }
-          catch (Throwable e) {
+          } catch (Throwable e) {
             cancelSignalled = true;
             e.printStackTrace();
           }
         }
-      }
-      finally {
+      } finally {
         finished = true;
       }
     }
@@ -775,23 +944,7 @@ public class FlamePreviewHelper implements IterationObserver {
         showLayerPreview(image, layerImg, 1, panelBounds.width, panelBounds.height);
       }
     }
-
   }
-
-  @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, XYZProjectedPoint pProjectedPoint, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue) {
-    displayUpdater.iterationFinished(pEventSource, pPlotX, pPlotY);
-  }
-
-  public void stopPreviewRendering() {
-    cancelBackgroundRender();
-  }
-
-  public SimpleImage getImage() {
-    FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
-    return imgPanel !=null ? imgPanel.getImage() : null;
-  }
-
 
   private class RenderThumbnailThread implements Runnable {
     private final List<FlameThumbnail> randomBatch;
@@ -807,14 +960,14 @@ public class FlamePreviewHelper implements IterationObserver {
 
     @Override
     public void run() {
-      finished = forceAbort= false;
+      finished = forceAbort = false;
       try {
         FlameThumbnail thumbnail = randomBatch.get(flameIdx);
         RenderInfo info = thumbnail.getPreviewRenderInfo();
         int quality = prefs.getTinaRenderPreviewQuality() / 2;
         flameRenderer = thumbnail.getPreviewRenderer(info, quality);
         RenderedFlame res = flameRenderer.renderFlame(info);
-        if(!forceAbort) {
+        if (!forceAbort) {
           randomBatch.get(flameIdx).setPreview(res.getImage());
           ImagePanel pnl = randomBatch.get(flameIdx).getImgPanel();
           if (pnl != null) {
@@ -822,8 +975,7 @@ public class FlamePreviewHelper implements IterationObserver {
             pnl.repaint();
           }
         }
-      }
-      finally {
+      } finally {
         finished = true;
       }
     }
@@ -832,8 +984,7 @@ public class FlamePreviewHelper implements IterationObserver {
       try {
         forceAbort = true;
         flameRenderer.cancel();
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
     }
@@ -841,45 +992,5 @@ public class FlamePreviewHelper implements IterationObserver {
     public boolean isFinished() {
       return finished;
     }
-  }
-
-  private RenderThumbnailThread renderThumbnailThread = null;
-
-  private void cancelThumbnailBackgroundRender() {
-    if(renderThumbnailThread!=null) {
-      try {
-        renderThumbnailThread.cancel();
-        while (!renderThumbnailThread.isFinished()) {
-          try {
-            Thread.sleep(1);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-      }
-      finally {
-        renderThumbnailThread = null;
-      }
-    }
-  }
-
-  private void refreshThumbnailAsync() {
-    cancelThumbnailBackgroundRender();
-    Flame flame = flameHolder.getFlame();
-    List<FlameThumbnail> randomBatch = randomBatchHolder.getRandomBatch();
-    for (int i = 0; i < randomBatch.size(); i++) {
-      Flame bFlame = randomBatch.get(i).getFlame();
-      if (bFlame == flame) {
-        renderThumbnailThread = new RenderThumbnailThread(randomBatch, i);
-        Thread executingThread = new Thread(renderThumbnailThread);
-        executingThread.setPriority(Thread.MIN_PRIORITY);
-        executingThread.start();
-        break;
-      }
-    }
-  }
-
-  public FlamePanelProvider getFlamePanelProvider() {
-    return flamePanelProvider;
   }
 }

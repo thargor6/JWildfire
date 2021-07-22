@@ -8,6 +8,9 @@ V7.00 (xx.xx.202x)
 
    On the other side, it would be impossible to create a variation set which contains all gpu-supported variations. They would be too many, and compilation at the device would fail or even crash the whole system.
    Therefore, the idea to compile the variations needed for each flame individually. This makes the rendering startup slower, but this would only affect gpu-flame-realtime editing, which is not supported in JWildfire. And when rendering final images a few seconds more for initialization would not make much difference.
+ - added a new GPU-mode-button in the main editor. If enabled, it has the following functions:
+    - full preview uses GPU rendering
+    - random-flame-generators try to avoid to use variations which are not supported by GPU
  - added a new tab in the GPU renderer for viewing the generated gpu-flame-parameters
  - displaying the name of variations where no code could be found
  - added a new option to enable automatic synchronization of changes between the Main Editor and GPU renderer

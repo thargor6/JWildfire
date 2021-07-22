@@ -83,6 +83,7 @@ public class VariationSet implements VariationnameTransformer {
         messageLogger.logMessage(msg);
       }
       logger.error(msg);
+      throw new RuntimeException(msg);
     }
   }
 

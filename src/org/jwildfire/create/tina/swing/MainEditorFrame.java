@@ -10085,7 +10085,7 @@ public class MainEditorFrame extends JFrame {
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
 
       gpuModeToggleButton = new JToggleButton();
-      gpuModeToggleButton.setToolTipText("Toggle prefer GPU mode on/off (tries to avoid to use variations which are not supported by GPU in random flames)");
+      gpuModeToggleButton.setToolTipText("Toggle GPU mode on/off (full preview uses GPU and random-flame-generators try to avoid to use variations which are not supported by GPU)");
       gpuModeToggleButton.setPreferredSize(new Dimension(72, 36));
       gpuModeToggleButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gpuModeToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/green_pill.png")));
