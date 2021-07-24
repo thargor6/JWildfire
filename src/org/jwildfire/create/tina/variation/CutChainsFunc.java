@@ -159,7 +159,7 @@ public class CutChainsFunc  extends VariationFunc implements SupportsGPU {
 	public String getGPUCode(FlameTransformationContext context) {
 		return	"		    float x,y,px_center,py_center;"
 				+"		    "
-				+"		    if( varpar->cut_chains_mode ==0)"
+				+"		    if( __cut_chains_mode ==0)"
 				+"		    {"
 				+"		      x= __x;"
 				+"		      y =__y;"
@@ -174,15 +174,15 @@ public class CutChainsFunc  extends VariationFunc implements SupportsGPU {
 				+"		    }"
 				+"		    "
 				+"		    "
-				+"		    float2 u =make_float2(x* varpar->cut_chains_zoom ,y* varpar->cut_chains_zoom );"
-				+"            u=u+(make_float2( varpar->cut_chains_shiftX ,varpar->cut_chains_shiftY));"
+				+"		    float2 u =make_float2(x* __cut_chains_zoom ,y* __cut_chains_zoom );"
+				+"            u=u+(make_float2( __cut_chains_shiftX ,__cut_chains_shiftY));"
 				+"    	    float wy = cos(u.y * 12.);"
 				+"    	    float wx = sin(u.x * 15.); "
 				+"    	    float w  = cos(u.x * 30.);"
 				+"    	    float color = smoothstep(-0.25, 0.25,mix(wy + wx, wx*1.4, w * 3.));"
 				+"			              	"
 				+"		    __doHide=false;"
-				+"		    if( varpar->cut_chains_invert ==0)"
+				+"		    if( __cut_chains_invert ==0)"
 				+"		    {"
 				+"		      if (color>0.0)"
 				+"		      { x=0;"
@@ -197,9 +197,9 @@ public class CutChainsFunc  extends VariationFunc implements SupportsGPU {
 				+"			        __doHide = true;"
 				+"			      }"
 				+"		    }"
-				+"		    __px = varpar->cut_chains * (x-px_center);"
-				+"		    __py = varpar->cut_chains * (y-py_center);"
-				+ (context.isPreserveZCoordinate() ? "__pz += varpar->cut_chains * __z;" : "");
+				+"		    __px = __cut_chains * (x-px_center);"
+				+"		    __py = __cut_chains * (y-py_center);"
+				+ (context.isPreserveZCoordinate() ? "__pz += __cut_chains * __z;" : "");
 	}
 }
 

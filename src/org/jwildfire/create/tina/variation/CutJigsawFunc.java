@@ -169,7 +169,7 @@ public class CutJigsawFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		    float x,y;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_jigsaw_mode ==0)"
+	    		+"		    if( __cut_jigsaw_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -179,7 +179,7 @@ public class CutJigsawFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     y=RANDFLOAT()-0.5;"
 	    		+"		    }"
 	    		+"		    "
-	    		+"    	    float2 u =make_float2(x* varpar->cut_jigsaw_zoom ,y* varpar->cut_jigsaw_zoom )+(make_float2(1.,0.0)*( varpar->cut_jigsaw_time ));"
+	    		+"    	    float2 u =make_float2(x* __cut_jigsaw_zoom ,y* __cut_jigsaw_zoom )+(make_float2(1.,0.0)*( __cut_jigsaw_time ));"
 	    		+"    	    float2 i = ceilf(u),m = mod(i,2.)-(.5);"
 	    		+"    	    u=u-(i-(0.5));"
 	    		+"            float2 D = dot(m, u) < 0. ? m*(-1.0) : m;           "
@@ -194,7 +194,7 @@ public class CutJigsawFunc  extends VariationFunc implements SupportsGPU {
 	    		+"            float color=1.0f-s*1.0e4/8.0f;"
 	    		+"              	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_jigsaw_invert ==0)"
+	    		+"		    if( __cut_jigsaw_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -209,9 +209,9 @@ public class CutJigsawFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_jigsaw * (x);"
-	    		+"		    __py = varpar->cut_jigsaw * (y);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_jigsaw * __z;\n" : "");
+	    		+"		    __px = __cut_jigsaw * (x);"
+	    		+"		    __py = __cut_jigsaw * (y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_jigsaw * __z;\n" : "");
 	  }
 }
 

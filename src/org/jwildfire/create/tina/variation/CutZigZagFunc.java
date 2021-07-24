@@ -167,7 +167,7 @@ public class CutZigZagFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "	    float xp,yp;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_zigzag_mode ==0)"
+	    		+"		    if( __cut_zigzag_mode ==0)"
 	    		+"		    {"
 	    		+"		      xp= __x;"
 	    		+"		      yp =__y;"
@@ -178,8 +178,8 @@ public class CutZigZagFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		    }"
 	    		+"		    "
 	    		+"		    float2 st =make_float2(xp,yp);"
-	    		+"          st=st*varpar->cut_zigzag_zoom;"
-	    		+"          st=st*make_float2(varpar->cut_zigzag_xpar,varpar->cut_zigzag_ypar);"
+	    		+"          st=st*__cut_zigzag_zoom;"
+	    		+"          st=st*make_float2(__cut_zigzag_xpar,__cut_zigzag_ypar);"
 	    		+"		    st = cut_zigzag_mirrorTile(st);"
 	    		+"		    float x = st.x*2.0f;"
 	    		+"          float a = floorf(1.0f + sinf( x*PI));"
@@ -188,7 +188,7 @@ public class CutZigZagFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		    float color = cut_zigzag_fillY(st,mix(a,b,f),0.01f);"
 	    		+"            "
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_zigzag_invert ==0 )"
+	    		+"		    if( __cut_zigzag_invert ==0 )"
 	    		+"		    {"
 	    		+"		      if (color>=0.5f)"
 	    		+"		      { xp=0.0f;"
@@ -203,9 +203,9 @@ public class CutZigZagFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_zigzag * xp;"
-	    		+"		    __py = varpar->cut_zigzag * yp;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_zigzag * __z;\n" : "");
+	    		+"		    __px = __cut_zigzag * xp;"
+	    		+"		    __py = __cut_zigzag * yp;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_zigzag * __z;\n" : "");
 	  }
 	 
 	  @Override

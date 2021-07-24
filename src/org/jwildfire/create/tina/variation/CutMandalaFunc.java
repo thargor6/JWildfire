@@ -276,7 +276,7 @@ public class CutMandalaFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "	    float x,y;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_mandala_mode ==0)"
+	    		+"		    if( __cut_mandala_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -287,12 +287,12 @@ public class CutMandalaFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		    }"
 	    		+"		    "
 	    		+"		    "
-	    		+"		    float2 p =make_float2(x* varpar->cut_mandala_zoom ,y* varpar->cut_mandala_zoom );"
+	    		+"		    float2 p =make_float2(x* __cut_mandala_zoom ,y* __cut_mandala_zoom );"
 	    		+"		    "
 	    		+"		    float2 f = make_float2 ( sqrt(p.x*p.x + p.y*p.y), atan2(p.y, p.x) );"
 	    		+"		    "
-	    		+"		    float T0 = cos(0.3* varpar->cut_mandala_time );"
-	    		+"		    float T1 = 0.5 + 0.5 * cos(0.3* varpar->cut_mandala_time );"
+	    		+"		    float T0 = cos(0.3* __cut_mandala_time );"
+	    		+"		    float T1 = 0.5 + 0.5 * cos(0.3* __cut_mandala_time );"
 	    		+"		    float T2 = 1.0; "
 	    		+"		    "
 	    		+"		    float m0 = 0.;"
@@ -301,7 +301,7 @@ public class CutMandalaFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		    float m3 = 0.;"
 	    		+"		    float m4 = 0.;"
 	    		+"		    if (f.x < 0.7325) {"
-	    		+"		        f.y += 0.1 *   varpar->cut_mandala_time ;"
+	    		+"		        f.y += 0.1 *   __cut_mandala_time ;"
 	    		+"			    float2 c;"
 	    		+"			    float2 f2;"
 	    		+"		        c = make_float2(0.225 - 0.1*T0, PI / 4.);"
@@ -350,7 +350,7 @@ public class CutMandalaFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		    float color=z;"
 	    		+"		    "
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_mandala_invert ==0)"
+	    		+"		    if( __cut_mandala_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -365,9 +365,9 @@ public class CutMandalaFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_mandala * (x);"
-	    		+"		    __py = varpar->cut_mandala * (y);"
-    + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_mandala * __z;\n" : "");
+	    		+"		    __px = __cut_mandala * (x);"
+	    		+"		    __py = __cut_mandala * (y);"
+    + (context.isPreserveZCoordinate() ? "__pz += __cut_mandala * __z;\n" : "");
 }
 
 @Override

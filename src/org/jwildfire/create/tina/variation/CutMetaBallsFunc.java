@@ -179,7 +179,7 @@ public class  CutMetaBallsFunc  extends VariationFunc  implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		    float x,y,px_center,py_center;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_metaballs_mode ==0)"
+	    		+"		    if( __cut_metaballs_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -193,7 +193,7 @@ public class  CutMetaBallsFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		      py_center=0.5;		     "
 	    		+"		    }"
 	    		+"  "
-	    		+"		    float2 st=make_float2(x* varpar->cut_metaballs_zoom ,y* varpar->cut_metaballs_zoom );"
+	    		+"		    float2 st=make_float2(x* __cut_metaballs_zoom ,y* __cut_metaballs_zoom );"
 	    		+"		    "
 // test random2() method
 //	    		+"		    float2 t0 = cut_metaballs_random2(st);"    		
@@ -207,7 +207,7 @@ public class  CutMetaBallsFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		        for (int i= -1; i <= 1; i++ ) {"
     		    +"		            float2 neighbor = make_float2((float)i,(float)j);"
 	    		+"		            float2 offset = cut_metaballs_random2(i_st+neighbor);"
-	    		+"		            float2 tmp = offset*6.2831f + varpar->cut_metaballs_time;"
+	    		+"		            float2 tmp = offset*6.2831f + __cut_metaballs_time;"
 	    		+"		            offset = sinf(tmp)*0.5f + 0.5f;"
 	    		+"		            float2 pos = neighbor + offset - f_st;"
 	    		+"		            float dist = length(pos);"
@@ -216,7 +216,7 @@ public class  CutMetaBallsFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		    }"
 	    		+"		    color += step(0.060, m_dist);"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_metaballs_invert ==0)"
+	    		+"		    if( __cut_metaballs_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color==0.0f)"
 	    		+"		      { x=0.0f;"
@@ -231,9 +231,9 @@ public class  CutMetaBallsFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_metaballs * (x-px_center);"
-	    		+"		    __py = varpar->cut_metaballs * (y-py_center);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_metaballs * __z;\n" : "");
+	    		+"		    __px = __cut_metaballs * (x-px_center);"
+	    		+"		    __py = __cut_metaballs * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_metaballs * __z;\n" : "");
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {

@@ -170,7 +170,7 @@ public class CutSpiralCBFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		    float x,y,px_center,py_center;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_spiralcb_mode ==0)"
+	    		+"		    if( __cut_spiralcb_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -181,19 +181,19 @@ public class CutSpiralCBFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     "
 	    		+"		    }"
 	    		+"		    "
-	    		+"		    float2 uv =make_float2(x* varpar->cut_spiralcb_zoom ,y* varpar->cut_spiralcb_zoom );"
+	    		+"		    float2 uv =make_float2(x* __cut_spiralcb_zoom ,y* __cut_spiralcb_zoom );"
 // test rotate & hill
 //	    		+"   float color=1.0;"
 //	    		+"			Mat2 m;"
-//	    		+"			m= cut_spiralcb_rotate (varpar->cut_spiralcb_time*7.0);"
+//	    		+"			m= cut_spiralcb_rotate (__cut_spiralcb_time*7.0);"
 //	    		+"			uv = times(&m,uv);"
 //	    		+"	    	float fi = length (uv) * 50.0;"
 //	    		+"          color=cut_spiralcb_hill (0.0, fi/25.0, uv.y);"
 // original code
-                +"		    float color=cut_spiralcb_compute_spiral (uv,  varpar->cut_spiralcb_time );"
+                +"		    float color=cut_spiralcb_compute_spiral (uv,  __cut_spiralcb_time );"
 	    		+"              	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_spiralcb_invert ==0)"
+	    		+"		    if( __cut_spiralcb_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -208,9 +208,9 @@ public class CutSpiralCBFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_spiralcb * x;"
-	    		+"		    __py = varpar->cut_spiralcb * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_spiralcb * __z;\n" : "");
+	    		+"		    __px = __cut_spiralcb * x;"
+	    		+"		    __py = __cut_spiralcb * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_spiralcb * __z;\n" : "");
 	  }
 	 
 	  @Override

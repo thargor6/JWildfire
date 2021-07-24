@@ -228,8 +228,8 @@ public class CutMagFieldFunc  extends VariationFunc implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;"
-	    		+"		  float spacing =( 1.0f/10.0f)*varpar->cut_magfield_density;"
-	    		+"		  if( varpar->cut_magfield_mode ==0)"
+	    		+"		  float spacing =( 1.0f/10.0f)*__cut_magfield_density;"
+	    		+"		  if( __cut_magfield_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -239,8 +239,8 @@ public class CutMagFieldFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     y=2.0*RANDFLOAT()-1.0;		     "
 	    		+"		    }"
 	    		+"		    "
-	    		+"		    float2 p = make_float2(x* varpar->cut_magfield_zoom ,y* varpar->cut_magfield_zoom );"
-	    		+"		    spacing = 1./(10.*varpar->cut_magfield_density);"
+	    		+"		    float2 p = make_float2(x* __cut_magfield_zoom ,y* __cut_magfield_zoom );"
+	    		+"		    spacing = 1./(10.*__cut_magfield_density);"
 // test cut_magfield_rand
 //	    		+"          float r =  cut_magfield_rand (1.0f/15.0f)-.5;"
 //              +"          float2 v=p;"
@@ -283,7 +283,7 @@ public class CutMagFieldFunc  extends VariationFunc implements SupportsGPU {
 //              +"          lines = mix(1. - lines, lines, disc);"
 //              +"          lines = pow(lines, 1./2.2);"
 // test cut_magfield_calcVelocity	    		
-//	    		+"          float2 v = cut_magfield_calcVelocity(p,varpar->cut_magfield_time);"
+//	    		+"          float2 v = cut_magfield_calcVelocity(p,__cut_magfield_time);"
 //	    		+"          float a = atan2(v.x, v.y) / PI / 2.;"
 //	    		+"          float lines = fract(a / spacing);"
 //	    		+"          lines = fminf(lines, 1. - lines) * 2.;"
@@ -296,11 +296,11 @@ public class CutMagFieldFunc  extends VariationFunc implements SupportsGPU {
 //	    		+"          lines = pow(lines, 1./2.2);"
 // normal code
 	    		+"		    "	            
-	    		+"          float2 v = cut_magfield_calcVelocity(p,varpar->cut_magfield_time);"
+	    		+"          float2 v = cut_magfield_calcVelocity(p,__cut_magfield_time);"
 	    		+"          float a = atan2(v.x, v.y) / PI / 2.;"
 	    		+"          float lines = fract(a / spacing);"
 	    		+"          lines = fminf(lines, 1. - lines) * 2.;"   
-	    		+"          lines /= cut_magfield_calcDerivative(v,p,varpar->cut_magfield_time)/spacing;"  
+	    		+"          lines /= cut_magfield_calcDerivative(v,p,__cut_magfield_time)/spacing;"  
 	    		+"          lines -= 1000.0 * .0005;"
 	    		+"          lines = cut_magfield_saturate(lines);"
 	    		+"          float disc = length(p) - 1.;"
@@ -310,7 +310,7 @@ public class CutMagFieldFunc  extends VariationFunc implements SupportsGPU {
 	    		+"          lines = pow(lines, 1./2.2);"	            
 	    		+"		    float color = lines;" 
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_magfield_invert ==0)"
+	    		+"		    if( __cut_magfield_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color==0.0)"
 	    		+"		      { x=0;"
@@ -325,9 +325,9 @@ public class CutMagFieldFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_magfield * x;"
-	    		+"		    __py = varpar->cut_magfield * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_magfield * __z;\n" : "");
+	    		+"		    __px = __cut_magfield * x;"
+	    		+"		    __py = __cut_magfield * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_magfield * __z;\n" : "");
 	  }
 	 
 	  @Override

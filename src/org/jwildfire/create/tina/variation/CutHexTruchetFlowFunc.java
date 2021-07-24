@@ -232,7 +232,7 @@ public class  CutHexTruchetFlowFunc  extends VariationFunc implements SupportsGP
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;"
-	    		+"		  if( varpar->cut_hextruchetflow_mode ==0)"
+	    		+"		  if( __cut_hextruchetflow_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -242,17 +242,17 @@ public class  CutHexTruchetFlowFunc  extends VariationFunc implements SupportsGP
 	    		+"		     y=RANDFLOAT()-0.5;"
 	    		+"		    }"
 	    		+"			    "
-	    	    +"      float shiftxy= varpar->cut_hextruchetflow_randomize*sin(varpar->cut_hextruchetflow_randomize*180.0f/PI);"
-	    		+"      float2 uv=make_float2(x,y)* varpar->cut_hextruchetflow_zoom - make_float2(shiftxy,shiftxy);"
+	    	    +"      float shiftxy= __cut_hextruchetflow_randomize*sin(__cut_hextruchetflow_randomize*180.0f/PI);"
+	    		+"      float2 uv=make_float2(x,y)* __cut_hextruchetflow_zoom - make_float2(shiftxy,shiftxy);"
  	    		+"      float3 color=make_float3(0.0,0.0,0.0);"
 //	    		+"      float t1= cut_hextruchetflow_Hashfv2  (uv);"
 //	    		+"      float2 t2=cut_hextruchetflow_PixToHex(uv);"
 //	    		+"             uv=cut_hextruchetflow_HexToPix(t2);"
 //	    		+"             t1=cut_hextruchetflow_HexEdgeDist  (uv);"
-//              +"      color=cut_hextruchetflow_ShowScene(uv , varpar->cut_hextruchetflow_grid);"
-   		        +"	    color =  color +  cut_hextruchetflow_ShowScene ( uv + step (1.5, 1.0) ,varpar->cut_hextruchetflow_grid);"
+//              +"      color=cut_hextruchetflow_ShowScene(uv , __cut_hextruchetflow_grid);"
+   		        +"	    color =  color +  cut_hextruchetflow_ShowScene ( uv + step (1.5, 1.0) ,__cut_hextruchetflow_grid);"
 	    		+"		__doHide=false;"
-	    		+"		if( varpar->cut_hextruchetflow_invert ==0)"
+	    		+"		if( __cut_hextruchetflow_invert ==0)"
 	    		+"		{"
 	    		+"			if (color.x > 0.9f)"
 	    		+"			{ x=0.0f;"
@@ -267,9 +267,9 @@ public class  CutHexTruchetFlowFunc  extends VariationFunc implements SupportsGP
 	    		+"			__doHide = true;"
 	    		+"			}"
 	    		+"		}"
-	    		+"		__px = varpar->cut_hextruchetflow * x;"
-	    		+"		__py = varpar->cut_hextruchetflow * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_hextruchetflow * __z;\n" : "");
+	    		+"		__px = __cut_hextruchetflow * x;"
+	    		+"		__py = __cut_hextruchetflow * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_hextruchetflow * __z;\n" : "");
 	  }
 	 
 	  @Override

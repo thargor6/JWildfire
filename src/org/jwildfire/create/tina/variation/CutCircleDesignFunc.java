@@ -184,7 +184,7 @@ public class CutCircleDesignFunc  extends VariationFunc implements SupportsGPU{
 	public String getGPUCode(FlameTransformationContext context) {
 		return	"		    float x,y,px_center,py_center;"
 				+"		    "
-				+"		    if( varpar->cut_circdes_mode ==0)"
+				+"		    if( __cut_circdes_mode ==0)"
 				+"		    {"
 				+"		      x= __x;"
 				+"		      y =__y;"
@@ -198,12 +198,12 @@ public class CutCircleDesignFunc  extends VariationFunc implements SupportsGPU{
 				+"		      py_center=0.5;"
 				+"		    }"
 				+"		    	    "
-				+"		    float2 u = make_float2(x* varpar->cut_circdes_zoom ,y* varpar->cut_circdes_zoom );"
+				+"		    float2 u = make_float2(x* __cut_circdes_zoom ,y* __cut_circdes_zoom );"
 				+"            u=fract(u)-(0.5);"
 				+"		    float r = .8, d = step(length(u),r);"
 				+"		    for (int i = 0; i < 9; i++)"
 				+"		    {"
-				+"		        r *= .5 + .1 * sin((float)(i) + varpar->cut_circdes_time);"
+				+"		        r *= .5 + .1 * sin((float)(i) + __cut_circdes_time);"
 				+"		        if ((i % 2) == 0 )"
 				+"		        {"
 				+"		        	d -= step(length(u+make_float2(0, r)), r);"
@@ -223,7 +223,7 @@ public class CutCircleDesignFunc  extends VariationFunc implements SupportsGPU{
 				+"		    float color=d;"
 				+"		    "
 				+"		    __doHide=false;"
-				+"		    if( varpar->cut_circdes_invert ==0)"
+				+"		    if( __cut_circdes_invert ==0)"
 				+"		    {"
 				+"		      if (color>0.5)"
 				+"		      { x=0;"
@@ -238,9 +238,9 @@ public class CutCircleDesignFunc  extends VariationFunc implements SupportsGPU{
 				+"			        __doHide = true;"
 				+"			      }"
 				+"		    }"
-				+"		    __px = varpar->cut_circdes * (x-px_center);"
-				+"		    __py = varpar->cut_circdes * (y-py_center);"
-				+ (context.isPreserveZCoordinate() ? "__pz += varpar->cut_circdes * __z;" : "");
+				+"		    __px = __cut_circdes * (x-px_center);"
+				+"		    __py = __cut_circdes * (y-py_center);"
+				+ (context.isPreserveZCoordinate() ? "__pz += __cut_circdes * __z;" : "");
 	}
 }
 

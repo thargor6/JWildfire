@@ -121,16 +121,16 @@ public class DCCylinderFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float ldcs, ldca;\n"
-        + "ldcs = 1.0f / (varpar->dc_cylinder_scale == 0 ? 1.0e-5f : varpar->dc_cylinder_scale);\n"
-        + "ldca = varpar->dc_cylinder_offset * PI;\n"
+        + "ldcs = 1.0f / (__dc_cylinder_scale == 0 ? 1.0e-5f : __dc_cylinder_scale);\n"
+        + "ldca = __dc_cylinder_offset * PI;\n"
         + "float a = RANDFLOAT() * 2.0f*PI;\n"
         + "float sr = sinf(a);\n"
         + "float cr = cosf(a);\n"
-        + "float rr = varpar->dc_cylinder_blur * (RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() - 2.0f);\n"
-        + "__px += varpar->dc_cylinder * sinf(__x + rr * sr) * varpar->dc_cylinder_x;\n"
-        + "__py += rr + __y * varpar->dc_cylinder_y;\n"
-        + "__pz += varpar->dc_cylinder * cosf(__x + rr * cr);\n"
-        + "__pal = fmodf(fabsf(0.5f * (ldcs * ((cosf(varpar->dc_cylinder_angle) * __px + sinf(varpar->dc_cylinder_angle) * __py + varpar->dc_cylinder_offset)) + 1.0f)), 1.0);\n";
+        + "float rr = __dc_cylinder_blur * (RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() - 2.0f);\n"
+        + "__px += __dc_cylinder * sinf(__x + rr * sr) * __dc_cylinder_x;\n"
+        + "__py += rr + __y * __dc_cylinder_y;\n"
+        + "__pz += __dc_cylinder * cosf(__x + rr * cr);\n"
+        + "__pal = fmodf(fabsf(0.5f * (ldcs * ((cosf(__dc_cylinder_angle) * __px + sinf(__dc_cylinder_angle) * __py + __dc_cylinder_offset)) + 1.0f)), 1.0);\n";
   }
 }
 

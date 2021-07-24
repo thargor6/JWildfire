@@ -181,7 +181,7 @@ public class CutWebFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		    float x,y;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_web_mode ==0)"
+	    		+"		    if( __cut_web_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -192,10 +192,10 @@ public class CutWebFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		    }"
 	    		+"		    "
 	    		+"    	    float2 u =make_float2(x*0.5f,y*0.5f);"
-	    		+"          float color=cut_web_getColour(u,varpar->cut_web_time,varpar->cut_web_thick);"
+	    		+"          float color=cut_web_getColour(u,__cut_web_time,__cut_web_thick);"
 	    		+"              	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_web_invert ==0)"
+	    		+"		    if( __cut_web_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -210,9 +210,9 @@ public class CutWebFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_web * (x);"
-	    		+"		    __py = varpar->cut_web * (y);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_web * __z;\n" : "");
+	    		+"		    __px = __cut_web * (x);"
+	    		+"		    __py = __cut_web * (y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_web * __z;\n" : "");
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {

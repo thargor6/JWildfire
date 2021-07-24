@@ -204,7 +204,7 @@ public class CutSpotsFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;  "
 	    		+"		  "
-	    		+"		  if( varpar->cut_spots_mode ==0)"
+	    		+"		  if( __cut_spots_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -213,7 +213,7 @@ public class CutSpotsFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     x=2.0*RANDFLOAT()-1.0;"
 	    		+"		     y=2.0*RANDFLOAT()-1.0;		     "
 	    		+"		    }"
-	    		+"		    float2 uv =make_float2(x* varpar->cut_spots_zoom *43.0,y* varpar->cut_spots_zoom *43.0);"
+	    		+"		    float2 uv =make_float2(x* __cut_spots_zoom *43.0,y* __cut_spots_zoom *43.0);"
 	    		+"            float black=0.0;"
 	    		+"            float white=1.0;"
 	    		+"            float f=cut_spots_fbm(uv);"
@@ -232,7 +232,7 @@ public class CutSpotsFunc  extends VariationFunc implements SupportsGPU {
 	    		+"            }"
 	    		+" 	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_spots_invert ==0)"
+	    		+"		    if( __cut_spots_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color==0.0)"
 	    		+"		      { x=0;"
@@ -247,9 +247,9 @@ public class CutSpotsFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_spots * x;"
-	    		+"		    __py = varpar->cut_spots * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_spots * __z;\n" : "");
+	    		+"		    __px = __cut_spots * x;"
+	    		+"		    __py = __cut_spots * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_spots * __z;\n" : "");
 	  }
 	 
 	  @Override

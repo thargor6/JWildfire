@@ -215,7 +215,7 @@ public class CutCelticFunc  extends VariationFunc   implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		    float x,y,px_center,py_center;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_celtic_mode ==0)"
+	    		+"		    if( __cut_celtic_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -231,7 +231,7 @@ public class CutCelticFunc  extends VariationFunc   implements SupportsGPU {
 	    		+"		    "
 	    		+"		    float2 uv1 =make_float2(x*1.0,y*1.155);"
 	    		+"            "
-	    		+"            uv1 = uv1*( varpar->cut_celtic_zoom );"
+	    		+"            uv1 = uv1*( __cut_celtic_zoom );"
 	    		+"            float m = mod(uv1.y, 2.);"
 	    		+"            uv1.x += step(1., m)*.5;"
 	    		+"        	  uv1 = fract(uv1);	"
@@ -239,7 +239,7 @@ public class CutCelticFunc  extends VariationFunc   implements SupportsGPU {
 	    		+"            uv1.x -=1.155/2.;"
 	    		+"            uv1.y -=.5;"
 	    		+"            float2 uv2 = make_float2(x*1.0,y*1.155);"
-	    		+"            uv2 = uv2*( varpar->cut_celtic_zoom );"
+	    		+"            uv2 = uv2*( __cut_celtic_zoom );"
 	    		+"            uv2.x -= .5;"
 	    		+"            uv2.y -= .288675;"
 	    		+"            float n = mod(uv2.y, 2.);"
@@ -250,7 +250,7 @@ public class CutCelticFunc  extends VariationFunc   implements SupportsGPU {
 	    		+"            uv2.y -=.5;"
 	    		+"            "
 	    		+"            float2 uv3 = make_float2(x*1.0,y*1.155);"
-	    		+"            uv3 = uv3*( varpar->cut_celtic_zoom );"
+	    		+"            uv3 = uv3*( __cut_celtic_zoom );"
 	    		+"            uv3.x += 1.;"
 	    		+"            uv3.y -= .65;"
 	    		+"            float o = mod(uv3.y, 2.);"
@@ -267,7 +267,7 @@ public class CutCelticFunc  extends VariationFunc   implements SupportsGPU {
 	    		+"            float color = f + g + h;"
 	    		+"			              	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_celtic_invert ==0)"
+	    		+"		    if( __cut_celtic_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -282,9 +282,9 @@ public class CutCelticFunc  extends VariationFunc   implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_celtic * (x-px_center);"
-	    		+"		    __py = varpar->cut_celtic * (y-py_center);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_celtic * __z;\n" : "");
+	    		+"		    __px = __cut_celtic * (x-px_center);"
+	    		+"		    __py = __cut_celtic * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_celtic * __z;\n" : "");
 	  }
 	 
 	  @Override

@@ -47,8 +47,8 @@ public class CylinderFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->cylinder*sinf(__x);\n"
-        + "__py += varpar->cylinder*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->cylinder*cosf(__x);\n" : "");
+    return "__px += __cylinder*sinf(__x);\n"
+        + "__py += __cylinder*__y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __cylinder*cosf(__x);\n" : "");
   }
 }

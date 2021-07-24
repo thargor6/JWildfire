@@ -339,7 +339,7 @@ public class CutRandomTileFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		    float x,y,px_center,py_center;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_randomtile_mode ==0)"
+	    		+"		    if( __cut_randomtile_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -354,7 +354,7 @@ public class CutRandomTileFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		    }"
 	    		+"		    "
 	    		+"		    float2 u =make_float2(x,y);"
-	    		+"          float2 p =make_float2(x* varpar->cut_randomtile_zoom ,y* varpar->cut_randomtile_zoom );"
+	    		+"          float2 p =make_float2(x* __cut_randomtile_zoom ,y* __cut_randomtile_zoom );"
 	    		+"          float2 eps = make_float2(4.0, 6.0);"
 // test hash21 & rot2
 //	    	    +"	    float2 ip = floorf(p); "
@@ -394,7 +394,7 @@ public class CutRandomTileFunc  extends VariationFunc implements SupportsGPU {
 	    		+"          col.x = sqrtf(fmaxf(col.x, 0.0f));"
 	    		+"          float color=col.x;"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_randomtile_invert ==0)"
+	    		+"		    if( __cut_randomtile_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -409,9 +409,9 @@ public class CutRandomTileFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_randomtile * (x-px_center);"
-	    		+"		    __py = varpar->cut_randomtile * (y-py_center);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_randomtile * __z;\n" : "");
+	    		+"		    __px = __cut_randomtile * (x-px_center);"
+	    		+"		    __py = __cut_randomtile * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_randomtile * __z;\n" : "");
 	  }
 	 
 	  @Override

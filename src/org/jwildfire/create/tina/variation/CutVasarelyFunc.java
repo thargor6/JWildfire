@@ -149,7 +149,7 @@ public class  CutVasarelyFunc  extends VariationFunc implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;  "
-	    		+"		  if( varpar->cut_vasarely_mode ==0)"
+	    		+"		  if( __cut_vasarely_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -159,18 +159,18 @@ public class  CutVasarelyFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     y=2.0*RANDFLOAT()-1.00;		     "
 	    		+"		    }"
 	    		+"			float2 uv = make_float2 (x,y);"
-	    		+"			uv=uv*( varpar->cut_vasarely_zoom );"
+	    		+"			uv=uv*( __cut_vasarely_zoom );"
 	    		+"			"
 	    		+"		    "
 	    		+"		    float l = length(uv);"
-	    		+"		    float b = fmaxf(0.,2.-l/varpar->cut_vasarely_size);"
+	    		+"		    float b = fmaxf(0.,2.-l/__cut_vasarely_size);"
 	    		+"		    "
 	    		+"		    float color=0.0f;"
 	    		+"		    color  = abs(uv.x)<1.?color-.5-sinf( l * sinf( atan2(uv.y,uv.x) + 1.57 + 4.*b*b)*150.) :color;"
 	    		+"		    color -= abs(uv.x)<1.?color-.5-sinf( l * sinf( atan2(uv.y,uv.x) + 1.57 + 4.*b*b)*150.) :color;"
 	    		+"		    		     "
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_vasarely_invert ==0)"
+	    		+"		    if( __cut_vasarely_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color<0.1)"
 	    		+"		      { x=0.;"
@@ -185,9 +185,9 @@ public class  CutVasarelyFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_vasarely * x;"
-	    		+"		    __py = varpar->cut_vasarely * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_vasarely * __z;\n" : "");
+	    		+"		    __px = __cut_vasarely * x;"
+	    		+"		    __py = __cut_vasarely * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_vasarely * __z;\n" : "");
 	  }
 }
 

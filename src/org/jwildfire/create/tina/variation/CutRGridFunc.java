@@ -163,7 +163,7 @@ public class  CutRGridFunc  extends VariationFunc  implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;  "
-	    		+"		  if( varpar->cut_rgrid_mode ==0)"
+	    		+"		  if( __cut_rgrid_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -173,8 +173,8 @@ public class  CutRGridFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		     y=RANDFLOAT()-0.5;"
 	    		+"		    }"
 	    		+"		    float pi = acosf(-1.);"
-	    		+"			float2 p=make_float2(x* varpar->cut_rgrid_zoom ,y* varpar->cut_rgrid_zoom );"
-	    		+"		    float th = mod( varpar->cut_rgrid_angle  * PI / 180., PI * 2.);"
+	    		+"			float2 p=make_float2(x* __cut_rgrid_zoom ,y* __cut_rgrid_zoom );"
+	    		+"		    float th = mod( __cut_rgrid_angle  * PI / 180., PI * 2.);"
 	    		+"		    float gridsize = (.5 + fabsf(sin(th * 2.)) * (sqrt(2.) / 2. - .5)) * 2.;"
 	    		+"		    int flip = 0;"
 	    		+"		    if(fract(th / pi + .25) > .5)"
@@ -189,7 +189,7 @@ public class  CutRGridFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"          Mat2 m;"
 	    		+"          Mat2_Init(&m, cos(th), sin(th), -sin(th), cos(th));"
 	    		+"		    p = times(&m,p);"
-	    		+"		    float w =  varpar->cut_rgrid_zoom  / 2000. * 1.5;   "
+	    		+"		    float w =  __cut_rgrid_zoom  / 2000. * 1.5;   "
 	    		+"		    float color = smoothstep(-w, +w, fmaxf(fabsf(p.x), fabsf(p.y)) - .5);"
 	    		+"		    if(flip==1)"
 	    		+"		        color = 1. - color;"
@@ -199,7 +199,7 @@ public class  CutRGridFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		        color = .4;"
 	    		+"		    "
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_rgrid_invert ==0)"
+	    		+"		    if( __cut_rgrid_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color==0.0)"
 	    		+"		      { x=0.;"
@@ -214,9 +214,9 @@ public class  CutRGridFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_rgrid * x;"
-	    		+"		    __py = varpar->cut_rgrid * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_rgrid * __z;\n" : "");
+	    		+"		    __px = __cut_rgrid * x;"
+	    		+"		    __py = __cut_rgrid * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_rgrid * __z;\n" : "");
 	  }
 }
 

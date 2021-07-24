@@ -202,7 +202,7 @@ public class CutAlienTextFunc  extends VariationFunc  implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return    "	    float x,y,px_center,py_center,x0=0.0,y0=0.0;\r\n"
-	    		+"		    if( varpar->cut_alientext_mode ==0)\n"
+	    		+"		    if( __cut_alientext_mode ==0)\n"
 	    		+"		    {\n"
 	    		+"		      x= __x;\n"
 	    		+"		      y =__y;\n"
@@ -216,14 +216,14 @@ public class CutAlienTextFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		      py_center=0.5;\n"
 	    		+"		    }\n"
 	    		+"		    \n"
-	    		+"          float2 uv=make_float2(x* varpar->cut_alientext_zoom ,y * varpar->cut_alientext_zoom);\n"
+	    		+"          float2 uv=make_float2(x* __cut_alientext_zoom ,y * __cut_alientext_zoom);\n"
 	    		+"          uv=uv+make_float2(x0,y0);\n"
 	    		+"          uv.y=uv.y-y0;\n"	    		
 	    		+"		    float dims=2.0;\n"
 	    		+"		    float cellRand;\n"
 	    		+"		    float2 ij;\n"
 	    		+"		    \n"
-	    		+"		   	for(int i = 0; i <= varpar->cut_alientext_subdivisions ; i++) { \n"
+	    		+"		   	for(int i = 0; i <= __cut_alientext_subdivisions ; i++) { \n"
 	    		+"		        ij =cut_alientext_getCellIJ (uv, dims);\n"
 	    		+"		        cellRand =cut_alientext_random2d (ij);\n"
 	    		+"		        dims *= 2.0;\n"
@@ -236,7 +236,7 @@ public class CutAlienTextFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		    float color =cut_alientext_letter (uv, 1.0 / (dims));\n"
 	    		+"            \n"
 	    		+"		    __doHide=false;\n"
-	    		+"		    if( varpar->cut_alientext_invert ==0)\n"
+	    		+"		    if( __cut_alientext_invert ==0)\n"
 	    		+"		    {\n"
 	    		+"		      if (color>0.0)\n"
 	    		+"		      { x=0.0;\n"
@@ -251,9 +251,9 @@ public class CutAlienTextFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"			        __doHide = true;\n"
 	    		+"			      }\n"
 	    		+"		    }\n"
-	    		+"		    __px = varpar->cut_alientext * (x-px_center);\n"
-	    		+"		    __py = varpar->cut_alientext * (y-py_center);\n"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_alientext * __z;\n" : "");
+	    		+"		    __px = __cut_alientext * (x-px_center);\n"
+	    		+"		    __py = __cut_alientext * (y-py_center);\n"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_alientext * __z;\n" : "");
 	  }
 	 
 	  @Override

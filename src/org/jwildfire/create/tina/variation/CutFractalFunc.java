@@ -166,7 +166,7 @@ public class CutFractalFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return  "		    float x,y;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_fractal_mode ==0)"
+	    		+"		    if( __cut_fractal_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -176,16 +176,16 @@ public class CutFractalFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     y=RANDFLOAT()-0.5; 		     "
 	    		+"		    }"
 	    		+"		    "
-	    		+"		    float2 c = make_float2(cos( varpar->cut_fractal_time +1.5), sin( varpar->cut_fractal_time +1.8) )*(0.15)-(0.25);"
-	    		+"		    float2 t =make_float2(x* varpar->cut_fractal_zoom ,y* varpar->cut_fractal_zoom );"
+	    		+"		    float2 c = make_float2(cos( __cut_fractal_time +1.5), sin( __cut_fractal_time +1.8) )*(0.15)-(0.25);"
+	    		+"		    float2 t =make_float2(x* __cut_fractal_zoom ,y* __cut_fractal_zoom );"
 	    		+"            "
 	    		+"          float2 U=make_float2(t.y,t.x);"
-	    		+"          for (int i=0; i<  varpar->cut_fractal_iters ; i++)"
+	    		+"          for (int i=0; i<  __cut_fractal_iters ; i++)"
 	    		+"              U = abs(U)*( 0.5/ dot(U, U))+(c);"
 	    		+"            "
 	    		+"          float color=fabsf(dot(U, U) - .01) *2.;"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_fractal_invert ==0)"
+	    		+"		    if( __cut_fractal_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.5)"
 	    		+"		      { x=0;"
@@ -200,8 +200,8 @@ public class CutFractalFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_fractal * (x);"
-	    		+"		    __py = varpar->cut_fractal * (y);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_fractal * __z;\n" : "");
+	    		+"		    __px = __cut_fractal * (x);"
+	    		+"		    __py = __cut_fractal * (y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_fractal * __z;\n" : "");
 	  }
 }

@@ -185,7 +185,7 @@ public class CutBricksFunc  extends VariationFunc   implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		    float x,y,px_center,py_center;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_bricks_mode ==0)"
+	    		+"		    if( __cut_bricks_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -200,12 +200,12 @@ public class CutBricksFunc  extends VariationFunc   implements SupportsGPU {
 	    		+"		    }"
 	    		+"		    "
 	    		+"		    "
-	    		+"		    float2 u =make_float2(x* varpar->cut_bricks_zoom ,y* varpar->cut_bricks_zoom );"
+	    		+"		    float2 u =make_float2(x* __cut_bricks_zoom ,y* __cut_bricks_zoom );"
 	    		+"		    u = cut_bricks_brickTile(u);"
-	    		+"			float color = cut_bricks_box(u,make_float2( varpar->cut_bricks_size,varpar->cut_bricks_size ));"
+	    		+"			float color = cut_bricks_box(u,make_float2( __cut_bricks_size,__cut_bricks_size ));"
 	    		+"              	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_bricks_invert ==0)"
+	    		+"		    if( __cut_bricks_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -220,9 +220,9 @@ public class CutBricksFunc  extends VariationFunc   implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_bricks * (x-px_center);"
-	    		+"		    __py = varpar->cut_bricks * (y-py_center);"
-                + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_bricks * __z;\n" : "");	    
+	    		+"		    __px = __cut_bricks * (x-px_center);"
+	    		+"		    __py = __cut_bricks * (y-py_center);"
+                + (context.isPreserveZCoordinate() ? "__pz += __cut_bricks * __z;\n" : "");	    
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {

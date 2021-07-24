@@ -173,7 +173,7 @@ public class CutSnowflakeFunc  extends VariationFunc implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;  "
-	    		+"		  if( varpar->cut_snowflake_mode ==0)"
+	    		+"		  if( __cut_snowflake_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -183,11 +183,11 @@ public class CutSnowflakeFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     y=RANDFLOAT()-0.5;		     "
 	    		+"		    }"
 	    		+"		    	    "
-	    		+"		    float2 uv = make_float2(x* varpar->cut_snowflake_zoom ,y* varpar->cut_snowflake_zoom );	"
+	    		+"		    float2 uv = make_float2(x* __cut_snowflake_zoom ,y* __cut_snowflake_zoom );	"
 	    		+"		    float s = .25, f = .0, k = f;"
-	    		+"		    float3 p = make_float3(uv.x,uv.y, sinf( varpar->cut_snowflake_time  * .4) * .5 - .5)*s;"
+	    		+"		    float3 p = make_float3(uv.x,uv.y, sinf( __cut_snowflake_time  * .4) * .5 - .5)*s;"
 	    		+"		        "
-	    		+"		    for( int i=0; i<  varpar->cut_snowflake_level ; i++ )"
+	    		+"		    for( int i=0; i<  __cut_snowflake_level ; i++ )"
 	    		+"		    {"
 	    		+"		           p = abs(p)/(dot(p,p))-1.65;"
 	    		+"		           k = length(p) ;"
@@ -198,7 +198,7 @@ public class CutSnowflakeFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		    float color=f;"
 	    		+"		    "
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_snowflake_invert ==0)"
+	    		+"		    if( __cut_snowflake_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.5)"
 	    		+"		      { x=0;"
@@ -213,9 +213,9 @@ public class CutSnowflakeFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_snowflake * x;"
-	    		+"		    __py = varpar->cut_snowflake * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_snowflake * __z;\n" : "");
+	    		+"		    __px = __cut_snowflake * x;"
+	    		+"		    __py = __cut_snowflake * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_snowflake * __z;\n" : "");
 	  }
 }
 

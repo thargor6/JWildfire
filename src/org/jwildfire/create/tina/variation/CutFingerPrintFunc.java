@@ -208,7 +208,7 @@ public class CutFingerPrintFunc  extends VariationFunc implements SupportsGPU{
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return  "		    float x,y,px_center,py_center;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_fingerprint_mode ==0)"
+	    		+"		    if( __cut_fingerprint_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -223,7 +223,7 @@ public class CutFingerPrintFunc  extends VariationFunc implements SupportsGPU{
 	    		+"		    }"
 	    		+"		    vec3 color=cut_fingerprint_getRGBColor(x,y,varpar);"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_fingerprint_invert ==0)"
+	    		+"		    if( __cut_fingerprint_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color.x==0.0f)"
 	    		+"		      { __px=0.0f;"
@@ -238,9 +238,9 @@ public class CutFingerPrintFunc  extends VariationFunc implements SupportsGPU{
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_fingerprint * (x-px_center);"
-	    		+"		    __py = varpar->cut_fingerprint * (y-py_center);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_fingerprint * __z;\n" : "");
+	    		+"		    __px = __cut_fingerprint * (x-px_center);"
+	    		+"		    __py = __cut_fingerprint * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_fingerprint * __z;\n" : "");
 	  }
 	 
 	  @Override
@@ -254,13 +254,13 @@ public class CutFingerPrintFunc  extends VariationFunc implements SupportsGPU{
 	    		+"__device__ float3  cut_fingerprint_getRGBColor (float xp,float yp, struct VarPar__jwf_cut_fingerprint *varpar)"
 	    		+"	{"
 	    		+"	    "
-	    		+"		float2 uv=make_float2(xp,yp)*(varpar->jwf_cut_fingerprint_zoom);"
+	    		+"		float2 uv=make_float2(xp,yp)*(__jwf_cut_fingerprint_zoom);"
 	    		+"	    float3 color=make_float3(0.,0.,0.);"
 
 	    		+"	    float bounds = smoothstep(9.,10.,length(uv*( make_float2(0.7,0.5))));"
 	    		+"	    "
 	    		+"	    float a=0.;"
-	    		+"	    float2 h = make_float2(floor(7.*varpar->jwf_cut_fingerprint_seed), 0.);"
+	    		+"	    float2 h = make_float2(floor(7.*__jwf_cut_fingerprint_seed), 0.);"
 	    		+"	    for(int i=0; i<50; i++){"
 	    		+"	        float s=sign(h.x);"
 	    		+"	        h =  cut_fingerprint_hash2 (h)*(make_float2(15.,20.));"
@@ -272,7 +272,7 @@ public class CutFingerPrintFunc  extends VariationFunc implements SupportsGPU{
 	    		+"	    "
 	    		+"	    a+=atan2(uv.y, uv.x); "
 	    		+"	    "
-	    		+"	    float p=(1.-bounds)*varpar->jwf_cut_fingerprint_width; "
+	    		+"	    float p=(1.-bounds)*__jwf_cut_fingerprint_width; "
 	    		+"	    float s = min(0.3,p); "
 	    		+"	    float l = length(uv)+0.319*a; "
 	    		+"	    "

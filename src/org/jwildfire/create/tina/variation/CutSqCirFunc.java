@@ -148,7 +148,7 @@ public class  CutSqCirFunc  extends VariationFunc implements SupportsGPU  {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;  "
-	    		+"		  if( varpar->cut_sqcir_mode ==0)"
+	    		+"		  if( __cut_sqcir_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -158,15 +158,15 @@ public class  CutSqCirFunc  extends VariationFunc implements SupportsGPU  {
 	    		+"		     y=RANDFLOAT()-0.5;		     "
 	    		+"		    }"
 	    		+"		       "
-	    		+"			float2 uv=make_float2(x* varpar->cut_sqcir_zoom ,y* varpar->cut_sqcir_zoom );"
+	    		+"			float2 uv=make_float2(x* __cut_sqcir_zoom ,y* __cut_sqcir_zoom );"
 	    		+"		    int color=0;"
-	    		+"		    float lhs =  pow(abs(uv.x-uv.y),  varpar->cut_sqcir_power ) +   pow(abs(uv.y+uv.x),  varpar->cut_sqcir_power );"
+	    		+"		    float lhs =  pow(abs(uv.x-uv.y),  __cut_sqcir_power ) +   pow(abs(uv.y+uv.x),  __cut_sqcir_power );"
 	    		+"		    float rhs = 1.0f;   "
 	    		+"		    color = (lhs <= rhs)?1:0;"
 	    		+"		    "
 	    		+"		    __doHide=false;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_sqcir_invert ==0)"
+	    		+"		    if( __cut_sqcir_invert ==0)"
 	    		+"		    {"
 	    		+"		      if ( color==0)"
 	    		+"		      { x=0.0f;"
@@ -181,9 +181,9 @@ public class  CutSqCirFunc  extends VariationFunc implements SupportsGPU  {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_sqcir * x;"
-	    		+"		    __py = varpar->cut_sqcir * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_sqcir * __z;\n" : "");
+	    		+"		    __px = __cut_sqcir * x;"
+	    		+"		    __py = __cut_sqcir * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_sqcir * __z;\n" : "");
 	  }
 }
 

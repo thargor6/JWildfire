@@ -318,9 +318,9 @@ double getColor(vec2 pos){
 	            +"      int qParam=3;"
 	            +"      int rParam=4;"    
 //    U,V,W are the 'barycentric' coordinate for the vertex.
-	            +"      float U=varpar->cut_triantess_uBaryc;"
-	            +"      float V=varpar->cut_triantess_vBaryc;"
-	            +"      float W=varpar->cut_triantess_wBaryc;"
+	            +"      float U=__cut_triantess_uBaryc;"
+	            +"      float V=__cut_triantess_vBaryc;"
+	            +"      float W=__cut_triantess_wBaryc;"
 	            +"      float3 nb,nc,p,q;"
 	  	        +"      float3 pA,pB,pC;"
 	  	        +"      float spaceType=0.0f;"
@@ -328,7 +328,7 @@ double getColor(vec2 pos){
 	  	        +"      float backGroundColor=1.0f;"
 	  	        +"      float segColor = 0.0f;"
 	  	        
-	    		+"		if( varpar->cut_triantess_mode ==0)"
+	    		+"		if( __cut_triantess_mode ==0)"
 	    		+"		{"
 	    		+"			x= __x;"
 	    		+"			y =__y;"
@@ -338,12 +338,12 @@ double getColor(vec2 pos){
 	    		+"			y=RANDFLOAT()-0.5;		     "
 	    		+"		}"
 	    		+"		"
-	    		+"		float2 uv=make_float2(x* varpar->cut_triantess_zoom ,y* varpar->cut_triantess_zoom );"
+	    		+"		float2 uv=make_float2(x* __cut_triantess_zoom ,y* __cut_triantess_zoom );"
 // init()
-	    		+"		spaceType=(float)(sign(varpar->cut_triantess_qParam*varpar->cut_triantess_rParam+varpar->cut_triantess_pParam*varpar->cut_triantess_rParam+varpar->cut_triantess_pParam*varpar->cut_triantess_qParam-varpar->cut_triantess_pParam*varpar->cut_triantess_qParam*varpar->cut_triantess_rParam));"
-	    		+"		float cospip=cosf(PI/(float)(varpar->cut_triantess_pParam)), sinpip=sinf(PI/(float)(varpar->cut_triantess_pParam));"
-	    		+"		float cospiq=cosf(PI/(float)(varpar->cut_triantess_qParam)), sinpiq=sinf(PI/(float)(varpar->cut_triantess_qParam));"
-	    		+"		float cospir=cosf(PI/(float)(varpar->cut_triantess_rParam)), sinpir=sinf(PI/(float)(varpar->cut_triantess_rParam));"
+	    		+"		spaceType=(float)(sign(__cut_triantess_qParam*__cut_triantess_rParam+__cut_triantess_pParam*__cut_triantess_rParam+__cut_triantess_pParam*__cut_triantess_qParam-__cut_triantess_pParam*__cut_triantess_qParam*__cut_triantess_rParam));"
+	    		+"		float cospip=cosf(PI/(float)(__cut_triantess_pParam)), sinpip=sinf(PI/(float)(__cut_triantess_pParam));"
+	    		+"		float cospiq=cosf(PI/(float)(__cut_triantess_qParam)), sinpiq=sinf(PI/(float)(__cut_triantess_qParam));"
+	    		+"		float cospir=cosf(PI/(float)(__cut_triantess_rParam)), sinpir=sinf(PI/(float)(__cut_triantess_rParam));"
 	    		+"		float ncsincos=(cospiq+cospip*cospir)/sinpip;"
 //	    		+"		"
 	    		+"		nb=make_float3(-cospip,sinpip,0.);"
@@ -366,7 +366,7 @@ double getColor(vec2 pos){
 	    		+"	"
 //	    		+"	z3= cut_triantess_fold (z3);"
 	    		
-	    		+"		for(int i=0;i<varpar->cut_triantess_Iters;i++){"
+	    		+"		for(int i=0;i<__cut_triantess_Iters;i++){"
 	    		+"			z3.x=abs(z3.x);"
 	    		+"			float t=-2.*fminf(0.,dot(nb,z3));"
 	    		+"			z3=z3+(nb*(make_float3(1.,1.,spaceType))*(t));"
@@ -377,7 +377,7 @@ double getColor(vec2 pos){
 	    		+"	"
 //  end fold(z3)
 	    		+"	"
-	    		+"		float ds= cut_triantess_dist2Segments (z3, r , nb, nc,spaceType,p,varpar->cut_triantess_SRadius);"
+	    		+"		float ds= cut_triantess_dist2Segments (z3, r , nb, nc,spaceType,p,__cut_triantess_SRadius);"
 	    		+"		color=mix(segColor,color,smoothstep(-1.,1.,ds*0.5/aaScale));"
 	    		+"	"
 	    		+"	if(spaceType==-1.)"
@@ -385,7 +385,7 @@ double getColor(vec2 pos){
 
 // end getColor(uv)
 	    		+"		__doHide=false;"
-	    		+"		if( varpar->cut_triantess_invert ==0)"
+	    		+"		if( __cut_triantess_invert ==0)"
 	    		+"		{"
 	    		+"			if (color>0.0)"
 	    		+"			{ x=0;"
@@ -400,9 +400,9 @@ double getColor(vec2 pos){
 	    		+"			__doHide = true;"
 	    		+"			}"
 	    		+"		}"
-	    		+"		__px = varpar->cut_triantess * x;"
-	    		+"		__py = varpar->cut_triantess * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_triantess * __z;\n" : "");
+	    		+"		__px = __cut_triantess * x;"
+	    		+"		__py = __cut_triantess * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_triantess * __z;\n" : "");
 	  }
 	 
 	  @Override

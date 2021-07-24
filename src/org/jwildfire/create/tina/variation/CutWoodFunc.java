@@ -225,7 +225,7 @@ public class CutWoodFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		    float x,y,px_center,py_center;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_wood_mode ==0)"
+	    		+"		    if( __cut_wood_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -239,19 +239,19 @@ public class CutWoodFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		      py_center=0.5;		     "
 	    		+"		    }"
 	    		+"		    "
-	    		+"		    float2 st =make_float2(x* varpar->cut_wood_zoom ,y* varpar->cut_wood_zoom );"
-	    		+"            st=st+(make_float2(  varpar->cut_wood_shiftX  ,  varpar->cut_wood_shiftY ));"
+	    		+"		    float2 st =make_float2(x* __cut_wood_zoom ,y* __cut_wood_zoom );"
+	    		+"            st=st+(make_float2(  __cut_wood_shiftX  ,  __cut_wood_shiftY ));"
 	    		+"    	    float2 sti = floorf(st);"
 	    		+"    	       "
-	    		+"    	    st = cut_wood_twist(st, pow(cut_wood_noise(st,  varpar->cut_wood_freq ),  varpar->cut_wood_smooth ));"
-	    		+"    	    float2 c = fract(st*(make_float2(1.0,  varpar->cut_wood_LineCount )));"
+	    		+"    	    st = cut_wood_twist(st, pow(cut_wood_noise(st,  __cut_wood_freq ),  __cut_wood_smooth ));"
+	    		+"    	    float2 c = fract(st*(make_float2(1.0,  __cut_wood_LineCount )));"
 	    		+"    	    "
 	    		+"    	    float background=0.0;"
 	    		+"    	    float foreground=1.0;"
-	    		+"    	    float color = mix(background, foreground, cut_wood_line(c,  varpar->cut_wood_LineWidth ));"
+	    		+"    	    float color = mix(background, foreground, cut_wood_line(c,  __cut_wood_LineWidth ));"
 //	    		+"			float color=1.0;"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_wood_invert ==0)"
+	    		+"		    if( __cut_wood_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -266,9 +266,9 @@ public class CutWoodFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_wood * (x-px_center);"
-	    		+"		    __py = varpar->cut_wood * (y-py_center);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_wood * __z;\n" : "");
+	    		+"		    __px = __cut_wood * (x-px_center);"
+	    		+"		    __py = __cut_wood * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_wood * __z;\n" : "");
 	  }
 	 
 	  @Override

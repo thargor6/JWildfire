@@ -144,7 +144,7 @@ public class  CutHexDotsFunc  extends VariationFunc implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;"
-	    		+"		  if( varpar->cut_hexdots_mode ==0)"
+	    		+"		  if( __cut_hexdots_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -154,7 +154,7 @@ public class  CutHexDotsFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     y=RANDFLOAT()-0.5;"
 	    		+"		    }"
 	    		+"	    "
-	    		+"	    float2 u=make_float2(x* varpar->cut_hexdots_zoom ,y* varpar->cut_hexdots_zoom );"
+	    		+"	    float2 u=make_float2(x* __cut_hexdots_zoom ,y* __cut_hexdots_zoom );"
 	    		+"	    		"
 	    		+"	    float2 s = make_float2(1.0f,1.732f);"
 	    		+"	    float2 a = mod(u,s)*2.0f-s;"
@@ -164,24 +164,24 @@ public class  CutHexDotsFunc  extends VariationFunc implements SupportsGPU {
 	    		+"      col= 0.8f*fminf(dot(a,a),dot(b,b));"
 	    		+"	    "
 	    		+"		__doHide=false;"
-	    		+"		if( varpar->cut_hexdots_invert ==0)"
+	    		+"		if( __cut_hexdots_invert ==0)"
 	    		+"		{"
-	    		+"			if (col>varpar->cut_hexdots_size)"
+	    		+"			if (col>__cut_hexdots_size)"
 	    		+"			{ x=0.0f;"
 	    		+"			  y=0.0f;"
 	    		+"			__doHide = true;"
 	    		+"			}"
 	    		+"		} else"
 	    		+"		{"
-	    		+"			if (col<=varpar->cut_hexdots_size)"
+	    		+"			if (col<=__cut_hexdots_size)"
 	    		+"			{ x=0.0f;"
 	    		+"			  y=0.0f;"
 	    		+"			__doHide = true;"
 	    		+"		    }"
 	    		+"		}"
-	    		+"		__px = varpar->cut_hexdots * x;"
-	    		+"		__py = varpar->cut_hexdots * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_hexdots * __z;\n" : "");
+	    		+"		__px = __cut_hexdots * x;"
+	    		+"		__py = __cut_hexdots * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_hexdots * __z;\n" : "");
 	 }
 }
 

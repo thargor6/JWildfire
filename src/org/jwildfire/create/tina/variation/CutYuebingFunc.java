@@ -145,7 +145,7 @@ public class  CutYuebingFunc  extends VariationFunc  implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "	  float x,y;  "
-	    		+"		  if( varpar->cut_yuebing_mode ==0)"
+	    		+"		  if( __cut_yuebing_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -154,13 +154,13 @@ public class  CutYuebingFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		     x=RANDFLOAT()-0.5;"
 	    		+"		     y=RANDFLOAT()-0.5;		     "
 	    		+"		    }"
-	    		+"			float2 position = make_float2 (x* varpar->cut_yuebing_zoom ,y* varpar->cut_yuebing_zoom ); "
-	    		+"			float duration = sinf( varpar->cut_yuebing_p1 /2.0)* varpar->cut_yuebing_p2 ;"
+	    		+"			float2 position = make_float2 (x* __cut_yuebing_zoom ,y* __cut_yuebing_zoom ); "
+	    		+"			float duration = sinf( __cut_yuebing_p1 /2.0)* __cut_yuebing_p2 ;"
 	    		+"			float color=0;"
 	    		+"			color += sinf(position.x*position.y*10000. * duration);"
 	    		+"		        "
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_yuebing_invert ==0)"
+	    		+"		    if( __cut_yuebing_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color<0.3)"
 	    		+"		      { x=0.;"
@@ -175,9 +175,9 @@ public class  CutYuebingFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_yuebing * x;"
-	    		+"		    __py = varpar->cut_yuebing * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_yuebing * __z;\n" : "");
+	    		+"		    __px = __cut_yuebing * x;"
+	    		+"		    __py = __cut_yuebing * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_yuebing * __z;\n" : "");
 	  }
 }
 

@@ -232,7 +232,7 @@ public class CutKleinianFunc  extends VariationFunc implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		    float x,y;		    "
-	    		+"		    if( varpar->cut_kleinian_mode ==0)"
+	    		+"		    if( __cut_kleinian_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -242,12 +242,12 @@ public class CutKleinianFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     y=RANDFLOAT()-0.5;"
 	    		+"		    }"
 	    		+"		    "
-	    		+"		    float2 uv =make_float2(x* varpar->cut_kleinian_zoom ,y* varpar->cut_kleinian_zoom )-make_float2( varpar->cut_kleinian_Dx , varpar->cut_kleinian_Dy);"
+	    		+"		    float2 uv =make_float2(x* __cut_kleinian_zoom ,y* __cut_kleinian_zoom )-make_float2( __cut_kleinian_Dx , __cut_kleinian_Dy);"
 	    		+"		    "
 	    		+"		    int hit=cut_kleinian_JosKleinian(uv,varpar);"
 	    		+"		                  	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_kleinian_invert ==0)"
+	    		+"		    if( __cut_kleinian_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (hit==0)"
 	    		+"		      { x=0;"
@@ -262,9 +262,9 @@ public class CutKleinianFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"          __px = varpar->cut_kleinian * x;"
-	    		+"		    __py = varpar->cut_kleinian * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_kleinian * __z;\n" : "");
+	    		+"          __px = __cut_kleinian * x;"
+	    		+"		    __py = __cut_kleinian * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_kleinian * __z;\n" : "");
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {
@@ -288,17 +288,17 @@ public class CutKleinianFunc  extends VariationFunc implements SupportsGPU {
 	    		+"	  "
 	    		+"	  int flag=0;"
 	    		+"	  "
-	    		+"	  float KleinR = 1.8462756+(1.958591-1.8462756)*0.5+0.5*(1.958591-1.8462756)*varpar->jwf_cut_kleinian_time;  "
-	    		+"	  float KleinI = 0.09627581+(0.0112786-0.09627581)*0.5+0.5*(0.0112786-0.09627581)*varpar->jwf_cut_kleinian_time;"
+	    		+"	  float KleinR = 1.8462756+(1.958591-1.8462756)*0.5+0.5*(1.958591-1.8462756)*__jwf_cut_kleinian_time;  "
+	    		+"	  float KleinI = 0.09627581+(0.0112786-0.09627581)*0.5+0.5*(0.0112786-0.09627581)*__jwf_cut_kleinian_time;"
 	    		+"	      "
 	    		+"		float a = KleinR;"
 	    		+"	    float b = KleinI;"
 	    		+"		float f = sign(b);    "
 	    		+"		"
-	    		+"		for (int i = 0; i < varpar->jwf_cut_kleinian_NIters ; i++) "
+	    		+"		for (int i = 0; i < __jwf_cut_kleinian_NIters ; i++) "
 	    		+"		{"
 	    		+"	        z.x=z.x+f*b/a*z.y;"
-	    		+"			z.x =  cut_kleinian_wrap (z.x, 2. * varpar->jwf_cut_kleinian_boxSize, - varpar->jwf_cut_kleinian_boxSize);"
+	    		+"			z.x =  cut_kleinian_wrap (z.x, 2. * __jwf_cut_kleinian_boxSize, - __jwf_cut_kleinian_boxSize);"
 	    		+"			z.x=z.x-f*b/a*z.y;"
 	    		+"	     "
 	    		+"	        if  (z.y >= a * 0.5 + f *(2.*a-1.95)/4. * sign(z.x + b * 0.5)* (1. - exp(-(7.2-(1.95-a)*15.)* abs(z.x + b * 0.5))))	"

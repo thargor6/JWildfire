@@ -194,7 +194,7 @@ public class CutSWarpFunc  extends VariationFunc implements SupportsGPU{
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;  "
-	    		+"		  if( varpar->cut_swarp_mode ==0)"
+	    		+"		  if( __cut_swarp_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -204,25 +204,25 @@ public class CutSWarpFunc  extends VariationFunc implements SupportsGPU{
 	    		+"		     y=RANDFLOAT()-0.5;		     "
 	    		+"		    }"
 	    		+"		    	    "
-	    		+"		    float2 uv = make_float2(x* varpar->cut_swarp_zoom ,y* varpar->cut_swarp_zoom );	"
+	    		+"		    float2 uv = make_float2(x* __cut_swarp_zoom ,y* __cut_swarp_zoom );	"
 	    		+"		    "
-	    		+"		    float2 v0=uv*(5.)+(  cosf(uv*(11.)+( varpar->cut_swarp_time )))+( varpar->cut_swarp_time );"
+	    		+"		    float2 v0=uv*(5.)+(  cosf(uv*(11.)+( __cut_swarp_time )))+( __cut_swarp_time );"
 	    		+"		    float2 v1=sinf(v0);"
 	    		+"		    float t0=dot(v1, make_float2(0.5,0.5));"
 	    		+"		    uv = uv+(t0*.02);    "
-	    		+"		    uv.y += sinf(uv.x*7. + cos(uv.x*4. +  varpar->cut_swarp_time *2.)*1. +  varpar->cut_swarp_time )*.05;"
+	    		+"		    uv.y += sinf(uv.x*7. + cos(uv.x*4. +  __cut_swarp_time *2.)*1. +  __cut_swarp_time )*.05;"
 	    		+"		    "
 	    		+"		    float s = (ceilf(uv.x)*2. - 1.);"
 	    		+"		    float m = 6.; "
 	    		+"		    uv.y += s/m;"
 	    		+"		    "
 	    		+"		    float n = 5.; "
-	    		+"		    float k = sinf(s*3.14159/2. + cut_swarp_dist(uv,varpar->cut_swarp_type)*n*m*3.14159/2.);"
+	    		+"		    float k = sinf(s*3.14159/2. + cut_swarp_dist(uv,__cut_swarp_type)*n*m*3.14159/2.);"
 	    		+"		    "
 	    		+"		    float color=sqrt(max(k, 0.));"
 	    		+"		    "
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_swarp_invert ==0)"
+	    		+"		    if( __cut_swarp_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.5)"
 	    		+"		      { x=0;"
@@ -237,9 +237,9 @@ public class CutSWarpFunc  extends VariationFunc implements SupportsGPU{
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_swarp * x;"
-	    		+"		    __py = varpar->cut_swarp * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_swarp * __z;\n" : "");
+	    		+"		    __px = __cut_swarp * x;"
+	    		+"		    __py = __cut_swarp * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_swarp * __z;\n" : "");
 	  }
 	 
 	  @Override

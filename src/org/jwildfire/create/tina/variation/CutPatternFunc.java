@@ -229,7 +229,7 @@ public class CutPatternFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		   float x,y;"
 	    		+"		   "
-	    		+"		    if( varpar->cut_pattern_mode ==0)"
+	    		+"		    if( __cut_pattern_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -239,14 +239,14 @@ public class CutPatternFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     y=RANDFLOAT()-0.5;"
 	    		+"		    }"
 	    		+"		    "
-	    		+"		     float2 uv = make_float2(x,y)*varpar->cut_pattern_zoom;"
+	    		+"		     float2 uv = make_float2(x,y)*__cut_pattern_zoom;"
 	    		+"           uv=fract(uv);"
 	    		+"		     uv = cut_pattern_rotateTilePattern(uv);"
 	    		+"		     "
 	    		+"		     float2 pos = make_float2(0.,5.)-( uv);"
 	    		+"		     float radius = length(pos);"
 	    		+"		     float angle = atan2(pos.x,pos.y);"
-	    		+"		     float r = sin(radius*sin(uv.y*PI*5.+ varpar->cut_pattern_time +cos(sin(uv.x*PI*3.)*PI*2.+sin(uv.y*PI*15.)))"
+	    		+"		     float r = sin(radius*sin(uv.y*PI*5.+ __cut_pattern_time +cos(sin(uv.x*PI*3.)*PI*2.+sin(uv.y*PI*15.)))"
 	    		+"		                   *1.*sin(uv.y*PI+sin(uv.x*PI*5.)));"
 	    		+"		     "
 	    		+"		     float b = cos(r*PI*2.+PI*2.)*0.9+sin(r*PI*2.+PI*2.)*0.7;"
@@ -254,7 +254,7 @@ public class CutPatternFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     float color=b;"
 	    		+"		     "
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_pattern_invert ==0)"
+	    		+"		    if( __cut_pattern_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -269,9 +269,9 @@ public class CutPatternFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_pattern * x;"
-	    		+"		    __py = varpar->cut_pattern * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_pattern * __z;\n" : "");
+	    		+"		    __px = __cut_pattern * x;"
+	    		+"		    __py = __cut_pattern * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_pattern * __z;\n" : "");
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {

@@ -88,15 +88,15 @@ public class DCCarpetFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float H = 0.1f * varpar->dc_carpet_origin;\n"
+    return "float H = 0.1f * __dc_carpet_origin;\n"
         + "int x0 = (RANDFLOAT() < 0.5f) ? -1 : 1;\n"
         + "int y0 = (RANDFLOAT() > 0.5f) ? -1 : 1;\n"
         + "float x = __x + x0, y = __y + y0;\n"
         + "float x0_xor_y0 = (float) (x0 ^ y0);\n"
         + "float h = -H + (1.f - x0_xor_y0) * H;\n"
-        + "__px += varpar->dc_carpet * (xform->a * x + xform->b * y + xform->c);\n"
-        + "__py += varpar->dc_carpet * (xform->d * x + xform->e * y + xform->f);\n"
+        + "__px += __dc_carpet * (xform->a * x + xform->b * y + xform->c);\n"
+        + "__py += __dc_carpet * (xform->d * x + xform->e * y + xform->f);\n"
         + "__pal = fmodf(fabsf(__pal * 0.5f * (1.f + h) + x0_xor_y0 * (1.f - h) * 0.5f), 1.0f);"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->dc_carpet * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __dc_carpet * __z;\n" : "");
   }
 }

@@ -157,7 +157,7 @@ public class  CutApollonianFunc  extends VariationFunc   implements SupportsGPU 
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "float x,y;  \n"
-	    		+"		  if( varpar->cut_apollonian_mode ==0)\n"
+	    		+"		  if( __cut_apollonian_mode ==0)\n"
 	    		+"		    {\n"
 	    		+"		      x= __x;\n"
 	    		+"		      y =__y;\n"
@@ -167,11 +167,11 @@ public class  CutApollonianFunc  extends VariationFunc   implements SupportsGPU 
 	    		+"		     y=RANDFLOAT()-0.5;\n"
 	    		+"		    }\n"
 	    		+"	    \n"
-	    		+"	    float2 p=make_float2(x*varpar->cut_apollonian_zoom,y* varpar->cut_apollonian_zoom );	\n"
+	    		+"	    float2 p=make_float2(x*__cut_apollonian_zoom,y* __cut_apollonian_zoom );	\n"
 	    		+"		float col=0.0f;\n"
-	    		+"		col =col + cut_apollonian_apollo(p,varpar->cut_apollonian_levels);\n"
+	    		+"		col =col + cut_apollonian_apollo(p,__cut_apollonian_levels);\n"
 	    		+"		__doHide=false;\n"
-	    		+"		if( varpar->cut_apollonian_invert ==0)\n"
+	    		+"		if( __cut_apollonian_invert ==0)\n"
 	    		+"		{\n"
 	    		+"			if (col>0.0f)\n"
 	    		+"			{ x=0.0f;\n"
@@ -186,9 +186,9 @@ public class  CutApollonianFunc  extends VariationFunc   implements SupportsGPU 
 	    		+"			__doHide = true;\n"
 	    		+"			}\n"
 	    		+"		}\n"
-	    		+"		__px = varpar->cut_apollonian * x;\n"
-	    		+"		__py = varpar->cut_apollonian * y;\n"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_apollonian * __z;\n" : "");
+	    		+"		__px = __cut_apollonian * x;\n"
+	    		+"		__py = __cut_apollonian * y;\n"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_apollonian * __z;\n" : "");
 	  }
 	 
 	  @Override

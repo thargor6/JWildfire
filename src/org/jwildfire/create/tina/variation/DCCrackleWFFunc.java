@@ -76,10 +76,10 @@ public class DCCrackleWFFunc extends CrackleFunc {
   }
 
   protected String applyCellCalculationGPU(FlameTransformationContext context) {
-    return    "    __px += varpar->"+getName()+" * DXo;\n"
-            + "    __py += varpar->"+getName()+" * DYo;\n"
-            + (context.isPreserveZCoordinate() ? "__pz += varpar->"+getName()+" * __z;\n" : "")
-            + "    __pal = L * varpar->"+getName()+"_color_scale + varpar->"+getName()+"_color_offset;\n"
+    return    "    __px += __"+getName()+" * DXo;\n"
+            + "    __py += __"+getName()+" * DYo;\n"
+            + (context.isPreserveZCoordinate() ? "__pz += __"+getName()+" * __z;\n" : "")
+            + "    __pal = L * __"+getName()+"_color_scale + __"+getName()+"_color_offset;\n"
             + "    if(__pal<0)\n"
             + "      __pal = 0;\n"
             + "    else if(__pal>1.f)\n"

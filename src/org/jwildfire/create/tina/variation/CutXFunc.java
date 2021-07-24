@@ -157,7 +157,7 @@ public class  CutXFunc  extends VariationFunc  implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;  "
-	    		+"		  if( varpar->cut_x_mode ==0)"
+	    		+"		  if( __cut_x_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -167,14 +167,14 @@ public class  CutXFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		     y=RANDFLOAT()-0.50;		     "
 	    		+"		    }"
 	    		+"			float2 uv = make_float2 (x,y);"
-	    		+"			uv=uv* varpar->cut_x_zoom ;"
+	    		+"			uv=uv* __cut_x_zoom ;"
 	    		+"			"
 	    		+"		    float2 st = abs(uv);"
 	    		+"		    float color = 0.0f;"
 	    		+"		    "
 	    		+"		    float line = 0.0f;	 "
 	    		+"		    float movement = 0.0f;"
-	    		+"		    movement =  varpar->cut_x_size ;"
+	    		+"		    movement =  __cut_x_size ;"
 	    		+"          Mat2 mat;"
 	    		+"          mat=cut_x_rot(PI/4.0f);"
 	    		+"		    st = times(&mat,st);"
@@ -184,7 +184,7 @@ public class  CutXFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		    color = mix(color,1.,line);    "
 	    		+"		     "
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_x_invert ==0)"
+	    		+"		    if( __cut_x_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color<0.1)"
 	    		+"		      { x=0.;"
@@ -199,9 +199,9 @@ public class  CutXFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_x * x;"
-	    		+"		    __py = varpar->cut_x * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_x * __z;\n" : "");
+	    		+"		    __px = __cut_x * x;"
+	    		+"		    __py = __cut_x * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_x * __z;\n" : "");
 	  }
 	 
 	  @Override

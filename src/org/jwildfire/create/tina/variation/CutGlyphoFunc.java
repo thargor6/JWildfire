@@ -176,7 +176,7 @@ public class CutGlyphoFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		float x,y,px_center,py_center;"
 	    		+"		    "
-	    		+"		if( varpar->cut_glypho_mode ==0)"
+	    		+"		if( __cut_glypho_mode ==0)"
 	    		+"		{"
 	    		+"		     x= __x;"
 	    		+"		     y =__y;"
@@ -189,7 +189,7 @@ public class CutGlyphoFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     px_center=0.0;"
 	    		+"		     py_center=0.0;"
 	    		+"		}"
-	    		+"		float2 uv=make_float2(x,y)*( varpar->cut_glypho_zoom );"
+	    		+"		float2 uv=make_float2(x,y)*( __cut_glypho_zoom );"
 	    		+"	    float color=0.0f;"
 	    		+"	    float m = 0.0f;"
 	    		+"	    float stp = PI/5.0f;"
@@ -197,14 +197,14 @@ public class CutGlyphoFunc  extends VariationFunc implements SupportsGPU {
 	    		+"	        for(float i=0.0001f; i<2.0f*PI; i+=stp){"
 	    		+"	            float2 uvi = uv*(n)+(make_float2(cos(i + n*stp*.5 )*.4, sin(i + n*stp*.5 )*.4));"
 	    		+"	            float l = length(uvi);"
-	    		+"	            m += smoothstep( varpar->cut_glypho_f1  * n, 0.0f, l)* varpar->cut_glypho_f3;"
+	    		+"	            m += smoothstep( __cut_glypho_f1  * n, 0.0f, l)* __cut_glypho_f3;"
 	    		+"	        }"
 	    		+"	    }"
 	    		+"	    "
-	    		+"	    m = step( varpar->cut_glypho_f2 , fract(m* varpar->cut_glypho_f3 ));"
+	    		+"	    m = step( __cut_glypho_f2 , fract(m* __cut_glypho_f3 ));"
 	    		+"	   color = m;"
 	    		+"	   __doHide=false;"
-	    		+"	   if( varpar->cut_glypho_invert ==0)"
+	    		+"	   if( __cut_glypho_invert ==0)"
 	    		+"		{"
 	    		+"	      if (color==0.0f)"
 	    		+"	      { __px=0;"
@@ -219,9 +219,9 @@ public class CutGlyphoFunc  extends VariationFunc implements SupportsGPU {
 	    		+"	        __doHide = true;"
 	    		+"	      }"
 	    		+"	    }"
-	    		+"	    __px = varpar->cut_glypho * (x-px_center);"
-	    		+"	    __py = varpar->cut_glypho * (y-py_center);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_glypho * __z;\n" : "");
+	    		+"	    __px = __cut_glypho * (x-px_center);"
+	    		+"	    __py = __cut_glypho * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_glypho * __z;\n" : "");
 	  }
 }
 

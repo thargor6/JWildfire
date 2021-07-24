@@ -168,7 +168,7 @@ public class CutSinCosFunc  extends VariationFunc implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return "float x,y;\n"  
-	  		  +"if(varpar->cut_sincos_mode==0)\n"
+	  		  +"if(__cut_sincos_mode==0)\n"
 			  +"{\n"
 			  +"  x= __x;\n"
 			  +"  y =__y;\n"
@@ -177,12 +177,12 @@ public class CutSinCosFunc  extends VariationFunc implements SupportsGPU {
 			  +" x=RANDFLOAT()-0.5;\n"
 			  +" y=RANDFLOAT()-0.5;\n"
 			  +"}\n"
-			  +"float2 uv= make_float2(x*varpar->cut_sincos_zoom,y*varpar->cut_sincos_zoom);\n"
+			  +"float2 uv= make_float2(x*__cut_sincos_zoom,y*__cut_sincos_zoom);\n"
 		      +"uv.x+=1.5;\n"
 			  +"uv.y += cos(uv.x*10.0)*0.15;\n"
 			  +"uv.y*=1.5;\n"
 			  +"float r = 7.3,\n"
-			  +"e = uv.x-varpar->cut_sincos_time*0.5,\n"
+			  +"e = uv.x-__cut_sincos_time*0.5,\n"
 			  +"t = e + abs(uv.y),\n"
 	  		  +"f = (1.0+sin(uv.x*3.0))*0.4+0.1,\n"
 			  +"d = f - abs(fract(t*r) - .5)*2.,\n"
@@ -190,7 +190,7 @@ public class CutSinCosFunc  extends VariationFunc implements SupportsGPU {
 	          +"  float color=sqrt(s);\n"
 	            
 			  +"  __doHide=false;\n"
-			  +"  if(varpar->cut_sincos_invert==0)\n"
+			  +"  if(__cut_sincos_invert==0)\n"
 			   +" {\n"
 			   +"   if (color>0.0)\n"
 			   +"   { x=0;\n"
@@ -205,9 +205,9 @@ public class CutSinCosFunc  extends VariationFunc implements SupportsGPU {
 			    +"        __doHide = true;\n"
 				+"      }\n"
 			    +"}\n"
-			    +"__px = varpar->cut_sincos * x;\n"
-			    +"__py = varpar->cut_sincos * y;\n"
-			    + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_sincos * __z;" : "");
+			    +"__px = __cut_sincos * x;\n"
+			    +"__py = __cut_sincos * y;\n"
+			    + (context.isPreserveZCoordinate() ? "__pz += __cut_sincos * __z;" : "");
 	  }
 }
 

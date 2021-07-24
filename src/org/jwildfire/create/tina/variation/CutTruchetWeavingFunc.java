@@ -286,7 +286,7 @@ public class  CutTruchetWeavingFunc  extends VariationFunc  implements SupportsG
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;"
-	    		+"		  if( varpar->cut_truchetweaving_mode ==0)"
+	    		+"		  if( __cut_truchetweaving_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -295,8 +295,8 @@ public class  CutTruchetWeavingFunc  extends VariationFunc  implements SupportsG
 	    		+"		     x=RANDFLOAT()-0.5;"
 	    		+"		     y=RANDFLOAT()-0.5;"
 	    		+"		    }"
-	    		+"	    float uvx=  varpar->cut_truchetweaving_randomize *sinf( varpar->cut_truchetweaving_randomize *180.0f/PI);"
-	    		+"	    float2 u=make_float2(x* varpar->cut_truchetweaving_zoom -uvx,y* varpar->cut_truchetweaving_zoom -uvx);"
+	    		+"	    float uvx=  __cut_truchetweaving_randomize *sinf( __cut_truchetweaving_randomize *180.0f/PI);"
+	    		+"	    float2 u=make_float2(x* __cut_truchetweaving_zoom -uvx,y* __cut_truchetweaving_zoom -uvx);"
 	    		+"	    float R3  = 1.732050807f;"
 	    		+"	    float2 s = make_float2(1.0f,R3),"
 	    		+"	         a = mod(u     ,s)*(2.)-(s),"
@@ -313,13 +313,13 @@ public class  CutTruchetWeavingFunc  extends VariationFunc  implements SupportsG
 	    		+"         id=floorf(u) -0.5;"
 	    		+"	     }"
 	    		+"	    float n = cut_truchetweaving_N21(id);"
-	    		+"	    float3 O = cut_truchetweaving_Truchet(fract(u), n, u , varpar->cut_truchetweaving_type,varpar->cut_truchetweaving_width);"
+	    		+"	    float3 O = cut_truchetweaving_Truchet(fract(u), n, u , __cut_truchetweaving_type,__cut_truchetweaving_width);"
 	    		+"	    	    "
 	    		+"      float col=0.0f;"
 	    		+"	    col=O.z;   "
 	    		+"	    "
 	    		+"		__doHide=false;"
-	    		+"		if( varpar->cut_truchetweaving_invert ==0)"
+	    		+"		if( __cut_truchetweaving_invert ==0)"
 	    		+"		{"
 	    		+"			if (col>0.0f)"
 	    		+"			{ x=0.0f;"
@@ -334,9 +334,9 @@ public class  CutTruchetWeavingFunc  extends VariationFunc  implements SupportsG
 	    		+"			__doHide = true;"
 	    		+"			}"
 	    		+"		}"
-	    		+"		__px = varpar->cut_truchetweaving * x;"
-	    		+"		__py = varpar->cut_truchetweaving * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_truchetweaving * __z;\n" : "");
+	    		+"		__px = __cut_truchetweaving * x;"
+	    		+"		__py = __cut_truchetweaving * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_truchetweaving * __z;\n" : "");
 	  }
 
 	  @Override

@@ -164,7 +164,7 @@ public class CutSpiralFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return  "		    float x,y;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_spiral_mode ==0)"
+	    		+"		    if( __cut_spiral_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -175,10 +175,10 @@ public class CutSpiralFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     "
 	    		+"		    }"
 	    		+"		    "
-	    		+"		    float2 uv =make_float2(x* varpar->cut_spiral_zoom ,y* varpar->cut_spiral_zoom );"
+	    		+"		    float2 uv =make_float2(x* __cut_spiral_zoom ,y* __cut_spiral_zoom );"
 	    		+"    "
 	    		+"		    int  l = 0;"
-	    		+"		    Mat2 rot = cut_spiral_rot2( varpar->cut_spiral_time );"
+	    		+"		    Mat2 rot = cut_spiral_rot2( __cut_spiral_time );"
 	    		+"		    "
 	    		+"		    for(int i = 0; i < 64; i++) {"
 	    		+"		        "
@@ -192,7 +192,7 @@ public class CutSpiralFunc  extends VariationFunc implements SupportsGPU {
 	    		+"    	    float color =l; "
 	    		+"			              	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_spiral_invert ==0)"
+	    		+"		    if( __cut_spiral_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -207,9 +207,9 @@ public class CutSpiralFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_spiral * x;"
-	    		+"		    __py = varpar->cut_spiral * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_spiral * __z;\n" : "");
+	    		+"		    __px = __cut_spiral * x;"
+	    		+"		    __py = __cut_spiral * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_spiral * __z;\n" : "");
 	  }
 	 
 	  @Override

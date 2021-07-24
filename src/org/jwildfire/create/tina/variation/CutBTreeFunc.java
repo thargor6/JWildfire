@@ -166,7 +166,7 @@ public class CutBTreeFunc  extends VariationFunc  implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return  "float x,y;  "
-	    		+"		  if( varpar->cut_btree_mode ==0)"
+	    		+"		  if( __cut_btree_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -176,20 +176,20 @@ public class CutBTreeFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"		     y=2.0*RANDFLOAT()-1.0;"
 	    		+"		    }"
 	    		+"		    "
-	    		+"		    float2 w =make_float2(x* varpar->cut_btree_zoom ,y* varpar->cut_btree_zoom );"
-	    		+"		    float2 t = w/w*(fract( varpar->cut_btree_time )) ;"
+	    		+"		    float2 w =make_float2(x* __cut_btree_zoom ,y* __cut_btree_zoom );"
+	    		+"		    float2 t = w/w*(fract( __cut_btree_time )) ;"
 	    		+"		    float2 l = w*w*(5.0f)-t;"
 	    		+"		    t=t+1.0;"
 	    		+"		    float2 m = exp2f( ceilf(l) )*t;  "
 	    		+"		    w= fract( m*w.x)-0.5;"
 	    		+"		    float2 t0=sign(w)/(4.);"
 	    		+"			float2 t1=abs( smoothstep(0., 1., fract(l))*t0-w);"
-	    		+"		    float2 t2=( m/t1/(100.0* varpar->cut_btree_thickness));"
+	    		+"		    float2 t2=( m/t1/(100.0* __cut_btree_thickness));"
 	    		+"		    "
 	    		+"		    float color = t2.y;"
 	    		+"              	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_btree_invert ==0)"
+	    		+"		    if( __cut_btree_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.5)"
 	    		+"		      { x=0;"
@@ -204,9 +204,9 @@ public class CutBTreeFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_btree * x;"
-	    		+"		    __py = varpar->cut_btree * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_btree * __z;\n" : "");
+	    		+"		    __px = __cut_btree * x;"
+	    		+"		    __py = __cut_btree * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_btree * __z;\n" : "");
 	  }
 }
 

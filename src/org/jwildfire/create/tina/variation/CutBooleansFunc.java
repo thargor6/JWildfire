@@ -171,7 +171,7 @@ public class CutBooleansFunc  extends VariationFunc implements SupportsGPU {
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return  "	    float x,y,px_center,py_center,temp;"
 	    		+"		    "
-	    		+"		    if( varpar->cut_booleans_mode ==0)"
+	    		+"		    if( __cut_booleans_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -185,18 +185,18 @@ public class CutBooleansFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		      py_center=0.5;		     "
 	    		+"		    }"
 	    		+"		    float2 u =make_float2(x,y );"
-	    		+"          u=u*varpar->cut_booleans_zoom;"
-	    		+"          if( varpar->cut_booleans_type ==0)   "
+	    		+"          u=u*__cut_booleans_zoom;"
+	    		+"          if( __cut_booleans_type ==0)   "
 	    		+"             temp=((int)u.x )^((int)u.y);            "
-	    		+"          else if( varpar->cut_booleans_type ==1)  "
+	    		+"          else if( __cut_booleans_type ==1)  "
 	    		+"             temp=((int)u.x )&((int)u.y);"
-	    		+"          else if( varpar->cut_booleans_type ==2)  "
+	    		+"          else if( __cut_booleans_type ==2)  "
 	    		+"             temp=((int)u.x )|((int)u.y);"
 	    		+"            "
 	    		+"            float color=sin(temp);"
 	    		+"              	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_booleans_invert ==0)"
+	    		+"		    if( __cut_booleans_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -211,9 +211,9 @@ public class CutBooleansFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_booleans * (x-px_center);"
-	    		+"		    __py = varpar->cut_booleans * (y-py_center);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_booleans * __z;\n" : "");
+	    		+"		    __px = __cut_booleans * (x-px_center);"
+	    		+"		    __py = __cut_booleans * (y-py_center);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_booleans * __z;\n" : "");
 	  }
 }
 

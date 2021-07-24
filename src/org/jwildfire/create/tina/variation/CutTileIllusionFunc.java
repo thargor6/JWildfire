@@ -176,7 +176,7 @@ public class  CutTileIllusionFunc  extends VariationFunc implements SupportsGPU 
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "		  float x,y;  "
-	    		+"		  if( varpar->cut_tileillusion_mode ==0)"
+	    		+"		  if( __cut_tileillusion_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -186,7 +186,7 @@ public class  CutTileIllusionFunc  extends VariationFunc implements SupportsGPU 
 	    		+"		     y=RANDFLOAT()-0.5;		     "
 	    		+"		    }"
 	    		+"   "
-	    		+"			float2 uv=make_float2(x* varpar->cut_tileillusion_zoom ,y* varpar->cut_tileillusion_zoom );"
+	    		+"			float2 uv=make_float2(x* __cut_tileillusion_zoom ,y* __cut_tileillusion_zoom );"
 	    		+"		   float y0 = cut_tileillusion_solve(uv.y-3.,uv.y,  floorf(cut_tileillusion_f(uv.y))),"
 	    		+"		           y1 = cut_tileillusion_solve(uv.y,uv.y+3., floorf(cut_tileillusion_f(uv.y))+1.);"
 	    		+"		    uv.y = cut_tileillusion_f(uv.y);"
@@ -194,12 +194,12 @@ public class  CutTileIllusionFunc  extends VariationFunc implements SupportsGPU 
 	    		+"		    float s = mod(floorf(uv.y),2.);"
 	    		+"		    float color = 0.;"
 	    		+"		    if (fract(uv.y)>.05) {"
-	    		+"		    	uv.x +=  varpar->cut_tileillusion_time *sign(s-.5);"
+	    		+"		    	uv.x +=  __cut_tileillusion_time *sign(s-.5);"
 	    		+"		    	float c = mod(floorf(uv.x)+floor(uv.y),2.);"
 	    		+"		    	color = c;"
 	    		+"		    }"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_tileillusion_invert ==0)"
+	    		+"		    if( __cut_tileillusion_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color==0.0)"
 	    		+"		      { x=0.;"
@@ -214,9 +214,9 @@ public class  CutTileIllusionFunc  extends VariationFunc implements SupportsGPU 
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_tileillusion * x;"
-	    		+"		    __py = varpar->cut_tileillusion * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_tileillusion * __z;\n" : "");
+	    		+"		    __px = __cut_tileillusion * x;"
+	    		+"		    __py = __cut_tileillusion * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_tileillusion * __z;\n" : "");
 	  }
 	 
 	  @Override

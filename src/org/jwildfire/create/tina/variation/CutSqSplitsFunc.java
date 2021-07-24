@@ -164,7 +164,7 @@ public class CutSqSplitsFunc  extends VariationFunc implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "	  float x,y;  "
-	    		+"		  if( varpar->cut_sqsplits_mode ==0)"
+	    		+"		  if( __cut_sqsplits_mode ==0)"
 	    		+"		    {"
 	    		+"		      x= __x;"
 	    		+"		      y =__y;"
@@ -174,11 +174,11 @@ public class CutSqSplitsFunc  extends VariationFunc implements SupportsGPU {
 	    		+"		     y=RANDFLOAT()-0.5;		     "
 	    		+"		    }"
 	    		+"		    "
-	    		+"		     float2 U= make_float2(x* varpar->cut_sqsplits_zoom ,y* varpar->cut_sqsplits_zoom );"
+	    		+"		     float2 U= make_float2(x* __cut_sqsplits_zoom ,y* __cut_sqsplits_zoom );"
 	    		+"	         float2 Uf = fract(U)-(.5);"
 	    		+"	         float2 Ui = floorf(mod(U,2.));"
 	    		+"	         "
-	    		+"	         float t =  varpar->cut_sqsplits_time *.35,"
+	    		+"	         float t =  __cut_sqsplits_time *.35,"
 	    		+"	               a = atan2(Uf.x,Uf.y)/6.3 ,  "
 	    		+"	               r = fract(t+t+ 2.* ( Ui.x!=Ui.y ? a : 1.-a )),"
 	    		+"	           sharp = 180.* length(Uf),"
@@ -188,7 +188,7 @@ public class CutSqSplitsFunc  extends VariationFunc implements SupportsGPU {
 	    		+"	     	float color = 1.-k;"
 	    		+"              	"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->cut_sqsplits_invert ==0)"
+	    		+"		    if( __cut_sqsplits_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (color>0.0)"
 	    		+"		      { x=0;"
@@ -203,9 +203,9 @@ public class CutSqSplitsFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->cut_sqsplits * x;"
-	    		+"		    __py = varpar->cut_sqsplits * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_sqsplits * __z;\n" : "");
+	    		+"		    __px = __cut_sqsplits * x;"
+	    		+"		    __py = __cut_sqsplits * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_sqsplits * __z;\n" : "");
 	  }
 
 }

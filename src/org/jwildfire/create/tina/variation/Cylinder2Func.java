@@ -46,8 +46,8 @@ public class Cylinder2Func extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += varpar->cylinder2 * __x / sqrtf(__x*__x + 1.0);\n"
-        + "__py += varpar->cylinder2 * __y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->cylinder2 * __z;" : "");
+    return "__px += __cylinder2 * __x / sqrtf(__x*__x + 1.0);\n"
+        + "__py += __cylinder2 * __y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __cylinder2 * __z;" : "");
   }
 }
