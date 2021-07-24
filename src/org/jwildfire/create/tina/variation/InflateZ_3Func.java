@@ -46,6 +46,6 @@ public class InflateZ_3Func extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "    float ang = atan2f(__y, __x);\n"
         + "    float val1 = 0.2 * (PI - ang) * cosf(3.0 * ang + (__y - __x));\n"
-        + "    __pz += varpar->inflateZ_3 * val1;\n";
+        + "    __pz += __inflateZ_3 * val1;\n";
   }
 }

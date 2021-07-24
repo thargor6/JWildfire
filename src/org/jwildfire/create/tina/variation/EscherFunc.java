@@ -87,12 +87,12 @@ public class EscherFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float vc = 0.5f*(1.f+cosf(varpar->escher_beta));\n"
-        + "float vd = 0.5f*sinf(varpar->escher_beta);\n"
-        + "float m = varpar->escher*expf(vc*0.5f*logf(__r2)-vd*__theta);\n"
+    return "float vc = 0.5f*(1.f+cosf(__escher_beta));\n"
+        + "float vd = 0.5f*sinf(__escher_beta);\n"
+        + "float m = __escher*expf(vc*0.5f*logf(__r2)-vd*__theta);\n"
         + "float n = vc*__theta+vd*0.5f*logf(__r2);\n"
         + "__px += m*cosf(n);\n"
         + "__py += m*sinf(n);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->escher*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __escher*__z;\n" : "");
   }
 }

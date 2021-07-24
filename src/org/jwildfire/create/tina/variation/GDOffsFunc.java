@@ -154,14 +154,14 @@ public class GDOffsFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float gdodx = varpar->gdoffs_delta_x * 0.1f;\n"
-        + "float gdody = varpar->gdoffs_delta_y * 0.1f;\n"
-        + "float gdoax = ((fabsf(varpar->gdoffs_area_x) < 1.f) ? 0.1f : fabsf(varpar->gdoffs_area_x))*2.f;\n"
-        + "float gdoay = ((fabsf(varpar->gdoffs_area_y) < 1.f) ? 0.1f : fabsf(varpar->gdoffs_area_y))*2.f;\n"
-        + "float gdocx = varpar->gdoffs_center_x;\n"
-        + "float gdocy = varpar->gdoffs_center_y;\n"
-        + "int   gdos  = varpar->gdoffs_square;\n"
-        + "float gdob = varpar->gdoffs_gamma * 2.f /fmaxf(gdoax, gdoay);\n"
+    return "float gdodx = __gdoffs_delta_x * 0.1f;\n"
+        + "float gdody = __gdoffs_delta_y * 0.1f;\n"
+        + "float gdoax = ((fabsf(__gdoffs_area_x) < 1.f) ? 0.1f : fabsf(__gdoffs_area_x))*2.f;\n"
+        + "float gdoay = ((fabsf(__gdoffs_area_y) < 1.f) ? 0.1f : fabsf(__gdoffs_area_y))*2.f;\n"
+        + "float gdocx = __gdoffs_center_x;\n"
+        + "float gdocy = __gdoffs_center_y;\n"
+        + "int   gdos  = __gdoffs_square;\n"
+        + "float gdob = __gdoffs_gamma * 2.f /fmaxf(gdoax, gdoay);\n"
         + "\n"
         + "float osc_x=gdoffs_fosc(gdodx,1.f),\n"
         + "  osc_y=gdoffs_fosc(gdody,1.f);\n"
@@ -176,9 +176,9 @@ public class GDOffsFunc extends VariationFunc implements SupportsGPU {
         + "    out_x = gdoffs_flip(gdoffs_flip(in_x,gdoffs_fosc(in_x,4.f),osc_x),gdoffs_fosc(gdoffs_fclp(gdob *in_x),4.f),osc_x);\n"
         + "    out_y = gdoffs_flip(gdoffs_flip(in_y,gdoffs_fosc(in_y,4.f),osc_y),gdoffs_fosc(gdoffs_fclp(gdob *in_y),4.f),osc_y);\n"
         + "}\n"
-        + "__px += varpar->gdoffs*out_x;\n"
-        + "__py += varpar->gdoffs*out_y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->gdoffs*__z;\n" : "");
+        + "__px += __gdoffs*out_x;\n"
+        + "__py += __gdoffs*out_y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __gdoffs*__z;\n" : "");
   }
 
   @Override

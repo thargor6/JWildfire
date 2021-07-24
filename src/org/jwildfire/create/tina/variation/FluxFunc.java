@@ -78,14 +78,14 @@ public class FluxFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float xpw = __x + varpar->flux;\n"
-        + "float xmw = __x - varpar->flux;\n"
-        + "float avgr = varpar->flux * (2.f + varpar->flux_spread) *\n"
+    return "float xpw = __x + __flux;\n"
+        + "float xmw = __x - __flux;\n"
+        + "float avgr = __flux * (2.f + __flux_spread) *\n"
         + "    sqrtf(sqrtf(__y * __y + xpw * xpw) / sqrtf(__y * __y + xmw * xmw));\n"
         + "float avga = (atan2f(__y, xmw) - atan2f(__y, xpw)) * 0.5f;\n"
         + "        \n"
         + "__px += avgr * cosf(avga);\n"
         + "__py += avgr * sinf(avga);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->flux*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __flux*__z;\n" : "");
   }
 }

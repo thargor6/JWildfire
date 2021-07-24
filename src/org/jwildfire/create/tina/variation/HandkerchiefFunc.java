@@ -48,8 +48,8 @@ public class HandkerchiefFunc extends SimpleVariationFunc implements SupportsGPU
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->handkerchief*__r*sinf(__phi+__r);\n"
-        + "__py += varpar->handkerchief*__r*cosf(__phi-__r);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->handkerchief*__z;\n" : "");
+    return "__px += __handkerchief*__r*sinf(__phi+__r);\n"
+        + "__py += __handkerchief*__r*cosf(__phi-__r);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __handkerchief*__z;\n" : "");
   }
 }

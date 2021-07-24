@@ -50,10 +50,10 @@ public class FlipYFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "if (__x > 0.f)\n"
-        + "    __py -= varpar->flipy * __y;\n"
+        + "    __py -= __flipy * __y;\n"
         + "else\n"
-        + "    __py += varpar->flipy * __y;\n"
-        + "__px += varpar->flipy * __x;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->flipy * __z;\n" : "");
+        + "    __py += __flipy * __y;\n"
+        + "__px += __flipy * __x;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __flipy * __z;\n" : "");
   }
 }

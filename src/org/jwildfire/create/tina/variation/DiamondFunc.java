@@ -52,8 +52,8 @@ public class DiamondFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->diamond*__x*__rinv*cosf(__r);\n"
-        + "__py += varpar->diamond*__y*__rinv*sinf(__r);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->diamond*__z;\n" : "");
+    return "__px += __diamond*__x*__rinv*cosf(__r);\n"
+        + "__py += __diamond*__y*__rinv*sinf(__r);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __diamond*__z;\n" : "");
   }
 }

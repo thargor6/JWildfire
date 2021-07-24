@@ -63,9 +63,9 @@ public class FociFunc extends SimpleVariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float expx = expf(__x)*0.5f;\n"
         + "float expnx = 0.25f/expx;\n"
-        + "float tmp = varpar->foci/(expx+expnx-cosf(__y));\n"
+        + "float tmp = __foci/(expx+expnx-cosf(__y));\n"
         + "__px += tmp*(expx-expnx);\n"
         + "__py += tmp*sinf(__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->foci*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __foci*__z;\n" : "");
   }
 }

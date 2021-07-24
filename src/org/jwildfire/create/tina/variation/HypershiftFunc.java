@@ -78,13 +78,13 @@ public class HypershiftFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float scale = 1 - varpar->hypershift_shift * varpar->hypershift_shift;\n"
+    return "    float scale = 1 - __hypershift_shift * __hypershift_shift;\n"
         + "    float rad = 1 / (__x * __x + __y * __y);\n"
-        + "    float x = rad * __x + varpar->hypershift_shift;\n"
+        + "    float x = rad * __x + __hypershift_shift;\n"
         + "    float y = rad * __y;\n"
-        + "    rad = varpar->hypershift * scale / (x * x + y * y);\n"
-        + "    __px += rad * x + varpar->hypershift_shift;\n"
-        + "    __py += rad * y * varpar->hypershift_stretch;\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->hypershift * __z;\n" : "");
+        + "    rad = __hypershift * scale / (x * x + y * y);\n"
+        + "    __px += rad * x + __hypershift_shift;\n"
+        + "    __py += rad * y * __hypershift_stretch;\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += __hypershift * __z;\n" : "");
   }
 }

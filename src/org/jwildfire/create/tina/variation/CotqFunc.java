@@ -64,7 +64,7 @@ public class CotqFunc extends SimpleVariationFunc implements SupportsGPU {
         + "    float sh = sinhf(abs_v);\n"
         + "    float ch = coshf(abs_v);\n"
         + "    float sysz = __y*__y + __z*__z;\n"
-        + "    float ni = varpar->cotq / (__x*__x + sysz);\n"
+        + "    float ni = __cotq / (__x*__x + sysz);\n"
         + "    float C = c * sh / abs_v;\n"
         + "    float B = -s * sh / abs_v;\n"
         + "    float stcv = s * ch;\n"

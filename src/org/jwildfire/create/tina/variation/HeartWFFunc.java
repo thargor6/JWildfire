@@ -107,22 +107,22 @@ public class HeartWFFunc extends VariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float nx, t;\n"
         + "if (__phi < 0) {\n"
-        + "    t = -__phi / PI * 60.f * varpar->heart_wf_scale_r_left - varpar->heart_wf_shift_t;\n"
+        + "    t = -__phi / PI * 60.f * __heart_wf_scale_r_left - __heart_wf_shift_t;\n"
         + "    if (t > 60.f)\n"
         + "        t = 60.f;\n"
         + "    nx = -0.001f * (-t * t + 40.f * t + 1200.f) * sinf(PI * t / 180.f) * __r;\n"
         + "}\n"
         + "else {\n"
-        + "    t = __phi / PI * 60.f * varpar->heart_wf_scale_r_right - varpar->heart_wf_shift_t;\n"
+        + "    t = __phi / PI * 60.f * __heart_wf_scale_r_right - __heart_wf_shift_t;\n"
         + "    if (t > 60.f)\n"
         + "        t = 60.f;\n"
         + "    nx = 0.001f * (-t * t + 40.f * t + 1200.f) * sinf(PI * t / 180.f) * __r;\n"
         + "}\n"
         + "float ny = -0.001f * (-t * t + 40.f * t + 400.f) * cosf(PI * t / 180.f) * __r;\n"
-        + "nx *= varpar->heart_wf_scale_x;\n"
-        + "__px += varpar->heart_wf * nx;\n"
-        + "__py += varpar->heart_wf * ny;\n"
+        + "nx *= __heart_wf_scale_x;\n"
+        + "__px += __heart_wf * nx;\n"
+        + "__py += __heart_wf * ny;\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->heart_wf * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __heart_wf * __z;\n" : "");
   }
 }

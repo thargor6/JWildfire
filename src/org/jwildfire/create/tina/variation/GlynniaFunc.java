@@ -94,7 +94,7 @@ public class GlynniaFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float vvar2 = varpar->glynnia*rsqrtf(2.f);\n"
+    return "float vvar2 = __glynnia*rsqrtf(2.f);\n"
         + "float r = __r;\n"
         + "if( r > 1.f)\n"
         + "{\n"
@@ -107,7 +107,7 @@ public class GlynniaFunc extends SimpleVariationFunc implements SupportsGPU {
         + "    else\n"
         + "    {\n"
         + "        float d = r + __x;\n"
-        + "        r = varpar->glynnia / sqrtf(r * (__y*__y + d*d));\n"
+        + "        r = __glynnia / sqrtf(r * (__y*__y + d*d));\n"
         + "        __px += r * d;\n"
         + "        __py += r * __y;\n"
         + "    }\n"
@@ -123,11 +123,11 @@ public class GlynniaFunc extends SimpleVariationFunc implements SupportsGPU {
         + "    else\n"
         + "    {\n"
         + "        float d = r + __x;\n"
-        + "        r = varpar->glynnia / sqrtf(r * (__y*__y + d*d));\n"
+        + "        r = __glynnia / sqrtf(r * (__y*__y + d*d));\n"
         + "        __px -= r * d;\n"
         + "        __py += r * __y;\n"
         + "    }\n"
         + "}\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->glynnia*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __glynnia*__z;\n" : "");
   }
 }

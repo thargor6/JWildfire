@@ -84,10 +84,10 @@ public class DinisSurfaceWFFunc extends VariationFunc implements SupportsGPU {
         + "    float v = __y;\n"
         + "    float sinv = sinf(v);\n"
         + "    float t=logf(tanf(v / 2.0));\n"
-        + "    __px += varpar->dinis_surface_wf * varpar->dinis_surface_wf_a * cosf(u) * sinv;\n"
-        + "    __py += varpar->dinis_surface_wf * varpar->dinis_surface_wf_a * sinf(u) * sinv;\n"
+        + "    __px += __dinis_surface_wf * __dinis_surface_wf_a * cosf(u) * sinv;\n"
+        + "    __py += __dinis_surface_wf * __dinis_surface_wf_a * sinf(u) * sinv;\n"
         + " if(fabsf(v)>1.0e-06) {"
-        + "    __pz += -varpar->dinis_surface_wf * (varpar->dinis_surface_wf_a * (cosf(v) +  logf(tanf(fabsf(v) / 2.0))) + varpar->dinis_surface_wf_b * u);\n"
+        + "    __pz += -__dinis_surface_wf * (__dinis_surface_wf_a * (cosf(v) +  logf(tanf(fabsf(v) / 2.0))) + __dinis_surface_wf_b * u);\n"
         + "    __doHide = false;\n"
         + " }"
         + " else __doHide=true; \n";

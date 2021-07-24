@@ -50,8 +50,8 @@ public class DiscFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->disc*(__phi/PI)*sinf(PI*__r);\n"
-        + "__py += varpar->disc*(__phi/PI)*cosf(PI*__r);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->disc*__z;\n" : "");
+    return "__px += __disc*(__phi/PI)*sinf(PI*__r);\n"
+        + "__py += __disc*(__phi/PI)*cosf(PI*__r);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __disc*__z;\n" : "");
   }
 }

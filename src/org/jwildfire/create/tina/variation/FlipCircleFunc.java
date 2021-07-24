@@ -50,11 +50,11 @@ public class FlipCircleFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "if (__r2 > varpar->flipcircle * varpar->flipcircle)\n"
-        + "    __py += varpar->flipcircle * __y;\n"
+    return "if (__r2 > __flipcircle * __flipcircle)\n"
+        + "    __py += __flipcircle * __y;\n"
         + "else\n"
-        + "    __py -= varpar->flipcircle * __y;\n"
-        + "__px += varpar->flipcircle * __x;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->flipcircle * __z;\n" : "");
+        + "    __py -= __flipcircle * __y;\n"
+        + "__px += __flipcircle * __x;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __flipcircle * __z;\n" : "");
   }
 }

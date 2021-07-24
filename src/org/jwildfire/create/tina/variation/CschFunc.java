@@ -59,8 +59,8 @@ public class CschFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float cschden = 2.f/(coshf(2.f*__x)-cosf(2.f*__y));\n"
-        + "__px += varpar->csch*cschden*sinhf(__x)*cosf(__y);\n"
-        + "__py -= varpar->csch*cschden*coshf(__x)*sinf(__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->csch*__z;\n" : "");
+        + "__px += __csch*cschden*sinhf(__x)*cosf(__y);\n"
+        + "__py -= __csch*cschden*coshf(__x)*sinf(__y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __csch*__z;\n" : "");
   }
 }

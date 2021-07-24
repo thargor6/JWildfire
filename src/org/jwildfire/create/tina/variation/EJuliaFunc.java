@@ -127,7 +127,7 @@ public class EJuliaFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "int _sign = 1;\n"
-        + "if (varpar->eJulia_power < 0)\n"
+        + "if (__eJulia_power < 0)\n"
         + "   _sign = -1;\n"
         + "float r2 = __y * __y + __x * __x;\n"
         + "float tmp2;\n"
@@ -153,14 +153,14 @@ public class EJuliaFunc extends VariationFunc implements SupportsGPU {
         + "float nu = acosf(t);\n"
         + "if (__y < 0)\n"
         + "  nu *= -1.0f;\n"
-        + "nu = nu / varpar->eJulia_power + 2.0f*PI / varpar->eJulia_power * floorf(RANDFLOAT() * varpar->eJulia_power);\n"
-        + "mu /= varpar->eJulia_power;\n"
+        + "nu = nu / __eJulia_power + 2.0f*PI / __eJulia_power * floorf(RANDFLOAT() * __eJulia_power);\n"
+        + "mu /= __eJulia_power;\n"
         + "sinhmu = sinhf(mu);\n"
         + "coshmu = coshf(mu);\n"
         + "sinnu = sinf(nu);\n"
         + "cosnu = cosf(nu);\n"
-        + "__px += varpar->eJulia * coshmu * cosnu;\n"
-        + "__py += varpar->eJulia * sinhmu * sinnu;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->eJulia * __z;\n" : "");
+        + "__px += __eJulia * coshmu * cosnu;\n"
+        + "__py += __eJulia * sinhmu * sinnu;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __eJulia * __z;\n" : "");
   }
 }

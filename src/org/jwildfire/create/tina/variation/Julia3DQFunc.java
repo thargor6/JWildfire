@@ -98,8 +98,8 @@ public class Julia3DQFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int power = lroundf(varpar->julia3Dq_power);\n"
-           + "int divisor = lroundf(varpar->julia3Dq_divisor);\n"
+    return "int power = lroundf(__julia3Dq_power);\n"
+           + "int divisor = lroundf(__julia3Dq_divisor);\n"
            +"float inv_power, abs_inv_power, half_inv_power, inv_power_2pi;\n"
         + "inv_power = (float) divisor / (float) power;\n"
         + "    abs_inv_power = fabsf(inv_power);\n"
@@ -110,10 +110,10 @@ public class Julia3DQFunc extends VariationFunc implements SupportsGPU {
         + "    float cosa = cosf(a);\n"
         + "    float z = __z * abs_inv_power;\n"
         + "    float r2d = __x*__x + __y*__y;\n"
-        + "    float r = varpar->julia3Dq * powf(r2d + z*z, half_inv_power);\n"
+        + "    float r = __julia3Dq * powf(r2d + z*z, half_inv_power);\n"
         + "    __pz += r * z;\n"
         + "    r *= sqrtf(r2d);\n"
         + "    __px += r * cosa;\n"
         + "    __py += r * sina;\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->julia3Dq * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "      __pz += __julia3Dq * __z;\n" : "");
   }}

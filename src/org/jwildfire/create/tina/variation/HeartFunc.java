@@ -51,8 +51,8 @@ public class HeartFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->heart*__r*sinf(__phi*__r);\n"
-        + "__py += -varpar->heart*__r*cosf(__phi*__r);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->heart*__z;\n" : "");
+    return "__px += __heart*__r*sinf(__phi*__r);\n"
+        + "__py += -__heart*__r*cosf(__phi*__r);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __heart*__z;\n" : "");
   }
 }

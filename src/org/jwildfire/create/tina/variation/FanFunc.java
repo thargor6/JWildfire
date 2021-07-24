@@ -60,11 +60,11 @@ public class FanFunc extends SimpleVariationFunc implements SupportsGPU {
         + "float dx = (fmodf(__phi+xform->f,t)>.5f*t)\n"
         + "?__r*cosf(__phi-.5f*t)\n"
         + ":__r*cosf(__phi+.5f*t);\n"
-        + "__px += varpar->fan*dx;\n"
+        + "__px += __fan*dx;\n"
         + "float dy = (fmodf(__phi+xform->f,t)>.5f*t)\n"
         + "?__r*sinf(__phi-.5f*t)\n"
         + ":__r*sinf(__phi+.5f*t);\n"
-        + "__py += varpar->fan*dy;\n"
-        + (context.isPreserveZCoordinate() ?  "__pz += varpar->fan*__z;\n" : "");
+        + "__py += __fan*dy;\n"
+        + (context.isPreserveZCoordinate() ?  "__pz += __fan*__z;\n" : "");
   }
 }

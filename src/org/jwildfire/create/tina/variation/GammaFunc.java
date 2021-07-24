@@ -52,9 +52,9 @@ public class GammaFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += gamma_lgamma(hypotf(__y, __x)) * varpar->gamma;\n"
-        + " __py += atan2f(__y, __x) * varpar->gamma;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->gamma * __z;\n" : "");
+    return "__px += gamma_lgamma(hypotf(__y, __x)) * __gamma;\n"
+        + " __py += atan2f(__y, __x) * __gamma;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __gamma * __z;\n" : "");
   }
 
   @Override

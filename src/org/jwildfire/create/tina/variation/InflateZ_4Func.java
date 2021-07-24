@@ -57,6 +57,6 @@ public class InflateZ_4Func extends SimpleVariationFunc implements SupportsGPU {
         + "    if (rndm < 0.5) {\n"
         + "      val1 = -val1;\n"
         + "    }\n"
-        + "    __pz += varpar->inflateZ_4 * val1 * 0.25;\n";
+        + "    __pz += __inflateZ_4 * val1 * 0.25;\n";
   }
 }

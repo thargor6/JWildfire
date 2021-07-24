@@ -45,8 +45,8 @@ public class InvpolarFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float ny = 1 + __y;\n"
-        + "    __px += varpar->invpolar * ny * (sinf(__x * PI));\n"
-        + "    __py += varpar->invpolar * ny * (cosf(__x * PI));\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->invpolar * __z;\n" : "");
+        + "    __px += __invpolar * ny * (sinf(__x * PI));\n"
+        + "    __py += __invpolar * ny * (cosf(__x * PI));\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += __invpolar * __z;\n" : "");
   }
 }

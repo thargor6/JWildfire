@@ -124,15 +124,15 @@ public class CropFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float xmin, xmax, ymin, ymax, w, h;\n"
-        + "xmin = fminf(varpar->crop_left, varpar->crop_right);\n"
-        + "ymin = fminf(varpar->crop_top, varpar->crop_bottom);\n"
-        + "xmax = fmaxf(varpar->crop_left, varpar->crop_right);\n"
-        + "ymax = fmaxf(varpar->crop_top, varpar->crop_bottom);\n"
-        + "w = (xmax - xmin) * 0.5f * varpar->crop_scatter_area;\n"
-        + "h = (ymax - ymin) * 0.5f * varpar->crop_scatter_area;\n"
+        + "xmin = fminf(__crop_left, __crop_right);\n"
+        + "ymin = fminf(__crop_top, __crop_bottom);\n"
+        + "xmax = fmaxf(__crop_left, __crop_right);\n"
+        + "ymax = fmaxf(__crop_top, __crop_bottom);\n"
+        + "w = (xmax - xmin) * 0.5f * __crop_scatter_area;\n"
+        + "h = (ymax - ymin) * 0.5f * __crop_scatter_area;\n"
         + "float x = __x;\n"
         + "float y = __y;\n"
-        + "if (((x < xmin) || (x > xmax) || (y < ymin) || (y > ymax)) && (lroundf(varpar->crop_zero) != 0)) {\n"
+        + "if (((x < xmin) || (x > xmax) || (y < ymin) || (y > ymax)) && (lroundf(__crop_zero) != 0)) {\n"
         + "  __px = __py = 0;\n"
         + "  __doHide = true;\n"
         + "} else {\n"
@@ -145,9 +145,9 @@ public class CropFunc extends VariationFunc implements SupportsGPU {
         + "     y = ymin + RANDFLOAT() * h;\n"
         + "   else if (y > ymax)\n"
         + "     y = ymax - RANDFLOAT() * h;\n"
-        + "  __px = varpar->crop * x;\n"
-        + "  __py = varpar->crop * y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->crop*__z;\n" : "")
+        + "  __px = __crop * x;\n"
+        + "  __py = __crop * y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __crop*__z;\n" : "")
         + "}\n";
   }
 }

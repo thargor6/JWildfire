@@ -142,8 +142,8 @@ public class EllipticFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float _v = varpar->elliptic * 2.f / PI;\n"
-            +"int mode = lroundf(varpar->elliptic_mode);"
+    return "float _v = __elliptic * 2.f / PI;\n"
+            +"int mode = lroundf(__elliptic_mode);"
         +"if (mode == 2) {\n"
         + "      float sq = __y * __y + __x * __x;\n"
         + "      float x2 = 2.0f * __x;\n"
@@ -169,7 +169,7 @@ public class EllipticFunc extends VariationFunc implements SupportsGPU {
         + "      __px += _v * atan2f(a, b);\n"
         + "      __py += sign * _v * logf(xmax + elliptic_sqrt_safe(xmax - 1.0));\n"
         + "    }\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->elliptic * __z;\n": "");
+        + (context.isPreserveZCoordinate() ? "__pz += __elliptic * __z;\n": "");
   }
 
   @Override

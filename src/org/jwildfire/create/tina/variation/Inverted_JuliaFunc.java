@@ -116,12 +116,12 @@ public class Inverted_JuliaFunc extends VariationFunc implements SupportsGPU {
         + "    float y = __y;\n"
         + "    float xs = x * x;\n"
         + "    float ys = y * y;\n"
-        + "    float z = powf(xs + (ys * varpar->inverted_julia_y2_mult), varpar->inverted_julia_power) + varpar->inverted_julia_x2y2_add;\n"
+        + "    float z = powf(xs + (ys * __inverted_julia_y2_mult), __inverted_julia_power) + __inverted_julia_x2y2_add;\n"
         + "\n"
-        + "    float q = atan2f(x * varpar->inverted_julia_a2x_mult, y * varpar->inverted_julia_a2y_mult + varpar->inverted_julia_a2y_add) * 0.5 + PI * (int) (2 * RANDFLOAT());\n"
+        + "    float q = atan2f(x * __inverted_julia_a2x_mult, y * __inverted_julia_a2y_mult + __inverted_julia_a2y_add) * 0.5 + PI * (int) (2 * RANDFLOAT());\n"
         + "\n"
-        + "    __px += varpar->inverted_julia * cosf(z * varpar->inverted_julia_cos_mult) * (sinf(q) / z / varpar->inverted_julia_center);\n"
-        + "    __py += varpar->inverted_julia * cosf(z * varpar->inverted_julia_cos_mult) * (cosf(q) / z / varpar->inverted_julia_center) * varpar->inverted_julia_y_mult;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->inverted_julia * __z;\n" : "");
+        + "    __px += __inverted_julia * cosf(z * __inverted_julia_cos_mult) * (sinf(q) / z / __inverted_julia_center);\n"
+        + "    __py += __inverted_julia * cosf(z * __inverted_julia_cos_mult) * (cosf(q) / z / __inverted_julia_center) * __inverted_julia_y_mult;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __inverted_julia * __z;\n" : "");
   }
 }

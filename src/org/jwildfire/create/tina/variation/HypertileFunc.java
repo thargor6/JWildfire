@@ -109,8 +109,8 @@ public class HypertileFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float pa = 2.f*M_PI_F / varpar->hypertile_p;\n"
-        + "float qa = 2.f*M_PI_F / varpar->hypertile_q;\n"
+    return "float pa = 2.f*M_PI_F / __hypertile_p;\n"
+        + "float qa = 2.f*M_PI_F / __hypertile_q;\n"
         + "float r = (1.f - cosf(pa)) / (cosf(pa) + cosf(qa)) + 1.f;\n"
         + "if (r > 0.f)\n"
         + "    r = 1.f / sqrtf(r);\n"
@@ -119,17 +119,17 @@ public class HypertileFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "float cosa;\n"
         + "float sina;\n"
-        + "sincosf(varpar->hypertile_n * pa, &sina, &cosa);\n"
+        + "sincosf(__hypertile_n * pa, &sina, &cosa);\n"
         + "float re = r * cosa;\n"
         + "float im = r * sina;\n"
         + "float a  = __x + re;\n"
         + "float b  = __y - im;\n"
         + "float c  = re*__x - im*__y + 1.f;\n"
         + "float d  = re*__y + im*__x;\n"
-        + "float vr = varpar->hypertile / (c*c + d*d);\n"
+        + "float vr = __hypertile / (c*c + d*d);\n"
         + "\n"
         + "__px += vr * (a*c + b*d);\n"
         + "__py += vr * (b*c - a*d);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->hypertile*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __hypertile*__z;\n" : "");
   }
 }

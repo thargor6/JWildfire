@@ -55,7 +55,7 @@ public class DeltaAFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float avgr = varpar->deltaA * sqrtf(__y*__y + (__x+1.f)*(__x+1.f)) / sqrtf(__y*__y + (__x-1.f)*(__x-1.f));\n"
+    return "float avgr = __deltaA * sqrtf(__y*__y + (__x+1.f)*(__x+1.f)) / sqrtf(__y*__y + (__x-1.f)*(__x-1.f));\n"
         + "float avga = (atan2f(__y, __x - 1.f) - atan2f(__y, __x + 1.f))/2.f;\n"
         + "float c;\n"
         + "float s;\n"
@@ -63,6 +63,6 @@ public class DeltaAFunc extends SimpleVariationFunc implements SupportsGPU {
         + "\n"
         + "__px += avgr * c;\n"
         + "__py += avgr * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->deltaA*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __deltaA*__z;\n" : "");
   }
 }

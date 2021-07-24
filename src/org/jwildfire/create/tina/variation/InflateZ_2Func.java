@@ -46,6 +46,6 @@ public class InflateZ_2Func extends SimpleVariationFunc implements SupportsGPU {
     return "    float val1 = __y * 2.0;\n"
         + "    float val2 = __x * 2.0;\n"
         + "    float aval = (val1 + val2) * 0.333333;\n"
-        + "    __pz += varpar->inflateZ_2 * (0.25 - aval);\n";
+        + "    __pz += __inflateZ_2 * (0.25 - aval);\n";
   }
 }

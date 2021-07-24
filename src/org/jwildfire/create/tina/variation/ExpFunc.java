@@ -54,8 +54,8 @@ public class ExpFunc extends SimpleVariationFunc implements SupportsGPU {
     return "float expe = expf(__x);\n"
         + "    float expsin = sinf(__y);\n"
         + "    float expcos = cosf(__y);\n"
-        + "    __px += varpar->exp * expe * expcos;\n"
-        + "    __py += varpar->exp * expe * expsin;"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->exp*__z;\n" : "");
+        + "    __px += __exp * expe * expcos;\n"
+        + "    __py += __exp * expe * expsin;"
+        + (context.isPreserveZCoordinate() ? "__pz += __exp*__z;\n" : "");
   }
 }

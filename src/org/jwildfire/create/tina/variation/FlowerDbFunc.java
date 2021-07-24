@@ -122,18 +122,18 @@ public class FlowerDbFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float r = varpar->flower_db * sqrtf(__r2);\n"
+    return "float r = __flower_db * sqrtf(__r2);\n"
         + "float t = __theta;\n"
-        + "r = r * (fabsf((varpar->flower_db_petal_spread + sinf(varpar->flower_db_petals * t)) * cosf(varpar->flower_db_petal_split * varpar->flower_db_petals * t)));\n"
+        + "r = r * (fabsf((__flower_db_petal_spread + sinf(__flower_db_petals * t)) * cosf(__flower_db_petal_split * __flower_db_petals * t)));\n"
         + "__px += sinf(t) * r;\n"
         + "__py += cosf(t) * r;\n"
-        + "__pz -= varpar->flower_db_stem_thickness * ((2.0f / r) - 1.0f);\n"
+        + "__pz -= __flower_db_stem_thickness * ((2.0f / r) - 1.0f);\n"
         + "float rnew = sqrtf((__px * __px) + (__py * __py));\n"
-        + "if (rnew > varpar->flower_db_petal_fold_radius) {\n"
-        + "   __pz += (rnew - varpar->flower_db_petal_fold_radius) * varpar->flower_db_petal_fold_strength;\n"
+        + "if (rnew > __flower_db_petal_fold_radius) {\n"
+        + "   __pz += (rnew - __flower_db_petal_fold_radius) * __flower_db_petal_fold_strength;\n"
         + "}\n"
-        + "if ((varpar->flower_db_stem_length != 0) && (__pz <= (-1 * varpar->flower_db_stem_length))) {\n"
-        + "  __pz = (-1 * varpar->flower_db_stem_length);\n"
+        + "if ((__flower_db_stem_length != 0) && (__pz <= (-1 * __flower_db_stem_length))) {\n"
+        + "  __pz = (-1 * __flower_db_stem_length);\n"
         + "}";
   }
 }

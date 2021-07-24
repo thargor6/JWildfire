@@ -100,8 +100,8 @@ public class Fan2Func extends VariationFunc implements SupportsGPU {
         + "      angle = 0.0f;\n"
         + "    }\n"
         + "\n"
-        + "    float dy = varpar->fan2_y;\n"
-        + "    float dx = PI * (varpar->fan2_x * varpar->fan2_x) + 1.0e-6f;\n"
+        + "    float dy = __fan2_y;\n"
+        + "    float dx = PI * (__fan2_x * __fan2_x) + 1.0e-6f;\n"
         + "    float dx2 = dx * 0.5f;\n"
         + "\n"
         + "    float t = angle + dy - (int) ((angle + dy) / dx) * dx;\n"
@@ -112,9 +112,9 @@ public class Fan2Func extends VariationFunc implements SupportsGPU {
         + "      a = angle + dx2;\n"
         + "    }\n"
         + "\n"
-        + "    __px += varpar->fan2 * r * sinf(a);\n"
-        + "    __py += varpar->fan2 * r * cosf(a);\n"
+        + "    __px += __fan2 * r * sinf(a);\n"
+        + "    __py += __fan2 * r * cosf(a);\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->fan2*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __fan2*__z;\n" : "");
   }
 }

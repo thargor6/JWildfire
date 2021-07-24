@@ -70,7 +70,7 @@ public class Foci_3DFunc extends SimpleVariationFunc implements SupportsGPU {
         + "    float cosy = cosf(__y);\n"
         + "    float sinz = sinf(boot);\n"
         + "    float cosz = cosf(boot);\n"
-        + "    float tmp = varpar->foci_3D / (expx + expnx - (cosy * cosz));\n"
+        + "    float tmp = __foci_3D / (expx + expnx - (cosy * cosz));\n"
         + "\n"
         + "    __px += (expx - expnx) * tmp;\n"
         + "    __py += siny * tmp;\n"

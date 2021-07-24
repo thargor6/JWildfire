@@ -83,9 +83,9 @@ public class FlowerFunc extends VariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rn;\n"
         + "rn = RANDFLOAT();\n"
-        + "float rnew = varpar->flower*(rn-varpar->flower_holes)*cosf(varpar->flower_petals*__theta)*__rinv;\n"
+        + "float rnew = __flower*(rn-__flower_holes)*cosf(__flower_petals*__theta)*__rinv;\n"
         + "__px += rnew*__x;\n"
         + "__py += rnew*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->flower*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __flower*__z;\n" : "");
   }
 }

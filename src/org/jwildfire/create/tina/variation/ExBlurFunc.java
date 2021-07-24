@@ -125,11 +125,11 @@ public class ExBlurFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "float rr, theta, phi, su, cu, sv, cv, sru, cru, srv, crv, n, rsrv;\n"
         + "    float ox, oy, oz;\n"
-        + "    ox = __x - varpar->exblur_x_origin;\n"
-        + "    oy = __y + varpar->exblur_y_origin;\n"
-        + "    oz = __z - varpar->exblur_z_origin;\n"
+        + "    ox = __x - __exblur_x_origin;\n"
+        + "    oy = __y + __exblur_y_origin;\n"
+        + "    oz = __z - __exblur_z_origin;\n"
         + "    n = ox*ox + oy*oy + oz*oz;\n"
-        + "    rr = varpar->exblur * powf(n, varpar->exblur_dist) * (RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() - 2.0f);\n"
+        + "    rr = __exblur * powf(n, __exblur_dist) * (RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() - 2.0f);\n"
         + "    theta = atan2f(oy, ox);\n"
         + "    phi = acosf(oz / sqrtf(n));\n"
         + "    su = sinf(theta);\n"
@@ -142,10 +142,10 @@ public class ExBlurFunc extends VariationFunc implements SupportsGPU {
         + "    theta = RANDFLOAT() * 2.0f*PI;\n"
         + "    srv = sinf(theta);\n"
         + "    crv = cosf(theta);\n"
-        + "    rsrv = varpar->exblur_r * srv;\n"
+        + "    rsrv = __exblur_r * srv;\n"
         + "    __px += rr * (sv * cu + rsrv * cru);\n"
         + "    __py += rr * (sv * su + rsrv * sru);\n"
-        + "    __pz += rr * (cv + varpar->exblur_r * crv);\n";
+        + "    __pz += rr * (cv + __exblur_r * crv);\n";
   }
 
 }

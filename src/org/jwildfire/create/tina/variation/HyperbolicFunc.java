@@ -46,8 +46,8 @@ public class HyperbolicFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr
     return "float r2inv_eps = 1.f/(__r2 ADD_EPSILON);\n"
-        + "__px += varpar->hyperbolic*__x*r2inv_eps;\n"
-        + "__py += varpar->hyperbolic*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->hyperbolic*__z;\n" : "");
+        + "__px += __hyperbolic*__x*r2inv_eps;\n"
+        + "__py += __hyperbolic*__y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __hyperbolic*__z;\n" : "");
   }
 }

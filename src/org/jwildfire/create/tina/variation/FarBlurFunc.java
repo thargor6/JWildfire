@@ -122,15 +122,15 @@ public class FarBlurFunc extends VariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float su, cu, sv, cv;\n"
         + "float rn1 = RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f;\n"
-        + "float dx = __px - varpar->farblur_x_origin;\n"
-        + "float dy = __py - varpar->farblur_y_origin;\n"
-        + "float dz = __pz - varpar->farblur_z_origin;\n"
-        + "float r = varpar->farblur * (dx*dx + dy*dy + dz*dz) * rn1;\n"
+        + "float dx = __px - __farblur_x_origin;\n"
+        + "float dy = __py - __farblur_y_origin;\n"
+        + "float dz = __pz - __farblur_z_origin;\n"
+        + "float r = __farblur * (dx*dx + dy*dy + dz*dz) * rn1;\n"
         + "sincosf(RANDFLOAT() * 2.f*PI,  &su, &cu);\n"
         + "sincosf(RANDFLOAT() * 2.f*PI,  &sv, &cv);\n"
         + "\n"
-        + "__px += varpar->farblur_x * r * sv * cu;\n"
-        + "__py += varpar->farblur_y * r * sv * su;\n"
-        + "__pz += varpar->farblur_z * r * cv;\n";
+        + "__px += __farblur_x * r * sv * cu;\n"
+        + "__py += __farblur_y * r * sv * su;\n"
+        + "__pz += __farblur_z * r * cv;\n";
   }
 }

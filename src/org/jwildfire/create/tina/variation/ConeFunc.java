@@ -105,12 +105,12 @@ public class ConeFunc extends VariationFunc implements SupportsGPU {
 
     @Override
     public String getGPUCode(FlameTransformationContext context) {
-    return "   float r = varpar->cone / sqrtf(__x * __x *varpar->cone_warp+ __y * __y + varpar->cone_size1)*varpar->cone_size2;\n"
-        + "    float xx = __phi* varpar->cone_radius1 + PI * (int) (varpar->cone_weight * RANDFLOAT())*varpar->cone_radius2;\n"
-        + "    float sina = sinf(xx*varpar->cone_ywave);\n"
-        + "    float cosa = cosf(xx*varpar->cone_xwave);\n"
+    return "   float r = __cone / sqrtf(__x * __x *__cone_warp+ __y * __y + __cone_size1)*__cone_size2;\n"
+        + "    float xx = __phi* __cone_radius1 + PI * (int) (__cone_weight * RANDFLOAT())*__cone_radius2;\n"
+        + "    float sina = sinf(xx*__cone_ywave);\n"
+        + "    float cosa = cosf(xx*__cone_xwave);\n"
         + "    __px += r * cosa;\n"
         + "    __py += r * sina;\n"
-        + "    __pz += r * varpar->cone_height;";
+        + "    __pz += r * __cone_height;";
     }
 }

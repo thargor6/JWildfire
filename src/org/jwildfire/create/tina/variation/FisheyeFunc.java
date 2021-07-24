@@ -48,8 +48,8 @@ public class FisheyeFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->fisheye*__y*2.f/(__r+1.f);\n"
-        + "__py += varpar->fisheye*__x*2.f/(__r+1.f);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->fisheye*__z;\n" : "");
+    return "__px += __fisheye*__y*2.f/(__r+1.f);\n"
+        + "__py += __fisheye*__x*2.f/(__r+1.f);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __fisheye*__z;\n" : "");
   }
 }

@@ -83,20 +83,20 @@ public class HoleFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int hole_inside = (int)varpar->hole_inside;\n"
+    return "int hole_inside = (int)__hole_inside;\n"
         + "float alpha = atan2f(__y,__x);\n"
-        + "float delta = powf(alpha/M_PI_F + 1.f, varpar->hole_a);\n"
+        + "float delta = powf(alpha/M_PI_F + 1.f, __hole_a);\n"
         + "float r;\n"
         + "if (hole_inside)\n"
-        + "    r = varpar->hole*delta/(__x*__x + __y*__y + delta);\n"
+        + "    r = __hole*delta/(__x*__x + __y*__y + delta);\n"
         + "else\n"
-        + "    r = varpar->hole*sqrtf(__x*__x + __y*__y + delta);\n"
+        + "    r = __hole*sqrtf(__x*__x + __y*__y + delta);\n"
         + "float c;\n"
         + "float s;\n"
         + "sincosf(alpha, &s, &c);\n"
         + "\n"
         + "__px += r * c;\n"
         + "__py += r * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->hole * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __hole * __z;\n" : "");
   }
 }

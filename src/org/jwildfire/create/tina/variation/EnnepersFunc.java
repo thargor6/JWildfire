@@ -47,9 +47,9 @@ public class EnnepersFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px = varpar->ennepers * (__x - ((__x*__x*__x)/3.0f)) + __x*__y*__y;\n"
-        + "__py = varpar->ennepers * (__y - ((__y*__y*__y)/3.0f)) + __y*__x*__x;\n"
+    return "__px = __ennepers * (__x - ((__x*__x*__x)/3.0f)) + __x*__y*__y;\n"
+        + "__py = __ennepers * (__y - ((__y*__y*__y)/3.0f)) + __y*__x*__x;\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->ennepers*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __ennepers*__z;\n" : "");
   }
 }

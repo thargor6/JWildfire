@@ -47,8 +47,8 @@ public class EyefishFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->eyefish*(2.f/(__r+1.f))*__x;\n"
-        + "__py += varpar->eyefish*(2.f/(__r+1.f))*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->eyefish*__z;\n" : "");
+    return "__px += __eyefish*(2.f/(__r+1.f))*__x;\n"
+        + "__py += __eyefish*(2.f/(__r+1.f))*__y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __eyefish*__z;\n" : "");
   }
 }

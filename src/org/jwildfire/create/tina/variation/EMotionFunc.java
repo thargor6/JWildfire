@@ -131,19 +131,19 @@ public class EMotionFunc extends VariationFunc implements SupportsGPU {
         + "if (__y < 0.0f)\n"
         + "  nu *= -1.0f;\n"
         + "if (nu < 0.0f) {\n"
-        + "  mu += varpar->eMotion_move;\n"
+        + "  mu += __eMotion_move;\n"
         + "} else {\n"
-        + "  mu -= varpar->eMotion_move;\n"
+        + "  mu -= __eMotion_move;\n"
         + "}\n"
         + "if (mu <= 0.0f) {\n"
         + "  mu *= -1.0f;\n"
         + "  nu *= -1.0f;\n"
         + "}\n"
-        + "nu += varpar->eMotion_rotate;\n"
+        + "nu += __eMotion_rotate;\n"
         + "sinhmu = sinhf(mu);\n"
         + "coshmu = coshf(mu);\n"
-        + "__px += varpar->eMotion * coshmu * cosf(nu);\n"
-        + "__py += varpar->eMotion * sinhmu * sinf(nu);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->eMotion * __z;\n": "");
+        + "__px += __eMotion * coshmu * cosf(nu);\n"
+        + "__py += __eMotion * sinhmu * sinf(nu);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __eMotion * __z;\n": "");
   }
 }

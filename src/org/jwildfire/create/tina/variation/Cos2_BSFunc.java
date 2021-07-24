@@ -89,12 +89,12 @@ public class Cos2_BSFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float cossin = sinf(__x * varpar->cos2_bs_x1);\n"
-        + "float coscos = cosf(__x * varpar->cos2_bs_x2);\n"
-        + "float cossinh = sinhf(__y * varpar->cos2_bs_y1);\n"
-        + "float coscosh = coshf(__y * varpar->cos2_bs_y2);\n"
-        + "__px += varpar->cos2_bs * coscos * coscosh;\n"
-        + "__py -= varpar->cos2_bs * cossin * cossinh;\n"
-        + (context.isPreserveZCoordinate() ? "__pz -= varpar->cos2_bs * __z;\n" : "");
+    return "float cossin = sinf(__x * __cos2_bs_x1);\n"
+        + "float coscos = cosf(__x * __cos2_bs_x2);\n"
+        + "float cossinh = sinhf(__y * __cos2_bs_y1);\n"
+        + "float coscosh = coshf(__y * __cos2_bs_y2);\n"
+        + "__px += __cos2_bs * coscos * coscosh;\n"
+        + "__py -= __cos2_bs * cossin * cossinh;\n"
+        + (context.isPreserveZCoordinate() ? "__pz -= __cos2_bs * __z;\n" : "");
   }
 }

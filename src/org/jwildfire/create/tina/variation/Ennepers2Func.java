@@ -83,9 +83,9 @@ public class Ennepers2Func extends VariationFunc implements SupportsGPU {
     return "float xx = __x;\n"
         + "float yy = __y;\n"
         + "float r2 = 1.0f / (xx*xx + yy*yy);\n"
-        + "float dxy = (sqrf(varpar->ennepers2_a * xx) - sqrf(varpar->ennepers2_b * yy));\n"
-        + "__px += varpar->ennepers2 * xx * (varpar->ennepers2_a*varpar->ennepers2_a - dxy * r2 - varpar->ennepers2_c * sqrtf(fabsf(xx)));\n"
-        + "__py += varpar->ennepers2 * yy * (varpar->ennepers2_b*varpar->ennepers2_b - dxy * r2 - varpar->ennepers2_c * sqrtf(fabsf(yy)));\n"
-        + "__pz += varpar->ennepers2 * dxy * 0.5f * sqrtf(r2);";
+        + "float dxy = (sqrf(__ennepers2_a * xx) - sqrf(__ennepers2_b * yy));\n"
+        + "__px += __ennepers2 * xx * (__ennepers2_a*__ennepers2_a - dxy * r2 - __ennepers2_c * sqrtf(fabsf(xx)));\n"
+        + "__py += __ennepers2 * yy * (__ennepers2_b*__ennepers2_b - dxy * r2 - __ennepers2_c * sqrtf(fabsf(yy)));\n"
+        + "__pz += __ennepers2 * dxy * 0.5f * sqrtf(r2);";
   }
 }

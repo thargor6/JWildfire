@@ -47,9 +47,9 @@ public class HorseshoeFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rinv_eps = 1.f/sqrtf(__r2 ADD_EPSILON);\n"
-        + "__px += varpar->horseshoe*(__x-__y)*(__x+__y)*rinv_eps;\n"
-        + "__py += varpar->horseshoe*2.f*__x*__y*rinv_eps;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->horseshoe*__z;\n" : "");
+        + "__px += __horseshoe*(__x-__y)*(__x+__y)*rinv_eps;\n"
+        + "__py += __horseshoe*2.f*__x*__y*rinv_eps;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __horseshoe*__z;\n" : "");
   }
 
 

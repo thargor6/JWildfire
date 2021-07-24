@@ -106,8 +106,8 @@ public class Hypertile2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int p= lroundf(varpar->hypertile2_p);\n"
-        + "int q = lroundf(varpar->hypertile2_q);\n"
+    return "int p= lroundf(__hypertile2_p);\n"
+        + "int q = lroundf(__hypertile2_q);\n"
         + "float pa = 2.0f * PI / p;\n"
         + "    float r2 = 1.0 - (cosf(2.0f * PI / p) - 1.0f) /\n"
         + "            (cosf(2.0f * PI / p) + cosf(2.0f * PI / q));\n"
@@ -125,7 +125,7 @@ public class Hypertile2Func extends VariationFunc implements SupportsGPU {
         + "    float x = (a * c + b * d);\n"
         + "    float y = (b * c - a * d);\n"
         + "\n"
-        + "    float vr = varpar->hypertile2 / (c*c + d*d);\n"
+        + "    float vr = __hypertile2 / (c*c + d*d);\n"
         + "\n"
         + "    float rpa = pa * lroundf(RANDFLOAT() * 0x00007fff);\n"
         + "    float sina = sinf(rpa);\n"
@@ -133,6 +133,6 @@ public class Hypertile2Func extends VariationFunc implements SupportsGPU {
         + "\n"
         + "    __px += vr * (x * cosa + y * sina);\n"
         + "    __py += vr * (y * cosa - x * sina);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->hypertile2 * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __hypertile2 * __z;\n" : "");
   }
 }

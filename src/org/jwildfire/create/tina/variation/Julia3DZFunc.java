@@ -143,12 +143,12 @@ public class Julia3DZFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int power = lroundf(varpar->julia3Dz_power);\n" +
+    return "int power = lroundf(__julia3Dz_power);\n" +
             "float absPower, cPower;\n"
         + "  absPower = fabsf(power);\n"
         + "  cPower = 1.0f / power * 0.5f;\n"
         + "    float r2d = __x * __x + __y * __y;\n"
-        + "    float r = varpar->julia3Dz * powf(r2d, cPower);\n"
+        + "    float r = __julia3Dz * powf(r2d, cPower);\n"
         + "\n"
         + "    int rnd = (int) (RANDFLOAT() * absPower);\n"
         + "    float angle = (atan2f(__y, __x) + 2.f * PI * rnd) / power;\n"

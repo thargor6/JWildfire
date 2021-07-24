@@ -48,6 +48,6 @@ public class InflateZ_6Func extends SimpleVariationFunc implements SupportsGPU {
     return "    float ang = atan2f(__y, __x);\n"
         + "    float adf = __y - __x;\n"
         + "    float kik = ang * sinf(adf);\n"
-        + "    __pz += varpar->inflateZ_6 * (1.5 - acosf(sinf(ang) * kik * 0.5));\n";
+        + "    __pz += __inflateZ_6 * (1.5 - acosf(sinf(ang) * kik * 0.5));\n";
   }
 }

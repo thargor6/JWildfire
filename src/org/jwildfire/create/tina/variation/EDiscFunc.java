@@ -72,7 +72,7 @@ public class EDiscFunc extends SimpleVariationFunc implements SupportsGPU {
         + "    float xmax = (r1 + r2) * 0.5;\n"
         + "    float a1 = logf(xmax + sqrtf(xmax - 1.0));\n"
         + "    float a2 = -acosf(__x / xmax);\n"
-        + "    float w = varpar->edisc / 11.57034632;\n"
+        + "    float w = __edisc / 11.57034632;\n"
         + "\n"
         + "    float snv = sinf(a1);\n"
         + "    float csv = cosf(a1);\n"
@@ -85,6 +85,6 @@ public class EDiscFunc extends SimpleVariationFunc implements SupportsGPU {
         + "\n"
         + "    __px += w * cshu * csv;\n"
         + "    __py += w * snhu * snv;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->edisc*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __edisc*__z;\n" : "");
   }
 }

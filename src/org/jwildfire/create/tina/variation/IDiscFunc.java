@@ -66,13 +66,13 @@ public class IDiscFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float a = M_PI_F/(__r + 1.f);\n"
-        + "float r = atan2f(__y, __x) * varpar->idisc * M_1_PI_F;\n"
+        + "float r = atan2f(__y, __x) * __idisc * M_1_PI_F;\n"
         + "float c;\n"
         + "float s;\n"
         + "sincosf(a, &s, &c);\n"
         + "\n"
         + "__px += r * c;\n"
         + "__py += r * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->idisc*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __idisc*__z;\n" : "");
   }
 }

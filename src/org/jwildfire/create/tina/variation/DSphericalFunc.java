@@ -85,15 +85,15 @@ public class DSphericalFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "      if (RANDFLOAT() < (varpar->d_spherical_d_spher_weight)) {\n"
-        + "        float r = varpar->d_spherical / (__x*__x + __y*__y);\n"
+    return "      if (RANDFLOAT() < (__d_spherical_d_spher_weight)) {\n"
+        + "        float r = __d_spherical / (__x*__x + __y*__y);\n"
         + "        __px += __x * r;\n"
         + "        __py += __y * r;\n"
-        + (context.isPreserveZCoordinate() ? "          __pz += varpar->d_spherical * __z;\n" : "")
+        + (context.isPreserveZCoordinate() ? "          __pz += __d_spherical * __z;\n" : "")
         + "      } else {\n"
-        + "        __px += __x * varpar->d_spherical;\n"
-        + "        __py += __y * varpar->d_spherical;\n"
-        + (context.isPreserveZCoordinate() ? "          __pz += varpar->d_spherical * __z;\n" : "")
+        + "        __px += __x * __d_spherical;\n"
+        + "        __py += __y * __d_spherical;\n"
+        + (context.isPreserveZCoordinate() ? "          __pz += __d_spherical * __z;\n" : "")
         + "    }";
   }
 }

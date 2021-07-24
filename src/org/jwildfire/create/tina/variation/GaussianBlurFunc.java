@@ -54,8 +54,8 @@ public class GaussianBlurFunc extends SimpleVariationFunc implements SupportsGPU
         + "rn1 = RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f;\n"
         + "float rn2;\n"
         + "rn2 = RANDFLOAT();\n"
-        + "__px += varpar->gaussian_blur*rn1*cosf(2.f*PI*rn2);\n"
-        + "__py += varpar->gaussian_blur*rn1*sinf(2.f*PI*rn2);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->gaussian_blur*__z;\n" : "");
+        + "__px += __gaussian_blur*rn1*cosf(2.f*PI*rn2);\n"
+        + "__py += __gaussian_blur*rn1*sinf(2.f*PI*rn2);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __gaussian_blur*__z;\n" : "");
   }
 }

@@ -78,9 +78,9 @@ public class ConicFunc extends VariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rn;\n"
         + "rn = RANDFLOAT();\n"
-        + "float rnew = varpar->conic*(rn-varpar->conic_holes)*varpar->conic_eccentricity/(1.f+varpar->conic_eccentricity*__x*__rinv)*__rinv;\n"
+        + "float rnew = __conic*(rn-__conic_holes)*__conic_eccentricity/(1.f+__conic_eccentricity*__x*__rinv)*__rinv;\n"
         + "__px += rnew*__x;\n"
         + "__py += rnew*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->conic*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __conic*__z;\n" : "");
   }
 }

@@ -72,9 +72,9 @@ public class ExtrudeFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "if ((((RANDINT() ^ (RANDINT()<<15)) & 0x0fffffff) / (float)0xfffffff) < varpar->extrude_root_face)\n"
-        + "    __pz = varpar->extrude < 0.f ? 0.f : varpar->extrude;\n"
+    return "if ((((RANDINT() ^ (RANDINT()<<15)) & 0x0fffffff) / (float)0xfffffff) < __extrude_root_face)\n"
+        + "    __pz = __extrude < 0.f ? 0.f : __extrude;\n"
         + "else\n"
-        + "    __pz = varpar->extrude * (((RANDINT() ^ (RANDINT()<<15)) & 0x0fffffff) / (float)0xfffffff);";
+        + "    __pz = __extrude * (((RANDINT() ^ (RANDINT()<<15)) & 0x0fffffff) / (float)0xfffffff);";
   }
 }

@@ -125,16 +125,16 @@ public class EModFunc extends VariationFunc implements SupportsGPU {
         + "float nu = acosf(t);\n"
         + "if (__y < 0)\n"
         + "  nu *= -1.0f;\n"
-        + "if (mu < varpar->eMod_radius && -mu < varpar->eMod_radius) {\n"
+        + "if (mu < __eMod_radius && -mu < __eMod_radius) {\n"
         + "  if (nu > 0.0f)\n"
-        + "    mu = fmodf(mu + varpar->eMod_radius + varpar->eMod_distance * varpar->eMod_radius, 2.0f * varpar->eMod_radius) - varpar->eMod_radius;\n"
+        + "    mu = fmodf(mu + __eMod_radius + __eMod_distance * __eMod_radius, 2.0f * __eMod_radius) - __eMod_radius;\n"
         + "  else\n"
-        + "    mu = fmodf(mu - varpar->eMod_radius - varpar->eMod_distance * varpar->eMod_radius, 2.0f * varpar->eMod_radius) + varpar->eMod_radius;\n"
+        + "    mu = fmodf(mu - __eMod_radius - __eMod_distance * __eMod_radius, 2.0f * __eMod_radius) + __eMod_radius;\n"
         + "}\n"
         + "sinhmu = sinhf(mu);\n"
         + "coshmu = coshf(mu);\n"
-        + "__px += varpar->eMod * coshmu * cosf(nu);\n"
-        + "__py += varpar->eMod * sinhmu * sinf(nu);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->eMod * __z;\n" : "");
+        + "__px += __eMod * coshmu * cosf(nu);\n"
+        + "__py += __eMod * sinhmu * sinf(nu);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __eMod * __z;\n" : "");
   }
 }

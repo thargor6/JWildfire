@@ -82,8 +82,8 @@ public class HadamardFunc extends SimpleVariationFunc  implements SupportsGPU {
         + "      y = __x / 2.0;\n"
         + "    }\n"
         + "\n"
-        + "    __px += x * varpar->hadamard_js;\n"
-        + "    __py += y * varpar->hadamard_js;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->hadamard_js * __z;\n" : "");
+        + "    __px += x * __hadamard_js;\n"
+        + "    __py += y * __hadamard_js;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __hadamard_js * __z;\n" : "");
   }
 }

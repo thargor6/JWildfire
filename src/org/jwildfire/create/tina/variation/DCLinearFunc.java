@@ -90,12 +90,12 @@ public class DCLinearFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float ldcs = 1.0 / (varpar->dc_linear_scale == 0.0 ? 10E-6 : varpar->dc_linear_scale);\n"
-        + " __px += varpar->dc_linear * __x;\n"
-        + "    __py += varpar->dc_linear * __y;\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->dc_linear * __z;\n" : "")
-        + "    float s = sinf(varpar->dc_linear_angle);\n"
-        + "    float c = cosf(varpar->dc_linear_angle);\n"
-        + "    __pal = fmodf(fabsf(0.5 * (ldcs * ((c * __px + s * __py + varpar->dc_linear_offset)) + 1.0)), 1.0);";
+    return "float ldcs = 1.0 / (__dc_linear_scale == 0.0 ? 10E-6 : __dc_linear_scale);\n"
+        + " __px += __dc_linear * __x;\n"
+        + "    __py += __dc_linear * __y;\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += __dc_linear * __z;\n" : "")
+        + "    float s = sinf(__dc_linear_angle);\n"
+        + "    float c = cosf(__dc_linear_angle);\n"
+        + "    __pal = fmodf(fabsf(0.5 * (ldcs * ((c * __px + s * __py + __dc_linear_offset)) + 1.0)), 1.0);";
   }
 }

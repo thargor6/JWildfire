@@ -137,18 +137,18 @@ public class Elliptic2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float _v = varpar->elliptic2 / (PI / varpar->elliptic2_h);\n"
-        + "float tmp = __y * __y + __x * __x + varpar->elliptic2_a1;\n"
-        + "float x2 = varpar->elliptic2_b1 * __x;\n"
-        + "float xmax = varpar->elliptic2_c * (sqrtf(tmp + x2) + sqrtf(tmp - x2));\n"
-        + "float a = __x / xmax * varpar->elliptic2_a2;\n"
-        + "float b = sqrtf_safe(varpar->elliptic2_d - a * a) * varpar->elliptic2_b2;\n"
-        + "float ps = -PI*0.5f * varpar->elliptic2_a3;\n"
+    return "float _v = __elliptic2 / (PI / __elliptic2_h);\n"
+        + "float tmp = __y * __y + __x * __x + __elliptic2_a1;\n"
+        + "float x2 = __elliptic2_b1 * __x;\n"
+        + "float xmax = __elliptic2_c * (sqrtf(tmp + x2) + sqrtf(tmp - x2));\n"
+        + "float a = __x / xmax * __elliptic2_a2;\n"
+        + "float b = sqrtf_safe(__elliptic2_d - a * a) * __elliptic2_b2;\n"
+        + "float ps = -PI*0.5f * __elliptic2_a3;\n"
         + "__px += _v * atan2f(a, b) + ps;\n"
-        + "if (RANDFLOAT() < varpar->elliptic2_e)\n"
-        + "  __py += _v * logf(xmax + sqrtf_safe(xmax - varpar->elliptic2_f));\n"
+        + "if (RANDFLOAT() < __elliptic2_e)\n"
+        + "  __py += _v * logf(xmax + sqrtf_safe(xmax - __elliptic2_f));\n"
         + "else\n"
-        + "  __py -= _v * logf(xmax + sqrtf_safe(xmax - varpar->elliptic2_g));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->elliptic2 * __z;\n" : "");
+        + "  __py -= _v * logf(xmax + sqrtf_safe(xmax - __elliptic2_g));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __elliptic2 * __z;\n" : "");
   }
 }

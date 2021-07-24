@@ -94,16 +94,16 @@ public class EpispiralFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float theta = atan2f(__y, __x);\n"
-        + "    float t = -varpar->epispiral_holes;\n"
-        + "    if (fabsf(varpar->epispiral_thickness) > 1.0e-6f) {\n"
-        + "      float d = cosf(varpar->epispiral_n * theta);\n"
-        + "      t += (RANDFLOAT() * varpar->epispiral_thickness) * (1.0 / d);\n"
+        + "    float t = -__epispiral_holes;\n"
+        + "    if (fabsf(__epispiral_thickness) > 1.0e-6f) {\n"
+        + "      float d = cosf(__epispiral_n * theta);\n"
+        + "      t += (RANDFLOAT() * __epispiral_thickness) * (1.0 / d);\n"
         + "    } else {\n"
-        + "      float d = cosf(varpar->epispiral_n * theta);\n"
+        + "      float d = cosf(__epispiral_n * theta);\n"
         + "      t += 1.0 / d;\n"
         + "    }\n"
-        + "    __px += varpar->epispiral * t * cosf(theta);\n"
-        + "    __py += varpar->epispiral * t * sinf(theta);\n"
-        + (context.isPreserveZCoordinate() ? "    __pz += varpar->epispiral*__z;\n" : "");
+        + "    __px += __epispiral * t * cosf(theta);\n"
+        + "    __py += __epispiral * t * sinf(theta);\n"
+        + (context.isPreserveZCoordinate() ? "    __pz += __epispiral*__z;\n" : "");
   }
 }

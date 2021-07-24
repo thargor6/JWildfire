@@ -73,10 +73,10 @@ public class Disc3DFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float r = sqrtf(__y * __y + __x * __x + 1.e-6f);\n"
-        + "float a = varpar->disc3d_pi * r;\n"
+        + "float a = __disc3d_pi * r;\n"
         + "float sr = sinf(a);\n"
         + "float cr = cosf(a);\n"
-        + "float vv = varpar->disc3d * atan2f(__x, __y) / (varpar->disc3d_pi + 1.e-6f);\n"
+        + "float vv = __disc3d * atan2f(__x, __y) / (__disc3d_pi + 1.e-6f);\n"
         + "__px += vv * sr;\n"
         + "__py += vv * cr;\n"
         + "__pz += vv * (r * cosf(__z));";

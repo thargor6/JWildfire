@@ -98,17 +98,17 @@ public class JuliaCFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float re = 1.0f / (varpar->juliac_re + 1.e-6f);\n"
-        + "    float im = varpar->juliac_im / 100.0f;\n"
-        + "    float arg = atan2f(__y, __x) + fmodf(lroundf(RANDFLOAT()*0x0000ffff), varpar->juliac_re) * 2.0f * PI;\n"
-        + "    float lnmod = varpar->juliac_dist * 0.5f * logf(__x * __x + __y * __y);\n"
+    return "    float re = 1.0f / (__juliac_re + 1.e-6f);\n"
+        + "    float im = __juliac_im / 100.0f;\n"
+        + "    float arg = atan2f(__y, __x) + fmodf(lroundf(RANDFLOAT()*0x0000ffff), __juliac_re) * 2.0f * PI;\n"
+        + "    float lnmod = __juliac_dist * 0.5f * logf(__x * __x + __y * __y);\n"
         + "    float a = arg * re + lnmod * im;\n"
         + "    float s = sinf(a);\n"
         + "    float c = cosf(a);\n"
         + "    float mod2 = expf(lnmod * re - arg * im);\n"
         + "\n"
-        + "    __px += varpar->juliac * mod2 * c;\n"
-        + "    __py += varpar->juliac * mod2 * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->juliac * __z;\n" : "");
+        + "    __px += __juliac * mod2 * c;\n"
+        + "    __py += __juliac * mod2 * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __juliac * __z;\n" : "");
   }
 }

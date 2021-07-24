@@ -50,8 +50,8 @@ public class ExponentialFunc extends SimpleVariationFunc implements SupportsGPU 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->exponential*expf(__x-1.f)*cosf(PI*__y);\n"
-        + "__py += varpar->exponential*expf(__x-1.f)*sinf(PI*__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->exponential*__z;\n" : "");
+    return "__px += __exponential*expf(__x-1.f)*cosf(PI*__y);\n"
+        + "__py += __exponential*expf(__x-1.f)*sinf(PI*__y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __exponential*__z;\n" : "");
   }
 }

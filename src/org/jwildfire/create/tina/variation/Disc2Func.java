@@ -108,18 +108,18 @@ public class Disc2Func extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float sinadd, cosadd;\n"
-        + "sincosf(varpar->disc2_twist, &sinadd, &cosadd);\n"
+        + "sincosf(__disc2_twist, &sinadd, &cosadd);\n"
         + "cosadd -= 1.f;\n"
-        + "if (fabsf(varpar->disc2_twist)>2.f*PI)\n"
+        + "if (fabsf(__disc2_twist)>2.f*PI)\n"
         + "{\n"
-        + "    float sign = varpar->disc2_twist >= 0.f ? 1.f : -1.f;\n"
-        + "    float k = 1.f+ varpar->disc2_twist-sign*2.f*PI;\n"
+        + "    float sign = __disc2_twist >= 0.f ? 1.f : -1.f;\n"
+        + "    float k = 1.f+ __disc2_twist-sign*2.f*PI;\n"
         + "    sinadd *= k;\n"
         + "    cosadd *= k;\n"
         + "}\n"
-        + "float t = varpar->disc2_rot*PI*(__x+__y);\n"
-        + "__px += varpar->disc2*__phi*(sinf(t)+cosadd)/PI;\n"
-        + "__py += varpar->disc2*__phi*(cosf(t)+sinadd)/PI;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->disc2*__z;\n" : "");
+        + "float t = __disc2_rot*PI*(__x+__y);\n"
+        + "__px += __disc2*__phi*(sinf(t)+cosadd)/PI;\n"
+        + "__py += __disc2*__phi*(cosf(t)+sinadd)/PI;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __disc2*__z;\n" : "");
   }
 }

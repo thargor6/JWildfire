@@ -87,8 +87,8 @@ public class HenonFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += (varpar->henon_c - (varpar->henon_a * __x*__x) + __y) * varpar->henon;\n"
-        + "__py += varpar->henon_b * __x * varpar->henon;"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->henon * __z;\n": "");
+    return "__px += (__henon_c - (__henon_a * __x*__x) + __y) * __henon;\n"
+        + "__py += __henon_b * __x * __henon;"
+        + (context.isPreserveZCoordinate() ? "__pz += __henon * __z;\n": "");
   }
 }

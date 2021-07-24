@@ -56,8 +56,8 @@ public class ExFunc extends SimpleVariationFunc implements SupportsGPU {
         + "float m1 = cosf(__phi-__r);\n"
         + "m0 = __r*m0*m0*m0;\n"
         + "m1 = __r*m1*m1*m1;\n"
-        + "__px += varpar->ex*(m0+m1);\n"
-        + "__py += varpar->ex*(m0-m1);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->ex*__z;\n" : "");
+        + "__px += __ex*(m0+m1);\n"
+        + "__py += __ex*(m0-m1);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __ex*__z;\n" : "");
   }
 }

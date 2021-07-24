@@ -92,13 +92,13 @@ public class CPowFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float lnr = 0.5f*logf(__r2);\n"
-        + "float va = 2.f*PI/(varpar->cpow_power);\n"
-        + "float vc = varpar->cpow_r/(varpar->cpow_power);\n"
-        + "float vd = varpar->cpow_i/(varpar->cpow_power);\n"
-        + "float ang = vc*__theta + vd*lnr+va*floorf(varpar->cpow_power*RANDFLOAT());\n"
-        + "float m = varpar->cpow*expf(vc*lnr-vd*__theta);\n"
+        + "float va = 2.f*PI/(__cpow_power);\n"
+        + "float vc = __cpow_r/(__cpow_power);\n"
+        + "float vd = __cpow_i/(__cpow_power);\n"
+        + "float ang = vc*__theta + vd*lnr+va*floorf(__cpow_power*RANDFLOAT());\n"
+        + "float m = __cpow*expf(vc*lnr-vd*__theta);\n"
         + "__px += m*cosf(ang);\n"
         + "__py += m*sinf(ang);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->cpow*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __cpow*__z;\n" : "");
   }
 }

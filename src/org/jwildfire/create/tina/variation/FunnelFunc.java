@@ -71,9 +71,9 @@ public class FunnelFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->funnel * tanhf(__x) * (1.0f / cosf(__x) + varpar->funnel_effect * PI);\n"
-        + "__py += varpar->funnel * tanhf(__y) * (1.0f / cosf(__y) + varpar->funnel_effect * PI);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->funnel*__z;\n" : "");
+    return "__px += __funnel * tanhf(__x) * (1.0f / cosf(__x) + __funnel_effect * PI);\n"
+        + "__py += __funnel * tanhf(__y) * (1.0f / cosf(__y) + __funnel_effect * PI);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __funnel*__z;\n" : "");
   }
 
 }

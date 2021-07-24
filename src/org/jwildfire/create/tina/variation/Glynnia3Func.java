@@ -134,44 +134,44 @@ public class Glynnia3Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float _vvar2 = varpar->glynnia3 * sqrtf(2.0) / 2.0;\n"
-        + " float r = varpar->glynnia3_rscale * (sqrtf(__x*__x + __y*__y));\n"
+    return "float _vvar2 = __glynnia3 * sqrtf(2.0) / 2.0;\n"
+        + " float r = __glynnia3_rscale * (sqrtf(__x*__x + __y*__y));\n"
         + "    float d;\n"
         + "\n"
-        + "    if (r > varpar->glynnia3_rthresh && __y > varpar->glynnia3_ythresh) {\n"
+        + "    if (r > __glynnia3_rthresh && __y > __glynnia3_ythresh) {\n"
         + "      if (RANDFLOAT() > 0.5) {\n"
-        + "        d = varpar->glynnia3_dscale * sqrtf(r + __x);\n"
+        + "        d = __glynnia3_dscale * sqrtf(r + __x);\n"
         + "        if (d != 0) {\n"
         + "        __px += _vvar2 * d;\n"
         + "        __py -= _vvar2 / d * __y;\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->glynnia3 * __z;\n" : "")
+        + (context.isPreserveZCoordinate() ? "      __pz += __glynnia3 * __z;\n" : "")
         + "        }\n"
         + "      } else {\n"
-        + "        d = varpar->glynnia3_dscale * (r + __x);\n"
+        + "        d = __glynnia3_dscale * (r + __x);\n"
         + "        float dx = sqrtf(r * (__y*__y + d*d));\n"
         + "        if (dx != 0) {\n"
-        + "          r = varpar->glynnia3 / dx;\n"
+        + "          r = __glynnia3 / dx;\n"
         + "          __px += r * d;\n"
         + "          __py += r * __y;\n"
-            + (context.isPreserveZCoordinate() ? "      __pz += varpar->glynnia3 * __z;\n" : "")
+            + (context.isPreserveZCoordinate() ? "      __pz += __glynnia3 * __z;\n" : "")
         + "        }\n"
         + "      }\n"
         + "    } else {\n"
         + "      if (RANDFLOAT() > 0.5) {\n"
-        + "        d = varpar->glynnia3_dscale * sqrtf(r + __x);\n"
+        + "        d = __glynnia3_dscale * sqrtf(r + __x);\n"
         + "        if (d != 0) {\n"
         + "          __px -= _vvar2 * d;\n"
         + "          __py -= _vvar2 / d * __y;\n"
-            + (context.isPreserveZCoordinate() ? "      __pz += varpar->glynnia3 * __z;\n" : "")
+            + (context.isPreserveZCoordinate() ? "      __pz += __glynnia3 * __z;\n" : "")
         + "        }\n"
         + "      } else {\n"
-        + "        d = varpar->glynnia3_dscale * (r + __x);\n"
+        + "        d = __glynnia3_dscale * (r + __x);\n"
         + "        float dx = sqrtf(r * (__y*__y + d*d));\n"
         + "        if (dx != 0) {\n"
-        + "          r = varpar->glynnia3 / dx;\n"
+        + "          r = __glynnia3 / dx;\n"
         + "          __px -= r * d;\n"
         + "          __py += r * __y;\n"
-            + (context.isPreserveZCoordinate() ? "      __pz += varpar->glynnia3 * __z;\n" : "")
+            + (context.isPreserveZCoordinate() ? "      __pz += __glynnia3 * __z;\n" : "")
         + "        }\n"
         + "      }\n"
         + "    }\n";

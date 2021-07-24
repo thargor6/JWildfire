@@ -64,8 +64,8 @@ public class CrossFunc extends SimpleVariationFunc implements SupportsGPU {
     return "float oddr = __x*__x-__y*__y;\n"
         + "oddr*=oddr;\n"
         + "oddr = oddr ADD_EPSILON;\n"
-        + "__px += varpar->cross*sqrtf(1.f/oddr)*__x;\n"
-        + "__py += varpar->cross*sqrtf(1.f/oddr)*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->cross*__z;\n" : "");
+        + "__px += __cross*sqrtf(1.f/oddr)*__x;\n"
+        + "__py += __cross*sqrtf(1.f/oddr)*__y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __cross*__z;\n" : "");
   }
 }

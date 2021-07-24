@@ -53,9 +53,9 @@ public class JuliaFunc extends SimpleVariationFunc implements SupportsGPU {
     return "float rn;\n"
         + "rn = RANDFLOAT();\n"
         + "float omega = ((rn<.5f)?0.f:PI);\n"
-        + "__px += varpar->julia*sqrtf(__r)*cosf(.5f*__phi+omega);\n"
-        + "__py += varpar->julia*sqrtf(__r)*sinf(.5f*__phi+omega);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->julia*__z;\n": "");
+        + "__px += __julia*sqrtf(__r)*cosf(.5f*__phi+omega);\n"
+        + "__py += __julia*sqrtf(__r)*sinf(.5f*__phi+omega);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __julia*__z;\n": "");
   }
 }
 

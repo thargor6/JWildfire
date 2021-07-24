@@ -119,10 +119,10 @@ public class ECollideFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float _eCa, _eCn_pi, _eCa_eCn, _pi_eCn;\n"
-        + "int num = lroundf(varpar->eCollide_num);\n"
+        + "int num = lroundf(__eCollide_num);\n"
         + "_eCn_pi = (float) num / PI;\n"
         + "_pi_eCn = PI / (float) num;\n"
-        + "_eCa = PI * varpar->eCollide_a;\n"
+        + "_eCa = PI * __eCollide_a;\n"
         + "_eCa_eCn = _eCa / num;  float tmp = __y * __y + __x * __x + 1.0f;\n"
         + "float tmp2 = 2.0f * __x;\n"
         + "float xmax = (sqrtf_safe(tmp + tmp2) + sqrtf_safe(tmp - tmp2)) * 0.5f;\n"
@@ -145,8 +145,8 @@ public class ECollideFunc extends VariationFunc implements SupportsGPU {
         + "  nu *= -1.0f;\n"
         + "sinnu = sinf(nu);\n"
         + "cosnu = cosf(nu);\n"
-        + "__px += varpar->eCollide * xmax * cosnu;\n"
-        + "__py += varpar->eCollide * sqrtf(xmax - 1.0f) * sqrtf(xmax + 1.0f) * sinnu;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->eCollide * __z;\n" : "");
+        + "__px += __eCollide * xmax * cosnu;\n"
+        + "__py += __eCollide * sqrtf(xmax - 1.0f) * sqrtf(xmax + 1.0f) * sinnu;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __eCollide * __z;\n" : "");
   }
 }

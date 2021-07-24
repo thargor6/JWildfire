@@ -96,10 +96,10 @@ public class CurveFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float pc_xlen = varpar->curve_xlength*varpar->curve_xlength;\n"
-        + "float pc_ylen = varpar->curve_ylength*varpar->curve_ylength;\n"
-        + "__px += varpar->curve*(__x+varpar->curve_xamp*expf(-__y*__y/pc_xlen));\n"
-        + "__py += varpar->curve*(__y+varpar->curve_yamp*expf(-__x*__x/pc_ylen));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->curve*__z;\n" : "");
+    return "float pc_xlen = __curve_xlength*__curve_xlength;\n"
+        + "float pc_ylen = __curve_ylength*__curve_ylength;\n"
+        + "__px += __curve*(__x+__curve_xamp*expf(-__y*__y/pc_xlen));\n"
+        + "__py += __curve*(__y+__curve_yamp*expf(-__x*__x/pc_ylen));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __curve*__z;\n" : "");
   }
 }

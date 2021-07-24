@@ -106,8 +106,8 @@ public class Hypertile3D1Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int p = lroundf(varpar->hypertile3D1_p);\n"
-        + "int q = lroundf(varpar->hypertile3D1_q);\n"
+    return "int p = lroundf(__hypertile3D1_p);\n"
+        + "int q = lroundf(__hypertile3D1_q);\n"
         +"float pa, qa, r, c2, s2z;\n"
         + "pa = 2.f * PI / p;\n"
         + "    qa = 2.f * PI / q;\n"
@@ -133,7 +133,7 @@ public class Hypertile3D1Func extends VariationFunc implements SupportsGPU {
         + "\n"
         + "    float x2cx = 2.f * cx * __x, y2cy = 2.f * cy * __y;\n"
         + "\n"
-        + "    float d = varpar->hypertile3D1 / (c2 * r2 + x2cx - y2cy + 1.f);\n"
+        + "    float d = __hypertile3D1 / (c2 * r2 + x2cx - y2cy + 1.f);\n"
         + "\n"
         + "    __px += d * (__x * s2x - cx * (y2cy - r2 - 1.f));\n"
         + "    __py += d * (__y * s2y + cy * (-x2cx - r2 - 1.f));\n"

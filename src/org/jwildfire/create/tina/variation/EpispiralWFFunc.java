@@ -79,7 +79,7 @@ public class EpispiralWFFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float d = cosf(varpar->epispiral_wf_waves * __phi);\n"
+    return "float d = cosf(__epispiral_wf_waves * __phi);\n"
         + "if (d != 0.f) {\n"
         + "    float r = 0.5f / d;\n"
         + "float sina, cosa;\n"
@@ -88,9 +88,9 @@ public class EpispiralWFFunc extends VariationFunc implements SupportsGPU {
         + "float nx = sina * r;\n"
         + "float ny = cosa * r;\n"
         + "\n"
-        + "__px += varpar->epispiral_wf * nx;\n"
-        + "__py += varpar->epispiral_wf * ny;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->epispiral_wf*__z;\n" : "")
+        + "__px += __epispiral_wf * nx;\n"
+        + "__py += __epispiral_wf * ny;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __epispiral_wf*__z;\n" : "")
         +"}\n";
   }
 }
