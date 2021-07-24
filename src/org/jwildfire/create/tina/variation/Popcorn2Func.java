@@ -79,8 +79,8 @@ public class Popcorn2Func extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->popcorn2*(__x+varpar->popcorn2_x*sinf(tanf(__y*varpar->popcorn2_c)));\n"
-        + "__py += varpar->popcorn2*(__y+varpar->popcorn2_y*sinf(tanf(__x*varpar->popcorn2_c)));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->popcorn2*__z;\n" : "");
+    return "__px += __popcorn2*(__x+__popcorn2_x*sinf(tanf(__y*__popcorn2_c)));\n"
+        + "__py += __popcorn2*(__y+__popcorn2_y*sinf(tanf(__x*__popcorn2_c)));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __popcorn2*__z;\n" : "");
   }
 }

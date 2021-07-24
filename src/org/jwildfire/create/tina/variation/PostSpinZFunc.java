@@ -58,8 +58,8 @@ public class PostSpinZFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float _pz_sin = sinf(varpar->post_spin_z * (PI*0.5f));\n"
-        + "    float _pz_cos = cosf(varpar->post_spin_z * (PI*0.5f));\n"
+    return "float _pz_sin = sinf(__post_spin_z * (PI*0.5f));\n"
+        + "    float _pz_cos = cosf(__post_spin_z * (PI*0.5f));\n"
         + "    float y = _pz_cos * __py - _pz_sin * __px;\n"
         + "    __px = _pz_sin * __py + _pz_cos * __px;\n"
         + "    __py = y;\n";

@@ -51,9 +51,9 @@ public class PreSinusoidal3DFunc extends SimpleVariationFunc implements Supports
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__x = varpar->pre_sinusoidal3d * sinf(__x);\n"
-        + "__y = varpar->pre_sinusoidal3d * sinf(__y);\n"
-        + "__z = varpar->pre_sinusoidal3d * atan2f(__x * __x, __y * __y) * cosf(__z);"
+    return "__x = __pre_sinusoidal3d * sinf(__x);\n"
+        + "__y = __pre_sinusoidal3d * sinf(__y);\n"
+        + "__z = __pre_sinusoidal3d * atan2f(__x * __x, __y * __y) * cosf(__z);"
             + "__r2 = __x*__x+__y*__y;\n"
             + "__r = sqrtf(__r2);\n"
             + "__rinv = 1.f/__r;\n"

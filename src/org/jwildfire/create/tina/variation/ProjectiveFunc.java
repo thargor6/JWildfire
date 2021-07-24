@@ -114,9 +114,9 @@ public class ProjectiveFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float U = varpar->projective_A * __x + varpar->projective_B * __y + varpar->projective_C;\n"
-        + "    __px += varpar->projective * (varpar->projective_A1 * __x + varpar->projective_B1 * __y + varpar->projective_C1) / U;\n"
-        + "    __py += varpar->projective * (varpar->projective_A2 * __x + varpar->projective_B2 * __y + varpar->projective_C2) / U;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->projective * __z;\n" : "");
+    return "float U = __projective_A * __x + __projective_B * __y + __projective_C;\n"
+        + "    __px += __projective * (__projective_A1 * __x + __projective_B1 * __y + __projective_C1) / U;\n"
+        + "    __py += __projective * (__projective_A2 * __x + __projective_B2 * __y + __projective_C2) / U;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __projective * __z;\n" : "");
   }
 }

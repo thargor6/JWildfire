@@ -97,14 +97,14 @@ public class NgonFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float rf = powf(__r,varpar->ngon_power);\n"
-        + "float b = 2.f*PI/varpar->ngon_sides;\n"
+    return "float rf = powf(__r,__ngon_power);\n"
+        + "float b = 2.f*PI/__ngon_sides;\n"
         + "float p = __theta-b*floorf(__theta/b);\n"
         + "if (p > .5f*b)\n"
         + "    p -= b;\n"
-        + "float amp = (varpar->ngon_corners*(1.f/(cosf(p) ADD_EPSILON) -1.f)+varpar->ngon_circle)/(rf ADD_EPSILON);\n"
-        + "__px += varpar->ngon*__x*amp;\n"
-        + "__py += varpar->ngon*__y*amp;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->ngon*__z;\n" : "");
+        + "float amp = (__ngon_corners*(1.f/(cosf(p) ADD_EPSILON) -1.f)+__ngon_circle)/(rf ADD_EPSILON);\n"
+        + "__px += __ngon*__x*amp;\n"
+        + "__py += __ngon*__y*amp;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __ngon*__z;\n" : "");
   }
 }

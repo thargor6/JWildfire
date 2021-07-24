@@ -45,6 +45,6 @@ public class PostZTranslateWFFunc extends SimpleVariationFunc implements Support
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__pz += varpar->post_ztranslate_wf;\n";
+    return "__pz += __post_ztranslate_wf;\n";
   }
 }

@@ -48,8 +48,8 @@ public class RippledFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px = 0.5f*varpar->rippled*(tanh(__r2 ADD_EPSILON)*(2.f*__x));\n"
-        + "__py = 0.5f*varpar->rippled*(cosf(__r2 ADD_EPSILON)*(2.f*__y));"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->rippled*__z;\n" : "");
+    return "__px = 0.5f*__rippled*(tanh(__r2 ADD_EPSILON)*(2.f*__x));\n"
+        + "__py = 0.5f*__rippled*(cosf(__r2 ADD_EPSILON)*(2.f*__y));"
+        + (context.isPreserveZCoordinate() ? "__pz += __rippled*__z;\n" : "");
   }
 }

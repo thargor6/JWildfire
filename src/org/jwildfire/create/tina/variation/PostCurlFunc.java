@@ -92,8 +92,8 @@ public class PostCurlFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float _c1 = varpar->post_curl_c1 * varpar->post_curl;\n"
-        + "float _c2 = varpar->post_curl_c2 * varpar->post_curl;\n"
+    return "float _c1 = __post_curl_c1 * __post_curl;\n"
+        + "float _c2 = __post_curl_c2 * __post_curl;\n"
         + "float    _c22 = 2 * _c2;\n"
         + "    float x = __px;\n"
         + "    float y = __py;\n"

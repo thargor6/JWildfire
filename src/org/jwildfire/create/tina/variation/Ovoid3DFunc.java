@@ -79,9 +79,9 @@ public class Ovoid3DFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float T = __r2 + epsilon;\n"
-        + "float r = varpar->ovoid3d / T;\n"
-        + "__px += __x * r * varpar->ovoid3d_x;\n"
-        + "__py += __y * r * varpar->ovoid3d_y;\n"
-        + "__pz += __z * r * varpar->ovoid3d_z;\n";
+        + "float r = __ovoid3d / T;\n"
+        + "__px += __x * r * __ovoid3d_x;\n"
+        + "__py += __y * r * __ovoid3d_y;\n"
+        + "__pz += __z * r * __ovoid3d_z;\n";
   }
 }

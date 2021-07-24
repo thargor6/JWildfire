@@ -82,9 +82,9 @@ public class ParabolaFunc extends VariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rn;\n"
         + "rn = RANDFLOAT();\n"
-        + "__px += varpar->parabola*varpar->parabola_height*sinf(__r)*sinf(__r)*rn;\n"
+        + "__px += __parabola*__parabola_height*sinf(__r)*sinf(__r)*rn;\n"
         + "rn = RANDFLOAT();\n"
-        + "__py += varpar->parabola*varpar->parabola_width*cosf(__r)*rn;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->parabola*__z;\n" : "");
+        + "__py += __parabola*__parabola_width*cosf(__r)*rn;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __parabola*__z;\n" : "");
   }
 }

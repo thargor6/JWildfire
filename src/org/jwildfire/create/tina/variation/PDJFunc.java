@@ -84,8 +84,8 @@ public class PDJFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->pdj*(sinf(varpar->pdj_a*__y)-cosf(varpar->pdj_b*__x));\n"
-        + "__py += varpar->pdj*(sinf(varpar->pdj_c*__x)-cosf(varpar->pdj_d*__y));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->pdj*__z;\n" : "");
+    return "__px += __pdj*(sinf(__pdj_a*__y)-cosf(__pdj_b*__x));\n"
+        + "__py += __pdj*(sinf(__pdj_c*__x)-cosf(__pdj_d*__y));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __pdj*__z;\n" : "");
   }
 }

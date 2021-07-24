@@ -54,8 +54,8 @@ public class Panorama1Func extends SimpleVariationFunc implements SupportsGPU {
         + "float x1 = __x * aux;\n"
         + "float y1 = __y * aux;\n"
         + "aux = sqrtf(x1 * x1 + y1 * y1);\n"
-        + "__px += varpar->panorama1 * (atan2f(x1, y1)) * 1.0f / PI;\n"
-        + "__py += varpar->panorama1 * (aux - 0.5f);"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->panorama1 * __z;\n" : "");
+        + "__px += __panorama1 * (atan2f(x1, y1)) * 1.0f / PI;\n"
+        + "__py += __panorama1 * (aux - 0.5f);"
+        + (context.isPreserveZCoordinate() ? "__pz += __panorama1 * __z;\n" : "");
   }
 }

@@ -91,11 +91,11 @@ public class PreCurlFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "    float x = __x;\n"
         + "    float y = __y;\n"
-        + "float c2x2 = 2.0 * varpar->pre_curl_c2;\n"
-        + "    float re = 1 + varpar->pre_curl_c1 * x + varpar->pre_curl_c2 * (x * x - y * y);\n"
-        + "    float im = varpar->pre_curl_c1 * y + c2x2 * x * y;\n"
+        + "float c2x2 = 2.0 * __pre_curl_c2;\n"
+        + "    float re = 1 + __pre_curl_c1 * x + __pre_curl_c2 * (x * x - y * y);\n"
+        + "    float im = __pre_curl_c1 * y + c2x2 * x * y;\n"
         + "\n"
-        + "    float r = varpar->pre_curl / (re * re + im * im);\n"
+        + "    float r = __pre_curl / (re * re + im * im);\n"
         + "\n"
         + "    __x = (x * re + y * im) * r;\n"
         + "    __y = (y * re - x * im) * r;\n";

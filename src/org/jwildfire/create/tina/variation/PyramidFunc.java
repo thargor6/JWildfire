@@ -60,7 +60,7 @@ public class PyramidFunc extends SimpleVariationFunc implements SupportsGPU {
         + "y = y * y * y;\n"
         + "float z = __z;\n"
         + "z = fabsf(z * z * z);\n"
-        + "float r = varpar->pyramid / (fabsf(x) + fabsf(y) + z + 0.000000001);\n"
+        + "float r = __pyramid / (fabsf(x) + fabsf(y) + z + 0.000000001);\n"
         + "__px += x * r;\n"
         + "__py += y * r;\n"
         + "__pz += z * r;\n";

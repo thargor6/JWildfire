@@ -90,10 +90,10 @@ public class PreRectWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float dx = varpar->pre_rect_wf_x1 - varpar->pre_rect_wf_x0;\n"
-        + "float dy = varpar->pre_rect_wf_y1 - varpar->pre_rect_wf_y0;\n"
-        + "__x = varpar->pre_rect_wf * (varpar->pre_rect_wf_x0 + dx * RANDFLOAT());\n"
-        + "__y = varpar->pre_rect_wf * (varpar->pre_rect_wf_y0 + dy * RANDFLOAT());"
+    return "float dx = __pre_rect_wf_x1 - __pre_rect_wf_x0;\n"
+        + "float dy = __pre_rect_wf_y1 - __pre_rect_wf_y0;\n"
+        + "__x = __pre_rect_wf * (__pre_rect_wf_x0 + dx * RANDFLOAT());\n"
+        + "__y = __pre_rect_wf * (__pre_rect_wf_y0 + dy * RANDFLOAT());"
             + "__r2 = __x*__x+__y*__y;\n"
             + "__r = sqrtf(__r2);\n"
             + "__rinv = 1.f/__r;\n"

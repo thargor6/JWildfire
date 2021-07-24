@@ -77,9 +77,9 @@ public class LogApoFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float _denom = 0.5f / logf(varpar->log_apo_base);\n"
-        + "__px += varpar->log_apo * logf(__x*__x + __y*__y) * _denom;\n"
-        + "    __py += varpar->log_apo * atan2f(__y, __x);"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->log_apo * __z;\n" : "");
+    return "float _denom = 0.5f / logf(__log_apo_base);\n"
+        + "__px += __log_apo * logf(__x*__x + __y*__y) * _denom;\n"
+        + "    __py += __log_apo * atan2f(__y, __x);"
+        + (context.isPreserveZCoordinate() ? "__pz += __log_apo * __z;\n" : "");
   }
 }

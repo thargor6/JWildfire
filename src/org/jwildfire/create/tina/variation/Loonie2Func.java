@@ -131,15 +131,15 @@ public class Loonie2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int sides = lroundf(varpar->loonie2_sides);\n"
-        + "float _sqrvvar = varpar->loonie2 * varpar->loonie2;\n"
+    return "int sides = lroundf(__loonie2_sides);\n"
+        + "float _sqrvvar = __loonie2 * __loonie2;\n"
         + "float a = 2.0f*PI / sides;\n"
         + "float _sina = sinf(a);\n"
         + "float _cosa = cosf(a);\n"
-        + "a = -PI*0.5f * varpar->loonie2_star;\n"
+        + "a = -PI*0.5f * __loonie2_star;\n"
         + "float _sins = sinf(a);\n"
         + "float _coss = cosf(a);\n"
-        + "a = PI*0.5f * varpar->loonie2_circle;\n"
+        + "a = PI*0.5f * __loonie2_circle;\n"
         + "float _sinc = sinf(a);\n"
         + "float _cosc = cosf(a);\n"
         + "    float xrt = __x, yrt = __y, swp;\n"
@@ -152,7 +152,7 @@ public class Loonie2Func extends VariationFunc implements SupportsGPU {
         + "      xrt = swp;\n"
         + "      r2 = fmaxf(r2, xrt * _coss + fabsf(yrt) * _sins);\n"
         + "    }\n"
-        + "    r2 = r2 * _cosc + varpar->loonie2_circle * _sinc;\n"
+        + "    r2 = r2 * _cosc + __loonie2_circle * _sinc;\n"
         + "    if (i > 1) {\n"
         + "      r2 = r2*r2;\n"
         + "    } else {\n"
@@ -160,17 +160,17 @@ public class Loonie2Func extends VariationFunc implements SupportsGPU {
         + "    }\n"
         + "\n"
         + "    if (r2 > 0 && (r2 < _sqrvvar)) {\n"
-        + "      float r = varpar->loonie2 * sqrtf(fabsf(_sqrvvar / r2 - 1.0f));\n"
+        + "      float r = __loonie2 * sqrtf(fabsf(_sqrvvar / r2 - 1.0f));\n"
         + "      __px += r * __x;\n"
         + "      __py += r * __y;\n"
         + "    } else if (r2 < 0) {\n"
-        + "      float r = varpar->loonie2 / sqrtf(fabsf(_sqrvvar / r2) - 1.0f);\n"
+        + "      float r = __loonie2 / sqrtf(fabsf(_sqrvvar / r2) - 1.0f);\n"
         + "      __px += r * __x;\n"
         + "      __py += r * __y;\n"
         + "    } else {\n"
-        + "      __px += varpar->loonie2 * __x;\n"
-        + "      __py += varpar->loonie2 * __y;\n"
+        + "      __px += __loonie2 * __x;\n"
+        + "      __py += __loonie2 * __y;\n"
         + "    }"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->loonie2 * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __loonie2 * __z;\n" : "");
   }
 }

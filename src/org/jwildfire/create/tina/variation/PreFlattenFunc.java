@@ -48,7 +48,7 @@ public class PreFlattenFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float pre_flatten = fminf(fabsf(varpar->pre_flatten), 1.f);\n"
+    return "float pre_flatten = fminf(fabsf(__pre_flatten), 1.f);\n"
         + "__z = __z * (1.f - pre_flatten);\n";
   }
 }

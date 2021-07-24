@@ -64,7 +64,7 @@ public class Loonie_3DFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float sqrvvar = varpar->loonie_3D * varpar->loonie_3D;\n"
+    return "float sqrvvar = __loonie_3D * __loonie_3D;\n"
         + "float efTez = __z;\n"
         + "float kikr;\n"
         + "kikr = atan2f(__y, __x);\n"
@@ -78,14 +78,14 @@ public class Loonie_3DFunc extends SimpleVariationFunc implements SupportsGPU {
         + "else {\n"
         + "  __doHide = false;\n"
         + "  if (r2 < sqrvvar) {\n"
-        + "    float r = varpar->loonie_3D * sqrtf(sqrvvar / r2 - 1.0f);\n"
+        + "    float r = __loonie_3D * sqrtf(sqrvvar / r2 - 1.0f);\n"
         + "    __px += r * __x;\n"
         + "    __py += r * __y;\n"
         + "    __pz += r * efTez * 0.5;\n"
         + "  } else {\n"
-        + "     __px += varpar->loonie_3D * __x;\n"
-        + "     __py += varpar->loonie_3D * __y;\n"
-        + "     __pz += varpar->loonie_3D * efTez * 0.5;\n"
+        + "     __px += __loonie_3D * __x;\n"
+        + "     __py += __loonie_3D * __y;\n"
+        + "     __pz += __loonie_3D * efTez * 0.5;\n"
         + "  }\n"
         + "}\n";
   }

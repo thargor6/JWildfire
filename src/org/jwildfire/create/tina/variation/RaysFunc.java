@@ -53,11 +53,11 @@ public class RaysFunc extends SimpleVariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rn;\n"
         + "rn = RANDFLOAT();\n"
-        + "float v = varpar->rays;\n"
+        + "float v = __rays;\n"
         + "float r2inv_eps = 1.f/(__r2 ADD_EPSILON);\n"
         + "float front = v*tanf(rn*PI*v)*r2inv_eps;\n"
         + "__px += v*front*cosf(__x);\n"
         + "__py += v*front*sinf(__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->rays*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __rays*__z;\n" : "");
   }
 }

@@ -104,11 +104,11 @@ public class MaskFunc extends VariationFunc implements SupportsGPU {
         + "  __doHide = true;\n"
         + "} else {\n"
         + "  __doHide = false;\n"
-        + "  float xfactor = varpar->mask_xscale * __x + varpar->mask_xshift;\n"
-        + "  float yfactor = varpar->mask_yscale * __y + varpar->mask_yshift;\n"
-        + "  __px += (varpar->mask / sumsq) * sinf(xfactor) * (coshf(yfactor) + varpar->mask_ushift) * sqrf(sinf(xfactor));\n"
-        + "  __py += (varpar->mask / sumsq) * cosf(xfactor) * (coshf(yfactor) + varpar->mask_ushift) * sqrf(sinf(xfactor));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->mask * __z;\n" : "")
+        + "  float xfactor = __mask_xscale * __x + __mask_xshift;\n"
+        + "  float yfactor = __mask_yscale * __y + __mask_yshift;\n"
+        + "  __px += (__mask / sumsq) * sinf(xfactor) * (coshf(yfactor) + __mask_ushift) * sqrf(sinf(xfactor));\n"
+        + "  __py += (__mask / sumsq) * cosf(xfactor) * (coshf(yfactor) + __mask_ushift) * sqrf(sinf(xfactor));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __mask * __z;\n" : "")
         + "}\n";
   }
 }

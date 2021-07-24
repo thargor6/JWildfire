@@ -48,7 +48,7 @@ public class PreSphericalFunc extends SimpleVariationFunc implements SupportsGPU
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float r = varpar->pre_spherical / (__x * __x + __y * __y + 1.e-6f);\n"
+    return "    float r = __pre_spherical / (__x * __x + __y * __y + 1.e-6f);\n"
         + "    __x = __x * r;\n"
         + "    __y = __y * r;\n"
             + "__r2 = __x*__x+__y*__y;\n"

@@ -104,10 +104,10 @@ public class NPolarFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int n = lroundf(varpar->npolar_n);\n"
-        + "int parity  = lroundf(varpar->npolar_parity);\n"
+    return "int n = lroundf(__npolar_n);\n"
+        + "int parity  = lroundf(__npolar_parity);\n"
         + "int _nnz = (n == 0) ? 1 : n;\n"
-        + "float _vvar = varpar->npolar / PI;\n"
+        + "float _vvar = __npolar / PI;\n"
         + "float _vvar_2 = _vvar * 0.5;\n"
         + "float _absn = fabsf(_nnz);\n"
         + "float _cn = 1.0 / _nnz / 2.0;\n"
@@ -115,7 +115,7 @@ public class NPolarFunc extends VariationFunc implements SupportsGPU {
         + "float x = (_isodd != 0) ? __x : _vvar * atan2f(__x, __y);\n"
         + "    float y = (_isodd != 0) ? __y : _vvar_2 * logf(__x * __x + __y * __y);\n"
         + "    float angle = (atan2f(y, x) + (2.0f*PI) * (lroundf(RANDFLOAT()*0x0000ffff) % (int) _absn)) / _nnz;\n"
-        + "    float r = varpar->npolar * powf(x*x + y*y, _cn) * ((_isodd == 0) ? 1.0 : parity);\n"
+        + "    float r = __npolar * powf(x*x + y*y, _cn) * ((_isodd == 0) ? 1.0 : parity);\n"
         + "    float sina = sinf(angle);\n"
         + "    float cosa = cosf(angle);\n"
         + "    cosa *= r;\n"
@@ -124,6 +124,6 @@ public class NPolarFunc extends VariationFunc implements SupportsGPU {
         + "    y = (_isodd != 0) ? sina : (_vvar * atan2f(cosa, sina));\n"
         + "    __px += x;\n"
         + "    __py += y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->npolar*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __npolar*__z;\n" : "");
   }
 }

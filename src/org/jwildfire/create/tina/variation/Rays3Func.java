@@ -52,8 +52,8 @@ public class Rays3Func extends SimpleVariationFunc implements SupportsGPU {
     return "    float t = __x*__x + __y*__y;\n"
         + "    float u = 1.0f / sqrtf(cosf(sinf(t*t + 1.e-6f) * sinf(1.0f / t*t + 1.e-6f)));\n"
         + "\n"
-        + "    __px = (varpar->rays3 / 10.0f) * u * cosf(t) * t / __x;\n"
-        + "    __py = (varpar->rays3 / 10.0f) * u * tan(t) * t / __y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->rays3 * __z;\n" : "");
+        + "    __px = (__rays3 / 10.0f) * u * cosf(t) * t / __x;\n"
+        + "    __py = (__rays3 / 10.0f) * u * tan(t) * t / __y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __rays3 * __z;\n" : "");
   }
 }

@@ -79,9 +79,9 @@ public class LoqFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float denom = 0.5 * varpar->loq / logf(varpar->loq_base);\n"
+    return "float denom = 0.5 * __loq / logf(__loq_base);\n"
         + "float abs_v = hypotf(__y, __z);\n"
-        + "    float C = varpar->loq * atan2f(abs_v, __x) / abs_v;\n"
+        + "    float C = __loq * atan2f(abs_v, __x) / abs_v;\n"
         + "    __px += logf(__x*__x + abs_v*abs_v) * denom;\n"
         + "    __py += C * __y;\n"
         + "    __pz += C * __z;\n";

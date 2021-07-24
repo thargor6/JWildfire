@@ -49,8 +49,8 @@ public class PreDiscFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__x = varpar->pre_disc*(__phi/PI)*sinf(PI*__r);\n"
-        + "__y = varpar->pre_disc*(__phi/PI)*cosf(PI*__r);\n"
+    return "__x = __pre_disc*(__phi/PI)*sinf(PI*__r);\n"
+        + "__y = __pre_disc*(__phi/PI)*cosf(PI*__r);\n"
         + "__r2 = __x*__x+__y*__y;\n"
         + "__r = sqrtf(__r2);\n"
         + "__rinv = 1.f/__r;\n"

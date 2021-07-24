@@ -53,7 +53,7 @@ public class PostRotateYFunc extends SimpleVariationFunc implements SupportsGPU 
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float py_cos;\n"
         + "float py_sin;\n"
-        + "sincosf(varpar->post_rotate_y * M_PI_2_F, &py_sin, &py_cos);\n"
+        + "sincosf(__post_rotate_y * M_PI_2_F, &py_sin, &py_cos);\n"
         + "float x = py_cos * __px - py_sin * __pz;\n"
         + "__pz = py_sin * __px + py_cos * __pz;\n"
         + "__px = x;\n";

@@ -81,11 +81,11 @@ public class PieFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int t1 = (int)(RANDFLOAT()*varpar->pie_slices+0.5f);\n"
-        + "float t2 = varpar->pie_rotation+2.f*PI*(t1 + RANDFLOAT() * varpar->pie_thickness)/varpar->pie_slices;\n"
-        + "float rn = varpar->pie*RANDFLOAT();\n"
+    return "int t1 = (int)(RANDFLOAT()*__pie_slices+0.5f);\n"
+        + "float t2 = __pie_rotation+2.f*PI*(t1 + RANDFLOAT() * __pie_thickness)/__pie_slices;\n"
+        + "float rn = __pie*RANDFLOAT();\n"
         + "__px += rn*cosf(t2);\n"
         + "__py += rn*sinf(t2);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->pie*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __pie*__z;\n" : "");
   }
 }

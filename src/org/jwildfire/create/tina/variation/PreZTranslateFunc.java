@@ -45,6 +45,6 @@ public class PreZTranslateFunc extends SimpleVariationFunc implements SupportsGP
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__z += varpar->pre_ztranslate;\n";
+    return "__z += __pre_ztranslate;\n";
   }
 }

@@ -90,8 +90,8 @@ public class PulseFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += varpar->pulse * (__x + varpar->pulse_scalex * sinf(__x * varpar->pulse_freqx));\n"
-        + "    __py += varpar->pulse * (__y + varpar->pulse_scaley * sinf(__y * varpar->pulse_freqy));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->pulse * __z;\n" : "");
+    return "__px += __pulse * (__x + __pulse_scalex * sinf(__x * __pulse_freqx));\n"
+        + "    __py += __pulse * (__y + __pulse_scaley * sinf(__y * __pulse_freqy));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __pulse * __z;\n" : "");
   }
 }

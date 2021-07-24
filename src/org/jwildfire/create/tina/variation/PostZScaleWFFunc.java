@@ -66,6 +66,6 @@ public class PostZScaleWFFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__pz = varpar->post_zscale_wf * __pz + varpar->post_zscale_wf_ztranslate;\n";
+    return "__pz = __post_zscale_wf * __pz + __post_zscale_wf_ztranslate;\n";
   }
 }

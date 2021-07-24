@@ -48,9 +48,9 @@ public class Polar2Func extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float p2v = varpar->polar2 / PI;\n"
+    return "float p2v = __polar2 / PI;\n"
         + "    __px += p2v * __phi;\n"
         + "    __py += p2v / 2.0f * logf(__r2);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->polar2 * __z;\n": "");
+        + (context.isPreserveZCoordinate() ? "__pz += __polar2 * __z;\n": "");
   }
 }

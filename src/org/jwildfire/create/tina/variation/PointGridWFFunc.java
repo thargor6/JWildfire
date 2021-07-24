@@ -124,25 +124,25 @@ public class PointGridWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float _dx = (varpar->pointgrid_wf_xmax - varpar->pointgrid_wf_xmin) / (float) varpar->pointgrid_wf_xcount;\n"
-        + "float _dy = (varpar->pointgrid_wf_ymax - varpar->pointgrid_wf_ymin) / (float) varpar->pointgrid_wf_ycount;\n"
-        + "int xIdx = (int)(RANDFLOAT()*varpar->pointgrid_wf_xcount);\n"
-        + "int yIdx = (int)(RANDFLOAT()*varpar->pointgrid_wf_ycount);\n"
-        + "float x = varpar->pointgrid_wf_xmin + _dx * xIdx;\n"
-        + "float y = varpar->pointgrid_wf_ymin + _dy * yIdx;\n"
-        + "if (varpar->pointgrid_wf_distortion > 0) {\n"
-        + "  long xseed = (varpar->pointgrid_wf_seed + 1563) * xIdx + yIdx;\n"
+    return "float _dx = (__pointgrid_wf_xmax - __pointgrid_wf_xmin) / (float) __pointgrid_wf_xcount;\n"
+        + "float _dy = (__pointgrid_wf_ymax - __pointgrid_wf_ymin) / (float) __pointgrid_wf_ycount;\n"
+        + "int xIdx = (int)(RANDFLOAT()*__pointgrid_wf_xcount);\n"
+        + "int yIdx = (int)(RANDFLOAT()*__pointgrid_wf_ycount);\n"
+        + "float x = __pointgrid_wf_xmin + _dx * xIdx;\n"
+        + "float y = __pointgrid_wf_ymin + _dy * yIdx;\n"
+        + "if (__pointgrid_wf_distortion > 0) {\n"
+        + "  long xseed = (__pointgrid_wf_seed + 1563) * xIdx + yIdx;\n"
         + "  pointgrid_randomize(xseed);\n"
-        + "  float distx = (0.5f - pointgrid_random()) * varpar->pointgrid_wf_distortion;\n"
-        + "  long yseed = (varpar->pointgrid_wf_seed + 6715) * yIdx + xIdx;\n"
+        + "  float distx = (0.5f - pointgrid_random()) * __pointgrid_wf_distortion;\n"
+        + "  long yseed = (__pointgrid_wf_seed + 6715) * yIdx + xIdx;\n"
         + "  pointgrid_randomize(yseed);\n"
-        + "  float disty = (0.5f - pointgrid_random()) * varpar->pointgrid_wf_distortion;\n"
+        + "  float disty = (0.5f - pointgrid_random()) * __pointgrid_wf_distortion;\n"
         + "  x += distx;\n"
         + "  y += disty;\n"
         + "}\n"
-        + "__px += x * varpar->pointgrid_wf;\n"
-        + "__py += y * varpar->pointgrid_wf;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->pointgrid_wf * __z;\n": "");
+        + "__px += x * __pointgrid_wf;\n"
+        + "__py += y * __pointgrid_wf;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __pointgrid_wf * __z;\n": "");
   }
 
   @Override

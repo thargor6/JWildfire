@@ -45,6 +45,6 @@ public class PreZScaleFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__z *= varpar->pre_zscale;\n";
+    return "__z *= __pre_zscale;\n";
   }
 }

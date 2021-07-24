@@ -103,7 +103,7 @@ public class PlusRecipFunc extends VariationFunc implements SupportsGPU {
             + "Complex k;\n"
             + "Complex_Init(&k, z.re, z.im);\n"
             + "Complex a;\n"
-            + "Complex_Init(&a, varpar->plusrecip_ar, varpar->plusrecip_ai);\n"
+            + "Complex_Init(&a, __plusrecip_ar, __plusrecip_ai);\n"
             + "float aa = sqrtf(Complex_Mag2eps(&a));\n"
             + "Complex_Sqr(&k);\n"
             + "Complex_Sub(&k, &a);\n"
@@ -119,10 +119,10 @@ public class PlusRecipFunc extends VariationFunc implements SupportsGPU {
             + "if(k.re < 0) {\n"
             + "  Complex_Neg(&k);\n"
             + "}\n"
-            + "Complex_Scale(&k, varpar->plusrecip);\n"
+            + "Complex_Scale(&k, __plusrecip);\n"
            + "__px += k.re;\n"
             + "__py += k.im;\n"
-            + (context.isPreserveZCoordinate() ? "__pz += varpar->plusrecip * __z;\n": "");
+            + (context.isPreserveZCoordinate() ? "__pz += __plusrecip * __z;\n": "");
   }
 }
 

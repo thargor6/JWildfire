@@ -56,9 +56,9 @@ public class PetalFunc extends SimpleVariationFunc implements SupportsGPU {
         + "float bx = (cosf(__x)*cosf(__y))*(cosf(__x)*cosf(__y))*(cosf(__x)*cosf(__y));\n"
         + "float by = (sinf(__x)*cosf(__y))*(sinf(__x)*cosf(__y))*(sinf(__x)*cosf(__y));\n"
         + "\n"
-        + "__px += varpar->petal * a * bx;\n"
-        + "__py += varpar->petal * a * by;\n"
+        + "__px += __petal * a * bx;\n"
+        + "__py += __petal * a * by;\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->petal*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __petal*__z;\n" : "");
   }
 }

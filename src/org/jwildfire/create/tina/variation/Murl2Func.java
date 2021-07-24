@@ -114,25 +114,25 @@ public class Murl2Func extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float _invp, _vp, _a, _sina, _cosa, _r, _re, _im, _rl;" +
-            "float _p2 = (float) varpar->murl2_power / 2.0f;\n" +
+            "float _p2 = (float) __murl2_power / 2.0f;\n" +
             "\n" +
-            "    if (varpar->murl2_power != 0.f) {\n" +
-            "      _invp = 1.0f / (float) varpar->murl2_power;\n" +
-            "      if (varpar->murl2_c == -1.f) {\n" +
+            "    if (__murl2_power != 0.f) {\n" +
+            "      _invp = 1.0f / (float) __murl2_power;\n" +
+            "      if (__murl2_c == -1.f) {\n" +
             "        _vp = 0.f;\n" +
             "      } else {\n" +
-            "        _vp = varpar->murl2 * powf(varpar->murl2_c + 1.f, 2.0f / ((float) varpar->murl2_power));\n" +
+            "        _vp = __murl2 * powf(__murl2_c + 1.f, 2.0f / ((float) __murl2_power));\n" +
             "      }\n" +
             "    } else {\n" +
             "      _invp = 100000000000.0f;\n" +
-            "      _vp = varpar->murl2 * powf(varpar->murl2_c + 1.f, 4.f /*Normally infinity, but we let this be a special case*/);\n" +
+            "      _vp = __murl2 * powf(__murl2_c + 1.f, 4.f /*Normally infinity, but we let this be a special case*/);\n" +
             "    }\n" +
             "\n" +
-            "    _a = atan2f(__y, __x) * (float) varpar->murl2_power;\n" +
+            "    _a = atan2f(__y, __x) * (float) __murl2_power;\n" +
             "    _sina = sinf(_a);\n" +
             "    _cosa = cosf(_a);\n" +
             "\n" +
-            "    _r = varpar->murl2_c * powf(__x * __x + __y * __y, _p2);\n" +
+            "    _r = __murl2_c * powf(__x * __x + __y * __y, _p2);\n" +
             "\n" +
             "    _re = _r * _cosa + 1.f;\n" +
             "    _im = _r * _sina;\n" +
@@ -146,6 +146,6 @@ public class Murl2Func extends VariationFunc implements SupportsGPU {
             "\n" +
             "    __px += _rl * (__x * _re + __y * _im);\n" +
             "    __py += _rl * (__y * _re - __x * _im);\n" +
-            (context.isPreserveZCoordinate() ? "__pz += varpar->murl2 * __z;\n" : "");
+            (context.isPreserveZCoordinate() ? "__pz += __murl2 * __z;\n" : "");
   }
 }

@@ -53,8 +53,8 @@ public class NoiseFunc extends SimpleVariationFunc implements SupportsGPU {
     return "float rn1,rn2;\n"
         + "rn1 = RANDFLOAT();\n"
         + "rn2 = RANDFLOAT();\n"
-        + "__px += varpar->noise*rn1*__x*cosf(2.f*PI*rn2);\n"
-        + "__py += varpar->noise*rn1*__y*sinf(2.f*PI*rn2);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->noise*__z;\n" : "");
+        + "__px += __noise*rn1*__x*cosf(2.f*PI*rn2);\n"
+        + "__py += __noise*rn1*__y*sinf(2.f*PI*rn2);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __noise*__z;\n" : "");
   }
 }

@@ -49,9 +49,9 @@ public class PolarFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->polar*__phi/PI;\n"
-        + "__py += varpar->polar*(__r-1.f);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->polar*__z;\n" : "");
+    return "__px += __polar*__phi/PI;\n"
+        + "__py += __polar*(__r-1.f);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __polar*__z;\n" : "");
   }
 
 }

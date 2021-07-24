@@ -97,22 +97,22 @@ public class ModulusFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float xr = 2.f*varpar->modulus_x;\n"
-        + "float yr = 2.f*varpar->modulus_y;\n"
+    return "float xr = 2.f*__modulus_x;\n"
+        + "float yr = 2.f*__modulus_y;\n"
         + "\n"
-        + "if (__x > varpar->modulus_x)\n"
-        + "    __px += varpar->modulus*(-varpar->modulus_x + fmodf(__x + varpar->modulus_x, xr));\n"
-        + "else if (__x < -varpar->modulus_x)\n"
-        + "    __px += varpar->modulus*( varpar->modulus_x - fmodf(varpar->modulus_x - __x, xr));\n"
+        + "if (__x > __modulus_x)\n"
+        + "    __px += __modulus*(-__modulus_x + fmodf(__x + __modulus_x, xr));\n"
+        + "else if (__x < -__modulus_x)\n"
+        + "    __px += __modulus*( __modulus_x - fmodf(__modulus_x - __x, xr));\n"
         + "else\n"
-        + "    __px += varpar->modulus*__x;\n"
+        + "    __px += __modulus*__x;\n"
         + "\n"
-        + "if (__y > varpar->modulus_y)\n"
-        + "    __py += varpar->modulus*(-varpar->modulus_y + fmodf(__y + varpar->modulus_y, yr));\n"
-        + "else if (__y < -varpar->modulus_y)\n"
-        + "    __py += varpar->modulus*( varpar->modulus_y - fmodf(varpar->modulus_y - __y, yr));\n"
+        + "if (__y > __modulus_y)\n"
+        + "    __py += __modulus*(-__modulus_y + fmodf(__y + __modulus_y, yr));\n"
+        + "else if (__y < -__modulus_y)\n"
+        + "    __py += __modulus*( __modulus_y - fmodf(__modulus_y - __y, yr));\n"
         + "else\n"
-        + "    __py += varpar->modulus*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->modulus*__z;\n" : "");
+        + "    __py += __modulus*__y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __modulus*__z;\n" : "");
   }
 }

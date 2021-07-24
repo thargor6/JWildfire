@@ -111,23 +111,23 @@ public class OscilloscopeFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float tpf = 2.f*PI*varpar->oscilloscope_frequency;\n"
-        + "float t = varpar->oscilloscope_amplitude*expf(-fabsf(__x)*varpar->oscilloscope_damping)*cosf(tpf*__x)+varpar->oscilloscope_separation;\n"
-        + "__px += varpar->oscilloscope*__x;\n"
+    return "float tpf = 2.f*PI*__oscilloscope_frequency;\n"
+        + "float t = __oscilloscope_amplitude*expf(-fabsf(__x)*__oscilloscope_damping)*cosf(tpf*__x)+__oscilloscope_separation;\n"
+        + "__px += __oscilloscope*__x;\n"
         + "if (fabsf(__y) <= t)\n"
-        + "    __py -= varpar->oscilloscope*__y;\n"
+        + "    __py -= __oscilloscope*__y;\n"
         + "else\n"
-        + "    __py += varpar->oscilloscope*__y;\n"
+        + "    __py += __oscilloscope*__y;\n"
         + "    __3D_SUPPORT_ONLY__\n"
-        + "    __pz += varpar->oscilloscope*__z;\n"
+        + "    __pz += __oscilloscope*__z;\n"
         + "    ]]>\n"
         + "    </source>\n"
         + "</variation>\n"
         + "<variation name=\"polar2\" default=\"0.f\" >\n"
         + "    <source license=\"GNU/GPLv3\">\n"
         + "    <![CDATA[\n"
-        + "__px += varpar->polar2*__phi/PI;\n"
-        + "__py += varpar->polar2*0.5f*logf(__r2)/PI;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->polar2*__z;\n" : "");
+        + "__px += __polar2*__phi/PI;\n"
+        + "__py += __polar2*0.5f*logf(__r2)/PI;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __polar2*__z;\n" : "");
   }
 }

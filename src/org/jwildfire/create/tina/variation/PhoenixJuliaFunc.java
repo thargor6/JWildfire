@@ -111,18 +111,18 @@ public class PhoenixJuliaFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float  _invN = varpar->phoenix_julia_dist / varpar->phoenix_julia_power;\n"
-        + "float    _inv2PI_N = 2.0f*PI / varpar->phoenix_julia_power;\n"
-        + "float    _cN = varpar->phoenix_julia_dist / varpar->phoenix_julia_power / 2.0f;\n"
-        + "    float preX = __x * (varpar->phoenix_julia_x_distort + 1.0f);\n"
-        + "    float preY = __y * (varpar->phoenix_julia_y_distort + 1.0f);\n"
+    return "float  _invN = __phoenix_julia_dist / __phoenix_julia_power;\n"
+        + "float    _inv2PI_N = 2.0f*PI / __phoenix_julia_power;\n"
+        + "float    _cN = __phoenix_julia_dist / __phoenix_julia_power / 2.0f;\n"
+        + "    float preX = __x * (__phoenix_julia_x_distort + 1.0f);\n"
+        + "    float preY = __y * (__phoenix_julia_y_distort + 1.0f);\n"
         + "\n"
         + "    float a = atan2f(preY, preX) * _invN + lroundf(0x00007fff * RANDFLOAT()) * _inv2PI_N;\n"
         + "    float sina = sinf(a);\n"
         + "    float cosa = cosf(a);\n"
-        + "    float r = varpar->phoenix_julia * powf(__x*__x + __y*__y, _cN);\n"
+        + "    float r = __phoenix_julia * powf(__x*__x + __y*__y, _cN);\n"
         + "    __px += r * cosa;\n"
         + "    __py += r * sina;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->phoenix_julia * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __phoenix_julia * __z;\n" : "");
   }
 }

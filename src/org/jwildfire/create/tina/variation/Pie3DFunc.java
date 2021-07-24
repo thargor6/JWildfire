@@ -80,10 +80,10 @@ public class Pie3DFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float slices = varpar->pie3D_slices;\n"
+    return "float slices = __pie3D_slices;\n"
         + "int sl  = (int) (RANDFLOAT() * slices + 0.5f);\n"
-        + "float a = varpar->pie3D_rotation + 2.f * M_PI_F * (sl + RANDFLOAT() * varpar->pie3D_thickness) / slices;\n"
-        + "float r = varpar->pie3D * RANDFLOAT();\n"
+        + "float a = __pie3D_rotation + 2.f * M_PI_F * (sl + RANDFLOAT() * __pie3D_thickness) / slices;\n"
+        + "float r = __pie3D * RANDFLOAT();\n"
         + "float sina, cosa;\n"
         + "sincosf(a,  &sina, &cosa);\n"
         + "__px += r * cosa;\n"

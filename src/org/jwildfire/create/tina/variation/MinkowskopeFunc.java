@@ -164,25 +164,25 @@ public class MinkowskopeFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float _tpf = 0.5f * varpar->minkowskope_frequencyx;\n"
-        + "float _tpf2 = 0.5f * varpar->minkowskope_frequencyy;\n"
-        + "short _noDamping = (fabsf(varpar->minkowskope_damping) <= 1.e-6f) ? 1 : 0;\n"
-        + "short _altWave = (varpar->minkowskope_frequencyx <= 0.0f) ? 1 : 0;\n"
+    return "float _tpf = 0.5f * __minkowskope_frequencyx;\n"
+        + "float _tpf2 = 0.5f * __minkowskope_frequencyy;\n"
+        + "short _noDamping = (fabsf(__minkowskope_damping) <= 1.e-6f) ? 1 : 0;\n"
+        + "short _altWave = (__minkowskope_frequencyx <= 0.0f) ? 1 : 0;\n"
         + "float t;\n"
-        + "float pt = varpar->minkowskope_perturbation * minkosine(_tpf2 * __y, _altWave);\n"
+        + "float pt = __minkowskope_perturbation * minkosine(_tpf2 * __y, _altWave);\n"
         + "if (_noDamping==1) {\n"
-        + "  t = varpar->minkowskope_amplitude * (minkocosine(_tpf * __x + pt, _altWave)) + varpar->minkowskope_separation;\n"
+        + "  t = __minkowskope_amplitude * (minkocosine(_tpf * __x + pt, _altWave)) + __minkowskope_separation;\n"
         + "} else {\n"
-        + "  t = varpar->minkowskope_amplitude * expf(-fabsf(__x) * varpar->minkowskope_damping) * (minkocosine(_tpf * __x + pt, _altWave)) + varpar->minkowskope_separation;\n"
+        + "  t = __minkowskope_amplitude * expf(-fabsf(__x) * __minkowskope_damping) * (minkocosine(_tpf * __x + pt, _altWave)) + __minkowskope_separation;\n"
         + "}\n"
         + "if (fabsf(__y) <= t) {\n"
-        + "  __px -= varpar->minkowskope * __x;\n"
-        + "  __py -= varpar->minkowskope * __y;\n"
+        + "  __px -= __minkowskope * __x;\n"
+        + "  __py -= __minkowskope * __y;\n"
         + "} else {\n"
-        + "  __px += varpar->minkowskope * __x;\n"
-        + "  __py += varpar->minkowskope * __y;\n"
+        + "  __px += __minkowskope * __x;\n"
+        + "  __py += __minkowskope * __y;\n"
         + "}"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->minkowskope * __z;" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __minkowskope * __z;" : "");
   }
 
   @Override

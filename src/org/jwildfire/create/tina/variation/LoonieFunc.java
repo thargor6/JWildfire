@@ -56,12 +56,12 @@ public class LoonieFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float w2 = varpar->loonie*varpar->loonie;\n"
+    return "float w2 = __loonie*__loonie;\n"
         + "float q = (__r2 < w2)\n"
-        + "? varpar->loonie*sqrtf(w2/__r2-1.f)\n"
-        + ": varpar->loonie;\n"
+        + "? __loonie*sqrtf(w2/__r2-1.f)\n"
+        + ": __loonie;\n"
         + "__px += q*__x;\n"
         + "__py += q*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->loonie*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __loonie*__z;\n" : "");
   }
 }

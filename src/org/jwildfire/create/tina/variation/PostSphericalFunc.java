@@ -48,7 +48,7 @@ public class PostSphericalFunc extends SimpleVariationFunc implements SupportsGP
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float r = varpar->post_spherical / (__px * __px + __py * __py + 1.e-6f);\n"
+    return "float r = __post_spherical / (__px * __px + __py * __py + 1.e-6f);\n"
         + "    __px = __px * r;\n"
         + "    __py = __py * r;\n";
   }

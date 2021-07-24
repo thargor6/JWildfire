@@ -103,9 +103,9 @@ public class Poincare3DFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float cx, cy, cz, c2, c2x, c2y, c2z, s2x, s2y, s2z;\n"
-        + "cx = -varpar->poincare3D_r * cosf(varpar->poincare3D_a * (PI*0.5f)) * cosf(varpar->poincare3D_b * (PI*0.5f));\n"
-        + "    cy = varpar->poincare3D_r * sinf(varpar->poincare3D_a * (PI*0.5f)) * cosf(varpar->poincare3D_b * (PI*0.5f));\n"
-        + "    cz = -varpar->poincare3D_r * sinf(varpar->poincare3D_b * (PI*0.5f));\n"
+        + "cx = -__poincare3D_r * cosf(__poincare3D_a * (PI*0.5f)) * cosf(__poincare3D_b * (PI*0.5f));\n"
+        + "    cy = __poincare3D_r * sinf(__poincare3D_a * (PI*0.5f)) * cosf(__poincare3D_b * (PI*0.5f));\n"
+        + "    cz = -__poincare3D_r * sinf(__poincare3D_b * (PI*0.5f));\n"
         + "\n"
         + "    c2 = cx*cx + cy*cy + cz*cz;\n"
         + "\n"
@@ -120,7 +120,7 @@ public class Poincare3DFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "    float x2cx = c2x * __x, y2cy = c2y * __y, z2cz = c2z * __z;\n"
         + "\n"
-        + "    float d = varpar->poincare3D / (c2 * r2 - x2cx - y2cy - z2cz + 1);\n"
+        + "    float d = __poincare3D / (c2 * r2 - x2cx - y2cy - z2cz + 1);\n"
         + "\n"
         + "    __px += d * (__x * s2x + cx * (y2cy + z2cz - r2 - 1));\n"
         + "    __py += d * (__y * s2y + cy * (x2cx + z2cz - r2 - 1));\n"

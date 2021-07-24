@@ -147,21 +147,21 @@ public class MobiusNFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float power = varpar->mobiusN_power;\n"
+    return "float power = __mobiusN_power;\n"
         + "    if (fabsf(power) < 1.0)\n"
         + "      power = 1.0;\n"
         + "float realU, imagU, realV, imagV, radV, x, y, z, r, alpha, sina, cosa, n;\n"
-        + "    z = 4.0f * varpar->mobiusN_dist / power;\n"
+        + "    z = 4.0f * __mobiusN_dist / power;\n"
         + "    r = powf(__r, z);\n"
         + "    alpha = atan2f(__y, __x) * power;\n"
         + "    sina = sinf(alpha);\n"
         + "    cosa = cosf(alpha);\n"
         + "    x = r * cosa;\n"
         + "    y = r * sina;\n"
-        + "    realU = varpar->mobiusN_re_a * x - varpar->mobiusN_im_a * y + varpar->mobiusN_re_b;\n"
-        + "    imagU = varpar->mobiusN_re_a * y + varpar->mobiusN_im_a * x + varpar->mobiusN_im_b;\n"
-        + "    realV = varpar->mobiusN_re_c * x - varpar->mobiusN_im_c * y + varpar->mobiusN_re_d;\n"
-        + "    imagV = varpar->mobiusN_re_c * y + varpar->mobiusN_im_c * x + varpar->mobiusN_im_d;\n"
+        + "    realU = __mobiusN_re_a * x - __mobiusN_im_a * y + __mobiusN_re_b;\n"
+        + "    imagU = __mobiusN_re_a * y + __mobiusN_im_a * x + __mobiusN_im_b;\n"
+        + "    realV = __mobiusN_re_c * x - __mobiusN_im_c * y + __mobiusN_re_d;\n"
+        + "    imagV = __mobiusN_re_c * y + __mobiusN_im_c * x + __mobiusN_im_d;\n"
         + "    radV = realV*realV + imagV*imagV;\n"
         + "\n"
         + "    x = (realU * realV + imagU * imagV) / radV;\n"
@@ -172,8 +172,8 @@ public class MobiusNFunc extends VariationFunc implements SupportsGPU {
         + "    alpha = (atan2f(y, x) + n * 2.0f*PI) / floorf(power);\n"
         + "    sina = sinf(alpha);\n"
         + "    cosa = cosf(alpha);\n"
-        + "    __px += varpar->mobiusN * r * cosa;\n"
-        + "    __py += varpar->mobiusN * r * sina;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->mobiusN * __z;\n" : "");
+        + "    __px += __mobiusN * r * cosa;\n"
+        + "    __py += __mobiusN * r * sina;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __mobiusN * __z;\n" : "");
   }
 }

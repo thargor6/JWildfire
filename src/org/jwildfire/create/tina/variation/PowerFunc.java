@@ -48,8 +48,8 @@ public class PowerFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->power*__y*__rinv*powf(__r,__x*__rinv);\n"
-        + "__py += varpar->power*__x*__rinv*powf(__r,__x*__rinv);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->power*__z;\n" : "");
+    return "__px += __power*__y*__rinv*powf(__r,__x*__rinv);\n"
+        + "__py += __power*__x*__rinv*powf(__r,__x*__rinv);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __power*__z;\n" : "");
   }
 }

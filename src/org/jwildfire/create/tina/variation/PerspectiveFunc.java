@@ -89,8 +89,8 @@ public class PerspectiveFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->perspective*(varpar->perspective_dist/(varpar->perspective_dist-__y*sinf(varpar->perspective_angle)) ADD_EPSILON)*__x;\n"
-        + "__py += varpar->perspective*(varpar->perspective_dist/(varpar->perspective_dist-__y*sinf(varpar->perspective_angle)) ADD_EPSILON)*__y*cosf(varpar->perspective_angle);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->perspective*__z;\n" : "");
+    return "__px += __perspective*(__perspective_dist/(__perspective_dist-__y*sinf(__perspective_angle)) ADD_EPSILON)*__x;\n"
+        + "__py += __perspective*(__perspective_dist/(__perspective_dist-__y*sinf(__perspective_angle)) ADD_EPSILON)*__y*cosf(__perspective_angle);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __perspective*__z;\n" : "");
   }
 }

@@ -116,12 +116,12 @@ public class LogDbFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float _denom = 0.5;\n"
-        + "    if (varpar->log_db_base > 1.0e-20f)\n"
-        + "      _denom = _denom / logf(2.71828182845905 * varpar->log_db_base);\n"
-        + "    _denom *= varpar->log_db;\n"
+        + "    if (__log_db_base > 1.0e-20f)\n"
+        + "      _denom = _denom / logf(2.71828182845905 * __log_db_base);\n"
+        + "    _denom *= __log_db;\n"
         + "float _fixpe = PI;\n"
-        + "    if (varpar->log_db_fix_period > 1.0e-20f)\n"
-        + "      _fixpe *= varpar->log_db_fix_period;\n"
+        + "    if (__log_db_fix_period > 1.0e-20f)\n"
+        + "      _fixpe *= __log_db_fix_period;\n"
         + "    float fix_atan_period = 0.f;\n"
         + "    int adp;\n"
         + "    int i;\n"
@@ -133,7 +133,7 @@ public class LogDbFunc extends VariationFunc implements SupportsGPU {
         + "    }\n"
         + "    fix_atan_period *= _fixpe;\n"
         + "    __px += _denom * logf(__r2);\n"
-        + "    __py += varpar->log_db * (__theta + fix_atan_period);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->log_db * __z;\n" : "");
+        + "    __py += __log_db * (__theta + fix_atan_period);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __log_db * __z;\n" : "");
   }
 }

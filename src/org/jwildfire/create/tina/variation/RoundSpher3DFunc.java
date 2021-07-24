@@ -78,8 +78,8 @@ public class RoundSpher3DFunc extends SimpleVariationFunc implements SupportsGPU
         + "    float d = __x*__x + __y*__y + tempTZ*tempTZ;\n"
         + "    float e = 1.0 / d + sqrf((2.0f / PI));\n"
         + "\n"
-        + "    __px += varpar->roundspher3D * (varpar->roundspher3D / d * __x / e);\n"
-        + "    __py += varpar->roundspher3D * (varpar->roundspher3D / d * __y / e);\n"
-        + "    __pz = tempPZ + varpar->roundspher3D * (varpar->roundspher3D / d * tempTZ / e);\n";
+        + "    __px += __roundspher3D * (__roundspher3D / d * __x / e);\n"
+        + "    __py += __roundspher3D * (__roundspher3D / d * __y / e);\n"
+        + "    __pz = tempPZ + __roundspher3D * (__roundspher3D / d * tempTZ / e);\n";
   }
 }

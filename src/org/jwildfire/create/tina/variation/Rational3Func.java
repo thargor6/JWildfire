@@ -143,17 +143,17 @@ public class Rational3Func extends VariationFunc implements SupportsGPU {
         + "    float zb3 = 3.f * xsqr * __y - ycb;\n"
         + "    float zb2 = 2.f * __x * __y;\n"
         + "\n"
-        + "    float tr = (varpar->rational3_a * zt3) + (varpar->rational3_b * zt2) + (varpar->rational3_c * __x) + varpar->rational3_d;\n"
-        + "    float ti = (varpar->rational3_a * zb3) + (varpar->rational3_b * zb2) + (varpar->rational3_c * __y);\n"
+        + "    float tr = (__rational3_a * zt3) + (__rational3_b * zt2) + (__rational3_c * __x) + __rational3_d;\n"
+        + "    float ti = (__rational3_a * zb3) + (__rational3_b * zb2) + (__rational3_c * __y);\n"
         + "\n"
-        + "    float br = (varpar->rational3_e * zt3) + (varpar->rational3_f * zt2) + (varpar->rational3_g * __x) + varpar->rational3_h;\n"
-        + "    float bi = (varpar->rational3_e * zb3) + (varpar->rational3_f * zb2) + (varpar->rational3_g * __y);\n"
+        + "    float br = (__rational3_e * zt3) + (__rational3_f * zt2) + (__rational3_g * __x) + __rational3_h;\n"
+        + "    float bi = (__rational3_e * zb3) + (__rational3_f * zb2) + (__rational3_g * __y);\n"
         + "\n"
         + "    float r3den = 1 / (br * br + bi * bi);\n"
         + "\n"
-        + "    __px += varpar->rational3 * (tr * br + ti * bi) * r3den;\n"
-        + "    __py += varpar->rational3 * (ti * br - tr * bi) * r3den;\n"
+        + "    __px += __rational3 * (tr * br + ti * bi) * r3den;\n"
+        + "    __py += __rational3 * (ti * br - tr * bi) * r3den;\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ?  "__pz += varpar->rational3 * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ?  "__pz += __rational3 * __z;\n" : "");
   }
 }

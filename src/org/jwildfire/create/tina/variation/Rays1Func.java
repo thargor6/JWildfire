@@ -51,9 +51,9 @@ public class Rays1Func extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "    float t = __x*__x + __y*__y;\n"
-        + "    float u = 1.0f / tan(sqrtf(t)) + (varpar->rays1 * sqrf(2.0f / PI));\n"
-        + "    __px = varpar->rays1 * u * t / __x;\n"
-        + "    __py = varpar->rays1 * u * t / __y;\n"
-        +(context.isPreserveZCoordinate()? "__pz += varpar->rays1 * __z;\n" : "");
+        + "    float u = 1.0f / tan(sqrtf(t)) + (__rays1 * sqrf(2.0f / PI));\n"
+        + "    __px = __rays1 * u * t / __x;\n"
+        + "    __py = __rays1 * u * t / __y;\n"
+        +(context.isPreserveZCoordinate()? "__pz += __rays1 * __z;\n" : "");
   }
 }

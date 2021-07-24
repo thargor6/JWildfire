@@ -130,12 +130,12 @@ public class PostCircleCropFunc extends VariationFunc implements SupportsGPU {
   // BROKEN
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float _cA = fmaxf(-1.0f, fminf(varpar->post_circlecrop_scatterarea, 1.f));\n"
-        + "float x0 = varpar->post_circlecrop_x;\n"
-        + "float y0 = varpar->post_circlecrop_y;\n"
-        + "float cr = varpar->post_circlecrop_radius;\n"
+    return "float _cA = fmaxf(-1.0f, fminf(__post_circlecrop_scatterarea, 1.f));\n"
+        + "float x0 = __post_circlecrop_x;\n"
+        + "float y0 = __post_circlecrop_y;\n"
+        + "float cr = __post_circlecrop_radius;\n"
         + "float ca = _cA;\n"
-        + "float vv = varpar->post_circlecrop;\n"
+        + "float vv = __post_circlecrop;\n"
         + "\n"
         + "// almost like a pre variation the input points are manipulated\n"
         + "__px -= x0;\n"
@@ -146,7 +146,7 @@ public class PostCircleCropFunc extends VariationFunc implements SupportsGPU {
         + "float rdc = cr + (RANDFLOAT() * 0.5f * ca);\n"
         + "\n"
         + "bool esc = rad > cr;\n"
-        + "bool cr0 = (bool)varpar->post_circlecrop_zero;\n"
+        + "bool cr0 = (bool)__post_circlecrop_zero;\n"
         + "\n"
         + "float c;\n"
         + "float s;\n"
@@ -167,6 +167,6 @@ public class PostCircleCropFunc extends VariationFunc implements SupportsGPU {
         + "    __px += vv * __px + x0;\n"
         + "    __py += vv * __py + y0;\n"
         + "}\n"
-        + (context.isPreserveZCoordinate() ? "__pz = varpar->post_circlecrop*__pz;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz = __post_circlecrop*__pz;\n" : "");
   }
 }

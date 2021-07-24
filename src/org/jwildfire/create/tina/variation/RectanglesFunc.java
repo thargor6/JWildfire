@@ -80,8 +80,8 @@ public class RectanglesFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += (varpar->rectangles_x == 0.f)? varpar->rectangles*__x : varpar->rectangles*((2.f*floorf(__x/varpar->rectangles_x)+1.f)*varpar->rectangles_x-__x);\n"
-        + "__py += (varpar->rectangles_y == 0.f)? varpar->rectangles*__y : varpar->rectangles*((2.f*floorf(__y/varpar->rectangles_y)+1.f)*varpar->rectangles_y-__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->rectangles*__z;\n" : "");
+    return "__px += (__rectangles_x == 0.f)? __rectangles*__x : __rectangles*((2.f*floorf(__x/__rectangles_x)+1.f)*__rectangles_x-__x);\n"
+        + "__py += (__rectangles_y == 0.f)? __rectangles*__y : __rectangles*((2.f*floorf(__y/__rectangles_y)+1.f)*__rectangles_y-__y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __rectangles*__z;\n" : "");
   }
 }

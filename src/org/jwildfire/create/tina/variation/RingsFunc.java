@@ -53,6 +53,6 @@ public class RingsFunc extends SimpleVariationFunc implements SupportsGPU {
          +" float d = r + dx - ((int) ((r + dx) / (2 * dx))) * 2 * dx - dx + r * (1 - dx);\n"
         + "__px += d * __y / r;\n"
         + "__py += d* __x / r;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->rings*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __rings*__z;\n" : "");
   }
 }

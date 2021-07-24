@@ -77,10 +77,10 @@ public class PostDepthFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float coeff = fabsf(__z);\n"
-        + "if (coeff != 0.f  &&  varpar->post_depth_power != 1.f)\n"
-        + "    coeff = expf(logf(coeff) * varpar->post_depth_power);\n"
-        + "__px += varpar->post_depth * (__x + __px * coeff);\n"
-        + "__py += varpar->post_depth * (__y + __py * coeff);\n"
-        + "__pz += varpar->post_depth * (__z + __pz * coeff);";
+        + "if (coeff != 0.f  &&  __post_depth_power != 1.f)\n"
+        + "    coeff = expf(logf(coeff) * __post_depth_power);\n"
+        + "__px += __post_depth * (__x + __px * coeff);\n"
+        + "__py += __post_depth * (__y + __py * coeff);\n"
+        + "__pz += __post_depth * (__z + __pz * coeff);";
   }
 }

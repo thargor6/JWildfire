@@ -103,12 +103,12 @@ public class LissajousFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float t = (varpar->lissajous_tmax - varpar->lissajous_tmin)*RANDFLOAT() + varpar->lissajous_tmin;\n"
+    return "float t = (__lissajous_tmax - __lissajous_tmin)*RANDFLOAT() + __lissajous_tmin;\n"
         + "float y0 = RANDFLOAT() - 0.5f;\n"
-        + "float x1 = sinf(varpar->lissajous_a * t + varpar->lissajous_d);\n"
-        + "float y1 = sinf(varpar->lissajous_b * t);\n"
-        + "__px += varpar->lissajous * (x1 + varpar->lissajous_c*t + varpar->lissajous_e*y0);\n"
-        + "__py += varpar->lissajous * (y1 + varpar->lissajous_c*t + varpar->lissajous_e*y0);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->lissajous*__z;\n" : "");
+        + "float x1 = sinf(__lissajous_a * t + __lissajous_d);\n"
+        + "float y1 = sinf(__lissajous_b * t);\n"
+        + "__px += __lissajous * (x1 + __lissajous_c*t + __lissajous_e*y0);\n"
+        + "__py += __lissajous * (y1 + __lissajous_c*t + __lissajous_e*y0);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __lissajous*__z;\n" : "");
   }
 }

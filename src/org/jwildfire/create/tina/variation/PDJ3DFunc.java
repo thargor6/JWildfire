@@ -94,8 +94,8 @@ public class PDJ3DFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "   __px += varpar->pdj3D * (sinf(varpar->pdj3D_a * __y) - cosf(varpar->pdj3D_b * __x));\n"
-        + "    __py += varpar->pdj3D * (sinf(varpar->pdj3D_c * __x) - cosf(varpar->pdj3D_d * __y));\n"
-        + "    __pz += varpar->pdj3D * (sinf(varpar->pdj3D_e * __y) - cosf(varpar->pdj3D_f * __z))*cosf(varpar->pdj3D_g * __x) + sinf(varpar->pdj3D_h * __z) ;";
+    return "   __px += __pdj3D * (sinf(__pdj3D_a * __y) - cosf(__pdj3D_b * __x));\n"
+        + "    __py += __pdj3D * (sinf(__pdj3D_c * __x) - cosf(__pdj3D_d * __y));\n"
+        + "    __pz += __pdj3D * (sinf(__pdj3D_e * __y) - cosf(__pdj3D_f * __z))*cosf(__pdj3D_g * __x) + sinf(__pdj3D_h * __z) ;";
   }
 }

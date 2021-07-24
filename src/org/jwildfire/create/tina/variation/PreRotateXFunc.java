@@ -53,7 +53,7 @@ public class PreRotateXFunc extends SimpleVariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rx_cos;\n"
         + "float rx_sin;\n"
-        + "sincosf(varpar->pre_rotate_x * M_PI_2_F, &rx_sin, &rx_cos);\n"
+        + "sincosf(__pre_rotate_x * M_PI_2_F, &rx_sin, &rx_cos);\n"
         + "float _z = rx_cos * __z - rx_sin * __y;\n"
         + " __y = rx_sin * __z + rx_cos * __y;\n"
         + " __z = _z;\n"

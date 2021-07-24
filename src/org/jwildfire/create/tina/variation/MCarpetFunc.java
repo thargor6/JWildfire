@@ -86,11 +86,11 @@ public class MCarpetFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float T = ((__x*__x + __y*__y) / 4.0f + 1.0f);\n"
-        + "float r = varpar->mcarpet / T;\n"
-        + "__px += __x * r * varpar->mcarpet_x;\n"
-        + "__py += __y * r * varpar->mcarpet_y;\n"
-        + "__px += (1.0 - (varpar->mcarpet_twist * __x*__x) + __y) * varpar->mcarpet;\n"
-        + "__py += varpar->mcarpet_tilt * __x * varpar->mcarpet;"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->mcarpet * __z;\n" : "");
+        + "float r = __mcarpet / T;\n"
+        + "__px += __x * r * __mcarpet_x;\n"
+        + "__py += __y * r * __mcarpet_y;\n"
+        + "__px += (1.0 - (__mcarpet_twist * __x*__x) + __y) * __mcarpet;\n"
+        + "__py += __mcarpet_tilt * __x * __mcarpet;"
+        + (context.isPreserveZCoordinate() ? "__pz += __mcarpet * __z;\n" : "");
   }
 }

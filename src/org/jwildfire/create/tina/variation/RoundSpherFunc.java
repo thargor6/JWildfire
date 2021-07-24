@@ -53,9 +53,9 @@ public class RoundSpherFunc extends SimpleVariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float e = 1.f/__r2 + 4.f/(PI*PI);\n"
         + "\n"
-        + "__px += varpar->roundspher * (varpar->roundspher/__r2*__x/e);\n"
-        + "__py += varpar->roundspher * (varpar->roundspher/__r2*__y/e);\n"
+        + "__px += __roundspher * (__roundspher/__r2*__x/e);\n"
+        + "__py += __roundspher * (__roundspher/__r2*__y/e);\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->roundspher*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __roundspher*__z;\n" : "");
   }
 }

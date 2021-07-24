@@ -67,19 +67,19 @@ public class Loonie3Func extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float _sqrvvar = varpar->loonie3 * varpar->loonie3;\n"
+    return "float _sqrvvar = __loonie3 * __loonie3;\n"
         + "float r2 = 2 * _sqrvvar;\n"
         + "if (__x > 1.e-6f) {\n"
         + "  r2 = sqrf((__x*__x + __y*__y) / __x);\n"
         + "}\n"
         + "if (r2 < _sqrvvar) {\n"
-        + "  float r = varpar->loonie3 * sqrtf(_sqrvvar / r2 - 1.0f);\n"
+        + "  float r = __loonie3 * sqrtf(_sqrvvar / r2 - 1.0f);\n"
         + "  __px += r * __x;\n"
         + "  __py += r * __y;\n"
         + "} else {\n"
-        + "  __px += varpar->loonie3 * __x;\n"
-        + "  __py += varpar->loonie3 * __y;\n"
+        + "  __px += __loonie3 * __x;\n"
+        + "  __py += __loonie3 * __y;\n"
         + "}\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->loonie3 * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __loonie3 * __z;\n" : "");
   }
 }

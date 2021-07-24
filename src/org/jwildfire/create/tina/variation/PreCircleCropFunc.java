@@ -128,11 +128,11 @@ public class PreCircleCropFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float ca = fmaxf(-1.0f, fminf(varpar->pre_circlecrop_scatter_area, 1.0f));\n"
-        + "    float x0 = varpar->pre_circlecrop_x;\n"
-        + "    float y0 = varpar->pre_circlecrop_y;\n"
-        + "    float cr = varpar->pre_circlecrop_radius;\n"
-        + "    float vv = varpar->pre_circlecrop;\n"
+    return "float ca = fmaxf(-1.0f, fminf(__pre_circlecrop_scatter_area, 1.0f));\n"
+        + "    float x0 = __pre_circlecrop_x;\n"
+        + "    float y0 = __pre_circlecrop_y;\n"
+        + "    float cr = __pre_circlecrop_radius;\n"
+        + "    float vv = __pre_circlecrop;\n"
         + "\n"
         + "    __x -= x0;\n"
         + "    __y -= y0;\n"
@@ -142,7 +142,7 @@ public class PreCircleCropFunc extends VariationFunc implements SupportsGPU {
         + "    float rdc = cr + (RANDFLOAT() * 0.5f * ca);\n"
         + "\n"
         + "    short esc = rad > cr;\n"
-        + "    short cr0 = lroundf(varpar->pre_circlecrop_zero) == 1;\n"
+        + "    short cr0 = lroundf(__pre_circlecrop_zero) == 1;\n"
         + "\n"
         + "    float s = sinf(ang);\n"
         + "    float c = cosf(ang);\n"

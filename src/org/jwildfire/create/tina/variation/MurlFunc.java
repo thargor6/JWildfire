@@ -101,12 +101,12 @@ public class MurlFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float murl_power = rintf(varpar->murl_power);\n"
-        + "float c = varpar->murl_c;\n"
+    return "float murl_power = rintf(__murl_power);\n"
+        + "float c = __murl_c;\n"
         + "if (murl_power != 1.f)\n"
-        + "    c = varpar->murl_c / (murl_power - 1.f);\n"
+        + "    c = __murl_c / (murl_power - 1.f);\n"
         + "float p2 = 0.5f*murl_power;\n"
-        + "float vp = varpar->murl*(varpar->murl_c + 1.f);\n"
+        + "float vp = __murl*(__murl_c + 1.f);\n"
         + "float cosa;\n"
         + "float sina;\n"
         + "sincosf(atan2f(__y,__x)*murl_power ,&sina, &cosa);\n"
@@ -117,6 +117,6 @@ public class MurlFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "__px += r1 * (__x*re + __y*im);\n"
         + "__py += r1 * (__y*re - __x*im);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->murl*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __murl*__z;\n" : "");
   }
 }
