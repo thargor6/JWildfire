@@ -10051,10 +10051,10 @@ public class MainEditorFrame extends JFrame {
       tinaSendToGPURenderButton = new JButton();
       tinaSendToGPURenderButton.setToolTipText("Send the currently selected flame to the GPU renderer");
       tinaSendToGPURenderButton.setText("GPU");
-      tinaSendToGPURenderButton.setPreferredSize(new Dimension(72, 24));
       tinaSendToGPURenderButton.setMnemonic(KeyEvent.VK_G);
+      tinaSendToGPURenderButton.setPreferredSize(new Dimension(72, 24));
       tinaSendToGPURenderButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      tinaSendToGPURenderButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/pill.png")));
+      tinaSendToGPURenderButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/green_pill.png")));
       tinaSendToGPURenderButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.sendCurrentFlameToGPURenderer();
@@ -10080,15 +10080,18 @@ public class MainEditorFrame extends JFrame {
       });
       motionCurveEditModeButton.setToolTipText("Activate animation controls in order to create animated flames");
       //motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionEditingMode.gif")));
+      motionCurveEditModeButton.setText("Anim");
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 36));
       motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
 
       gpuModeToggleButton = new JToggleButton();
       gpuModeToggleButton.setToolTipText("Toggle GPU mode on/off (full preview uses GPU and random-flame-generators try to avoid to use variations which are not supported by GPU)");
+      gpuModeToggleButton.setText("GPU");
       gpuModeToggleButton.setPreferredSize(new Dimension(72, 36));
       gpuModeToggleButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      gpuModeToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/green_pill.png")));
+      gpuModeToggleButton.setMnemonic(KeyEvent.VK_U);
+      gpuModeToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/pill.png")));
       gpuModeToggleButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.toggleGpuMode();
@@ -22906,7 +22909,7 @@ public class MainEditorFrame extends JFrame {
   private JToggleButton getSolidRenderingToggleBtn() {
     if (solidRenderingToggleBtn == null) {
       solidRenderingToggleBtn = new JToggleButton();
-      solidRenderingToggleBtn.setText("3D");
+      solidRenderingToggleBtn.setText("Solid");
       solidRenderingToggleBtn.setToolTipText("Enable solid rendering");
       solidRenderingToggleBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/kwikdisk-4.png")));
       solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 36));

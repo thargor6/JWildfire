@@ -222,7 +222,7 @@ public class FlamePreviewHelper implements IterationObserver {
             && gpuModeToggleButton.isSelected()
             && !pQuickRender) {
           try {
-            final int PROGRESS_STEPS = 50;
+            final int PROGRESS_STEPS = 25;
             File tmpFile = File.createTempFile("jwf", ".flame");
             try {
               FileDialogTools.ensureFileAccess(
@@ -395,7 +395,7 @@ public class FlamePreviewHelper implements IterationObserver {
           }
           try {
             mainProgressUpdater.updateProgress(i);
-            Thread.sleep(100);
+            Thread.sleep(150);
           } catch (Throwable ex) {
             ex.printStackTrace();
           }
