@@ -248,9 +248,9 @@ public class HexesFunc extends VariationFunc implements SupportsGPU {
         + "float DXo, DYo, L, L1, L2, R, s, trgL, Vx, Vy;\n"
         + "float U[2];\n"
         + "int Hx, Hy;\n"
-        + "float rotSin = sinf(varpar->hexes_rotate * 2.0f * PI);\n"
-        + "float rotCos = cosf(varpar->hexes_rotate * 2.0f * PI);\n"
-        + "s = varpar->hexes_cellsize;\n"
+        + "float rotSin = sinf(__hexes_rotate * 2.0f * PI);\n"
+        + "float rotCos = cosf(__hexes_rotate * 2.0f * PI);\n"
+        + "s = __hexes_cellsize;\n"
         + "if (0.0 != s) {\n"
         + "  U[_x_] = __x;\n"
         + "  U[_y_] = __y;\n"
@@ -280,7 +280,7 @@ public class HexesFunc extends VariationFunc implements SupportsGPU {
         + "  L1 = hexes_voronoi(P, 7, 0, U);\n"
         + "  DXo = U[_x_] - P[0][_x_];\n"
         + "  DYo = U[_y_] - P[0][_y_];\n"
-        + "  trgL = powf(L1 + 1e-06f, varpar->hexes_power) * varpar->hexes_scale;\n"
+        + "  trgL = powf(L1 + 1e-06f, __hexes_power) * __hexes_scale;\n"
         + "  Vx = DXo * rotCos + DYo * rotSin;\n"
         + "  Vy = -DXo * rotSin + DYo * rotCos;\n"
         + "  U[_x_] = Vx + P[0][_x_];\n"
@@ -300,10 +300,10 @@ public class HexesFunc extends VariationFunc implements SupportsGPU {
         + "  Vy *= R;\n"
         + "  Vx += P[0][_x_];\n"
         + "  Vy += P[0][_y_];\n"
-        + "  __px += varpar->hexes * Vx;\n"
-        + "  __py += varpar->hexes * Vy;\n"
+        + "  __px += __hexes * Vx;\n"
+        + "  __py += __hexes * Vy;\n"
         + "}\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->hexes * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __hexes * __z;\n" : "");
   }
 
   @Override

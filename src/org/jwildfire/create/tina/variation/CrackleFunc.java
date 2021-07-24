@@ -244,13 +244,13 @@ public class CrackleFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return
-            "if(fabsf(varpar->"+getName()+"_cellsize)>1.0e-6) {\n"
+            "if(fabsf(__"+getName()+"_cellsize)>1.0e-6) {\n"
         + "  float DXo, DYo, L, R, s, trgL;\n"
         + "  float2 U;\n"
         + "  int XCv, YCv;\n"
         + "  float2 P[9];\n"
-        + "  s = varpar->"+getName()+"_cellsize / 2.0;\n"
-        + "  if (varpar->"+getName()+" != 0) {\n"
+        + "  s = __"+getName()+"_cellsize / 2.0;\n"
+        + "  if (__"+getName()+" != 0) {\n"
         + "      float blurr = (RANDFLOAT() + RANDFLOAT()) / 2.0 + (RANDFLOAT() - 0.5) / 4.0;\n"
         + "      float theta = 2 * PI * RANDFLOAT();\n"
         + "      U.x = blurr * sinf(theta);\n"
@@ -265,7 +265,7 @@ public class CrackleFunc extends VariationFunc implements SupportsGPU {
         + "    int i = 0;\n"
         + "    for (di = -1; di < 2; di++) {\n"
         + "      for (dj = -1; dj < 2; dj++) {\n"
-        + "        __state%d_"+getName()+"_position(XCv + di, YCv + dj, varpar->"+getName()+"_z, s, varpar->"+getName()+"_distort, &(P[i]));\n"
+        + "        __state%d_"+getName()+"_position(XCv + di, YCv + dj, __"+getName()+"_z, s, __"+getName()+"_distort, &(P[i]));\n"
         + "        i++;\n"
         + "      }\n"
         + "    }\n"
@@ -277,14 +277,14 @@ public class CrackleFunc extends VariationFunc implements SupportsGPU {
         + "    i = 0;\n"
         + "    for (di = -1; di < 2; di++) {\n"
         + "      for (dj = -1; dj < 2; dj++) {\n"
-        + "        __state%d_"+getName()+"_position(XCv + di, YCv + dj, varpar->"+getName()+"_z, s, varpar->"+getName()+"_distort, &(P[i]));\n"
+        + "        __state%d_"+getName()+"_position(XCv + di, YCv + dj, __"+getName()+"_z, s, __"+getName()+"_distort, &(P[i]));\n"
         + "        i++;\n"
         + "      }\n"
         + "    }\n\n"
         + "    L = __state%d_"+getName()+"_voronoi(P, 9, 4, &U);\n"
         + "    DXo = U.x - P[4].x;\n"
         + "    DYo = U.y - P[4].y;\n"
-        + "    trgL = powf(L + 1e-32, varpar->"+getName()+"_power) * varpar->"+getName()+"_scale;\n"
+        + "    trgL = powf(L + 1e-32, __"+getName()+"_power) * __"+getName()+"_scale;\n"
         + "    R = trgL / (L + 1e-32);\n"
         + "    DXo *= R;\n"
         + "    DYo *= R;\n\n"
@@ -295,9 +295,9 @@ public class CrackleFunc extends VariationFunc implements SupportsGPU {
   }
 
   protected String applyCellCalculationGPU(FlameTransformationContext context) {
-    return  "    __px += varpar->"+getName()+" * DXo;\n"
-          + "    __py += varpar->"+getName()+" * DYo;\n"
-          + (context.isPreserveZCoordinate() ? "__pz += varpar->"+getName()+" * __z;\n" : "");
+    return  "    __px += __"+getName()+" * DXo;\n"
+          + "    __py += __"+getName()+" * DYo;\n"
+          + (context.isPreserveZCoordinate() ? "__pz += __"+getName()+" * __z;\n" : "");
   }
 
   @Override
