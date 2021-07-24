@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  PostCropBoxFunc  extends VariationFunc  {
+public class  PostCropBoxFunc  extends VariationFunc  implements SupportsGPU {
 
 	/*
 	 * Variation : post_crop_box
@@ -145,9 +145,48 @@ public class  PostCropBoxFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "	  float x,y;"
+	    		+""
+	    		+"	  x= __px;"
+	    		+"	  y =__py;"
+	    		+"	  float2 p=make_float2(x,y);"
+	    		+"	  float d=0.;"
+	    		+""
+	    		+"	  float2 ra=make_float2( varpar->post_crop_box_width ,varpar->post_crop_box_height);"
+	    		+"	  d = post_crop_box_sdBox( p, ra );"
+	    		+"    "
+	    		+"	  __doHide=false;"
+	    		+"	  if( varpar->post_crop_box_invert ==0)"
+	    		+"	   {"
+	    		+"		  if (d>0.0)"
+	    		+"		  { x=0.;"
+	    		+"		    y=0.;"
+	    		+"		    __doHide = true;"
+	    		+"	       }"
+	    		+"	  } else"
+	    		+"	 {"
+	    		+"	     if (d<=0.0 )"
+	    		+"	     { x=0.;"
+	    		+"	       y=0.;"
+	    		+"	       __doHide = true;"
+	    		+"	     }"
+	    		+"	 }"
+	    		+"		    __px = varpar->post_crop_box * x;"
+	    		+"		    __py = varpar->post_crop_box * y;"
+                + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_box * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  "__device__	float  post_crop_box_sdBox ( float2 p, float2 b )"
+		       +"   {"
+		       +"     float2 d = abs(p)-b;"
+		       +"     return length(max(d,make_float2(0.0f,0.0f))) + fminf(fmaxf(d.x,d.y),0.0);"
+		       +"}";
+	  }		  
 }
 
 

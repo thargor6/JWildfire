@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  PostCropStarsFunc  extends VariationFunc  {
+public class  PostCropStarsFunc  extends VariationFunc  implements SupportsGPU {
 
 	/*
 	 * Variation : crop_star
@@ -170,9 +170,63 @@ public class  PostCropStarsFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;"
+	    		+"		  "
+	    		+"	      x= __px;"
+	    		+"	      y =__py;"
+	    		+"  "
+	    		+"			float2 p=make_float2(x,y);"
+	    		+"			float d=0.;"
+	    		+""
+	    		+"			{"
+	    		+"				float a=  varpar->post_crop_stars_r2 ;"
+	    		+"				float m = 4.0 + a*a*( varpar->post_crop_stars_n *2.0-4.0);  "
+	    		+"				d = post_crop_stars_sdStar( p,varpar->post_crop_stars_radius,varpar->post_crop_stars_n,m );"
+	    		+"			}"
+	    		+"	    "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->post_crop_stars_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (d>0.0)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (d<=0.0 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->post_crop_stars * x;"
+	    		+"		    __py = varpar->post_crop_stars * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_stars * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ 	float post_crop_stars_sdStar( float2 p, float r,  int n, float m)"
+	    		+"	{"
+	    		+"		"
+	    		+"		float an = 3.141593/(float)(n);"
+	    		+"		float en = 6.283185/m;"
+	    		+"		float2  acs = make_float2(cos(an),sin(an));"
+	    		+"		float2  ecs = make_float2(cos(en),sin(en)); "
+	    		+"		"
+	    		+"		"
+	    		+"		float bn = mod(atan2(p.x,p.y),2.0*an) - an;"
+	    		+"		p = make_float2(cosf(bn),abs(sinf(bn)))*(length(p));"
+	    		+"		"
+	    		+"		p = p-(acs*(r));"
+	    		+"		p = p+(ecs*(clamp( -dot(p,ecs), 0.0, r*acs.y/ecs.y)));"
+	    		+"		return length(p)*sign(p.x);"
+	    		+"	}";
+	  }
 }
 
 

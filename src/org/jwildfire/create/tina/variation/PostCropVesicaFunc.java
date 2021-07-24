@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  PostCropVesicaFunc  extends VariationFunc  {
+public class  PostCropVesicaFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation : crop_shapes
@@ -163,9 +163,47 @@ double sdVesica(vec2 p, double r, double d)
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST,VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;"
+	    		+"		  "
+	    		+"	      x= __px;"
+	    		+"	      y =__py;"
+	    		+"			float2 p=make_float2(x,y);"
+	    		+"			float d=0.;"
+	    		+"				d = post_crop_vesica_sdVesica( p, 1.0 +  varpar->post_crop_vesica_height , 0.8 +  varpar->post_crop_vesica_width  );"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->post_crop_vesica_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (d>0.0)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (d<=0.0 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->post_crop_vesica * x;"
+	    		+"		    __py = varpar->post_crop_vesica * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_vesica * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ 	float  post_crop_vesica_sdVesica (float2 p, float r, float d)"
+	    		+"{"
+	    		+"    p = abs(p);"
+	    		+"    float b = sqrt(r*r-d*d);  "
+	    		+"    return ((p.y-b)*d > p.x*b) ? length(p-(make_float2(0.0,b)))"
+	    		+"                               : length(p-(make_float2(-d,0.0)))-r;"
+	    		+"}";
+	  }
 
 }
 
