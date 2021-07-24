@@ -119,11 +119,11 @@ public class Bipolar2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float x2y2 = (__x * __x + __y * __y) * varpar->bipolar2_g1;\n"
-        + "    float t = x2y2 + varpar->bipolar2_a;\n"
-        + "    float x2 = varpar->bipolar2_b * __x;\n"
-        + "    float ps = -(PI*0.5f) * varpar->bipolar2_shift;\n"
-        + "    float y = varpar->bipolar2_c * atan2f(varpar->bipolar2_e * __y, x2y2 - varpar->bipolar2_d) + ps;\n"
+    return "    float x2y2 = (__x * __x + __y * __y) * __bipolar2_g1;\n"
+        + "    float t = x2y2 + __bipolar2_a;\n"
+        + "    float x2 = __bipolar2_b * __x;\n"
+        + "    float ps = -(PI*0.5f) * __bipolar2_shift;\n"
+        + "    float y = __bipolar2_c * atan2f(__bipolar2_e * __y, x2y2 - __bipolar2_d) + ps;\n"
         + "\n"
         + "    if (y > (PI*0.5f)) {\n"
         + "      y = -(PI*0.5f) + fmodf(y + (PI*0.5f), PI);\n"
@@ -135,9 +135,9 @@ public class Bipolar2Func extends VariationFunc implements SupportsGPU {
         + "    float g = t - x2;\n"
         + "\n"
         + "    if (!((g == 0) || (f / g <= 0))) {\n"
-        + "    __px += varpar->bipolar2 * varpar->bipolar2_f1 * (2.0f / PI) * logf((t + x2) / (t - x2));\n"
-        + "    __py += varpar->bipolar2 * (2.0f / PI) * y * varpar->bipolar2_h;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->bipolar2 * __z;\n" : "")
+        + "    __px += __bipolar2 * __bipolar2_f1 * (2.0f / PI) * logf((t + x2) / (t - x2));\n"
+        + "    __py += __bipolar2 * (2.0f / PI) * y * __bipolar2_h;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __bipolar2 * __z;\n" : "")
         + "}\n";
   }
 }

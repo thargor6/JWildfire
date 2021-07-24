@@ -146,20 +146,20 @@ public class Atan2_SpiralsFunc extends VariationFunc implements SupportsGPU {
         + "    float y = __y;\n"
         + "    float xs = x * x;\n"
         + "    float ys = y * y;\n"
-        + "    float xy2 = powf(xs + ys, varpar->atan2_spirals_x2y2_power);\n"
-        + "    float r = powf(xs + ys, varpar->atan2_spirals_r_power);\n"
+        + "    float xy2 = powf(xs + ys, __atan2_spirals_x2y2_power);\n"
+        + "    float r = powf(xs + ys, __atan2_spirals_r_power);\n"
         + "\n"
-        + "    float fx = varpar->atan2_spirals_x_mult * atan2f(r * varpar->atan2_spirals_r_mult + varpar->atan2_spirals_r_add, xy2 * varpar->atan2_spirals_xy2_mult + varpar->atan2_spirals_xy2_add) + varpar->atan2_spirals_x_add;\n"
+        + "    float fx = __atan2_spirals_x_mult * atan2f(r * __atan2_spirals_r_mult + __atan2_spirals_r_add, xy2 * __atan2_spirals_xy2_mult + __atan2_spirals_xy2_add) + __atan2_spirals_x_add;\n"
 
-        + "    float fy = sinf(atan2f(y / varpar->atan2_spirals_yy_div + varpar->atan2_spirals_yy_add, (x / varpar->atan2_spirals_yx_div) + varpar->atan2_spirals_yx_add) + varpar->atan2_spirals_sin_add) * varpar->atan2_spirals_y_mult;\n"
+        + "    float fy = sinf(atan2f(y / __atan2_spirals_yy_div + __atan2_spirals_yy_add, (x / __atan2_spirals_yx_div) + __atan2_spirals_yx_add) + __atan2_spirals_sin_add) * __atan2_spirals_y_mult;\n"
         + "\n"
         + "    if (x >= 0) {\n"
-        + "      __px += varpar->atan2_spirals * (-fx + PI);\n"
+        + "      __px += __atan2_spirals * (-fx + PI);\n"
         + "    } else {\n"
-        + "      __px += varpar->atan2_spirals * (fx - PI);\n"
+        + "      __px += __atan2_spirals * (fx - PI);\n"
         + "    }\n"
         + "\n"
-        + "    __py += varpar->atan2_spirals * fy;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->atan2_spirals * __z;\n" : "");
+        + "    __py += __atan2_spirals * fy;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __atan2_spirals * __z;\n" : "");
   }
 }

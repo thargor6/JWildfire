@@ -79,8 +79,8 @@ public class Bent2Func extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->bent2*((__x < 0.f) ? __x*varpar->bent2_x : __x);\n"
-        + "__py += varpar->bent2*((__y < 0.f) ? __y*varpar->bent2_y : __y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->bent2*__z;\n" : "");
+    return "__px += __bent2*((__x < 0.f) ? __x*__bent2_x : __x);\n"
+        + "__py += __bent2*((__y < 0.f) ? __y*__bent2_y : __y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __bent2*__z;\n" : "");
   }
 }

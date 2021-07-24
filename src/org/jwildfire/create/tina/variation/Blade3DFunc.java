@@ -59,13 +59,13 @@ public class Blade3DFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float r = RANDFLOAT() * varpar->blade3D * __r;\n"
+    return "float r = RANDFLOAT() * __blade3D * __r;\n"
         + "float cosr;\n"
         + "float sinr;\n"
         + "sincosf(r, &sinr, &cosr);\n"
         + "\n"
-        + "__px += varpar->blade3D * __x * (cosr + sinr);\n"
-        + "__py += varpar->blade3D * __x * (cosr - sinr);\n"
-        + "__pz += varpar->blade3D * __y * (sinr - cosr);\n";
+        + "__px += __blade3D * __x * (cosr + sinr);\n"
+        + "__py += __blade3D * __x * (cosr - sinr);\n"
+        + "__pz += __blade3D * __y * (sinr - cosr);\n";
   }
 }

@@ -52,20 +52,20 @@ public class BentFunc extends SimpleVariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "if (__x < 0.f)\n"
         + "{\n"
-        + "    __px += varpar->bent*2.f*__x;\n"
+        + "    __px += __bent*2.f*__x;\n"
         + "}\n"
         + "else\n"
         + "{\n"
-        + "    __px += varpar->bent*__x;\n"
+        + "    __px += __bent*__x;\n"
         + "}\n"
         + "if (__y < 0.f)\n"
         + "{\n"
-        + "    __py += varpar->bent*.5f*__y;\n"
+        + "    __py += __bent*.5f*__y;\n"
         + "}\n"
         + "else\n"
         + "{\n"
-        + "    __py += varpar->bent*__y;\n"
+        + "    __py += __bent*__y;\n"
         + "}\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->bent*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __bent*__z;\n" : "");
   }
 }

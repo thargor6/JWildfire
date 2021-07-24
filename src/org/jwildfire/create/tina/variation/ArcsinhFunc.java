@@ -51,9 +51,9 @@ public class ArcsinhFunc extends SimpleVariationFunc implements SupportsGPU {
     return "Complex z;\n"
          + "Complex_Init(&z, __x, __y);\n"
          + "Complex_AsinH(&z);\n"
-         + "Complex_Scale(&z, varpar->arcsinh * 2.f / PI);\n"
+         + "Complex_Scale(&z, __arcsinh * 2.f / PI);\n"
          + "__px += z.re;\n"
          + "__py += z.im;\n"
-         + (context.isPreserveZCoordinate() ? "__pz += varpar->arcsinh * __z;\n": "");
+         + (context.isPreserveZCoordinate() ? "__pz += __arcsinh * __z;\n": "");
   }
 }

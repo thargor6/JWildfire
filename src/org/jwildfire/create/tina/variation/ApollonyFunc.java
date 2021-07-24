@@ -100,8 +100,8 @@ public class ApollonyFunc extends SimpleVariationFunc implements SupportsGPU {
         + "      y = -f1x * r / 2.0 - f1y / 2.0;\n"
         + "    }\n"
         + "\n"
-        + "    __px += x * varpar->apollony;\n"
-        + "    __py += y * varpar->apollony;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->apollony * __z;\n" : "");
+        + "    __px += x * __apollony;\n"
+        + "    __py += y * __apollony;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __apollony * __z;\n" : "");
   }
 }

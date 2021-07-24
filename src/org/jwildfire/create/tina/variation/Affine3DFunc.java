@@ -154,25 +154,25 @@ public class Affine3DFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float xa = varpar->affine3D_rotateX * PI / 180.0f;\n"
+    return "float xa = __affine3D_rotateX * PI / 180.0f;\n"
         + " float _sinX = sinf(xa);\n"
         + " float _cosX = cosf(xa);\n"
-        + " float ya = varpar->affine3D_rotateY * PI / 180.0f;\n"
+        + " float ya = __affine3D_rotateY * PI / 180.0f;\n"
         + " float _sinY = sinf(ya);\n"
         + " float _cosY = cosf(ya);\n"
-        + " float za = varpar->affine3D_rotateZ * PI / 180.0f;\n"
+        + " float za = __affine3D_rotateZ * PI / 180.0f;\n"
         + " float _sinZ = sinf(za);\n"
         + " float _cosZ = cosf(za);\n"
-        + " bool _hasShear = fabsf(varpar->affine3D_shearXY) > EPSILON || fabsf(varpar->affine3D_shearXZ) > EPSILON || fabsf(varpar->affine3D_shearYX) > EPSILON ||\n"
-        + "            fabsf(varpar->affine3D_shearYZ) > EPSILON || fabsf(varpar->affine3D_shearZX) > EPSILON || fabsf(varpar->affine3D_shearZY) > EPSILON;"
+        + " bool _hasShear = fabsf(__affine3D_shearXY) > EPSILON || fabsf(__affine3D_shearXZ) > EPSILON || fabsf(__affine3D_shearYX) > EPSILON ||\n"
+        + "            fabsf(__affine3D_shearYZ) > EPSILON || fabsf(__affine3D_shearZX) > EPSILON || fabsf(__affine3D_shearZY) > EPSILON;"
         + "if (_hasShear) {\n"
-        + "  __px += varpar->affine3D * (_cosZ * (_cosY * (varpar->affine3D_shearXY * varpar->affine3D_scaleY * __y + varpar->affine3D_shearXZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleX * __x) + _sinY * (_sinX * (varpar->affine3D_shearYX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearYZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleY * __y) + _cosX * (varpar->affine3D_shearZX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearZY * varpar->affine3D_scaleY * __y + varpar->affine3D_scaleZ * __z))) - _sinZ * (_cosX * (varpar->affine3D_shearYX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearYZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleY * __y) - _sinX * (varpar->affine3D_shearZX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearZY * varpar->affine3D_scaleY * __y + varpar->affine3D_scaleZ * __z)) + varpar->affine3D_translateX);\n"
-        + "  __py += varpar->affine3D * (_sinZ * (_cosY * (varpar->affine3D_shearXY * varpar->affine3D_scaleY * __y + varpar->affine3D_shearXZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleX * __x) + _sinY * (_sinX * (varpar->affine3D_shearYX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearYZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleY * __y) + _cosX * (varpar->affine3D_shearZX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearZY * varpar->affine3D_scaleY * __y + varpar->affine3D_scaleZ * __z))) + _cosZ * (_cosX * (varpar->affine3D_shearYX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearYZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleY * __y) - _sinX * (varpar->affine3D_shearZX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearZY * varpar->affine3D_scaleY * __y + varpar->affine3D_scaleZ * __z)) + varpar->affine3D_translateY);\n"
-        + "  __pz += varpar->affine3D * (-_sinY * (varpar->affine3D_shearXY * varpar->affine3D_scaleY * __y + varpar->affine3D_shearXZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleX * __x) + _cosY * (_sinX * (varpar->affine3D_shearYX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearYZ * varpar->affine3D_scaleZ * __z + varpar->affine3D_scaleY * __y) + _cosX * (varpar->affine3D_shearZX * varpar->affine3D_scaleX * __x + varpar->affine3D_shearZY * varpar->affine3D_scaleY * __y + varpar->affine3D_scaleZ * __z)) + varpar->affine3D_translateZ);\n"
+        + "  __px += __affine3D * (_cosZ * (_cosY * (__affine3D_shearXY * __affine3D_scaleY * __y + __affine3D_shearXZ * __affine3D_scaleZ * __z + __affine3D_scaleX * __x) + _sinY * (_sinX * (__affine3D_shearYX * __affine3D_scaleX * __x + __affine3D_shearYZ * __affine3D_scaleZ * __z + __affine3D_scaleY * __y) + _cosX * (__affine3D_shearZX * __affine3D_scaleX * __x + __affine3D_shearZY * __affine3D_scaleY * __y + __affine3D_scaleZ * __z))) - _sinZ * (_cosX * (__affine3D_shearYX * __affine3D_scaleX * __x + __affine3D_shearYZ * __affine3D_scaleZ * __z + __affine3D_scaleY * __y) - _sinX * (__affine3D_shearZX * __affine3D_scaleX * __x + __affine3D_shearZY * __affine3D_scaleY * __y + __affine3D_scaleZ * __z)) + __affine3D_translateX);\n"
+        + "  __py += __affine3D * (_sinZ * (_cosY * (__affine3D_shearXY * __affine3D_scaleY * __y + __affine3D_shearXZ * __affine3D_scaleZ * __z + __affine3D_scaleX * __x) + _sinY * (_sinX * (__affine3D_shearYX * __affine3D_scaleX * __x + __affine3D_shearYZ * __affine3D_scaleZ * __z + __affine3D_scaleY * __y) + _cosX * (__affine3D_shearZX * __affine3D_scaleX * __x + __affine3D_shearZY * __affine3D_scaleY * __y + __affine3D_scaleZ * __z))) + _cosZ * (_cosX * (__affine3D_shearYX * __affine3D_scaleX * __x + __affine3D_shearYZ * __affine3D_scaleZ * __z + __affine3D_scaleY * __y) - _sinX * (__affine3D_shearZX * __affine3D_scaleX * __x + __affine3D_shearZY * __affine3D_scaleY * __y + __affine3D_scaleZ * __z)) + __affine3D_translateY);\n"
+        + "  __pz += __affine3D * (-_sinY * (__affine3D_shearXY * __affine3D_scaleY * __y + __affine3D_shearXZ * __affine3D_scaleZ * __z + __affine3D_scaleX * __x) + _cosY * (_sinX * (__affine3D_shearYX * __affine3D_scaleX * __x + __affine3D_shearYZ * __affine3D_scaleZ * __z + __affine3D_scaleY * __y) + _cosX * (__affine3D_shearZX * __affine3D_scaleX * __x + __affine3D_shearZY * __affine3D_scaleY * __y + __affine3D_scaleZ * __z)) + __affine3D_translateZ);\n"
         + "} else {\n"
-        + "  __px += varpar->affine3D * (_cosZ * (_cosY * varpar->affine3D_scaleX * __x + _sinY * (_cosX * varpar->affine3D_scaleZ * __z + _sinX * varpar->affine3D_scaleY * __y)) - _sinZ * (_cosX * varpar->affine3D_scaleY * __y - _sinX * varpar->affine3D_scaleZ * __z) + varpar->affine3D_translateX);\n"
-        + "  __py += varpar->affine3D * (_sinZ * (_cosY * varpar->affine3D_scaleX * __x + _sinY * (_cosX * varpar->affine3D_scaleZ * __z + _sinX * varpar->affine3D_scaleY * __y)) + _cosZ * (_cosX * varpar->affine3D_scaleY * __y - _sinX * varpar->affine3D_scaleZ * __z) + varpar->affine3D_translateY);\n"
-        + "  __pz += varpar->affine3D * (-_sinY * varpar->affine3D_scaleX * __x + _cosY * (_cosX * varpar->affine3D_scaleZ * __z + _sinX * varpar->affine3D_scaleY * __y) + varpar->affine3D_translateZ);\n"
+        + "  __px += __affine3D * (_cosZ * (_cosY * __affine3D_scaleX * __x + _sinY * (_cosX * __affine3D_scaleZ * __z + _sinX * __affine3D_scaleY * __y)) - _sinZ * (_cosX * __affine3D_scaleY * __y - _sinX * __affine3D_scaleZ * __z) + __affine3D_translateX);\n"
+        + "  __py += __affine3D * (_sinZ * (_cosY * __affine3D_scaleX * __x + _sinY * (_cosX * __affine3D_scaleZ * __z + _sinX * __affine3D_scaleY * __y)) + _cosZ * (_cosX * __affine3D_scaleY * __y - _sinX * __affine3D_scaleZ * __z) + __affine3D_translateY);\n"
+        + "  __pz += __affine3D * (-_sinY * __affine3D_scaleX * __x + _cosY * (_cosX * __affine3D_scaleZ * __z + _sinX * __affine3D_scaleY * __y) + __affine3D_translateZ);\n"
         + "}\n";
   }
 }

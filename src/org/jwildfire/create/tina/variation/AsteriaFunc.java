@@ -105,10 +105,10 @@ public class AsteriaFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float sina = sinf(PI * varpar->asteria_alpha);\n"
-        + "float  cosa = cosf(PI * varpar->asteria_alpha);\n"
-        + "    float x0 = varpar->asteria * __x;\n"
-        + "    float y0 = varpar->asteria * __y;\n"
+    return "float sina = sinf(PI * __asteria_alpha);\n"
+        + "float  cosa = cosf(PI * __asteria_alpha);\n"
+        + "    float x0 = __asteria * __x;\n"
+        + "    float y0 = __asteria * __y;\n"
         + "    float xx = x0;\n"
         + "    float yy = y0;\n"
         + "    float r = xx*xx + yy*yy;\n"
@@ -124,7 +124,7 @@ public class AsteriaFunc extends VariationFunc implements SupportsGPU {
         + "    if (in1) {\n"
         + "      __px += x0;\n"
         + "      __py += y0;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->asteria * __z;\n" : "")
+        + (context.isPreserveZCoordinate() ? "__pz += __asteria * __z;\n" : "")
         + "    } else {\n"
         + "      xx = x0 * cosa - y0 * sina;\n"
         + "      yy = x0 * sina + y0 * cosa;\n"
@@ -133,7 +133,7 @@ public class AsteriaFunc extends VariationFunc implements SupportsGPU {
         + "      yy = -nx * sina + yy * cosa;\n"
         + "      __px += xx;\n"
         + "      __py += yy;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->asteria * __z;\n" : "")
+        + (context.isPreserveZCoordinate() ? "__pz += __asteria * __z;\n" : "")
         + "}\n";
   }
 }

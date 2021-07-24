@@ -103,22 +103,22 @@ public class AtanFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return " float norm = 1.0 / (PI*0.5f) * varpar->atan;\n"
-        + "    switch (lroundf(varpar->atan_Mode)) {\n"
+    return " float norm = 1.0 / (PI*0.5f) * __atan;\n"
+        + "    switch (lroundf(__atan_Mode)) {\n"
         + "      case 0:\n"
-        + "        __px += varpar->atan * __x;\n"
-        + "        __py += norm * atan(varpar->atan_Stretch * __y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->atan * __z;\n" : "")
+        + "        __px += __atan * __x;\n"
+        + "        __py += norm * atan(__atan_Stretch * __y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __atan * __z;\n" : "")
         + "        break;\n"
         + "      case 1:\n"
-        + "        __px += norm * atan(varpar->atan_Stretch * __x);\n"
-        + "        __py += varpar->atan * __y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->atan * __z;\n" : "")
+        + "        __px += norm * atan(__atan_Stretch * __x);\n"
+        + "        __py += __atan * __y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __atan * __z;\n" : "")
         + "        break;\n"
         + "      case 2:\n"
-        + "        __px += norm * atan(varpar->atan_Stretch * __x);\n"
-        + "        __py += norm * atan(varpar->atan_Stretch * __y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->atan * __z;\n" : "")
+        + "        __px += norm * atan(__atan_Stretch * __x);\n"
+        + "        __py += norm * atan(__atan_Stretch * __y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __atan * __z;\n" : "")
         + "        break;\n"
         + "      default:\n"
         + "        break;\n"

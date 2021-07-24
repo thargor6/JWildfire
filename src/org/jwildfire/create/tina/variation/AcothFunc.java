@@ -58,9 +58,9 @@ public class AcothFunc extends SimpleVariationFunc implements SupportsGPU {
         + "Complex_Init(&z, __x, __y);\n"
         + "Complex_AcotH(&z);\n"
         + "Complex_Flip(&z);\n"
-        + "Complex_Scale(&z, varpar->acoth * 2.f / PI);\n"
+        + "Complex_Scale(&z, __acoth * 2.f / PI);\n"
         + "__py += z.im;\n"
         + "__px += z.re;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->acoth * __z;\n": "");
+        + (context.isPreserveZCoordinate() ? "__pz += __acoth * __z;\n": "");
   }
 }

@@ -62,9 +62,9 @@ public class BladeFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "float rn;\n"
         + "rn = RANDFLOAT();\n"
-        + "float v = varpar->blade;\n"
+        + "float v = __blade;\n"
         + "__px += v*__x*(cosf(rn*__r*v)+sinf(rn*__r*v));\n"
         + "__py += v*__x*(cosf(rn*__r*v)-sinf(rn*__r*v));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->blade*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __blade*__z;\n" : "");
   }
 }

@@ -43,8 +43,8 @@ public class BilinearFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += varpar->bi_linear * __y;\n"
-          +"__py += varpar->bi_linear * __x;\n"
-          +(context.isPreserveZCoordinate() ? "__pz += varpar->bi_linear * __z;" : "");
+    return "__px += __bi_linear * __y;\n"
+          +"__py += __bi_linear * __x;\n"
+          +(context.isPreserveZCoordinate() ? "__pz += __bi_linear * __z;" : "");
   }
 }

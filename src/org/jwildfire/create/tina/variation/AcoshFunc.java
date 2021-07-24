@@ -61,7 +61,7 @@ public class AcoshFunc extends SimpleVariationFunc implements SupportsGPU {
     return "Complex z;\n"
             + "Complex_Init(&z, __x, __y);\n"
             + "Complex_AcosH(&z);\n"
-            + "Complex_Scale(&z, varpar->acosh * 2.f / PI);\n"
+            + "Complex_Scale(&z, __acosh * 2.f / PI);\n"
             + "if(RANDFLOAT()<0.5) {\n"
             + "  __py += z.im;\n"
             + "  __px += z.re;\n"
@@ -70,6 +70,6 @@ public class AcoshFunc extends SimpleVariationFunc implements SupportsGPU {
             + "  __py += -z.im;\n"
             + "  __px += -z.re;\n"
             + "}\n"
-            + (context.isPreserveZCoordinate() ? "__pz += varpar->acosh * __z;\n": "");
+            + (context.isPreserveZCoordinate() ? "__pz += __acosh * __z;\n": "");
   }
 }

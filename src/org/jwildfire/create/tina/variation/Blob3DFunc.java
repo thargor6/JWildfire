@@ -83,13 +83,13 @@ public class Blob3DFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return " float a = atan2f(__x, __y);\n"
         + "    float r = sqrtf(__x * __x + __y * __y);\n"
-        + "    r = r * (varpar->blob3D_low + (varpar->blob3D_high - varpar->blob3D_low) * (0.5 + 0.5 * sinf(varpar->blob3D_waves * a)));\n"
+        + "    r = r * (__blob3D_low + (__blob3D_high - __blob3D_low) * (0.5 + 0.5 * sinf(__blob3D_waves * a)));\n"
         + "    float nx = sinf(a) * r;\n"
         + "    float ny = cosf(a) * r;\n"
-        + "    float nz = sinf(varpar->blob3D_waves * a) * r;\n"
+        + "    float nz = sinf(__blob3D_waves * a) * r;\n"
         + "\n"
-        + "    __px += varpar->blob3D * nx;\n"
-        + "    __py += varpar->blob3D * ny;\n"
-        + "    __pz += varpar->blob3D * nz;\n";
+        + "    __px += __blob3D * nx;\n"
+        + "    __py += __blob3D * ny;\n"
+        + "    __pz += __blob3D * nz;\n";
   }
 }

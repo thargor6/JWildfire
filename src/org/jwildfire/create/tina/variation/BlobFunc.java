@@ -83,8 +83,8 @@ public class BlobFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->blob*(varpar->blob_low+(varpar->blob_high-varpar->blob_low)*.5f*(sinf(varpar->blob_waves*__phi)+1.f))*__x;\n"
-        + "__py += varpar->blob*(varpar->blob_low+(varpar->blob_high-varpar->blob_low)*.5f*(sinf(varpar->blob_waves*__phi)+1.f))*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->blob*__z;\n" : "");
+    return "__px += __blob*(__blob_low+(__blob_high-__blob_low)*.5f*(sinf(__blob_waves*__phi)+1.f))*__x;\n"
+        + "__py += __blob*(__blob_low+(__blob_high-__blob_low)*.5f*(sinf(__blob_waves*__phi)+1.f))*__y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __blob*__z;\n" : "");
   }
 }

@@ -58,9 +58,9 @@ public class ArchFunc extends SimpleVariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rn;\n"
         + "rn = RANDFLOAT();\n"
-        + "float v = varpar->arch;\n"
+        + "float v = __arch;\n"
         + "__px += v*sinf(rn*PI*v);\n"
         + "__py += v*sinf(rn*PI*v)*tanf(rn*PI*v);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->arch*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __arch*__z;\n" : "");
   }
 }

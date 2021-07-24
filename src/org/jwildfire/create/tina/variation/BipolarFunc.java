@@ -88,13 +88,13 @@ public class BipolarFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float y0 = 0.5f*atan2f(2.f*__y,__r2-1.f)-0.5f*PI*varpar->bipolar_shift;\n"
+    return "float y0 = 0.5f*atan2f(2.f*__y,__r2-1.f)-0.5f*PI*__bipolar_shift;\n"
         + "if (y0 > 0.5f*PI)\n"
         + "    y0 = -0.5f*PI+fmodf(y0+0.5f*PI,PI);\n"
         + "else if (y0 < -0.5f*PI)\n"
         + "    y0 = 0.5f*PI-fmodf(0.5f*PI-y0,PI);\n"
-        + "__px += varpar->bipolar*logf((__r2+1.f+2.f*__x)/(__r2+1.f-2.f*__x))*0.5f/PI;\n"
-        + "__py += varpar->bipolar*y0*2.f/PI;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->bipolar*__z;\n" : "");
+        + "__px += __bipolar*logf((__r2+1.f+2.f*__x)/(__r2+1.f-2.f*__x))*0.5f/PI;\n"
+        + "__py += __bipolar*y0*2.f/PI;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __bipolar*__z;\n" : "");
   }
 }

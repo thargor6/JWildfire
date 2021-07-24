@@ -80,7 +80,7 @@ public class Arcsech2Func extends SimpleVariationFunc implements SupportsGPU {
         + "Complex_Mul(&z3, &z2);\n"
         + "Complex_Add(&z, &z3);\n"
         + "Complex_Log(&z);\n"
-        + "Complex_Scale(&z, varpar->arcsech2 * 2.0f / PI);\n"
+        + "Complex_Scale(&z, __arcsech2 * 2.0f / PI);\n"
         + "\n"
         + "    __py += z.im;\n"
         + "    if (z.im < 0) {\n"
@@ -90,6 +90,6 @@ public class Arcsech2Func extends SimpleVariationFunc implements SupportsGPU {
         + "      __px -= z.re;\n"
         + "      __py -= 1.0;\n"
         + "    }\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->arcsech2 * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __arcsech2 * __z;\n" : "");
   }
 }

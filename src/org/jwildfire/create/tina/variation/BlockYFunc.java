@@ -104,10 +104,10 @@ public class BlockYFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float v = varpar->blocky / (PI*0.5f);\n"
+    return "float v = __blocky / (PI*0.5f);\n"
         + "    float T, r;\n"
-        + "    T = ((cosf(__x) + cosf(__y)) / varpar->blocky_mp + 1.0);\n"
-        + "    r = varpar->blocky / T;\n"
+        + "    T = ((cosf(__x) + cosf(__y)) / __blocky_mp + 1.0);\n"
+        + "    r = __blocky / T;\n"
         + "    float tmp = __y*__y + __x*__x + 1.0;\n"
         + "    float x2 = 2.0 * __x;\n"
         + "    float y2 = 2.0 * __y;\n"
@@ -115,11 +115,11 @@ public class BlockYFunc extends VariationFunc implements SupportsGPU {
         + "    float ymax = 0.5 * (sqrtf(tmp + y2) + sqrtf(tmp - y2));\n"
         + "    float a = __x / xmax;\n"
         + "    float b = sqrtf_safe(1.0 - a*a);\n"
-        + "    __px += v * atan2f(a, b) * r * varpar->blocky_x;\n"
+        + "    __px += v * atan2f(a, b) * r * __blocky_x;\n"
         + "\n"
         + "    a = __y / ymax;\n"
         + "    b = sqrtf_safe(1.0 - a*a);\n"
-        + "    __py += v * atan2f(a, b) * r * varpar->blocky_y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->blocky * __z;\n" : "");
+        + "    __py += v * atan2f(a, b) * r * __blocky_y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __blocky * __z;\n" : "");
   }
 }

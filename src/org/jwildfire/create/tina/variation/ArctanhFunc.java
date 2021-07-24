@@ -67,9 +67,9 @@ public class ArctanhFunc extends SimpleVariationFunc implements SupportsGPU {
             + "Complex_Inc(&z3);\n"
             + "Complex_Div(&z3, &z2);\n"
             + "Complex_Log(&z3);\n"
-            + "Complex_Scale(&z3, varpar->arctanh * 2.f / PI);\n"
+            + "Complex_Scale(&z3, __arctanh * 2.f / PI);\n"
             + "__px += z3.re;\n"
             + "__py += z3.im;\n"
-            + (context.isPreserveZCoordinate() ? "__pz += varpar->arctanh * __z;\n": "");
+            + (context.isPreserveZCoordinate() ? "__pz += __arctanh * __z;\n": "");
   }
 }

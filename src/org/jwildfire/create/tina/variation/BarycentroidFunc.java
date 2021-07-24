@@ -119,11 +119,11 @@ public class BarycentroidFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return " float dot00 = varpar->barycentroid_a * varpar->barycentroid_a + varpar->barycentroid_b * varpar->barycentroid_b;\n"
-        + "    float dot01 = varpar->barycentroid_a * varpar->barycentroid_c + varpar->barycentroid_b * varpar->barycentroid_d;\n"
-        + "    float dot02 = varpar->barycentroid_a * __x + varpar->barycentroid_b * __y;\n"
-        + "    float dot11 = varpar->barycentroid_c * varpar->barycentroid_c + varpar->barycentroid_d * varpar->barycentroid_d;\n"
-        + "    float dot12 = varpar->barycentroid_c * __x + varpar->barycentroid_d * __y;\n"
+    return " float dot00 = __barycentroid_a * __barycentroid_a + __barycentroid_b * __barycentroid_b;\n"
+        + "    float dot01 = __barycentroid_a * __barycentroid_c + __barycentroid_b * __barycentroid_d;\n"
+        + "    float dot02 = __barycentroid_a * __x + __barycentroid_b * __y;\n"
+        + "    float dot11 = __barycentroid_c * __barycentroid_c + __barycentroid_d * __barycentroid_d;\n"
+        + "    float dot12 = __barycentroid_c * __x + __barycentroid_d * __y;\n"
         + "\n"
         + "    float invDenom = 1.0f / (dot00 * dot11 - dot01 * dot01);\n"
         + "\n"
@@ -133,9 +133,9 @@ public class BarycentroidFunc extends VariationFunc implements SupportsGPU {
         + "    float um = sqrtf(u*u + __x*__x) * (u<0.f ? -1 : u>0.f ? 1 : 0);\n"
         + "    float vm = sqrtf(v*v + __y*__y) * (v<0.f ? -1 : v>0.f ? 1 : 0);\n"
         + "\n"
-        + "    __px += varpar->barycentroid * um;\n"
-        + "    __py += varpar->barycentroid * vm;\n"
+        + "    __px += __barycentroid * um;\n"
+        + "    __py += __barycentroid * vm;\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->barycentroid*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __barycentroid*__z;\n" : "");
   }
 }

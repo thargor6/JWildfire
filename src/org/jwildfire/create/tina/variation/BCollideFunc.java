@@ -106,10 +106,10 @@ public class BCollideFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float _bCa, _bCn_pi, _bCa_bCn, _pi_bCn;\n"
-        + "int num = lroundf(varpar->bCollide_num);\n"
+        + "int num = lroundf(__bCollide_num);\n"
         + "    _bCn_pi = (float) num * (1.0f / PI);\n"
         + "    _pi_bCn = PI / (float) num;\n"
-        + "    _bCa = PI * varpar->bCollide_a;\n"
+        + "    _bCa = PI * __bCollide_a;\n"
         + "    _bCa_bCn = _bCa / (float) num;\n"
         + "    float tau, sigma;\n"
         + "    float temp;\n"
@@ -130,8 +130,8 @@ public class BCollideFunc extends VariationFunc implements SupportsGPU {
         + "    sins = sinf(sigma);\n"
         + "    coss = cosf(sigma);\n"
         + "    temp = cosht - coss;\n"
-        + "    __px += varpar->bCollide * sinht / temp;\n"
-        + "    __py += varpar->bCollide * sins / temp;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->bCollide * __z;\n" : "");
+        + "    __px += __bCollide * sinht / temp;\n"
+        + "    __py += __bCollide * sins / temp;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __bCollide * __z;\n" : "");
   }
 }

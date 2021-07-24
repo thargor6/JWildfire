@@ -89,12 +89,12 @@ public class AugerFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float s = sinf(varpar->auger_freq*__x);\n"
-        + "float t = sinf(varpar->auger_freq*__y);\n"
-        + "float dx = __x + varpar->auger_weight*(varpar->auger_scale*t/2.f+fabsf(__x)*t);\n"
-        + "float dy = __y + varpar->auger_weight*(varpar->auger_scale*s/2.f+fabsf(__y)*s);\n"
-        + "__px += varpar->auger*(__x+varpar->auger_sym*(dx-__x));\n"
-        + "__py += varpar->auger*dy;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->auger*__z;\n" : "");
+    return "float s = sinf(__auger_freq*__x);\n"
+        + "float t = sinf(__auger_freq*__y);\n"
+        + "float dx = __x + __auger_weight*(__auger_scale*t/2.f+fabsf(__x)*t);\n"
+        + "float dy = __y + __auger_weight*(__auger_scale*s/2.f+fabsf(__y)*s);\n"
+        + "__px += __auger*(__x+__auger_sym*(dx-__x));\n"
+        + "__py += __auger*dy;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __auger*__z;\n" : "");
   }
 }

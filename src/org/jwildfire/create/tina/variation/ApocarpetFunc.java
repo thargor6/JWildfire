@@ -121,8 +121,8 @@ public class ApocarpetFunc extends SimpleVariationFunc implements SupportsGPU {
         + "        break;\n"
         + "    }\n"
         + "\n"
-        + "    __px += x * varpar->apocarpet_js;\n"
-        + "    __py += y * varpar->apocarpet_js;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->apocarpet_js * __z;\n" : "");
+        + "    __px += x * __apocarpet_js;\n"
+        + "    __py += y * __apocarpet_js;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __apocarpet_js * __z;\n" : "");
   }
 }
