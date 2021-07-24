@@ -56,9 +56,9 @@ public class SpiralwingFunc extends SimpleVariationFunc implements SupportsGPU {
     return "float c1 = __x*__x;\n"
         + "float c2 = __y*__y;\n"
         + "\n"
-        + "__px += varpar->spiralwing * ((1.f/__r2 ADD_EPSILON)*cosf(c1 ADD_EPSILON)*sinf(c2 ADD_EPSILON));\n"
-        + "__py += varpar->spiralwing * ((1.f/__r2 ADD_EPSILON)*sinf(c1 ADD_EPSILON)*sinf(c2 ADD_EPSILON));\n"
+        + "__px += __spiralwing * ((1.f/__r2 ADD_EPSILON)*cosf(c1 ADD_EPSILON)*sinf(c2 ADD_EPSILON));\n"
+        + "__py += __spiralwing * ((1.f/__r2 ADD_EPSILON)*sinf(c1 ADD_EPSILON)*sinf(c2 ADD_EPSILON));\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->spiralwing*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __spiralwing*__z;\n" : "");
   }
 }

@@ -53,9 +53,9 @@ public class ScryFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float r0 = 1.f/(__r*(__r2+1.f/(varpar->scry ADD_EPSILON)));\n"
+    return "float r0 = 1.f/(__r*(__r2+1.f/(__scry ADD_EPSILON)));\n"
         + "__px += __x*r0;\n"
         + "__py += __y*r0;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->scry*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __scry*__z;\n" : "");
   }
 }

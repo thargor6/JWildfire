@@ -53,8 +53,8 @@ public class SinhFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->sinh*sinhf(__x)*cosf(__y);\n"
-        + "__py += varpar->sinh*coshf(__x)*sinf(__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->sinh*__z;\n" : "");
+    return "__px += __sinh*sinhf(__x)*cosf(__y);\n"
+        + "__py += __sinh*coshf(__x)*sinf(__y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __sinh*__z;\n" : "");
   }
 }

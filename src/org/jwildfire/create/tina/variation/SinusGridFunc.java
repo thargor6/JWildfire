@@ -99,10 +99,10 @@ public class SinusGridFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float ax = varpar->sinusgrid_ampx;\n"
-        + "float ay = varpar->sinusgrid_ampy;\n"
-        + "float fx = varpar->sinusgrid_freqx * 2.f*M_PI_F;\n"
-        + "float fy = varpar->sinusgrid_freqy * 2.f*M_PI_F;\n"
+    return "float ax = __sinusgrid_ampx;\n"
+        + "float ay = __sinusgrid_ampy;\n"
+        + "float fx = __sinusgrid_freqx * 2.f*M_PI_F;\n"
+        + "float fy = __sinusgrid_freqy * 2.f*M_PI_F;\n"
         + "fx = fx == 0.f ? 1.e-10f : fx;\n"
         + "fy = fy == 0.f ? 1.e-10f : fy;\n"
         + "\n"
@@ -111,8 +111,8 @@ public class SinusGridFunc extends VariationFunc implements SupportsGPU {
         + "float tx = __x + ax * (sx-__x);\n"
         + "float ty = __y + ay * (sy-__y);\n"
         + "\n"
-        + "__px += varpar->sinusgrid*tx;\n"
-        + "__py += varpar->sinusgrid*ty;\n"
-        + "__pz += varpar->sinusgrid*__z;\n";
+        + "__px += __sinusgrid*tx;\n"
+        + "__py += __sinusgrid*ty;\n"
+        + "__pz += __sinusgrid*__z;\n";
   }
 }

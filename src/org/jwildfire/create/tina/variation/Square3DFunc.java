@@ -41,8 +41,8 @@ public class Square3DFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += varpar->square3D*(RANDFLOAT()-.5f);\n"
-         + "__py += varpar->square3D*(RANDFLOAT()-.5f);\n"
-         + "__pz += varpar->square3D*(RANDFLOAT()-.5f);\n";
+    return "__px += __square3D*(RANDFLOAT()-.5f);\n"
+         + "__py += __square3D*(RANDFLOAT()-.5f);\n"
+         + "__pz += __square3D*(RANDFLOAT()-.5f);\n";
   }
 }

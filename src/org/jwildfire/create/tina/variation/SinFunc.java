@@ -53,8 +53,8 @@ public class SinFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->sin*sinf(__x)*coshf(__y);\n"
-        + "__py += varpar->sin*cosf(__x)*sinhf(__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->sin*__z;\n" : "");
+    return "__px += __sin*sinf(__x)*coshf(__y);\n"
+        + "__py += __sin*cosf(__x)*sinhf(__y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __sin*__z;\n" : "");
   }
 }

@@ -108,15 +108,15 @@ public class SpirographFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float d1 = (varpar->spirograph_tmax - varpar->spirograph_tmin) * RANDFLOAT() + varpar->spirograph_tmin;\n"
-        + "float d2 = (varpar->spirograph_ymax - varpar->spirograph_ymin) * RANDFLOAT() + varpar->spirograph_ymin;\n"
-        + "float e  = varpar->spirograph_a + varpar->spirograph_b;\n"
-        + "float f  = e / varpar->spirograph_b * d1;\n"
-        + "float d3 = e * cosf(d1) - varpar->spirograph_c1 * cosf(f);\n"
-        + "float d4 = e * sinf(d1) - varpar->spirograph_c2 * sinf(f);\n"
+    return "float d1 = (__spirograph_tmax - __spirograph_tmin) * RANDFLOAT() + __spirograph_tmin;\n"
+        + "float d2 = (__spirograph_ymax - __spirograph_ymin) * RANDFLOAT() + __spirograph_ymin;\n"
+        + "float e  = __spirograph_a + __spirograph_b;\n"
+        + "float f  = e / __spirograph_b * d1;\n"
+        + "float d3 = e * cosf(d1) - __spirograph_c1 * cosf(f);\n"
+        + "float d4 = e * sinf(d1) - __spirograph_c2 * sinf(f);\n"
         + "\n"
-        + "__px += varpar->spirograph * (d3 + varpar->spirograph_d * cosf(d1) + d2);\n"
-        + "__py += varpar->spirograph * (d4 + varpar->spirograph_d * sinf(d1) + d2);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->spirograph*__z;\n" : "");
+        + "__px += __spirograph * (d3 + __spirograph_d * cosf(d1) + d2);\n"
+        + "__py += __spirograph * (d4 + __spirograph_d * sinf(d1) + d2);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __spirograph*__z;\n" : "");
   }
 }

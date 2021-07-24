@@ -110,17 +110,17 @@ public class SeaShell3DFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "   int nSpirals = lroundf(varpar->seashell3D_nSpirals);\n"
+    return "   int nSpirals = lroundf(__seashell3D_nSpirals);\n"
         + "    float s, t;\n"
         + "    t = 2.0f*PI * RANDFLOAT();\n"
         + "    s = 2.0f*PI * RANDFLOAT();\n"
         + "\n"
-        + "    float x = varpar->seashell3D_final_radius * (1 - t / (2.0f*PI)) * cosf(nSpirals * t) * (1.0 + cosf(s)) + varpar->seashell3D_inner_radius * cosf(nSpirals * t);\n"
-        + "    float y = varpar->seashell3D_final_radius * (1 - t / (2.0f*PI)) * sinf(nSpirals * t) * (1.0 + cosf(s)) + varpar->seashell3D_inner_radius * sinf(nSpirals * t);\n"
-        + "    float z = varpar->seashell3D_height * t / (2.0f*PI) + varpar->seashell3D_final_radius * (1 - t / (2.0f*PI)) * sinf(s);\n"
+        + "    float x = __seashell3D_final_radius * (1 - t / (2.0f*PI)) * cosf(nSpirals * t) * (1.0 + cosf(s)) + __seashell3D_inner_radius * cosf(nSpirals * t);\n"
+        + "    float y = __seashell3D_final_radius * (1 - t / (2.0f*PI)) * sinf(nSpirals * t) * (1.0 + cosf(s)) + __seashell3D_inner_radius * sinf(nSpirals * t);\n"
+        + "    float z = __seashell3D_height * t / (2.0f*PI) + __seashell3D_final_radius * (1 - t / (2.0f*PI)) * sinf(s);\n"
         + "\n"
-        + "    __px += x * varpar->seashell3D;\n"
-        + "    __py += y * varpar->seashell3D;\n"
-        + "    __pz += z * varpar->seashell3D;\n";
+        + "    __px += x * __seashell3D;\n"
+        + "    __py += y * __seashell3D;\n"
+        + "    __pz += z * __seashell3D;\n";
   }
 }

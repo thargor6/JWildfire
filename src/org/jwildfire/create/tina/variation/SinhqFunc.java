@@ -56,8 +56,8 @@ public class SinhqFunc extends SimpleVariationFunc implements SupportsGPU {
         + "    float c = cosf(abs_v);\n"
         + "    float sh = sinhf(__x);\n"
         + "    float ch = coshf(__x);\n"
-        + "    float C = varpar->sinhq * ch * s / abs_v;\n"
-        + "    __px += varpar->sinhq * sh * c;\n"
+        + "    float C = __sinhq * ch * s / abs_v;\n"
+        + "    __px += __sinhq * sh * c;\n"
         + "    __py += C * __y;\n"
         + "    __pz += C * __z;\n";
   }

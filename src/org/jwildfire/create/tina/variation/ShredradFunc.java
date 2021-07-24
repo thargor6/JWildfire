@@ -89,9 +89,9 @@ public class ShredradFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float sa = 2.f*M_PI_F / varpar->shredrad_n;\n"
-        + "float sw = varpar->shredrad_width;\n"
-        + "float vv = varpar->shredrad;\n"
+    return "float sa = 2.f*M_PI_F / __shredrad_n;\n"
+        + "float sw = __shredrad_width;\n"
+        + "float vv = __shredrad;\n"
         + "\n"
         + "float ang = atan2f(__y, __x);\n"
         + "float rad = sqrtf(__x * __x + __y * __y);\n"
@@ -103,6 +103,6 @@ public class ShredradFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "__px += vv * rad * c;\n"
         + "__py += vv * rad * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->shredrad * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __shredrad * __z;\n" : "");
   }
 }

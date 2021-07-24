@@ -100,21 +100,21 @@ public class SplitsFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return " if (__x >= 0.f) {\n" +
-            "      __px += varpar->splits * (__x + varpar->splits_x);\n" +
-            "      __py += varpar->splits * (varpar->splits_rshear);\n" +
+            "      __px += __splits * (__x + __splits_x);\n" +
+            "      __py += __splits * (__splits_rshear);\n" +
             "    } else {\n" +
-            "      __px += varpar->splits * (__x - varpar->splits_x);\n" +
-            "      __py -= varpar->splits * (varpar->splits_lshear);\n" +
+            "      __px += __splits * (__x - __splits_x);\n" +
+            "      __py -= __splits * (__splits_lshear);\n" +
             "    }\n" +
             "\n" +
             "    if (__y >= 0.f) {\n" +
-            "      __py += varpar->splits * (__y + varpar->splits_y);\n" +
-            "      __px += varpar->splits * (varpar->splits_ushear);\n" +
+            "      __py += __splits * (__y + __splits_y);\n" +
+            "      __px += __splits * (__splits_ushear);\n" +
             "    } else {\n" +
-            "      __py += varpar->splits * (__y - varpar->splits_y);\n" +
-            "      __px -= varpar->splits * (varpar->splits_dshear);\n" +
+            "      __py += __splits * (__y - __splits_y);\n" +
+            "      __px -= __splits * (__splits_dshear);\n" +
             "    }"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->splits*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __splits*__z;\n" : "");
   }
 }
 

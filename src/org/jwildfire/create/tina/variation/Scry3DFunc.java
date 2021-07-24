@@ -56,7 +56,7 @@ public class Scry3DFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float inv = 1.0f / (varpar->scry_3D + 1.e-6f);\n"
+    return "    float inv = 1.0f / (__scry_3D + 1.e-6f);\n"
         + "    float t = __x*__x + __y*__y + __z*__z;\n"
         + "    float r = 1.0f / (sqrtf(t) * (t + inv));\n"
         + "    float Footzee, kikr;\n"

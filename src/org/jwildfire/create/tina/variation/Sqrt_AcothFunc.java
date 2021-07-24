@@ -63,7 +63,7 @@ public class Sqrt_AcothFunc extends SimpleVariationFunc implements SupportsGPU {
             + "Complex_Init(&z, __x, __y);\n"
             + "Complex_Sqrt(&z);\n"
             + "Complex_AcotH(&z);\n"
-            + "Complex_Scale(&z, varpar->sqrt_acoth * 2.f / PI);\n"
+            + "Complex_Scale(&z, __sqrt_acoth * 2.f / PI);\n"
             + "if(RANDFLOAT()<0.5) {\n"
             + "  __py += z.im;\n"
             + "  __px += z.re;\n"
@@ -72,6 +72,6 @@ public class Sqrt_AcothFunc extends SimpleVariationFunc implements SupportsGPU {
             + "  __py += -z.im;\n"
             + "  __px += -z.re;\n"
             + "}\n"
-            + (context.isPreserveZCoordinate() ? "__pz += varpar->sqrt_acoth * __z;\n": "");
+            + (context.isPreserveZCoordinate() ? "__pz += __sqrt_acoth * __z;\n": "");
   }
 }

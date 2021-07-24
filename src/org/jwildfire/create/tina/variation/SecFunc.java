@@ -59,8 +59,8 @@ public class SecFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float secden = 2.f/(cosf(2.f*__x)+coshf(2.f*__y));\n"
-        + "__px += varpar->sec*secden*cosf(__x)*coshf(__y);\n"
-        + "__py += varpar->sec*secden*sinf(__x)*sinhf(__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->sec*__z;\n" : "");
+        + "__px += __sec*secden*cosf(__x)*coshf(__y);\n"
+        + "__py += __sec*secden*sinf(__x)*sinhf(__y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __sec*__z;\n" : "");
   }
 }

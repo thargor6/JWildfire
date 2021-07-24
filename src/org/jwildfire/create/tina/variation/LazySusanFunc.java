@@ -105,22 +105,22 @@ public class LazySusanFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float x0 = __x-varpar->lazysusan_x;\n"
-        + "float y0 = __y+varpar->lazysusan_y;\n"
+    return "float x0 = __x-__lazysusan_x;\n"
+        + "float y0 = __y+__lazysusan_y;\n"
         + "float r0 = sqrtf(x0*x0+y0*y0);\n"
-        + "if (r0<varpar->lazysusan)\n"
+        + "if (r0<__lazysusan)\n"
         + "{\n"
-        + "    float a = atan2f(y0,x0)+varpar->lazysusan_spin+varpar->lazysusan_twist*(varpar->lazysusan-r0);\n"
-        + "    r0 = varpar->lazysusan*r0;\n"
-        + "    __px += r0*cosf(a)+varpar->lazysusan_x;\n"
-        + "    __py += r0*sinf(a)-varpar->lazysusan_y;\n"
+        + "    float a = atan2f(y0,x0)+__lazysusan_spin+__lazysusan_twist*(__lazysusan-r0);\n"
+        + "    r0 = __lazysusan*r0;\n"
+        + "    __px += r0*cosf(a)+__lazysusan_x;\n"
+        + "    __py += r0*sinf(a)-__lazysusan_y;\n"
         + "}\n"
         + "else\n"
         + "{\n"
-        + "    r0 = varpar->lazysusan*(1.f+varpar->lazysusan_space/r0);\n"
-        + "    __px += r0*x0 + varpar->lazysusan_x;\n"
-        + "    __py += r0*y0 - varpar->lazysusan_y;\n"
+        + "    r0 = __lazysusan*(1.f+__lazysusan_space/r0);\n"
+        + "    __px += r0*x0 + __lazysusan_x;\n"
+        + "    __py += r0*y0 - __lazysusan_y;\n"
         + "}\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->lazysusan*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __lazysusan*__z;\n" : "");
   }
 }

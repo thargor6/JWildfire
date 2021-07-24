@@ -104,7 +104,7 @@ public class PostPointSymmetryWFFunc extends VariationFunc implements SupportsGP
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int order = lroundf(varpar->post_point_symmetry_wf_order);\n"
+    return "int order = lroundf(__post_point_symmetry_wf_order);\n"
         + "if(order>36) order=36;\n"
         +"float _sina[36];\n"
         + "float _cosa[36];\n"
@@ -115,11 +115,11 @@ public class PostPointSymmetryWFFunc extends VariationFunc implements SupportsGP
         + "      _cosa[i] = cosf(angle);\n"
         + "      angle += da;\n"
         + "    }\n"
-        + "    float dx = (__px - varpar->post_point_symmetry_wf_centre_x) * varpar->post_point_symmetry_wf;\n"
-        + "    float dy = (__py - varpar->post_point_symmetry_wf_centre_y) * varpar->post_point_symmetry_wf;\n"
+        + "    float dx = (__px - __post_point_symmetry_wf_centre_x) * __post_point_symmetry_wf;\n"
+        + "    float dy = (__py - __post_point_symmetry_wf_centre_y) * __post_point_symmetry_wf;\n"
         + "    int idx = lroundf(RANDFLOAT() * (order-1));\n"
-        + "    __px = varpar->post_point_symmetry_wf_centre_x + dx * _cosa[idx] + dy * _sina[idx];\n"
-        + "    __py = varpar->post_point_symmetry_wf_centre_y + dy * _cosa[idx] - dx * _sina[idx];\n"
-        + "    __pal = fmodf(__pal + idx * varpar->post_point_symmetry_wf_colorshift, 1.0);\n";
+        + "    __px = __post_point_symmetry_wf_centre_x + dx * _cosa[idx] + dy * _sina[idx];\n"
+        + "    __py = __post_point_symmetry_wf_centre_y + dy * _cosa[idx] - dx * _sina[idx];\n"
+        + "    __pal = fmodf(__pal + idx * __post_point_symmetry_wf_colorshift, 1.0);\n";
   }
 }

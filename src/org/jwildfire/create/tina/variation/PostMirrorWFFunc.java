@@ -130,11 +130,11 @@ public class PostMirrorWFFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "if (varpar->post_mirror_wf_xaxis > 0.f && RANDFLOAT() < 0.5f)\n"
-        + "    __px = -__px - varpar->post_mirror_wf_xshift;\n"
-        + "if (varpar->post_mirror_wf_yaxis > 0.f && RANDFLOAT() < 0.5f)\n"
-        + "    __py = -__py - varpar->post_mirror_wf_yshift;            \n"
-        + "if (varpar->post_mirror_wf_zaxis > 0.f && RANDFLOAT() < 0.5f)\n"
-        + "    __pz = -__pz - varpar->post_mirror_wf_zshift;";
+    return "if (__post_mirror_wf_xaxis > 0.f && RANDFLOAT() < 0.5f)\n"
+        + "    __px = -__px - __post_mirror_wf_xshift;\n"
+        + "if (__post_mirror_wf_yaxis > 0.f && RANDFLOAT() < 0.5f)\n"
+        + "    __py = -__py - __post_mirror_wf_yshift;            \n"
+        + "if (__post_mirror_wf_zaxis > 0.f && RANDFLOAT() < 0.5f)\n"
+        + "    __pz = -__pz - __post_mirror_wf_zshift;";
   }
 }

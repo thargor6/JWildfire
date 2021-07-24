@@ -89,16 +89,16 @@ public class LineFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "  float ux = cosf(varpar->line_delta * PI) * cosf(varpar->line_phi * PI);\n"
-        + "    float uy = sinf(varpar->line_delta * PI) * cosf(varpar->line_phi * PI);\n"
-        + "    float uz = sinf(varpar->line_phi * PI);\n"
+    return "  float ux = cosf(__line_delta * PI) * cosf(__line_phi * PI);\n"
+        + "    float uy = sinf(__line_delta * PI) * cosf(__line_phi * PI);\n"
+        + "    float uz = sinf(__line_phi * PI);\n"
         + "\n"
         + "    float r = sqrtf(ux * ux + uy * uy + uz * uz);\n"
         + "    ux /= r;\n"
         + "    uy /= r;\n"
         + "    uz /= r;\n"
         + "\n"
-        + "    float rand = RANDFLOAT() * varpar->line;\n"
+        + "    float rand = RANDFLOAT() * __line;\n"
         + "    __px += ux * rand;\n"
         + "    __py += uy * rand;\n"
         + "    __pz += uz * rand;\n";

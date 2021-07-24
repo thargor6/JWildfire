@@ -95,12 +95,12 @@ public class SeparationFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float sx2 = varpar->separation_x*varpar->separation_x;\n"
-        + "float sy2 = varpar->separation_y*varpar->separation_y;\n"
+    return "float sx2 = __separation_x*__separation_x;\n"
+        + "float sy2 = __separation_y*__separation_y;\n"
         + "float signX = __x >= 0.f ? 1.f : -1.f;\n"
         + "float signY = __y >= 0.f ? 1.f : -1.f;\n"
-        + "__px += varpar->separation*(signX*sqrtf(__x*__x+sx2)-__x*varpar->separation_xinside);\n"
-        + "__py += varpar->separation*(signY*sqrtf(__y*__y+sy2)-__y*varpar->separation_yinside);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->separation*__z;\n" : "");
+        + "__px += __separation*(signX*sqrtf(__x*__x+sx2)-__x*__separation_xinside);\n"
+        + "__py += __separation*(signY*sqrtf(__y*__y+sy2)-__y*__separation_yinside);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __separation*__z;\n" : "");
   }
 }

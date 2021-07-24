@@ -91,17 +91,17 @@ public class PostLogTile2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float spreadx = -varpar->post_log_tile2_spreadx;\n"
+    return "    float spreadx = -__post_log_tile2_spreadx;\n"
         + "    if (RANDFLOAT() < 0.5)\n"
-        + "      spreadx = varpar->post_log_tile2_spreadx;\n"
-        + "    float spready = -varpar->post_log_tile2_spready;\n"
+        + "      spreadx = __post_log_tile2_spreadx;\n"
+        + "    float spready = -__post_log_tile2_spready;\n"
         + "    if (RANDFLOAT() < 0.5)\n"
-        + "      spready = varpar->post_log_tile2_spready;\n"
-        + "    float spreadz = -varpar->post_log_tile2_spreadz;\n"
+        + "      spready = __post_log_tile2_spready;\n"
+        + "    float spreadz = -__post_log_tile2_spreadz;\n"
         + "    if (RANDFLOAT() < 0.5)\n"
-        + "      spreadz = varpar->post_log_tile2_spreadz;\n"
-        + "    __px = varpar->post_log_tile2 * (__px + spreadx * round(logf(RANDFLOAT())));\n"
-        + "    __py = varpar->post_log_tile2 * (__py + spready * round(logf(RANDFLOAT())));\n"
-        + "    __pz = varpar->post_log_tile2 * (__pz + spreadz * round(logf(RANDFLOAT())));\n";
+        + "      spreadz = __post_log_tile2_spreadz;\n"
+        + "    __px = __post_log_tile2 * (__px + spreadx * round(logf(RANDFLOAT())));\n"
+        + "    __py = __post_log_tile2 * (__py + spready * round(logf(RANDFLOAT())));\n"
+        + "    __pz = __post_log_tile2 * (__pz + spreadz * round(logf(RANDFLOAT())));\n";
   }
 }

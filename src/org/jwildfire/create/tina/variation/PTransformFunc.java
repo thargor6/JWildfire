@@ -99,17 +99,17 @@ public class PTransformFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return  "int use_log = roundf(varpar->pTransform_use_log);\n"
-        + "int power = lroundf(varpar->pTransform_power);\n"
-        + "float rho = (use_log != 0) ? logf(__r) / power + varpar->pTransform_move : __r / power + varpar->pTransform_move;\n"
-        + "float theta = __theta + varpar->pTransform_rotate;\n"
+    return  "int use_log = roundf(__pTransform_use_log);\n"
+        + "int power = lroundf(__pTransform_power);\n"
+        + "float rho = (use_log != 0) ? logf(__r) / power + __pTransform_move : __r / power + __pTransform_move;\n"
+        + "float theta = __theta + __pTransform_rotate;\n"
         + "    if (__x >= 0.0)\n"
-        + "      rho += varpar->pTransform_split;\n"
+        + "      rho += __pTransform_split;\n"
         + "    else\n"
-        + "      rho -= varpar->pTransform_split;\n"
+        + "      rho -= __pTransform_split;\n"
         + "    if (use_log != 0) rho = expf(rho);\n"
-        + "    __px += varpar->pTransform * rho * cosf(theta);\n"
-        + "    __py += varpar->pTransform * rho * sinf(theta);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->pTransform * __z;\n" : "");
+        + "    __px += __pTransform * rho * cosf(theta);\n"
+        + "    __py += __pTransform * rho * sinf(theta);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __pTransform * __z;\n" : "");
   }
 }

@@ -57,9 +57,9 @@ public class Secant2Func extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->secant2*__x;\n"
-        + "float icosr = 1.f/cosf(varpar->secant2*__r);\n"
-        + "__py += varpar->secant2*(icosr + (icosr < 0.f ? 1.f : -1.f));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->secant2*__z;\n" : "");
+    return "__px += __secant2*__x;\n"
+        + "float icosr = 1.f/cosf(__secant2*__r);\n"
+        + "__py += __secant2*(icosr + (icosr < 0.f ? 1.f : -1.f));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __secant2*__z;\n" : "");
   }
 }

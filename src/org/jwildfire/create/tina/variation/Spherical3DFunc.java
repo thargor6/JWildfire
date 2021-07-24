@@ -46,7 +46,7 @@ public class Spherical3DFunc extends SimpleVariationFunc implements SupportsGPU 
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float T = __x*__x + __y*__y + __z*__z;\n"
-        + "float r = varpar->spherical3D/T;\n"
+        + "float r = __spherical3D/T;\n"
         + "\n"
         + "__px += r * __x;\n"
         + "__py += r * __y;\n"

@@ -44,8 +44,8 @@ public class Sinusoidal3DFunc extends SimpleVariationFunc implements SupportsGPU
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += varpar->sinusoidal3d * sinf(__x);\n"
-        + "__py += varpar->sinusoidal3d * sinf(__y);\n"
-        + "__pz += varpar->sinusoidal3d * (atan2f(__x * __x, __y * __y) * cosf(__z));";
+    return "__px += __sinusoidal3d * sinf(__x);\n"
+        + "__py += __sinusoidal3d * sinf(__y);\n"
+        + "__pz += __sinusoidal3d * (atan2f(__x * __x, __y * __y) * cosf(__z));";
   }
 }

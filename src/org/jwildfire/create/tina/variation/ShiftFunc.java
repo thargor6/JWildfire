@@ -88,11 +88,11 @@ public class ShiftFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float ang = varpar->shift_angle / 180.f * PI;\n"
+    return "float ang = __shift_angle / 180.f * PI;\n"
         + "    float sn = sinf(ang);\n"
         + "    float cs = cosf(ang);\n"
-        + "    __px += varpar->shift * (__x + cs * varpar->shift_shift_x - sn * varpar->shift_shift_y);\n"
-        + "    __py += varpar->shift * (__y - cs * varpar->shift_shift_y - sn * varpar->shift_shift_x);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->shift * __z;\n" : "");
+        + "    __px += __shift * (__x + cs * __shift_shift_x - sn * __shift_shift_y);\n"
+        + "    __py += __shift * (__y - cs * __shift_shift_y - sn * __shift_shift_x);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __shift * __z;\n" : "");
   }
 }

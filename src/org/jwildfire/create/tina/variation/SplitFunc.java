@@ -85,10 +85,10 @@ public class SplitFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float signX = cosf(__x*varpar->split_xsize*PI) >= 0.f ? 1.f : -1.f;\n"
-        + "float signY = cosf(__y*varpar->split_ysize*PI) >= 0.f ? 1.f : -1.f;\n"
-        + "__px += varpar->split*__x*signY;\n"
-        + "__py += varpar->split*__y*signX;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->split*__z;\n" : "");
+    return "float signX = cosf(__x*__split_xsize*PI) >= 0.f ? 1.f : -1.f;\n"
+        + "float signY = cosf(__y*__split_ysize*PI) >= 0.f ? 1.f : -1.f;\n"
+        + "__px += __split*__x*signY;\n"
+        + "__py += __split*__y*signX;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __split*__z;\n" : "");
   }
 }

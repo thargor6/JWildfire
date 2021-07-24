@@ -90,18 +90,18 @@ public class Splits3DFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "if(__x >= 0.0)\n"
-        + "    __px += varpar->splits3D * (__x + varpar->splits3D_x);\n"
+        + "    __px += __splits3D * (__x + __splits3D_x);\n"
         + "else\n"
-        + "    __px += varpar->splits3D * (__x - varpar->splits3D_x);\n"
+        + "    __px += __splits3D * (__x - __splits3D_x);\n"
         + "\n"
         + "if(__y >= 0.0)\n"
-        + "    __py += varpar->splits3D * (__y + varpar->splits3D_y);\n"
+        + "    __py += __splits3D * (__y + __splits3D_y);\n"
         + "else\n"
-        + "    __py += varpar->splits3D * (__y - varpar->splits3D_y);\n"
+        + "    __py += __splits3D * (__y - __splits3D_y);\n"
         + "\n"
         + "if(__z >= 0.0)\n"
-        + "    __pz += varpar->splits3D * (__z + varpar->splits3D_z);\n"
+        + "    __pz += __splits3D * (__z + __splits3D_z);\n"
         + "else\n"
-        + "    __pz += varpar->splits3D * (__z - varpar->splits3D_z);";
+        + "    __pz += __splits3D * (__z - __splits3D_z);";
   }
 }

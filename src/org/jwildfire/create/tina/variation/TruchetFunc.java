@@ -229,10 +229,10 @@ public class TruchetFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int extended = lroundf(varpar->truchet_extended);\n"
-        + "float exponent = varpar->truchet_exponent;\n"
-        + "float arc_width = varpar->truchet_arc_width;\n"
-        + "float size = varpar->truchet_size;\n"
+    return "int extended = lroundf(__truchet_extended);\n"
+        + "float exponent = __truchet_exponent;\n"
+        + "float arc_width = __truchet_arc_width;\n"
+        + "float size = __truchet_size;\n"
         + "if (extended < 0) {\n"
         + "      extended = 0;\n"
         + "    } else if (extended > 1) {\n"
@@ -255,9 +255,9 @@ public class TruchetFunc extends VariationFunc implements SupportsGPU {
         + "    }\n\n"
         + " float n = exponent;\n"
         + "    float onen = 1.0f / exponent;\n"
-        + "    float tdeg = varpar->truchet_rotation;\n"
+        + "    float tdeg = __truchet_rotation;\n"
         + "    float width = arc_width;\n"
-        + "    float seed = fabsf(varpar->truchet_seed);\n"
+        + "    float seed = fabsf(__truchet_seed);\n"
         + "    float seed2 = sqrtf(seed + (seed / 2.f) + 1.e-6f) / ((seed * 0.5f) + 1.e-6f) * 0.25f;\n"
         + "    float x, y;\n"
         + "    int intx = 0;\n"
@@ -266,7 +266,7 @@ public class TruchetFunc extends VariationFunc implements SupportsGPU {
         + "    float r0 = 0.0;\n"
         + "    float r1 = 0.0;\n"
         + "    float rmax = 0.5 * (powf(2.0f, 1.0f / n) - 1.0f) * width;\n"
-        + "    float scale = (cosf(r) - sinf(r)) / varpar->truchet;\n"
+        + "    float scale = (cosf(r) - sinf(r)) / __truchet;\n"
         + "    float tiletype = 0.0f;\n"
         + "    float randint = 0.0f;\n"
         + "    float modbase = 65535.0f;\n"
@@ -339,7 +339,7 @@ public class TruchetFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "    r = fabsf(r0 - 0.5f) / rmax;\n"
         + "    if (r < 1.0f) {\n"
-        + "      if (lroundf(varpar->truchet_direct_color) == 1) {\n"
+        + "      if (lroundf(__truchet_direct_color) == 1) {\n"
         + "        __pal = r0;\n"
         + "        if(__pal<0.f)\n"
         + "          __pal = 0.f;\n"
@@ -352,7 +352,7 @@ public class TruchetFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "    r = fabsf(r1 - 0.5f) / rmax;\n"
         + "    if (r < 1.0f) {\n"
-        + "      if (varpar->truchet_direct_color == 1) {\n"
+        + "      if (__truchet_direct_color == 1) {\n"
         + "        __pal = 1.0f - r1;\n"
         + "        if(__pal<0.f)\n"
         + "          __pal = 0.f;\n"
@@ -361,7 +361,7 @@ public class TruchetFunc extends VariationFunc implements SupportsGPU {
         + "      }\n"
         + "      __px += size * (x + floorf(__x));\n"
         + "      __py += size * (y + floorf(__y));\n"
-        + (context.isPreserveZCoordinate() ? "     __pz += varpar->truchet * __z;" : "")
+        + (context.isPreserveZCoordinate() ? "     __pz += __truchet * __z;" : "")
         + "    }\n";
   }
 }

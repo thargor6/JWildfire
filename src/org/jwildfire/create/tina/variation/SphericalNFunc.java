@@ -89,15 +89,15 @@ public class SphericalNFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float R = pow(sqrtf(__x*__x + __y*__y), varpar->sphericalN_dist);\n"
-        + "int N = (int) floorf(varpar->sphericalN_power * RANDFLOAT());\n"
-        + "float alpha = atan2f(__y, __x) + N * 2.0f*PI / floorf(varpar->sphericalN_power);\n"
+    return "float R = pow(sqrtf(__x*__x + __y*__y), __sphericalN_dist);\n"
+        + "int N = (int) floorf(__sphericalN_power * RANDFLOAT());\n"
+        + "float alpha = atan2f(__y, __x) + N * 2.0f*PI / floorf(__sphericalN_power);\n"
         + "float sina = sinf(alpha);\n"
         + "float cosa = cosf(alpha);\n"
         + "if (R > 1.e-6f) {\n"
-        + "  __px += varpar->sphericalN * cosa / R;\n"
-        + "  __py += varpar->sphericalN * sina / R;\n"
+        + "  __px += __sphericalN * cosa / R;\n"
+        + "  __py += __sphericalN * sina / R;\n"
         + "}\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->sphericalN * __z;\n": "");
+        + (context.isPreserveZCoordinate() ? "__pz += __sphericalN * __z;\n": "");
   }
 }

@@ -74,10 +74,10 @@ public class HelicoidFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "    float range = sqrtf(__x * __x + __y * __y);\n"
-        + "    float s = sinf(__z * (2.0f*PI) * varpar->helicoid_frequency + atan2f(__y, __x));\n"
-        + "    float c = cosf(__z * (2.0f*PI) * varpar->helicoid_frequency + atan2f(__y, __x));\n"
-        + "    __px += varpar->helicoid * c * range;\n"
-        + "    __py += varpar->helicoid * s * range;\n"
-        + "    __pz += varpar->helicoid * __z;\n";
+        + "    float s = sinf(__z * (2.0f*PI) * __helicoid_frequency + atan2f(__y, __x));\n"
+        + "    float c = cosf(__z * (2.0f*PI) * __helicoid_frequency + atan2f(__y, __x));\n"
+        + "    __px += __helicoid * c * range;\n"
+        + "    __py += __helicoid * s * range;\n"
+        + "    __pz += __helicoid * __z;\n";
   }
 }

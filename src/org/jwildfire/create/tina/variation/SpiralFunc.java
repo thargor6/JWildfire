@@ -54,8 +54,8 @@ public class SpiralFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float r_eps = sqrtf(__r2 ADD_EPSILON);\n"
-        + "__px += varpar->spiral*__rinv*(__y*__rinv+sinf(r_eps));\n"
-        + "__py += varpar->spiral*__rinv*(__x*__rinv-cosf(r_eps));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->spiral*__z;\n" : "");
+        + "__px += __spiral*__rinv*(__y*__rinv+sinf(r_eps));\n"
+        + "__py += __spiral*__rinv*(__x*__rinv-cosf(r_eps));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __spiral*__z;\n" : "");
   }
 }

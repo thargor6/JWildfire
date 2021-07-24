@@ -127,16 +127,16 @@ public class Scry2Func extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float _sina, _cosa, _sins, _coss, _sinc, _cosc;\n"
-        + "int sides = lroundf(varpar->scry2_sides);\n"
+        + "int sides = lroundf(__scry2_sides);\n"
         + "float a = 2.0f*PI / sides;\n"
         + "    _sina = sinf(a);\n"
         + "    _cosa = cosf(a);\n"
         + "\n"
-        + "    a = -PI*0.5f * varpar->scry2_star;\n"
+        + "    a = -PI*0.5f * __scry2_star;\n"
         + "    _sins = sinf(a);\n"
         + "    _coss = cosf(a);\n"
         + "\n"
-        + "    a = PI*0.5f * varpar->scry2_circle;\n"
+        + "    a = PI*0.5f * __scry2_circle;\n"
         + "    _sinc = sinf(a);\n"
         + "    _cosc = cosf(a);\n"
         + "    float xrt = __x, yrt = __y, swp;\n"
@@ -160,12 +160,12 @@ public class Scry2Func extends VariationFunc implements SupportsGPU {
         + "    } else {\n"
         + "      r2 = fabsf(r2) * r2;\n"
         + "    }\n"
-        + "    float d = (r1 * (r2 + 1.0f / varpar->scry2));\n"
+        + "    float d = (r1 * (r2 + 1.0f / __scry2));\n"
         + "    if (d != 0) {\n"
         + "      float r = 1.0f / d;\n"
         + "      __px += __x * r;\n"
         + "      __py += __y * r;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->scry2 * __z;\n" : "")
+        + (context.isPreserveZCoordinate() ? "__pz += __scry2 * __z;\n" : "")
         + "    }\n";
   }
 }

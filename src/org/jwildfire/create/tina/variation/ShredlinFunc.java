@@ -93,11 +93,11 @@ public class ShredlinFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float sxd = varpar->shredlin_xdistance;\n"
-        + "float sxw = varpar->shredlin_xwidth;\n"
-        + "float syd = varpar->shredlin_ydistance;\n"
-        + "float syw = varpar->shredlin_ywidth;\n"
-        + "float vv  = varpar->shredlin;\n"
+    return "float sxd = __shredlin_xdistance;\n"
+        + "float sxw = __shredlin_xwidth;\n"
+        + "float syd = __shredlin_ydistance;\n"
+        + "float syw = __shredlin_ywidth;\n"
+        + "float vv  = __shredlin;\n"
         + "\n"
         + "float xpos = __x < 0 ? 1.f : 0.f;\n"
         + "float ypos = __y < 0 ? 1.f : 0.f;\n"
@@ -106,6 +106,6 @@ public class ShredlinFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "__px += vv * sxd * ((xrng - (int)xrng) * sxw + (int)xrng + (0.5f - xpos) * (1.f - sxw));\n"
         + "__py += vv * syd * ((yrng - (int)yrng) * syw + (int)yrng + (0.5f - ypos) * (1.f - syw));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->shredlin * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __shredlin * __z;\n" : "");
   }
 }

@@ -107,8 +107,8 @@ public class SigmoidFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float ax = 1.f; float ay = 1.f;\n"
-        + "float sx = varpar->sigmoid_shiftx;\n"
-        + "float sy = varpar->sigmoid_shifty;\n"
+        + "float sx = __sigmoid_shiftx;\n"
+        + "float sy = __sigmoid_shifty;\n"
         + "if (sx < 1.f && sx > -1.f) {\n"
         + "    if (sx == 0.f) {\n"
         + "        sx = 1.e-10f;\n"
@@ -127,13 +127,13 @@ public class SigmoidFunc extends VariationFunc implements SupportsGPU {
         + "}\n"
         + "sx *= -5.f;\n"
         + "sy *= -5.f;\n"
-        + "float vv = fabsf(varpar->sigmoid);\n"
+        + "float vv = fabsf(__sigmoid);\n"
         + "float c0 = ax /(1.f + expf(sx*__x));\n"
         + "float c1 = ay /(1.f + expf(sy*__y));\n"
         + "float x = (2.f *(c0 - 0.5f));\n"
         + "float y = (2.f *(c1 - 0.5f));\n"
         + "__px += vv*x;\n"
         + "__py += vv*y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->sigmoid*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __sigmoid*__z;\n" : "");
   }
 }

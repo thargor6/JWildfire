@@ -61,8 +61,8 @@ public class SechFunc extends SimpleVariationFunc implements SupportsGPU {
     return "float d = (cosf(2.f * __y) + coshf(2.f * __x));\n"
         + "if(d==0) return;"
         + "float sechden = 2.f/d;\n"
-        + "__px += varpar->sech * sechden * cosf(__y) * coshf(__x);\n"
-        + "__py -= varpar->sech * sechden * sinf(__y) * sinhf(__x);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->sech*__z;\n" : "");
+        + "__px += __sech * sechden * cosf(__y) * coshf(__x);\n"
+        + "__py -= __sech * sechden * sinf(__y) * sinhf(__x);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __sech*__z;\n" : "");
   }
 }

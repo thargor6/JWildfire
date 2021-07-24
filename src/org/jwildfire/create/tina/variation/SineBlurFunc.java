@@ -76,15 +76,15 @@ public class SineBlurFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float power = varpar->sineblur_power;\n"
+    return "    float power = __sineblur_power;\n"
         + "    if (power < 0.0f)\n"
         + "      power = 0.0f;\n"
         + "    float ang = RANDFLOAT() * 2.0f*PI;\n"
-        + "    float r = varpar->sineblur * (power == 1.0f ? acosf(RANDFLOAT() * 2.0f - 1.0f) / PI : acosf(expf(logf(RANDFLOAT()) * power) * 2.0f - 1.0f) / PI);\n"
+        + "    float r = __sineblur * (power == 1.0f ? acosf(RANDFLOAT() * 2.0f - 1.0f) / PI : acosf(expf(logf(RANDFLOAT()) * power) * 2.0f - 1.0f) / PI);\n"
         + "    float s = sinf(ang);\n"
         + "    float c = cosf(ang);\n"
         + "    __px += r * c;\n"
         + "    __py += r * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->sineblur*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __sineblur*__z;\n" : "");
   }
 }

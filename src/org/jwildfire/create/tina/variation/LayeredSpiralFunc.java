@@ -75,15 +75,15 @@ public class LayeredSpiralFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float a = __x * varpar->layered_spiral_radius;\n"
+    return "float a = __x * __layered_spiral_radius;\n"
         + "float t = __x*__x + __y*__y ADD_EPSILON;\n"
         + "float c;\n"
         + "float s;\n"
         + "sincosf(t, &s, &c);\n"
         + "\n"
-        + "__px += varpar->layered_spiral * a * c;\n"
-        + "__py += varpar->layered_spiral * a * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->layered_spiral * __z;\n" : "");
+        + "__px += __layered_spiral * a * c;\n"
+        + "__py += __layered_spiral * a * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __layered_spiral * __z;\n" : "");
   }
 }
 

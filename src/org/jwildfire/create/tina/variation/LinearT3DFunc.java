@@ -90,8 +90,8 @@ public class LinearT3DFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += (__x < 0.f ? -1.f : 1.f) * powf(fabsf(__x), varpar->linearT3D_powX) * varpar->linearT3D;\n"
-         + "__py += (__y < 0.f ? -1.f : 1.f) * powf(fabsf(__y), varpar->linearT3D_powY) * varpar->linearT3D;\n"
-         + "__pz += (__z < 0.f ? -1.f : 1.f) * powf(fabsf(__z), varpar->linearT3D_powY) * varpar->linearT3D;";
+    return "__px += (__x < 0.f ? -1.f : 1.f) * powf(fabsf(__x), __linearT3D_powX) * __linearT3D;\n"
+         + "__py += (__y < 0.f ? -1.f : 1.f) * powf(fabsf(__y), __linearT3D_powY) * __linearT3D;\n"
+         + "__pz += (__z < 0.f ? -1.f : 1.f) * powf(fabsf(__z), __linearT3D_powY) * __linearT3D;";
   }
 }

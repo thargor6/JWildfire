@@ -46,7 +46,7 @@ public class PostFlattenFunc extends SimpleVariationFunc implements SupportsGPU 
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float post_flatten = fminf(fabsf(varpar->post_flatten), 1.f);\n"
+    return "float post_flatten = fminf(fabsf(__post_flatten), 1.f);\n"
         + "__pz = __pz * (1.f - post_flatten);\n";
   }
 }

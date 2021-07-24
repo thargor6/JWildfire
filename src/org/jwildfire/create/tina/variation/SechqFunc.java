@@ -57,7 +57,7 @@ public class SechqFunc extends SimpleVariationFunc implements SupportsGPU {
         + "    float c = cosf(abs_v);\n"
         + "    float sh = sinhf(__x);\n"
         + "    float ch = coshf(__x);\n"
-        + "    float ni = varpar->sechq / (__x*__x + __y*__y + __z*__z);\n"
+        + "    float ni = __sechq / (__x*__x + __y*__y + __z*__z);\n"
         + "    float C = ni * sh * s / abs_v;\n"
         + "    __px += ch * c * ni;\n"
         + "    __py -= C * __y;\n"

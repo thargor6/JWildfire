@@ -105,16 +105,16 @@ public class KaleidoscopeFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float q = varpar->kaleidoscope_pull;\n"
-        + "float w = varpar->kaleidoscope_rotate;\n"
-        + "float e = varpar->kaleidoscope_line_up;\n"
-        + "float r = varpar->kaleidoscope_x;\n"
-        + "float t = varpar->kaleidoscope_y;\n"
+    return "float q = __kaleidoscope_pull;\n"
+        + "float w = __kaleidoscope_rotate;\n"
+        + "float e = __kaleidoscope_line_up;\n"
+        + "float r = __kaleidoscope_x;\n"
+        + "float t = __kaleidoscope_y;\n"
         + "__px += ((w * __x) *cosf(45.f)- __y *sinf(45.f) +  e ) + r;\n"
         + "if (__y > 0)\n"
         + "    __py += (w * __y) * cosf(45.f) + __x *sinf(45.f)  + q + e + t;\n"
         + "else\n"
         + "    __py += (w * __y) * cosf(45.f) + __x *sinf(45.f)  - q  - e;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->kaleidoscope * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __kaleidoscope * __z;\n" : "");
   }
 }
