@@ -84,25 +84,25 @@ public class BoardersFunc extends SimpleVariationFunc implements SupportsGPU {
         + "float offsetY = __y-roundY ADD_EPSILON;\n"
         + "if (RANDFLOAT() >= 0.75f)\n"
         + "{\n"
-        + "    __px += varpar->boarders*(offsetX*0.5f+roundX);\n"
-        + "    __py += varpar->boarders*(offsetY*0.5f+roundY);\n"
+        + "    __px += __boarders*(offsetX*0.5f+roundX);\n"
+        + "    __py += __boarders*(offsetY*0.5f+roundY);\n"
         + "}\n"
         + "else\n"
         + "{\n"
         + "    if (fabsf(offsetX)>=fabsf(offsetY))\n"
         + "    {\n"
         + "        float signX = offsetX >= 0.f ? 1.f : -1.f;\n"
-        + "        __px += varpar->boarders*(offsetX*0.5f+roundX+signX*0.25f);\n"
-        + "        __py += varpar->boarders*(offsetY*0.5f+roundY+signX*(0.25f*offsetY/offsetX));\n"
+        + "        __px += __boarders*(offsetX*0.5f+roundX+signX*0.25f);\n"
+        + "        __py += __boarders*(offsetY*0.5f+roundY+signX*(0.25f*offsetY/offsetX));\n"
         + "    }\n"
         + "    else\n"
         + "    {\n"
         + "        float signY = offsetY >= 0.f ? 1.f : -1.f;\n"
-        + "        __py += varpar->boarders*(offsetY*0.5f+roundY+signY*0.25f);\n"
-        + "        __px += varpar->boarders*(offsetX*0.5f+roundX+signY*(offsetX/offsetY*0.25f));\n"
+        + "        __py += __boarders*(offsetY*0.5f+roundY+signY*0.25f);\n"
+        + "        __px += __boarders*(offsetX*0.5f+roundX+signY*(offsetX/offsetY*0.25f));\n"
         + "    }\n"
         + "}\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->boarders*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __boarders*__z;\n" : "");
   }
 }
 

@@ -88,10 +88,10 @@ public class BlurLinearFunc extends VariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float cosa;\n"
         + "float sina;\n"
-        + "sincosf(varpar->blur_linear_angle, &sina, &cosa);\n"
-        + "float r    = varpar->blur_linear_length * RANDFLOAT();\n"
-        + "__px += varpar->blur_linear * (__x + r * cosa);\n"
-        + "__py += varpar->blur_linear * (__y + r * sina);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->blur_linear*__z;\n" : "");
+        + "sincosf(__blur_linear_angle, &sina, &cosa);\n"
+        + "float r    = __blur_linear_length * RANDFLOAT();\n"
+        + "__px += __blur_linear * (__x + r * cosa);\n"
+        + "__py += __blur_linear * (__y + r * sina);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __blur_linear*__z;\n" : "");
   }
 }

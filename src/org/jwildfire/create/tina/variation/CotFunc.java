@@ -57,8 +57,8 @@ public class CotFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float cotden = 1.f/(coshf(2.f*__y)-cosf(2.f*__x));\n"
-        + "__px += varpar->cot*cotden*sinf(2.f*__x);\n"
-        + "__py -= varpar->cot*cotden*sinhf(2.f*__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->cot*__z;\n" : "");
+        + "__px += __cot*cotden*sinf(2.f*__x);\n"
+        + "__py -= __cot*cotden*sinhf(2.f*__y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __cot*__z;\n" : "");
   }
 }

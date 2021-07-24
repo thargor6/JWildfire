@@ -96,11 +96,11 @@ public class BlurCircleFunc extends SimpleVariationFunc implements SupportsGPU {
         + "    perimeter = (y2 >= absx ? 3.f * absy - x2 : 7.f * absy + x2);\n"
         + "    side = absy;\n"
         + "}\n"
-        + "float r = varpar->blur_circle * side;\n"
+        + "float r = __blur_circle * side;\n"
         + "float sina;\n"
         + "sincosf(M_PI_4_F * perimeter / side - M_PI_4_F, &sina, &cosa);\n"
         + "__px += r * cosa;\n"
         + "__py += r * sina;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->blur_circle*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __blur_circle*__z;\n" : "");
   }
 }

@@ -102,15 +102,15 @@ public class CellFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float inv_cell_size = 1.0f / varpar->cell_size;\n" +
+    return "float inv_cell_size = 1.0f / __cell_size;\n" +
             "\n" +
             "    /* calculate input cell */\n" +
             "    int x = (int) floorf(__x * inv_cell_size);\n" +
             "    int y = (int) floorf(__y * inv_cell_size);\n" +
             "\n" +
             "    /* Offset from cell origin */\n" +
-            "    float dx = __x - x * varpar->cell_size;\n" +
-            "    float dy = __y - y * varpar->cell_size;\n" +
+            "    float dx = __x - x * __cell_size;\n" +
+            "    float dy = __y - y * __cell_size;\n" +
             "\n" +
             "    /* interleave cells */\n" +
             "    if (y >= 0) {\n" +
@@ -131,8 +131,8 @@ public class CellFunc extends VariationFunc implements SupportsGPU {
             "      }\n" +
             "    }\n" +
             "\n" +
-            "    __px += varpar->cell * (dx + x * varpar->cell_size);\n" +
-            "    __py -= varpar->cell * (dy + y * varpar->cell_size);\n" +
-            (context.isPreserveZCoordinate()? "__z += varpar->cell * __z;": "");
+            "    __px += __cell * (dx + x * __cell_size);\n" +
+            "    __py -= __cell * (dy + y * __cell_size);\n" +
+            (context.isPreserveZCoordinate()? "__z += __cell * __z;": "");
   }
 }

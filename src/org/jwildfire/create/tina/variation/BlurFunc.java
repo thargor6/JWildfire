@@ -56,9 +56,9 @@ public class BlurFunc extends SimpleVariationFunc implements SupportsGPU {
     return "float r = RANDFLOAT() * (PI + PI);\n"
         + "float sina, cosa;\n"
         + "sincosf(r, &sina, &cosa);\n"
-        + "float r2=varpar->blur * RANDFLOAT();\n"
+        + "float r2=__blur * RANDFLOAT();\n"
         + "__px += r2 * cosa;\n"
         + "__py += r2 * sina;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->blur*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __blur*__z;\n" : "");
   }
 }

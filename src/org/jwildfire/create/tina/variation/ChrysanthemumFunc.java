@@ -60,10 +60,10 @@ public class ChrysanthemumFunc extends SimpleVariationFunc implements SupportsGP
         + "    float p4 = sinf(17.0 * u / 3.0);\n"
         + "    float p8 = sinf(2.0 * cosf(3.0 * u) - 28.0 * u);\n"
         + "    float r = 5.0 * (1 + sinf(11.0 * u / 5.0)) - 4.0 * p4 * p4 * p4 * p4 * p8 * p8 * p8 * p8 * p8 * p8 * p8 * p8;\n"
-        + "    r *= varpar->chrysanthemum;\n"
+        + "    r *= __chrysanthemum;\n"
         + "    __px += r * cosf(u);\n"
         + "    __py += r * sinf(u);\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->chrysanthemum * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "      __pz += __chrysanthemum * __z;\n" : "");
   }
 }

@@ -86,14 +86,14 @@ public class BlurPixelizeFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float inv_size = 1.f/varpar->blur_pixelize_size;\n"
-        + "float v = varpar->blur_pixelize * varpar->blur_pixelize_size;\n"
+    return "float inv_size = 1.f/__blur_pixelize_size;\n"
+        + "float v = __blur_pixelize * __blur_pixelize_size;\n"
         + "\n"
         + "float x0 = floorf(__x*inv_size);\n"
         + "float y0 = floorf(__y*inv_size);\n"
         + "\n"
-        + "__px += v * (x0 + varpar->blur_pixelize_scale * (RANDFLOAT() - 0.5f) + 0.5f);\n"
-        + "__py += v * (y0 + varpar->blur_pixelize_scale * (RANDFLOAT() - 0.5f) + 0.5f);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->blur_pixelize*__z;\n" : "");
+        + "__px += v * (x0 + __blur_pixelize_scale * (RANDFLOAT() - 0.5f) + 0.5f);\n"
+        + "__py += v * (y0 + __blur_pixelize_scale * (RANDFLOAT() - 0.5f) + 0.5f);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __blur_pixelize*__z;\n" : "");
   }
 }

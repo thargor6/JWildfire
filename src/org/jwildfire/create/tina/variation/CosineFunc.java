@@ -50,8 +50,8 @@ public class CosineFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->cosine*cosf(PI*__x)*coshf(__y);\n"
-        + "__py += -varpar->cosine*sinf(PI*__x)*sinhf(__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->cosine*__z;\n" : "");
+    return "__px += __cosine*cosf(PI*__x)*coshf(__y);\n"
+        + "__py += -__cosine*sinf(PI*__x)*sinhf(__y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __cosine*__z;\n" : "");
   }
 }

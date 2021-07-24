@@ -113,22 +113,22 @@ public class ChecksFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float _cs, _ncx, _ncy;\n"
-        + "_cs = 1.0f / (varpar->checks_size + 1.e-6f);\n"
-        + "_ncx = varpar->checks_x * -1.0f;\n"
-        + "_ncy = varpar->checks_y * -1.0f;\n"
+        + "_cs = 1.0f / (__checks_size + 1.e-6f);\n"
+        + "_ncx = __checks_x * -1.0f;\n"
+        + "_ncy = __checks_y * -1.0f;\n"
         + "int isXY = (int) rintf(__x * _cs) + (int) rintf(__y * _cs);\n"
-        + "float rnx = varpar->checks_rnd * RANDFLOAT();\n"
-        + "float rny = varpar->checks_rnd * RANDFLOAT();\n"
+        + "float rnx = __checks_rnd * RANDFLOAT();\n"
+        + "float rny = __checks_rnd * RANDFLOAT();\n"
         + "float dx, dy;\n"
         + "if (isXY % 2 == 0) {\n"
         + "   dx = _ncx + rnx;\n"
         + "   dy = _ncy;\n"
         + "} else {\n"
-        + "   dx = varpar->checks_x;\n"
-        + "   dy = varpar->checks_y + rny;\n"
+        + "   dx = __checks_x;\n"
+        + "   dy = __checks_y + rny;\n"
         + "}\n"
-        + "    __px += varpar->checks * (__x + dx);\n"
-        + "    __py += varpar->checks * (__y + dy);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->checks*__z;\n" : "");
+        + "    __px += __checks * (__x + dx);\n"
+        + "    __py += __checks * (__y + dy);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __checks*__z;\n" : "");
   }
 }

@@ -102,8 +102,8 @@ public class BModFunc extends VariationFunc implements SupportsGPU {
         + "    tau = 0.5 * (logf(sqrf(__x + 1.0) + __y*__y) - logf(sqrf(__x - 1.0) + __y*__y));\n"
         + "    sigma = PI - atan2f(__y, __x + 1.0) - atan2f(__y, 1.0 - __x);\n"
         + "\n"
-        + "    if (tau < varpar->bMod_radius && -tau < varpar->bMod_radius) {\n"
-        + "      tau = fmodf(tau + varpar->bMod_radius + varpar->bMod_distance * varpar->bMod_radius, 2.0 * varpar->bMod_radius) - varpar->bMod_radius;\n"
+        + "    if (tau < __bMod_radius && -tau < __bMod_radius) {\n"
+        + "      tau = fmodf(tau + __bMod_radius + __bMod_distance * __bMod_radius, 2.0 * __bMod_radius) - __bMod_radius;\n"
         + "    }\n"
         + "\n"
         + "    sinht = sinhf(tau);\n"
@@ -112,9 +112,9 @@ public class BModFunc extends VariationFunc implements SupportsGPU {
         + "    coss = cosf(sigma);\n"
         + "    temp = cosht - coss;\n"
         + "    if (temp != 0) {\n"
-        + "    __px += varpar->bMod * sinht / temp;\n"
-        + "    __py += varpar->bMod * sins / temp;"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->bMod * __z;\n" : "")
+        + "    __px += __bMod * sinht / temp;\n"
+        + "    __py += __bMod * sins / temp;"
+        + (context.isPreserveZCoordinate() ? "__pz += __bMod * __z;\n" : "")
         + "    }\n";
   }
 }

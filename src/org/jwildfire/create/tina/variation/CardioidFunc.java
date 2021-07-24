@@ -77,12 +77,12 @@ public class CardioidFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float a = atan2f(__y, __x);\n"
-        + "float r = varpar->cardioid * sqrtf(__x*__x + __y*__y + sinf(a * varpar->cardioid_a) + 1.f);\n"
+        + "float r = __cardioid * sqrtf(__x*__x + __y*__y + sinf(a * __cardioid_a) + 1.f);\n"
         + "float c;\n"
         + "float s;\n"
         + "sincosf(atan2f(__y, __x), &s, &c);\n"
         + "__px += r * c;\n"
         + "__py += r * s;\n"
-        + (context.isPreserveZCoordinate() ?  "__pz += varpar->cardioid*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ?  "__pz += __cardioid*__z;\n" : "");
   }
 }

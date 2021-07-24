@@ -118,13 +118,13 @@ public class CPow3Func extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float ang, p_a, tc, half_c, td, half_d, coeff;\n"
-        + "    ang = 2.0 * PI / varpar->cpow3_divisor;\n"
-        + "    p_a = atan2f((varpar->cpow3_d < 0 ? -logf(-varpar->cpow3_d) : logf(varpar->cpow3_d)) * varpar->cpow3_r, 2 * PI);\n"
-        + "    tc = cosf(p_a) * varpar->cpow3_r * cosf(p_a) / varpar->cpow3_divisor;\n"
-        + "    td = cosf(p_a) * varpar->cpow3_r * sinf(p_a) / varpar->cpow3_divisor;\n"
+        + "    ang = 2.0 * PI / __cpow3_divisor;\n"
+        + "    p_a = atan2f((__cpow3_d < 0 ? -logf(-__cpow3_d) : logf(__cpow3_d)) * __cpow3_r, 2 * PI);\n"
+        + "    tc = cosf(p_a) * __cpow3_r * cosf(p_a) / __cpow3_divisor;\n"
+        + "    td = cosf(p_a) * __cpow3_r * sinf(p_a) / __cpow3_divisor;\n"
         + "    half_c = tc / 2.0;\n"
         + "    half_d = td / 2.0;\n"
-        + "    coeff = td == 0 ? 0 : -0.095 * varpar->cpow3_spread / td;\n"
+        + "    coeff = td == 0 ? 0 : -0.095 * __cpow3_spread / td;\n"
         + " float a = __theta;\n"
         + "\n"
         + "    if (a < 0) a += 2 * PI;\n"
@@ -135,12 +135,12 @@ public class CPow3Func extends VariationFunc implements SupportsGPU {
         + "    a += ((RANDFLOAT() < 0.5) ? 2 * PI : -2 * PI) * roundf(logf(RANDFLOAT()) * coeff);\n"
         + "\n"
         + "    float lnr2 = logf(__r2);\n"
-        + "    float r = varpar->cpow3 * expf(half_c * lnr2 - td * a);\n"
-        + "    float th = tc * a + half_d * lnr2 + ang * floorf(varpar->cpow3_divisor * RANDFLOAT());\n"
+        + "    float r = __cpow3 * expf(half_c * lnr2 - td * a);\n"
+        + "    float th = tc * a + half_d * lnr2 + ang * floorf(__cpow3_divisor * RANDFLOAT());\n"
         + "\n"
         + "    __px += r * cosf(th);\n"
         + "    __py += r * sinf(th);\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "   __pz += varpar->cpow3 * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "   __pz += __cpow3 * __z;\n" : "");
   }
 }

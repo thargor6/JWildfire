@@ -116,10 +116,10 @@ public class CPow2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int range = lroundf(varpar->cpow2_range);\n"
-        + "float ang = 2.0f * PI / varpar->cpow2_divisor;\n"
-        + "float c = varpar->cpow2_r * cosf(PI / 2.0f * varpar->cpow2_a) / varpar->cpow2_divisor;\n"
-        + "float d = varpar->cpow2_r * sinf(PI / 2.0f * varpar->cpow2_a) / varpar->cpow2_divisor;\n"
+    return "int range = lroundf(__cpow2_range);\n"
+        + "float ang = 2.0f * PI / __cpow2_divisor;\n"
+        + "float c = __cpow2_r * cosf(PI / 2.0f * __cpow2_a) / __cpow2_divisor;\n"
+        + "float d = __cpow2_r * sinf(PI / 2.0f * __cpow2_a) / __cpow2_divisor;\n"
         + "float half_c = c / 2.0f;\n"
         + "float half_d = d / 2.0f;\n"
         + "float inv_range = 0.5f / range;\n"
@@ -131,10 +131,10 @@ public class CPow2Func extends VariationFunc implements SupportsGPU {
         + "    if (cosf(a * inv_range) < RANDFLOAT() * 2.0f - 1.0f)\n"
         + "      a -= full_range;\n"
         + "    float lnr2 = logf(__r2);\n"
-        + "    float r = varpar->cpow2 * expf(half_c * lnr2 - d * a);\n"
-        + "    float th = c * a + half_d * lnr2 + ang * floorf(varpar->cpow2_divisor * RANDFLOAT());\n"
+        + "    float r = __cpow2 * expf(half_c * lnr2 - d * a);\n"
+        + "    float th = c * a + half_d * lnr2 + ang * floorf(__cpow2_divisor * RANDFLOAT());\n"
         + "    __px += r * cosf(th);\n"
         + "    __py += r * sinf(th);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->cpow2*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __cpow2*__z;\n" : "");
   }
 }

@@ -92,16 +92,16 @@ public class Coth2_BSFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "   float cothsin = sinf(varpar->coth2_bs_y1 * __y);\n"
-        + "    float cothcos = cosf(varpar->coth2_bs_y2 * __y);\n"
-        + "    float cothsinh = sinhf(varpar->coth2_bs_x1 * __x);\n"
-        + "    float cothcosh = coshf(varpar->coth2_bs_x2 * __x);\n"
+    return "   float cothsin = sinf(__coth2_bs_y1 * __y);\n"
+        + "    float cothcos = cosf(__coth2_bs_y2 * __y);\n"
+        + "    float cothsinh = sinhf(__coth2_bs_x1 * __x);\n"
+        + "    float cothcosh = coshf(__coth2_bs_x2 * __x);\n"
         + "    float d = (cothcosh - cothcos);\n"
         + "    if (d != 0) {\n"
         + "      float cothden = 1.0 / d;\n"
-        + "      __px += varpar->coth2_bs * cothden * cothsinh;\n"
-        + "      __py += varpar->coth2_bs * cothden * cothsin;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->coth2_bs * __z;\n" : "")
+        + "      __px += __coth2_bs * cothden * cothsinh;\n"
+        + "      __py += __coth2_bs * cothden * cothsin;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __coth2_bs * __z;\n" : "")
         + "}\n";
   }
 }

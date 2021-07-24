@@ -127,12 +127,12 @@ public class CircleCropFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float cA = fmaxf(-1.0, fminf(varpar->circlecrop_scatter_area, 1.0));\n"
-        + "float x0 = varpar->circlecrop_x;\n"
-        + "    float y0 = varpar->circlecrop_y;\n"
-        + "    float cr = varpar->circlecrop_radius;\n"
+    return "float cA = fmaxf(-1.0, fminf(__circlecrop_scatter_area, 1.0));\n"
+        + "float x0 = __circlecrop_x;\n"
+        + "    float y0 = __circlecrop_y;\n"
+        + "    float cr = __circlecrop_radius;\n"
         + "    float ca = cA;\n"
-        + "    float vv = varpar->circlecrop;\n"
+        + "    float vv = __circlecrop;\n"
         + "\n"
         + "    __x -= x0;\n"
         + "    __y -= y0;\n"
@@ -142,7 +142,7 @@ public class CircleCropFunc extends VariationFunc implements SupportsGPU {
         + "    float rdc = cr + (RANDFLOAT() * 0.5 * ca);\n"
         + "\n"
         + "    short esc = rad > cr;\n"
-        + "    short cr0 = lroundf(varpar->circlecrop_zero) == 1;\n"
+        + "    short cr0 = lroundf(__circlecrop_zero) == 1;\n"
         + "\n"
         + "    float s = sinf(ang);\n"
         + "    float c = cosf(ang);\n"
@@ -162,6 +162,6 @@ public class CircleCropFunc extends VariationFunc implements SupportsGPU {
         + "      __py += vv * __y + y0;\n"
         + "    }\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->circlecrop * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "      __pz += __circlecrop * __z;\n" : "");
   }
 }

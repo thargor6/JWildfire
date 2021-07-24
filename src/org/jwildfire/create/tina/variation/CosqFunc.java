@@ -56,8 +56,8 @@ public class CosqFunc extends SimpleVariationFunc implements SupportsGPU {
         + "    float c = cosf(__x);\n"
         + "    float sh = sinhf(abs_v);\n"
         + "    float ch = coshf(abs_v);\n"
-        + "    float C = -varpar->cosq * s * sh / abs_v;\n"
-        + "    __px += varpar->cosq * c * ch;\n"
+        + "    float C = -__cosq * s * sh / abs_v;\n"
+        + "    __px += __cosq * c * ch;\n"
         + "    __py += C * __y;\n"
         + "    __pz += C * __z;\n";
   }

@@ -56,8 +56,8 @@ public class CoshqFunc extends SimpleVariationFunc implements SupportsGPU {
         + " float c = cosf(abs_v);\n"
         + " float sh = sinhf(__x);\n"
         + " float ch = coshf(__x);\n"
-        + " float C = varpar->coshq * sh * s / abs_v;\n"
-        + " __px += varpar->coshq * ch * c;\n"
+        + " float C = __coshq * sh * s / abs_v;\n"
+        + " __px += __coshq * ch * c;\n"
         + " __py += C * __y;\n"
         + " __pz += C * __z;";
   }

@@ -89,13 +89,13 @@ public class Cot2_BSFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float cotsin = sinf(varpar->cot2_bs_x1 * __x);\n"
-        + "    float cotcos = cosf(varpar->cot2_bs_x2 * __x);\n"
-        + "    float cotsinh = sinhf(varpar->cot2_bs_y1 * __y);\n"
-        + "    float cotcosh = coshf(varpar->cot2_bs_y2 * __y);\n"
+    return "    float cotsin = sinf(__cot2_bs_x1 * __x);\n"
+        + "    float cotcos = cosf(__cot2_bs_x2 * __x);\n"
+        + "    float cotsinh = sinhf(__cot2_bs_y1 * __y);\n"
+        + "    float cotcosh = coshf(__cot2_bs_y2 * __y);\n"
         + "    float cotden = 1.0 / (cotcosh - cotcos);\n"
-        + "    __px += varpar->cot2_bs * cotden * cotsin;\n"
-        + "    __py += varpar->cot2_bs * cotden * -1 * cotsinh;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->cot2_bs * __z;\n" : "");
+        + "    __px += __cot2_bs * cotden * cotsin;\n"
+        + "    __py += __cot2_bs * cotden * -1 * cotsinh;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __cot2_bs * __z;\n" : "");
   }
 }

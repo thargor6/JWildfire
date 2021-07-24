@@ -77,7 +77,7 @@ public class Blur3DFunc extends SimpleVariationFunc implements SupportsGPU {
         + "float cosb;\n"
         + "float sinb;\n"
         + "sincosf(RANDFLOAT()*M_PI_F, &sinb, &cosb);\n"
-        + "float rndG = varpar->blur3D*(RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f);\n"
+        + "float rndG = __blur3D*(RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f);\n"
         + "__px += rndG*sinb*cosa;\n"
         + "__py += rndG*sinb*sina;\n"
         + "__pz += rndG*cosb;\n";

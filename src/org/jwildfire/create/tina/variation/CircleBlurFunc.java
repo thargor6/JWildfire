@@ -60,8 +60,8 @@ public class CircleBlurFunc extends SimpleVariationFunc implements SupportsGPU {
         + "float s;\n"
         + "sincosf(RANDFLOAT()*2.F*M_PI_F, &s, &c);\n"
         + "\n"
-        + "__px += varpar->circleblur * rad * c;\n"
-        + "__py += varpar->circleblur *rad * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->circleblur*__z;\n" : "");
+        + "__px += __circleblur * rad * c;\n"
+        + "__py += __circleblur *rad * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __circleblur*__z;\n" : "");
   }
 }

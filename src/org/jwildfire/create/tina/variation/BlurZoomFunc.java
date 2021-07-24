@@ -78,10 +78,10 @@ public class BlurZoomFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float _z = 1.f + varpar->blur_zoom_length * RANDFLOAT();\n"
+    return "float _z = 1.f + __blur_zoom_length * RANDFLOAT();\n"
         + "\n"
-        + "__px += varpar->blur_zoom * ((__x - varpar->blur_zoom_x) * _z + varpar->blur_zoom_x);\n"
-        + "__py += varpar->blur_zoom * ((__y + varpar->blur_zoom_y) * _z - varpar->blur_zoom_y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->blur_zoom*__z;\n" : "");
+        + "__px += __blur_zoom * ((__x - __blur_zoom_x) * _z + __blur_zoom_x);\n"
+        + "__py += __blur_zoom * ((__y + __blur_zoom_y) * _z - __blur_zoom_y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __blur_zoom*__z;\n" : "");
   }
 }

@@ -54,8 +54,8 @@ public class CoshFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->cosh*coshf(__x)*cosf(__y);\n"
-        + "__py += varpar->cosh*sinhf(__x)*sinf(__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->cosh*__z;\n" : "");
+    return "__px += __cosh*coshf(__x)*cosf(__y);\n"
+        + "__py += __cosh*sinhf(__x)*sinf(__y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __cosh*__z;\n" : "");
   }
 }
