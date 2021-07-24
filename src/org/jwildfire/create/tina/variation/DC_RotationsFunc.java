@@ -17,7 +17,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_RotationsFunc  extends DC_BaseFunc {
+public class DC_RotationsFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_rotations
@@ -160,8 +160,119 @@ public class DC_RotationsFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,1.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_rotations_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_rotations_zoom;"
+	    		+"color=dc_rotations_getRGBColor(uv,varpar->dc_rotations_time,varpar->dc_rotations_levels);"
+	    		+"if( varpar->dc_rotations_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_rotations_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
 
+	    		+" for(int index=0; index<numColors;index++)"
+               +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+               
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+               +" }"
+
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_rotations_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_rotations*x;"
+	    		+"__py+= varpar->dc_rotations*y;"
+	    		+"float dz = z * varpar->dc_rotations_scale_z + varpar->dc_rotations_offset_z;"
+	    		+"if ( varpar->dc_rotations_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		 return  "	__device__ float3  dc_rotations_hsv2rgb_smooth ( float3 c )"
+				 +"	{"
+				 +"		float3 t1=make_float3(0.0,4.0,2.0) + c.x*6.0;"
+				 +"		float3 t2=mod(t1,6.0)-3.0;"
+				 +"	    float3 rgb = clamp( abs(t2)-1.0, 0.0, 1.0 );"
+				 +"	    float3 t0= make_float3 (3.0,3.0,3.0)- rgb*2.0;"
+				 +"		rgb = rgb*rgb*t0;"
+				 +"		return  mix( make_float3(1.0,1.0,1.0), rgb, c.y)*c.z;"
+				 +"	}"
+
+				 +"	__device__ Mat2  dc_rotations_rotate (float a)"
+				 +"	{"
+				 +"		float c = cosf(a);"
+				 +"		float s = sinf(a);"
+				 +"     Mat2 M;"
+				 +"		Mat2_Init(&M, c, s, -s, c);"
+				 +"     return M;"
+				 +"	}"
+				 +"	"
+				 +"	__device__ Mat2  dc_rotations_rot (float a) {"
+				 +"		float c = cosf(a);"
+				 +"		float s = sinf(a);"
+				 +"     Mat2 M;"
+				 +"		Mat2_Init(&M, c, -s, s, c);"
+				 +"     return M;"
+				 +"	}"
+				 
+				 +"	__device__ float3  dc_rotations_getRGBColor (float2 uv,float time, float levels )"
+				 +"	{"
+				 +"		float _d =  1.0-length(uv);"
+				 +"		float s = 0.5;"
+				 +"		for (int k = 0; k < levels; k++) {"
+				 +"			uv = (abs(uv)/( dot(uv, uv)))-(s);"
+				 +"         Mat2 m1=dc_rotations_rot (time * .1);"
+				 +"			uv = times(&m1,uv);"
+				 +"			s *= .955;"
+				 +"		}"
+				 +"		Mat2 m2=dc_rotations_rotate (time+uv.x*0.05);"
+				 +"		 uv = times(&m2,uv);"
+				 +"		float3 ch_color =  dc_rotations_hsv2rgb_smooth (make_float3(time*0.4+uv.y*.1,1.0,1.0));"
+				 +"		float3 bg_color = make_float3(_d*0.1, _d*0.2, _d*0.1);"
+				 +"		uv.x += 0.5+sinf(time+uv.y*0.7)*0.15;"
+				 +"		float3 color = mix(ch_color, bg_color, 0.0);"
+				 +"		return color;"
+				 +"	}";
+	 }	
 }
 

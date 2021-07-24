@@ -1175,6 +1175,15 @@ __device__ float2 sin(float2 x)
 	return make_float2(v1,v2);
 }
 
+__device__ float3 sinf(float3 a)
+{
+	float v1,v2,v3;
+	v1=sinf(a.x);
+	v2=sinf(a.y);
+	v3=sinf(a.z);
+	return make_float3(v1,v2,v3);
+}
+
 __device__ float3 sin(float3 a)
 {
 	float v1,v2,v3;
@@ -1223,6 +1232,15 @@ __device__ float2 cos(float2 x)
 	v1=cosf(x.x);
 	v2=cosf(x.y);
 	return make_float2(v1,v2);
+}
+
+__device__ float3 cosf(float3 a)
+{
+	float v1,v2,v3;
+	v1=cosf(a.x);
+	v2=cosf(a.y);
+	v3=cosf(a.z);
+	return make_float3(v1,v2,v3);
 }
 
 __device__ float3 cos(float3 a)
@@ -1277,7 +1295,14 @@ __device__ float4 abs(float4 v)
 
 __device__ float sign(float v)
 {
-	return ((v>0.0)?1.0:(v<0.0)?-1.0:0.0);
+    float val=0.0;
+    if(v>0.0)
+	   val=1.0;
+	else if(v<0.0)
+	   val=-1.0;
+	else 
+	   val=0.0;
+	return val;
 }
 
 __device__ float2 sign(float2 v)
@@ -1416,6 +1441,25 @@ __device__ float4 step(float4 lim, float4 x)
 	return make_float4(x1,y1,z1,w1);
 }
 
+__device__ float ceil(float x)
+{
+   return ceilf(x);
+}
+
+__device__ float2 ceil(float2 v)
+{
+   return make_float2(ceilf(v.x),ceilf(v.y));
+}
+
+__device__ float3 ceil(float3 v)
+{
+   return make_float3(ceilf(v.x),ceilf(v.y),ceilf(v.z));
+}
+
+__device__ float4 ceil(float4 v)
+{
+   return make_float4(ceilf(v.x),ceilf(v.y),ceilf(v.z),ceilf(v.w));
+}
 		
 __device__ float2 floorf(float2 v)
 {

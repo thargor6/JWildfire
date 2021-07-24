@@ -17,7 +17,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_TeslaFunc  extends DC_BaseFunc {
+public class DC_TeslaFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_tesla
@@ -144,8 +144,98 @@ public	double field21( vec3 p, double s) {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_tesla_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_tesla_zoom;"
+	    		+"color=dc_tesla_getRGBColor(uv,varpar->dc_tesla_time,varpar->dc_tesla_style,varpar->dc_tesla_levels);"
+	    		+"if( varpar->dc_tesla_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_tesla_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+              +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+              // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+              +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_tesla_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_tesla*x;"
+	    		+"__py+= varpar->dc_tesla*y;"
+	    		+"float dz = z * varpar->dc_tesla_scale_z + varpar->dc_tesla_offset_z;"
+	    		+"if ( varpar->dc_tesla_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+//		 return "";
+		 return   "__device__	float  dc_tesla_field21 ( float3 p, float s, float time, float style, float levels) {"
+				 +"	float strength = 20. + .03 * logf(1.0e-6f + fract(sinf(time*10.) * 4500.0));"
+				 +"	float accum = s*3.;"
+				 +"	float prev = 0.;"
+				 +"	float tw = 0.01;"
+				 +"	for (int i = 0; i < levels; ++i) {"
+				 +"		"
+				 +"		float mag = dot(p,p)*powf(s,1.0*fabsf(sinf(time/8.0)));"
+				 +"		p = abs(p)/( mag) + (make_float3(-.9, -.234560*fabsf(sinf(time)), -1.));"
+				 +"		float w = expf(-(float)i / style );"
+				 +"		accum += w *expf(-strength * powf(fabsf(mag / prev),1.2));"
+				 +"		tw += w*w;"
+				 +"		prev = mag;"
+				 +"	}"
+				 +"	return fmaxf(0. ,6. * accum / tw - 2.);"
+				 +"}"
 
+				 +"	__device__ float3  dc_tesla_getRGBColor (float2 pos, float time, float style, float levels)"
+				 +"	{"
+				 +"		float col=0.2;"
+				 +"		col= dc_tesla_field21 (make_float3(pos.x,pos.y,1.0), 0.5, time,style, levels);"
+				 +"		return make_float3(col,col,col);"
+				 +"	}";
+	 }	
 }
 

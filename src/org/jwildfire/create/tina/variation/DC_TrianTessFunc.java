@@ -16,7 +16,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_TrianTessFunc  extends DC_BaseFunc {
+public class DC_TrianTessFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_triantess
@@ -96,20 +96,20 @@ public class DC_TrianTessFunc  extends DC_BaseFunc {
 	  private static final String RESSOURCE_VERTCOLOR = "Vertex_-RGB";
 	  private static final String RESSOURCE_BACKGROUND = "Background_-RGB";
 	  
-	  private String faceARGB = new String("FFFF00");
-	  private String faceBRGB = new String("00FF00");
-	  private String faceCRGB = new String("0000FF");
+	  private String faceARGB = new String("FFFFFF");
+	  private String faceBRGB = new String("000000");
+	  private String faceCRGB = new String("000000");
 	  
 	  private String SegmentRGB = new String("FFFFFF");
-	  private String VertexRGB = new String("FF0000");
+	  private String VertexRGB = new String("000000");
 	  private String BackgroundRGB = new String("000000");
 	  
 	  
-		vec3 faceAColor = new vec3 (1,1,0);
-		vec3 faceBColor = new vec3(0,1,0);
-		vec3 faceCColor = new vec3(0,0,1);
+		vec3 faceAColor = new vec3 (1.,1.,1.);
+		vec3 faceBColor = new vec3(0,0,0);
+		vec3 faceCColor = new vec3(0,0,0);
 		vec3 segColor = new vec3(1.0,1.0,1.0);
-		vec3 vertexColor = new vec3(1.0,0.0,0.0);
+		vec3 vertexColor = new vec3(0.0,0.0,0.0);
 		vec3 backGroundColor = new vec3(.0,.0,.0);
 		
 	  
@@ -560,8 +560,250 @@ public class DC_TrianTessFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_triantess_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)/varpar->dc_triantess_zoom +make_float2(varpar->dc_triantess_CenterX,varpar->dc_triantess_CenterY);"
+	   	
+	    		+"color=dc_triantess_getRGBColor(uv, varpar->dc_triantess_Iterations, varpar->dc_triantess_pParam, varpar->dc_triantess_qParam, varpar->dc_triantess_rParam,"
+                +"      varpar->dc_triantess_U, varpar->dc_triantess_V, varpar->dc_triantess_W,"
+                + "     varpar->dc_triantess_VRadius,varpar->dc_triantess_SRadius, varpar->dc_triantess_RotAngle,"
+                +"      varpar->dc_triantess_Vertex, varpar->dc_triantess_Segments, varpar->dc_triantess_Faces);"
+                
+	    		+"if( varpar->dc_triantess_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_triantess_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+              +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+              // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+              +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_triantess_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_triantess*x;"
+	    		+"__py+= varpar->dc_triantess*y;"
+	    		+"float dz = z * varpar->dc_triantess_scale_z + varpar->dc_triantess_offset_z;"
+	    		+"if ( varpar->dc_triantess_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		 return   "__device__	float  dc_triantess_hdotd (float3 a, float3 b, float spaceType){"
+				 +"		return dot(make_float2(a.x,a.y),make_float2(b.x,b.y))+spaceType*a.z*b.z;"
+				 +"	}"
+				 
+				 +"__device__	float  dc_triantess_hdotv (float3 a, float3 b, float spaceType){"
+				 +"		return spaceType*dot(make_float2(a.x,a.y),make_float2(b.x,b.y))+a.z*b.z;"
+				 +"	}"
 
+				 +"__device__	float  dc_triantess_hdotdv (float3 d, float3 v){"
+				 +"		return dot(d,v);"
+				 +"	}"
+				 
+				 +"__device__	float  dc_triantess_hlengthv (float3 v, float spaceType){"
+				 +"		return sqrtf(fabsf( dc_triantess_hdotv (v,v,spaceType)));"
+				 +"	}"
+				 
+				 +"__device__	float  dc_triantess_hlengthd (float3 v, float spaceType){"
+				 +"		return sqrtf(fabsf( dc_triantess_hdotd (v,v,spaceType)));"
+				 +"	}"
+				 
+				 +"__device__	float3  dc_triantess_hnormalizev (float3 v, float spaceType){"
+				 +"		return  v*(1./ dc_triantess_hlengthv(v,spaceType));"
+				 +"	}"
+				 
+				 +"__device__	float3  dc_triantess_hnormalized (float3 v, float spaceType){"
+				 +"		return v*(1./ dc_triantess_hlengthd(v,spaceType));"
+				 +"	}"
+
+				 +"__device__	float3  dc_triantess_Rotate (float3 p, float spaceType, float cRA, float sRA){"
+				 +"		float3 p1=p;"
+				 +"		float2 rv;"
+				 +"	    float2	RotVector=make_float2(0.0,1.0);"
+				 +"		rv=normalize(RotVector);"
+				 +"		float vp=dot(rv,make_float2(p.x,p.y));"
+				 +"		float2 t1=rv*((vp*(cRA-1.))-p.z*sRA);"
+				 +"		p1.x+=t1.x;p1.y+=t1.y;"
+				 +"		p1.z+=vp*spaceType*sRA+p.z*(cRA-1.);"
+				 +"		return p1;"
+				 +"	}"
+				 
+				 +"__device__	float3  dc_triantess_fold (float3 pos, float spaceType,float Iterations, float3 nb, float3 nc) {"
+				 +"		float3 ap=pos+1.0;"
+				 +"		float nbrFolds=0.;"
+				 +"		for(int i=0;i<Iterations && (pos.x!=ap.x || pos.y!=ap.y);i++){"
+				 +"			ap=pos;"
+				 +"			pos.x=fabsf(pos.x);"
+				 +"			float t=-2.*fminf(0.,dc_triantess_hdotdv(nb,pos)); "
+				 +"			pos=pos+(nb*(make_float3(1.,1.,spaceType))*(t));"
+				 +"			t=-2.*fminf(0.,dc_triantess_hdotdv(nc,pos)); "
+				 +"			pos=pos + nc*(make_float3(1.,1.,spaceType))*t;"
+				 +"			nbrFolds+=1.0;"
+				 +"		}"
+				 +"		return pos;"
+				 +"	}"
+				 
+				 +"__device__	float  dc_triantess_DD (float tha, float r, float spaceType){"
+				 +"		return tha*(1.+spaceType*r*r)/(1.+spaceType*spaceType*r*tha);"
+				 +"	}"
+				 
+				 +"__device__	float  dc_triantess_dist2Vertex (float3 z, float r, float spaceType, float3 p, float tVR){"
+				 +"		float tha= dc_triantess_hlengthd (p-z,spaceType)/dc_triantess_hlengthv(p+z, spaceType);"
+				 +"		return  dc_triantess_DD ((tha-tVR)/(1.+spaceType*tha*tVR),r,spaceType);"
+				 +"	}"
+				 
+				 +"__device__	float3  dc_triantess_closestFTVertex (float3 z, float spaceType, float3 gA,float3 gB,float3 gC){"
+				 +"			float fa= dc_triantess_hdotd (gA,z,spaceType);"
+				 +"			float fb= dc_triantess_hdotd (gB,z,spaceType);"
+				 +"			float fc= dc_triantess_hdotd (gC,z,spaceType);"
+				 +"			float f=fmaxf(fa,fmaxf(fb,fc));"
+				 +"			float3 c=make_float3((fa==f?1.0f:0.0f),(fb==f?1.0f:0.0f),(fc==f?1.0f:0.0f));"
+				 +"			float k=1./(c.x+c.y+c.z);"
+				 +"			return c*(k);"
+				 +"	}"
+				 
+				 +"__device__	float  dc_triantess_dist2Segment (float3 z, float3 n, float r, float spaceType,float3 p, float tSR){"
+				 +"		float pn= dc_triantess_hdotv (p,n,spaceType),nn= dc_triantess_hdotv (n,n,spaceType),pp= dc_triantess_hdotv (p,p,spaceType),zn= dc_triantess_hdotv (z,n,spaceType),zp= dc_triantess_hdotv (z,p,spaceType);"
+				 +"		float det=1./(pn*pn-pp*nn);"
+				 +"		float alpha=det*(pn*zn-zp*nn), beta=det*(-pp*zn+pn*zp);"
+				 +"		float3 pmin= dc_triantess_hnormalizev (p*(alpha)+(n*(fminf(0.,beta))),spaceType);"
+				 +"		float tha= dc_triantess_hlengthd (pmin-z, spaceType)/dc_triantess_hlengthv(pmin+z,spaceType);"
+				 +"		return  dc_triantess_DD ((tha-tSR)/(1.+spaceType*tha*tSR),r,spaceType);"
+				 +"	}"
+				 
+				 +"__device__	float  dc_triantess_dist2Segments (float3 z, float r,float spaceType, float3 nb,float3 nc, float3 p, float tSR){"
+				 +"		float da= dc_triantess_dist2Segment (z, make_float3(1.,0.,0.), r, spaceType,p, tSR);"
+				 +"		float db= dc_triantess_dist2Segment (z, nb, r, spaceType,p,tSR);"
+				 +"		float dc= dc_triantess_dist2Segment (z, nc*(make_float3(1.,1.,spaceType)), r, spaceType,p,tSR);"
+				 +"		return fminf(fminf(da,db),dc);"
+				 +"	}"
+
+
+				 +"__device__ float3  dc_triantess_getRGBColor (float2 pos, float Iterations, float pParam, float qParam, float rParam,"
+				 + "                                            float U, float V, float W, float VRadius,float SRadius, float RotAngle,"
+				 + "                                            float Vertex, float Segments, float Faces)"
+				 +"	{"			 
+				 +"     float tVR,tSR,cRA,sRA;"
+// init
+				 +"		float spaceType= sign (qParam*rParam + pParam*rParam + pParam*qParam - pParam*qParam*rParam);"
+				 
+				 +"		float cospip=cosf(PI/pParam), sinpip=sinf(PI/pParam);"
+				 +"		float cospiq=cosf(PI/qParam), sinpiq=sinf(PI/qParam);"
+				 +"		float cospir=cosf(PI/rParam), sinpir=sinf(PI/rParam);"
+				 +"		float ncsincos=(cospiq+cospip*cospir)/sinpip;"
+
+				 +"		float3 nb=make_float3(-cospip,sinpip,0.);"
+				 +"		float3 nc=make_float3(-cospir,-ncsincos,sqrtf(fabsf( (ncsincos+sinpir)*(-ncsincos+sinpir) ) ) );"
+				 +"		if(spaceType==0.0f){"
+				 +"			nc.z=0.25f;"
+				 +"		}"
+				 
+				 +"		float3 pA=make_float3(nb.y*nc.z, -nb.x*nc.z, nb.x*nc.y-nb.y*nc.x);"
+				 +"		float3 pB=make_float3(0.,nc.z,-nc.y);"
+				 +"		float3 pC=make_float3(0.,0.,nb.y);"
+				 
+				 +"		float3 q=pA*(U)+(pB*(V))+(pC*(W));"
+				 +"		float qq= dc_triantess_hlengthv (q,spaceType), Aq= dc_triantess_hdotv (pA,q,spaceType), Bq= dc_triantess_hdotv (pB,q,spaceType), Cq= dc_triantess_hdotv (pC,q,spaceType);"
+				 +"		float3 gA=pA*(qq/Aq)-(q);"
+				 +"     float3 gB=pB*(qq/Bq)-(q);"
+				 +"     float3 gC=pC*(qq/Cq)-(q);"
+				 +"		float3 p= dc_triantess_hnormalizev (q,spaceType);"
+				 
+				 +"		if(spaceType==-1.){"
+				 +"			tVR=sinhf(0.5*VRadius)/coshf(0.5*VRadius);"
+				 +"			tSR=sinhf(0.5*SRadius)/coshf(0.5*SRadius);"
+				 +"			cRA=coshf(RotAngle);sRA=sinhf(RotAngle);"
+				 +"		}else if (spaceType==1.){"
+				 +"			tVR=sinf(0.5*VRadius)/cosf(0.5*VRadius);"
+				 +"			tSR=sinf(0.5*SRadius)/cosf(0.5*SRadius);"
+				 +"			cRA=cosf(RotAngle);sRA=sinf(RotAngle);"
+				 +"		}else{"
+				 +"			tVR=0.5*VRadius;"
+				 +"			tSR=0.5*SRadius;"
+				 +"			cRA=1.;sRA=RotAngle;"
+				 +"		}"
+//// end init
+				 +"      float3 faceAColor = make_float3 (1.,1.,1.);"
+				 +"      float3 faceBColor = make_float3(0.,0.,0.);"
+				 +"      float3 faceCColor = make_float3(0.,0.,0.);"
+				 +"      float3 segColor = make_float3(1.0,1.0,1.0);"
+				 +"      float3 vertexColor = make_float3(0.0,0.0,0.0);"
+				 +"      float3 backGroundColor = make_float3(.0,.0,.0);"
+				 
+				 +"      float aascale=0.0005;"
+				 +"      float2	aaScale=make_float2(aascale,aascale);"
+				 +"		 float r=length(pos);"
+				 +"		 float3 z3=make_float3(pos.x*2.0, pos.y*2.0, 1.-spaceType*r*r)/(1.+spaceType*r*r);"
+				 
+				 +"		 if(spaceType==-1. && r>=1.) "
+				 +"			return backGroundColor;"
+				 
+				 +"		 z3= dc_triantess_Rotate (z3,spaceType, cRA , sRA);"
+				 +"		 z3= dc_triantess_fold (z3,spaceType, Iterations, nb,nc);"
+				 +"		 float3 color=backGroundColor;"
+				 +"		 if(Faces==1.0){"
+				 +"			float3 c= dc_triantess_closestFTVertex (z3,spaceType,gA,gB,gC);"
+				 +"			color=faceAColor*c.x + faceBColor*c.y + faceCColor*c.z;"
+				 +"		 }"
+				 +"		 if(Segments==1.0){"
+				 +"			float ds= dc_triantess_dist2Segments (z3, r,  spaceType, nb, nc, p, tSR );"
+				 +"			color=mix( segColor,color,smoothstep(-1.0, 1.0 , ds*0.5/aaScale.y) );"
+				 +"		 }"
+				 +"		 if(Vertex==1.0){"
+				 +"			float dv= dc_triantess_dist2Vertex (z3,r,spaceType, p,tVR);"
+				 +"			color=mix( vertexColor, color, smoothstep(-1.0 , 1.0 , dv*0.5/aaScale.y) );"
+				 +"		 }"
+				 +"		 if(spaceType==-1.)"
+				 +"			color=mix(backGroundColor,color,smoothstep(0.,1.,(1.-r)*0.5/aaScale.y));"
+//				 +"      float3 color=make_float3(1.0,1.0,0.0);"
+				 +"		 return color;"
+				 +"	}";
+	 }	
 }
 

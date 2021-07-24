@@ -314,7 +314,7 @@ public class DC_HoshiFunc  extends DC_BaseFunc implements SupportsGPU {
 	    		+"		for(int i = steps ; i > 0; i--){"
 	    		+"			p = abs(p- fold)+fold;"
 	    		+"			p = p*(scale)-( translate);"
-	    		+"			p =  dc_hoshi_rotate (p, PI/(0.10+sinf(time*0.0005+(float)i*0.5000001)*0.4999+0.5+(10./time)+sinf(time)/100.));"
+	    		+"			p =  dc_hoshi_rotate (p, -PI/(0.10+sinf(time*0.0005+(float)i*0.5000001)*0.4999+0.5+(10./time)+sinf(time)/100.));"
 	    		+"		}"
 	    		+"		float i = x*x + atan2(p.y, p.x) + time*0.02;"
 	    		+"		float h = floorf(i*4.0)/8.0 + 1.107;"

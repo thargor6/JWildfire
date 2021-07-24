@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_WorleyFunc  extends DC_BaseFunc {
+public class DC_WorleyFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_worley
@@ -141,8 +141,109 @@ public class DC_WorleyFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_worley_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_worley_zoom;"
+	    		+"color=dc_worley_getRGBColor(uv, varpar->dc_worley_pattern, varpar->dc_worley_distort);"
+	    		+"if( varpar->dc_worley_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_worley_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+            +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+            // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+            +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_worley_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_worley*x;"
+	    		+"__py+= varpar->dc_worley*y;"
+	    		+"float dz = z * varpar->dc_worley_scale_z + varpar->dc_worley_offset_z;"
+	    		+"if ( varpar->dc_worley_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
 
+		 return   "__device__  float2  dc_worley_H (float2 n, float pattern, float distort)"
+				 +"	{"
+				 +"	    return fract(  make_float2(1.0,12.34) + 1.0e4 * sin( n.x+n.y/(pattern*.01)) )*distort*0.75 + 0.3;"
+				 +"	}"
+				 
+				 +"	__device__ float3 dc_worley_getRGBColor (float2 U,float pattern, float distort)"
+				 +"	{"
+				 +"	    float2 p;"
+				 +"	    float2 c;"
+				 +"	    float3 O = make_float3(0.0,0.0,0.0);"
+				 +"	    float l;"
+				 +"	    O = O + 1.0e9- O;"
+				 +"	    for (int k=0; k<9; k++)"
+				 +"	    { "
+				 +"	                p = ceil(U)+ make_float2( k-k/3*3 ,k/3)-2.0;"
+				 +"	                c =  dc_worley_H (p,pattern,distort) + p -U;"
+				 +"	                l = dot(c , c);"
+				 +"	                if ( l < O.x ) { "
+				 +"	                	O.y=O.x;"
+				 +"	                    O.z=O.y;"
+				 +"	                    O.x=l;"
+				 +"	                }"
+				 +"	                else if( l < O.y )"
+				 +"	    	        { O.z =O.y ;"
+				 +"	    	          O.y=l; "
+				 +"	    	        }"
+				 +"                 else if(l < O.z )"
+				 +"	                  O.z=l; "
+				 +"	    }"
+				 +"	    O = sqrt(O)*5.0;"
+				 +"	    O = O- O.x;"
+				 +"	    O = O+4.*( O.y/ (O.y/O.z +1.) - 0.5 )- O;"
+				 +"		return O;"
+				 +"	}";
+	 }	
 }
 

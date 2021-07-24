@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_SunFlowerFunc  extends DC_BaseFunc {
+public class DC_SunFlowerFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_sincos
@@ -170,8 +170,126 @@ public class DC_SunFlowerFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_sunflower_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_sunflower_zoom;"
+	    		+"color=dc_sunflower_getRGBColor(uv,varpar->dc_sunflower_N, varpar->dc_sunflower_step, varpar->dc_sunflower_GridX,"
+	    		+ "    varpar->dc_sunflower_GridY, varpar->dc_sunflower_Polar, varpar->dc_sunflower_Dots);"
+	    		+"if( varpar->dc_sunflower_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_sunflower_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+              +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+              // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+              +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_sunflower_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_sunflower*x;"
+	    		+"__py+= varpar->dc_sunflower*y;"
+	    		+"float dz = z * varpar->dc_sunflower_scale_z + varpar->dc_sunflower_offset_z;"
+	    		+"if ( varpar->dc_sunflower_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		 return   "	__device__ float  dc_sunflower_S (float d,float r)"
+				 +"	{"
+				 +"		return smoothstep( r, 0., d); "
+				 +"	}"
+				 
+				 +"	__device__ float  dc_sunflower_line (float2 p, float2 a,float2 b) {  "
+				 +"	    p = p-a;"
+				 +"	    b = b-a;"
+				 +"		float h = clamp(dot(p, b) / dot(b, b), 0.0, 1.0); "
+				 +"		return length(p - b*h);"
+				 +"	}"
+				 
+				 +"	__device__ float  dc_sunflower_L (float2 U, float x, float y)"
+				 +"	{ "
+				 +"		return  dc_sunflower_line ( U, floorf(U + 0.5)-make_float2(x,y), floorf(U+ 0.5)+make_float2(x,y));"
+				 +"	}"
+				 
+				 +"	__device__ float3  dc_sunflower_getRGBColor (float2 U, float N, float step, float GridX, float GridY, float Polar, float Dots)"
+				 +"	{"
+				 +"     float2 J=make_float2(1.0,1.0);"
+				 +"	    float r = step, y, l, w;"
+				 +"	    float3 O=make_float3(0.,0.,0.);"
+				 +"	    l = length(U);"
+				 +"	    J.x = l*6.28;                    "
+				 +"	    U = make_float2( atan2f(U.y,U.x)/6.28 , l )*N;"
+				 +"	    w=0.1;"
+				 +"	    U.x += r* floorf(U.y+.5);"
+				 +"	    if(GridX==1.0)"
+				 +"     { float val=((r<0)?-1.:1.);"
+				 +"       float val1=dc_sunflower_L (U , val - r,1.0);"
+				 +"	      O.x  =  dc_sunflower_S ( val1, w );"
+				 +"     }"
+				 +"	    if(GridY==1.0)"
+				 +"     {  float val=dc_sunflower_L (U,  -r,1.0);"
+				 +"	       O.y  =  dc_sunflower_S (val , w );"
+				 +"     }"
+				 +"	    if(GridX==0.0 && GridY==0.0)"
+				 +"	    {"
+				 +"	      O.z  =  dc_sunflower_S (  dc_sunflower_L (U,((r<0)?-.5:.5)-r,1), w );"
+				 +"	      U.x+=.5;"
+				 +"       O.z  +=  dc_sunflower_S (  dc_sunflower_L (U,((r<0)?-.5:.5)-r,1), w ); U.x-=.5;"
+				 +"	    }"
+				 +"	    if(Polar==1.0)"
+				 +"	         O = O+(.5*  dc_sunflower_S (  dc_sunflower_L (U,1,0),    w ));"
+				 +"	    if(Dots==1.0)"
+				 +"	    {"
+				 +"	      U = fract( U+(.5) )-(.5);"
+				 +"	      O = O+( dc_sunflower_S ( length(U*J)-0.3, N*2./2000. ));"
+				 +"	    }"
+				 +"		return O;"
+				 +"	}";
+	 }	
 }
 

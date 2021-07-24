@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_PentaTilesFunc  extends DC_BaseFunc {
+public class DC_PentaTilesFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_sincos
@@ -178,8 +178,131 @@ public class DC_PentaTilesFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_pentatiles_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_pentatiles_zoom;"
+	    		+"color=dc_pentatiles_getRGBColor(uv,varpar->dc_pentatiles_width,varpar->dc_pentatiles_border);"
+	    		+"if( varpar->dc_pentatiles_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_pentatiles_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+              +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+              // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+              +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_pentatiles_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_pentatiles*x;"
+	    		+"__py+= varpar->dc_pentatiles*y;"
+	    		+"float dz = z * varpar->dc_pentatiles_scale_z + varpar->dc_pentatiles_offset_z;"
+	    		+"if ( varpar->dc_pentatiles_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		 return   "	__device__ float  dc_pentatiles_sfun (float v, float width)"
+				 +"{"
+				 +"		return smoothstep(width, 0., v);"
+				 +"}"
 
+				 +"	__device__ float  dc_pentatiles_Sfun (float v, float width)"
+				 +"	{"
+				 +"		return  dc_pentatiles_sfun (abs(v),width);"
+				 +"	}"
+
+				 +"	__device__ float  dc_pentatiles_lfun  (float x,float y,float a,float b)"
+				 +"	{"
+				 +"		return dot( make_float2(x,y), normalize(make_float2(a,b)) );"
+				 +"	}"
+
+				 +"	__device__ float  dc_pentatiles_Lfun (float x,float y,float a,float b, float width)"
+				 +"	{"
+				 +"		return  dc_pentatiles_Sfun (dc_pentatiles_lfun(x,y,a,b), width);"
+				 +"	}"
+
+				 +"	__device__ float  dc_pentatiles_Pfun (float x,float y,float a,float b,float width)"
+				 +"	{"
+				 +"		return step(dc_pentatiles_lfun (x,y,a,b),0.);"
+				 +"	}"
+
+				 +"	__device__ float3  dc_pentatiles_getRGBColor (float2 U, float width,float border)"
+				 +"	{"
+				 +"	    float3 O=make_float3(0.,0.0,0.0);"
+				 +"		float h = (sqrtf(3.)+1.)/2.; "
+				 +"		float c = sqrtf(3.)-1.;"
+				 +"		float r=h+c/2.; "
+				 +"		float e =  width;"
+				 +"		float b, i,v;"
+				 +"		float2 T = mod(U, r+r)-r;"
+				 +"		float2 V = abs(T);"
+				 +"		O.x =  dc_pentatiles_Pfun ( V.x, V.y-h, -(c/2.-h), r ,width);"
+				 +"		O.y =  dc_pentatiles_Pfun ( V.x-c/2., V.y, -sqrtf(3.), 1.0, width );"
+				 +"		i = step(.5,O.x) + 2.*step(.5,O.y);"
+				 +"     O.z=1.;"
+				 +"		    U = floorf(U/((r+r)))*( 2.);"
+				 +"		    if (O.x==0.0) U = U+(sign(T));"
+				 +"		    i = (O.x + 2.*O.y + 4.*O.z) + 8.*(U.x + 12.*U.y); "
+				 +"		    O = cosf( make_float3(0.,23.,21.) + i )*0.6+0.6;"
+				 +"		    O =O*( .4+.6*fract(1234.*sinf(43.*i)));"
+				 +"		    if(border==1.0)"
+				 +"		    { "
+				 +"			    b =       (  dc_pentatiles_Sfun (V.x,width)   * step(h,V.y)"
+				 +"			              +  dc_pentatiles_Sfun (r-V.x,width) * step(V.y,c/2.) "
+				 +"			              +  dc_pentatiles_Lfun ( V.x, V.y-h, -(c/2.-h), r ,width)"
+				 +"			              +  dc_pentatiles_Sfun (V.y  ,width)  * step(V.x   ,c/2.)"
+				 +"			              +  dc_pentatiles_Sfun (r-V.y,width)  * step (r-V.x,c/2.)"
+				 +"			              +  dc_pentatiles_Lfun ( V.x-c/2. , V.y, -sqrtf(3.), 1.0 ,width)"
+				 +"			             );"
+				 +"		        O = O*(1.-b);                                      "
+				 +"		    }"
+				 +"		return O;"
+				 +"	}";
+	 }	
 }
 

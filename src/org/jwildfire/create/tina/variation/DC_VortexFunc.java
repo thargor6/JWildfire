@@ -26,7 +26,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_VortexFunc  extends DC_BaseFunc {
+public class DC_VortexFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation :dc_vortex
@@ -43,7 +43,7 @@ public class DC_VortexFunc  extends DC_BaseFunc {
 	private static final String PARAM_SEED= "randomize";
 
 	private static final String PARAM_TIME="time";
-	private static final String PARAM_STRENGTH="Flow strength";
+	private static final String PARAM_STRENGTH="flowStrength";
 	private static final String PARAM_SOFTNESS="Blending";
 	private static final String PARAM_ZOOM = "zoom";
 
@@ -187,8 +187,133 @@ vec2 FlowField (vec2 q)
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_vortex_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_vortex_zoom;"
+	    		+"color=dc_vortex_getRGBColor(uv,varpar->dc_vortex_time,varpar->dc_vortex_flowStrength,varpar->dc_vortex_Blending );"
+	    		+"if( varpar->dc_vortex_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_vortex_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+          +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+          // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+          +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_vortex_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_vortex*x;"
+	    		+"__py+= varpar->dc_vortex*y;"
+	    		+"float dz = z * varpar->dc_vortex_scale_z + varpar->dc_vortex_offset_z;"
+	    		+"if ( varpar->dc_vortex_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
 
+		 return   "__device__ float4  dc_vortex_Hashv4f  (float p)"
+				 +"{"
+				 +"	 float cHashM = 43758.54;"
+				 +"	 float4 cHashA4 = make_float4 (0., 1., 57., 58.);"
+				 +"  return fract (sinf (cHashA4 + p)* cHashM);"
+				 +"}"
+				 
+				 +"__device__ float  dc_vortex_Noisefv2  (float2 p)"
+				 +"{"
+				 +"	 float4 cHashA4 = make_float4 (0., 1., 57., 58.);"
+				 +"	 float3 cHashA3 = make_float3 (1., 57., 113.);"
+				 +"  float2 i = floorf (p);"
+				 +"  float2 f = fract (p);"
+				 +"  f = f*f* (make_float2(3.,3.)- f*2.0);"
+				 +"  float4 t =  dc_vortex_Hashv4f  (dot (i, make_float2(cHashA3.x,cHashA3.y)));"
+				 +"  return mix (mix (t.x, t.y, f.x), mix (t.z, t.w, f.x), f.y);"
+				 +"}"
+				 
+				 +"__device__ float  dc_vortex_Fbm2  (float2 p)"
+				 +"{"
+				 +"  float s = 0.0;"
+				 +"  float a = 1.0;"
+				 +"  for (int i = 0; i < 6; i ++) {"
+				 +"    s += a *  dc_vortex_Noisefv2  (p);"
+				 +"    a *= 0.5;"
+				 +"    p =p*2.0;"
+				 +"  }"
+				 +"  return s;"
+				 +"}"
+
+				 +"__device__ float2  dc_vortex_VortF  (float2 q, float2 c)"
+				 +"{"
+				 +"  float2 d = q- c;"
+				 +"  return make_float2 (d.y, - d.x)/((dot (d, d) + 0.05))*(-0.25);"
+				 +"}"
+				 
+				 +"__device__ float2  dc_vortex_FlowField  (float2 q, float time)"
+				 +"{"
+				 +"  float2 vr, c;"
+				 +"  float dir = 1.;"
+				 +"  c = make_float2 (mod (time, 10.) - 20., 0.6 * dir);"
+				 +"  vr = make_float2 (0.0,0.0);"
+				 +"  for (int k = 0; k < 30; k ++) {"
+				 +"    vr = vr+ dc_vortex_VortF  ( q*4., c)*dir;"
+				 +"    c = make_float2 (c.x + 1., - c.y);"
+				 +"    dir = - dir;"
+				 +"  }"
+				 +"  return vr;"
+				 +"}"
+				 
+				 +"	__device__ float3  dc_vortex_getRGBColor (float2 uv, float time, float strength, float softness)"
+				 +"	{"
+				 +"        float2 p = uv;"
+				 +"        for (int i = 0; i < strength ; i ++) "
+				 +"        	p = p- dc_vortex_FlowField  (p, time)* 0.03;"
+				 +"        float3 col =  make_float3 (0.5, 0.5, 0.5)* dc_vortex_Fbm2  ( p*softness+make_float2 (-0.1 * time, 0.) );"
+				 +"        return col;"
+				 +"	}";
+	 }	
 }
 

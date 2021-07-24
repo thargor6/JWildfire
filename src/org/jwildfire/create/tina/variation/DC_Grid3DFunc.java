@@ -304,7 +304,7 @@ public class DC_Grid3DFunc  extends DC_BaseFunc implements SupportsGPU {
 	    		+"	__device__ float3  dc_grid3D_getRGBColor (float2 p,float time)"
 	    		+"	{"
 	    		+"			float3 dir = normalize(make_float3(p.x,p.y,1.));"
-	    		+"			float a = time * 0.021;"
+	    		+"			float a = -time * 0.021;"
 	    		+"			float3 pos =make_float3(0.0,time*0.1,0.0);"
 	    		+"			Mat3 M;"
 	    		+ "         Mat3_Init(&M,1.0,0.0,0.0,0.0,cosf(a),-sinf(a),0.0,sinf(a),cosf(a));"

@@ -17,7 +17,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_PoincareDiscFunc  extends DC_BaseFunc {
+public class DC_PoincareDiscFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_poincaredisc
@@ -31,8 +31,8 @@ public class DC_PoincareDiscFunc  extends DC_BaseFunc {
 
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_MAXITER = "MaxIter";
-	private static final String PARAM_N = "n";
-	private static final String PARAM_P = "p";
+	private static final String PARAM_N = "N";
+	private static final String PARAM_P = "P";
 	
 	private static final String PARAM_CHECKER0 = "checkers0";
 	private static final String PARAM_CHECKER1 = "checkers1";
@@ -194,8 +194,153 @@ int checkers2=1;
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_poincaredisc_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_poincaredisc_zoom;"
+	    		+"color=dc_poincaredisc_getRGBColor(uv,varpar->dc_poincaredisc_N,varpar->dc_poincaredisc_P,varpar->dc_poincaredisc_MaxIter,"
+	    		+ "                                    varpar->dc_poincaredisc_checkers0,"
+	    		+ "                                    varpar->dc_poincaredisc_checkers1,varpar->dc_poincaredisc_checkers2);"
+	    		+"if( varpar->dc_poincaredisc_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_poincaredisc_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+             +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+             // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+             +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_poincaredisc_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_poincaredisc*x;"
+	    		+"__py+= varpar->dc_poincaredisc*y;"
+	    		+"float dz = z * varpar->dc_poincaredisc_scale_z + varpar->dc_poincaredisc_offset_z;"
+	    		+"if ( varpar->dc_poincaredisc_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		return   "__device__ float  dc_poincaredisc_radians (float angle)"
+				+"	{"
+				+"		return PI*angle/180.0;"
+				+"	}"
+			
+		   		 +"	__device__ float2  dc_poincaredisc_mbtpc (float2 z){"
+				 +"   float2 mba=make_float2(1.,0.);" 
+				 +"   float2 mbb=make_float2(0.,0.);"
+				 +"		float2 zn=make_float2(z.x*mba.x-z.y*mba.y+mbb.x,"
+				 +"						z.x*mba.y+z.y*mba.x+mbb.y);"
+				 +"		float2 zd=make_float2(z.x*mbb.x+z.y*mbb.y+mba.x,"
+				 +"						-z.x*mbb.y+z.y*mbb.x-mba.y);"
+				 +"		float idn2=1.0/dot(zd,zd);"
+				 +"		z=make_float2(dot(zn,zd),dot(zn,make_float2(zd.y,zd.x)*(make_float2(-1.,1.))))*idn2;"
+				 +"		return z;"
+				 +"	}"
 
+				 +"	__device__ float3  dc_poincaredisc_getRGBColor (float2 z, float N, float P, float maxiter, float checkers0, float checkers1, float checkers2)"
+				 +"	{"
+				 +"	    float2 nfp=make_float2(0.0,0.0);"  
+				 +"	    float2 pcenter=make_float2(0.0,0.0);"  
+				 +"	    float2 pscale=make_float2(1.0,1.0);"  
+				 +"	    float angle=29.9664;"
+				 +"		float a=PI/N;"
+				 +"		float b=PI/P;"
+				 +"		if((a+b)>=0.5*PI)"
+				 +"           b=0.5*PI-a-0.01;"
+				 +"		float ca=cosf(a), sa=sinf(a);"
+				 +"		float sb=sinf(b);"
+				 +"		float c1=cosf(a+b);"
+				 +"		float s=c1/sqrtf(1.-sa*sa-sb*sb);"
+				 +"		float sx=(s*s+1.)/(2.*s*ca);"
+				 +"		float sr=sqrtf(sx*sx-1.);"
+				 +"		nfp=make_float2(sa,-ca);"
+				 
+				 +"		if(dot(z,z)>1.0f)"
+				 +"			return make_float3(0.,0.0,0.0);"
+				 +"		z= dc_poincaredisc_mbtpc (z);"
+				 +"		float2 az=z+1.;"
+				 +"		float3 fc=make_float3(0.,0.,0.);"
+				 +"		for(int i=0; i<maxiter && (az.x!=z.x) && (az.y!=z.y) ; i++){"
+				 +"			az=z;"
+				 +"			z.y=fabsf(z.y);"
+				 +"         float t0=0.0;"
+				 +"         if(az.y!=z.y)"
+				 +"           t0=1.0;"
+				 +"			fc.x+=t0;"
+				 +"			float t=2.*fminf(0.,dot(z,nfp));"
+				 +"         t0=0.0;"
+				 +"         if(t<0.0)"
+				 +"             t0=1.0;"
+				 +"			fc.y+=t0;"
+				 +"			z=z-nfp*t;"
+				 +"			z.x -= sx;"
+				 +"			float r2=dot(z,z);"
+				 +"			float k=fmaxf(sr*sr/r2,1.);"
+				 +"         t0=0.0;"
+				 +"         if(k!=1.0)"
+				 +"             t0=1.0;"
+				 +"			fc.z+=t0;"
+				 +"			z=z*k;"
+				 +"			z.x+=sx;"
+				 +"		}"
+				 +"		float r=fabsf(length(make_float2(z.x-sx,z.y))-sr);"
+				 +"		r=powf(r,0.25);"
+				 +"		float k=mod((checkers0==1?1:0)*fc.x+(checkers1==1?1:0)*fc.y+(checkers2==1?1:0)*fc.z,2.);"
+				 +"		float3 col1=make_float3(r,r,r)*(0.5*k+0.5);"
+				 +"		float2 ptex=z;"
+				 +"		ptex.y*=k*2.-1.;"
+				 +"		ptex=ptex*(pscale);"
+				 +"     Mat2 M;"
+				 +"		Mat2_Init(&M,cosf( dc_poincaredisc_radians (angle)),sinf( dc_poincaredisc_radians (angle)),-sinf( dc_poincaredisc_radians (angle)),cosf( dc_poincaredisc_radians (angle)));"
+				 +"     ptex=times(&M,ptex);"
+				 +"		ptex=ptex-(pcenter);"
+				 +"		ptex=ptex*0.5+0.5;"
+				 +"		return col1;"
+				 +"	}";
+	 }	
 }
 

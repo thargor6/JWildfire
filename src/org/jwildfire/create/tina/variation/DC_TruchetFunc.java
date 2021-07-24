@@ -2,6 +2,7 @@ package org.jwildfire.create.tina.variation;
 
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -13,7 +14,7 @@ import js.glsl.vec2;
 import js.glsl.vec3;
 
 
-public class DC_TruchetFunc  extends DC_BaseFunc {
+public class DC_TruchetFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation :dc_truchet
@@ -131,8 +132,116 @@ public class DC_TruchetFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_truchet_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_truchet_zoom;"
+	    		+"color=dc_truchet_getRGBColor(uv,varpar->dc_truchet_type);"
+	    		+"if( varpar->dc_truchet_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_truchet_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+             +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+             // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+             +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_truchet_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_truchet*x;"
+	    		+"__py+= varpar->dc_truchet*y;"
+	    		+"float dz = z * varpar->dc_truchet_scale_z + varpar->dc_truchet_offset_z;"
+	    		+"if ( varpar->dc_truchet_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
 
+		 return   "	__device__   float2  dc_truchet_truchetPattern ( float2 st,  float index)"
+				 +"	{"
+				 +"		index = fract((index-0.5)*2.0);"
+				 +"		if (index > 0.75) {"
+				 +"			st = make_float2(1.0,1.0)-st;"
+				 +"		} else if (index > 0.5) {"
+				 +"			st = make_float2(1.-st.x,st.y);"
+				 +"		} else if (index > 0.25) {"
+				 +"			st = make_float2(1.0,1.0) - make_float2(1.0-st.x,st.y);"
+				 +"		}"
+				 +"		return st;"
+				 +"	}"
+				 
+				 +"__device__  float  dc_truchet_random (float2 st)"
+				 +"	{"
+				 +"		return fract(sinf(dot(make_float2(st.x,st.y),make_float2(12.9898,78.233)))*43758.5453123);"
+				 +"	}"
+				 
+				 +"__device__ float3  dc_truchet_getRGBColor (float2 st , float type)"
+				 +"{"
+				 +"    float2 ipos = floorf(st);"
+				 +"    float2 fpos = fract(st);"
+				 +"    float index=dc_truchet_random(ipos);"
+				 +"    float2 tile = dc_truchet_truchetPattern(fpos, index);"
+				 +"    float icolor = 0.0;"
+				 +"    if(type==0.0)"
+				 +"    {"
+				 +"       icolor = smoothstep(tile.x-0.3,tile.x,tile.y)-"
+				 +"	               smoothstep(tile.x,tile.x+0.3,tile.y);"
+				 +"	   } else if(type==1.0)"
+				 +"	   { "
+				 +"	      icolor = (step(length(tile),0.6) -"
+				 +"	                step(length(tile),0.4) ) +"
+				 +"	               (step(length(tile-(make_float2(1.,1.0))),0.6) -"
+				 +"	                step(length( tile-make_float2(1.,1.0) ),0.4) );"
+				 +"	   } else if(type==2.0)"
+				 +"	   {"
+				 +"	      icolor = step(tile.x,tile.y);"
+				 +"	   }"
+				 +"	   return make_float3(icolor,icolor,icolor);"
+				 +"}";
+	 }	
 }
 

@@ -18,7 +18,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_StarsFieldFunc  extends DC_BaseFunc {
+public class DC_StarsFieldFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_starsfield
@@ -31,10 +31,10 @@ public class DC_StarsFieldFunc  extends DC_BaseFunc {
 	private static final long serialVersionUID = 1L;
 
 
-	private static final String PARAM_SEED = "Seed";
+	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_TIME = "time";
-	private static final String PARAM_ZDISTANCE = "Z distance";
-	private static final String PARAM_GLOW = "Glow";
+	private static final String PARAM_ZDISTANCE = "zdistance";
+	private static final String PARAM_GLOW = "glow";
 
 
 	private int seed = 10000;
@@ -195,8 +195,147 @@ public class DC_StarsFieldFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_starsfield_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y);"
+	    		+"color=dc_starsfield_getRGBColor(uv,varpar->dc_starsfield_time,varpar->dc_starsfield_zdistance,varpar->dc_starsfield_glow);"
+	    		+"if( varpar->dc_starsfield_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_starsfield_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+            +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+            // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+            +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_starsfield_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_starsfield*x;"
+	    		+"__py+= varpar->dc_starsfield*y;"
+	    		+"float dz = z * varpar->dc_starsfield_scale_z + varpar->dc_starsfield_offset_z;"
+	    		+"if ( varpar->dc_starsfield_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	
+	 public String getGPUFunctions(FlameTransformationContext context) {
 
+		 return   "	  __device__ Mat2  dc_starsfield_rotate (float a) {"
+				 +"		    float c = cosf(a);"
+				 +"		    float s = sinf(a);"
+				 +"         Mat2 M;"
+				 +"         Mat2_Init(&M,c, s, -s, c);"
+				 +"         return M;"
+				 +"		}"
+
+				 +"		__device__ float  dc_starsfield_hash11 (float p) {"
+				 +"		    p = fract(p * 35.35);"
+				 +"		    p += dot(p, p + 45.85);"
+				 +"		    return fract(p * 7858.58);"
+				 +"		}"
+
+				 +"		__device__ float hash21(float2 p) {"
+				 +"		    p = fract(p*( make_float2(451.45, 231.95)));"
+				 +"		    p = p+(dot(p, p+ 78.78));"
+				 +"		    return fract(p.x * p.y);"
+				 +"		}"
+
+				 +"		__device__ float2  dc_starsfield_hash22 (float2 p) "
+				 +"		{"
+				 +"			float3 t1=make_float3(p.x,p.y,p.x);"
+				 +"			t1=t1*make_float3(451.45, 231.95, 7878.5);"
+				 +"		    float3 q = fract(t1);"
+				 +"		    q = q + dot(q, q +  78.78);"
+				 +"		    return fract(make_float2(q.x,q.z)*( q.y));"
+				 +"		}"
+				 
+				 +"		__device__ float  dc_starsfield_layer (float2 uv, float zdistance) {"
+				 +"		    float c = 0.0;"
+				 +"		    uv = uv*5.0;"
+				 +"		    float2 i = floorf(uv);"
+				 +"		    float2 f = fract(uv)*zdistance - 1.0f;"
+				 +"		    float2 p =  dc_starsfield_hash22 (i)*0.3; "
+				 +"		    float d = length(f-p);"
+				 +"		    c += smoothstep(.1 + .8 * hash21(i), .01, d);"
+				 +"		    c *= (1.0f / d) * 0.2f;"
+				 +"		    return c;"
+				 +"		}"
+				 
+				 +"		__device__ float3  dc_starsfield_render (float2 uv, float time, float zdistance, float glow) {"
+				 +"		    float3 col = make_float3(0.,0.,0.);"
+				 +"         Mat2 mat=dc_starsfield_rotate (time );"
+				 +"		    uv = times(&mat,uv);"
+				 +"			uv = uv+(make_float2(cosf(time ), sinf(time))*(2.0));"
+				 +"		    "
+				 +"		    for (float i = 0.; i < 1.; i += .1) {"
+				 +"             Mat2 mat1=dc_starsfield_rotate ( dc_starsfield_hash11 (i) * 6.28);"
+				 +"		        uv = times(&mat1,uv);"
+				 +"		        "
+				 +"		        float t = fract(i - time );"
+				 +"		        float s = smoothstep(0., 1., t);"
+				 +"		        float f = smoothstep(0., 1., t);"
+				 +"		        f *= smoothstep(1., 0., t);"
+				 +"		        "
+				 +"		        float2 k =  dc_starsfield_hash22 (make_float2(i, i * 5.))*0.1;"
+				 +"		        float l =  dc_starsfield_layer ((uv-(k))*( s), zdistance);"
+				 +"		        "
+				 +"		        col = col + mix(make_float3(.0, .0, 0), make_float3(1., 1.0, 1.0), l)*f;"
+				 +"		    }"
+				 +"		    float t1= glow*hash21( uv+time);"
+				 +"		    col = col +  make_float3(t1,t1,t1);"
+				 +"		    return col;"
+				 +"		}"
+				 
+				 +"	__device__ float3  dc_starsfield_getRGBColor (float2 uv, float time, float zdistance, float glow)"
+				 +"	{"
+				 +"		float3 col=  dc_starsfield_render (uv, time, zdistance, glow);"
+				 +"		return col;"
+				 +"	}";
+	 }	
 }
 
