@@ -85,6 +85,275 @@ __device__ float fracf(float x) {
 }
 
 //--------------------------------- Noise -----------
+	// Utility functions
+
+	// Hashing function (used for fast on-device pseudorandom numbers for randomness in noise)
+	__device__ unsigned int hash(unsigned int seed)
+	{
+		seed = (seed + 0x7ed55d16) + (seed << 12);
+		seed = (seed ^ 0xc761c23c) ^ (seed >> 19);
+		seed = (seed + 0x165667b1) + (seed << 5);
+		seed = (seed + 0xd3a2646c) ^ (seed << 9);
+		seed = (seed + 0xfd7046c5) + (seed << 3);
+		seed = (seed ^ 0xb55a4f09) ^ (seed >> 16);
+
+		return seed;
+	}
+
+	// Returns a random integer between [min, max]
+	__device__ int randomIntRange(int min, int max, int seed)
+	{
+		int base = hash(seed);
+		base = base % (1 + max - min) + min;
+
+		return base;
+	}
+
+	// Returns a random float between [0, 1]
+	__device__ float randomFloat(unsigned int seed)
+	{
+		unsigned int noiseVal = hash(seed);
+
+		return ((float)noiseVal / (float)0xffffffff);
+	}
+
+// Maps from the signed range [0, 1] to unsigned [-1, 1]
+	// NOTE: no clamping
+	__device__ float mapToSigned(float input)
+	{
+		return input * 2.0f - 1.0f;
+	}
+
+	// Maps from the unsigned range [-1, 1] to signed [0, 1]
+	// NOTE: no clamping
+	__device__ float mapToUnsigned(float input)
+	{
+		return input * 0.5f + 0.5f;
+	}
+
+	// Maps from the signed range [0, 1] to unsigned [-1, 1] with clamping
+	__device__ float clampToSigned(float input)
+	{
+		return __saturatef(input) * 2.0f - 1.0f;
+	}
+
+	// Maps from the unsigned range [-1, 1] to signed [0, 1] with clamping
+	__device__ float clampToUnsigned(float input)
+	{
+		return __saturatef(input * 0.5f + 0.5f);
+	}
+
+
+	// Random float for a grid coordinate [-1, 1]
+	__device__ float randomGrid(int x, int y, int z, int seed = 0)
+	{
+		return mapToSigned(randomFloat((unsigned int)(x * 1723.0f + y * 93241.0f + z * 149812.0f + 3824.0f + seed)));
+	}
+
+	// Random unsigned int for a grid coordinate [0, MAXUINT]
+	__device__ unsigned int randomIntGrid(float x, float y, float z, float seed = 0.0f)
+	{
+		return hash((unsigned int)(x * 1723.0f + y * 93241.0f + z * 149812.0f + 3824 + seed));
+	}
+
+	// Random 3D vector as float3 from grid position
+	__device__ float3 vectorNoise(int x, int y, int z)
+	{
+		return make_float3(randomFloat(x * 8231.0f + y * 34612.0f + z * 11836.0f + 19283.0f) * 2.0f - 1.0f,
+			randomFloat(x * 1171.0f + y * 9234.0f + z * 992903.0f + 1466.0f) * 2.0f - 1.0f,
+			0.0f);
+	}
+
+	// Scale 3D vector by scalar value
+	__device__ float3 scaleVector(float3 v, float factor)
+	{
+		return make_float3(v.x * factor, v.y * factor, v.z * factor);
+	}
+
+	// Scale 3D vector by nonuniform parameters
+	__device__ float3 nonuniformScaleVector(float3 v, float xf, float yf, float zf)
+	{
+		return make_float3(v.x * xf, v.y * yf, v.z * zf);
+	}
+
+
+	// Adds two 3D vectors
+	__device__ float3 addVectors(float3 v, float3 w)
+	{
+		return make_float3(v.x + w.x, v.y + w.y, v.z + w.z);
+	}
+
+	// Dot product between two vectors
+	__device__ float dotProduct(float3 u, float3 v)
+	{
+		return (u.x * v.x + u.y * v.y + u.z * v.z);
+	}
+
+	// Device constants for noise
+
+	__device__ __constant__ float gradMap[16][3] = { { 1.0f, 1.0f, 0.0f },{ -1.0f, 1.0f, 0.0f },{ 1.0f, -1.0f, 0.0f },{ -1.0f, -1.0f, 0.0f },
+	{ 1.0f, 0.0f, 1.0f },{ -1.0f, 0.0f, 1.0f },{ 1.0f, 0.0f, -1.0f },{ -1.0f, 0.0f, -1.0f },
+	{ 0.0f, 1.0f, 1.0f },{ 0.0f, -1.0f, 1.0f },{ 0.0f, 1.0f, -1.0f },{ 0.0f, -1.0f, -1.0f }};
+
+	// Helper functions for noise
+
+	// Linearly interpolate between two float values
+	__device__  float lerp(float a, float b, float ratio)
+	{
+		return a * (1.0f - ratio) + b * ratio;
+	}
+
+	// 1D cubic interpolation with four points
+	__device__ float cubic(float p0, float p1, float p2, float p3, float x)
+	{
+		return p1 + 0.5f * x * (p2 - p0 + x * (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3 + x * (3.0f * (p1 - p2) + p3 - p0)));
+	}
+
+	// Fast gradient function for gradient noise
+	__device__ float grad(int hash, float x, float y, float z)
+	{
+		switch (hash & 0xF)
+		{
+		case 0x0: return x + y;
+		case 0x1: return -x + y;
+		case 0x2: return x - y;
+		case 0x3: return -x - y;
+		case 0x4: return x + z;
+		case 0x5: return -x + z;
+		case 0x6: return x - z;
+		case 0x7: return -x - z;
+		case 0x8: return y + z;
+		case 0x9: return -y + z;
+		case 0xA: return y - z;
+		case 0xB: return -y - z;
+		case 0xC: return y + x;
+		case 0xD: return -y + z;
+		case 0xE: return y - x;
+		case 0xF: return -y - z;
+		default: return 0; // never happens
+		}
+	}
+
+	// Ken Perlin's fade function for Perlin noise
+	__device__ float fade(float t)
+	{
+		return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);     // 6t^5 - 15t^4 + 10t^3
+	}
+
+	// Dot product using a float[3] and float parameters
+	// NOTE: could be cleaned up
+	__device__ float dot(float g[3], float x, float y, float z) {
+		return g[0] * x + g[1] * y + g[2] * z;
+	}
+
+	// Random value for simplex noise [0, 255]
+	__device__ unsigned char calcPerm(int p)
+	{
+		return (unsigned char)(hash(p));
+	}
+
+	// Random value for simplex noise [0, 11]
+	__device__ unsigned char calcPerm12(int p)
+	{
+		return (unsigned char)(hash(p) % 12);
+	}
+
+	// Noise functions
+
+	// Simplex noise adapted from Java code by Stefan Gustafson and Peter Eastman
+	__device__ float cu_simplexNoise(float3 pos, float scale, int seed)
+	{
+		float xin = pos.x * scale;
+		float yin = pos.y * scale;
+		float zin = pos.z * scale;
+
+		// Skewing and unskewing factors for 3 dimensions
+		float F3 = 1.0f / 3.0f;
+		float G3 = 1.0f / 6.0f;
+
+		float n0, n1, n2, n3; // Noise contributions from the four corners
+
+								// Skew the input space to determine which simplex cell we're in
+		float s = (xin + yin + zin)*F3; // Very nice and simple skew factor for 3D
+		int i = floorf(xin + s);
+		int j = floorf(yin + s);
+		int k = floorf(zin + s);
+		float t = (i + j + k)*G3;
+		float X0 = i - t; // Unskew the cell origin back to (x,y,z) space
+		float Y0 = j - t;
+		float Z0 = k - t;
+		float x0 = xin - X0; // The x,y,z distances from the cell origin
+		float y0 = yin - Y0;
+		float z0 = zin - Z0;
+
+		// For the 3D case, the simplex shape is a slightly irregular tetrahedron.
+		// Determine which simplex we are in.
+		int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
+		int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
+		if (x0 >= y0) {
+			if (y0 >= z0)
+			{
+				i1 = 1.0f; j1 = 0.0f; k1 = 0.0f; i2 = 1.0f; j2 = 1.0f; k2 = 0.0f;
+			} // X Y Z order
+			else if (x0 >= z0) { i1 = 1.0f; j1 = 0.0f; k1 = 0.0f; i2 = 1.0f; j2 = 0.0f; k2 = 1.0f; } // X Z Y order
+			else { i1 = 0.0f; j1 = 0.0f; k1 = 1.0f; i2 = 1.0f; j2 = 0.0f; k2 = 1.0f; } // Z X Y order
+		}
+		else { // x0<y0
+			if (y0 < z0) { i1 = 0.0f; j1 = 0.0f; k1 = 1.0f; i2 = 0.0f; j2 = 1; k2 = 1.0f; } // Z Y X order
+			else if (x0 < z0) { i1 = 0.0f; j1 = 1.0f; k1 = 0.0f; i2 = 0.0f; j2 = 1.0f; k2 = 1.0f; } // Y Z X order
+			else { i1 = 0.0f; j1 = 1.0f; k1 = 0.0f; i2 = 1.0f; j2 = 1.0f; k2 = 0.0f; } // Y X Z order
+		}
+
+		// A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),
+		// a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
+		// a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where
+		// c = 1/6.
+		float x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
+		float y1 = y0 - j1 + G3;
+		float z1 = z0 - k1 + G3;
+		float x2 = x0 - i2 + 2.0f*G3; // Offsets for third corner in (x,y,z) coords
+		float y2 = y0 - j2 + 2.0f*G3;
+		float z2 = z0 - k2 + 2.0f*G3;
+		float x3 = x0 - 1.0f + 3.0f*G3; // Offsets for last corner in (x,y,z) coords
+		float y3 = y0 - 1.0f + 3.0f*G3;
+		float z3 = z0 - 1.0f + 3.0f*G3;
+
+        int gi0 = calcPerm12(seed + (i * 607495) + (j * 359609) + (k * 654846));
+        int gi1 = calcPerm12(seed + (i + i1) * 607495 + (j + j1) * 359609 + (k + k1) * 654846);
+        int gi2 = calcPerm12(seed + (i + i2) * 607495 + (j + j2) * 359609 + (k + k2) * 654846);
+        int gi3 = calcPerm12(seed + (i + 1) * 607495 + (j + 1) * 359609 + (k + 1) * 654846);
+
+		// Calculate the contribution from the four corners
+		float t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
+		if (t0 < 0.0f) n0 = 0.0f;
+		else {
+			t0 *= t0;
+			n0 = t0 * t0 * dot(gradMap[gi0], x0, y0, z0);
+		}
+		float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
+		if (t1 < 0.0f) n1 = 0.0f;
+		else {
+			t1 *= t1;
+			n1 = t1 * t1 * dot(gradMap[gi1], x1, y1, z1);
+		}
+		float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
+		if (t2 < 0.0f) n2 = 0.0f;
+		else {
+			t2 *= t2;
+			n2 = t2 * t2 * dot(gradMap[gi2], x2, y2, z2);
+		}
+		float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
+		if (t3 < 0.0f) n3 = 0.0f;
+		else {
+			t3 *= t3;
+			n3 = t3 * t3 * dot(gradMap[gi3], x3, y3, z3);
+		}
+
+		// Add contributions from each corner to get the final noise value.
+		// The result is scaled to stay just inside [-1,1]
+		return 32.0f*(n0 + n1 + n2 + n3);
+	}
+
 // cudaNoise
 // Library of common 3D noise functions for CUDA kernels
 // https://github.com/covexp/cuda-noise
@@ -1300,7 +1569,7 @@ __device__ float sign(float v)
 	   val=1.0;
 	else if(v<0.0)
 	   val=-1.0;
-	else 
+	else
 	   val=0.0;
 	return val;
 }
@@ -1460,7 +1729,7 @@ __device__ float4 ceil(float4 v)
 {
    return make_float4(ceilf(v.x),ceilf(v.y),ceilf(v.z),ceilf(v.w));
 }
-		
+
 __device__ float2 floorf(float2 v)
 {
 	return make_float2(floorf(v.x),floorf(v.y));
@@ -2340,7 +2609,26 @@ struct __align__(8) xForm
     float zxPd;
     float zxPe;
     float zxPf;
-	int useXyz;	
+	int useXyz;
+	int wfield_type;
+	int wfield_input;
+	float wfield_var_amount;
+	int	wfield_param1_var_idx;
+	int wfield_param1_param_idx;
+	float wfield_param1_amount;
+	int	wfield_param2_var_idx;
+	int wfield_param2_param_idx;
+	float wfield_param2_amount;
+	int	wfield_param3_var_idx;
+	int wfield_param3_param_idx;
+	float wfield_param3_amount;
+	float wfield_color_amount;
+	float wfield_jitter_amount;
+	int wfield_seed;
+	int wfield_octaves;
+	float wfield_gain;
+	float wfield_lacunarity;
+	float wfield_scale;
 #endif	
 };
 
@@ -2752,6 +3040,46 @@ __device__ float sinhcoshf(float theta, float* ch)
 
 __VARIATION_FUNCTIONS__
 
+__device__ float calcWFieldIntensity(struct xForm* xform,float3 __wFieldPos) {
+  float __wFieldValue;
+         switch(xform->wfield_type) {
+           case 2: // Cubic Noise
+             __wFieldValue = cudaNoise::cubicValue(__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+             break;
+           case 3: // Cubic Fractal Noise
+             __wFieldValue = cudaNoise::repeater(__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves, xform->wfield_lacunarity, xform->wfield_gain, cudaNoise::BASIS_CUBICVALUE);
+             break;
+           case 4: // Perlin Noise
+             __wFieldValue = cudaNoise::perlinNoise(__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+             break;
+           case 5: // Perlin Fractal Noise
+             __wFieldValue = cudaNoise::repeater(__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves, xform->wfield_lacunarity, xform->wfield_gain, cudaNoise::BASIS_PERLIN);
+             break;
+           case 6: // Simplex Noise
+             __wFieldValue = cudaNoise::simplexNoise(__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+             break;
+           case 7: // Simplex Fractal Noise
+             __wFieldValue = cudaNoise::repeater(__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves, xform->wfield_lacunarity, xform->wfield_gain, cudaNoise::BASIS_SIMPLEX);
+             break;
+           case 8: // Value Noise
+             __wFieldValue = cudaNoise::linearValue(__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+             break;
+           case 9: // Value Fractal Noise
+             __wFieldValue = cudaNoise::repeater(__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves, xform->wfield_lacunarity, xform->wfield_gain, cudaNoise::BASIS_LINEARVALUE);
+             break;
+           case 1: // Cellular Noise: not supported -> use worley
+             __wFieldValue = cudaNoise::worleyNoise(__wFieldPos, xform->wfield_scale, xform->wfield_seed, 1.0, 2, 32, 0.25f);
+             break;
+           case 10: // Image Map: not supported -> use spots
+             __wFieldValue = cudaNoise::spots(__wFieldPos, xform->wfield_scale, xform->wfield_seed, 1.0, 2, 32, 0.25, cudaNoise::SHAPE_QUADRATIC);
+             break;
+           default:
+             // 0: None
+             __wFieldValue = 0.f;
+             break;
+         }
+         return __wFieldValue;
+}
 
 __device__ void iteratePoint(struct VariationListNode *varUsageList,
                 float *varpars,
@@ -2807,6 +3135,94 @@ __device__ void iteratePoint(struct VariationListNode *varUsageList,
 		 __z = activePoint[index].z; // 3d hack does not transform them here
 	 }
 
+////WFIELD
+/*
+int wfield_type;
+	int	wfield_param1_var_idx;
+	int wfield_param1_param_idx;
+	float wfield_param1_amount;
+	int	wfield_param2_var_idx;
+	int wfield_param2_param_idx;
+	float wfield_param2_amount;
+	int	wfield_param3_var_idx;
+	int wfield_param3_param_idx;
+	float wfield_param3_amount;
+	float wfield_jitter_amount;
+*/
+     bool __useWFields = false;
+     int __wFieldVar1IntensityIdx = -1;
+     int __wFieldVar2IntensityIdx = -1;
+     int __wFieldVar3IntensityIdx = -1;
+
+     float __wFieldVar1Intensity = 0.0;
+     float __wFieldVar2Intensity = 0.0;
+     float __wFieldVar3Intensity = 0.0;
+
+     float __wFieldValue;
+     if(xform->wfield_type>1) {
+
+
+     float3 __wFieldPos;
+     if(xform->wfield_input == 1) { // Position
+       __wFieldPos = make_float3(activePoint[index].x, activePoint[index].y, activePoint[index].z);
+     }
+     else {
+       __wFieldPos = make_float3(__x, __y, __z); // Affine
+     }
+
+    // __wFieldValue = calcWFieldIntensity(xform, __wFieldPos);
+
+
+         switch(xform->wfield_type) {
+           case 2: // Cubic Noise
+             __wFieldValue = cudaNoise::cubicValue(__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+             break;
+           case 3: // Cubic Fractal Noise
+          //   __wFieldValue = cudaNoise::repeater(__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves, xform->wfield_lacunarity, xform->wfield_gain, cudaNoise::BASIS_CUBICVALUE);
+             break;
+           case 4: // Perlin Noise
+          //   __wFieldValue = cudaNoise::perlinNoise(__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+             break;
+           case 5: // Perlin Fractal Noise
+          //   __wFieldValue = cudaNoise::repeater(__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves, xform->wfield_lacunarity, xform->wfield_gain, cudaNoise::BASIS_PERLIN);
+             break;
+           case 6: // Simplex Noise
+           //  __wFieldValue = cu_simplexNoise(__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+             break;
+           case 7: // Simplex Fractal Noise
+           //  __wFieldValue = cudaNoise::repeater(__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves, xform->wfield_lacunarity, xform->wfield_gain, cudaNoise::BASIS_SIMPLEX);
+             break;
+           case 8: // Value Noise
+          //   __wFieldValue = cudaNoise::linearValue(__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+             break;
+           case 9: // Value Fractal Noise
+          //   __wFieldValue = cudaNoise::repeater(__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves, xform->wfield_lacunarity, xform->wfield_gain, cudaNoise::BASIS_LINEARVALUE);
+             break;
+           case 1: // Cellular Noise: not supported -> use worley
+          //   __wFieldValue = cudaNoise::worleyNoise(__wFieldPos, xform->wfield_scale, xform->wfield_seed, 1.0, 2, 32, 0.25f);
+             break;
+           case 10: // Image Map: not supported -> use spots
+          //   __wFieldValue = cudaNoise::spots(__wFieldPos, xform->wfield_scale, xform->wfield_seed, 1.0, 2, 32, 0.25, cudaNoise::SHAPE_QUADRATIC);
+             break;
+           default:
+             // 0: None
+             __wFieldValue = 0.f;
+             break;
+         }
+     }
+
+     float __wFieldAmountScale;
+     if(fabs(__wFieldValue)>EPSILON) {
+       __useWFields = true;
+       __wFieldAmountScale = 1.0f + __wFieldValue * xform->wfield_var_amount;
+     }
+     else {
+       __wFieldAmountScale = 1.f;
+     }
+
+////WFIELD
+
+
 	float __r2, __r, __rinv, __phi, __theta;
     float __px = __x;  // note that enterGroup action will handle resetting these to zero -- also works correctly for xforms with NO variations set
     float __py = __y;
@@ -2815,7 +3231,7 @@ __device__ void iteratePoint(struct VariationListNode *varUsageList,
 	float __x0 = __x;
 	float __y0 = __y;
 	float __z0 = __z;
-	
+
 	bool __was_pre = 0;
 
 
@@ -2917,6 +3333,13 @@ __device__ void iteratePoint(struct VariationListNode *varUsageList,
 	  activePoint[index].colorB = __colorB; 
 	  activePoint[index].colorA = __colorA; 
 	}
+
+	////WFIELD
+	if(__useWFields && fabsf(xform->wfield_color_amount)>EPSILON) {
+      activePoint[index].pal *= (1.0f + __wFieldValue *  xform->wfield_color_amount * 0.1);
+    }
+	////WFIELD
+
 #endif
 }
 

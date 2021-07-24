@@ -44,8 +44,8 @@ public class CylinderApoFunc extends SimpleVariationFunc implements SupportsGPU 
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += varpar->cylinder_apo * sinf(__x);\n"
-         + "__py += varpar->cylinder_apo * __y;\n"
-         + "__pz += varpar->cylinder_apo * cosf(__x);\n";
+    return "__px += __cylinder_apo * sinf(__x);\n"
+         + "__py += __cylinder_apo * __y;\n"
+         + "__pz += __cylinder_apo * cosf(__x);\n";
   }
 }

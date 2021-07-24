@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -62,8 +63,12 @@ public class FACLRenderTools {
       StreamRedirector errorStreamHandler = new StreamRedirector(proc.getErrorStream(), pOS, false);
       errorStreamHandler.start();
       outputStreamHandler.start();
-      int exitVal = proc.waitFor();
-      return exitVal;
+      if(proc.waitFor(5, TimeUnit.MINUTES)) {
+        return proc.exitValue();
+      }
+      else {
+        return -1;
+      }
     }
     catch (Exception ex) {
       throw new RuntimeException(ex);

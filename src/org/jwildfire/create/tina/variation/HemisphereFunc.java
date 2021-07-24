@@ -44,7 +44,7 @@ public class HemisphereFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float r = varpar->hemisphere / sqrtf(__x*__x + __y*__y + 1.f);\n"
+    return "float r = __hemisphere / sqrtf(__x*__x + __y*__y + 1.f);\n"
         + "__px += r * __x;\n"
         + "__py += r * __y;\n"
         + "__pz += r;";

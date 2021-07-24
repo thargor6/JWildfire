@@ -96,10 +96,10 @@ public class JuliaNFunc extends VariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rn;\n"
         + "rn = RANDFLOAT();\n"
-        + "float t = (__theta+2.f*PI*truncf(rn*fabsf(varpar->julian_power)))/(varpar->julian_power);\n"
-        + "float rnew = powf(__r, varpar->julian_dist/(varpar->julian_power));\n"
-        + "__px += varpar->julian*rnew*cosf(t);\n"
-        + "__py += varpar->julian*rnew*sinf(t);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->julian*__z;\n" : "");
+        + "float t = (__theta+2.f*PI*truncf(rn*fabsf(__julian_power)))/(__julian_power);\n"
+        + "float rnew = powf(__r, __julian_dist/(__julian_power));\n"
+        + "__px += __julian*rnew*cosf(t);\n"
+        + "__py += __julian*rnew*sinf(t);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __julian*__z;\n" : "");
   }
 }

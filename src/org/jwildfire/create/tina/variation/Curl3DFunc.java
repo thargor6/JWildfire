@@ -96,11 +96,11 @@ public class Curl3DFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float  c2 = varpar->curl3D_cx*varpar->curl3D_cx + varpar->curl3D_cy*varpar->curl3D_cy + varpar->curl3D_cz*varpar->curl3D_cz;\n"
+    return "float  c2 = __curl3D_cx*__curl3D_cx + __curl3D_cy*__curl3D_cy + __curl3D_cz*__curl3D_cz;\n"
         + "float r2 = __x*__x + __y*__y + __z*__z;\n"
-        + "float r  = varpar->curl3D / (r2*c2 + 2.f*varpar->curl3D_cx*__x - 2.f*varpar->curl3D_cy*__y + 2.f*varpar->curl3D_cz*__z + 1.f);\n"
-        + "__px += r * (__x + varpar->curl3D_cx*r2);\n"
-        + "__py += r * (__y - varpar->curl3D_cy*r2);\n"
-        + "__pz += r * (__z + varpar->curl3D_cz*r2);\n";
+        + "float r  = __curl3D / (r2*c2 + 2.f*__curl3D_cx*__x - 2.f*__curl3D_cy*__y + 2.f*__curl3D_cz*__z + 1.f);\n"
+        + "__px += r * (__x + __curl3D_cx*r2);\n"
+        + "__py += r * (__y - __curl3D_cy*r2);\n"
+        + "__pz += r * (__z + __curl3D_cz*r2);\n";
   }
 }

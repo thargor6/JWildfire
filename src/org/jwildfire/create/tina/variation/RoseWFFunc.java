@@ -89,17 +89,17 @@ public class RoseWFFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "   float a = __phi;\n"
-        + "    float r = varpar->rose_wf_amp * cosf(lroundf(varpar->rose_wf_waves) * a);\n"
+        + "    float r = __rose_wf_amp * cosf(lroundf(__rose_wf_waves) * a);\n"
         + "\n"
-        + "    if (lroundf(varpar->rose_wf_filled) == 1) {\n"
+        + "    if (lroundf(__rose_wf_filled) == 1) {\n"
         + "      r *= RANDFLOAT();\n"
         + "    }\n"
         + "\n"
         + "    float nx = sinf(a) * r;\n"
         + "    float ny = cosf(a) * r;\n"
         + "\n"
-        + "    __px += varpar->rose_wf * nx;\n"
-        + "    __py += varpar->rose_wf * ny;\n"
-        + (context.isPreserveZCoordinate() ? "__py += varpar->rose_wf * __z;\n" : "");
+        + "    __px += __rose_wf * nx;\n"
+        + "    __py += __rose_wf * ny;\n"
+        + (context.isPreserveZCoordinate() ? "__py += __rose_wf * __z;\n" : "");
   }
 }

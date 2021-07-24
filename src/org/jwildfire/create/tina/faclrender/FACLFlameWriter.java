@@ -25,6 +25,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.io.AbstractFlameWriter;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder.Attribute;
@@ -33,6 +34,9 @@ import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.swing.MessageLogger;
 import org.jwildfire.create.tina.variation.*;
+
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 public class FACLFlameWriter extends AbstractFlameWriter {
   private final MessageLogger messageLogger;
@@ -82,7 +86,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
       // XForm
       for (XForm xForm : layer.getXForms()) {
         xb.beginElement(
-            "xform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)));
+            "xform", addWFieldAttributes(filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)), xForm));
         for (int priority : extractVariationPriorities(xForm)) {
           xb.emptyElement(
               "variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
@@ -92,7 +96,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
       // FinalXForms
       for (XForm xForm : layer.getFinalXForms()) {
         xb.beginElement(
-            "finalxform", filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)));
+            "finalxform", addWFieldAttributes(filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)), xForm));
         for (int priority : extractVariationPriorities(xForm)) {
           xb.emptyElement(
               "variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
@@ -206,6 +210,50 @@ public class FACLFlameWriter extends AbstractFlameWriter {
 
   private List<Attribute<?>> filterXFormAttrList(List<Attribute<?>> pSrc) {
     return pSrc.stream().filter(a ->  !a.getName().endsWith("fx_priority") && !a.getName().startsWith("wfield_") &&  !a.getName().contains("Curve_") && !XFORM_ATTR_BLACKLIST.contains(a.getName())).collect(Collectors.toList());
+  }
+
+  List<Attribute<?>> addWFieldAttributes(List<Attribute<?>> pSrc, XForm pXForm) {
+    if(pXForm.getWeightingFieldType()!= WeightingFieldType.NONE) {
+      pSrc.add(new Attribute<Integer>("wfield_type", pXForm.getWeightingFieldType().ordinal()));
+      pSrc.add(new Attribute<Integer>("wfield_input", pXForm.getWeightingFieldInput().ordinal()));
+      pSrc.add(new Attribute<Double>("wfield_var_amount", pXForm.getWeightingFieldVarAmountIntensity()));
+      String paramVarNames[]=new String[]{pXForm.getWeightingFieldVarParam1VarName(), pXForm.getWeightingFieldVarParam2VarName(), pXForm.getWeightingFieldVarParam3VarName()};
+      String paramNames[]=new String[]{pXForm.getWeightingFieldVarParam1ParamName(), pXForm.getWeightingFieldVarParam2ParamName(), pXForm.getWeightingFieldVarParam3ParamName()};
+      double paramAmountVales[] = new double[]{pXForm.getWeightingFieldVarParam1Intensity(), pXForm.getWeightingFieldVarParam2Intensity(), pXForm.getWeightingFieldVarParam3Intensity()};
+      for(int i=0;i<paramNames.length;i++) {
+        if(paramNames[i]!=null && paramNames[i].length()>0 && fabs(paramAmountVales[i])>EPSILON) {
+            int varIdx = -1;
+            int paramIdx = -1;
+            for(int j=0;j<pXForm.getVariationCount();j++) {
+              VariationFunc varFunc=pXForm.getVariation(j).getFunc();
+              if(paramVarNames[i].equals(varFunc.getName())) {
+                varIdx = j;
+                for(int k=0;k<varFunc.getParameterNames().length;k++) {
+                  if(paramNames[i].equals(varFunc.getParameterNames()[k])) {
+                    paramIdx = k;
+                    break;
+                  }
+                }
+                break;
+              }
+            }
+            if(varIdx>=0) {
+              pSrc.add(new Attribute<Integer>("wfield_param"+(i+1)+"_var_idx", varIdx));
+              // param_idx < 0 means amount (which is the intensity of the contributing variation)
+              pSrc.add(new Attribute<Integer>("wfield_param"+(i+1)+"_param_idx", paramIdx));
+              pSrc.add(new Attribute<Double>("wfield_param"+(i+1)+"_amount", paramAmountVales[i]));
+            }
+         }
+      }
+      pSrc.add(new Attribute<Double>("wfield_color_amount", pXForm.getWeightingFieldColorIntensity()));
+      pSrc.add(new Attribute<Double>("wfield_jitter_amount", pXForm.getWeightingFieldJitterIntensity()));
+      pSrc.add(new Attribute<Integer>("wfield_seed", pXForm.getWeightingFieldNoiseSeed()));
+      pSrc.add(new Attribute<Integer>("wfield_octaves", pXForm.getWeightingFieldFractalNoiseOctaves()));
+      pSrc.add(new Attribute<Double>("wfield_gain", pXForm.getWeightingFieldFractalNoiseGain()));
+      pSrc.add(new Attribute<Double>("wfield_lacunarity", pXForm.getWeightingFieldFractalNoiseLacunarity()));
+      pSrc.add(new Attribute<Double>("wfield_scale", pXForm.getWeightingFieldNoiseFrequency()));
+    }
+    return pSrc;
   }
 
   // remove unnecessary flame-attributes

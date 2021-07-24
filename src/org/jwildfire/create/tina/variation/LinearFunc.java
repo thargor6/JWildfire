@@ -44,8 +44,8 @@ public class LinearFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->linear * __x;\n"
-         + "__py += varpar->linear * __y;\n"
-         + (context.isPreserveZCoordinate() ? "__pz += varpar->linear * __z;" : "");
+    return "__px += __linear * __x;\n"
+         + "__py += __linear * __y;\n"
+         + (context.isPreserveZCoordinate() ? "__pz += __linear * __z;" : "");
   }
 }

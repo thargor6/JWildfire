@@ -85,16 +85,16 @@ public class Rings2Func extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float l = sqrtf(__x * __x + __y * __y);\n"
-        + "float _dx = varpar->rings2_val * varpar->rings2_val ADD_EPSILON;\n"
+        + "float _dx = __rings2_val * __rings2_val ADD_EPSILON;\n"
         + " if (_dx == 0.f || l == 0.f) {\n"
         + "    return;\n"
         + " }\n"
-        + " float r = varpar->rings2 * (2.f - _dx * ((int) ((l / _dx + 1.f) / 2.f) * 2.f / l + 1.f));\n"
+        + " float r = __rings2 * (2.f - _dx * ((int) ((l / _dx + 1.f) / 2.f) * 2.f / l + 1.f));\n"
         + "\n"
         + "    __px += r * __x;\n"
         + "    __py += r * __y;\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->rings2 * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __rings2 * __z;\n" : "");
   }
 
 }

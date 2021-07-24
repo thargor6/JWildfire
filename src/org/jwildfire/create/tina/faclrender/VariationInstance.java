@@ -85,9 +85,11 @@ public class VariationInstance {
     {
       SupportsGPU supportsGPU = VariationInstance.getInitializedVarFunc(transformCtx, func);
       {
-        String rawGpuCode = supportsGPU.getGPUCode(transformCtx);
+        String rawGpuCode = getWFieldsInitCode(transformedName)
+                          +  supportsGPU.getGPUCode(transformCtx);
         gpuCode = singleton ? rawGpuCode : injectInstanceId(rawGpuCode, instanceId);
         gpuCode = gpuCode.replace("->" + originalName, "->" + transformedName);
+        gpuCode = gpuCode.replace("__" + originalName, "__" + transformedName);
       }
       {
         String rawGpuFunctions = supportsGPU.getGPUFunctions(transformCtx);
@@ -119,6 +121,37 @@ public class VariationInstance {
       sb.append("</functions>\n");
     }
     sb.append("</variation>\n");
+    return sb.toString();
+  }
+
+  private String getWFieldsInitCode(String funcName) {
+    StringBuffer sb = new StringBuffer();
+    sb.append("float __"+originalName+" = varpar->"+originalName+" * __wFieldAmountScale;\n");
+    if (func.getParameterNames().length > 0) {
+      int idx = 0;
+      sb.append("float wFieldScale;\n");
+      for (String param : func.getParameterNames()) {
+        sb.append("if(" + idx + "==__wFieldVar1IntensityIdx)\n");
+        sb.append("  wFieldScale = __wFieldVar1Intensity;\n");
+        sb.append("else if(" + idx + "==__wFieldVar2IntensityIdx)\n");
+        sb.append("  wFieldScale = __wFieldVar2Intensity;\n");
+        sb.append("else if(" + idx + "==__wFieldVar3IntensityIdx)\n");
+        sb.append("  wFieldScale = __wFieldVar3Intensity;\n");
+        sb.append("else\n");
+        sb.append("  wFieldScale = 1.f;\n");
+        sb.append(
+            "float __"
+                + originalName
+                + "_"
+                + param
+                + " = varpar->"
+                + originalName
+                + "_"
+                + param
+                + " * wFieldScale;\n");
+        idx++;
+      }
+    }
     return sb.toString();
   }
 

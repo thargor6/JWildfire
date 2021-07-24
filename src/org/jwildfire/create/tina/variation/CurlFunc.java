@@ -77,12 +77,12 @@ public class CurlFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float re = 1.f + varpar->curl_c1 * __x + varpar->curl_c2 * (__x * __x - __y * __y);\n"
-        + "float im = varpar->curl_c1 * __y + 2.f * varpar->curl_c2 * __x * __y;\n"
-        + "float r = varpar->curl / (re * re + im * im);\n"
+    return "float re = 1.f + __curl_c1 * __x + __curl_c2 * (__x * __x - __y * __y);\n"
+        + "float im = __curl_c1 * __y + 2.f * __curl_c2 * __x * __y;\n"
+        + "float r = __curl / (re * re + im * im);\n"
         + "__px += (__x * re + __y * im) * r;\n"
         + "__py += (__y * re - __x * im) * r;\n"
         + (context.isPreserveZCoordinate() ?
-         "__pz += varpar->curl * __z;\n" : "");
+         "__pz += __curl * __z;\n" : "");
   }
 }

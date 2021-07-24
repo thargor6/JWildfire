@@ -165,12 +165,12 @@ public class JuliaScopeFunc extends VariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rn1;\n"
         + "rn1 = RANDFLOAT();\n"
-        + "int rn = (int)truncf(rn1*fabsf(varpar->juliascope_power));\n"
+        + "int rn = (int)truncf(rn1*fabsf(__juliascope_power));\n"
         + "float rn0 = ((rn&1)!=0)?-1.f:1.f;\n"
-        + "float t = (rn0*__theta+2.f*PI*truncf(rn1*fabsf(varpar->juliascope_power)))/(varpar->juliascope_power);\n"
-        + "float rnew = powf(__r, varpar->juliascope_dist/(varpar->juliascope_power));\n"
-        + "__px += varpar->juliascope*rnew*cosf(t);\n"
-        + "__py += varpar->juliascope*rnew*sinf(t);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->juliascope*__z;\n " : "");
+        + "float t = (rn0*__theta+2.f*PI*truncf(rn1*fabsf(__juliascope_power)))/(__juliascope_power);\n"
+        + "float rnew = powf(__r, __juliascope_dist/(__juliascope_power));\n"
+        + "__px += __juliascope*rnew*cosf(t);\n"
+        + "__py += __juliascope*rnew*sinf(t);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __juliascope*__z;\n " : "");
   }
 }

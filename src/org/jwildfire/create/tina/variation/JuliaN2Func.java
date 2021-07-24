@@ -123,21 +123,21 @@ public class JuliaN2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "int power = lroundf(varpar->julian2_power);\n" +
+    return "int power = lroundf(__julian2_power);\n" +
             "int _absN = power < 0 ? -power : power;\n"
-        + "float _cN = varpar->julian2_dist / power * 0.5f;\n"
+        + "float _cN = __julian2_dist / power * 0.5f;\n"
         + "if (power != 0) {\n"
-        + "    float x = varpar->julian2_a * __x + varpar->julian2_b * __y + varpar->julian2_e;\n"
-        + "    float y = varpar->julian2_c * __x + varpar->julian2_d * __y + varpar->julian2_f;\n"
+        + "    float x = __julian2_a * __x + __julian2_b * __y + __julian2_e;\n"
+        + "    float y = __julian2_c * __x + __julian2_d * __y + __julian2_f;\n"
         + "    float sina = 0.0, cosa = 0.0;\n"
         + "    float angle = (atan2f(y, x) + (2.0f*PI) * (lroundf(RANDFLOAT()*0x0000ffff) % _absN)) / power;\n"
-        + "    float r = varpar->julian2 * powf(x*x + y*y, _cN);\n"
+        + "    float r = __julian2 * powf(x*x + y*y, _cN);\n"
         + "\n"
         + "    sina = sinf(angle);\n"
         + "    cosa = cosf(angle);\n"
         + "    __px += r * cosa;\n"
         + "    __py += r * sina;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->julian2 * __z;\n" : "")
+        + (context.isPreserveZCoordinate() ? "__pz += __julian2 * __z;\n" : "")
         + "}\n";
   }
 }

@@ -87,8 +87,8 @@ public class LoziFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += (varpar->lozi_c - (varpar->lozi_a * fabsf(__x)) + __y) * varpar->lozi;\n"
-        + "__py += varpar->lozi_b * __x * varpar->lozi;"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->lozi * __z;\n" : "");
+    return "__px += (__lozi_c - (__lozi_a * fabsf(__x)) + __y) * __lozi;\n"
+        + "__py += __lozi_b * __x * __lozi;"
+        + (context.isPreserveZCoordinate() ? "__pz += __lozi * __z;\n" : "");
   }
 }

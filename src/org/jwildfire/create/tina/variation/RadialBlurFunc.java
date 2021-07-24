@@ -95,15 +95,15 @@ public class RadialBlurFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "float rndG = RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f;\n"
             + "float sina, cosa;\n"
-            + "sincosf(varpar->radial_blur_angle * PI * 0.5f, &sina, &cosa);\n"
-            + "float spin = varpar->radial_blur * sina;\n"
-            + "float zoom = varpar->radial_blur * cosa;\n"
+            + "sincosf(__radial_blur_angle * PI * 0.5f, &sina, &cosa);\n"
+            + "float spin = __radial_blur * sina;\n"
+            + "float zoom = __radial_blur * cosa;\n"
             + "float ra = sqrtf(__x * __x + __y * __y);\n"
             + "float  alpha = atan2f(__y, __x) + spin * rndG;\n"
             + "sincosf(alpha, &sina, &cosa);\n"
             + "float rz = zoom * rndG - 1.0f;\n"
             + "__px += ra * cosa + rz * __x;\n"
             + "__py += ra * sina + rz * __y;\n"
-            + (context.isPreserveZCoordinate() ? "__pz += varpar->radial_blur*__z;\n" : "");
+            + (context.isPreserveZCoordinate() ? "__pz += __radial_blur*__z;\n" : "");
   }
 }

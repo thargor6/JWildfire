@@ -48,8 +48,8 @@ public class SphericalFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float r2inv_eps = 1.f/(__r2 ADD_EPSILON);\n"
-        + "__px += varpar->spherical*__x*r2inv_eps;\n"
-        + "__py += varpar->spherical*__y*r2inv_eps;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->spherical*__z;\n" : "");
+        + "__px += __spherical*__x*r2inv_eps;\n"
+        + "__py += __spherical*__y*r2inv_eps;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __spherical*__z;\n" : "");
   }
 }

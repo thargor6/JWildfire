@@ -40,6 +40,6 @@ public class ZTranslateFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__pz += varpar->ztranslate;\n";
+    return "__pz += __ztranslate;\n";
   }
 }

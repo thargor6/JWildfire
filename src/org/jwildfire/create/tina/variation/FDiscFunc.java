@@ -123,16 +123,16 @@ public class FDiscFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "   float afactor = 2.0f*PI / (__r + varpar->fdisc_ashift);\n"
-        + "    float r = (atan2f(__y, __x) / PI + varpar->fdisc_rshift) * 0.5f;\n"
-        + "    float xfactor = cosf(afactor + varpar->fdisc_xshift);\n"
-        + "    float yfactor = sinf(afactor + varpar->fdisc_yshift);\n"
-        + "    float pr = varpar->fdisc * r;\n"
+    return "   float afactor = 2.0f*PI / (__r + __fdisc_ashift);\n"
+        + "    float r = (atan2f(__y, __x) / PI + __fdisc_rshift) * 0.5f;\n"
+        + "    float xfactor = cosf(afactor + __fdisc_xshift);\n"
+        + "    float yfactor = sinf(afactor + __fdisc_yshift);\n"
+        + "    float pr = __fdisc * r;\n"
         + "    float prx = pr * xfactor;\n"
         + "    float pry = pr * yfactor;\n"
-        + "    __px += (varpar->fdisc_term1 * prx) + (varpar->fdisc_term2 * __x * prx) + (varpar->fdisc_term3 * __x * pr) + (varpar->fdisc_term4 * __x);\n"
-        + "    __py += (varpar->fdisc_term1 * pry) + (varpar->fdisc_term2 * __y * pry) + (varpar->fdisc_term3 * __y * pr) + (varpar->fdisc_term4 * __y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->fdisc*__z;\n" : "");
+        + "    __px += (__fdisc_term1 * prx) + (__fdisc_term2 * __x * prx) + (__fdisc_term3 * __x * pr) + (__fdisc_term4 * __x);\n"
+        + "    __py += (__fdisc_term1 * pry) + (__fdisc_term2 * __y * pry) + (__fdisc_term3 * __y * pr) + (__fdisc_term4 * __y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __fdisc*__z;\n" : "");
   }
 }
 
