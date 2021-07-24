@@ -86,9 +86,9 @@ public class WhorlFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float a = __theta+((__r<varpar->whorl)?varpar->whorl_inside:varpar->whorl_outside)/(varpar->whorl-__r);\n"
-        + "__px += varpar->whorl*__r*cosf(a);\n"
-        + "__py += varpar->whorl*__r*sinf(a);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->whorl*__z;\n" : "");
+    return "float a = __theta+((__r<__whorl)?__whorl_inside:__whorl_outside)/(__whorl-__r);\n"
+        + "__px += __whorl*__r*cosf(a);\n"
+        + "__py += __whorl*__r*sinf(a);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __whorl*__z;\n" : "");
   }
 }

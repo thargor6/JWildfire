@@ -46,8 +46,8 @@ public class WhitneyUmbrellaFunc extends SimpleVariationFunc implements Supports
   public String getGPUCode(FlameTransformationContext context) {
     return "float u = __x;\n"
         + "float v = __y;\n"
-        + "__px += varpar->whitney_umbrella * u * v;\n"
-        + "__py += varpar->whitney_umbrella * u;\n"
-        + "__pz += varpar->whitney_umbrella * v * v;\n";
+        + "__px += __whitney_umbrella * u * v;\n"
+        + "__py += __whitney_umbrella * u;\n"
+        + "__pz += __whitney_umbrella * v * v;\n";
   }
 }

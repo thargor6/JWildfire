@@ -100,10 +100,10 @@ public class StarBlurFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float power = lroundf(varpar->starblur_power);\n" +
+    return "float power = lroundf(__starblur_power);\n" +
             "float starblur_alpha = PI / power;\n"
-        + "float starblur_length = sqrtf(1.0f + varpar->starblur_range*varpar->starblur_range - 2.0f * varpar->starblur_range * cosf(starblur_alpha));\n"
-        + "starblur_alpha = asinf(sinf(starblur_alpha) * varpar->starblur_range / starblur_length);\n"
+        + "float starblur_length = sqrtf(1.0f + __starblur_range*__starblur_range - 2.0f * __starblur_range * cosf(starblur_alpha));\n"
+        + "starblur_alpha = asinf(sinf(starblur_alpha) * __starblur_range / starblur_length);\n"
         + "float f = RANDFLOAT() * power * 2.0f;\n"
         + "    float angle = truncf(f);\n"
         + "    f = f - angle;\n"
@@ -119,8 +119,8 @@ public class StarBlurFunc extends VariationFunc implements SupportsGPU {
         + "    float s = sinf(ang);\n"
         + "    float c = cosf(ang);\n"
         + "\n"
-        + "    __px += varpar->starblur * z * c;\n"
-        + "    __py += varpar->starblur * z * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->starblur*__z;\n" : "");
+        + "    __px += __starblur * z * c;\n"
+        + "    __py += __starblur * z * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __starblur*__z;\n" : "");
   }
 }

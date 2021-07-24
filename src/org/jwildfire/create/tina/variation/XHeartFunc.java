@@ -98,11 +98,11 @@ public class XHeartFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float ang = M_PI_4_F + (0.5f * M_PI_4_F * varpar->xheart_angle);\n"
+    return "float ang = M_PI_4_F + (0.5f * M_PI_4_F * __xheart_angle);\n"
         + "float cosa;\n"
         + "float sina;\n"
         + "sincosf(ang, &sina, &cosa);\n"
-        + "float r   = 6.f + 2.f * varpar->xheart_ratio;\n"
+        + "float r   = 6.f + 2.f * __xheart_ratio;\n"
         + "float r2_4 = __x*__x + __y*__y + 4.f;\n"
         + "r2_4 = r2_4 == 0.f ? 1.f : r2_4;\n"
         + "float bx = 4.f/r2_4; float by = r/r2_4;\n"
@@ -110,12 +110,12 @@ public class XHeartFunc extends VariationFunc implements SupportsGPU {
         + "float y = sina * bx*__x + cosa * by*__y;\n"
         + "\n"
         + "if (x > 0.f) {\n"
-        + "    __px +=  varpar->xheart * x;\n"
-        + "    __py +=  varpar->xheart * y;\n"
+        + "    __px +=  __xheart * x;\n"
+        + "    __py +=  __xheart * y;\n"
         + "} else {\n"
-        + "    __px +=  varpar->xheart * x;\n"
-        + "    __py += -varpar->xheart * y;\n"
+        + "    __px +=  __xheart * x;\n"
+        + "    __py += -__xheart * y;\n"
         + "}\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->xheart*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __xheart*__z;\n" : "");
   }
 }

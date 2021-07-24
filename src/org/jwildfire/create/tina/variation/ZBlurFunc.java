@@ -55,6 +55,6 @@ public class ZBlurFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__pz += varpar->zblur*(RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f);\n";
+    return "__pz += __zblur*(RANDFLOAT()+RANDFLOAT()+RANDFLOAT()+RANDFLOAT()-2.f);\n";
   }
 }

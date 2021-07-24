@@ -103,25 +103,25 @@ public class TargetFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float t_size_2 = 0.5f * varpar->target_size;\n"
+    return "float t_size_2 = 0.5f * __target_size;\n"
         + "float a = atan2f(__y, __x);\n"
         + "    float r = sqrtf(__x*__x + __y*__y);\n"
         + "    float t = logf(r);\n"
         + "    if (t < 0.0f)\n"
         + "      t -= t_size_2;\n"
         + "\n"
-        + "    t = fmodf(fabsf(t), varpar->target_size);\n"
+        + "    t = fmodf(fabsf(t), __target_size);\n"
         + "\n"
         + "    if (t < t_size_2)\n"
-        + "      a += varpar->target_even;\n"
+        + "      a += __target_even;\n"
         + "    else\n"
-        + "      a += varpar->target_odd;\n"
+        + "      a += __target_odd;\n"
         + "\n"
         + "    float s = sinf(a);\n"
         + "    float c = cosf(a);\n"
         + "\n"
         + "    __px += r * c;\n"
         + "    __py += r * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->target*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __target*__z;\n" : "");
   }
 }

@@ -47,8 +47,8 @@ public class SquareFunc extends SimpleVariationFunc implements SupportsGPU {
     return "float rn1,rn2;\n"
         + "rn1 = RANDFLOAT();\n"
         + "rn2 = RANDFLOAT();\n"
-        + "__px += varpar->square*(rn1-.5f);\n"
-        + "__py += varpar->square*(rn2-.5f);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->square*__z;\n" : "");
+        + "__px += __square*(rn1-.5f);\n"
+        + "__py += __square*(rn2-.5f);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __square*__z;\n" : "");
   }
 }

@@ -87,13 +87,13 @@ public class VogelFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "float M_PHI = 1.61803398874989484820f;\n"
         + "float M_2PI_PHI2 = 2.0f * PI / (M_PHI * M_PHI);\n"
-        + "int i = lroundf(varpar->vogel_n* RANDFLOAT()) + 1;\n"
+        + "int i = lroundf(__vogel_n* RANDFLOAT()) + 1;\n"
         + "float a = i * 2.0f*M_2PI_PHI2;\n"
         + "float sina, cosa;\n"
         + "sincosf(a, &sina, &cosa);\n"
-        + "float r = varpar->vogel * (__r + sqrtf(i));\n"
-        + "__px += r * (cosa + (varpar->vogel_scale * __x));\n"
-        + "__py += r * (sina + (varpar->vogel_scale * __y));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->vogel * __z;\n" : "");
+        + "float r = __vogel * (__r + sqrtf(i));\n"
+        + "__px += r * (cosa + (__vogel_scale * __x));\n"
+        + "__py += r * (sina + (__vogel_scale * __y));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __vogel * __z;\n" : "");
   }
 }

@@ -63,7 +63,7 @@ public class TanqFunc extends SimpleVariationFunc implements SupportsGPU {
     return "   float abs_v = hypotf(__y, __z);\n"
         + "    float s = sinf(__x);\n"
         + "    float sysz = __y*__y + __z*__z;\n"
-        + "    float ni = varpar->tanq / (__x*__x + sysz);\n"
+        + "    float ni = __tanq / (__x*__x + sysz);\n"
         + "    float c = cosf(__x);\n"
         + "    float sh = sinhf(abs_v);\n"
         + "    float ch = coshf(abs_v);\n"

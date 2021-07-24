@@ -52,9 +52,9 @@ public class XErfFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "float r2 = __x*__x + __y*__y + __z*__z;\n"
          + "if (r2 <= 1.e-6f) r2 = 1.e-6f;\n"
-         + "__px += ((fabsf(__x) >= 2.0) ? (__x / r2) : xerf_erf(__x)) * varpar->xerf;\n"
-         + "__py += ((fabsf(__y) >= 2.0) ? (__y / r2) : xerf_erf(__y)) * varpar->xerf;\n"
-         + "__pz += ((fabsf(__z) >= 2.0) ? (__z / r2) : xerf_erf(__z)) * varpar->xerf;\n";
+         + "__px += ((fabsf(__x) >= 2.0) ? (__x / r2) : xerf_erf(__x)) * __xerf;\n"
+         + "__py += ((fabsf(__y) >= 2.0) ? (__y / r2) : xerf_erf(__y)) * __xerf;\n"
+         + "__pz += ((fabsf(__z) >= 2.0) ? (__z / r2) : xerf_erf(__z)) * __xerf;\n";
   }
 
   @Override

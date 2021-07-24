@@ -107,12 +107,12 @@ public class STwinFunc extends VariationFunc implements SupportsGPU {
     return " float multiplier = 0.05f;\n"
         + "  float multiplier2 = 0.0001f;\n"
         + "  float multiplier3 = 0.1f;"
-        + "float x = __x * varpar->stwin * multiplier;\n"
-        + "    float y = __y * varpar->stwin * multiplier;\n"
-        + "    float x2 = x * x + (varpar->stwin_offset_x2 * multiplier2);\n"
-        + "    float y2 = y * y + (varpar->stwin_offset_y2 * multiplier2);\n"
+        + "float x = __x * __stwin * multiplier;\n"
+        + "    float y = __y * __stwin * multiplier;\n"
+        + "    float x2 = x * x + (__stwin_offset_x2 * multiplier2);\n"
+        + "    float y2 = y * y + (__stwin_offset_y2 * multiplier2);\n"
         + "\n"
-        + "    float result = (x2 - y2) * sinf(2.0f*PI * varpar->stwin_distort * (x + y + (varpar->stwin_offset_xy * multiplier3)));\n"
+        + "    float result = (x2 - y2) * sinf(2.0f*PI * __stwin_distort * (x + y + (__stwin_offset_xy * multiplier3)));\n"
         + "    float divident = x2 + y2;\n"
         + "    if (divident == 0) {\n"
         + "      divident = 1.0f;\n"
@@ -120,8 +120,8 @@ public class STwinFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "    result = result / divident;\n"
         + "\n"
-        + "    __px += (varpar->stwin * __x) + result;\n"
-        + "    __py += (varpar->stwin * __y) + result;"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->stwin * __z;\n" : "");
+        + "    __px += (__stwin * __x) + result;\n"
+        + "    __py += (__stwin * __y) + result;"
+        + (context.isPreserveZCoordinate() ? "__pz += __stwin * __z;\n" : "");
   }
 }

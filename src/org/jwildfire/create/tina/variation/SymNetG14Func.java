@@ -175,10 +175,10 @@ public class SymNetG14Func extends VariationFunc implements SupportsGPU {
 	public String getGPUCode(FlameTransformationContext context) {
 	    return   "float x,y;"
 	    		
-	    		+"  float spacex=sqrtf(varpar->sym_ng14_radius*varpar->sym_ng14_radius/2.0);"
+	    		+"  float spacex=sqrtf(__sym_ng14_radius*__sym_ng14_radius/2.0);"
 	    		+"  float spacey=spacex;"
-	    		+"  float sx=varpar->sym_ng14_stepx/2.0;"
-	    		+"  float sy=varpar->sym_ng14_stepy/2.0;"
+	    		+"  float sx=__sym_ng14_stepx/2.0;"
+	    		+"  float sy=__sym_ng14_stepy/2.0;"
 	    		
 	    		+"Mathc Tx[12]={"
 	    		  +"{ 1.0 , 0.0   ,  0.0  ,  0.    , 1.0  , 0.0 },"
@@ -227,8 +227,8 @@ public class SymNetG14Func extends VariationFunc implements SupportsGPU {
 	    		+"	z=z+(make_float2(spacex,spacey));"
 	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
 	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
-	    		+"  __px += varpar->sym_ng14 * (f.x);"
-	    		+"  __py += varpar->sym_ng14 * (f.y);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_ng14 * __z;\n" : "");
+	    		+"  __px += __sym_ng14 * (f.x);"
+	    		+"  __py += __sym_ng14 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __sym_ng14 * __z;\n" : "");
 	  }  
 }

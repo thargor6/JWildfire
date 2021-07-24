@@ -63,7 +63,7 @@ public class TanhqFunc extends SimpleVariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "    float abs_v = hypotf(__y, __z);\n"
         + "    float sysz = __y*__y + __z*__z;\n"
-        + "    float ni = varpar->tanhq / (__x*__x + sysz);\n"
+        + "    float ni = __tanhq / (__x*__x + sysz);\n"
         + "    float s = sinf(abs_v);\n"
         + "    float c = cosf(abs_v);\n"
         + "    float sh = sinhf(__x);\n"

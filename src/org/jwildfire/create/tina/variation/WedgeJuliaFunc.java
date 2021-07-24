@@ -95,19 +95,19 @@ public class WedgeJuliaFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float wedgeJulia_cf = 1.f-varpar->wedge_julia_angle*varpar->wedge_julia_count*0.5f/PI;\n"
-        + "float wedgeJulia_rN = fabsf(varpar->wedge_julia_power);\n"
-        + "float wedgeJulia_cn = varpar->wedge_julia_dist/varpar->wedge_julia_power/2.f;\n"
-        + "float r = varpar->wedge_julia*powf(__r2, wedgeJulia_cn);\n"
+    return "float wedgeJulia_cf = 1.f-__wedge_julia_angle*__wedge_julia_count*0.5f/PI;\n"
+        + "float wedgeJulia_rN = fabsf(__wedge_julia_power);\n"
+        + "float wedgeJulia_cn = __wedge_julia_dist/__wedge_julia_power/2.f;\n"
+        + "float r = __wedge_julia*powf(__r2, wedgeJulia_cn);\n"
         + "int t_rnd = (int)(wedgeJulia_rN*RANDFLOAT());\n"
-        + "float a = (__theta+2.f*PI*t_rnd)/varpar->wedge_julia_power;\n"
-        + "float c = floorf((varpar->wedge_julia_count*a+PI)*0.5f/PI);\n"
-        + "a = a*wedgeJulia_cf+c*varpar->wedge_julia_angle;\n"
+        + "float a = (__theta+2.f*PI*t_rnd)/__wedge_julia_power;\n"
+        + "float c = floorf((__wedge_julia_count*a+PI)*0.5f/PI);\n"
+        + "a = a*wedgeJulia_cf+c*__wedge_julia_angle;\n"
         + "float sa = sinf(a);\n"
         + "float ca = cosf(sa);\n"
         + "__px += r*ca;\n"
         + "__py += r*sa;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->wedge_julia*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __wedge_julia*__z;\n" : "");
   }
 }
 

@@ -90,10 +90,10 @@ public class Waves3Func extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return " float x0 = __x;\n"
         + " float y0 = __y;\n"
-        + " float scalexx = 0.5 * varpar->waves3_scalex * (1.0 + sinf(y0 * varpar->waves3_sx_freq));\n"
-        + " float scaleyy = 0.5 * varpar->waves3_scaley * (1.0 + sinf(x0 * varpar->waves3_sy_freq));\n"
-        + "    __px += varpar->waves3 * (x0 + sinf(y0 * varpar->waves3_freqx) * scalexx);\n"
-        + "    __py += varpar->waves3 * (y0 + sinf(x0 * varpar->waves3_freqy) * scaleyy);\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->waves3 * __z;\n" : "");
+        + " float scalexx = 0.5 * __waves3_scalex * (1.0 + sinf(y0 * __waves3_sx_freq));\n"
+        + " float scaleyy = 0.5 * __waves3_scaley * (1.0 + sinf(x0 * __waves3_sy_freq));\n"
+        + "    __px += __waves3 * (x0 + sinf(y0 * __waves3_freqx) * scalexx);\n"
+        + "    __py += __waves3 * (y0 + sinf(x0 * __waves3_freqy) * scaleyy);\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += __waves3 * __z;\n" : "");
   }
 }

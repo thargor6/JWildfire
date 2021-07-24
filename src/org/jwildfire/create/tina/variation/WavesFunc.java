@@ -47,8 +47,8 @@ public class WavesFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->waves*(__x+xform->b*sinf(__y/(xform->c*xform->c ADD_EPSILON)));\n"
-        + "__py += varpar->waves*(__y+xform->e*sinf(__x/(xform->f*xform->f ADD_EPSILON)));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->waves*__z;\n" : "");
+    return "__px += __waves*(__x+xform->b*sinf(__y/(xform->c*xform->c ADD_EPSILON)));\n"
+        + "__py += __waves*(__y+xform->e*sinf(__x/(xform->f*xform->f ADD_EPSILON)));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __waves*__z;\n" : "");
   }
 }

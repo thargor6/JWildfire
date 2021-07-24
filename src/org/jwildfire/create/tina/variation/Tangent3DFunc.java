@@ -50,8 +50,8 @@ public class Tangent3DFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += varpar->tangent3D * sinf(__x) / cosf(__y);\n"
-        + "__py += varpar->tangent3D * tan(__y);\n"
-        + "__pz += varpar->tangent3D * tan(__x);";
+    return "__px += __tangent3D * sinf(__x) / cosf(__y);\n"
+        + "__py += __tangent3D * tan(__y);\n"
+        + "__pz += __tangent3D * tan(__x);";
   }
 }

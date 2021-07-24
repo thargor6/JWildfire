@@ -116,12 +116,12 @@ public class Waves42Func extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "float x0 = __x;\n"
         + "float y0 = __y;\n"
-        + "float ax = floorf(y0 * varpar->waves42_freqx2);\n"
-        + "ax = sinf(ax * 12.9898f + ax * 78.233f + 1.0f + y0 * 0.001f * varpar->waves42_yfact) * 43758.5453f;\n"
+        + "float ax = floorf(y0 * __waves42_freqx2);\n"
+        + "ax = sinf(ax * 12.9898f + ax * 78.233f + 1.0f + y0 * 0.001f * __waves42_yfact) * 43758.5453f;\n"
         + "ax = ax - (int) ax;\n"
-        + "if (lroundf(varpar->waves42_cont) == 1) ax = (ax > 0.5f) ? 1.0f : 0.0f;\n"
-        + "__px += varpar->waves42 * (x0 + sinf(y0 * varpar->waves42_freqx) * ax * ax * varpar->waves42_scalex);\n"
-        + "__py += varpar->waves42 * (y0 + sinf(x0 * varpar->waves42_freqy) * varpar->waves42_scaley);"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->waves42 * __z;\n": "");
+        + "if (lroundf(__waves42_cont) == 1) ax = (ax > 0.5f) ? 1.0f : 0.0f;\n"
+        + "__px += __waves42 * (x0 + sinf(y0 * __waves42_freqx) * ax * ax * __waves42_scalex);\n"
+        + "__py += __waves42 * (y0 + sinf(x0 * __waves42_freqy) * __waves42_scaley);"
+        + (context.isPreserveZCoordinate() ? "__pz += __waves42 * __z;\n": "");
   }
 }

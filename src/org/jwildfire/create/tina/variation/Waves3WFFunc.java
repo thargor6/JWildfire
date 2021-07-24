@@ -116,19 +116,19 @@ public class Waves3WFFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "bool use_cos_x  = (bool)varpar->waves3_wf_use_cos_x;\n"
-        + "bool use_cos_y  = (bool)varpar->waves3_wf_use_cos_y;\n"
-        + "float _dampingX = fabsf(varpar->waves3_wf_dampx) < epsilon ? 1.f : expf(varpar->waves3_wf_dampx);\n"
-        + "float _dampingY = fabsf(varpar->waves3_wf_dampy) < epsilon ? 1.f : expf(varpar->waves3_wf_dampy);\n"
+    return "bool use_cos_x  = (bool)__waves3_wf_use_cos_x;\n"
+        + "bool use_cos_y  = (bool)__waves3_wf_use_cos_y;\n"
+        + "float _dampingX = fabsf(__waves3_wf_dampx) < epsilon ? 1.f : expf(__waves3_wf_dampx);\n"
+        + "float _dampingY = fabsf(__waves3_wf_dampy) < epsilon ? 1.f : expf(__waves3_wf_dampy);\n"
         + "\n"
         + "if (use_cos_x)\n"
-        + "    __px += varpar->waves3_wf * (__x + _dampingX * varpar->waves3_wf_scalex * cosf(__y * varpar->waves3_wf_freqx) * cosf(__y * varpar->waves3_wf_freqx)) * _dampingX;\n"
+        + "    __px += __waves3_wf * (__x + _dampingX * __waves3_wf_scalex * cosf(__y * __waves3_wf_freqx) * cosf(__y * __waves3_wf_freqx)) * _dampingX;\n"
         + "else\n"
-        + "    __px += varpar->waves3_wf * (__x + _dampingX * varpar->waves3_wf_scalex * sinf(__y * varpar->waves3_wf_freqx) * sinf(__y * varpar->waves3_wf_freqx)) * _dampingX;\n"
+        + "    __px += __waves3_wf * (__x + _dampingX * __waves3_wf_scalex * sinf(__y * __waves3_wf_freqx) * sinf(__y * __waves3_wf_freqx)) * _dampingX;\n"
         + "if (use_cos_y)\n"
-        + "    __py += varpar->waves3_wf * (__y + _dampingY * varpar->waves3_wf_scaley * cosf(__x * varpar->waves3_wf_freqy) * cosf(__x * varpar->waves3_wf_freqy)) * _dampingY;\n"
+        + "    __py += __waves3_wf * (__y + _dampingY * __waves3_wf_scaley * cosf(__x * __waves3_wf_freqy) * cosf(__x * __waves3_wf_freqy)) * _dampingY;\n"
         + "else\n"
-        + "    __py += varpar->waves3_wf * (__y + _dampingY * varpar->waves3_wf_scaley * sinf(__x * varpar->waves3_wf_freqy) * sinf(__x * varpar->waves3_wf_freqy)) * _dampingY;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->waves3_wf*__z;\n" : "");
+        + "    __py += __waves3_wf * (__y + _dampingY * __waves3_wf_scaley * sinf(__x * __waves3_wf_freqy) * sinf(__x * __waves3_wf_freqy)) * _dampingY;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __waves3_wf*__z;\n" : "");
   }
 }

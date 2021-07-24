@@ -178,11 +178,11 @@ public class SymNetG11Func extends VariationFunc implements SupportsGPU {
 	public String getGPUCode(FlameTransformationContext context) {
 	    return   "float x,y;"
 
-	    		+"  float stepx=varpar->sym_ng11_stepx;"
-	    		+"  float stepy=varpar->sym_ng11_stepy;"
+	    		+"  float stepx=__sym_ng11_stepx;"
+	    		+"  float stepy=__sym_ng11_stepy;"
 	    		
-	    		+"  float spacex=varpar->sym_ng11_spacex;"
-	    		+"  float spacey=varpar->sym_ng11_spacey;"
+	    		+"  float spacex=__sym_ng11_spacex;"
+	    		+"  float spacey=__sym_ng11_spacey;"
 	    		
 	    		+"Mathc Tx[8]={	{ 1.0 , 0.0 , 0.0  ,  0.0 ,  1.0  , 0.0  }, "
 	    		+"		        {-1.0 , 0.0 , 0.0  ,  0.0 , -1.0  , 0.0  }, "
@@ -214,11 +214,11 @@ public class SymNetG11Func extends VariationFunc implements SupportsGPU {
 	    		+"  y =__y;"
 	    		+"	        "
 	    		+"  float2 z =make_float2(x,y);"
-	    		+"	z=z+(make_float2(varpar->sym_ng11_space,varpar->sym_ng11_space));"
+	    		+"	z=z+(make_float2(__sym_ng11_space,__sym_ng11_space));"
 	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
 	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
-	    		+"  __px += varpar->sym_ng11 * (f.x);"
-	    		+"  __py += varpar->sym_ng11 * (f.y);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_ng11 * __z;\n" : "");
+	    		+"  __px += __sym_ng11 * (f.x);"
+	    		+"  __py += __sym_ng11 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __sym_ng11 * __z;\n" : "");
 	  }
 }

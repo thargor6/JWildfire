@@ -154,10 +154,10 @@ public class SymNetG4Func extends VariationFunc implements SupportsGPU  {
 	    		+"		        { 1.0 , 0.0 , 0.0  , 0. ,-1.0 , 0.0 }, "
 	    		+"		        {-1.0 , 0.0 , 0.0  , 0. , 1.0 , 0.0 }, "
 	   		    +" };"
-	    		+" float sx=varpar->sym_ng4_sepx /2.0;"
-	    		+" float sy=varpar->sym_ng4_sepy /2.0;"
-	    		+" float stpx=varpar->sym_ng4_stepx /2.0;"
-	    		+" float stpy=varpar->sym_ng4_stepy /2.0;"
+	    		+" float sx=__sym_ng4_sepx /2.0;"
+	    		+" float sy=__sym_ng4_sepy /2.0;"
+	    		+" float stpx=__sym_ng4_stepx /2.0;"
+	    		+" float stpy=__sym_ng4_stepy /2.0;"
 	    		
 	    		+"	Tx[0].c =  -sx - 2.0 -stpx;"
 	    		+"	Tx[0].f =   sy - 1.5 -stpy;"
@@ -174,8 +174,8 @@ public class SymNetG4Func extends VariationFunc implements SupportsGPU  {
 	    		+"  float2 z =make_float2(x,y);"
 	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
 	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
-	    		+"  __px += varpar->sym_ng4 * (f.x);"
-	    		+"  __py += varpar->sym_ng4 * (f.y);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_ng4 * __z;\n" : "");
+	    		+"  __px += __sym_ng4 * (f.x);"
+	    		+"  __py += __sym_ng4 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __sym_ng4 * __z;\n" : "");
 	  }    
 }

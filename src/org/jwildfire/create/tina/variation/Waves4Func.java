@@ -115,15 +115,15 @@ public class Waves4Func extends VariationFunc implements SupportsGPU {
     return "\tfloat x0 = __x;\n"
         + "\tfloat y0 = __y;\n"
         + "\t\n"
-        + "\tfloat ax = floorf(y0 * varpar->waves4_freqx / (2.0f*PI));\n"
+        + "\tfloat ax = floorf(y0 * __waves4_freqx / (2.0f*PI));\n"
         + "\n"
-        + "    ax = sinf(ax * 12.9898 + ax * 78.233 + 1.0 + y0 * 0.001 * varpar->waves4_yfact) * 43758.5453;\n"
+        + "    ax = sinf(ax * 12.9898 + ax * 78.233 + 1.0 + y0 * 0.001 * __waves4_yfact) * 43758.5453;\n"
         + "    ax = ax - (int) ax;\n"
-        + "    if (lroundf(varpar->waves4_cont) == 1) ax = (ax > 0.5) ? 1.0 : 0.0;\n"
+        + "    if (lroundf(__waves4_cont) == 1) ax = (ax > 0.5) ? 1.0 : 0.0;\n"
         + "\n"
         + "    \n"
-        + "    __px += varpar->waves4 * (x0 + sinf(y0 * varpar->waves4_freqx) * ax * ax * varpar->waves4_scalex);\n"
-        + "    __py += varpar->waves4 * (y0 + sinf(x0 * varpar->waves4_freqy) * varpar->waves4_scaley);\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->waves4 * __z;\n" : "");
+        + "    __px += __waves4 * (x0 + sinf(y0 * __waves4_freqx) * ax * ax * __waves4_scalex);\n"
+        + "    __py += __waves4 * (y0 + sinf(x0 * __waves4_freqy) * __waves4_scaley);\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += __waves4 * __z;\n" : "");
   }
 }

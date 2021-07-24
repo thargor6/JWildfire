@@ -136,10 +136,10 @@ public class SymNetG3Func extends VariationFunc implements SupportsGPU {
 	    		+"Mathc Tx[2]={	{ 1.0 , 0.0 , 0.0  , 0. , 1.0 , 0.0 }, "
 	    		+"		        {-1.0 , 0.0 , 0.0  , 0. ,-1.0 , 0.0 }, "
 	   		    +" };"
-	    		+"	Tx[0].c =  - varpar->sym_ng3_sepx - varpar->sym_ng3_step  /2.0;"
-	    		+"	Tx[0].f =  - varpar->sym_ng3_sepy - varpar->sym_ng3_step  /2.0;"
-	    		+"	Tx[1].c =    varpar->sym_ng3_sepx + varpar->sym_ng3_step  /2.0;"
-	    		+"	Tx[1].f =    varpar->sym_ng3_sepy + varpar->sym_ng3_step  /2.0;"
+	    		+"	Tx[0].c =  - __sym_ng3_sepx - __sym_ng3_step  /2.0;"
+	    		+"	Tx[0].f =  - __sym_ng3_sepy - __sym_ng3_step  /2.0;"
+	    		+"	Tx[1].c =    __sym_ng3_sepx + __sym_ng3_step  /2.0;"
+	    		+"	Tx[1].f =    __sym_ng3_sepy + __sym_ng3_step  /2.0;"
 	    		+"    "
 	    		+"	x= __x;"
 	    		+"  y =__y;"
@@ -147,8 +147,8 @@ public class SymNetG3Func extends VariationFunc implements SupportsGPU {
 	    		+"  float2 z =make_float2(x,y);"
 	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
 	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
-	    		+"  __px += varpar->sym_ng3 * (f.x);"
-	    		+"  __py += varpar->sym_ng3 * (f.y);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_ng3 * __z;\n" : "");
+	    		+"  __px += __sym_ng3 * (f.x);"
+	    		+"  __py += __sym_ng3 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __sym_ng3 * __z;\n" : "");
 	  }    
 }

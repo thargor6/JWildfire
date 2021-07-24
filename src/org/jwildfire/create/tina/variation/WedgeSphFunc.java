@@ -97,12 +97,12 @@ public class WedgeSphFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rinv_eps = 1.f/sqrtf(__r2 ADD_EPSILON);\n"
-        + "float a = __theta+varpar->wedge_sph_swirl*rinv_eps;\n"
-        + "float c = floorf((varpar->wedge_sph_count*a+PI)*0.5f/PI);\n"
-        + "float comp_fac = 1.f-varpar->wedge_sph_angle*varpar->wedge_sph_count*0.5f/PI;\n"
-        + "a = a*comp_fac+c*varpar->wedge_sph_angle;\n"
-        + "__px += varpar->wedge_sph*(rinv_eps+varpar->wedge_sph_hole)*cosf(a);\n"
-        + "__py += varpar->wedge_sph*(rinv_eps+varpar->wedge_sph_hole)*sinf(a);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->wedge_sph*__z;\n" : "");
+        + "float a = __theta+__wedge_sph_swirl*rinv_eps;\n"
+        + "float c = floorf((__wedge_sph_count*a+PI)*0.5f/PI);\n"
+        + "float comp_fac = 1.f-__wedge_sph_angle*__wedge_sph_count*0.5f/PI;\n"
+        + "a = a*comp_fac+c*__wedge_sph_angle;\n"
+        + "__px += __wedge_sph*(rinv_eps+__wedge_sph_hole)*cosf(a);\n"
+        + "__py += __wedge_sph*(rinv_eps+__wedge_sph_hole)*sinf(a);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __wedge_sph*__z;\n" : "");
   }
 }

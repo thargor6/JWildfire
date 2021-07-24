@@ -82,17 +82,17 @@ public class ZTwisterFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "   float ez = varpar->ztwister_twist * __pz;\n"
-        + "    if (varpar->ztwister_base != 1.0) {\n"
-        + "      ez = powf(varpar->ztwister_base, ez) - 1;\n"
+    return "   float ez = __ztwister_twist * __pz;\n"
+        + "    if (__ztwister_base != 1.0) {\n"
+        + "      ez = powf(__ztwister_base, ez) - 1;\n"
         + "    }\n"
         + "    float sinz = sinf(ez);\n"
         + "    float cosz = cosf(ez);\n"
         + "    float nx = __x * cosz - __y * sinz;\n"
         + "    float ny = __x * sinz + __y * cosz;\n"
         + "\n"
-        + "    __px += varpar->ztwister * nx;\n"
-        + "    __py += varpar->ztwister * ny;\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->ztwister * __z;\n" : "");
+        + "    __px += __ztwister * nx;\n"
+        + "    __py += __ztwister * ny;\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += __ztwister * __z;\n" : "");
   }
 }

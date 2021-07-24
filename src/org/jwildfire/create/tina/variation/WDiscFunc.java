@@ -68,8 +68,8 @@ public class WDiscFunc extends SimpleVariationFunc implements SupportsGPU {
         + "float s;\n"
         + "sincosf(a, &s, &c);\n"
         + "\n"
-        + "__px += varpar->wdisc * r * c;\n"
-        + "__py += varpar->wdisc * r * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->wdisc*__z;\n" : "");
+        + "__px += __wdisc * r * c;\n"
+        + "__py += __wdisc * r * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __wdisc*__z;\n" : "");
   }
 }

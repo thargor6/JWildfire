@@ -59,10 +59,10 @@ public class TwintrianFunc extends SimpleVariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float rn;\n"
         + "rn = RANDFLOAT();\n"
-        + "float v = varpar->twintrian;\n"
+        + "float v = __twintrian;\n"
         + "float t = log10f(sinf(rn*__r*v)*sinf(rn*__r*v))+cosf(rn*__r*v);\n"
         + "__px += v*__x*t;\n"
         + "__py += v*__x*(t-PI*sinf(rn*__r*v));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->twintrian*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __twintrian*__z;\n" : "");
   }
 }

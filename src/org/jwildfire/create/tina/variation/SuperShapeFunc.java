@@ -109,15 +109,15 @@ public class SuperShapeFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float t1 = fabsf(cosf((varpar->super_shape_m*__theta+PI)*.25f));\n"
-        + "float t2 = fabsf(sinf((varpar->super_shape_m*__theta+PI)*.25f));\n"
-        + "t1 = powf(t1,varpar->super_shape_n2);\n"
-        + "t2 = powf(t2,varpar->super_shape_n3);\n"
+    return "float t1 = fabsf(cosf((__super_shape_m*__theta+PI)*.25f));\n"
+        + "float t2 = fabsf(sinf((__super_shape_m*__theta+PI)*.25f));\n"
+        + "t1 = powf(t1,__super_shape_n2);\n"
+        + "t2 = powf(t2,__super_shape_n3);\n"
         + "float rn;\n"
         + "rn = RANDFLOAT();\n"
-        + "float rnew = varpar->super_shape*((varpar->super_shape_rnd*rn+(1.f-varpar->super_shape_rnd)*__r-varpar->super_shape_holes)*powf(t1+t2,-1.f/(varpar->super_shape_n1))*__rinv);\n"
+        + "float rnew = __super_shape*((__super_shape_rnd*rn+(1.f-__super_shape_rnd)*__r-__super_shape_holes)*powf(t1+t2,-1.f/(__super_shape_n1))*__rinv);\n"
         + "__px += rnew*__x;\n"
         + "__py += rnew*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->super_shape*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __super_shape*__z;\n" : "");
   }
 }

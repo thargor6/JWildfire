@@ -72,9 +72,9 @@ public class Swirl3DWFFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "float rad = __r;\n"
             + "float ang = __theta;\n"
-            + "__px += varpar->swirl3D_wf * (rad * cosf(ang));\n"
-            + "__py += varpar->swirl3D_wf * (rad * sinf(ang));\n"
-            + "__pz += varpar->swirl3D_wf * (sinf(6.0f * cosf(rad) - varpar->swirl3D_wf_n * ang));\n"
-            + "__pal = fabsf(sinf(6.0 * cosf(rad) - varpar->swirl3D_wf_n * ang));";
+            + "__px += __swirl3D_wf * (rad * cosf(ang));\n"
+            + "__py += __swirl3D_wf * (rad * sinf(ang));\n"
+            + "__pz += __swirl3D_wf * (sinf(6.0f * cosf(rad) - __swirl3D_wf_n * ang));\n"
+            + "__pal = fabsf(sinf(6.0 * cosf(rad) - __swirl3D_wf_n * ang));";
   }
 }

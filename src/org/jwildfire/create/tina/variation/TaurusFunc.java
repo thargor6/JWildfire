@@ -89,9 +89,9 @@ public class TaurusFunc extends VariationFunc implements SupportsGPU {
         + "    float cx = cosf(__x);\n"
         + "    float sy = sinf(__y);\n"
         + "    float cy = cosf(__y);\n"
-        + "    float ir = (varpar->taurus_inv * varpar->taurus_r) + ((1.0f - varpar->taurus_inv) * (varpar->taurus_r * cosf(varpar->taurus_n * __x)));\n"
-        + "    __px += varpar->taurus * (cx * (ir + sy));\n"
-        + "    __py += varpar->taurus * (sx * (ir + sy));\n"
-        + "    __pz += varpar->taurus * (varpar->taurus_sor * cy) + ((1.0f - varpar->taurus_sor) * __y);\n";
+        + "    float ir = (__taurus_inv * __taurus_r) + ((1.0f - __taurus_inv) * (__taurus_r * cosf(__taurus_n * __x)));\n"
+        + "    __px += __taurus * (cx * (ir + sy));\n"
+        + "    __py += __taurus * (sx * (ir + sy));\n"
+        + "    __pz += __taurus * (__taurus_sor * cy) + ((1.0f - __taurus_sor) * __y);\n";
   }
 }

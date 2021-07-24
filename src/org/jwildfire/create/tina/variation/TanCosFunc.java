@@ -49,9 +49,9 @@ public class TanCosFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "    float d1 = 1.e-6f + __x*__x + __y*__y;\n"
-        + "    float d2 = varpar->tancos / d1;\n"
+        + "    float d2 = __tancos / d1;\n"
         + "    __px += d2 * (tanh(d1) * (2.0 * __x));\n"
         + "    __py += d2 * (cosf(d1) * (2.0 * __y));\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->tancos * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "      __pz += __tancos * __z;\n" : "");
   }
 }

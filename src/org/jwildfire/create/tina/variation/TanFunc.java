@@ -58,8 +58,8 @@ public class TanFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->tan*sinf(2.f*__x)/(cosf(2.f*__x)+coshf(2.f*__y));\n"
-        + "__py += varpar->tan*sinhf(2.f*__y)/(cosf(2.f*__x)+coshf(2.f*__y));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->tan*__z;\n" : "");
+    return "__px += __tan*sinf(2.f*__x)/(cosf(2.f*__x)+coshf(2.f*__y));\n"
+        + "__py += __tan*sinhf(2.f*__y)/(cosf(2.f*__x)+coshf(2.f*__y));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __tan*__z;\n" : "");
   }
 }

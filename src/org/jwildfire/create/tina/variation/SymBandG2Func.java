@@ -130,10 +130,10 @@ public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm
 	    		+"Mathc Tx[2]={	{ 1.0 , 0.0 , 0.0  , 0. , 1.0 , 0.0 }, "
 	    		+"		        { 1.0 , 0.0 , 0.0  , 0. ,-1.0 , 0.0 }, "
 	    		+"		      };"
-	    		+"	Tx[0].c =  - varpar->sym_bg2_stepx  /2.- 1.0;"
-	    		+"	Tx[0].f =  - varpar->sym_bg2_stepy  /2.;"
-	    		+"	Tx[1].c =    varpar->sym_bg2_stepx  /2.;"
-	    		+"	Tx[1].f =    varpar->sym_bg2_stepy  /2. + 1.0;"
+	    		+"	Tx[0].c =  - __sym_bg2_stepx  /2.- 1.0;"
+	    		+"	Tx[0].f =  - __sym_bg2_stepy  /2.;"
+	    		+"	Tx[1].c =    __sym_bg2_stepx  /2.;"
+	    		+"	Tx[1].f =    __sym_bg2_stepy  /2. + 1.0;"
 	    		+"    "
 	    		+"	x= __x;"
 	    		+"  y =__y;"
@@ -141,8 +141,8 @@ public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm
 	    		+"  float2 z =make_float2(x,y);"
 	    		+"  int index=(int) sizeof(Tx)/sizeof(Tx[0])*RANDFLOAT();"
 	    		+"  float2 f = transfhcf(z,Tx[index].a,Tx[index].b,Tx[index].c,Tx[index].d,Tx[index].e,Tx[index].f);"
-	    		+"  __px += varpar->sym_bg2 * (f.x);"
-	    		+"  __py += varpar->sym_bg2 * (f.y);"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->sym_bg2 * __z;\n" : "");
+	    		+"  __px += __sym_bg2 * (f.x);"
+	    		+"  __py += __sym_bg2 * (f.y);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __sym_bg2 * __z;\n" : "");
 	  }
 }

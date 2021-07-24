@@ -74,8 +74,8 @@ public class Waves2_3DFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "    float avgxy = (__x + __y) / 2.0f;\n"
-        + "    __px += varpar->waves2_3D * (__x + varpar->waves2_3D_scale * sinf(__y * varpar->waves2_3D_freq));\n"
-        + "    __py += varpar->waves2_3D * (__y + varpar->waves2_3D_scale * sinf(__x * varpar->waves2_3D_freq));\n"
-        + "    __pz += varpar->waves2_3D * (__z + varpar->waves2_3D_scale * sinf(avgxy * varpar->waves2_3D_freq));";
+        + "    __px += __waves2_3D * (__x + __waves2_3D_scale * sinf(__y * __waves2_3D_freq));\n"
+        + "    __py += __waves2_3D * (__y + __waves2_3D_scale * sinf(__x * __waves2_3D_freq));\n"
+        + "    __pz += __waves2_3D * (__z + __waves2_3D_scale * sinf(avgxy * __waves2_3D_freq));";
   }
 }

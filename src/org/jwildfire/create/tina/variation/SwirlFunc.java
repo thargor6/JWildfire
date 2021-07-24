@@ -52,8 +52,8 @@ public class SwirlFunc extends SimpleVariationFunc implements SupportsGPU {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
     return "float c1,s1;\n"
         + "sincosf(__r2, &s1, &c1);\n"
-        + "__px += varpar->swirl*(__x*s1-__y*c1);\n"
-        + "__py += varpar->swirl*(__x*c1+__y*s1);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->swirl*__z;\n" : "");
+        + "__px += __swirl*(__x*s1-__y*c1);\n"
+        + "__py += __swirl*(__x*c1+__y*s1);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __swirl*__z;\n" : "");
   }
 }

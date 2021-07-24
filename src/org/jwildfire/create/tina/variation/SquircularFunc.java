@@ -61,13 +61,13 @@ public class SquircularFunc extends SimpleVariationFunc implements SupportsGPU {
         + "    float rs = sqrtf(r);\n"
         + "    float xs = u > 0 ? 1.0 : -1.0;\n"
         + "\n"
-        + "    r = sqrtf(varpar->squircular * varpar->squircular * r - 4 * u * u * v * v);\n"
-        + "    r = sqrtf(1 + u * u / (v * v) - rs / (varpar->squircular * v * v) * r);\n"
+        + "    r = sqrtf(__squircular * __squircular * r - 4 * u * u * v * v);\n"
+        + "    r = sqrtf(1 + u * u / (v * v) - rs / (__squircular * v * v) * r);\n"
         + "    r = r / sqrtf(2);\n"
         + "\n"
         + "    __px += xs * r;\n"
         + "    __py += v / u * r;\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->squircular * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "      __pz += __squircular * __z;\n" : "");
   }
 }

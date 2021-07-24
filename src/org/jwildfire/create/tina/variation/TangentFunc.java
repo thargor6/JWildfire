@@ -57,8 +57,8 @@ public class TangentFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->tangent*(sinf(__x)/cosf(__y));\n"
-        + "__py += varpar->tangent*(tanf(__y));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->tangent*__z;\n" : "");
+    return "__px += __tangent*(sinf(__x)/cosf(__y));\n"
+        + "__py += __tangent*(tanf(__y));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __tangent*__z;\n" : "");
   }
 }

@@ -104,14 +104,14 @@ public class Waves23Func extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "float x0 = __x;\n"
         + "float y0 = __y;\n"
-        + "float mx = y0 * varpar->waves23_freqx / (PI + PI);\n"
+        + "float mx = y0 * __waves23_freqx / (PI + PI);\n"
         + "float fx = mx - floorf(mx);\n"
         + "if (fx > 0.5) fx = 0.5 - fx;\n"
-        + "float my = x0 * varpar->waves23_freqy / (PI + PI);\n"
+        + "float my = x0 * __waves23_freqy / (PI + PI);\n"
         + "float fy = my - floorf(my);\n"
         + "if (fy > 0.5) fy = 0.5 - fy;\n"
-        + "__px += varpar->waves23 * (x0 + fx * varpar->waves23_scalex);\n"
-        + "__py += varpar->waves23 * (y0 + fy * varpar->waves23_scaley);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->waves23 * __z;\n" : "");
+        + "__px += __waves23 * (x0 + fx * __waves23_scalex);\n"
+        + "__py += __waves23 * (y0 + fy * __waves23_scaley);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __waves23 * __z;\n" : "");
   }
 }

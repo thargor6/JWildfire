@@ -118,28 +118,28 @@ public class WaffleFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float vcosr = varpar->waffle * cosf(varpar->waffle_rotation);\n"
-        + " float vsinr = varpar->waffle * sinf(varpar->waffle_rotation);\n"
+    return "float vcosr = __waffle * cosf(__waffle_rotation);\n"
+        + " float vsinr = __waffle * sinf(__waffle_rotation);\n"
         + "float a = 0.0, r = 0.0;\n"
         + "    switch ((int)(RANDFLOAT()*5)) {\n"
         + "      case 0:\n"
-        + "        a = ((int)(RANDFLOAT()*varpar->waffle_slices) + RANDFLOAT() * varpar->waffle_xthickness) / varpar->waffle_slices;\n"
-        + "        r = ((int)(RANDFLOAT()*varpar->waffle_slices) + RANDFLOAT() * varpar->waffle_ythickness) / varpar->waffle_slices;\n"
+        + "        a = ((int)(RANDFLOAT()*__waffle_slices) + RANDFLOAT() * __waffle_xthickness) / __waffle_slices;\n"
+        + "        r = ((int)(RANDFLOAT()*__waffle_slices) + RANDFLOAT() * __waffle_ythickness) / __waffle_slices;\n"
         + "        break;\n"
         + "      case 1:\n"
-        + "        a = ((int)(RANDFLOAT()*varpar->waffle_slices) + RANDFLOAT()) / varpar->waffle_slices;\n"
-        + "        r = ((int)(RANDFLOAT()*varpar->waffle_slices) + varpar->waffle_ythickness) / varpar->waffle_slices;\n"
+        + "        a = ((int)(RANDFLOAT()*__waffle_slices) + RANDFLOAT()) / __waffle_slices;\n"
+        + "        r = ((int)(RANDFLOAT()*__waffle_slices) + __waffle_ythickness) / __waffle_slices;\n"
         + "        break;\n"
         + "      case 2:\n"
-        + "        a = ((int)(RANDFLOAT()*varpar->waffle_slices) + varpar->waffle_xthickness) / varpar->waffle_slices;\n"
-        + "        r = ((int)(RANDFLOAT()*varpar->waffle_slices) + RANDFLOAT()) / varpar->waffle_slices;\n"
+        + "        a = ((int)(RANDFLOAT()*__waffle_slices) + __waffle_xthickness) / __waffle_slices;\n"
+        + "        r = ((int)(RANDFLOAT()*__waffle_slices) + RANDFLOAT()) / __waffle_slices;\n"
         + "        break;\n"
         + "      case 3:\n"
         + "        a = RANDFLOAT();\n"
-        + "        r = ((int)(RANDFLOAT()*varpar->waffle_slices) + varpar->waffle_ythickness + RANDFLOAT() * (1.f - varpar->waffle_ythickness)) / varpar->waffle_slices;\n"
+        + "        r = ((int)(RANDFLOAT()*__waffle_slices) + __waffle_ythickness + RANDFLOAT() * (1.f - __waffle_ythickness)) / __waffle_slices;\n"
         + "        break;\n"
         + "      case 4:\n"
-        + "        a = ((int)(RANDFLOAT()*varpar->waffle_slices) + varpar->waffle_xthickness + RANDFLOAT() * (1.f - varpar->waffle_xthickness)) / varpar->waffle_slices;\n"
+        + "        a = ((int)(RANDFLOAT()*__waffle_slices) + __waffle_xthickness + RANDFLOAT() * (1.f - __waffle_xthickness)) / __waffle_slices;\n"
         + "        r = RANDFLOAT();\n"
         + "        break;\n"
         + "      default:\n"
@@ -147,6 +147,6 @@ public class WaffleFunc extends VariationFunc implements SupportsGPU {
         + "    }\n"
         + "    __px += (vcosr * a + vsinr * r);\n"
         + "    __py += (-vsinr * a + vcosr * r);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->waffle*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __waffle*__z;\n" : "");
   }
 }

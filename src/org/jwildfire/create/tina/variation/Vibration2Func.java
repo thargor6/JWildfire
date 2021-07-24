@@ -223,11 +223,11 @@ public class Vibration2Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float d_along_dir = __x * cosf(varpar->vibration2_dir) + __y * sinf(varpar->vibration2_dir);\n"
-        + "float dirL = varpar->vibration2_dir + vibration2_modulate(varpar->vibration2_dm, varpar->vibration2_dmfreq, d_along_dir);\n"
-        + "float angleL = varpar->vibration2_angle + vibration2_modulate(varpar->vibration2_tm, varpar->vibration2_tmfreq, d_along_dir);\n"
-        + "float freqL = vibration2_modulate(varpar->vibration2_fm, varpar->vibration2_fmfreq, d_along_dir) / varpar->vibration2_freq;\n"
-        + "float ampL = varpar->vibration2_amp + varpar->vibration2_amp * vibration2_modulate(varpar->vibration2_am, varpar->vibration2_amfreq, d_along_dir);\n"
+    return "float d_along_dir = __x * cosf(__vibration2_dir) + __y * sinf(__vibration2_dir);\n"
+        + "float dirL = __vibration2_dir + vibration2_modulate(__vibration2_dm, __vibration2_dmfreq, d_along_dir);\n"
+        + "float angleL = __vibration2_angle + vibration2_modulate(__vibration2_tm, __vibration2_tmfreq, d_along_dir);\n"
+        + "float freqL = vibration2_modulate(__vibration2_fm, __vibration2_fmfreq, d_along_dir) / __vibration2_freq;\n"
+        + "float ampL = __vibration2_amp + __vibration2_amp * vibration2_modulate(__vibration2_am, __vibration2_amfreq, d_along_dir);\n"
 
         + "\n"
         + "float total_angle = angleL + dirL;\n"
@@ -235,8 +235,8 @@ public class Vibration2Func extends VariationFunc implements SupportsGPU {
         + "float sin_dir = sinf(dirL);\n"
         + "float cos_tot = cosf(total_angle);\n"
         + "float sin_tot = sinf(total_angle);\n"
-        + "float scaled_freq = varpar->vibration2_freq * 2.0f*PI;\n"
-        + "float phase_shift = 2.0f*PI * varpar->vibration2_phase / varpar->vibration2_freq;\n"
+        + "float scaled_freq = __vibration2_freq * 2.0f*PI;\n"
+        + "float phase_shift = 2.0f*PI * __vibration2_phase / __vibration2_freq;\n"
         + "d_along_dir = __x * cos_dir + __y * sin_dir;\n"
 
 
@@ -246,11 +246,11 @@ public class Vibration2Func extends VariationFunc implements SupportsGPU {
         + "float y = __y + local_amp * sin_tot;\n"
         + "\n"
 
-        + "d_along_dir = __x * cosf(varpar->vibration2_dir2) + __y * sinf(varpar->vibration2_dir2);\n"
-        + "dirL = varpar->vibration2_dir2 + vibration2_modulate(varpar->vibration2_d2m, varpar->vibration2_d2mfreq, d_along_dir);\n"
-        + "angleL = varpar->vibration2_angle2 + vibration2_modulate(varpar->vibration2_t2m, varpar->vibration2_t2mfreq, d_along_dir);\n"
-        + "freqL = vibration2_modulate(varpar->vibration2_f2m, varpar->vibration2_f2mfreq, d_along_dir) / varpar->vibration2_freq2;\n"
-        + "ampL = varpar->vibration2_amp2 + varpar->vibration2_amp2 * vibration2_modulate(varpar->vibration2_a2m, varpar->vibration2_a2mfreq, d_along_dir);\n"
+        + "d_along_dir = __x * cosf(__vibration2_dir2) + __y * sinf(__vibration2_dir2);\n"
+        + "dirL = __vibration2_dir2 + vibration2_modulate(__vibration2_d2m, __vibration2_d2mfreq, d_along_dir);\n"
+        + "angleL = __vibration2_angle2 + vibration2_modulate(__vibration2_t2m, __vibration2_t2mfreq, d_along_dir);\n"
+        + "freqL = vibration2_modulate(__vibration2_f2m, __vibration2_f2mfreq, d_along_dir) / __vibration2_freq2;\n"
+        + "ampL = __vibration2_amp2 + __vibration2_amp2 * vibration2_modulate(__vibration2_a2m, __vibration2_a2mfreq, d_along_dir);\n"
 
         + "\n"
         + "total_angle = angleL + dirL;\n"
@@ -258,17 +258,17 @@ public class Vibration2Func extends VariationFunc implements SupportsGPU {
         + "sin_dir = sinf(dirL);\n"
         + "cos_tot = cosf(total_angle);\n"
         + "sin_tot = sinf(total_angle);\n"
-        + "scaled_freq = varpar->vibration2_freq2 * 2.0f*PI;\n"
-        + "phase_shift = 2.0f*PI * varpar->vibration2_phase2 / varpar->vibration2_freq2;\n"
+        + "scaled_freq = __vibration2_freq2 * 2.0f*PI;\n"
+        + "phase_shift = 2.0f*PI * __vibration2_phase2 / __vibration2_freq2;\n"
         + "d_along_dir = __x * cos_dir + __y * sin_dir;\n"
         + "local_amp = ampL * sinf((d_along_dir * scaled_freq) + freqL + phase_shift);\n"
         + "\n"
         + "x += local_amp * cos_tot;\n"
         + "y += local_amp * sin_tot;\n"
         + "\n"
-        + "__px += varpar->vibration2 * x;\n"
-        + "__py += varpar->vibration2 * y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->vibration2 * __z;\n": "");
+        + "__px += __vibration2 * x;\n"
+        + "__py += __vibration2 * y;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __vibration2 * __z;\n": "");
   }
 
   @Override

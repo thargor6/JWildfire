@@ -57,13 +57,13 @@ public class UnpolarFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float vvar = varpar->unpolar / PI;\n"
+    return "float vvar = __unpolar / PI;\n"
         + "float vvar_2 = vvar * 0.5;\n"
         + "float r = expf(__y);\n"
         + "    float s = sinf(__x);\n"
         + "    float c = cosf(__x);\n"
         + "    __py += vvar_2 * r * c;\n"
         + "    __px += vvar_2 * r * s;\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->unpolar * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "      __pz += __unpolar * __z;\n" : "");
   }
 }

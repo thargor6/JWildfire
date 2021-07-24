@@ -61,8 +61,8 @@ public class TanhFunc extends SimpleVariationFunc implements SupportsGPU {
     return "float d = (cosf(2.f*__y)+coshf(2.f*__x));"
         + "if(d==0.f) return;"
         +  "float tanhden = 1.f/d;\n"
-        + "__px += varpar->tanh*tanhden*sinhf(2.f*__x);\n"
-        + "__py += varpar->tanh*tanhden*sinf(2.f*__y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->tanh*__z;\n" : "");
+        + "__px += __tanh*tanhden*sinhf(2.f*__x);\n"
+        + "__py += __tanh*tanhden*sinf(2.f*__y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __tanh*__z;\n" : "");
   }
 }

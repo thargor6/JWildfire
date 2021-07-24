@@ -99,10 +99,10 @@ public class Waves2RadialFunc extends VariationFunc implements SupportsGPU {
     return "float x0 = __x;\n"
         + "float y0 = __y;\n"
         + "float dist = sqrtf(x0*x0 + y0*y0);\n"
-        + "float factor = (dist < varpar->waves2_radial_w2r_distance) ? (dist - varpar->waves2_radial_w2r_null) / (varpar->waves2_radial_w2r_distance - varpar->waves2_radial_w2r_null) : 1.0f;\n"
-        + "factor = (dist < varpar->waves2_radial_w2r_null) ? 0.0 : factor;\n"
-        + "__px += varpar->waves2_radial * (x0 + factor * sinf(y0 * varpar->waves2_radial_w2r_freqx) * varpar->waves2_radial_w2r_scalex);\n"
-        + "__py += varpar->waves2_radial * (y0 + factor * sinf(x0 * varpar->waves2_radial_w2r_freqy) * varpar->waves2_radial_w2r_scaley);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->waves2_radial * __z;\n" : "");
+        + "float factor = (dist < __waves2_radial_w2r_distance) ? (dist - __waves2_radial_w2r_null) / (__waves2_radial_w2r_distance - __waves2_radial_w2r_null) : 1.0f;\n"
+        + "factor = (dist < __waves2_radial_w2r_null) ? 0.0 : factor;\n"
+        + "__px += __waves2_radial * (x0 + factor * sinf(y0 * __waves2_radial_w2r_freqx) * __waves2_radial_w2r_scalex);\n"
+        + "__py += __waves2_radial * (y0 + factor * sinf(x0 * __waves2_radial_w2r_freqy) * __waves2_radial_w2r_scaley);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __waves2_radial * __z;\n" : "");
   }
 }

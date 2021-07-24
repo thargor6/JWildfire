@@ -50,12 +50,12 @@ public class TwoFaceFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float v = varpar->twoface;\n"
+    return "float v = __twoface;\n"
         + "if (__x > 0.f)\n"
         + "    v /= __r2;\n"
         + "\n"
         + "__px += v*__x;\n"
         + "__py += v*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->twoface*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __twoface*__z;\n" : "");
   }
 }

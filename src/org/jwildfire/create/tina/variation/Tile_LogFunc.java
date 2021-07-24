@@ -75,12 +75,12 @@ public class Tile_LogFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float x = -varpar->tile_log_spread;\n"
+    return "    float x = -__tile_log_spread;\n"
         + "    if (RANDFLOAT() < 0.5)\n"
-        + "      x = varpar->tile_log_spread;\n"
+        + "      x = __tile_log_spread;\n"
         + "\n"
-        + "    __px += varpar->tile_log * (__x + roundf(x * logf(RANDFLOAT())));\n"
-        + "    __py += varpar->tile_log * __y;\n"
-        + "    __pz += varpar->tile_log * __z;\n";
+        + "    __px += __tile_log * (__x + roundf(x * logf(RANDFLOAT())));\n"
+        + "    __py += __tile_log * __y;\n"
+        + "    __pz += __tile_log * __z;\n";
   }
 }

@@ -90,8 +90,8 @@ public class TileHlpFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float width2 = varpar->tile_hlp_width * varpar->tile_hlp;\n"
-        + "    float x = __x / varpar->tile_hlp_width;\n"
+    return "    float width2 = __tile_hlp_width * __tile_hlp;\n"
+        + "    float x = __x / __tile_hlp_width;\n"
         + "    float aux = 0;\n"
         + "    if (x > 0.0) {\n"
         + "      aux = x - (int) x;\n"
@@ -108,9 +108,9 @@ public class TileHlpFunc extends VariationFunc implements SupportsGPU {
         + "      }\n"
         + "    }\n"
         + "\n"
-        + "    __px += __x * varpar->tile_hlp + aux2;\n"
-        + "    __py += varpar->tile_hlp * __y;\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->tile_hlp * __z;\n" : "");
+        + "    __px += __x * __tile_hlp + aux2;\n"
+        + "    __py += __tile_hlp * __y;\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += __tile_hlp * __z;\n" : "");
   }
 }
 

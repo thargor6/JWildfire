@@ -78,11 +78,11 @@ public class SquirrelFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float u = (varpar->squirrel_a ADD_EPSILON)*__x*__x + (varpar->squirrel_b ADD_EPSILON)*__y*__y;\n"
+    return "float u = (__squirrel_a ADD_EPSILON)*__x*__x + (__squirrel_b ADD_EPSILON)*__y*__y;\n"
         + "\n"
-        + "__px = cosf(sqrtf(u)) * tan(__x) * varpar->squirrel;\n"
-        + "__py = sinf(sqrtf(u)) * tan(__y) * varpar->squirrel;\n"
+        + "__px = cosf(sqrtf(u)) * tan(__x) * __squirrel;\n"
+        + "__py = sinf(sqrtf(u)) * tan(__y) * __squirrel;\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->squirrel*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __squirrel*__z;\n" : "");
   }
 }

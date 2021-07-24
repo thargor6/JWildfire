@@ -100,10 +100,10 @@ public class XHeartBlurWFFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float rat, cosa, sina;\n"
-        + "float ang = 0.25f*PI + (0.5f * 0.25f*PI * varpar->xheart_blur_wf_angle);\n"
+        + "float ang = 0.25f*PI + (0.5f * 0.25f*PI * __xheart_blur_wf_angle);\n"
         + "sina = sinf(ang);\n"
         + "cosa = cosf(ang);\n"
-        + "rat = 6.f + 2.f * varpar->xheart_blur_wf_ratio;\n"
+        + "rat = 6.f + 2.f * __xheart_blur_wf_ratio;\n"
         + "float dx = 2.0f - RANDFLOAT() * 4.0f;\n"
         + "float dy = 2.0f - RANDFLOAT() * 4.0f;\n"
         + "float r2_4 = dx * dx + dy * dy + 4.f;\n"
@@ -113,13 +113,13 @@ public class XHeartBlurWFFunc extends VariationFunc implements SupportsGPU {
         + "float x = cosa * (bx * dx) - sina * (by * dy);\n"
         + "float y = sina * (bx * dx) + cosa * (by * dy);\n"
         + "if (x > 0) {\n"
-        + "  __px += varpar->xheart_blur_wf * x;\n"
-        + "  __py += varpar->xheart_blur_wf * y;\n"
+        + "  __px += __xheart_blur_wf * x;\n"
+        + "  __py += __xheart_blur_wf * y;\n"
         + "} else {\n"
-        + "  __px += varpar->xheart_blur_wf * x;\n"
-        + "  __py += -varpar->xheart_blur_wf * y;\n"
+        + "  __px += __xheart_blur_wf * x;\n"
+        + "  __py += -__xheart_blur_wf * y;\n"
         + "}\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->xheart_blur_wf * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __xheart_blur_wf * __z;\n" : "");
   }
 }
 

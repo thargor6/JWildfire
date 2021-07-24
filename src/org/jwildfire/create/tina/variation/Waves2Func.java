@@ -83,8 +83,8 @@ public class Waves2Func extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->waves2*(__x+varpar->waves2_scalex*sinf(__y*varpar->waves2_freqx));\n"
-        + "__py += varpar->waves2*(__y+varpar->waves2_scaley*sinf(__x*varpar->waves2_freqy));\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->waves2*__z;\n" : "");
+    return "__px += __waves2*(__x+__waves2_scalex*sinf(__y*__waves2_freqx));\n"
+        + "__py += __waves2*(__y+__waves2_scaley*sinf(__x*__waves2_freqy));\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __waves2*__z;\n" : "");
   }
 }

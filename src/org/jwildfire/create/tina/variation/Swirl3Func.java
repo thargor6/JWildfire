@@ -74,11 +74,11 @@ public class Swirl3Func extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "float rad = __r;\n"
-        + "float ang = __theta + logf(rad) * varpar->swirl3_shift;\n"
+        + "float ang = __theta + logf(rad) * __swirl3_shift;\n"
         + "float s = sinf(ang);\n"
         + "float c = cosf(ang);\n"
-        + "    __px += varpar->swirl3 * rad * c;\n"
-        + "    __py += varpar->swirl3 * rad * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->swirl3 * __z;\n": "");
+        + "    __px += __swirl3 * rad * c;\n"
+        + "    __py += __swirl3 * rad * s;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __swirl3 * __z;\n": "");
   }
 }

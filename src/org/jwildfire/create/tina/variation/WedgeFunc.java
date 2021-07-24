@@ -98,12 +98,12 @@ public class WedgeFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float a = __theta+varpar->wedge_swirl*__r;\n"
-        + "float c = floorf((varpar->wedge_count*a+PI)*0.5f/PI);\n"
-        + "float comp_fac = 1.f-varpar->wedge_angle*varpar->wedge_count*0.5f/PI;\n"
-        + "a = a*comp_fac+c*varpar->wedge_angle;\n"
-        + "__px += varpar->wedge*(__r+varpar->wedge_hole)*cosf(a);\n"
-        + "__py += varpar->wedge*(__r+varpar->wedge_hole)*sinf(a);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->wedge*__z;\n" : "");
+    return "float a = __theta+__wedge_swirl*__r;\n"
+        + "float c = floorf((__wedge_count*a+PI)*0.5f/PI);\n"
+        + "float comp_fac = 1.f-__wedge_angle*__wedge_count*0.5f/PI;\n"
+        + "a = a*comp_fac+c*__wedge_angle;\n"
+        + "__px += __wedge*(__r+__wedge_hole)*cosf(a);\n"
+        + "__py += __wedge*(__r+__wedge_hole)*sinf(a);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __wedge*__z;\n" : "");
   }
 }
