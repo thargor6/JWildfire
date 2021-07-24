@@ -44,8 +44,8 @@ public class BubbleFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "__px += varpar->bubble*(4.f/(__r2+4.f))*__x;\n"
-        + "__py += varpar->bubble*(4.f/(__r2+4.f))*__y;\n"
-        + "__pz += varpar->bubble*(8.f/(__r2+4.f) - 1.f);";
+    return "__px += __bubble*(4.f/(__r2+4.f))*__x;\n"
+        + "__py += __bubble*(4.f/(__r2+4.f))*__y;\n"
+        + "__pz += __bubble*(8.f/(__r2+4.f) - 1.f);";
   }
 }

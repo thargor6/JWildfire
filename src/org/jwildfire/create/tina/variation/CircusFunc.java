@@ -87,19 +87,19 @@ public class CircusFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float scale_1 = 1.0f / varpar->circus_scale;\n"
+    return "float scale_1 = 1.0f / __circus_scale;\n"
         + "    float r = __r;\n"
         + "    float a = __theta;\n"
         + "    float s = sinf(a);\n"
         + "    float c = cosf(a);\n"
         + "\n"
         + "    if (r <= 1.0f)\n"
-        + "      r *= varpar->circus_scale;\n"
+        + "      r *= __circus_scale;\n"
         + "    else\n"
         + "      r *= scale_1;\n"
         + "\n"
-        + "    __px += varpar->circus * r * c;\n"
-        + "    __py += varpar->circus * r * s;\n"
-        + (context.isPreserveZCoordinate() ? "__py += varpar->circus * __z;\n" : "");
+        + "    __px += __circus * r * c;\n"
+        + "    __py += __circus * r * s;\n"
+        + (context.isPreserveZCoordinate() ? "__py += __circus * __z;\n" : "");
   }
 }

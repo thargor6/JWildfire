@@ -83,13 +83,13 @@ public class CloverLeafWFFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "float a = __phi;\n"
         + "float r = (sinf(2.f * a) + 0.25f * sinf(6.f * a));\n"
-        + "if (lroundf(varpar->cloverleaf_wf_filled) == 1) {\n"
+        + "if (lroundf(__cloverleaf_wf_filled) == 1) {\n"
         + "      r *= RANDFLOAT();\n"
         + "}\n"
         + "float nx = sinf(a) * r;\n"
         + "float ny = cosf(a) * r;\n"
-        + "__px += varpar->cloverleaf_wf * nx;\n"
-        + "__py += varpar->cloverleaf_wf * ny;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->cloverleaf_wf * __z;\n" : "");
+        + "__px += __cloverleaf_wf * nx;\n"
+        + "__py += __cloverleaf_wf * ny;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __cloverleaf_wf * __z;\n" : "");
   }
 }

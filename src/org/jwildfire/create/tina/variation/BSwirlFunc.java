@@ -101,7 +101,7 @@ public class BSwirlFunc extends VariationFunc implements SupportsGPU {
         + "    tau = 0.5 * (logf(sqrf(__x + 1.0) + __y*__y) - logf(sqrf(__x - 1.0) + __y*__y));\n"
         + "    sigma = PI - atan2f(__y, __x + 1.0) - atan2f(__y, 1.0 - __x);\n"
         + "\n"
-        + "    sigma = sigma + tau * varpar->bSwirl_out + varpar->bSwirl_in / tau;\n"
+        + "    sigma = sigma + tau * __bSwirl_out + __bSwirl_in / tau;\n"
         + "\n"
         + "    sinht = sinhf(tau);\n"
         + "    cosht = coshf(tau);\n"
@@ -109,9 +109,9 @@ public class BSwirlFunc extends VariationFunc implements SupportsGPU {
         + "    coss = cosf(sigma);\n"
         + "    temp = cosht - coss;\n"
         + "    if (temp != 0) {\n"
-        + "      __px += varpar->bSwirl * sinht / temp;\n"
-        + "      __py += varpar->bSwirl * sins / temp;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->bSwirl * __z;\n" : "")
+        + "      __px += __bSwirl * sinht / temp;\n"
+        + "      __py += __bSwirl * sins / temp;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __bSwirl * __z;\n" : "")
         + "    }\n";
   }
 }

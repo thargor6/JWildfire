@@ -52,10 +52,10 @@ public class ButterflyFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float wx = varpar->butterfly*(4.f*rsqrtf(3.f*PI));\n"
+    return "float wx = __butterfly*(4.f*rsqrtf(3.f*PI));\n"
         + "float r0 = wx*sqrtf(fabsf(__y*__x)/(__x*__x+4.f*__y*__y ADD_EPSILON));\n"
         + "__px += r0*__x;\n"
         + "__py += r0*2.f*__y;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->butterfly*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __butterfly*__z;\n" : "");
   }
 }

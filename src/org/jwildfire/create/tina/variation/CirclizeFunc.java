@@ -98,7 +98,7 @@ public class CirclizeFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float weight_4_pi = varpar->circlize * 1.27323954f;\n"
+    return "float weight_4_pi = __circlize * 1.27323954f;\n"
         + "float absx = fabsf(__x);\n"
         + "float absy = fabsf(__y);\n"
         + "float side, perimeter, cosa;\n"
@@ -111,12 +111,12 @@ public class CirclizeFunc extends VariationFunc implements SupportsGPU {
         + "    perimeter = (__y >= absx ? 3.f * absy - __x : 7.f * absy + __x);\n"
         + "    side = absy;\n"
         + "}\n"
-        + "float r = weight_4_pi * side + varpar->circlize_hole;\n"
+        + "float r = weight_4_pi * side + __circlize_hole;\n"
         + "float sina;\n"
         + "sincosf(M_PI_4_F * perimeter / side - M_PI_4_F, &sina, &cosa);\n"
         + "\n"
         + "__px += r * cosa;\n"
         + "__py += r * sina;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->circlize*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __circlize*__z;\n" : "");
   }
 }

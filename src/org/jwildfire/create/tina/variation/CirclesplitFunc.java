@@ -98,19 +98,19 @@ public class CirclesplitFunc extends VariationFunc implements SupportsGPU {
         + "    float x1;\n"
         + "    float y1;\n"
         + "\n"
-        + "    if (r < varpar->circlesplit_cs_radius - varpar->circlesplit_cs_split) {\n"
+        + "    if (r < __circlesplit_cs_radius - __circlesplit_cs_split) {\n"
         + "      x1 = x0;\n"
         + "      y1 = y0;\n"
         + "    } else {\n"
         + "      float a = atan2f(y0, x0);\n"
-        + "      float len = r + varpar->circlesplit_cs_split;\n"
+        + "      float len = r + __circlesplit_cs_split;\n"
         + "      x1 = cosf(a) * len;\n"
         + "      y1 = sinf(a) * len;\n"
         + "    }\n"
         + "\n"
-        + "    __px += varpar->circlesplit * x1;\n"
-        + "    __py += varpar->circlesplit * y1;\n"
-        + (context.isPreserveZCoordinate()? "      __pz += varpar->circlesplit * __z;\n" : "");
+        + "    __px += __circlesplit * x1;\n"
+        + "    __py += __circlesplit * y1;\n"
+        + (context.isPreserveZCoordinate()? "      __pz += __circlesplit * __z;\n" : "");
   }
 }
 

@@ -82,13 +82,13 @@ public class BSplitFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    if (__x + varpar->bsplit_x == 0 || __x + varpar->bsplit_x == PI) {\n"
+    return "    if (__x + __bsplit_x == 0 || __x + __bsplit_x == PI) {\n"
         + "      __doHide = true;\n"
         + "    } else {\n"
         + "      __doHide = false;\n"
-        + "      __px += varpar->bsplit / tan(__x + varpar->bsplit_x) * cosf(__y + varpar->bsplit_y);\n"
-        + "      __py += varpar->bsplit / sinf(__x + varpar->bsplit_x) * (-1 * __y + varpar->bsplit_y);\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->bsplit * __z;\n" : "")
+        + "      __px += __bsplit / tan(__x + __bsplit_x) * cosf(__y + __bsplit_y);\n"
+        + "      __py += __bsplit / sinf(__x + __bsplit_x) * (-1 * __y + __bsplit_y);\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __bsplit * __z;\n" : "")
             + "    }";
   }
 }

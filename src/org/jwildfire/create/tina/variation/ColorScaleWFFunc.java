@@ -95,13 +95,13 @@ public class ColorScaleWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "__px += varpar->colorscale_wf * varpar->colorscale_wf_scale_x * __x;\n"
-            + "__py += varpar->colorscale_wf * varpar->colorscale_wf_scale_y * __y;\n"
-            + "float dz = __pal * varpar->colorscale_wf_scale_z * varpar->colorscale_wf + varpar->colorscale_wf_offset_z;\n"
-            + "if (lroundf(varpar->colorscale_wf_reset_z) > 0) {\n"
+    return "__px += __colorscale_wf * __colorscale_wf_scale_x * __x;\n"
+            + "__py += __colorscale_wf * __colorscale_wf_scale_y * __y;\n"
+            + "float dz = __pal * __colorscale_wf_scale_z * __colorscale_wf + __colorscale_wf_offset_z;\n"
+            + "if (lroundf(__colorscale_wf_reset_z) > 0) {\n"
             + "  __pz = dz;\n"
             + "} else {\n"
-            + "  if (lroundf(varpar->colorscale_wf_sides) > 0) {\n"
+            + "  if (lroundf(__colorscale_wf_sides) > 0) {\n"
             + "    __pz += dz * RANDFLOAT();\n"
             + "  } else {\n"
             + "     __pz += dz;\n"

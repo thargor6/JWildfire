@@ -84,13 +84,13 @@ public class Bubble2Func extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "    float T, r;\n"
         + "    T = ((__x*__x + __y*__y + __z*__z) / 4.0 + 1.0);\n"
-        + "    r = varpar->bubble2 / T;\n"
-        + "    __px += __x * r * varpar->bubble2_x;\n"
-        + "    __py += __y * r * varpar->bubble2_y;\n"
+        + "    r = __bubble2 / T;\n"
+        + "    __px += __x * r * __bubble2_x;\n"
+        + "    __py += __y * r * __bubble2_y;\n"
         + "    if (__z >= 0.0)\n"
-        + "      __pz += varpar->bubble2 * (__z + varpar->bubble2_z);\n"
+        + "      __pz += __bubble2 * (__z + __bubble2_z);\n"
         + "    else\n"
-        + "      __pz += varpar->bubble2 * (__z - varpar->bubble2_z);\n"
-        + "    __pz += __z * r * varpar->bubble2_z;\n";
+        + "      __pz += __bubble2 * (__z - __bubble2_z);\n"
+        + "    __pz += __z * r * __bubble2_z;\n";
   }
 }

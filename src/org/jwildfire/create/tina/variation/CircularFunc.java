@@ -82,8 +82,8 @@ public class CircularFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "     float c_a = varpar->circular_angle * PI / 180.f;\n"
-        + "    float aux = (sinf(__x * 12.9898 + __y * 78.233 + varpar->circular_seed) * 43758.5453);\n"
+    return "     float c_a = __circular_angle * PI / 180.f;\n"
+        + "    float aux = (sinf(__x * 12.9898 + __y * 78.233 + __circular_seed) * 43758.5453);\n"
         + "    aux = aux - (int) aux;\n"
         + "    float rnd = (2 * (RANDFLOAT() + aux) - 2.0) * c_a;\n"
         + "    float rad = sqrtf(__x*__x + __y*__y);\n"
@@ -92,8 +92,8 @@ public class CircularFunc extends VariationFunc implements SupportsGPU {
         + "    float bx = cosf(ang + rnd);\n"
         + "\n"
         + "\n"
-        + "    __px += varpar->circular * (bx * rad);\n"
-        + "    __py += varpar->circular * (by * rad);\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->circular * __z;\n" : "");
+        + "    __px += __circular * (bx * rad);\n"
+        + "    __py += __circular * (by * rad);\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += __circular * __z;\n" : "");
   }
 }

@@ -48,13 +48,13 @@ public class BubbleWFFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return "    float r = ((__x * __x + __y * __y) / 4.0 + 1.0);\n"
-        + "    float t = varpar->bubble_wf / r;\n"
+        + "    float t = __bubble_wf / r;\n"
         + "    __px += t * __x;\n"
         + "    __py += t * __y;\n"
         + "    if (RANDFLOAT() < 0.5) {\n"
-        + "      __pz -= varpar->bubble_wf * (2 / r - 1);\n"
+        + "      __pz -= __bubble_wf * (2 / r - 1);\n"
         + "    } else {\n"
-        + "      __pz += varpar->bubble_wf * (2 / r - 1);\n"
+        + "      __pz += __bubble_wf * (2 / r - 1);\n"
         + "    }\n";
   }
 }

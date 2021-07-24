@@ -111,12 +111,12 @@ public class CollideoscopeFunc extends VariationFunc implements SupportsGPU {
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "float _kn_pi = (float) varpar->collideoscope_num * M_1_PI_F;\n"
-        + "float _pi_kn = M_PI_F / (float) varpar->collideoscope_num;\n"
-        + "float _ka    = M_PI_F * varpar->collideoscope_a;\n"
-        + "float _ka_kn = _ka / (float) varpar->collideoscope_num;\n"
+    return "float _kn_pi = (float) __collideoscope_num * M_1_PI_F;\n"
+        + "float _pi_kn = M_PI_F / (float) __collideoscope_num;\n"
+        + "float _ka    = M_PI_F * __collideoscope_a;\n"
+        + "float _ka_kn = _ka / (float) __collideoscope_num;\n"
         + "float a = atan2f(__y, __x);\n"
-        + "float r = varpar->collideoscope * __r;\n"
+        + "float r = __collideoscope * __r;\n"
         + "int alt;\n"
         + "\n"
         + "if (a >= 0.f) {\n"
@@ -139,6 +139,6 @@ public class CollideoscopeFunc extends VariationFunc implements SupportsGPU {
         + "\n"
         + "__px += r * c;\n"
         + "__py += r * s;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->collideoscope*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "__pz += __collideoscope*__z;\n" : "");
   }
 }

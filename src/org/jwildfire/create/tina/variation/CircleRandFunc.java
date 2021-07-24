@@ -113,28 +113,28 @@ public class CircleRandFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "   int Seed = lroundf(varpar->circleRand_Seed);\n"
+    return "   int Seed = lroundf(__circleRand_Seed);\n"
         + "    float X, Y, U;\n"
         + "    int M, N;\n"
         + "    int maxIter = 100;\n"
         + "    int iter = 0;\n"
         + "    do {\n"
-        + "      X = varpar->circleRand_X * (1.0 - 2.0 * RANDFLOAT());\n"
-        + "      Y = varpar->circleRand_Y * (1.0 - 2.0 * RANDFLOAT());\n"
-        + "      M = (int) floorf(0.5 * X / varpar->circleRand_Sc);\n"
-        + "      N = (int) floorf(0.5 * Y / varpar->circleRand_Sc);\n"
-        + "      X = X - (M * 2 + 1) * varpar->circleRand_Sc;\n"
-        + "      Y = Y - (N * 2 + 1) * varpar->circleRand_Sc;\n"
+        + "      X = __circleRand_X * (1.0 - 2.0 * RANDFLOAT());\n"
+        + "      Y = __circleRand_Y * (1.0 - 2.0 * RANDFLOAT());\n"
+        + "      M = (int) floorf(0.5 * X / __circleRand_Sc);\n"
+        + "      N = (int) floorf(0.5 * Y / __circleRand_Sc);\n"
+        + "      X = X - (M * 2 + 1) * __circleRand_Sc;\n"
+        + "      Y = Y - (N * 2 + 1) * __circleRand_Sc;\n"
         + "      U = sqrtf(X * X + Y * Y);\n"
         + "      if (++iter > maxIter) {\n"
         + "        break;\n"
         + "      }\n"
         + "    }\n"
-        + "    while ((circleRand_DiscretNoise2(M + Seed, N) > varpar->circleRand_Dens) || (U > (0.3 + 0.7 * circleRand_DiscretNoise2(M + 10, N + 3)) * varpar->circleRand_Sc));\n"
+        + "    while ((circleRand_DiscretNoise2(M + Seed, N) > __circleRand_Dens) || (U > (0.3 + 0.7 * circleRand_DiscretNoise2(M + 10, N + 3)) * __circleRand_Sc));\n"
         + "\n"
-        + "    __px += varpar->circleRand * (X + (M * 2 + 1) * varpar->circleRand_Sc);\n"
-        + "    __py += varpar->circleRand * (Y + (N * 2 + 1) * varpar->circleRand_Sc);\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->circleRand * __z;\n" : "");
+        + "    __px += __circleRand * (X + (M * 2 + 1) * __circleRand_Sc);\n"
+        + "    __py += __circleRand * (Y + (N * 2 + 1) * __circleRand_Sc);\n"
+        + (context.isPreserveZCoordinate() ? "      __pz += __circleRand * __z;\n" : "");
   }
 
   @Override

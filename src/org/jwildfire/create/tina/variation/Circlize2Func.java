@@ -124,7 +124,7 @@ public class Circlize2Func extends VariationFunc implements SupportsGPU {
         + "      side = absy;\n"
         + "    }\n"
         + "\n"
-        + "    r = varpar->circlize2 * (side + varpar->circlize2_hole);\n"
+        + "    r = __circlize2 * (side + __circlize2_hole);\n"
         + "    float a = (0.25f*PI) * perimeter / side - (0.25f*PI);\n"
         + "    sina = sinf(a);\n"
         + "    cosa = cosf(a);\n"
@@ -132,6 +132,6 @@ public class Circlize2Func extends VariationFunc implements SupportsGPU {
         + "    __px += r * cosa;\n"
         + "    __py += r * sina;\n"
         + "\n"
-        + (context.isPreserveZCoordinate() ? "      __pz += varpar->circlize2 * __z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "      __pz += __circlize2 * __z;\n" : "");
   }
 }

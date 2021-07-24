@@ -87,10 +87,10 @@ public class CliffordFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "float x = sinf(varpar->clifford_js_a * __y) + varpar->clifford_js_c * cosf(varpar->clifford_js_a * __x);\n"
-        + "float y = sinf(varpar->clifford_js_b * __x) + varpar->clifford_js_d * cosf(varpar->clifford_js_b * __y);\n"
-        + "__px += x * varpar->clifford_js;\n"
-        + "__py += y * varpar->clifford_js;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += varpar->clifford_js * __z;\n" : "");
+    return "float x = sinf(__clifford_js_a * __y) + __clifford_js_c * cosf(__clifford_js_a * __x);\n"
+        + "float y = sinf(__clifford_js_b * __x) + __clifford_js_d * cosf(__clifford_js_b * __y);\n"
+        + "__px += x * __clifford_js;\n"
+        + "__py += y * __clifford_js;\n"
+        + (context.isPreserveZCoordinate() ? "__pz += __clifford_js * __z;\n" : "");
   }
 }

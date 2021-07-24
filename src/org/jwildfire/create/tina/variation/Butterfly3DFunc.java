@@ -49,7 +49,7 @@ public class Butterfly3DFunc extends SimpleVariationFunc implements SupportsGPU 
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    return "    float wx = varpar->butterfly3D * 1.3029400317411197908970256609023;\n"
+    return "    float wx = __butterfly3D * 1.3029400317411197908970256609023;\n"
         + "    float y2 = __y * 2.0;\n"
         + "    float r = wx * sqrtf(fabsf(__y * __x) / (1.e-6f + __x * __x + y2 * y2));\n"
         + "    __px += r * __x;\n"
