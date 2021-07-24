@@ -48,9 +48,9 @@ public class DC_ButerfliesFunc  extends VariationFunc implements SupportsGPU {
 
 	double time=0.0;
     double zoom=1.0;
-    double red=-1.;
-    double green=-1.0;
-    double blue=-1.0;
+    double red=1.;
+    double green=1.0;
+    double blue=1.0;
 	int colorOnly=0;
     int gradient=0;
 
@@ -352,7 +352,7 @@ public class DC_ButerfliesFunc  extends VariationFunc implements SupportsGPU {
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {
 	    return   "float x,y;"
-	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float3 color=make_float3(1.0,1.0,1.0);"
 	    		+"float z=0.5;"
 	    		+"if( varpar->dc_butterflies_ColorOnly ==1)"
 	    		+"{"

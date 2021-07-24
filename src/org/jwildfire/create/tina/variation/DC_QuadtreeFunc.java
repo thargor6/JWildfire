@@ -21,13 +21,13 @@ import js.glsl.vec4;
 
 
 
-public class DC_QuadtreeFunc  extends DC_BaseFunc {
+public class DC_QuadtreeFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
-	 * Variation : dc_sincos
+	 * Variation : dc_quadtree
 	 * Autor: Jesus Sosa
 	 * Date: February 13, 2019
-	 * Reference 
+	 * Reference :  https://www.shadertoy.com/view/ltlyRH
 	 */
 
 
@@ -40,7 +40,7 @@ public class DC_QuadtreeFunc  extends DC_BaseFunc {
 	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_WIDTH = "width";
-	private static final String PARAM_LEVELS = "Leves";
+	private static final String PARAM_LEVELS = "levels";
 
 
 
@@ -157,8 +157,109 @@ public double rnd(double p)
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_quadtree_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y);"
+	    		+"color=dc_quadtree_getRGBColor(uv,varpar->dc_quadtree_time,varpar->dc_quadtree_zoom,varpar->dc_quadtree_levels, varpar->dc_quadtree_width);"
+	    		+"if( varpar->dc_quadtree_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_quadtree_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+           +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+           // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+           +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_quadtree_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_quadtree*x;"
+	    		+"__py+= varpar->dc_quadtree*y;"
+	    		+"float dz = z * varpar->dc_quadtree_scale_z + varpar->dc_quadtree_offset_z;"
+	    		+"if ( varpar->dc_quadtree_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
+		return   "__device__ float  dc_quadtree_sfun (float a) {"
+				+"	return  sinf(a);"
+				+"}"
+				
+				+"__device__ float  dc_quadtree_rnd (float p, float time)"
+				+"{"
+				+"	return 0.5 + 0.5* dc_quadtree_sfun (p+time)* dc_quadtree_sfun (p*2.17-time)* dc_quadtree_sfun (p*5.7+time);"
+				+"}"
+				
+				+"	__device__ float3  dc_quadtree_getRGBColor (float2 xy, float time, float zoom, float levels, float width)"
+				+"	{"
+				+"	    float r=1.0f, id=1.0f;"
+				+"		float2 U= xy/zoom + make_float2(0.5,0.5);"
+				+"	    float2 fU;"
+				+"	    float3 O=make_float3(0.0,0.0,0.0);"
+				+"      O.z=1.0;"
+				+"	    for (int i=0; i<levels; i++) {             "
+				+"	        fU = min(U,make_float2(1.0,1.0)-U);"
+				+"	        if ( fminf(fU.x,fU.y) < 0.3*r/width)"
+				+"	        { "
+				+"	        	O=O-1.0;"
+				+"	        	break;"
+				+"	        } "
+				+"	        if ( dc_quadtree_rnd (id, time ) > 0.7f)"
+				+"	        	break; "
+				+"	        fU = step(0.5,U);"
+				+"	        id = 4.*id + 2.*fU.y+fU.x;"
+				+"	        U = U*2.0f-fU;"
+				+"	        r *= 2.0f;"
+				+"	        if (r>width)"
+				+"	        	break;"
+				+"	        O = O+0.13;"
+				+"	    }"
+				+"		return O;"
+				+"	}";
+	 }	
 }
 

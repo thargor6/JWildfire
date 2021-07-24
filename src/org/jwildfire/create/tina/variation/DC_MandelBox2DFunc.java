@@ -20,7 +20,7 @@ import js.glsl.vec4;
 
 
 
-public class DC_MandelBox2DFunc  extends DC_BaseFunc {
+public class DC_MandelBox2DFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_mandelbox2D
@@ -124,8 +124,96 @@ public class DC_MandelBox2DFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_mandelbox2D_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=2.0*RANDFLOAT()-1.0;"
+	    		+"  y=2.0*RANDFLOAT()-1.0;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_mandelbox2D_zoom;"
+	    		+"color=dc_mandelbox2D_getRGBColor(uv,varpar->dc_mandelbox2D_time);"
+	    		+"if( varpar->dc_mandelbox2D_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_mandelbox2D_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+               +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+               // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+               +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_mandelbox2D_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_mandelbox2D*x;"
+	    		+"__py+= varpar->dc_mandelbox2D*y;"
+	    		+"float dz = z * varpar->dc_mandelbox2D_scale_z + varpar->dc_mandelbox2D_offset_z;"
+	    		+"if ( varpar->dc_mandelbox2D_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	   return   "	__device__ float3  dc_mandelbox2D_getRGBColor (float2 I, float time)"
+			   +"	{"
+			   +"		float4 O=make_float4(I.x,I.y,-5.0f*cosf(time*0.1f),1.0f);"
+			   +"	    float d=1.0f,b;"
+			   +"	    for(int i=0;i<20;i++){ "
+			   +"	        I=clamp(I,-1.,1.)*2.0f - I;"
+//			   +"	        float b = (O.w=length(I))<.5?4.:O.w<1.?1./O.w:1.;"
+			   +"           O.w=length(I);"
+			   +"           if(O.w < 0.5f)"
+			   +"                b=4.0f;"
+			   +"           else if(O.w< 1.0)"
+			   +"                b=1.0f/O.w;"
+			   +"           else"
+			   +"                b=1.0;"
 
+			   +"	        I= I*(O.z * b)+ make_float2(O.x,O.y); "
+			   +"	        d=b*d*fabsf(O.z)+1.0f;"
+			   +"	    }"
+			   +"	    d=powf(length(I)/d,.1)*5.0;"
+			   +"		O=make_float4(cosf(d),sinf(10.*d+1.),cosf(3.*d+1.),0.0)*0.5+0.5;"
+			   +"		return make_float3(O.x,O.y,O.z);"
+			   +"	}";
+	  }
 }
 

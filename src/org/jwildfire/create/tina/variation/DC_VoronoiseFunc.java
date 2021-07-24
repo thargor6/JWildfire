@@ -16,7 +16,7 @@ import js.glsl.vec3;
 
 
 
-public class DC_VoronoiseFunc  extends DC_BaseFunc {
+public class DC_VoronoiseFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	/*
 	 * Variation : dc_voronise
@@ -30,8 +30,8 @@ public class DC_VoronoiseFunc  extends DC_BaseFunc {
 
 
 	private static final String PARAM_ZOOM = "zoom";
-	private static final String PARAM_DELTAX = "pX";
-	private static final String PARAM_DELTAY = "pY";
+	private static final String PARAM_DELTAX = "deltaX";
+	private static final String PARAM_DELTAY = "deltaY";
 
 
 	double zoom = 8.0;
@@ -95,8 +95,108 @@ public class DC_VoronoiseFunc  extends DC_BaseFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	 @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float x,y;"
+	    		+"float3 color=make_float3(1.0,1.0,0.0);"
+	    		+"float z=0.5;"
+	    		+"if( varpar->dc_voronoise_ColorOnly ==1)"
+	    		+"{"
+	    		+"  x=__x;"
+	    		+"  y=__y;"
+	    		+"}"
+	    		+"else"
+	    		+"{"
+	    		+"  x=RANDFLOAT()-0.5;"
+	    		+"  y=RANDFLOAT()-0.5;"
+	    		+"}"
+	    		+"float2 uv=make_float2(x,y)*varpar->dc_voronoise_zoom;"
+	    		+"color=dc_voronise_getRGBColor(uv, varpar->dc_voronoise_deltaX, varpar->dc_voronoise_deltaY);"
+	    		+"if( varpar->dc_voronoise_Gradient ==0 )"
+	    		+"{"
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = color.x;"
+	    		+"   __colorG  = color.y;"
+	    		+"   __colorB  = color.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_voronoise_Gradient ==1 )"  
+	    		+"{"
+	    		+"float4 pal_color=make_float4(color.x,color.y,color.z,1.0);"
+	    		+"float4 simcol=pal_color;"
+	    		+"float diff=1000000000.0f;"
+////read palette colors to find the nearest color to pixel color
+	    		+" for(int index=0; index<numColors;index++)"
+             +" {      pal_color = read_imageStepMode(palette, numColors, (float)index/(float)numColors);"
+	    		+"        float3 pal_color3=make_float3(pal_color.x,pal_color.y,pal_color.z);"
+             // implement:  float distance(float,float,float,float,float,float) in GPU function
+	        	+"    float dvalue= distance_color(color.x,color.y,color.z,pal_color.x,pal_color.y,pal_color.z);"
+	        	+ "   if (diff >dvalue) "
+	        	+ "    {" 
+	        	+"	     diff = dvalue;" 
+	        	+"       simcol=pal_color;" 
+	        	+"	   }"
+             +" }"
+////use nearest palette color as the pixel color                
+	    		+"   __useRgb  = true;"
+	    		+"   __colorR  = simcol.x;"
+	    		+"   __colorG  = simcol.y;"
+	    		+"   __colorB  = simcol.z;"
+	    		+"   __colorA  = 1.0;"
+	    		+"}"
+	    		+"else if( varpar->dc_voronoise_Gradient ==2 )"
+	    		+"{"
+	    		+"  int3 icolor=dbl2int(color);"
+	    		+"  float z=greyscale((float)icolor.x,(float)icolor.y,(float)icolor.z);"
+	    		+"  __pal=z;"
+	    		+"}"
+	    		+"__px+= varpar->dc_voronoise*x;"
+	    		+"__py+= varpar->dc_voronoise*y;"
+	    		+"float dz = z * varpar->dc_voronoise_scale_z + varpar->dc_voronoise_offset_z;"
+	    		+"if ( varpar->dc_voronoise_reset_z  == 1) {"
+	    		+"     __pz = dz;"
+	    		+"}"
+	    		+"else {"
+	    		+"   __pz += dz;"
+	    		+"}";
+	  }
+	 public String getGPUFunctions(FlameTransformationContext context) {
 
+		 return   "	__device__ float3  dc_voronise_hash3 ( float2 p ) {"
+				 +"	   float3 q = make_float3(dot(p,make_float2(127.1,311.7)),"
+				 +"		        dot(p,make_float2(269.5,183.3)),"
+				 +"				dot(p,make_float2(419.2,371.9)) );"
+				 +"	   return fract(sin(q)*43758.5453);"
+				 +"}"
+				 
+				 +"	__device__ float  dc_voronise_iqnoise ( float2 x, float u, float v ) {"
+				 +"			float2 p = floorf(x);"
+				 +"			float2 f = fract(x);"
+				 +"			float k = 1.0+63.0*powf(1.0-v,4.0);"
+				 +"			float va = 0.0;"
+				 +"			float wt = 0.0;"
+				 +"			for (int j=-2; j<=2; j++) {"
+				 +"				for (int i=-2; i<=2; i++) {"
+				 +"					float2 g = make_float2((float)i,(float)j);"
+				 +"					float3 o =  dc_voronise_hash3 (p+g)*( make_float3(u,u,1.0));"
+				 +"					float2 r = g-f+(make_float2( o.x,o.y));"
+				 +"					float d = dot(r,r);"
+				 +"					float ww = powf( 1.0-smoothstep(0.0,1.414,sqrtf(d)), k );"
+				 +"					va += o.z*ww;"
+				 +"					wt += ww;"
+				 +"				}"
+				 +"			}"
+				 +"			return va/wt;"
+				 +"}"
+				 
+				 +"	__device__ float3 dc_voronise_getRGBColor (float2 st, float deltaX, float deltaY) {"
+				 +"		float3 col=make_float3(0.0,0.0,0.0);"
+				 +"	    float n = dc_voronise_iqnoise(st, deltaX, deltaY);"
+				 +"	    col = make_float3(n,n,n);"
+				 +"		return col;"
+				 +"	}";
+	 }	
 }
 
