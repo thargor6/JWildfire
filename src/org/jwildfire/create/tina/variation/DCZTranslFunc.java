@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 
-public class DCZTranslFunc extends VariationFunc {
+public class DCZTranslFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X0 = "x0";
@@ -99,7 +99,23 @@ public class DCZTranslFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_ZTRANSFORM, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _x0 = __dc_ztransl_x0 < __dc_ztransl_x1 ? __dc_ztransl_x0 : __dc_ztransl_x1;\n"
+        + "float     _x1 = __dc_ztransl_x0 > __dc_ztransl_x1 ? __dc_ztransl_x0 : __dc_ztransl_x1;\n"
+        + "float    _x1_m_x0 = _x1 - _x0 == 0 ? 1.e-6f : _x1 - _x0;\n"
+        + "    float zf = __dc_ztransl_factor * (__pal - _x0) / _x1_m_x0;\n"
+        + "    if (lroundf(__dc_ztransl_clamp) != 0)\n"
+        + "      zf = zf < 0 ? 0 : zf > 1 ? 1 : zf;\n"
+        + "    __px += __dc_ztransl * __x;\n"
+        + "    __py += __dc_ztransl * __y;\n"
+        + "\n"
+        + "    if (lroundf(__dc_ztransl_overwrite) == 0)\n"
+        + "      __pz += __dc_ztransl * __z * zf;\n"
+        + "    else\n"
+        + "      __pz += __dc_ztransl * zf;";
+  }
 }
