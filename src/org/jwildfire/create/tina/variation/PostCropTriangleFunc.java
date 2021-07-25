@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
 
-public class PostCropTriangleFunc extends VariationFunc {
+public class PostCropTriangleFunc extends VariationFunc implements SupportsGPU {
 	
 	  /*
 	   * Variation : crop_triangle
@@ -74,7 +74,10 @@ public class PostCropTriangleFunc extends VariationFunc {
    
    pVarTP.doHide=true;
    if(isInsideTriangle(x1,y1,x2,y2,x3,y3,x,y))
+//   {    x=0.0;
+//        y=0.0;
 	    pVarTP.doHide=false;
+//   }
    
    pVarTP.x = pAmount * x;
    pVarTP.y = pAmount * y;
@@ -138,7 +141,39 @@ public class PostCropTriangleFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+@Override
+public String getGPUCode(FlameTransformationContext context) {
+    return   "  float x=__px;"
+    		+"  float y=__py;"
+    		+"   "
+    		+"   __doHide=true;"
+    		+"   if(post_crop_triangle_isInsideTriangle( varpar->post_crop_triangle_x1 ,varpar->post_crop_triangle_y1,varpar->post_crop_triangle_x2,varpar->post_crop_triangle_y2,varpar->post_crop_triangle_x3,varpar->post_crop_triangle_y3,x,y))"
+    		+"       __doHide=false;"
+    		+"   "
+    		+"   __px = varpar->post_crop_triangle * x;"
+    		+"   __py = varpar->post_crop_triangle * y;"
+            + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_triangle * __z;\n" : "");
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return   "__device__ float  post_crop_triangle_TriangleArea (float varpar->post_crop_triangle_x1, float varpar->post_crop_triangle_y1, float varpar->post_crop_triangle_x2,float varpar->post_crop_triangle_y2, float varpar->post_crop_triangle_x3,float varpar->post_crop_triangle_y3)"
+    		+"	{"
+    		+"		return fabsf((x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))/2.0);"
+    		+"	}"
+    		+"	"
+    		+"__device__ bool  post_crop_triangle_isInsideTriangle (float x1,float y1,float x2,float y2, float x3,float y3, float x , float y)"
+    		+"	{"
+    		+"		float a = post_crop_triangle_TriangleArea (x1,y1,x2,y2,x3,y3);"
+    		+"		float a1= post_crop_triangle_TriangleArea (x,y,x2,y2,x3,y3);"
+    		+"		float a2= post_crop_triangle_TriangleArea (x1,y1,x,y,x3,y3);"
+    		+"		float a3= post_crop_triangle_TriangleArea (x1,y1,x2,y2,x,y);"
+    		+"		if (a==(a1+a2+a3))"
+    		+ "        return true;"
+    		+ "     else "
+    		+ "        return false;"
+    		+"	}";
+  }
 }
