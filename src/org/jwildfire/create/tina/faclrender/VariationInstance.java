@@ -88,7 +88,7 @@ public class VariationInstance {
         String rawGpuCode = getWFieldsInitCode(transformedName)
                           +  supportsGPU.getGPUCode(transformCtx);
         gpuCode = singleton ? rawGpuCode : injectInstanceId(rawGpuCode, instanceId);
-        gpuCode = gpuCode.replace("->" + originalName, "->" + transformedName);
+        gpuCode = gpuCode.replace("varpar->" + originalName, "varpar->" + transformedName);
         gpuCode = gpuCode.replace("__" + originalName, "__" + transformedName);
       }
       {
