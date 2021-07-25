@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  PostCropPolygonFunc  extends VariationFunc  {
+public class  PostCropPolygonFunc  extends VariationFunc  implements SupportsGPU {
 
 	/*
 	 * Variation : crop_polygon
@@ -221,9 +221,117 @@ double sdCircle( vec2 p, double r )
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;"
+	    		+"		  "
+	    		+"	      x= __px;"
+	    		+"	      y =__py;"
+	    		+"  "
+	    		+"			float2 p=make_float2(x,y);"
+	    		+"			float d=0.;"
+	    		+"			if( varpar->post_crop_polygon_type ==4)  "
+	    		+"			{"
+	    		+"				d = post_crop_polygon_sdHexagram( p,  varpar->post_crop_polygon_radius );"
+	    		+"			}"
+	    		+"			else if ( varpar->post_crop_polygon_type ==3) "
+	    		+"			{"
+	    		+"				d= post_crop_polygon_sdOctogon( p,  varpar->post_crop_polygon_radius  );"
+	    		+"			}"
+	    		+"			else if( varpar->post_crop_polygon_type ==2) "
+	    		+"			{"
+	    		+"				 d= post_crop_polygon_sdHexagon( p,varpar->post_crop_polygon_radius );"
+	    		+"			}"
+	    		+"			else if( varpar->post_crop_polygon_type ==1)  "
+	    		+"			{"
+	    		+"				d= post_crop_polygon_sdPentagon( p,varpar->post_crop_polygon_radius );"
+	    		+"			}"
+	    		+"			else if( varpar->post_crop_polygon_type ==0)  "
+	    		+"			{"
+	    		+"				d= post_crop_polygon_sdCircle( p,varpar->post_crop_polygon_radius );"
+	    		+"			}"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->post_crop_polygon_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (d>0.0)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (d<=0.0 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->post_crop_polygon * x;"
+	    		+"		    __py = varpar->post_crop_polygon * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_polygon * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float  post_crop_polygon_sdHexagram ( float2 p, float r )"
+	    		+"{"
+	    		+"    float4 k = make_float4(-0.5,0.86602540378,0.57735026919,1.73205080757);"
+	    		+"    "
+	    		+"    p = abs(p);"
+	    		+"    "
+	    		+"    float t0=dot(make_float2(k.x,k.y),p);"
+	    		+"    float2 t1= (make_float2(k.x,k.y))*(make_float2(2.0,2.0))*(fminf(t0,0.0));"
+	    		+"    "
+	    		+"    p = p-( t1);"
+	    		+"    "
+	    		+"    t0=dot(make_float2(k.y,k.x),p);"
+	    		+"    t1=(make_float2(k.y,k.x))*(2.0)*(fminf(t0,0));"
+	    		+"    "
+	    		+"    p = p-(t1);"
+	    		+"    p = p-(make_float2(clamp(p.x,r*k.z,r*k.w),r));"
+	    		+"    return length(p)*sign(p.y);"
+	    		+"}"
+	    		+""
+	    		+"__device__ float  post_crop_polygon_sdOctogon ( float2 p, float r )"
+	    		+"{"
+	    		+""
+	    		+" float3 k = make_float3(-0.9238795325,   "
+	    		+"                    0.3826834323,   "
+	    		+"                    0.4142135623 ); "
+	    		+""
+	    		+"p = abs(p);"
+	    		+"p = p-(make_float2( k.x,k.y)*(2.0*fminf(dot(make_float2( k.x,k.y),p),0.0)));"
+	    		+"p = p-(make_float2(-k.x,k.y)*(2.0*fminf(dot(make_float2(-k.x,k.y),p),0.0)));"
+	    		+""
+	    		+"p = p-( make_float2(clamp(p.x, -k.z*r, k.z*r), r));"
+	    		+"return length(p)*sign(p.y);"
+	    		+"}"
+	    		+"__device__ float  post_crop_polygon_sdHexagon (  float2 p, float r )"
+	    		+"{"
+	    		+"    float3 k = make_float3(-0.866025404,0.5,0.577350269);"
+	    		+"    p = abs(p);"
+	    		+"    p = p-(make_float2(k.x,k.y)*(2.0*fminf(dot(make_float2(k.x,k.y),p),0.0)));"
+	    		+"    p = p-(make_float2(clamp(p.x, -k.z*r, k.z*r), r));"
+	    		+"    return length(p)*sign(p.y);"
+	    		+"}"
+	    		+""
+	    		+"__device__ float  post_crop_polygon_sdPentagon (  float2 p, float r )"
+	    		+"{"
+	    		+"  float3 k = make_float3(0.809016994,0.587785252,0.726542528); "
+	    		+" p.y = -p.y;"
+	    		+" p.x = abs(p.x);"
+	    		+" p = p-(make_float2(-k.x,k.y)*(2.0*fminf(dot(make_float2(-k.x,k.y),p),0.0)));"
+	    		+" p = p-(make_float2( k.x,k.y)*(2.0*fminf(dot(make_float2( k.x,k.y),p),0.0)));"
+	    		+" p = p-(make_float2(clamp(p.x,-r*k.z,r*k.z),r));    "
+	    		+" return length(p)*sign(p.y);"
+	    		+"}"
+	    		+"__device__ float  post_crop_polygon_sdCircle ( float2 p, float r )"
+	    		+"{"
+	    		+"  return length(p) - r;"
+	    		+"}";
+	  }
 }
 
 

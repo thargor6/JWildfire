@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
 
-public class TriangleFunc extends VariationFunc {
+public class TriangleFunc extends VariationFunc implements SupportsGPU {
 	
 	  /*
 	   * Variation : triangle
@@ -126,6 +126,20 @@ public class TriangleFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "float sqrt_r1 = sqrtf(RANDFLOAT());"
+	    		+"float r2 = RANDFLOAT();"
+	    		+"float a = 1.0 - sqrt_r1;"
+	    		+"float b = sqrt_r1 * (1.0 - r2);"
+	    		+"float c = r2 * sqrt_r1;"
+	    		+"float dx = a * varpar->triangle_x1 + b * varpar->triangle_x2 + c * varpar->triangle_x3;"
+	    		+"float dy = a * varpar->triangle_y1 + b * varpar->triangle_y2 + c * varpar->triangle_y3;"
+	    		+"float dz = a * varpar->triangle_z1 + b * varpar->triangle_z2 + c * varpar->triangle_z3;"
+	    		+"__px = __triangle * dx;"
+	    		+"__py = __triangle * dy;"
+	    		+"__pz = __triangle * dz;";
+	  }	
 }

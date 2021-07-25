@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  PostCropCrossFunc  extends VariationFunc  {
+public class  PostCropCrossFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation : crop_cross
@@ -162,9 +162,60 @@ double sdCross( vec2 p,  vec2 b, double r )
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;"
+	    		+"		  "
+	    		+"	      x= __px;"
+	    		+"	      y =__py;"
+	    		+"			float2 p=make_float2(x,y);"
+	    		+"			float d=0.;"
+	    		+" "
+	    		+"			{"
+	    		+"				"
+	    		+"				float2 si=make_float2( varpar->post_crop_cross_width , varpar->post_crop_cross_Size);"
+	    		+"				if( si.x<si.y ) "
+	    		+"				   	si=make_float2(si.y,si.x);"
+	    		+"				    "
+	    		+"				 float ra = 0.1*sinf(varpar->post_crop_cross_round*1.2);"
+	    		+"				 d = post_crop_cross_sdCross( p, si, ra );"
+	    		+"			}"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->post_crop_cross_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (d>0.0)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (d<=0.0 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->post_crop_cross * x;"
+	    		+"		    __py = varpar->post_crop_cross * y;"
+                + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_cross * __z;\n" : "");	    		
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  "__device__	float post_crop_cross_sdCross( float2 p,  float2 b, float r ) "
+	    		+"{"
+	    		+"    p = abs(p);"
+	    		+"    p = (p.y>p.x) ? make_float2(p.y,p.x) : make_float2(p.x,p.y);"
+	    		+"    "
+	    		+"	float2  q = p-(b);"
+	    		+"    float k = fmaxf(q.y,q.x);"
+	    		+"    float2  w = (k>0.0) ? q : make_float2(b.y-p.x,-k);"
+	    		+"    "
+	    		+"    return sign(k)*length(max(w,0.0f)) + r;"
+	    		+"}";
+	  }	
 }
 
 

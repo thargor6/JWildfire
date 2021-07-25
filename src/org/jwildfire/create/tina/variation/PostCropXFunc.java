@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  PostCropXFunc  extends VariationFunc  {
+public class  PostCropXFunc  extends VariationFunc  implements SupportsGPU {
 
 	/*
 	 * Variation : post_crop_x
@@ -37,7 +37,7 @@ public class  PostCropXFunc  extends VariationFunc  {
 
 
 	private static final String PARAM_RADIUS = "radius";
-	private static final String PARAM_THICK = "w";
+	private static final String PARAM_THICK = "width";
 	private static final String PARAM_INVERT = "invert";
 	
 
@@ -141,8 +141,48 @@ public class  PostCropXFunc  extends VariationFunc  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "	  float x,y;"
+	    		+"	      x= __px;"
+	    		+"	      y =__py;"
+	    		+"  "
+	    		+"			float2 p=make_float2(x,y);"
+	    		+"			float d=0.0f;"
+	    		+"			d = post_crop_x_sdRoundedX( p, varpar->post_crop_x_width , varpar->post_crop_x_radius );"
+	    		+"    "
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->post_crop_x_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (d>0.0)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (d<=0.0 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->post_crop_x * x;"
+	    		+"		    __py = varpar->post_crop_x * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_x * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return  
+	    		"__device__ float post_crop_x_sdRoundedX(  float2 p, float w,  float r )"
+	    		+"{"
+	    		+"    p = abs(p);"
+	    		+"    float t=fminf(p.x+p.y,w) *0.5;"
+	    		+"    return length( p-( make_float2(t,t))) - r;"
+	    		+"}";
+	  }
 
 }
 

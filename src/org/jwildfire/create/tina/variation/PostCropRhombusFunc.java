@@ -21,7 +21,7 @@ import js.glsl.vec4;
 
 
 
-public class  PostCropRhombusFunc  extends VariationFunc  {
+public class  PostCropRhombusFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation : crop_rhombus
@@ -150,9 +150,51 @@ double sdRhombus( vec2 p, vec2 b )
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+	    return   "		  float x,y;"
+	    		+"		  "
+	    		+"	      x= __px;"
+	    		+"	      y =__py;"
+	    		+"  "
+	    		+"			float2 p=make_float2(x,y);"
+	    		+"			float d=0.;"
+	    		+"			float2 ra=make_float2( varpar->post_crop_rhombus_width ,varpar->post_crop_rhombus_height);"
+	    		+"			d = post_crop_rhombus_sdRhombus( p, ra );"
+	    		+"		    __doHide=false;"
+	    		+"		    if( varpar->post_crop_rhombus_invert ==0)"
+	    		+"		    {"
+	    		+"		      if (d>0.0)"
+	    		+"		      { x=0.;"
+	    		+"		        y=0.;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (d<=0.0 )"
+	    		+"			      { x=0.;"
+	    		+"			        y=0.;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = varpar->post_crop_rhombus * x;"
+	    		+"		    __py = varpar->post_crop_rhombus * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_rhombus * __z;\n" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float  post_crop_rhombus_ndot (float2 a, float2 b ) { return a.x*b.x - a.y*b.y; }"
+	    		+"__device__ float  post_crop_rhombus_sdRhombus ( float2 p, float2 b ) "
+	    		+"{"
+	    		+"    float2 q = abs(p);"
+	    		+"    float h = clamp( (-2.0* post_crop_rhombus_ndot (q,b) +  post_crop_rhombus_ndot (b,b) )/dot(b,b), -1.0, 1.0 );"
+	    		+"    float d = length( q-( b*(make_float2(1.0-h,1.0+h))*(0.5) ));"
+	    		+"    d *= sign( q.x*b.y + q.y*b.x - b.x*b.y );"
+	    		+"	return d;"
+	    		+"}";
+	  }
 }
 
 
