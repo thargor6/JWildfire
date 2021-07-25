@@ -175,15 +175,15 @@ double sdCross( vec2 p,  vec2 b, double r )
 	    		+" "
 	    		+"			{"
 	    		+"				"
-	    		+"				float2 si=make_float2( varpar->post_crop_cross_width , varpar->post_crop_cross_Size);"
+	    		+"				float2 si=make_float2( __post_crop_cross_width , __post_crop_cross_Size);"
 	    		+"				if( si.x<si.y ) "
 	    		+"				   	si=make_float2(si.y,si.x);"
 	    		+"				    "
-	    		+"				 float ra = 0.1*sinf(varpar->post_crop_cross_round*1.2);"
+	    		+"				 float ra = 0.1*sinf(__post_crop_cross_round*1.2);"
 	    		+"				 d = post_crop_cross_sdCross( p, si, ra );"
 	    		+"			}"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->post_crop_cross_invert ==0)"
+	    		+"		    if( __post_crop_cross_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (d>0.0)"
 	    		+"		      { x=0.;"
@@ -198,9 +198,9 @@ double sdCross( vec2 p,  vec2 b, double r )
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->post_crop_cross * x;"
-	    		+"		    __py = varpar->post_crop_cross * y;"
-                + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_cross * __z;\n" : "");	    		
+	    		+"		    __px = __post_crop_cross * x;"
+	    		+"		    __py = __post_crop_cross * y;"
+                + (context.isPreserveZCoordinate() ? "__pz += __post_crop_cross * __z;\n" : "");
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {

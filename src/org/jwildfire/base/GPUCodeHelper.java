@@ -24,13 +24,21 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        "double _pz_sin = sin(pAmount * M_PI_2);\n"
-            + "    double _pz_cos = cos(pAmount * M_PI_2);\n"
-            + "    double y = _pz_cos * pVarTP.y - _pz_sin * pVarTP.x;\n"
-            + "    pVarTP.x = _pz_sin * pVarTP.y + _pz_cos * pVarTP.x;\n"
-            + "    pVarTP.y = y;\n";
+        "double _x0 = x0 < x1 ? x0 : x1;\n"
+            + "double     _x1 = x0 > x1 ? x0 : x1;\n"
+            + "double    _x1_m_x0 = _x1 - _x0 == 0 ? SMALL_EPSILON : _x1 - _x0;\n"
+            + "    double zf = factor * (pAffineTP.color - _x0) / _x1_m_x0;\n"
+            + "    if (clamp != 0)\n"
+            + "      zf = zf < 0 ? 0 : zf > 1 ? 1 : zf;\n"
+            + "    pVarTP.x += pAmount * pAffineTP.x;\n"
+            + "    pVarTP.y += pAmount * pAffineTP.y;\n"
+            + "\n"
+            + "    if (overwrite == 0)\n"
+            + "      pVarTP.z += pAmount * pAffineTP.z * zf;\n"
+            + "    else\n"
+            + "      pVarTP.z += pAmount * zf;\n";
 
-    System.err.println(convertCode(code, "post_spin_z", new String[]{}));
+    System.err.println(convertCode(code, "dc_ztransl", new String[]{"x0", "x1", "factor"}));
   }
 
   private String convertCode(String code, String varName, String paramNames[]) {

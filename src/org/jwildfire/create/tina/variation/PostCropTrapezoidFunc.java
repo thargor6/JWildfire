@@ -168,10 +168,10 @@ public class  PostCropTrapezoidFunc  extends VariationFunc implements SupportsGP
 	    		+"			float2 p=make_float2(x,y);"
 	    		+"			float d=0.0f;"
 	    		+""
-	    		+"				d = post_crop_trapezoid_sdTrapezoid( p, varpar->post_crop_trapezoid_LMay, varpar->post_crop_trapezoid_LMin,  varpar->post_crop_trapezoid_height  );"
+	    		+"				d = post_crop_trapezoid_sdTrapezoid( p, __post_crop_trapezoid_LMay, __post_crop_trapezoid_LMin,  __post_crop_trapezoid_height  );"
 	    		+""
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->post_crop_trapezoid_invert ==0)"
+	    		+"		    if( __post_crop_trapezoid_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (d>0.0)"
 	    		+"		      { x=0.;"
@@ -186,9 +186,9 @@ public class  PostCropTrapezoidFunc  extends VariationFunc implements SupportsGP
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->post_crop_trapezoid * x;"
-	    		+"		    __py = varpar->post_crop_trapezoid * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_trapezoid * __z;\n" : "");
+	    		+"		    __px = __post_crop_trapezoid * x;"
+	    		+"		    __py = __post_crop_trapezoid * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __post_crop_trapezoid * __z;\n" : "");
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {

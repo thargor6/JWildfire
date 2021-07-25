@@ -183,13 +183,13 @@ public class  PostCropStarsFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"			float d=0.;"
 	    		+""
 	    		+"			{"
-	    		+"				float a=  varpar->post_crop_stars_r2 ;"
-	    		+"				float m = 4.0 + a*a*( varpar->post_crop_stars_n *2.0-4.0);  "
-	    		+"				d = post_crop_stars_sdStar( p,varpar->post_crop_stars_radius,varpar->post_crop_stars_n,m );"
+	    		+"				float a=  __post_crop_stars_r2 ;"
+	    		+"				float m = 4.0 + a*a*( __post_crop_stars_n *2.0-4.0);  "
+	    		+"				d = post_crop_stars_sdStar( p,__post_crop_stars_radius,__post_crop_stars_n,m );"
 	    		+"			}"
 	    		+"	    "
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->post_crop_stars_invert ==0)"
+	    		+"		    if( __post_crop_stars_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (d>0.0)"
 	    		+"		      { x=0.;"
@@ -204,9 +204,9 @@ public class  PostCropStarsFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->post_crop_stars * x;"
-	    		+"		    __py = varpar->post_crop_stars * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_stars * __z;\n" : "");
+	    		+"		    __px = __post_crop_stars * x;"
+	    		+"		    __py = __post_crop_stars * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __post_crop_stars * __z;\n" : "");
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {

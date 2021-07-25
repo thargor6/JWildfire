@@ -161,10 +161,10 @@ double sdRhombus( vec2 p, vec2 b )
 	    		+"  "
 	    		+"			float2 p=make_float2(x,y);"
 	    		+"			float d=0.;"
-	    		+"			float2 ra=make_float2( varpar->post_crop_rhombus_width ,varpar->post_crop_rhombus_height);"
+	    		+"			float2 ra=make_float2( __post_crop_rhombus_width ,__post_crop_rhombus_height);"
 	    		+"			d = post_crop_rhombus_sdRhombus( p, ra );"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->post_crop_rhombus_invert ==0)"
+	    		+"		    if( __post_crop_rhombus_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (d>0.0)"
 	    		+"		      { x=0.;"
@@ -179,9 +179,9 @@ double sdRhombus( vec2 p, vec2 b )
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->post_crop_rhombus * x;"
-	    		+"		    __py = varpar->post_crop_rhombus * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->cut_rhombus * __z;\n" : "");
+	    		+"		    __px = __post_crop_rhombus * x;"
+	    		+"		    __py = __post_crop_rhombus * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __cut_rhombus * __z;\n" : "");
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {

@@ -135,9 +135,9 @@ public class TriangleFunc extends VariationFunc implements SupportsGPU {
 	    		+"float a = 1.0 - sqrt_r1;"
 	    		+"float b = sqrt_r1 * (1.0 - r2);"
 	    		+"float c = r2 * sqrt_r1;"
-	    		+"float dx = a * varpar->triangle_x1 + b * varpar->triangle_x2 + c * varpar->triangle_x3;"
-	    		+"float dy = a * varpar->triangle_y1 + b * varpar->triangle_y2 + c * varpar->triangle_y3;"
-	    		+"float dz = a * varpar->triangle_z1 + b * varpar->triangle_z2 + c * varpar->triangle_z3;"
+	    		+"float dx = a * __triangle_x1 + b * __triangle_x2 + c * __triangle_x3;"
+	    		+"float dy = a * __triangle_y1 + b * __triangle_y2 + c * __triangle_y3;"
+	    		+"float dz = a * __triangle_z1 + b * __triangle_z2 + c * __triangle_z3;"
 	    		+"__px = __triangle * dx;"
 	    		+"__py = __triangle * dy;"
 	    		+"__pz = __triangle * dz;";

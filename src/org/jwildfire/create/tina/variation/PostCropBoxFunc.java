@@ -156,11 +156,11 @@ public class  PostCropBoxFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"	  float2 p=make_float2(x,y);"
 	    		+"	  float d=0.;"
 	    		+""
-	    		+"	  float2 ra=make_float2( varpar->post_crop_box_width ,varpar->post_crop_box_height);"
+	    		+"	  float2 ra=make_float2( __post_crop_box_width ,__post_crop_box_height);"
 	    		+"	  d = post_crop_box_sdBox( p, ra );"
 	    		+"    "
 	    		+"	  __doHide=false;"
-	    		+"	  if( varpar->post_crop_box_invert ==0)"
+	    		+"	  if( __post_crop_box_invert ==0)"
 	    		+"	   {"
 	    		+"		  if (d>0.0)"
 	    		+"		  { x=0.;"
@@ -175,9 +175,9 @@ public class  PostCropBoxFunc  extends VariationFunc  implements SupportsGPU {
 	    		+"	       __doHide = true;"
 	    		+"	     }"
 	    		+"	 }"
-	    		+"		    __px = varpar->post_crop_box * x;"
-	    		+"		    __py = varpar->post_crop_box * y;"
-                + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_box * __z;\n" : "");
+	    		+"		    __px = __post_crop_box * x;"
+	    		+"		    __py = __post_crop_box * y;"
+                + (context.isPreserveZCoordinate() ? "__pz += __post_crop_box * __z;\n" : "");
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {

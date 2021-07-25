@@ -150,16 +150,16 @@ public String getGPUCode(FlameTransformationContext context) {
     		+"  float y=__py;"
     		+"   "
     		+"   __doHide=true;"
-    		+"   if(post_crop_triangle_isInsideTriangle( varpar->post_crop_triangle_x1 ,varpar->post_crop_triangle_y1,varpar->post_crop_triangle_x2,varpar->post_crop_triangle_y2,varpar->post_crop_triangle_x3,varpar->post_crop_triangle_y3,x,y))"
+    		+"   if(post_crop_triangle_isInsideTriangle( __post_crop_triangle_x1 ,__post_crop_triangle_y1,__post_crop_triangle_x2,__post_crop_triangle_y2,__post_crop_triangle_x3,__post_crop_triangle_y3,x,y))"
     		+"       __doHide=false;"
     		+"   "
-    		+"   __px = varpar->post_crop_triangle * x;"
-    		+"   __py = varpar->post_crop_triangle * y;"
-            + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_triangle * __z;\n" : "");
+    		+"   __px = __post_crop_triangle * x;"
+    		+"   __py = __post_crop_triangle * y;"
+            + (context.isPreserveZCoordinate() ? "__pz += __post_crop_triangle * __z;\n" : "");
   }
   @Override
   public String getGPUFunctions(FlameTransformationContext context) {
-    return   "__device__ float  post_crop_triangle_TriangleArea (float varpar->post_crop_triangle_x1, float varpar->post_crop_triangle_y1, float varpar->post_crop_triangle_x2,float varpar->post_crop_triangle_y2, float varpar->post_crop_triangle_x3,float varpar->post_crop_triangle_y3)"
+    return   "__device__ float  post_crop_triangle_TriangleArea (float x1, float y1, float x2,float y2, float x3,float y3)"
     		+"	{"
     		+"		return fabsf((x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))/2.0);"
     		+"	}"

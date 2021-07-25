@@ -173,9 +173,9 @@ double sdVesica(vec2 p, double r, double d)
 	    		+"	      y =__py;"
 	    		+"			float2 p=make_float2(x,y);"
 	    		+"			float d=0.;"
-	    		+"				d = post_crop_vesica_sdVesica( p, 1.0 +  varpar->post_crop_vesica_height , 0.8 +  varpar->post_crop_vesica_width  );"
+	    		+"				d = post_crop_vesica_sdVesica( p, 1.0 +  __post_crop_vesica_height , 0.8 +  __post_crop_vesica_width  );"
 	    		+"		    __doHide=false;"
-	    		+"		    if( varpar->post_crop_vesica_invert ==0)"
+	    		+"		    if( __post_crop_vesica_invert ==0)"
 	    		+"		    {"
 	    		+"		      if (d>0.0)"
 	    		+"		      { x=0.;"
@@ -190,9 +190,9 @@ double sdVesica(vec2 p, double r, double d)
 	    		+"			        __doHide = true;"
 	    		+"			      }"
 	    		+"		    }"
-	    		+"		    __px = varpar->post_crop_vesica * x;"
-	    		+"		    __py = varpar->post_crop_vesica * y;"
-	            + (context.isPreserveZCoordinate() ? "__pz += varpar->post_crop_vesica * __z;\n" : "");
+	    		+"		    __px = __post_crop_vesica * x;"
+	    		+"		    __py = __post_crop_vesica * y;"
+	            + (context.isPreserveZCoordinate() ? "__pz += __post_crop_vesica * __z;\n" : "");
 	  }
 	  @Override
 	  public String getGPUFunctions(FlameTransformationContext context) {
