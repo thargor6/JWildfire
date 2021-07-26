@@ -301,7 +301,7 @@ public class CutKleinianFunc  extends VariationFunc implements SupportsGPU {
 	    		+"			z.x =  cut_kleinian_wrap (z.x, 2. * varpar->jwf_cut_kleinian_boxSize, - varpar->jwf_cut_kleinian_boxSize);"
 	    		+"			z.x=z.x-f*b/a*z.y;"
 	    		+"	     "
-	    		+"	        if  (z.y >= a * 0.5 + f *(2.*a-1.95)/4. * sign(z.x + b * 0.5)* (1. - exp(-(7.2-(1.95-a)*15.)* abs(z.x + b * 0.5))))	"
+	    		+"	        if  (z.y >= a * 0.5 + f *(2.*a-1.95)/4. * sign(z.x + b * 0.5)* (1. - expf(-(7.2-(1.95-a)*15.)* fabsf(z.x + b * 0.5))))	"
 	    		+"	        {"
 	    		+"	        	z= make_float2(-b, a)-(z);"
 	    		+"	        }"

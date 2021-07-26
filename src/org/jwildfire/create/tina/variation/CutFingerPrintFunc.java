@@ -260,7 +260,7 @@ public class CutFingerPrintFunc  extends VariationFunc implements SupportsGPU{
 	    		+"	    float bounds = smoothstep(9.,10.,length(uv*( make_float2(0.7,0.5))));"
 	    		+"	    "
 	    		+"	    float a=0.;"
-	    		+"	    float2 h = make_float2(floor(7.*varpar->jwf_cut_fingerprint_seed), 0.);"
+	    		+"	    float2 h = make_float2(floorf(7.*varpar->jwf_cut_fingerprint_seed), 0.);"
 	    		+"	    for(int i=0; i<50; i++){"
 	    		+"	        float s=sign(h.x);"
 	    		+"	        h =  cut_fingerprint_hash2 (h)*(make_float2(15.,20.));"
