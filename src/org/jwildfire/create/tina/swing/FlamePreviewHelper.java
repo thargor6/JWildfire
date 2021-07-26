@@ -238,6 +238,8 @@ public class FlamePreviewHelper implements IterationObserver {
                 gpuProgressUpdater = new GpuProgressUpdater(PROGRESS_STEPS);
                 new Thread(gpuProgressUpdater).start();
               }
+              long t0 = System.currentTimeMillis();
+
               List<Flame> preparedFlames = FACLRenderTools.prepareFlame(flame);
               new FACLFlameWriter().writeFlame(preparedFlames, tmpFile.getAbsolutePath());
               FACLRenderResult openClRenderRes =
@@ -252,6 +254,12 @@ public class FlamePreviewHelper implements IterationObserver {
               } else {
                 SimpleImage img = new ImageReader().loadImage(openClRenderRes.getOutputFilename());
                 mainProgressUpdater.updateProgress(PROGRESS_STEPS);
+                if (!cfg.isNoControls() && messageHelper != null) {
+                  long t1 = System.currentTimeMillis();
+                  messageHelper.showStatusMessage(
+                          flame, "render time (GPU): " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                  logger.info(openClRenderRes.getMessage());
+                }
                 return img;
               }
             } finally {
@@ -347,7 +355,7 @@ public class FlamePreviewHelper implements IterationObserver {
 
               if (!cfg.isNoControls() && messageHelper != null) {
                 messageHelper.showStatusMessage(
-                    flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                    flame, "render time (CPU): " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
               }
 
               return img;
