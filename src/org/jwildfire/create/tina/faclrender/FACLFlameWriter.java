@@ -200,12 +200,66 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     res.add(xb.createAttr("is3Dcapable", "yes"));
     res.add(xb.createAttr("uuid", varSetUuid));
     res.add(xb.createAttr("structName", "varpar"));
-    res.add(xb.createAttr("globalDefinitions", buildGlobalDefintions(pFlames)));
+    res.add(xb.createAttr("globalDefinitions", buildGlobalDefinitions(pFlames)));
     return res;
   }
 
-  private String buildGlobalDefintions(List<Flame> pFlames) {
-    return "";
+  private String buildGlobalDefinitions(List<Flame> pFlames) {
+    Set<FACLRenderKernelSwitches> switches = new HashSet<>();
+    for(Flame flame: pFlames) {
+      if(fabs(flame.getCamDOF())>EPSILON) {
+        switches.add(FACLRenderKernelSwitches.ADD_FEATURE_DOF);
+      }
+      for(Layer layer: flame.getLayers()) {
+        for(List<XForm> xforms: Arrays.asList( layer.getXForms(), layer.getFinalXForms())) {
+          for(XForm xform: xforms) {
+            if(xform.getWeightingFieldType()!=null && xform.getWeightingFieldType()!=WeightingFieldType.NONE) {
+              switches.add(FACLRenderKernelSwitches.ADD_FEATURE_WFIELDS);
+              if(fabs(xform.getWeightingFieldJitterIntensity())>EPSILON) {
+                switches.add(FACLRenderKernelSwitches.ADD_FEATURE_WFIELDS_JITTER);
+              }
+              switch(xform.getWeightingFieldType()) {
+                case CELLULAR_NOISE: {
+                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_WORLEY_NOISE);
+                  break;
+                }
+                case CUBIC_NOISE:
+                case CUBIC_FRACTAL_NOISE: {
+                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_CUBIC_VALUE_NOISE);
+                  break;
+                }
+                case PERLIN_NOISE:
+                case PERLIN_FRACTAL_NOISE: {
+                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_PERLIN_NOISE);
+                  break;
+                }
+                case SIMPLEX_NOISE:
+                case SIMPLEX_FRACTAL_NOISE: {
+                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_SIMPLEX_NOISE);
+                  break;
+                }
+                case VALUE_NOISE:
+                case VALUE_FRACTAL_NOISE: {
+                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_LINEAR_VALUE_NOISE);
+                  break;
+                }
+                case IMAGE_MAP: {
+                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_SPOTS_NOISE);
+                  break;
+                }
+              }
+            }
+            // GPU-version of crackle uses simplexNoise from the library rather than its own, because this would be much slower
+            for(int i=0;i<xform.getVariationCount();i++) {
+              if(xform.getVariation(i).getFunc().getName().toLowerCase().contains("crackle")) {
+                switches.add(FACLRenderKernelSwitches.ADD_FEATURE_SIMPLEX_NOISE);
+              }
+            }
+          }
+        }
+      }
+    }
+    return switches.stream().map(sw -> "#define "+sw.toString()+"\n").collect(Collectors.joining());
   }
 
   // remove unnecessary xform-attributes

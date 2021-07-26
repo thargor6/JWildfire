@@ -19,11 +19,37 @@ Copyright 2011-2016 Steven Brodhead, Sr., Centcom Inc.
 //     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-//#define ADD_FEATURE_WFIELDS
-//#define ADD_FEATURE_WFIELDS_JITTER
+/*
+Extended version for the use from within JWildfire7+. Requires the extended FACLRenderJWF.exe as client to execute.
+See https://bitbucket.org/amaschke/faengine/src/JWildfireExperiments/ for more details.
+Copyright 2021 Andreas Maschke, with contributions made by Jesus Sosa.
+*/
 
-
+// the following switches are made to help to keep the kernel small and include only features which are actually used (="poor module system")
+// activate noise features
+//   #define ADD_FEATURE_PERLIN_NOISE
+//   #define ADD_FEATURE_SIMPLEX_NOISE
+//   #define ADD_FEATURE_LINEAR_VALUE_NOISE
+//   #define ADD_FEATURE_CUBIC_VALUE_NOISE
+//   #define ADD_FEATURE_WORLEY_NOISE
+//   #define ADD_FEATURE_SPOTS_NOISE
+// activate wfields, please note that you must ensure to enable all the required noise types, otherwise all noise (and so the wfield) will be zero
+//   #define ADD_FEATURE_WFIELDS
+//   #define ADD_FEATURE_WFIELDS_JITTER
+// activate additional features
+//   #define ADD_FEATURE_DOF
+// Usually, these switches are set by the client by replacing the following placeholder:
 __GLOBAL_DEFINITIONS__
+
+
+// derived switches
+#if defined(ADD_FEATURE_PERLIN_NOISE) || defined(ADD_FEATURE_SIMPLEX_NOISE) || defined(ADD_FEATURE_LINEAR_VALUE_NOISE) || defined(ADD_FEATURE_CUBIC_VALUE_NOISE) || defined(ADD_FEATURE_WORLEY_NOISE) || defined(ADD_FEATURE_SPOTS_NOISE)
+  #define ADD_FEATURE_NOISE
+#else
+  #undef ADD_FEATURE_NOISE
+#endif
+
+
 
 #define NUM_ITERATIONS 100
 // #define DENSITY_KERNAL_RADIUS 7
@@ -91,14 +117,16 @@ __device__ float fracf(float x) {
   x - truncf(x);
 }
 
+#define EPSILON 0.000000001f
 
+
+#ifdef ADD_FEATURE_NOISE
 //--------------------------------- Noise (for supporting wfields) ----------------------------------
 // based on cudaNoise, a Library of common 3D noise functions for CUDA kernels
 // https://github.com/covexp/cuda-noise
 // TODO: replace by CUDA port of FastNoise: https://github.com/Auburn/FastNoise_Java (in order to achieve the
 //same results on CPU and GPU)
 
-#define EPSILON 0.000000001f
 	// Utility functions
 
 	// Hashing function (used for fast on-device pseudorandom numbers for randomness in noise)
@@ -273,7 +301,7 @@ __device__ float fracf(float x) {
 	}
 
 	// Noise functions
-
+#ifdef ADD_FEATURE_SIMPLEX_NOISE
 	// Simplex noise adapted from Java code by Stefan Gustafson and Peter Eastman
 	__device__ float cu_simplexNoise(float3 pos, float scale, int seed)
 	{
@@ -368,6 +396,25 @@ __device__ float fracf(float x) {
 		return 32.0f*(n0 + n1 + n2 + n3);
 	}
 
+	// Fast function for fBm using simplex noise
+    	__device__ float cu_repeaterSimplex(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
+    	{
+    		float acc = 0.0f;
+    		float amp = 1.0f;
+
+    		for (int i = 0; i < n; i++)
+    		{
+                acc += cu_simplexNoise(make_float3(pos.x, pos.y, pos.z), scale, seed) * amp * 0.35f;
+    			scale *= lacunarity;
+    			amp *= decay;
+              //  seed = seed ^ ((i + 672381) * 200394);
+    		}
+
+    		return acc;
+    	}
+#endif // ADD_FEATURE_SIMPLEX_NOISE
+
+#ifdef ADD_FEATURE_LINEAR_VALUE_NOISE
 	// Linear value noise
   	__device__ float cu_linearValue(float3 pos, float scale, int seed)
     	{
@@ -403,7 +450,26 @@ __device__ float fracf(float x) {
     		return lerp(y0, y1, w);
     	}
 
+    		// Fast function for fBm using linear value noise
+            	__device__ float cu_repeaterLinearValue(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
+            	{
+            		float acc = 0.0f;
+            		float amp = 1.0f;
 
+            		for (int i = 0; i < n; i++)
+            		{
+                        acc += cu_linearValue(make_float3(pos.x, pos.y, pos.z), scale, seed) * amp * 0.35f;
+            			scale *= lacunarity;
+            			amp *= decay;
+                        //seed = seed ^ ((i + 672381) * 200394);
+            		}
+
+            		return acc;
+            	}
+
+#endif // ADD_FEATURE_LINEAR_VALUE_NOISE
+
+#ifdef ADD_FEATURE_PERLIN_NOISE
 // Perlin gradient noise
 	__device__ float cu_perlinNoise(float3 pos, float scale, int seed)
 	{
@@ -466,41 +532,9 @@ __device__ float fracf(float x) {
 
 		return acc;
 	}
+#endif // ADD_FEATURE_PERLIN_NOISE
 
-	// Fast function for fBm using simplex noise
-    	__device__ float cu_repeaterSimplex(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
-    	{
-    		float acc = 0.0f;
-    		float amp = 1.0f;
-
-    		for (int i = 0; i < n; i++)
-    		{
-                acc += cu_simplexNoise(make_float3(pos.x, pos.y, pos.z), scale, seed) * amp * 0.35f;
-    			scale *= lacunarity;
-    			amp *= decay;
-              //  seed = seed ^ ((i + 672381) * 200394);
-    		}
-
-    		return acc;
-    	}
-
-	// Fast function for fBm using linear value noise
-    	__device__ float cu_repeaterLinearValue(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
-    	{
-    		float acc = 0.0f;
-    		float amp = 1.0f;
-
-    		for (int i = 0; i < n; i++)
-    		{
-                acc += cu_linearValue(make_float3(pos.x, pos.y, pos.z), scale, seed) * amp * 0.35f;
-    			scale *= lacunarity;
-    			amp *= decay;
-                //seed = seed ^ ((i + 672381) * 200394);
-    		}
-
-    		return acc;
-    	}
-
+#endif // ADD_FEATURE_NOISE
 //------------- START of JS CODE--------------------------
 // vector operations 2D,3D, 4D
 
@@ -2315,29 +2349,38 @@ __device__ float sinhcoshf(float theta, float* ch)
 
 __VARIATION_FUNCTIONS__
 
-
 #ifdef ADD_FEATURE_WFIELDS
 __device__ float calcWFieldIntensity(float3 *__wFieldPos, struct xForm* xform) {
-  float __wFieldValue =0.0f;
-
         switch(xform->wfield_type) {
              case 4: // Perlin Noise
-               __wFieldValue = cu_perlinNoise(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+#ifdef ADD_FEATURE_PERLIN_NOISE
+               return cu_perlinNoise(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+#endif
                break;
              case 5: // Perlin Fractal Noise
-               __wFieldValue = cu_repeaterPerlin(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+#ifdef ADD_FEATURE_PERLIN_NOISE
+               return cu_repeaterPerlin(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+#endif
                break;
              case 6: // Simplex Noise
-               __wFieldValue = cu_simplexNoise(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+#ifdef ADD_FEATURE_SIMPLEX_NOISE
+               return cu_simplexNoise(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+#endif
                break;
              case 7: // Simplex Fractal Noise
-               __wFieldValue = cu_repeaterSimplex(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+#ifdef ADD_FEATURE_SIMPLEX_NOISE
+               return cu_repeaterSimplex(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+#endif
                break;
              case 8: // Value Noise
-               __wFieldValue = cu_linearValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+#ifdef ADD_FEATURE_LINEAR_VALUE_NOISE
+               return cu_linearValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+#endif
                break;
              case 9: // Value Fractal Noise
-               __wFieldValue = cu_repeaterLinearValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+#ifdef ADD_FEATURE_LINEAR_VALUE_NOISE
+               return cu_repeaterLinearValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+#endif
                break;
              // not supported
              case 2: // Cubic Noise
@@ -2345,10 +2388,12 @@ __device__ float calcWFieldIntensity(float3 *__wFieldPos, struct xForm* xform) {
              case 1: // Cellular Noise
              case 10: // Image Map
              default:
-               __wFieldValue = cu_repeaterPerlin(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+#ifdef ADD_FEATURE_PERLIN_NOISE
+               return cu_repeaterPerlin(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+#endif
                break;
            }
-  return  __wFieldValue;
+  return  0.f;
 }
 #endif
 
@@ -2621,7 +2666,7 @@ __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, f
     }
 
 	float dr = fade * camDOF_10 * zdist * dofScale;
-
+#ifdef ADD_FEATURE_DOF
     switch(dofType) {
 	  case 0: // BUBBLE
 	  default:
@@ -2649,7 +2694,7 @@ __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, f
 		   break;
          }		 
 	}
-
+#endif
 }
 
 
@@ -2707,7 +2752,7 @@ float rnd1, float rnd2)
       if (zr < 1.e-6f) {
         zr = 1.e-6f;
       }
-	  
+#ifdef ADD_FEATURE_DOF
       if (properties->camDOF > 1.e-6f) {
         if (properties->legacyDOF) {
           float zdist = properties->camDist - camPointZ;
@@ -2738,10 +2783,13 @@ float rnd1, float rnd2)
         }
       }
       else {
+#endif // ADD_FEATURE_DOF
         p->x = camPointX / zr;
         p->y = camPointY / zr;
         p->y = camPointY / zr;
+#ifdef ADD_FEATURE_DOF
       }
+#endif // ADD_FEATURE_DOF
 #endif	
 }
 
