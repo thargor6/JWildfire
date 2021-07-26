@@ -18,6 +18,13 @@ Copyright 2011-2016 Steven Brodhead, Sr., Centcom Inc.
 //     if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 //     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
+
+//#define ADD_FEATURE_WFIELDS
+//#define ADD_FEATURE_WFIELDS_JITTER
+
+
+__GLOBAL_DEFINITIONS__
+
 #define NUM_ITERATIONS 100
 // #define DENSITY_KERNAL_RADIUS 7
 #define DENSITY_KERNAL_RADIUS_16KB 7
@@ -2309,6 +2316,7 @@ __device__ float sinhcoshf(float theta, float* ch)
 __VARIATION_FUNCTIONS__
 
 
+#ifdef ADD_FEATURE_WFIELDS
 __device__ float calcWFieldIntensity(float3 *__wFieldPos, struct xForm* xform) {
   float __wFieldValue =0.0f;
 
@@ -2323,7 +2331,7 @@ __device__ float calcWFieldIntensity(float3 *__wFieldPos, struct xForm* xform) {
                __wFieldValue = cu_simplexNoise(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
                break;
              case 7: // Simplex Fractal Noise
-              __wFieldValue = cu_repeaterSimplex(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+               __wFieldValue = cu_repeaterSimplex(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
                break;
              case 8: // Value Noise
                __wFieldValue = cu_linearValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
@@ -2340,10 +2348,11 @@ __device__ float calcWFieldIntensity(float3 *__wFieldPos, struct xForm* xform) {
                __wFieldValue = cu_repeaterPerlin(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
                break;
            }
-
-
   return  __wFieldValue;
 }
+#endif
+
+
 __device__ void iteratePoint(struct VariationListNode *varUsageList,
                 float *varpars,
                 struct xForm* xform,
@@ -2422,6 +2431,7 @@ int wfield_type;
      float __wFieldVar3Intensity = 0.0;
 
      float __wFieldValue;
+#ifdef ADD_FEATURE_WFIELDS
      if(xform->wfield_type>1) {
          float3 __wFieldPos;
          if(xform->wfield_input == 1) { // Position
@@ -2432,6 +2442,7 @@ int wfield_type;
          }
          __wFieldValue = calcWFieldIntensity(&__wFieldPos, xform);
      }
+#endif
 
      float __wFieldAmountScale;
      if(fabs(__wFieldValue)>EPSILON) {
@@ -2441,7 +2452,6 @@ int wfield_type;
      else {
        __wFieldAmountScale = 1.f;
      }
-
 ////WFIELD
 	float __r2, __r, __rinv, __phi, __theta;
     float __px = __x;  // note that enterGroup action will handle resetting these to zero -- also works correctly for xforms with NO variations set
@@ -2510,7 +2520,7 @@ int wfield_type;
       activePoint[index].z = __pz;
     }
     //    activePoint[index].z=z;  // 3d hack does not transform them here
-/*
+#ifdef ADD_FEATURE_WFIELDS_JITTER
     if(__useWFields && fabsf(xform->wfield_jitter_amount) > EPSILON) {
       float jitterIntensity = 0.1 * xform->wfield_jitter_amount;
       {
@@ -2529,7 +2539,7 @@ int wfield_type;
           activePoint[index].z += (__wFieldJitterValue * jitterIntensity);
       }
     }
-*/
+#endif
     if (d_g_Flame.symmetryKind != 0.0f && xformIndex < d_g_Flame.numTrans) // does not apply to final xform
     {
         if (d_g_Flame.symmetryKind > 0.0f)
@@ -2572,11 +2582,12 @@ int wfield_type;
 	  activePoint[index].colorB = __colorB; 
 	  activePoint[index].colorA = __colorA; 
 	}
-
+#ifdef ADD_FEATURE_WFIELDS
 	////WFIELD
 	if(__useWFields && fabsf(xform->wfield_color_amount)>EPSILON) {
-      activePoint[index].pal *= (1.0f + __wFieldValue *  xform->wfield_color_amount * 0.1);
-    }
+          activePoint[index].pal *= (1.0f + __wFieldValue *  xform->wfield_color_amount * 0.1);
+        }
+#endif
 	////WFIELD
 
 #endif

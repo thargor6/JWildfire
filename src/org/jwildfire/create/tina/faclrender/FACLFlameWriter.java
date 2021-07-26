@@ -109,7 +109,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     }
     // VariationSet
     if(variationSet!=null) {
-      xb.beginElement("variationSet", createVariationSetAttrList(xb, variationSet.getUuid()));
+      xb.beginElement("variationSet", createVariationSetAttrList(pFlames, xb, variationSet.getUuid()));
       for(VariationInstance instance: variationSet.getVariationInstances()) {
         xb.addContent(instance.getTransformedCode(transformationContext));
       }
@@ -192,7 +192,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     return res;
   }
 
-  private List<Attribute<?>> createVariationSetAttrList(SimpleXMLBuilder xb, String varSetUuid) {
+  private List<Attribute<?>> createVariationSetAttrList(List<Flame> pFlames, SimpleXMLBuilder xb, String varSetUuid) {
     ArrayList<Attribute<?>> res = new ArrayList<>();
     res.add(xb.createAttr("name", "JWFVarSet_"+varSetUuid));
     res.add(xb.createAttr("version", "1.0"));
@@ -200,7 +200,12 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     res.add(xb.createAttr("is3Dcapable", "yes"));
     res.add(xb.createAttr("uuid", varSetUuid));
     res.add(xb.createAttr("structName", "varpar"));
+    res.add(xb.createAttr("globalDefinitions", buildGlobalDefintions(pFlames)));
     return res;
+  }
+
+  private String buildGlobalDefintions(List<Flame> pFlames) {
+    return "";
   }
 
   // remove unnecessary xform-attributes
