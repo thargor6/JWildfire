@@ -245,12 +245,6 @@ __device__ float fracf(float x) {
 		return a * (1.0f - ratio) + b * ratio;
 	}
 
-	// 1D cubic interpolation with four points
-	__device__ float cubic(float p0, float p1, float p2, float p3, float x)
-	{
-		return p1 + 0.5f * x * (p2 - p0 + x * (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3 + x * (3.0f * (p1 - p2) + p3 - p0)));
-	}
-
 	// Fast gradient function for gradient noise
 	__device__ float grad(int hash, float x, float y, float z)
 	{
@@ -533,6 +527,189 @@ __device__ float fracf(float x) {
 		return acc;
 	}
 #endif // ADD_FEATURE_PERLIN_NOISE
+
+#ifdef ADD_FEATURE_CUBIC_VALUE_NOISE
+	// 1D cubic interpolation with four points
+	__device__ float cubic(float p0, float p1, float p2, float p3, float x)
+	{
+		return p1 + 0.5f * x * (p2 - p0 + x * (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3 + x * (3.0f * (p1 - p2) + p3 - p0)));
+	}
+
+	// Tricubic interpolation
+	__device__ float tricubic(int x, int y, int z, float u, float v, float w)
+	{
+		// interpolate along x first
+		float x00 = cubic(randomGrid(x - 1, y - 1, z - 1), randomGrid(x, y - 1, z - 1), randomGrid(x + 1, y - 1, z - 1), randomGrid(x + 2, y - 1, z - 1), u);
+		float x01 = cubic(randomGrid(x - 1, y - 1, z), randomGrid(x, y - 1, z), randomGrid(x + 1, y - 1, z), randomGrid(x + 2, y - 1, z), u);
+		float x02 = cubic(randomGrid(x - 1, y - 1, z + 1), randomGrid(x, y - 1, z + 1), randomGrid(x + 1, y - 1, z + 1), randomGrid(x + 2, y - 1, z + 1), u);
+		float x03 = cubic(randomGrid(x - 1, y - 1, z + 2), randomGrid(x, y - 1, z + 2), randomGrid(x + 1, y - 1, z + 2), randomGrid(x + 2, y - 1, z + 2), u);
+
+		float x10 = cubic(randomGrid(x - 1, y, z - 1), randomGrid(x, y, z - 1), randomGrid(x + 1, y, z - 1), randomGrid(x + 2, y, z - 1), u);
+		float x11 = cubic(randomGrid(x - 1, y, z), randomGrid(x, y, z), randomGrid(x + 1, y, z), randomGrid(x + 2, y, z), u);
+		float x12 = cubic(randomGrid(x - 1, y, z + 1), randomGrid(x, y, z + 1), randomGrid(x + 1, y, z + 1), randomGrid(x + 2, y, z + 1), u);
+		float x13 = cubic(randomGrid(x - 1, y, z + 2), randomGrid(x, y, z + 2), randomGrid(x + 1, y, z + 2), randomGrid(x + 2, y, z + 2), u);
+
+		float x20 = cubic(randomGrid(x - 1, y + 1, z - 1), randomGrid(x, y + 1, z - 1), randomGrid(x + 1, y + 1, z - 1), randomGrid(x + 2, y + 1, z - 1), u);
+		float x21 = cubic(randomGrid(x - 1, y + 1, z), randomGrid(x, y + 1, z), randomGrid(x + 1, y + 1, z), randomGrid(x + 2, y + 1, z), u);
+		float x22 = cubic(randomGrid(x - 1, y + 1, z + 1), randomGrid(x, y + 1, z + 1), randomGrid(x + 1, y + 1, z + 1), randomGrid(x + 2, y + 1, z + 1), u);
+		float x23 = cubic(randomGrid(x - 1, y + 1, z + 2), randomGrid(x, y + 1, z + 2), randomGrid(x + 1, y + 1, z + 2), randomGrid(x + 2, y + 1, z + 2), u);
+
+		float x30 = cubic(randomGrid(x - 1, y + 2, z - 1), randomGrid(x, y + 2, z - 1), randomGrid(x + 1, y + 2, z - 1), randomGrid(x + 2, y + 2, z - 1), u);
+		float x31 = cubic(randomGrid(x - 1, y + 2, z), randomGrid(x, y + 2, z), randomGrid(x + 1, y + 2, z), randomGrid(x + 2, y + 2, z), u);
+		float x32 = cubic(randomGrid(x - 1, y + 2, z + 1), randomGrid(x, y + 2, z + 1), randomGrid(x + 1, y + 2, z + 1), randomGrid(x + 2, y + 2, z + 1), u);
+		float x33 = cubic(randomGrid(x - 1, y + 2, z + 2), randomGrid(x, y + 2, z + 2), randomGrid(x + 1, y + 2, z + 2), randomGrid(x + 2, y + 2, z + 2), u);
+
+		// interpolate along y
+		float y0 = cubic(x00, x10, x20, x30, v);
+		float y1 = cubic(x01, x11, x21, x31, v);
+		float y2 = cubic(x02, x12, x22, x32, v);
+		float y3 = cubic(x03, x13, x23, x33, v);
+
+		// interpolate along z
+		return cubic(y0, y1, y2, y3, w);
+	}
+
+// Tricubic interpolated value noise
+	__device__ float cu_cubicValue(float3 pos, float scale, int seed)
+	{
+		pos.x = pos.x * scale;
+		pos.y = pos.y * scale;
+		pos.z = pos.z * scale;
+
+		int ix = (int)pos.x;
+		int iy = (int)pos.y;
+		int iz = (int)pos.z;
+
+		float u = pos.x - ix;
+		float v = pos.y - iy;
+		float w = pos.z - iz;
+
+		return tricubic(ix, iy, iz, u, v, w);
+	}
+
+    __device__ float cu_repeaterCubicValue(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
+    {
+        float acc = 0.0f;
+        float amp = 1.0f;
+
+        for (int i = 0; i < n; i++)
+        {
+            acc += cu_cubicValue(make_float3(pos.x * scale, pos.y * scale, pos.z * scale), 1.0f, (i + 38) * 27389482) * amp;
+            scale *= lacunarity;
+            amp *= decay;
+        }
+
+        return acc;
+    }
+#endif
+
+#ifdef ADD_FEATURE_WORLEY_NOISE
+	// Worley cellular noise
+	__device__ float cu_worleyNoise(float3 pos, float scale, int seed, float size, int minNum, int maxNum, float jitter)
+	{
+		if (size < EPSILON)
+			return 0.0f;
+
+		int ix = (int)(pos.x * scale);
+		int iy = (int)(pos.y * scale);
+		int iz = (int)(pos.z * scale);
+
+		float u = pos.x - (float)ix;
+		float v = pos.y - (float)iy;
+		float w = pos.z - (float)iz;
+
+		float minDist = 1000000.0f;
+
+		// Traverse the whole 3x3 neighborhood looking for the closest feature point
+		for (int x = -1; x < 2; x++)
+		{
+			for (int y = -1; y < 2; y++)
+			{
+				for (int z = -1; z < 2; z++)
+				{
+					int numPoints = randomIntRange(minNum, maxNum, seed + (ix + x) * 823746.0f + (iy + y) * 12306.0f + (iz + z) * 67262.0f);
+
+					for (int i = 0; i < numPoints; i++)
+					{
+						float distU = u - x - (randomFloat(seed + (ix + x) * 23784.0f + (iy + y) * 9183.0f + (iz + z) * 23874.0f * i + 27432.0f) * jitter - jitter / 2.0f);
+						float distV = v - y - (randomFloat(seed + (ix + x) * 12743.0f + (iy + y) * 45191.0f + (iz + z) * 144421.0f * i + 76671.0f) * jitter - jitter / 2.0f);
+						float distW = w - z - (randomFloat(seed + (ix + x) * 82734.0f + (iy + y) * 900213.0f + (iz + z) * 443241.0f * i + 199823.0f) * jitter - jitter / 2.0f);
+
+						float distanceSq = distU * distU + distV * distV + distW * distW;
+
+						if (distanceSq < minDist)
+							minDist = distanceSq;
+					}
+				}
+			}
+		}
+		return __saturatef(minDist) * 2.0f - 1.0f;
+	}
+#endif
+
+#ifdef ADD_FEATURE_SPOTS_NOISE
+
+// Random spots
+	__device__ float cu_spots(float3 pos, float scale, int seed, float size, int minNum, int maxNum, float jitter)
+	{
+		if (size < EPSILON)
+			return 0.0f;
+
+		int ix = (int)(pos.x * scale);
+		int iy = (int)(pos.y * scale);
+		int iz = (int)(pos.z * scale);
+
+		float u = pos.x - (float)ix;
+		float v = pos.y - (float)iy;
+		float w = pos.z - (float)iz;
+
+		float val = -1.0f;
+
+		// We need to traverse the entire 3x3x3 neighborhood in case there are spots in neighbors near the edges of the cell
+		for (int x = -1; x < 2; x++)
+		{
+			for (int y = -1; y < 2; y++)
+			{
+				for (int z = -1; z < 2; z++)
+				{
+					int numSpots = randomIntRange(minNum, maxNum, seed + (ix + x) * 823746.0f + (iy + y) * 12306.0f + (iz + z) * 823452.0f + 3234874.0f);
+
+					for (int i = 0; i < numSpots; i++)
+					{
+						float distU = u - x - (randomFloat(seed + (ix + x) * 23784.0f + (iy + y) * 9183.0f + (iz + z) * 23874.0f * i + 27432.0f) * jitter - jitter / 2.0f);
+						float distV = v - y - (randomFloat(seed + (ix + x) * 12743.0f + (iy + y) * 45191.0f + (iz + z) * 144421.0f * i + 76671.0f) * jitter - jitter / 2.0f);
+						float distW = w - z - (randomFloat(seed + (ix + x) * 82734.0f + (iy + y) * 900213.0f + (iz + z) * 443241.0f * i + 199823.0f) * jitter - jitter / 2.0f);
+
+						float distanceSq = distU * distU + distV * distV + distW * distW;
+						float distanceAbs = 0.0f;
+
+                        distanceAbs = fabsf(distU) + fabsf(distV) + fabsf(distW);
+                        val = fmaxf(val, 1.0f - fmaxf(0.0f, fminf(size, distanceAbs)) / size);
+					}
+				}
+			}
+		}
+
+		return val;
+	}
+
+    __device__ float cu_repeaterSpots(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
+    {
+        float acc = 0.0f;
+        float amp = 1.0f;
+
+        for (int i = 0; i < n; i++)
+        {
+            acc += cu_spots(make_float3(pos.x * scale, pos.y * scale, pos.z * scale), 1.0f, (i + 38) * 27389482, 1.f, 0, 32, 1.f) * amp;
+
+
+            scale *= lacunarity;
+            amp *= decay;
+        }
+
+        return acc;
+    }
+#endif
 
 #endif // ADD_FEATURE_NOISE
 //------------- START of JS CODE--------------------------
@@ -2352,6 +2529,21 @@ __VARIATION_FUNCTIONS__
 #ifdef ADD_FEATURE_WFIELDS
 __device__ float calcWFieldIntensity(float3 *__wFieldPos, struct xForm* xform) {
         switch(xform->wfield_type) {
+             case 1: // Cellular Noise -> use worley
+#ifdef ADD_FEATURE_WORLEY_NOISE
+               return cu_worleyNoise(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, 1.f, 0, 32, 1.0f);
+#endif
+               break;
+             case 2: // Cubic Noise
+#ifdef ADD_FEATURE_CUBIC_VALUE_NOISE
+               return cu_cubicValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed)*0.25;
+#endif
+               break;
+             case 3: // Cubic Fractal Noise
+#ifdef ADD_FEATURE_CUBIC_VALUE_NOISE
+               return cu_repeaterCubicValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain)*0.25;
+#endif
+               break;
              case 4: // Perlin Noise
 #ifdef ADD_FEATURE_PERLIN_NOISE
                return cu_perlinNoise(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
@@ -2382,11 +2574,11 @@ __device__ float calcWFieldIntensity(float3 *__wFieldPos, struct xForm* xform) {
                return cu_repeaterLinearValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
 #endif
                break;
-             // not supported
-             case 2: // Cubic Noise
-             case 3: // Cubic Fractal Noise
-             case 1: // Cellular Noise
-             case 10: // Image Map
+             case 10: // Image Map -> spots
+#ifdef ADD_FEATURE_SPOTS_NOISE
+               //return cu_spots(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, 1.f, 0, 32, 1.f);
+               return cu_repeaterSpots(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+#endif
              default:
 #ifdef ADD_FEATURE_PERLIN_NOISE
                return cu_repeaterPerlin(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
