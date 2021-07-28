@@ -22,10 +22,10 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import js.glsl.G;
 import js.glsl.vec2;
 
-public class BulgeFunc extends VariationFunc implements SupportsGPU {
+public class BulgeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_POW = "N";
+  private static final String PARAM_POW = "n";
 
 
   private static final String[] paramNames = {PARAM_POW};
@@ -81,14 +81,6 @@ public class BulgeFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
   }
-	 @Override
-	  public String getGPUCode(FlameTransformationContext context) {
-	    return   "    float r = length(make_float2(__x,__y)); "
-	    		+"    float rn= pow(r,__bulge_N); "
-	    		+"    __px +=  __bulge * (rn * (__x )/r);"
-	    		+"    __py +=  __bulge * (rn * (__y )/r);";
-	  }
-
 }
