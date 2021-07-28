@@ -27,7 +27,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
 
 import org.jwildfire.base.Tools;
 
-public class ZSymmetryFunc extends VariationFunc implements SupportsGPU {
+public class ZSymmetryFunc extends VariationFunc {
 	/*
 	 * Variation :  c_symmetry
 	 * Date: august 29, 2019
@@ -115,17 +115,6 @@ public class ZSymmetryFunc extends VariationFunc implements SupportsGPU {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
 	}
-	
-	 @Override
-	  public String getGPUCode(FlameTransformationContext context) {
-	    return   "	 float2 uv=make_float2(__x,__y);"
-	    		+"	 float t =  __c_symmetry_p1  * atan2(uv.y, uv.x);"
-	    		+"	 uv=make_float2(cosf(t), sinf(t))*(powf(length(uv),  __c_symmetry_p2 )) ;"
-	    		+"		    		"
-	    		+"	  __px = __c_symmetry * (uv.x);"
-	    		+"	  __py = __c_symmetry * (uv.y);"
-	            + (context.isPreserveZCoordinate() ? "__pz += __c_symmetry * __z;\n" : "");
-	  }
 }
