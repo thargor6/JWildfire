@@ -26,7 +26,7 @@ import js.glsl.vec4;
 
 
 
-public class VortexFunc  extends VariationFunc implements SupportsGPU {
+public class VortexFunc  extends VariationFunc {
 
 	/*
 	 * Variation :vortex
@@ -45,12 +45,12 @@ public class VortexFunc  extends VariationFunc implements SupportsGPU {
 	private static final String PARAM_SEED= "randomize";
 
 	private static final String PARAM_TIME="time";
-	private static final String PARAM_STRENGTH="flowVel";
+	private static final String PARAM_STRENGTH="Flow Vel.";
 	private static final String PARAM_ZOOM="zoom";
-	private static final String PARAM_UPDOWN="UpDown";
-	private static final String PARAM_P1="vSep";
-	private static final String PARAM_P2="v_viDistance";
-	private static final String PARAM_P3="vDiameter";
+	private static final String PARAM_UPDOWN="Up/Down";
+	private static final String PARAM_P1="Vortices Separation";
+	private static final String PARAM_P2="V.-V. inline Distance";
+	private static final String PARAM_P3="V. Diameter";
 
 	
  	int seed=0;
@@ -176,40 +176,7 @@ public class VortexFunc  extends VariationFunc implements SupportsGPU {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
 	}
-	 @Override
-	  public String getGPUCode(FlameTransformationContext context) {
-	    return   "   float2 uv =make_float2(__x,__y);"
-	    		+"   float2 p = uv + make_float2(0.0,__vortex_UpDown);"
-	    		+"   for (int i = 0; i < __vortex_flowVel ; i ++) "
-	    		+"      	p = p-vortex_FlowField (p, __vortex_time, __vortex_zoom,__vortex_vSep,__vortex_v_viDistance,__vortex_vDiameter  )* 0.03;"
-	    		+"   __px += __vortex * p.x ;"
-	    		+"   __py += __vortex * p.y ;"
-	            + (context.isPreserveZCoordinate() ? "__pz += __vortex * __z;\n" : "");
-	  }
-	 
-	  @Override
-	  public String getGPUFunctions(FlameTransformationContext context) {
-	    return   "__device__	float2  vortex_VortF  (float2 q, float2 c, float p3)"
-	    		+"	{"
-	    		+"		float2 d = q- c;"
-	    		+"		return make_float2 (d.y, - d.x)/(dot (d, d) + 0.05)*p3;"
-	    		+"	}"
-	    		
-	    		+"__device__	float2  vortex_FlowField  (float2 q, float time , float zoom, float p1, float p2, float p3)"
-	    		+"	{"
-	    		+"		float2 vr, c;"
-	    		+"		float dir = 1.;"
-	    		+"		c = make_float2 (mod (time, 10.) - 20., p1 * dir);"
-	    		+"		vr = make_float2 (0.0,0.0);"
-	    		+"		for (int k = 0; k < 30; k ++) {"
-	    		+"			vr = vr+ vortex_VortF  ( q*(10.0-zoom), c , p3)*dir;"
-	    		+"			c = make_float2 (c.x + p2, - c.y);"
-	    		+"			dir = - dir;"
-	    		+"		}"
-	    		+"		return vr;"
-	    		+"	}";
-	  }	
 }
 

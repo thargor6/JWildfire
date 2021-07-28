@@ -18,7 +18,7 @@ import js.glsl.vec4;
 
 
 
-public class FresnelFunc  extends VariationFunc implements SupportsGPU {
+public class FresnelFunc  extends VariationFunc {
 
 	/*
 	 * Variation :fresnel
@@ -32,7 +32,7 @@ public class FresnelFunc  extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_X0 = "x0";
-	private static final String PARAM_Y0 = "y0";
+	private static final String PARAM_Y0 = "Y0";
 	private static final String PARAM_RING = "ring";
 	
 
@@ -110,24 +110,7 @@ public class FresnelFunc  extends VariationFunc implements SupportsGPU {
 	
 	  @Override
 	  public VariationFuncType[] getVariationTypes() {
-	    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+	    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
 	  }
-		 @Override
-		  public String getGPUCode(FlameTransformationContext context) {
-		    return   "		    float2 p=make_float2( __x, __y);"
-		    		+"	        float r = fresnel_distance(p, make_float2( __fresnel_x0 , __fresnel_y0));"
-		    		+"	        r = fract(r* __fresnel_ring );"
-		    		+"	        p=  p*r;"
-		    		+"		    __px = __fresnel * p.x;"
-		    		+"		    __py = __fresnel * p.y;"
-		            + (context.isPreserveZCoordinate() ? "__pz += __fresnel * __z;\n" : "");
-		  }
-		 
-		  public String getGPUFunctions(FlameTransformationContext context) {
-		   return   "__device__ float  fresnel_distance (float2 p0,float2 p1)"
-				   +"	{"
-				   +"	  return length(p0-p1);"
-				   +"	}";
-		  }
 }
 
