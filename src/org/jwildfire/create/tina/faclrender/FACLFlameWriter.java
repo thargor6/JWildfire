@@ -84,9 +84,10 @@ public class FACLFlameWriter extends AbstractFlameWriter {
       attrList.add(new SimpleXMLBuilder.Attribute<Double>("intensity_adjust", transformedFlame.getZBufferScale()));
       xb.beginElement("flame", attrList);
       // XForm
+      int xformIdx=0;
       for (XForm xForm : layer.getXForms()) {
         xb.beginElement(
-            "xform", addWFieldAttributes(filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)), xForm));
+            "xform", addWFieldAttributes(filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)), xForm, xformIdx++));
         for (int priority : extractVariationPriorities(xForm)) {
           xb.emptyElement(
               "variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
@@ -96,7 +97,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
       // FinalXForms
       for (XForm xForm : layer.getFinalXForms()) {
         xb.beginElement(
-            "finalxform", addWFieldAttributes(filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)), xForm));
+            "finalxform", addWFieldAttributes(filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)), xForm, xformIdx++));
         for (int priority : extractVariationPriorities(xForm)) {
           xb.emptyElement(
               "variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
@@ -220,12 +221,12 @@ public class FACLFlameWriter extends AbstractFlameWriter {
               }
               switch(xform.getWeightingFieldType()) {
                 case CELLULAR_NOISE: {
-                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_WORLEY_NOISE);
+                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_CELLULAR_NOISE);
                   break;
                 }
                 case CUBIC_NOISE:
                 case CUBIC_FRACTAL_NOISE: {
-                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_CUBIC_VALUE_NOISE);
+                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_CUBIC_NOISE);
                   break;
                 }
                 case PERLIN_NOISE:
@@ -240,12 +241,16 @@ public class FACLFlameWriter extends AbstractFlameWriter {
                 }
                 case VALUE_NOISE:
                 case VALUE_FRACTAL_NOISE: {
-                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_LINEAR_VALUE_NOISE);
+                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_VALUE_NOISE);
+                  break;
+                }
+                case WHITE_NOISE: {
+                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_WHITE_NOISE);
                   break;
                 }
                 case IMAGE_MAP: {
-                  switches.add(FACLRenderKernelSwitches.ADD_FEATURE_SPOTS_NOISE);
-                  break;
+                  throw new RuntimeException("Noise from an image-map is currently not supported on GPU. But, you may use any other noise-type instead.");
+                  //break;
                 }
               }
             }
@@ -259,6 +264,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
         }
       }
     }
+    //// System.err.println("SWITCHES: "+switches.stream().map(sw -> "#define "+sw.toString()+"\n").collect(Collectors.joining()));
     return switches.stream().map(sw -> "#define "+sw.toString()+"\n").collect(Collectors.joining());
   }
 
@@ -271,8 +277,9 @@ public class FACLFlameWriter extends AbstractFlameWriter {
     return pSrc.stream().filter(a ->  !a.getName().endsWith("fx_priority") && !a.getName().startsWith("wfield_") &&  !a.getName().contains("Curve_") && !XFORM_ATTR_BLACKLIST.contains(a.getName())).collect(Collectors.toList());
   }
 
-  List<Attribute<?>> addWFieldAttributes(List<Attribute<?>> pSrc, XForm pXForm) {
+  List<Attribute<?>> addWFieldAttributes(List<Attribute<?>> pSrc, XForm pXForm, int xformIdx) {
     if(pXForm.getWeightingFieldType()!= WeightingFieldType.NONE) {
+      pSrc.add(new Attribute<Integer>("xform_idx", xformIdx));
       pSrc.add(new Attribute<Integer>("wfield_type", pXForm.getWeightingFieldType().ordinal()));
       pSrc.add(new Attribute<Integer>("wfield_input", pXForm.getWeightingFieldInput().ordinal()));
       pSrc.add(new Attribute<Double>("wfield_var_amount", pXForm.getWeightingFieldVarAmountIntensity()));
@@ -297,6 +304,7 @@ public class FACLFlameWriter extends AbstractFlameWriter {
               }
             }
             if(varIdx>=0) {
+              pSrc.add(new Attribute<Integer>("wfield_param"+(i+1)+"_xform_idx", xformIdx));
               pSrc.add(new Attribute<Integer>("wfield_param"+(i+1)+"_var_idx", varIdx));
               // param_idx < 0 means amount (which is the intensity of the contributing variation)
               pSrc.add(new Attribute<Integer>("wfield_param"+(i+1)+"_param_idx", paramIdx));
@@ -311,6 +319,25 @@ public class FACLFlameWriter extends AbstractFlameWriter {
       pSrc.add(new Attribute<Double>("wfield_gain", pXForm.getWeightingFieldFractalNoiseGain()));
       pSrc.add(new Attribute<Double>("wfield_lacunarity", pXForm.getWeightingFieldFractalNoiseLacunarity()));
       pSrc.add(new Attribute<Double>("wfield_scale", pXForm.getWeightingFieldNoiseFrequency()));
+      if (pXForm.getWeightingFieldFractalType() != null) {
+        pSrc.add(
+            new Attribute<Integer>(
+                "wfield_fractal_type", pXForm.getWeightingFieldFractalType().ordinal()));
+      }
+      if (WeightingFieldType.CELLULAR_NOISE.equals(pXForm.getWeightingFieldType())) {
+        if (pXForm.getWeightingFieldCellularNoiseDistanceFunction() != null) {
+          pSrc.add(
+              new Attribute<Integer>(
+                  "wfield_cell_noise_dist_func",
+                  pXForm.getWeightingFieldCellularNoiseDistanceFunction().ordinal()));
+        }
+        if (pXForm.getWeightingFieldCellularNoiseReturnType() != null) {
+          pSrc.add(
+              new Attribute<Integer>(
+                  "wfield_cell_noise_ret_val",
+                  pXForm.getWeightingFieldCellularNoiseReturnType().ordinal()));
+        }
+      }
     }
     return pSrc;
   }

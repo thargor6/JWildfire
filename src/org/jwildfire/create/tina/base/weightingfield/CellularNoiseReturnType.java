@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -19,6 +19,18 @@ package org.jwildfire.create.tina.base.weightingfield;
 import fastnoise.FastNoise;
 
 public enum CellularNoiseReturnType {
+
+  CELL_VALUE {
+    @Override
+    public FastNoise.CellularReturnType toFastNoiseType() {
+      return FastNoise.CellularReturnType.CellValue;
+    }
+
+    @Override
+    public String toString() {
+      return "Cell value";
+    }
+  },
 
   DISTANCE {
     @Override
@@ -52,7 +64,7 @@ public enum CellularNoiseReturnType {
 
     @Override
     public String toString() {
-      return "Dist Add";
+      return "Dist add";
     }
   },
 
@@ -64,7 +76,7 @@ public enum CellularNoiseReturnType {
 
     @Override
     public String toString() {
-      return "Dist Sub";
+      return "Dist sub";
     }
   },
 
@@ -76,7 +88,7 @@ public enum CellularNoiseReturnType {
 
     @Override
     public String toString() {
-      return "Dist Mul";
+      return "Dist mul";
     }
   },
 
@@ -88,7 +100,7 @@ public enum CellularNoiseReturnType {
 
     @Override
     public String toString() {
-      return "Dist Div";
+      return "Dist div";
     }
   };
 

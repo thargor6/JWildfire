@@ -81,6 +81,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
     fillingComboBox = true;
     try {
       controls.weightingFieldParam04Cmb.removeAllItems();
+      controls.weightingFieldParam04Cmb.addItem(CellularNoiseReturnType.CELL_VALUE);
       controls.weightingFieldParam04Cmb.addItem(CellularNoiseReturnType.DISTANCE);
       controls.weightingFieldParam04Cmb.addItem(CellularNoiseReturnType.DISTANCE2);
       controls.weightingFieldParam04Cmb.addItem(CellularNoiseReturnType.DISTANCE_ADD);

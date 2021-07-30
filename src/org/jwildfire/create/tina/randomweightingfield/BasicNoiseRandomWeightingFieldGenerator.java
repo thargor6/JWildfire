@@ -30,6 +30,7 @@ public class BasicNoiseRandomWeightingFieldGenerator implements RandomWeightingF
 
   static {
     WEIGHTING_FIELD_TYPE_LIST = new ArrayList<>();
+    WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.CELLULAR_NOISE);
     WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.CUBIC_NOISE);
     WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.PERLIN_NOISE);
     WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.SIMPLEX_NOISE);

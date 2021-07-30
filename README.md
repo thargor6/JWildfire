@@ -18,7 +18,7 @@ An alternative GPU renderer is available. It is currently limited, but will be e
 - was designed to be as user-friendly as possible, for example, has complete undo/redo and has a lot of options
   which may be customized in the Preferences
 - contains about 800 variations/formulas (Java-version)
- -the GPU-extension supports about 230 variations/formulas, which where actually tested to behave the same as the 
+ -the GPU-extension supports about 500 variations/formulas, which where actually tested to behave the same as the 
   cpu-version
 - has lots of random-flame-generators which produce nice fractals forms as starting point for your own creations
 - contains numerous sub-modules like

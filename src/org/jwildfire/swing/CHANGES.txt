@@ -25,6 +25,29 @@ V7.00 (xx.xx.202x)
 
  - fixed a bug which occurred when importing a flame into the Easy Movie Maker: when the window was too small for holding the preview, the import failed
 
+ - omitting empty motion curves when writing flames to file or clipboard
+ - removed support for the old FACLRender (which had no special support for JWF and works very limited together with JWildfire) together with the info-window
+   under Help->GPU rendering (please see the users manual for questions regarding GPU rendering)
+ - slighlty increased the "diversity" of random flame generators
+ - the AI-Post-Denoiser under GPU rendering is turned off by default
+ - improved the appearance of the WField-tab
+ - new white-noise-type for weighting fields (not very spectacular, but interesting some times, though)
+ - added the cell-value-type as possible return-type for cellular noise in weighting fields
+
+ - improved the "Duckies"-random-flame-generator
+ - new variations:
+   - ovoid by Rob Richards
+   - post_point_crop by Whittaker Courtney
+   - hole
+   - post_flatten and pre_flatten
+   - pre_disc
+   - post_rotate_z
+
+  - new family of variations by Jesus Sosa: Symmetries band & network groups variations
+     - Symmetry Band Groups 1 to 7 variations: sym_bg1, sym_bg2, sym_bg3, sym_bg4, sym_bg5, sym_bg6, sym_bg7
+     - Symmetry Network Group 1 to 17 variations: sym_ng1, sym_ng2, sym_ng3, sym_ng4, sym_ng5, sym_ng6, sym_ng7, sym_ng8, sym_ng9, sym_ng10,
+       sym_ng11, sym_ng12, sym_ng13, sym_ng14, sym_ng15, sym_ng16, sym_ng17.
+
  - behaviour of some variations fixed: the contribution of these was not added to the variation current group, but
    was overriding all other contributions of the current group:
      - seashell3D
@@ -41,25 +64,6 @@ V7.00 (xx.xx.202x)
  - changed the initialization behaviour of the w-, x-, y- and z-variation: lituus is initialized to 0 instead to a random number
  - changed the behaviour of post_axis_symmetry_wf and post_mirror_wf so that it only adds a contribution when the amount-parameter is not equal to zero, for consistency reasons
  - improved the gnarl-random-flame-generators to also use waves22, waves23, waves4, waves42 and vibration2 to create more interesting variations of the standard-gnarls
- - omitting empty motion curves when writing flames to file or clipboard
- - removed support for the old FACLRender (which had no special support for JWF and works very limited together with JWildfire) together with the info-window
-   under Help->GPU rendering (please see the users manual for questions regarding GPU rendering)
- - slighlty increased the "diversity" of random flame generators
- - the AI-Post-Denoiser under GPU rendering is turned off by default
-
- - improved the "Duckies"-random-flame-generator
- - new variations:
-   - ovoid by Rob Richards
-   - post_point_crop by Whittaker Courtney
-   - hole
-   - post_flatten and pre_flatten
-   - pre_disc
-   - post_rotate_z
-
-  - new family of variations by Jesus Sosa: Symmetries band & network groups variations
-     - Symmetry Band Groups 1 to 7 variations: sym_bg1, sym_bg2, sym_bg3, sym_bg4, sym_bg5, sym_bg6, sym_bg7
-     - Symmetry Network Group 1 to 17 variations: sym_ng1, sym_ng2, sym_ng3, sym_ng4, sym_ng5, sym_ng6, sym_ng7, sym_ng8, sym_ng9, sym_ng10,
-       sym_ng11, sym_ng12, sym_ng13, sym_ng14, sym_ng15, sym_ng16, sym_ng17.
 
 V6.50 (11.04.2021)
  - Introducing variation-filters, based on variation-profiles and variation-types.
