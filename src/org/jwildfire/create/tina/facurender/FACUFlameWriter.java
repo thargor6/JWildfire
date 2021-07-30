@@ -84,10 +84,9 @@ public class FACUFlameWriter extends AbstractFlameWriter {
       attrList.add(new SimpleXMLBuilder.Attribute<Double>("intensity_adjust", transformedFlame.getZBufferScale()));
       xb.beginElement("flame", attrList);
       // XForm
-      int xformIdx=0;
       for (XForm xForm : layer.getXForms()) {
         xb.beginElement(
-            "xform", addWFieldAttributes(filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)), xForm, xformIdx++));
+            "xform", addWFieldAttributes(filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)), xForm));
         for (int priority : extractVariationPriorities(xForm)) {
           xb.emptyElement(
               "variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
@@ -97,7 +96,7 @@ public class FACUFlameWriter extends AbstractFlameWriter {
       // FinalXForms
       for (XForm xForm : layer.getFinalXForms()) {
         xb.beginElement(
-            "finalxform", addWFieldAttributes(filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)), xForm, xformIdx++));
+            "finalxform", addWFieldAttributes(filterXFormAttrList(createXFormAttrList(xb, layer, xForm, null, false)), xForm));
         for (int priority : extractVariationPriorities(xForm)) {
           xb.emptyElement(
               "variationGroup", createVariationGroupAttrList(xb, priority, xForm, variationSet));
@@ -277,9 +276,8 @@ public class FACUFlameWriter extends AbstractFlameWriter {
     return pSrc.stream().filter(a ->  !a.getName().endsWith("fx_priority") && !a.getName().startsWith("wfield_") &&  !a.getName().contains("Curve_") && !XFORM_ATTR_BLACKLIST.contains(a.getName())).collect(Collectors.toList());
   }
 
-  List<Attribute<?>> addWFieldAttributes(List<Attribute<?>> pSrc, XForm pXForm, int xformIdx) {
+  List<Attribute<?>> addWFieldAttributes(List<Attribute<?>> pSrc, XForm pXForm) {
     if(pXForm.getWeightingFieldType()!= WeightingFieldType.NONE) {
-      pSrc.add(new Attribute<Integer>("xform_idx", xformIdx));
       pSrc.add(new Attribute<Integer>("wfield_type", pXForm.getWeightingFieldType().ordinal()));
       pSrc.add(new Attribute<Integer>("wfield_input", pXForm.getWeightingFieldInput().ordinal()));
       pSrc.add(new Attribute<Double>("wfield_var_amount", pXForm.getWeightingFieldVarAmountIntensity()));
@@ -304,7 +302,6 @@ public class FACUFlameWriter extends AbstractFlameWriter {
               }
             }
             if(varIdx>=0) {
-              pSrc.add(new Attribute<Integer>("wfield_param"+(i+1)+"_xform_idx", xformIdx));
               pSrc.add(new Attribute<Integer>("wfield_param"+(i+1)+"_var_idx", varIdx));
               // param_idx < 0 means amount (which is the intensity of the contributing variation)
               pSrc.add(new Attribute<Integer>("wfield_param"+(i+1)+"_param_idx", paramIdx));
