@@ -126,17 +126,25 @@ public class VariationInstance {
 
   private String getWFieldsInitCode(String funcName) {
     StringBuffer sb = new StringBuffer();
-    sb.append("float __"+originalName+" = varpar->"+originalName+" * __wFieldAmountScale;\n");
+    sb.append("float wFieldScale;\n");
+    sb.append("if(-1==xform->wfield_param1_param_idx && varCounter==xform->wfield_param1_var_idx)\n");
+    sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param1_amount);\n");
+    sb.append("else if(-1==xform->wfield_param2_param_idx && varCounter==xform->wfield_param2_var_idx)\n");
+    sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param2_amount);\n");
+    sb.append("else if(-1==xform->wfield_param3_param_idx && varCounter==xform->wfield_param3_var_idx)\n");
+    sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param3_amount);\n");
+    sb.append("else\n");
+    sb.append("  wFieldScale = 1.f;\n");
+    sb.append("float __"+originalName+" = varpar->"+originalName+" * __wFieldAmountScale * wFieldScale;\n");
     if (func.getParameterNames().length > 0) {
       int idx = 0;
-      sb.append("float wFieldScale;\n");
       for (String param : func.getParameterNames()) {
-        sb.append("if(" + idx + "==__wFieldVar1IntensityIdx)\n");
-        sb.append("  wFieldScale = __wFieldVar1Intensity;\n");
-        sb.append("else if(" + idx + "==__wFieldVar2IntensityIdx)\n");
-        sb.append("  wFieldScale = __wFieldVar2Intensity;\n");
-        sb.append("else if(" + idx + "==__wFieldVar3IntensityIdx)\n");
-        sb.append("  wFieldScale = __wFieldVar3Intensity;\n");
+        sb.append("if(" + idx + "==xform->wfield_param1_param_idx && varCounter==xform->wfield_param1_var_idx)\n");
+        sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param1_amount);\n");
+        sb.append("else if(" + idx + "==xform->wfield_param2_param_idx && varCounter==xform->wfield_param2_var_idx)\n");
+        sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param2_amount);\n");
+        sb.append("else if(" + idx + "==xform->wfield_param3_param_idx && varCounter==xform->wfield_param3_var_idx)\n");
+        sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param3_amount);\n");
         sb.append("else\n");
         sb.append("  wFieldScale = 1.f;\n");
         sb.append(
