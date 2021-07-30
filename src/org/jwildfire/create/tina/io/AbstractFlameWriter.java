@@ -59,7 +59,7 @@ import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
-import org.jwildfire.create.tina.faclrender.VariationnameTransformer;
+import org.jwildfire.create.tina.facurender.VariationnameTransformer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;

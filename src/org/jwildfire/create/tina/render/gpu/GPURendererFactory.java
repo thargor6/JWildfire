@@ -35,7 +35,7 @@ public class GPURendererFactory {
 
   public static GPURenderer getGPURendererInstance() {
     if(instance==null) {
-      instance = new FACLRendererInterface();
+      instance = new FACURendererInterface();
     }
     return instance;
   }

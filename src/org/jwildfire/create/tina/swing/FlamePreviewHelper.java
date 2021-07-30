@@ -22,9 +22,9 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
-import org.jwildfire.create.tina.faclrender.FACLFlameWriter;
-import org.jwildfire.create.tina.faclrender.FACLRenderResult;
-import org.jwildfire.create.tina.faclrender.FACLRenderTools;
+import org.jwildfire.create.tina.facurender.FACUFlameWriter;
+import org.jwildfire.create.tina.facurender.FACURenderResult;
+import org.jwildfire.create.tina.facurender.FACURenderTools;
 import org.jwildfire.create.tina.render.*;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
@@ -240,10 +240,10 @@ public class FlamePreviewHelper implements IterationObserver {
               }
               long t0 = System.currentTimeMillis();
 
-              List<Flame> preparedFlames = FACLRenderTools.prepareFlame(flame);
-              new FACLFlameWriter().writeFlame(preparedFlames, tmpFile.getAbsolutePath());
-              FACLRenderResult openClRenderRes =
-                  FACLRenderTools.invokeFACLRender(
+              List<Flame> preparedFlames = FACURenderTools.prepareFlame(flame);
+              new FACUFlameWriter().writeFlame(preparedFlames, tmpFile.getAbsolutePath());
+              FACURenderResult openClRenderRes =
+                  FACURenderTools.invokeFACURender(
                       tmpFile.getAbsolutePath(),
                       width,
                       height,

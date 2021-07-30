@@ -228,7 +228,7 @@ public class PrefsReader {
 
         pPrefs.setTinaRandGenColorMapImagePath(getProperty(props, Prefs.KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH, pPrefs.getTinaRandGenColorMapImagePath()));
 
-        pPrefs.setTinaFACLRenderOptions(getProperty(props, Prefs.KEY_TINA_FACLRENDER_OPTS, pPrefs.getTinaFACLRenderOptions()));
+        pPrefs.setTinaFACURenderOptions(getProperty(props, Prefs.KEY_TINA_FACURENDER_OPTS, pPrefs.getTinaFACURenderOptions()));
         pPrefs.setTinaDefaultNewFlameTitle(getProperty(props, Prefs.KEY_TINA_DEFAULT_NEW_FLAME_TITLE, pPrefs.getTinaDefaultNewFlameTitle()));
 
         pPrefs.setTinaDefaultExpandNonlinearParams(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS, pPrefs.isTinaDefaultExpandNonlinearParams()));

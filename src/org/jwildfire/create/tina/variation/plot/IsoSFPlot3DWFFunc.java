@@ -23,10 +23,9 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.faclrender.FACLRenderTools;
+import org.jwildfire.create.tina.facurender.FACURenderTools;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.*;
-import org.jwildfire.create.tina.variation.mesh.AbstractOBJMeshWFFunc;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -653,7 +652,7 @@ public class IsoSFPlot3DWFFunc extends VariationFunc implements SupportsGPU {
   public String getGPUFunctions(FlameTransformationContext context) {
     return "__device__ float eval%d_isosfplot3d_wf(float x, float y, float z, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
             +"  float pi = PI;\n"
-            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(formula) +";\n"
+            +"  return "+ FACURenderTools.rewriteJavaFormulaForCUDA(formula) +";\n"
             +"}\n";
   }
 

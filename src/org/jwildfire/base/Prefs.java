@@ -143,7 +143,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS = "tina.initially_expand_nonlinear_params";
   static final String KEY_TINA_ENABLE_LEAP_MOTION_TAB = "tina.enable_leap_motion_tab";
 
-  static final String KEY_TINA_FACLRENDER_OPTS = "tina.faclrender_opts.2";
+  static final String KEY_TINA_FACURENDER_OPTS = "tina.facurender_opts";
   static final String KEY_TINA_DEFAULT_NEW_FLAME_TITLE = "tina.default.new_flame_title";
 
   static final String KEY_TINA_AUTOLOAD_IMAGES_IN_IR = "tina.autoload_images_in_ir";
@@ -236,7 +236,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaEnableLeapMotionTab = false;
 
   @Property(description = "Commandline-options added when invokling the external GPU-renderer. Refer to the documentation or sourcecode for more information.", category = PropertyCategory.TINA)
-  private String tinaFACLRenderOptions = "-nde";
+  private String tinaFACURenderOptions = "-nde";
 
   @Property(description = "Default title for fractal flames which are created using the \"New from scratch\"-button.", category = PropertyCategory.TINA)
   private String tinaDefaultNewFlameTitle= "";
@@ -860,7 +860,7 @@ public class Prefs extends ManagedObject {
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
     tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
     tinaEnableLeapMotionTab = pSrc.tinaEnableLeapMotionTab;
-    tinaFACLRenderOptions = pSrc.tinaFACLRenderOptions;
+    tinaFACURenderOptions = pSrc.tinaFACURenderOptions;
     tinaDefaultNewFlameTitle = pSrc.tinaDefaultNewFlameTitle;
 
     resolutionProfiles.clear();
@@ -1673,12 +1673,12 @@ public class Prefs extends ManagedObject {
     this.tinaDefaultExpandNonlinearParams = tinaDefaultExpandNonlinearParams;
   }
 
-  public String getTinaFACLRenderOptions() {
-    return tinaFACLRenderOptions;
+  public String getTinaFACURenderOptions() {
+    return tinaFACURenderOptions;
   }
 
-  public void setTinaFACLRenderOptions(String pTinaFACLRenderOptions) {
-    tinaFACLRenderOptions = pTinaFACLRenderOptions;
+  public void setTinaFACURenderOptions(String pTinaFACURenderOptions) {
+    tinaFACURenderOptions = pTinaFACURenderOptions;
   }
 
   public String getTinaDefaultNewFlameTitle() {

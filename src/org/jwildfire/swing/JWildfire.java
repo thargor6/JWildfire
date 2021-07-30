@@ -210,7 +210,7 @@ public class JWildfire extends JApplet {
       QuiltFlameRendererFrame quiltFlameRendererFrame = getJFrame(QuiltFlameRendererFrame.class);
       MeshGenInternalFrame meshGenFrame = getJFrame(MeshGenInternalFrame.class);
       InteractiveRendererFrame interactiveRendererFrame = getJFrame(InteractiveRendererFrame.class);
-      // create some unregistered window even when FACLRender is not available, in order to avoid further null-checks etc.
+      // create some unregistered window even when FACURender is not available, in order to avoid further null-checks etc.
       FlamesGPURenderFrame gpuRendererFrame = GPURendererFactory.isAvailable() ? getJFrame(FlamesGPURenderFrame.class) : new FlamesGPURenderFrame();
       HelpFrame helpFrame = getJFrame(HelpFrame.class);
 

@@ -21,9 +21,9 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.faclrender.FACLFlameWriter;
-import org.jwildfire.create.tina.faclrender.FACLRenderResult;
-import org.jwildfire.create.tina.faclrender.FACLRenderTools;
+import org.jwildfire.create.tina.facurender.FACUFlameWriter;
+import org.jwildfire.create.tina.facurender.FACURenderResult;
+import org.jwildfire.create.tina.facurender.FACURenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
@@ -332,14 +332,14 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
           boolean hasError=false;
           try {
             statsTextArea.setText("");
-            FACLFlameWriter gpuFlameWriter = new FACLFlameWriter(FlamesGPURenderController.this);
-            List<Flame> preparedFlames = FACLRenderTools.prepareFlame(getCurrFlame());
+            FACUFlameWriter gpuFlameWriter = new FACUFlameWriter(FlamesGPURenderController.this);
+            List<Flame> preparedFlames = FACURenderTools.prepareFlame(getCurrFlame());
             String gpuFlameParams = gpuFlameWriter.getFlameXML(preparedFlames);
             gpuFlameParamsTextArea.setText(gpuFlameParams);
             gpuFlameWriter.writeFlame(gpuFlameParams, tmpFile.getAbsolutePath());
             long t0 = System.currentTimeMillis();
-            FACLRenderResult renderResult =
-                FACLRenderTools.invokeFACLRender(tmpFile.getAbsolutePath(), width, height, quality, preparedFlames.size() > 1);
+            FACURenderResult renderResult =
+                FACURenderTools.invokeFACURender(tmpFile.getAbsolutePath(), width, height, quality, preparedFlames.size() > 1);
             long t1 = System.currentTimeMillis();
             try {
               if (renderResult.getReturnCode() == 0) {

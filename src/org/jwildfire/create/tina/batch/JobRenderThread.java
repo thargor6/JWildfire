@@ -26,9 +26,9 @@ import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.faclrender.FACLFlameWriter;
-import org.jwildfire.create.tina.faclrender.FACLRenderResult;
-import org.jwildfire.create.tina.faclrender.FACLRenderTools;
+import org.jwildfire.create.tina.facurender.FACUFlameWriter;
+import org.jwildfire.create.tina.facurender.FACURenderResult;
+import org.jwildfire.create.tina.facurender.FACURenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -40,7 +40,6 @@ import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.create.tina.swing.RenderMovieUtil;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.variation.RessourceManager;
-import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 
@@ -156,10 +155,10 @@ public class JobRenderThread implements Runnable {
       try {
         Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
         FileDialogTools.ensureFileAccess(parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), openClFlameFilename);
-        List<Flame> preparedFlames = FACLRenderTools.prepareFlame(newFlame);
-        new FACLFlameWriter().writeFlame(preparedFlames, openClFlameFilename);
+        List<Flame> preparedFlames = FACURenderTools.prepareFlame(newFlame);
+        new FACUFlameWriter().writeFlame(preparedFlames, openClFlameFilename);
         long t0 = Calendar.getInstance().getTimeInMillis();
-        FACLRenderResult openClRenderRes = FACLRenderTools.invokeFACLRender(openClFlameFilename, width, height, qualityProfile.getQuality(), preparedFlames.size() > 1);
+        FACURenderResult openClRenderRes = FACURenderTools.invokeFACURender(openClFlameFilename, width, height, qualityProfile.getQuality(), preparedFlames.size() > 1);
         long t1 = Calendar.getInstance().getTimeInMillis();
         if (openClRenderRes.getReturnCode() != 0) {
           throw new Exception(openClRenderRes.getMessage());

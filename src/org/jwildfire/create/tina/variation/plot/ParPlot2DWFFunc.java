@@ -24,7 +24,7 @@ import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.faclrender.FACLRenderTools;
+import org.jwildfire.create.tina.facurender.FACURenderTools;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.*;
 
@@ -643,15 +643,15 @@ public class ParPlot2DWFFunc extends VariationFunc implements SupportsGPU {
   public String getGPUFunctions(FlameTransformationContext context) {
     return "__device__ float evalx%d_parplot2d_wf(float u, float v, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
             +"  float pi = PI;\n"
-            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(xformula) +";\n"
+            +"  return "+ FACURenderTools.rewriteJavaFormulaForCUDA(xformula) +";\n"
             +"}\n"
             +"__device__ float evaly%d_parplot2d_wf(float u, float v, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
             +"  float pi = PI;\n"
-            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(yformula) +";\n"
+            +"  return "+ FACURenderTools.rewriteJavaFormulaForCUDA(yformula) +";\n"
             +"}\n"
             +"__device__ float evalz%d_parplot2d_wf(float u, float v, float param_a,float param_b, float param_c, float param_d, float param_e, float param_f) {\n"
             +"  float pi = PI;\n"
-            +"  return "+ FACLRenderTools.rewriteJavaFormulaForCUDA(zformula) +";\n"
+            +"  return "+ FACURenderTools.rewriteJavaFormulaForCUDA(zformula) +";\n"
             +"}\n";
   }
 
