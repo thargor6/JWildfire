@@ -27,12 +27,12 @@ Copyright 2021 Andreas Maschke, with contributions made by Jesus Sosa.
 
 // the following switches are made to help to keep the kernel small and include only features which are actually used (="poor module system")
 // activate noise features
-//   #define ADD_FEATURE_PERLIN_NOISE
-//   #define ADD_FEATURE_SIMPLEX_NOISE
-//   #define ADD_FEATURE_LINEAR_VALUE_NOISE
-//   #define ADD_FEATURE_CUBIC_VALUE_NOISE
-//   #define ADD_FEATURE_WORLEY_NOISE
-//   #define ADD_FEATURE_SPOTS_NOISE
+//  #define ADD_FEATURE_CELLULAR_NOISE
+//  #define ADD_FEATURE_CUBIC_NOISE
+//  #define ADD_FEATURE_PERLIN_NOISE
+//  #define ADD_FEATURE_SIMPLEX_NOISE
+//  #define ADD_FEATURE_VALUE_NOISE
+//  #define ADD_FEATURE_WHITE_NOISE
 // activate wfields, please note that you must ensure to enable all the required noise types, otherwise all noise (and so the wfield) will be zero
 //   #define ADD_FEATURE_WFIELDS
 //   #define ADD_FEATURE_WFIELDS_JITTER
@@ -41,15 +41,11 @@ Copyright 2021 Andreas Maschke, with contributions made by Jesus Sosa.
 // Usually, these switches are set by the client by replacing the following placeholder:
 __GLOBAL_DEFINITIONS__
 
-
-// derived switches
-#if defined(ADD_FEATURE_PERLIN_NOISE) || defined(ADD_FEATURE_SIMPLEX_NOISE) || defined(ADD_FEATURE_LINEAR_VALUE_NOISE) || defined(ADD_FEATURE_CUBIC_VALUE_NOISE) || defined(ADD_FEATURE_WORLEY_NOISE) || defined(ADD_FEATURE_SPOTS_NOISE)
-  #define ADD_FEATURE_NOISE
+#if defined(ADD_FEATURE_CELLULAR_NOISE) || defined(ADD_FEATURE_CUBIC_NOISE) || defined(ADD_FEATURE_PERLIN_NOISE) || defined(ADD_FEATURE_SIMPLEX_NOISE) || defined(ADD_FEATURE_VALUE_NOISE) || defined(ADD_FEATURE_WHITE_NOISE)
+  #define ADD_FEATURE_FAST_NOISE
 #else
-  #undef ADD_FEATURE_NOISE
+  #undef ADD_FEATURE_FAST_NOISE
 #endif
-
-
 
 #define NUM_ITERATIONS 100
 // #define DENSITY_KERNAL_RADIUS 7
@@ -120,598 +116,1222 @@ __device__ float fracf(float x) {
 #define EPSILON 0.000000001f
 
 
-#ifdef ADD_FEATURE_NOISE
+#ifdef ADD_FEATURE_FAST_NOISE
 //--------------------------------- Noise (for supporting wfields) ----------------------------------
-// based on cudaNoise, a Library of common 3D noise functions for CUDA kernels
-// https://github.com/covexp/cuda-noise
-// TODO: replace by CUDA port of FastNoise: https://github.com/Auburn/FastNoise_Java (in order to achieve the
-//same results on CPU and GPU)
+// partial CUDA-port of FastNoise: https://github.com/Auburn/FastNoise_Java
+// restrictions:
+//  - only 3d-noise is supported
+// -  and NoiseLookup-return-type of cellular noise is not supported because it is very complicated to set up (at least on GPU, in comparison to all other types)
+namespace fastNoise {
 
-	// Utility functions
+typedef enum {Value, ValueFractal, Perlin, PerlinFractal, Simplex, SimplexFractal, Cellular, WhiteNoise, Cubic, CubicFractal} NoiseType;
+typedef enum {Linear, Hermite, Quintic} Interp;
+typedef enum {FBM, Billow, RigidMulti} FractalType;
+typedef enum {Euclidean, Manhattan, Natural} CellularDistanceFunction;
+typedef enum {CellValue, Distance, Distance2, Distance2Add, Distance2Sub, Distance2Mul, Distance2Div} CellularReturnType;
 
-	// Hashing function (used for fast on-device pseudorandom numbers for randomness in noise)
-	__device__ unsigned int hash(unsigned int seed)
-	{
-		seed = (seed + 0x7ed55d16) + (seed << 12);
-		seed = (seed ^ 0xc761c23c) ^ (seed >> 19);
-		seed = (seed + 0x165667b1) + (seed << 5);
-		seed = (seed + 0xd3a2646c) ^ (seed << 9);
-		seed = (seed + 0xfd7046c5) + (seed << 3);
-		seed = (seed ^ 0xb55a4f09) ^ (seed >> 16);
-
-		return seed;
-	}
-
-	// Returns a random integer between [min, max]
-	__device__ int randomIntRange(int min, int max, int seed)
-	{
-		int base = hash(seed);
-		base = base % (1 + max - min) + min;
-
-		return base;
-	}
-
-	// Returns a random float between [0, 1]
-	__device__ float randomFloat(unsigned int seed)
-	{
-		unsigned int noiseVal = hash(seed);
-
-		return ((float)noiseVal / (float)0xffffffff);
-	}
-
-// Maps from the signed range [0, 1] to unsigned [-1, 1]
-	// NOTE: no clamping
-	__device__ float mapToSigned(float input)
-	{
-		return input * 2.0f - 1.0f;
-	}
-
-	// Maps from the unsigned range [-1, 1] to signed [0, 1]
-	// NOTE: no clamping
-	__device__ float mapToUnsigned(float input)
-	{
-		return input * 0.5f + 0.5f;
-	}
-
-	// Maps from the signed range [0, 1] to unsigned [-1, 1] with clamping
-	__device__ float clampToSigned(float input)
-	{
-		return __saturatef(input) * 2.0f - 1.0f;
-	}
-
-	// Maps from the unsigned range [-1, 1] to signed [0, 1] with clamping
-	__device__ float clampToUnsigned(float input)
-	{
-		return __saturatef(input * 0.5f + 0.5f);
-	}
+typedef struct __align__(8)
+{
+  int m_seed; // seed used for all noise types
+              // Default: 1337
+  float m_frequency; // frequency for all noise types
+                     // Default: 0.01
+  Interp m_interp; // possible interpolation methods (lowest to highest quality): Linear, Hermite, Quintic
+                   // used in Value, Gradient Noise and Position Perturbing
+                   // Default: Quintic
+  NoiseType m_noiseType; // Default: Simplex
+  int m_octaves; // octave count for all fractal noise types
+                 // Default: 3
+  float m_lacunarity; // octave lacunarity for all fractal noise types
+                      // Default: 2.0
+  float m_gain; //  octave gain for all fractal noise types
+               	// Default: 0.5
+  FractalType m_fractalType; // method for combining octaves in all fractal noise types
+                            // Default: FBM
+  CellularDistanceFunction m_cellularDistanceFunction; 	// distance function used in cellular noise calculations
+                                                       	// Default: Euclidean
+  CellularReturnType m_cellularReturnType; 	// return type from cellular noise calculations
+                                           	// Default: CellValue
+  float m_fractalBounding;
+} FastNoise;
 
 
-	// Random float for a grid coordinate [-1, 1]
-	__device__ float randomGrid(int x, int y, int z, int seed = 0)
-	{
-		return mapToSigned(randomFloat((unsigned int)(x * 1723.0f + y * 93241.0f + z * 149812.0f + 3824.0f + seed)));
-	}
+__device__ void calculateFractalBounding(FastNoise* n) {
+    float amp = n->m_gain;
+    float ampFractal = 1;
+    for (int i = 1; i < n->m_octaves; i++) {
+        ampFractal += amp;
+        amp *= n->m_gain;
+    }
+    n->m_fractalBounding = 1 / ampFractal;
+}
 
-	// Random unsigned int for a grid coordinate [0, MAXUINT]
-	__device__ unsigned int randomIntGrid(float x, float y, float z, float seed = 0.0f)
-	{
-		return hash((unsigned int)(x * 1723.0f + y * 93241.0f + z * 149812.0f + 3824 + seed));
-	}
+__device__ void init(FastNoise* n) {
+  n->m_seed = 1337;
+  n->m_frequency = 0.01f;
+  n->m_interp = Quintic;
+  n->m_noiseType = Simplex;
+  n->m_octaves = 3;
+  n->m_lacunarity = 2.0f;
+  n->m_gain = 0.5f;
+  n->m_fractalType = FBM;
+  n->m_cellularDistanceFunction = Euclidean;
+  n->m_cellularReturnType = Distance;
+  calculateFractalBounding(n);
+}
 
-	// Random 3D vector as float3 from grid position
-	__device__ float3 vectorNoise(int x, int y, int z)
-	{
-		return make_float3(randomFloat(x * 8231.0f + y * 34612.0f + z * 11836.0f + 19283.0f) * 2.0f - 1.0f,
-			randomFloat(x * 1171.0f + y * 9234.0f + z * 992903.0f + 1466.0f) * 2.0f - 1.0f,
-			0.0f);
-	}
+__device__ void prepare(FastNoise* n) {
+  calculateFractalBounding(n);
+}
 
-	// Scale 3D vector by scalar value
-	__device__ float3 scaleVector(float3 v, float factor)
-	{
-		return make_float3(v.x * factor, v.y * factor, v.z * factor);
-	}
+__device__ int fastFloor(float f) {
+  return (f >= 0 ? (int) f : (int) f - 1);
+}
 
-	// Scale 3D vector by nonuniform parameters
-	__device__ float3 nonuniformScaleVector(float3 v, float xf, float yf, float zf)
-	{
-		return make_float3(v.x * xf, v.y * yf, v.z * zf);
-	}
+__device__ int fastRound(float f) {
+  return (f >= 0) ? (int) (f + (float) 0.5) : (int) (f - (float) 0.5);
+}
 
+__device__ float lerp(float a, float b, float t) {
+  return a + t * (b - a);
+}
 
-	// Adds two 3D vectors
-	__device__ float3 addVectors(float3 v, float3 w)
-	{
-		return make_float3(v.x + w.x, v.y + w.y, v.z + w.z);
-	}
+__device__ float interpHermiteFunc(float t) {
+  return t * t * (3 - 2 * t);
+}
 
-	// Dot product between two vectors
-	__device__ float dotProduct(float3 u, float3 v)
-	{
-		return (u.x * v.x + u.y * v.y + u.z * v.z);
-	}
+__device__ float interpQuinticFunc(float t) {
+  return t * t * t * (t * (t * 6 - 15) + 10);
+}
 
-	// Device constants for noise
+__device__ float cubicLerp(float a, float b, float c, float d, float t) {
+  float p = (d - c) - (a - b);
+  return t * t * t * p + t * t * ((a - b) - p) + t * (c - a) + b;
+}
 
-	__device__ __constant__ float gradMap[16][3] = { { 1.0f, 1.0f, 0.0f },{ -1.0f, 1.0f, 0.0f },{ 1.0f, -1.0f, 0.0f },{ -1.0f, -1.0f, 0.0f },
-	{ 1.0f, 0.0f, 1.0f },{ -1.0f, 0.0f, 1.0f },{ 1.0f, 0.0f, -1.0f },{ -1.0f, 0.0f, -1.0f },
-	{ 0.0f, 1.0f, 1.0f },{ 0.0f, -1.0f, 1.0f },{ 0.0f, 1.0f, -1.0f },{ 0.0f, -1.0f, -1.0f }};
+__device__ __constant__ float GRAD_3D_x[16] =  { 1, -1, 1, -1, 1, -1, 1, -1, 0, 0, 0, 0, 1, 0, -1, 0 };
+__device__ __constant__ float GRAD_3D_y[16] =  { 1, 1, -1, -1, 0, 0, 0, 0, 1, -1, 1, -1, 1, -1, 1, -1 };
+__device__ __constant__ float GRAD_3D_z[16] =  { 0, 0, 0, 0, 1, 1, -1, -1, 1, 1, -1, -1, 0, 1, 0, -1 };
 
-	// Helper functions for noise
+// Hashing
+__device__ __constant__ int X_PRIME = 1619;
+__device__ __constant__ int Y_PRIME = 31337;
+__device__ __constant__ int Z_PRIME = 6971;
+__device__ __constant__ int W_PRIME = 1013;
 
-	// Linearly interpolate between two float values
-	__device__  float lerp(float a, float b, float ratio)
-	{
-		return a * (1.0f - ratio) + b * ratio;
-	}
+__device__ int hash2D(int seed, int x, int y) {
+    int hash = seed;
+    hash ^= X_PRIME * x;
+    hash ^= Y_PRIME * y;
 
-	// Fast gradient function for gradient noise
-	__device__ float grad(int hash, float x, float y, float z)
-	{
-		switch (hash & 0xF)
-		{
-		case 0x0: return x + y;
-		case 0x1: return -x + y;
-		case 0x2: return x - y;
-		case 0x3: return -x - y;
-		case 0x4: return x + z;
-		case 0x5: return -x + z;
-		case 0x6: return x - z;
-		case 0x7: return -x - z;
-		case 0x8: return y + z;
-		case 0x9: return -y + z;
-		case 0xA: return y - z;
-		case 0xB: return -y - z;
-		case 0xC: return y + x;
-		case 0xD: return -y + z;
-		case 0xE: return y - x;
-		case 0xF: return -y - z;
-		default: return 0; // never happens
-		}
-	}
+    hash = hash * hash * hash * 60493;
+    hash = (hash >> 13) ^ hash;
 
-	// Ken Perlin's fade function for Perlin noise
-	__device__ float fade(float t)
-	{
-		return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);     // 6t^5 - 15t^4 + 10t^3
-	}
+    return hash;
+}
 
-	// Dot product using a float[3] and float parameters
-	// NOTE: could be cleaned up
-	__device__ float dot(float g[3], float x, float y, float z) {
-		return g[0] * x + g[1] * y + g[2] * z;
-	}
+__device__ int hash3D(int seed, int x, int y, int z) {
+    int hash = seed;
+    hash ^= X_PRIME * x;
+    hash ^= Y_PRIME * y;
+    hash ^= Z_PRIME * z;
 
-	// Random value for simplex noise [0, 255]
-	__device__ unsigned char calcPerm(int p)
-	{
-		return (unsigned char)(hash(p));
-	}
+    hash = hash * hash * hash * 60493;
+    hash = (hash >> 13) ^ hash;
 
-	// Random value for simplex noise [0, 11]
-	__device__ unsigned char calcPerm12(int p)
-	{
-		return (unsigned char)(hash(p) % 12);
-	}
+    return hash;
+}
 
-	// Noise functions
-#ifdef ADD_FEATURE_SIMPLEX_NOISE
-	// Simplex noise adapted from Java code by Stefan Gustafson and Peter Eastman
-	__device__ float cu_simplexNoise(float3 pos, float scale, int seed)
-	{
-		float xin = pos.x * scale;
-		float yin = pos.y * scale;
-		float zin = pos.z * scale;
+__device__ int hash4D(int seed, int x, int y, int z, int w) {
+    int hash = seed;
+    hash ^= X_PRIME * x;
+    hash ^= Y_PRIME * y;
+    hash ^= Z_PRIME * z;
+    hash ^= W_PRIME * w;
 
-		// Skewing and unskewing factors for 3 dimensions
-		float F3 = 1.0f / 3.0f;
-		float G3 = 1.0f / 6.0f;
+    hash = hash * hash * hash * 60493;
+    hash = (hash >> 13) ^ hash;
 
-		float n0, n1, n2, n3; // Noise contributions from the four corners
+    return hash;
+}
 
-								// Skew the input space to determine which simplex cell we're in
-		float s = (xin + yin + zin)*F3; // Very nice and simple skew factor for 3D
-		int i = floorf(xin + s);
-		int j = floorf(yin + s);
-		int k = floorf(zin + s);
-		float t = (i + j + k)*G3;
-		float X0 = i - t; // Unskew the cell origin back to (x,y,z) space
-		float Y0 = j - t;
-		float Z0 = k - t;
-		float x0 = xin - X0; // The x,y,z distances from the cell origin
-		float y0 = yin - Y0;
-		float z0 = zin - Z0;
+__device__ float valCoord2D(int seed, int x, int y) {
+    int n = seed;
+    n ^= X_PRIME * x;
+    n ^= Y_PRIME * y;
 
-		// For the 3D case, the simplex shape is a slightly irregular tetrahedron.
-		// Determine which simplex we are in.
-		int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
-		int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
-		if (x0 >= y0) {
-			if (y0 >= z0)
-			{
-				i1 = 1.0f; j1 = 0.0f; k1 = 0.0f; i2 = 1.0f; j2 = 1.0f; k2 = 0.0f;
-			} // X Y Z order
-			else if (x0 >= z0) { i1 = 1.0f; j1 = 0.0f; k1 = 0.0f; i2 = 1.0f; j2 = 0.0f; k2 = 1.0f; } // X Z Y order
-			else { i1 = 0.0f; j1 = 0.0f; k1 = 1.0f; i2 = 1.0f; j2 = 0.0f; k2 = 1.0f; } // Z X Y order
-		}
-		else { // x0<y0
-			if (y0 < z0) { i1 = 0.0f; j1 = 0.0f; k1 = 1.0f; i2 = 0.0f; j2 = 1; k2 = 1.0f; } // Z Y X order
-			else if (x0 < z0) { i1 = 0.0f; j1 = 1.0f; k1 = 0.0f; i2 = 0.0f; j2 = 1.0f; k2 = 1.0f; } // Y Z X order
-			else { i1 = 0.0f; j1 = 1.0f; k1 = 0.0f; i2 = 1.0f; j2 = 1.0f; k2 = 0.0f; } // Y X Z order
-		}
+    return (n * n * n * 60493) / (float) 2147483648.0;
+}
 
-		// A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),
-		// a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
-		// a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where
-		// c = 1/6.
-		float x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
-		float y1 = y0 - j1 + G3;
-		float z1 = z0 - k1 + G3;
-		float x2 = x0 - i2 + 2.0f*G3; // Offsets for third corner in (x,y,z) coords
-		float y2 = y0 - j2 + 2.0f*G3;
-		float z2 = z0 - k2 + 2.0f*G3;
-		float x3 = x0 - 1.0f + 3.0f*G3; // Offsets for last corner in (x,y,z) coords
-		float y3 = y0 - 1.0f + 3.0f*G3;
-		float z3 = z0 - 1.0f + 3.0f*G3;
+__device__ float valCoord3D(int seed, int x, int y, int z) {
+    int n = seed;
+    n ^= X_PRIME * x;
+    n ^= Y_PRIME * y;
+    n ^= Z_PRIME * z;
 
-        int gi0 = calcPerm12(seed + (i * 607495) + (j * 359609) + (k * 654846));
-        int gi1 = calcPerm12(seed + (i + i1) * 607495 + (j + j1) * 359609 + (k + k1) * 654846);
-        int gi2 = calcPerm12(seed + (i + i2) * 607495 + (j + j2) * 359609 + (k + k2) * 654846);
-        int gi3 = calcPerm12(seed + (i + 1) * 607495 + (j + 1) * 359609 + (k + 1) * 654846);
+    return (n * n * n * 60493) / (float) 2147483648.0;
+}
 
-		// Calculate the contribution from the four corners
-		float t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
-		if (t0 < 0.0f) n0 = 0.0f;
-		else {
-			t0 *= t0;
-			n0 = t0 * t0 * dot(gradMap[gi0], x0, y0, z0);
-		}
-		float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
-		if (t1 < 0.0f) n1 = 0.0f;
-		else {
-			t1 *= t1;
-			n1 = t1 * t1 * dot(gradMap[gi1], x1, y1, z1);
-		}
-		float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
-		if (t2 < 0.0f) n2 = 0.0f;
-		else {
-			t2 *= t2;
-			n2 = t2 * t2 * dot(gradMap[gi2], x2, y2, z2);
-		}
-		float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
-		if (t3 < 0.0f) n3 = 0.0f;
-		else {
-			t3 *= t3;
-			n3 = t3 * t3 * dot(gradMap[gi3], x3, y3, z3);
-		}
+__device__ float valCoord4D(int seed, int x, int y, int z, int w) {
+    int n = seed;
+    n ^= X_PRIME * x;
+    n ^= Y_PRIME * y;
+    n ^= Z_PRIME * z;
+    n ^= W_PRIME * w;
 
-		// Add contributions from each corner to get the final noise value.
-		// The result is scaled to stay just inside [-1,1]
-		return 32.0f*(n0 + n1 + n2 + n3);
-	}
+    return (n * n * n * 60493) / (float) 2147483648.0;
+}
 
-	// Fast function for fBm using simplex noise
-    	__device__ float cu_repeaterSimplex(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
-    	{
-    		float acc = 0.0f;
-    		float amp = 1.0f;
+__device__ float gradCoord3D(int seed, int x, int y, int z, float xd, float yd, float zd) {
+    int hash = seed;
+    hash ^= X_PRIME * x;
+    hash ^= Y_PRIME * y;
+    hash ^= Z_PRIME * z;
 
-    		for (int i = 0; i < n; i++)
-    		{
-                acc += cu_simplexNoise(make_float3(pos.x, pos.y, pos.z), scale, seed) * amp * 0.35f;
-    			scale *= lacunarity;
-    			amp *= decay;
-              //  seed = seed ^ ((i + 672381) * 200394);
-    		}
+    hash = hash * hash * hash * 60493;
+    hash = (hash >> 13) ^ hash;
 
-    		return acc;
-    	}
-#endif // ADD_FEATURE_SIMPLEX_NOISE
+    int idx = hash & 15;
 
-#ifdef ADD_FEATURE_LINEAR_VALUE_NOISE
-	// Linear value noise
-  	__device__ float cu_linearValue(float3 pos, float scale, int seed)
-    	{
-    		float fseed = (float)seed;
+    return xd * GRAD_3D_x[idx] + yd * GRAD_3D_y[idx] + zd * GRAD_3D_z[idx];
+}
 
-    		int ix = (int)pos.x;
-    		int iy = (int)pos.y;
-    		int iz = (int)pos.z;
+__device__ float gradCoord4D(int seed, int x, int y, int z, int w, float xd, float yd, float zd, float wd) {
+    int hash = seed;
+    hash ^= X_PRIME * x;
+    hash ^= Y_PRIME * y;
+    hash ^= Z_PRIME * z;
+    hash ^= W_PRIME * w;
 
-    		float u = pos.x - ix;
-    		float v = pos.y - iy;
-    		float w = pos.z - iz;
+    hash = hash * hash * hash * 60493;
+    hash = (hash >> 13) ^ hash;
 
-    		// Corner values
-    		float a000 = randomGrid(ix, iy, iz, fseed);
-    		float a100 = randomGrid(ix + 1, iy, iz, fseed);
-    		float a010 = randomGrid(ix, iy + 1, iz, fseed);
-    		float a110 = randomGrid(ix + 1, iy + 1, iz, fseed);
-    		float a001 = randomGrid(ix, iy, iz + 1, fseed);
-    		float a101 = randomGrid(ix + 1, iy, iz + 1, fseed);
-    		float a011 = randomGrid(ix, iy + 1, iz + 1, fseed);
-    		float a111 = randomGrid(ix + 1, iy + 1, iz + 1, fseed);
+    hash &= 31;
+    float a = yd, b = zd, c = wd;            // X,Y,Z
+    switch (hash >> 3) {          // OR, DEPENDING ON HIGH ORDER 2 BITS:
+        case 1:
+            a = wd;
+            b = xd;
+            c = yd;
+            break;     // W,X,Y
+        case 2:
+            a = zd;
+            b = wd;
+            c = xd;
+            break;     // Z,W,X
+        case 3:
+            a = yd;
+            b = zd;
+            c = wd;
+            break;     // Y,Z,W
+    }
+    return ((hash & 4) == 0 ? -a : a) + ((hash & 2) == 0 ? -b : b) + ((hash & 1) == 0 ? -c : c);
+}
 
-    		// Linear interpolation
-    		float x00 = lerp(a000, a100, u);
-    		float x10 = lerp(a010, a110, u);
-    		float x01 = lerp(a001, a101, u);
-    		float x11 = lerp(a011, a111, u);
+// White Noise
+#ifdef ADD_FEATURE_WHITE_NOISE
+__device__ int floatToIntBits(float  x)
+{
+  union {
+    float f;  // assuming 32-bit IEEE 754 single-precision
+    int i;    // assuming 32-bit 2's complement int
+  } u;
 
-    		float y0 = lerp(x00, x10, v);
-    		float y1 = lerp(x01, x11, v);
+  if (isnan(x)) {
+    return 0x7fc00000;
+  } else {
+    u.f = x;
+    return u.i;
+  }
+}
 
-    		return lerp(y0, y1, w);
-    	}
+__device__  int floatCast2Int(float f) {
+    int i = floatToIntBits(f);
+    return i ^ (i >> 16);
+}
+#endif // ADD_FEATURE_WHITE_NOISE
 
-    		// Fast function for fBm using linear value noise
-            	__device__ float cu_repeaterLinearValue(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
-            	{
-            		float acc = 0.0f;
-            		float amp = 1.0f;
+#ifdef ADD_FEATURE_WHITE_NOISE
+__device__ float getWhiteNoise(FastNoise* n, float x, float y, float z) {
+    int xi = floatCast2Int(x);
+    int yi = floatCast2Int(y);
+    int zi = floatCast2Int(z);
 
-            		for (int i = 0; i < n; i++)
-            		{
-                        acc += cu_linearValue(make_float3(pos.x, pos.y, pos.z), scale, seed) * amp * 0.35f;
-            			scale *= lacunarity;
-            			amp *= decay;
-                        //seed = seed ^ ((i + 672381) * 200394);
-            		}
+    return valCoord3D(n->m_seed, xi, yi, zi);
+}
 
-            		return acc;
-            	}
+__device__ float getWhiteNoiseInt(FastNoise* n, int x, int y, int z) {
+    return valCoord3D(n->m_seed, x, y, z);
+}
+#endif // ADD_FEATURE_WHITE_NOISE
 
-#endif // ADD_FEATURE_LINEAR_VALUE_NOISE
+// Value Noise
+#ifdef ADD_FEATURE_VALUE_NOISE
+__device__ float singleValue(FastNoise* n,int seed, float x, float y, float z) {
+    int x0 = fastFloor(x);
+    int y0 = fastFloor(y);
+    int z0 = fastFloor(z);
+    int x1 = x0 + 1;
+    int y1 = y0 + 1;
+    int z1 = z0 + 1;
+
+    float xs, ys, zs;
+    switch (n->m_interp) {
+        default:
+        case Linear:
+            xs = x - x0;
+            ys = y - y0;
+            zs = z - z0;
+            break;
+        case Hermite:
+            xs = interpHermiteFunc(x - x0);
+            ys = interpHermiteFunc(y - y0);
+            zs = interpHermiteFunc(z - z0);
+            break;
+        case Quintic:
+            xs = interpQuinticFunc(x - x0);
+            ys = interpQuinticFunc(y - y0);
+            zs = interpQuinticFunc(z - z0);
+            break;
+    }
+
+    float xf00 = lerp(valCoord3D(seed, x0, y0, z0), valCoord3D(seed, x1, y0, z0), xs);
+    float xf10 = lerp(valCoord3D(seed, x0, y1, z0), valCoord3D(seed, x1, y1, z0), xs);
+    float xf01 = lerp(valCoord3D(seed, x0, y0, z1), valCoord3D(seed, x1, y0, z1), xs);
+    float xf11 = lerp(valCoord3D(seed, x0, y1, z1), valCoord3D(seed, x1, y1, z1), xs);
+
+    float yf0 = lerp(xf00, xf10, ys);
+    float yf1 = lerp(xf01, xf11, ys);
+
+    return lerp(yf0, yf1, zs);
+}
+
+__device__ float singleValueFractalFBM(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = singleValue(n, seed, x, y, z);
+    float amp = 1;
+
+    for (int i = 1; i < n->m_octaves; i++) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum += singleValue(n, ++seed, x, y, z) * amp;
+    }
+
+    return sum * n->m_fractalBounding;
+}
+
+__device__ float singleValueFractalBillow(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = fabsf(singleValue(n, seed, x, y, z)) * 2 - 1;
+    float amp = 1;
+
+    for (int i = 1; i < n->m_octaves; i++) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum += (fabsf(singleValue(n, ++seed, x, y, z)) * 2 - 1) * amp;
+    }
+
+    return sum * n->m_fractalBounding;
+}
+
+__device__ float singleValueFractalRigidMulti(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = 1 - fabsf(singleValue(n, seed, x, y, z));
+    float amp = 1;
+
+    for (int i = 1; i < n->m_octaves; i++) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum -= (1 - fabsf(singleValue(n, ++seed, x, y, z))) * amp;
+    }
+
+    return sum;
+}
+
+__device__ float getValue(FastNoise* n, float x, float y, float z) {
+    return singleValue(n, n->m_seed, x * n->m_frequency, y * n->m_frequency, z * n->m_frequency);
+}
+
+__device__ float getValueFractal(FastNoise* n, float x, float y, float z) {
+    x *= n->m_frequency;
+    y *= n->m_frequency;
+    z *= n->m_frequency;
+
+    switch (n->m_fractalType) {
+        case FBM:
+            return singleValueFractalFBM(n, x, y, z);
+        case Billow:
+            return singleValueFractalBillow(n, x, y, z);
+        case RigidMulti:
+            return singleValueFractalRigidMulti(n, x, y, z);
+        default:
+            return 0;
+    }
+}
+#endif // ADD_FEATURE_VALUE_NOISE
 
 #ifdef ADD_FEATURE_PERLIN_NOISE
-// Perlin gradient noise
-	__device__ float cu_perlinNoise(float3 pos, float scale, int seed)
-	{
-		float fseed = (float)seed;
+// Perlin Noise
+__device__ float singlePerlin(FastNoise* n, int seed, float x, float y, float z) {
+    int x0 = fastFloor(x);
+    int y0 = fastFloor(y);
+    int z0 = fastFloor(z);
+    int x1 = x0 + 1;
+    int y1 = y0 + 1;
+    int z1 = z0 + 1;
 
-		pos.x = pos.x * scale;
-		pos.y = pos.y * scale;
-		pos.z = pos.z * scale;
+    float xs, ys, zs;
+    switch (n->m_interp) {
+        default:
+        case Linear:
+            xs = x - x0;
+            ys = y - y0;
+            zs = z - z0;
+            break;
+        case Hermite:
+            xs = interpHermiteFunc(x - x0);
+            ys = interpHermiteFunc(y - y0);
+            zs = interpHermiteFunc(z - z0);
+            break;
+        case Quintic:
+            xs = interpQuinticFunc(x - x0);
+            ys = interpQuinticFunc(y - y0);
+            zs = interpQuinticFunc(z - z0);
+            break;
+    }
 
-		// zero corner integer position
-		float ix = floorf(pos.x);
-		float iy = floorf(pos.y);
-		float iz = floorf(pos.z);
+    float xd0 = x - x0;
+    float yd0 = y - y0;
+    float zd0 = z - z0;
+    float xd1 = xd0 - 1;
+    float yd1 = yd0 - 1;
+    float zd1 = zd0 - 1;
 
-		// current position within unit cube
-		pos.x -= ix;
-		pos.y -= iy;
-		pos.z -= iz;
+    float xf00 = lerp(gradCoord3D(seed, x0, y0, z0, xd0, yd0, zd0), gradCoord3D(seed, x1, y0, z0, xd1, yd0, zd0), xs);
+    float xf10 = lerp(gradCoord3D(seed, x0, y1, z0, xd0, yd1, zd0), gradCoord3D(seed, x1, y1, z0, xd1, yd1, zd0), xs);
+    float xf01 = lerp(gradCoord3D(seed, x0, y0, z1, xd0, yd0, zd1), gradCoord3D(seed, x1, y0, z1, xd1, yd0, zd1), xs);
+    float xf11 = lerp(gradCoord3D(seed, x0, y1, z1, xd0, yd1, zd1), gradCoord3D(seed, x1, y1, z1, xd1, yd1, zd1), xs);
 
-		// adjust for fade
-		float u = fade(pos.x);
-		float v = fade(pos.y);
-		float w = fade(pos.z);
+    float yf0 = lerp(xf00, xf10, ys);
+    float yf1 = lerp(xf01, xf11, ys);
 
-		// influence values
-		float i000 = grad(randomIntGrid(ix, iy, iz, fseed), pos.x, pos.y, pos.z);
-		float i100 = grad(randomIntGrid(ix + 1.0f, iy, iz, fseed), pos.x - 1.0f, pos.y, pos.z);
-		float i010 = grad(randomIntGrid(ix, iy + 1.0f, iz, fseed), pos.x, pos.y - 1.0f, pos.z);
-		float i110 = grad(randomIntGrid(ix + 1.0f, iy + 1.0f, iz, fseed), pos.x - 1.0f, pos.y - 1.0f, pos.z);
-		float i001 = grad(randomIntGrid(ix, iy, iz + 1.0f, fseed), pos.x, pos.y, pos.z - 1.0f);
-		float i101 = grad(randomIntGrid(ix + 1.0f, iy, iz + 1.0f, fseed), pos.x - 1.0f, pos.y, pos.z - 1.0f);
-		float i011 = grad(randomIntGrid(ix, iy + 1.0f, iz + 1.0f, fseed), pos.x, pos.y - 1.0f, pos.z - 1.0f);
-		float i111 = grad(randomIntGrid(ix + 1.0f, iy + 1.0f, iz + 1.0f, fseed), pos.x - 1.0f, pos.y - 1.0f, pos.z - 1.0f);
+    return lerp(yf0, yf1, zs);
+}
 
-		// interpolation
-		float x00 = lerp(i000, i100, u);
-		float x10 = lerp(i010, i110, u);
-		float x01 = lerp(i001, i101, u);
-		float x11 = lerp(i011, i111, u);
+__device__ float getPerlin(FastNoise* n, float x, float y, float z) {
+    return singlePerlin(n, n->m_seed, x * n->m_frequency, y * n->m_frequency, z * n->m_frequency);
+}
 
-		float y0 = lerp(x00, x10, v);
-		float y1 = lerp(x01, x11, v);
+__device__ float singlePerlinFractalFBM(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = singlePerlin(n, seed, x, y, z);
+    float amp = 1;
 
-		float avg = lerp(y0, y1, w);
+    for (int i = 1; i < n->m_octaves; i++) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
 
-		return avg;
-	}
+        amp *= n->m_gain;
+        sum += singlePerlin(n, ++seed, x, y, z) * amp;
+    }
 
-	__device__ float cu_repeaterPerlin(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
-	{
-		float acc = 0.0f;
-		float amp = 1.0f;
+    return sum * n->m_fractalBounding;
+}
 
-		for (int i = 0; i < n; i++)
-		{
-			acc += cu_perlinNoise(make_float3(pos.x * scale, pos.y * scale, pos.z * scale), 1.0f, (i + 38) * 27389482) * amp;
-			scale *= lacunarity;
-			amp *= decay;
-		}
+__device__ float singlePerlinFractalBillow(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = fabsf(singlePerlin(n, seed, x, y, z)) * 2 - 1;
+    float amp = 1;
 
-		return acc;
-	}
+    for (int i = 1; i < n->m_octaves; i++) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum += (fabsf(singlePerlin(n, ++seed, x, y, z)) * 2 - 1) * amp;
+    }
+
+    return sum * n->m_fractalBounding;
+}
+
+__device__ float singlePerlinFractalRigidMulti(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = 1 - fabsf(singlePerlin(n, seed, x, y, z));
+    float amp = 1;
+
+    for (int i = 1; i < n->m_octaves; i++) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum -= (1 - fabsf(singlePerlin(n, ++seed, x, y, z))) * amp;
+    }
+
+    return sum;
+}
+
+__device__ float getPerlinFractal(FastNoise* n, float x, float y, float z) {
+    x *= n->m_frequency;
+    y *= n->m_frequency;
+    z *= n->m_frequency;
+
+    switch (n->m_fractalType) {
+        case FBM:
+            return singlePerlinFractalFBM(n, x, y, z);
+        case Billow:
+            return singlePerlinFractalBillow(n, x, y, z);
+        case RigidMulti:
+            return singlePerlinFractalRigidMulti(n, x, y, z);
+        default:
+            return 0;
+    }
+}
 #endif // ADD_FEATURE_PERLIN_NOISE
 
-#ifdef ADD_FEATURE_CUBIC_VALUE_NOISE
-	// 1D cubic interpolation with four points
-	__device__ float cubic(float p0, float p1, float p2, float p3, float x)
-	{
-		return p1 + 0.5f * x * (p2 - p0 + x * (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3 + x * (3.0f * (p1 - p2) + p3 - p0)));
-	}
+// Simplex Noise
+#ifdef ADD_FEATURE_SIMPLEX_NOISE
+__device__ __constant__ float F3 = (float) (1.0 / 3.0);
+__device__ __constant__ float G3 = (float) (1.0 / 6.0);
+__device__ __constant__ float G33 =(float) ((1.0 / 6.0) * 3 - 1);
+#endif // ADD_FEATURE_SIMPLEX_NOISE
 
-	// Tricubic interpolation
-	__device__ float tricubic(int x, int y, int z, float u, float v, float w)
-	{
-		// interpolate along x first
-		float x00 = cubic(randomGrid(x - 1, y - 1, z - 1), randomGrid(x, y - 1, z - 1), randomGrid(x + 1, y - 1, z - 1), randomGrid(x + 2, y - 1, z - 1), u);
-		float x01 = cubic(randomGrid(x - 1, y - 1, z), randomGrid(x, y - 1, z), randomGrid(x + 1, y - 1, z), randomGrid(x + 2, y - 1, z), u);
-		float x02 = cubic(randomGrid(x - 1, y - 1, z + 1), randomGrid(x, y - 1, z + 1), randomGrid(x + 1, y - 1, z + 1), randomGrid(x + 2, y - 1, z + 1), u);
-		float x03 = cubic(randomGrid(x - 1, y - 1, z + 2), randomGrid(x, y - 1, z + 2), randomGrid(x + 1, y - 1, z + 2), randomGrid(x + 2, y - 1, z + 2), u);
+#ifdef ADD_FEATURE_SIMPLEX_NOISE
+__device__ float singleSimplex(int seed, float x, float y, float z) {
+    float t = (x + y + z) * F3;
+    int i = fastFloor(x + t);
+    int j = fastFloor(y + t);
+    int k = fastFloor(z + t);
 
-		float x10 = cubic(randomGrid(x - 1, y, z - 1), randomGrid(x, y, z - 1), randomGrid(x + 1, y, z - 1), randomGrid(x + 2, y, z - 1), u);
-		float x11 = cubic(randomGrid(x - 1, y, z), randomGrid(x, y, z), randomGrid(x + 1, y, z), randomGrid(x + 2, y, z), u);
-		float x12 = cubic(randomGrid(x - 1, y, z + 1), randomGrid(x, y, z + 1), randomGrid(x + 1, y, z + 1), randomGrid(x + 2, y, z + 1), u);
-		float x13 = cubic(randomGrid(x - 1, y, z + 2), randomGrid(x, y, z + 2), randomGrid(x + 1, y, z + 2), randomGrid(x + 2, y, z + 2), u);
+    t = (i + j + k) * G3;
+    float x0 = x - (i - t);
+    float y0 = y - (j - t);
+    float z0 = z - (k - t);
 
-		float x20 = cubic(randomGrid(x - 1, y + 1, z - 1), randomGrid(x, y + 1, z - 1), randomGrid(x + 1, y + 1, z - 1), randomGrid(x + 2, y + 1, z - 1), u);
-		float x21 = cubic(randomGrid(x - 1, y + 1, z), randomGrid(x, y + 1, z), randomGrid(x + 1, y + 1, z), randomGrid(x + 2, y + 1, z), u);
-		float x22 = cubic(randomGrid(x - 1, y + 1, z + 1), randomGrid(x, y + 1, z + 1), randomGrid(x + 1, y + 1, z + 1), randomGrid(x + 2, y + 1, z + 1), u);
-		float x23 = cubic(randomGrid(x - 1, y + 1, z + 2), randomGrid(x, y + 1, z + 2), randomGrid(x + 1, y + 1, z + 2), randomGrid(x + 2, y + 1, z + 2), u);
+    int i1, j1, k1;
+    int i2, j2, k2;
 
-		float x30 = cubic(randomGrid(x - 1, y + 2, z - 1), randomGrid(x, y + 2, z - 1), randomGrid(x + 1, y + 2, z - 1), randomGrid(x + 2, y + 2, z - 1), u);
-		float x31 = cubic(randomGrid(x - 1, y + 2, z), randomGrid(x, y + 2, z), randomGrid(x + 1, y + 2, z), randomGrid(x + 2, y + 2, z), u);
-		float x32 = cubic(randomGrid(x - 1, y + 2, z + 1), randomGrid(x, y + 2, z + 1), randomGrid(x + 1, y + 2, z + 1), randomGrid(x + 2, y + 2, z + 1), u);
-		float x33 = cubic(randomGrid(x - 1, y + 2, z + 2), randomGrid(x, y + 2, z + 2), randomGrid(x + 1, y + 2, z + 2), randomGrid(x + 2, y + 2, z + 2), u);
-
-		// interpolate along y
-		float y0 = cubic(x00, x10, x20, x30, v);
-		float y1 = cubic(x01, x11, x21, x31, v);
-		float y2 = cubic(x02, x12, x22, x32, v);
-		float y3 = cubic(x03, x13, x23, x33, v);
-
-		// interpolate along z
-		return cubic(y0, y1, y2, y3, w);
-	}
-
-// Tricubic interpolated value noise
-	__device__ float cu_cubicValue(float3 pos, float scale, int seed)
-	{
-		pos.x = pos.x * scale;
-		pos.y = pos.y * scale;
-		pos.z = pos.z * scale;
-
-		int ix = (int)pos.x;
-		int iy = (int)pos.y;
-		int iz = (int)pos.z;
-
-		float u = pos.x - ix;
-		float v = pos.y - iy;
-		float w = pos.z - iz;
-
-		return tricubic(ix, iy, iz, u, v, w);
-	}
-
-    __device__ float cu_repeaterCubicValue(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
-    {
-        float acc = 0.0f;
-        float amp = 1.0f;
-
-        for (int i = 0; i < n; i++)
+    if (x0 >= y0) {
+        if (y0 >= z0) {
+            i1 = 1;
+            j1 = 0;
+            k1 = 0;
+            i2 = 1;
+            j2 = 1;
+            k2 = 0;
+        } else if (x0 >= z0) {
+            i1 = 1;
+            j1 = 0;
+            k1 = 0;
+            i2 = 1;
+            j2 = 0;
+            k2 = 1;
+        } else // x0 < z0
         {
-            acc += cu_cubicValue(make_float3(pos.x * scale, pos.y * scale, pos.z * scale), 1.0f, (i + 38) * 27389482) * amp;
-            scale *= lacunarity;
-            amp *= decay;
+            i1 = 0;
+            j1 = 0;
+            k1 = 1;
+            i2 = 1;
+            j2 = 0;
+            k2 = 1;
         }
-
-        return acc;
-    }
-#endif
-
-#ifdef ADD_FEATURE_WORLEY_NOISE
-	// Worley cellular noise
-	__device__ float cu_worleyNoise(float3 pos, float scale, int seed, float size, int minNum, int maxNum, float jitter)
-	{
-		if (size < EPSILON)
-			return 0.0f;
-
-		int ix = (int)(pos.x * scale);
-		int iy = (int)(pos.y * scale);
-		int iz = (int)(pos.z * scale);
-
-		float u = pos.x - (float)ix;
-		float v = pos.y - (float)iy;
-		float w = pos.z - (float)iz;
-
-		float minDist = 1000000.0f;
-
-		// Traverse the whole 3x3 neighborhood looking for the closest feature point
-		for (int x = -1; x < 2; x++)
-		{
-			for (int y = -1; y < 2; y++)
-			{
-				for (int z = -1; z < 2; z++)
-				{
-					int numPoints = randomIntRange(minNum, maxNum, seed + (ix + x) * 823746.0f + (iy + y) * 12306.0f + (iz + z) * 67262.0f);
-
-					for (int i = 0; i < numPoints; i++)
-					{
-						float distU = u - x - (randomFloat(seed + (ix + x) * 23784.0f + (iy + y) * 9183.0f + (iz + z) * 23874.0f * i + 27432.0f) * jitter - jitter / 2.0f);
-						float distV = v - y - (randomFloat(seed + (ix + x) * 12743.0f + (iy + y) * 45191.0f + (iz + z) * 144421.0f * i + 76671.0f) * jitter - jitter / 2.0f);
-						float distW = w - z - (randomFloat(seed + (ix + x) * 82734.0f + (iy + y) * 900213.0f + (iz + z) * 443241.0f * i + 199823.0f) * jitter - jitter / 2.0f);
-
-						float distanceSq = distU * distU + distV * distV + distW * distW;
-
-						if (distanceSq < minDist)
-							minDist = distanceSq;
-					}
-				}
-			}
-		}
-		return __saturatef(minDist) * 2.0f - 1.0f;
-	}
-#endif
-
-#ifdef ADD_FEATURE_SPOTS_NOISE
-
-// Random spots
-	__device__ float cu_spots(float3 pos, float scale, int seed, float size, int minNum, int maxNum, float jitter)
-	{
-		if (size < EPSILON)
-			return 0.0f;
-
-		int ix = (int)(pos.x * scale);
-		int iy = (int)(pos.y * scale);
-		int iz = (int)(pos.z * scale);
-
-		float u = pos.x - (float)ix;
-		float v = pos.y - (float)iy;
-		float w = pos.z - (float)iz;
-
-		float val = -1.0f;
-
-		// We need to traverse the entire 3x3x3 neighborhood in case there are spots in neighbors near the edges of the cell
-		for (int x = -1; x < 2; x++)
-		{
-			for (int y = -1; y < 2; y++)
-			{
-				for (int z = -1; z < 2; z++)
-				{
-					int numSpots = randomIntRange(minNum, maxNum, seed + (ix + x) * 823746.0f + (iy + y) * 12306.0f + (iz + z) * 823452.0f + 3234874.0f);
-
-					for (int i = 0; i < numSpots; i++)
-					{
-						float distU = u - x - (randomFloat(seed + (ix + x) * 23784.0f + (iy + y) * 9183.0f + (iz + z) * 23874.0f * i + 27432.0f) * jitter - jitter / 2.0f);
-						float distV = v - y - (randomFloat(seed + (ix + x) * 12743.0f + (iy + y) * 45191.0f + (iz + z) * 144421.0f * i + 76671.0f) * jitter - jitter / 2.0f);
-						float distW = w - z - (randomFloat(seed + (ix + x) * 82734.0f + (iy + y) * 900213.0f + (iz + z) * 443241.0f * i + 199823.0f) * jitter - jitter / 2.0f);
-
-						float distanceSq = distU * distU + distV * distV + distW * distW;
-						float distanceAbs = 0.0f;
-
-                        distanceAbs = fabsf(distU) + fabsf(distV) + fabsf(distW);
-                        val = fmaxf(val, 1.0f - fmaxf(0.0f, fminf(size, distanceAbs)) / size);
-					}
-				}
-			}
-		}
-
-		return val;
-	}
-
-    __device__ float cu_repeaterSpots(float3 pos, float scale, int seed, int n, float lacunarity, float decay)
+    } else // x0 < y0
     {
-        float acc = 0.0f;
-        float amp = 1.0f;
-
-        for (int i = 0; i < n; i++)
+        if (y0 < z0) {
+            i1 = 0;
+            j1 = 0;
+            k1 = 1;
+            i2 = 0;
+            j2 = 1;
+            k2 = 1;
+        } else if (x0 < z0) {
+            i1 = 0;
+            j1 = 1;
+            k1 = 0;
+            i2 = 0;
+            j2 = 1;
+            k2 = 1;
+        } else // x0 >= z0
         {
-            acc += cu_spots(make_float3(pos.x * scale, pos.y * scale, pos.z * scale), 1.0f, (i + 38) * 27389482, 1.f, 0, 32, 1.f) * amp;
-
-
-            scale *= lacunarity;
-            amp *= decay;
+            i1 = 0;
+            j1 = 1;
+            k1 = 0;
+            i2 = 1;
+            j2 = 1;
+            k2 = 0;
         }
-
-        return acc;
     }
+
+    float x1 = x0 - i1 + G3;
+    float y1 = y0 - j1 + G3;
+    float z1 = z0 - k1 + G3;
+    float x2 = x0 - i2 + F3;
+    float y2 = y0 - j2 + F3;
+    float z2 = z0 - k2 + F3;
+    float x3 = x0 + G33;
+    float y3 = y0 + G33;
+    float z3 = z0 + G33;
+
+    float n0, n1, n2, n3;
+
+    t = (float) 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
+    if (t < 0) n0 = 0;
+    else {
+        t *= t;
+        n0 = t * t * gradCoord3D(seed, i, j, k, x0, y0, z0);
+    }
+
+    t = (float) 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
+    if (t < 0) n1 = 0;
+    else {
+        t *= t;
+        n1 = t * t * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
+    }
+
+    t = (float) 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
+    if (t < 0) n2 = 0;
+    else {
+        t *= t;
+        n2 = t * t * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
+    }
+
+    t = (float) 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
+    if (t < 0) n3 = 0;
+    else {
+        t *= t;
+        n3 = t * t * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
+    }
+
+    return 32 * (n0 + n1 + n2 + n3);
+}
+
+__device__ float getSimplex(FastNoise* n, float x, float y, float z) {
+    return singleSimplex(n->m_seed, x * n->m_frequency, y * n->m_frequency, z * n->m_frequency);
+}
+
+__device__ float singleSimplexFractalFBM(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = singleSimplex(seed, x, y, z);
+    float amp = 1;
+
+    for (int i = 1; i < n->m_octaves; i++) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum += singleSimplex(++seed, x, y, z) * amp;
+    }
+
+    return sum * n->m_fractalBounding;
+}
+
+__device__ float singleSimplexFractalBillow(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = fabsf(singleSimplex(seed, x, y, z)) * 2 - 1;
+    float amp = 1;
+
+    for (int i = 1; i < n->m_octaves; i++) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum += (fabsf(singleSimplex(++seed, x, y, z)) * 2 - 1) * amp;
+    }
+
+    return sum * n->m_fractalBounding;
+}
+
+__device__ float singleSimplexFractalRigidMulti(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = 1 - fabsf(singleSimplex(seed, x, y, z));
+    float amp = 1;
+
+    for (int i = 1; i < n->m_octaves; i++) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum -= (1 - fabsf(singleSimplex(++seed, x, y, z))) * amp;
+    }
+
+    return sum;
+}
+
+__device__ float getSimplexFractal(FastNoise* n, float x, float y, float z) {
+    x *= n->m_frequency;
+    y *= n->m_frequency;
+    z *= n->m_frequency;
+
+    switch (n->m_fractalType) {
+        case FBM:
+            return singleSimplexFractalFBM(n, x, y, z);
+        case Billow:
+            return singleSimplexFractalBillow(n, x, y, z);
+        case RigidMulti:
+            return singleSimplexFractalRigidMulti(n, x, y, z);
+        default:
+            return 0;
+    }
+}
+#endif // ADD_FEATURE_SIMPLEX_NOISE
+
+#ifdef ADD_FEATURE_SIMPLEX_NOISE
+__device__ __constant__ float F2 = (float) (1.0 / 2.0);
+__device__ __constant__ float G2 = (float) (1.0 / 4.0);
 #endif
 
-#endif // ADD_FEATURE_NOISE
+// Cubic Noise
+#ifdef ADD_FEATURE_CUBIC_NOISE
+__device__ __constant__ float CUBIC_3D_BOUNDING = 1 / (float) (1.5 * 1.5 * 1.5);
+
+__device__ float singleCubic(FastNoise* n, int seed, float x, float y, float z) {
+    int x1 = fastFloor(x);
+    int y1 = fastFloor(y);
+    int z1 = fastFloor(z);
+
+    int x0 = x1 - 1;
+    int y0 = y1 - 1;
+    int z0 = z1 - 1;
+    int x2 = x1 + 1;
+    int y2 = y1 + 1;
+    int z2 = z1 + 1;
+    int x3 = x1 + 2;
+    int y3 = y1 + 2;
+    int z3 = z1 + 2;
+
+    float xs = x - (float) x1;
+    float ys = y - (float) y1;
+    float zs = z - (float) z1;
+
+    return cubicLerp(
+        cubicLerp(
+            cubicLerp(valCoord3D(seed, x0, y0, z0), valCoord3D(seed, x1, y0, z0), valCoord3D(seed, x2, y0, z0), valCoord3D(seed, x3, y0, z0), xs),
+            cubicLerp(valCoord3D(seed, x0, y1, z0), valCoord3D(seed, x1, y1, z0), valCoord3D(seed, x2, y1, z0), valCoord3D(seed, x3, y1, z0), xs),
+            cubicLerp(valCoord3D(seed, x0, y2, z0), valCoord3D(seed, x1, y2, z0), valCoord3D(seed, x2, y2, z0), valCoord3D(seed, x3, y2, z0), xs),
+            cubicLerp(valCoord3D(seed, x0, y3, z0), valCoord3D(seed, x1, y3, z0), valCoord3D(seed, x2, y3, z0), valCoord3D(seed, x3, y3, z0), xs),
+            ys),
+        cubicLerp(
+            cubicLerp(valCoord3D(seed, x0, y0, z1), valCoord3D(seed, x1, y0, z1), valCoord3D(seed, x2, y0, z1), valCoord3D(seed, x3, y0, z1), xs),
+            cubicLerp(valCoord3D(seed, x0, y1, z1), valCoord3D(seed, x1, y1, z1), valCoord3D(seed, x2, y1, z1), valCoord3D(seed, x3, y1, z1), xs),
+            cubicLerp(valCoord3D(seed, x0, y2, z1), valCoord3D(seed, x1, y2, z1), valCoord3D(seed, x2, y2, z1), valCoord3D(seed, x3, y2, z1), xs),
+            cubicLerp(valCoord3D(seed, x0, y3, z1), valCoord3D(seed, x1, y3, z1), valCoord3D(seed, x2, y3, z1), valCoord3D(seed, x3, y3, z1), xs),
+            ys),
+        cubicLerp(
+            cubicLerp(valCoord3D(seed, x0, y0, z2), valCoord3D(seed, x1, y0, z2), valCoord3D(seed, x2, y0, z2), valCoord3D(seed, x3, y0, z2), xs),
+            cubicLerp(valCoord3D(seed, x0, y1, z2), valCoord3D(seed, x1, y1, z2), valCoord3D(seed, x2, y1, z2), valCoord3D(seed, x3, y1, z2), xs),
+            cubicLerp(valCoord3D(seed, x0, y2, z2), valCoord3D(seed, x1, y2, z2), valCoord3D(seed, x2, y2, z2), valCoord3D(seed, x3, y2, z2), xs),
+            cubicLerp(valCoord3D(seed, x0, y3, z2), valCoord3D(seed, x1, y3, z2), valCoord3D(seed, x2, y3, z2), valCoord3D(seed, x3, y3, z2), xs),
+            ys),
+        cubicLerp(
+            cubicLerp(valCoord3D(seed, x0, y0, z3), valCoord3D(seed, x1, y0, z3), valCoord3D(seed, x2, y0, z3), valCoord3D(seed, x3, y0, z3), xs),
+            cubicLerp(valCoord3D(seed, x0, y1, z3), valCoord3D(seed, x1, y1, z3), valCoord3D(seed, x2, y1, z3), valCoord3D(seed, x3, y1, z3), xs),
+            cubicLerp(valCoord3D(seed, x0, y2, z3), valCoord3D(seed, x1, y2, z3), valCoord3D(seed, x2, y2, z3), valCoord3D(seed, x3, y2, z3), xs),
+            cubicLerp(valCoord3D(seed, x0, y3, z3), valCoord3D(seed, x1, y3, z3), valCoord3D(seed, x2, y3, z3), valCoord3D(seed, x3, y3, z3), xs),
+            ys),
+        zs) * CUBIC_3D_BOUNDING;
+}
+
+
+__device__ float getCubic(FastNoise* n, float x, float y, float z) {
+    return singleCubic(n, n->m_seed, x * n->m_frequency, y * n->m_frequency, z * n->m_frequency);
+}
+
+__device__ float singleCubicFractalFBM(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = singleCubic(n, seed, x, y, z);
+    float amp = 1;
+    int i = 0;
+
+    while (++i < n->m_octaves) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum += singleCubic(n, ++seed, x, y, z) * amp;
+    }
+
+    return sum * n->m_fractalBounding;
+}
+
+__device__ float singleCubicFractalBillow(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = fabsf(singleCubic(n, seed, x, y, z)) * 2 - 1;
+    float amp = 1;
+    int i = 0;
+
+    while (++i < n->m_octaves) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum += (fabsf(singleCubic(n, ++seed, x, y, z)) * 2 - 1) * amp;
+    }
+
+    return sum * n->m_fractalBounding;
+}
+
+__device__ float singleCubicFractalRigidMulti(FastNoise* n, float x, float y, float z) {
+    int seed = n->m_seed;
+    float sum = 1 - fabsf(singleCubic(n, seed, x, y, z));
+    float amp = 1;
+    int i = 0;
+
+    while (++i < n->m_octaves) {
+        x *= n->m_lacunarity;
+        y *= n->m_lacunarity;
+        z *= n->m_lacunarity;
+
+        amp *= n->m_gain;
+        sum -= (1 - fabsf(singleCubic(n, ++seed, x, y, z))) * amp;
+    }
+
+    return sum;
+}
+
+__device__ float getCubicFractal(FastNoise* n, float x, float y, float z) {
+    x *= n->m_frequency;
+    y *= n->m_frequency;
+    z *= n->m_frequency;
+
+    switch (n->m_fractalType) {
+        case FBM:
+            return singleCubicFractalFBM(n, x, y, z);
+        case Billow:
+            return singleCubicFractalBillow(n, x, y, z);
+        case RigidMulti:
+            return singleCubicFractalRigidMulti(n, x, y, z);
+        default:
+            return 0;
+    }
+}
+#endif // ADD_FEATURE_CUBIC_NOISE
+
+// Cellular Noise
+#ifdef ADD_FEATURE_CELLULAR_NOISE
+__device__ __constant__ float CELL_3D_x[] =  {
+    0.1453787434f, -0.01242829687f, 0.2877979582f, -0.07732986802f, 0.1107205875f, 0.2755209141f, 0.294168941f, 0.4000921098f,
+    -0.1697304074f, -0.1483224484f, 0.2623596946f, -0.2709003183f, -0.03516550699f, -0.1267712655f, 0.02952021915f, -0.2806854217f,
+    -0.171159547f, 0.2113227183f, -0.1024352839f, -0.3304249877f, 0.2091111325f, 0.344678154f, 0.1984478035f, -0.2929008603f,
+    -0.1617332831f, -0.3582060271f, -0.1852067326f, 0.3046301062f, -0.03816768434f, -0.4084952196f, -0.02687443361f, -0.03801098351f,
+    0.2371120802f, 0.4447660503f, 0.01985147278f, 0.4274339143f, -0.2072988631f, -0.3791240978f, -0.2098721267f, 0.01582798878f,
+    -0.1888129464f, 0.1612988974f, -0.08974491322f, 0.07041229526f, -0.1082925611f, 0.2474100658f, -0.1068836661f, 0.2396452163f,
+    -0.3063886072f, 0.1593342891f, 0.2709690528f, -0.1519780427f, 0.1699773681f, -0.1986155616f, -0.1887482106f, 0.2659103394f,
+    -0.08838976154f, -0.04201869311f, -0.3230334656f, 0.2612720941f, 0.385713046f, 0.07654967953f, 0.4317038818f, -0.2890436293f,
+    -0.2201947582f, 0.4161322773f, 0.2204718095f, -0.1040307469f, -0.1432122615f, 0.3978380468f, -0.2599274663f, 0.4032618332f,
+    -0.08953470255f, 0.118937202f, 0.02167047076f, -0.3411343612f, 0.3162964612f, 0.2355138889f, -0.02874541518f, -0.2461455173f,
+    0.04208029445f, 0.2727458746f, -0.1347522818f, 0.3829624424f, -0.3547613644f, 0.2305790207f, -0.08323845599f, 0.2993663085f,
+    -0.2154865723f, 0.01683355354f, 0.05240429123f, 0.00940104872f, 0.3465688735f, -0.3706867948f, 0.2741169781f, 0.06413433865f,
+    -0.388187972f, 0.06419469312f, -0.1986120739f, -0.203203009f, -0.1389736354f, -0.06555641638f, -0.2529246486f, 0.1444476522f,
+    -0.3643780054f, 0.4286142488f, 0.165872923f, 0.2219610524f, 0.04322940318f, -0.08481269795f, 0.1822082075f, -0.3269323334f,
+    -0.4080485344f, 0.2676025294f, 0.3024892441f, 0.1448494052f, 0.4198402157f, -0.3008872161f, 0.3639310428f, 0.3295806598f,
+    0.2776259487f, 0.4149000507f, 0.145016715f, 0.09299023471f, 0.1028907093f, 0.2683057049f, -0.4227307273f, -0.1781224702f,
+    0.4390788626f, 0.2972583585f, -0.1707002821f, 0.3806686614f, -0.1751445661f, -0.2227237566f, 0.1369633021f, -0.3529503428f,
+    -0.2590744185f, -0.3784019401f, -0.05635805671f, 0.3251428613f, -0.4190995804f, -0.3253150961f, 0.2857945863f, -0.2733604046f,
+    0.219003657f, 0.3182767252f, -0.03222023115f, -0.3087780231f, -0.06487611647f, 0.3921171432f, -0.1606404506f, -0.03767771199f,
+    0.1394866832f, -0.4345093872f, -0.1044637494f, 0.2658727501f, 0.2051461999f, -0.266085566f, 0.07849405464f, -0.2160686338f,
+    -0.185779186f, 0.02492421743f, -0.120167831f, -0.02160084693f, 0.2597670064f, -0.1611553854f, -0.3278896792f, 0.2822734956f,
+    0.03169341113f, 0.2202613604f, 0.2933396046f, -0.3194922995f, -0.3441586045f, 0.2703645948f, 0.2298568861f, 0.09326603877f,
+    -0.1116165319f, 0.2172907365f, 0.1991339479f, -0.0541918155f, 0.08871336998f, 0.2787673278f, -0.322166438f, -0.4277366384f,
+    0.240131882f, 0.1448607981f, -0.3837065682f, -0.4382627882f, -0.37728353f, 0.1259579313f, -0.1406285511f, -0.1580694418f,
+    0.2477612106f, 0.2916132853f, 0.07365265219f, -0.26126526f, -0.3721862032f, -0.3691191571f, 0.2278441737f, 0.363398169f,
+    -0.304231482f, -0.3199312232f, 0.2874852279f, -0.1451096801f, 0.3220090754f, -0.1247400865f, -0.2829555867f, 0.1069384374f,
+    -0.1420661144f, -0.250548338f, 0.3265787872f, 0.07646097258f, 0.3451771584f, 0.298137964f, 0.2812250376f, 0.4390345476f,
+    0.2148373234f, 0.2595421179f, 0.3182823114f, -0.4089859285f, -0.2826749061f, 0.3483864637f, -0.3226415069f, 0.4330734858f,
+    -0.08717822568f, -0.2149678299f, -0.2687330705f, 0.2105665099f, 0.4361845915f, 0.05333333359f, -0.05986216652f, 0.3664988455f,
+    -0.2341015558f, -0.04730947785f, -0.2391566239f, -0.1242081035f, 0.2614832715f, -0.2728794681f, 0.007892900508f, -0.01730330376f,
+    0.2054835762f, -0.3231994983f, -0.2669545963f, -0.05554372779f, -0.2083935713f, 0.06989323478f, 0.3847566193f, -0.3026215288f,
+    0.3450735512f, 0.1814473292f, -0.03855010448f, 0.3533670318f, -0.007945601311f, 0.4063099273f, -0.2016773589f, -0.07527055435f,
+};
+
+__device__ __constant__ float CELL_3D_y[] = {
+    -0.4149781685f, -0.1457918398f, -0.02606483451f, 0.2377094325f, -0.3552302079f, 0.2640521179f, 0.1526064594f, -0.2034056362f,
+    0.3970864695f, -0.3859694688f, -0.2354852944f, 0.3505271138f, 0.3885234328f, 0.1920044036f, 0.4409685861f, -0.266996757f,
+    0.2141185563f, 0.3902405947f, 0.2128044156f, -0.1566986703f, 0.3133278055f, -0.1944240454f, -0.3214342325f, 0.2262915116f,
+    0.006314769776f, -0.148303178f, -0.3454119342f, 0.1026310383f, -0.2551766358f, 0.1805950793f, -0.2749741471f, 0.3277859044f,
+    0.2900386767f, 0.03946930643f, -0.01503183293f, 0.03345994256f, 0.2871414597f, 0.1281177671f, -0.1007087278f, 0.4263894424f,
+    -0.3160996813f, -0.1974805082f, 0.229148752f, 0.4150230285f, -0.1586061639f, -0.3309414609f, -0.2701644537f, 0.06803600538f,
+    0.2597428179f, -0.3114350249f, 0.1412648683f, 0.3623355133f, 0.3456012883f, 0.3836276443f, -0.2050154888f, 0.3015631259f,
+    -0.4288819642f, 0.3099592485f, 0.201549922f, 0.2759854499f, 0.2193460345f, 0.3721732183f, -0.02577753072f, -0.3418179959f,
+    0.383023377f, -0.1669634289f, 0.02654238946f, 0.3890079625f, 0.371614387f, -0.06206669342f, 0.2616724959f, -0.1124593585f,
+    -0.3048244735f, -0.2875221847f, -0.03284630549f, 0.2500031105f, 0.3082064153f, -0.3439334267f, -0.3955933019f, 0.02020282325f,
+    -0.4470439576f, 0.2288471896f, -0.02720848277f, 0.1231931484f, 0.1271702173f, 0.3063895591f, -0.1922245118f, -0.2619918095f,
+    0.2706747713f, -0.2680655787f, 0.4335128183f, -0.4472890582f, 0.01141914583f, -0.2551104378f, 0.2139972417f, 0.1708718512f,
+    -0.03973280434f, -0.2803682491f, -0.3391173584f, -0.3871641506f, -0.2775901578f, 0.342253257f, -0.2904227915f, 0.1069184044f,
+    -0.2447099973f, -0.1358496089f, -0.3136808464f, -0.3658139958f, -0.3832730794f, -0.4404869674f, -0.3953259299f, 0.3036542563f,
+    0.04227858267f, -0.01299671652f, -0.1009990293f, 0.425921681f, 0.08062320474f, -0.333040905f, -0.1291284382f, 0.0184175994f,
+    -0.2974929052f, -0.144793182f, -0.0398992945f, -0.299732164f, -0.361266869f, -0.07076041213f, -0.07933161816f, 0.1806857196f,
+    -0.02841848598f, 0.2382799621f, 0.2215845691f, 0.1471852559f, -0.274887877f, -0.2316778837f, 0.1341343041f, -0.2472893463f,
+    -0.2985577559f, 0.2199816631f, 0.1485737441f, 0.09666046873f, 0.1406751354f, -0.3080335042f, -0.05796152095f, 0.1973770973f,
+    0.2410037886f, -0.271342949f, -0.3331161506f, 0.1992794134f, -0.4311322747f, -0.06294284106f, -0.358928121f, -0.2290351443f,
+    -0.3602213994f, 0.005751117145f, 0.4168128432f, 0.2551943237f, 0.1975390727f, 0.23483312f, -0.3300346342f, 0.05376451292f,
+    0.2148499206f, -0.3229954284f, 0.4017266681f, -0.06885389554f, 0.3096300784f, -0.09823036005f, 0.1461670309f, 0.03754421121f,
+    0.347405252f, -0.3460788041f, 0.3031973659f, 0.2453752201f, -0.1698856132f, -0.3574277231f, 0.3744156221f, -0.3170108894f,
+    -0.2985018719f, -0.3460005203f, 0.3820341668f, -0.2103145071f, 0.2012117383f, 0.3505404674f, 0.3067213525f, 0.132066775f,
+    -0.1612516055f, -0.2387819045f, -0.2206398454f, -0.09082753406f, 0.05445141085f, 0.348394558f, -0.270877371f, 0.4162931958f,
+    -0.2927867412f, 0.3312535401f, -0.1666159848f, -0.2422237692f, 0.252790166f, -0.255281188f, -0.3358364886f, -0.2310190248f,
+    -0.2698452035f, 0.316332536f, 0.1642275508f, 0.3277541114f, 0.0511344108f, -0.04333605335f, -0.3056190617f, 0.3491024667f,
+    -0.3055376754f, 0.3156466809f, 0.1871229129f, -0.3026690852f, 0.2757120714f, 0.2852657134f, 0.3466716415f, -0.09790429955f,
+    0.1850172527f, -0.07946825393f, -0.307355516f, -0.04647718411f, 0.07417482322f, 0.225442246f, -0.1420585388f, -0.118868561f,
+    -0.3909896417f, 0.3939973956f, 0.322686276f, -0.1961317136f, -0.1105517485f, -0.313639498f, 0.1361029153f, 0.2550543014f,
+    -0.182405731f, -0.4222150243f, -0.2577696514f, 0.4256953395f, -0.3650179274f, -0.3499628774f, -0.1672771315f, 0.2978486637f,
+    -0.3252600376f, 0.1564282844f, 0.2599343665f, 0.3170813944f, -0.310922837f, -0.3156141536f, -0.1605309138f, -0.3001537679f,
+    0.08611519592f, -0.2788782453f, 0.09795110726f, 0.2665752752f, 0.140359426f, -0.1491768253f, 0.008816271194f, -0.425643481f,
+};
+
+__device__ __constant__ float CELL_3D_z[] = {
+    -0.0956981749f, -0.4255470325f, -0.3449535616f, 0.3741848704f, -0.2530858567f, -0.238463215f, 0.3044271714f, 0.03244149937f,
+    -0.1265461359f, 0.1775613147f, 0.2796677792f, -0.07901746678f, 0.2243054374f, 0.3867342179f, 0.08470692262f, 0.2289725438f,
+    0.3568720405f, -0.07453178509f, -0.3830421561f, 0.2622305365f, -0.2461670583f, -0.2142341261f, -0.2445373252f, 0.2559320961f,
+    -0.4198838754f, -0.2284613961f, -0.2211087107f, 0.314908508f, -0.3686842991f, 0.05492788837f, 0.3551999201f, 0.3059600725f,
+    -0.2493099024f, 0.05590469027f, -0.4493105419f, -0.1366772882f, -0.2776273824f, 0.2057929936f, -0.3851122467f, 0.1429738373f,
+    -0.2587096108f, -0.3707885038f, -0.3767448739f, -0.1590534329f, 0.4069604477f, 0.1782302128f, -0.3436379634f, -0.3747549496f,
+    0.2028785103f, -0.2830561951f, -0.3303331794f, 0.2193527988f, 0.2327390037f, -0.1260225743f, -0.353330953f, -0.2021172246f,
+    -0.1036702021f, 0.3235115047f, -0.2398478873f, -0.2409749453f, 0.07491837764f, 0.241095919f, 0.1243675091f, -0.04598084447f,
+    -0.08548310451f, -0.03817251927f, -0.391391981f, -0.2008741118f, -0.2095065525f, 0.2009293758f, -0.2578084893f, 0.1650235939f,
+    0.3186935478f, 0.325092195f, -0.4482761547f, 0.1537068389f, -0.08640228117f, -0.1695376245f, 0.2125550295f, -0.3761704803f,
+    0.02968078139f, -0.2752065618f, -0.4284874806f, -0.2016512234f, 0.2459107769f, 0.2354968222f, 0.3982726409f, -0.2103333191f,
+    0.287751117f, -0.3610505186f, -0.1087217856f, 0.04841609928f, -0.2868093776f, 0.003156692623f, -0.2855959784f, 0.4113266307f,
+    -0.2241236325f, 0.3460819069f, 0.2192091725f, 0.1063600375f, -0.3257760473f, -0.2847192729f, 0.2327739768f, 0.4125570634f,
+    -0.09922543227f, -0.01829506817f, -0.2767498872f, 0.1393320198f, 0.2318037215f, -0.03574965489f, 0.1140946023f, 0.05838957105f,
+    -0.184956522f, 0.36155217f, -0.3174892964f, -0.0104580805f, 0.1404780841f, -0.03241355801f, -0.2310412139f, -0.3058388149f,
+    -0.1921504723f, -0.09691688386f, 0.4241205002f, -0.3225111565f, 0.247789732f, -0.3542668666f, -0.1323073187f, -0.3716517945f,
+    -0.09435116353f, -0.2394997452f, 0.3525077196f, -0.1895464869f, 0.3102596268f, 0.3149912482f, -0.4071228836f, -0.129514612f,
+    -0.2150435121f, -0.1044989934f, 0.4210102279f, -0.2957006485f, -0.08405978803f, -0.04225456877f, 0.3427271751f, -0.2980207554f,
+    -0.3105713639f, 0.1660509868f, -0.300824678f, -0.2596995338f, 0.1114273361f, -0.2116183942f, -0.2187812825f, 0.3855169162f,
+    0.2308332918f, 0.1169124335f, -0.1336202785f, 0.2582393035f, 0.3484154868f, 0.2766800993f, -0.2956616708f, -0.3910546287f,
+    0.3490352499f, -0.3123343347f, 0.1633259825f, 0.4441762538f, 0.1978643903f, 0.4085091653f, 0.2713366126f, -0.3484423997f,
+    -0.2842624114f, -0.1849713341f, 0.1565989581f, -0.200538455f, -0.2349334659f, 0.04060059933f, 0.0973588921f, 0.3054595587f,
+    0.3177080142f, -0.1885958001f, -0.1299829458f, 0.39412061f, 0.3926114802f, 0.04370535101f, 0.06804996813f, 0.04582286686f,
+    0.344723946f, 0.3528435224f, 0.08116235683f, -0.04664855374f, 0.2391488697f, 0.2554522098f, -0.3306796947f, -0.06491553533f,
+    -0.2353514536f, 0.08793624968f, 0.411478311f, 0.2748965434f, 0.008634938242f, 0.03290232422f, 0.1944244981f, 0.1306597909f,
+    0.1926830856f, -0.008816977938f, -0.304764754f, -0.2720669462f, 0.3101538769f, -0.4301882115f, -0.1703910946f, -0.2630430352f,
+    -0.2982682484f, -0.2002316239f, 0.2466400438f, 0.324106687f, -0.0856480183f, 0.179547284f, 0.05684409612f, -0.01278335452f,
+    0.3494474791f, 0.3589187731f, -0.08203022006f, 0.1818526372f, 0.3421885344f, -0.1740766085f, -0.2796816575f, -0.02859407492f,
+    -0.2050050172f, -0.03247898316f, -0.1617284888f, -0.3459683451f, 0.004616608544f, -0.3182543336f, -0.4247264031f, -0.05590974511f,
+    0.3382670703f, -0.1483114513f, -0.2808182972f, -0.07652336246f, 0.02980623099f, 0.07458404908f, 0.4176793787f, -0.3368779738f,
+    -0.2334146693f, -0.2712420987f, -0.2523278991f, -0.3144428146f, -0.2497981362f, 0.3130537363f, -0.1693876312f, -0.1443188342f,
+    0.2756962409f, -0.3029914042f, 0.4375151083f, 0.08105160988f, -0.4274764309f, -0.1231199324f, -0.4021797064f, -0.1251477955f,
+};
+
+__device__ float singleCellular(FastNoise* n, float x, float y, float z) {
+    int xr = fastRound(x);
+    int yr = fastRound(y);
+    int zr = fastRound(z);
+
+    float distance = 999999;
+    int xc = 0, yc = 0, zc = 0;
+
+    switch (n->m_cellularDistanceFunction) {
+        case Euclidean:
+            for (int xi = xr - 1; xi <= xr + 1; xi++) {
+                for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                    for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                        int idx = hash3D(n->m_seed, xi, yi, zi) & 255;
+
+
+                        float vecX = xi - x + CELL_3D_x[idx];
+                        float vecY = yi - y + CELL_3D_y[idx];
+                        float vecZ = zi - z + CELL_3D_z[idx];
+
+                        float newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ;
+
+                        if (newDistance < distance) {
+                            distance = newDistance;
+                            xc = xi;
+                            yc = yi;
+                            zc = zi;
+                        }
+                    }
+                }
+            }
+            break;
+        case Manhattan:
+            for (int xi = xr - 1; xi <= xr + 1; xi++) {
+                for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                    for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                        int idx = hash3D(n->m_seed, xi, yi, zi) & 255;
+
+                        float vecX = xi - x + CELL_3D_x[idx];
+                        float vecY = yi - y + CELL_3D_y[idx];
+                        float vecZ = zi - z + CELL_3D_z[idx];
+
+                        float newDistance = fabsf(vecX) + fabsf(vecY) + fabsf(vecZ);
+
+                        if (newDistance < distance) {
+                            distance = newDistance;
+                            xc = xi;
+                            yc = yi;
+                            zc = zi;
+                        }
+                    }
+                }
+            }
+            break;
+        case Natural:
+            for (int xi = xr - 1; xi <= xr + 1; xi++) {
+                for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                    for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                        int idx = hash3D(n->m_seed, xi, yi, zi) & 255;
+
+                        float vecX = xi - x + CELL_3D_x[idx];
+                        float vecY = yi - y + CELL_3D_y[idx];
+                        float vecZ = zi - z + CELL_3D_z[idx];
+
+                        float newDistance = (fabsf(vecX) + fabsf(vecY) + fabsf(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ);
+
+                        if (newDistance < distance) {
+                            distance = newDistance;
+                            xc = xi;
+                            yc = yi;
+                            zc = zi;
+                        }
+                    }
+                }
+            }
+            break;
+    }
+
+    switch (n->m_cellularReturnType) {
+        case CellValue:
+            return valCoord3D(0, xc, yc, zc);
+        case Distance:
+            return distance - 1;
+        default:
+            return 0;
+    }
+}
+
+__device__ float singleCellular2Edge(FastNoise* n, float x, float y, float z) {
+    int xr = fastRound(x);
+    int yr = fastRound(y);
+    int zr = fastRound(z);
+
+    float distance = 999999;
+    float distance2 = 999999;
+
+    switch (n->m_cellularDistanceFunction) {
+        case Euclidean:
+            for (int xi = xr - 1; xi <= xr + 1; xi++) {
+                for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                    for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                       int idx = hash3D(n->m_seed, xi, yi, zi) & 255;
+                        float vecX = xi - x + CELL_3D_x[idx];
+                        float vecY = yi - y + CELL_3D_y[idx];
+                        float vecZ = zi - z + CELL_3D_z[idx];
+
+                        float newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ;
+
+                        distance2 = fmaxf(fminf(distance2, newDistance), distance);
+                        distance = fminf(distance, newDistance);
+                    }
+                }
+            }
+            break;
+        case Manhattan:
+            for (int xi = xr - 1; xi <= xr + 1; xi++) {
+                for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                    for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                        int idx = hash3D(n->m_seed, xi, yi, zi) & 255;
+
+                        float vecX = xi - x + CELL_3D_x[idx];
+                        float vecY = yi - y + CELL_3D_y[idx];
+                        float vecZ = zi - z + CELL_3D_z[idx];
+
+                        float newDistance = fabsf(vecX) + fabsf(vecY) + fabsf(vecZ);
+
+                        distance2 = fmaxf(fminf(distance2, newDistance), distance);
+                        distance = fminf(distance, newDistance);
+                    }
+                }
+            }
+            break;
+        case Natural:
+            for (int xi = xr - 1; xi <= xr + 1; xi++) {
+                for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                    for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                        int idx = hash3D(n->m_seed, xi, yi, zi) & 255;
+
+                        float vecX = xi - x + CELL_3D_x[idx];
+                        float vecY = yi - y + CELL_3D_y[idx];
+                        float vecZ = zi - z + CELL_3D_z[idx];
+
+                        float newDistance = (fabsf(vecX) + fabsf(vecY) + fabsf(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ);
+
+                        distance2 = fmaxf(fminf(distance2, newDistance), distance);
+                        distance = fminf(distance, newDistance);
+                    }
+                }
+            }
+            break;
+        default:
+            break;
+    }
+
+    switch (n->m_cellularReturnType) {
+        case Distance2:
+            return distance2 - 1;
+        case Distance2Add:
+            return distance2 + distance - 1;
+        case Distance2Sub:
+            return distance2 - distance - 1;
+        case Distance2Mul:
+            return distance2 * distance - 1;
+        case Distance2Div:
+            return distance / distance2 - 1;
+        default:
+            return 0;
+    }
+}
+
+__device__ float getCellular(FastNoise* n, float x, float y, float z) {
+    x *= n->m_frequency;
+    y *= n->m_frequency;
+    z *= n->m_frequency;
+
+    switch (n->m_cellularReturnType) {
+        case CellValue:
+        case Distance:
+            return singleCellular(n, x, y, z);
+        default:
+            return singleCellular2Edge(n, x, y, z);
+    }
+}
+#endif // ADD_FEATURE_CELLULAR_NOISE
+
+// MAIN FUNCTION
+__device__ float getNoise(FastNoise* n, float x, float y, float z) {
+    x *= n->m_frequency;
+    y *= n->m_frequency;
+    z *= n->m_frequency;
+
+    switch (n->m_noiseType) {
+        case Value:
+#ifdef ADD_FEATURE_VALUE_NOISE
+            return singleValue(n, n->m_seed, x, y, z);
+#else
+            return 0.f;
+#endif
+        case ValueFractal:
+#ifdef ADD_FEATURE_VALUE_NOISE
+            switch (n->m_fractalType) {
+                case FBM:
+                    return singleValueFractalFBM(n, x, y, z);
+                case Billow:
+                    return singleValueFractalBillow(n, x, y, z);
+                case RigidMulti:
+                    return singleValueFractalRigidMulti(n, x, y, z);
+                default:
+                    return 0;
+            }
+#else
+            return 0.f;
+#endif
+        case Perlin:
+#ifdef ADD_FEATURE_PERLIN_NOISE
+            return singlePerlin(n, n->m_seed, x, y, z);
+#else
+            return 0.f;
+#endif
+        case PerlinFractal:
+#ifdef ADD_FEATURE_PERLIN_NOISE
+            switch (n->m_fractalType) {
+                case FBM:
+                    return singlePerlinFractalFBM(n, x, y, z);
+                case Billow:
+                    return singlePerlinFractalBillow(n, x, y, z);
+                case RigidMulti:
+                    return singlePerlinFractalRigidMulti(n, x, y, z);
+                default:
+                    return 0;
+            }
+#else
+            return 0.f;
+#endif
+        case Simplex:
+#ifdef ADD_FEATURE_SIMPLEX_NOISE
+            return singleSimplex(n->m_seed, x, y, z);
+#else
+            return 0.f;
+#endif
+        case SimplexFractal:
+#ifdef ADD_FEATURE_SIMPLEX_NOISE
+            switch (n->m_fractalType) {
+                case FBM:
+                    return singleSimplexFractalFBM(n, x, y, z);
+                case Billow:
+                    return singleSimplexFractalBillow(n, x, y, z);
+                case RigidMulti:
+                    return singleSimplexFractalRigidMulti(n, x, y, z);
+                default:
+                    return 0;
+            }
+#else
+            return 0.f;
+#endif
+        case Cellular:
+#ifdef ADD_FEATURE_CELLULAR_NOISE
+            switch (n->m_cellularReturnType) {
+                case CellValue:
+                case Distance:
+                    return singleCellular(n, x, y, z);
+                default:
+                    return singleCellular2Edge(n, x, y, z);
+            }
+#else
+            return 0.f;
+#endif
+        case WhiteNoise:
+#ifdef ADD_FEATURE_WHITE_NOISE
+            return getWhiteNoise(n, x, y, z);
+#else
+            return 0.f;
+#endif
+        case Cubic:
+#ifdef ADD_FEATURE_CUBIC_NOISE
+            return singleCubic(n, n->m_seed, x, y, z);
+#else
+            return 0.f;
+#endif
+        case CubicFractal:
+#ifdef ADD_FEATURE_CUBIC_NOISE
+            switch (n->m_fractalType) {
+                case FBM:
+                    return singleCubicFractalFBM(n, x, y, z);
+                case Billow:
+                    return singleCubicFractalBillow(n, x, y, z);
+                case RigidMulti:
+                    return singleCubicFractalRigidMulti(n, x, y, z);
+                default:
+                    return 0;
+            }
+#else
+            return 0.f;
+#endif
+        default:
+            return 0;
+    }
+}
+
+}
+
+#endif // ADD_FEATURE_FAST_NOISE
+
 //------------- START of JS CODE--------------------------
 // vector operations 2D,3D, 4D
 
@@ -2096,15 +2716,19 @@ struct __align__(8) xForm
     float zxPe;
     float zxPf;
 	int useXyz;
+	int xform_idx;
 	int wfield_type;
 	int wfield_input;
 	float wfield_var_amount;
+	int	wfield_param1_xform_idx;
 	int	wfield_param1_var_idx;
 	int wfield_param1_param_idx;
 	float wfield_param1_amount;
+	int	wfield_param2_xform_idx;
 	int	wfield_param2_var_idx;
 	int wfield_param2_param_idx;
 	float wfield_param2_amount;
+	int	wfield_param3_xform_idx;
 	int	wfield_param3_var_idx;
 	int wfield_param3_param_idx;
 	float wfield_param3_amount;
@@ -2115,6 +2739,9 @@ struct __align__(8) xForm
 	float wfield_gain;
 	float wfield_lacunarity;
 	float wfield_scale;
+	int wfield_fractal_type;
+    int wfield_cell_noise_dist_func;
+    int wfield_cell_noise_ret_val;
 #endif	
 };
 
@@ -2498,16 +3125,6 @@ __device__ float4 HSVtoRGB(float4 color)
     return make_float4(r,g,b,color.w);
 }
 
-
-
-
-
-
-
-
-
- 
-
 __device__ float4 read_imageStepMode(float4 * image, int length, float index)
 {
     float clampedIndex = index - floorf(index);
@@ -2529,64 +3146,185 @@ __VARIATION_FUNCTIONS__
 #ifdef ADD_FEATURE_WFIELDS
 __device__ float calcWFieldIntensity(float3 *__wFieldPos, struct xForm* xform) {
         switch(xform->wfield_type) {
-             case 1: // Cellular Noise -> use worley
-#ifdef ADD_FEATURE_WORLEY_NOISE
-               return cu_worleyNoise(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, 1.f, 0, 32, 1.0f);
+             case 1: // Cellular Noise
+#ifdef ADD_FEATURE_CELLULAR_NOISE
+               {
+                  fastNoise::FastNoise noise;
+                  fastNoise::init(&noise);
+                  noise.m_seed = xform->wfield_seed;
+                  noise.m_frequency = xform->wfield_scale;
+                  noise.m_noiseType = fastNoise::Cellular;
+                  switch(xform->wfield_cell_noise_ret_val) {
+                    case 0: // Cell value
+                      noise.m_cellularReturnType = fastNoise::CellValue;
+                      break;
+                    case 1: // Distance1
+                      noise.m_cellularReturnType = fastNoise::Distance;
+                      break;
+                    case 2: // Distance2
+                      noise.m_cellularReturnType = fastNoise::Distance2;
+                      break;
+                    case 3: // Dist add
+                      noise.m_cellularReturnType = fastNoise::Distance2Add;
+                      break;
+                    case 4: // Dist sub
+                      noise.m_cellularReturnType = fastNoise::Distance2Sub;
+                      break;
+                    case 5: // Dist mul
+                      noise.m_cellularReturnType = fastNoise::Distance2Mul;
+                      break;
+                    case 6: // Dist div
+                      noise.m_cellularReturnType = fastNoise::Distance2Div;
+                      break;
+                    default:
+                      noise.m_cellularReturnType = fastNoise::Distance2;
+                      break;
+                  }
+                  noise.m_cellularDistanceFunction = xform->wfield_cell_noise_dist_func == 1 ? fastNoise::Manhattan : xform->wfield_cell_noise_dist_func == 2 ? fastNoise::Natural : fastNoise::Euclidean;
+                  fastNoise::prepare(&noise);
+                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+               }
 #endif
                break;
              case 2: // Cubic Noise
-#ifdef ADD_FEATURE_CUBIC_VALUE_NOISE
-               return cu_cubicValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed)*0.25;
+#ifdef ADD_FEATURE_CUBIC_NOISE
+               {
+                  fastNoise::FastNoise noise;
+                  fastNoise::init(&noise);
+                  noise.m_seed = xform->wfield_seed;
+                  noise.m_frequency = xform->wfield_scale;
+                  noise.m_noiseType = fastNoise::Cubic;
+                  fastNoise::prepare(&noise);
+                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+               }
 #endif
                break;
              case 3: // Cubic Fractal Noise
-#ifdef ADD_FEATURE_CUBIC_VALUE_NOISE
-               return cu_repeaterCubicValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain)*0.25;
+#ifdef ADD_FEATURE_CUBIC_NOISE
+                {
+                  fastNoise::FastNoise noise;
+                  fastNoise::init(&noise);
+                  noise.m_seed = xform->wfield_seed;
+                  noise.m_frequency = xform->wfield_scale;
+                  noise.m_noiseType = fastNoise::CubicFractal;
+                  noise.m_octaves = xform->wfield_octaves;
+                  noise.m_lacunarity = xform->wfield_lacunarity;
+                  noise.m_gain = xform->wfield_gain;
+                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? fastNoise::Billow : xform->wfield_fractal_type == 2 ? fastNoise::RigidMulti : fastNoise::FBM;
+                  fastNoise::prepare(&noise);
+                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+               }
 #endif
                break;
              case 4: // Perlin Noise
 #ifdef ADD_FEATURE_PERLIN_NOISE
-               return cu_perlinNoise(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+               {
+                  fastNoise::FastNoise noise;
+                  fastNoise::init(&noise);
+                  noise.m_seed = xform->wfield_seed;
+                  noise.m_frequency = xform->wfield_scale;
+                  noise.m_noiseType = fastNoise::Perlin;
+                  fastNoise::prepare(&noise);
+                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+               }
 #endif
                break;
              case 5: // Perlin Fractal Noise
 #ifdef ADD_FEATURE_PERLIN_NOISE
-               return cu_repeaterPerlin(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+               {
+                  fastNoise::FastNoise noise;
+                  fastNoise::init(&noise);
+                  noise.m_seed = xform->wfield_seed;
+                  noise.m_frequency = xform->wfield_scale;
+                  noise.m_noiseType = fastNoise::PerlinFractal;
+                  noise.m_octaves = xform->wfield_octaves;
+                  noise.m_lacunarity = xform->wfield_lacunarity;
+                  noise.m_gain = xform->wfield_gain;
+                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? fastNoise::Billow : xform->wfield_fractal_type == 2 ? fastNoise::RigidMulti : fastNoise::FBM;
+                  fastNoise::prepare(&noise);
+                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+               }
 #endif
                break;
              case 6: // Simplex Noise
 #ifdef ADD_FEATURE_SIMPLEX_NOISE
-               return cu_simplexNoise(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+               {
+                  fastNoise::FastNoise noise;
+                  fastNoise::init(&noise);
+                  noise.m_seed = xform->wfield_seed;
+                  noise.m_frequency = xform->wfield_scale;
+                  noise.m_noiseType = fastNoise::Simplex;
+                  fastNoise::prepare(&noise);
+                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+               }
 #endif
                break;
              case 7: // Simplex Fractal Noise
 #ifdef ADD_FEATURE_SIMPLEX_NOISE
-               return cu_repeaterSimplex(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+               {
+                  fastNoise::FastNoise noise;
+                  fastNoise::init(&noise);
+                  noise.m_seed = xform->wfield_seed;
+                  noise.m_frequency = xform->wfield_scale;
+                  noise.m_noiseType = fastNoise::SimplexFractal;
+                  noise.m_octaves = xform->wfield_octaves;
+                  noise.m_lacunarity = xform->wfield_lacunarity;
+                  noise.m_gain = xform->wfield_gain;
+                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? fastNoise::Billow : xform->wfield_fractal_type == 2 ? fastNoise::RigidMulti : fastNoise::FBM;
+                  fastNoise::prepare(&noise);
+                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+               }
 #endif
                break;
              case 8: // Value Noise
-#ifdef ADD_FEATURE_LINEAR_VALUE_NOISE
-               return cu_linearValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed);
+#ifdef ADD_FEATURE_VALUE_NOISE
+               {
+                  fastNoise::FastNoise noise;
+                  fastNoise::init(&noise);
+                  noise.m_seed = xform->wfield_seed;
+                  noise.m_frequency = xform->wfield_scale;
+                  noise.m_noiseType = fastNoise::Value;
+                  fastNoise::prepare(&noise);
+                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+               }
 #endif
                break;
              case 9: // Value Fractal Noise
-#ifdef ADD_FEATURE_LINEAR_VALUE_NOISE
-               return cu_repeaterLinearValue(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+#ifdef ADD_FEATURE_VALUE_NOISE
+               {
+                  fastNoise::FastNoise noise;
+                  fastNoise::init(&noise);
+                  noise.m_seed = xform->wfield_seed;
+                  noise.m_frequency = xform->wfield_scale;
+                  noise.m_noiseType = fastNoise::ValueFractal;
+                  noise.m_octaves = xform->wfield_octaves;
+                  noise.m_lacunarity = xform->wfield_lacunarity;
+                  noise.m_gain = xform->wfield_gain;
+                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? fastNoise::Billow : xform->wfield_fractal_type == 2 ? fastNoise::RigidMulti : fastNoise::FBM;
+                  fastNoise::prepare(&noise);
+                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+               }
 #endif
                break;
-             case 10: // Image Map -> spots
-#ifdef ADD_FEATURE_SPOTS_NOISE
-               //return cu_spots(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, 1.f, 0, 32, 1.f);
-               return cu_repeaterSpots(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
+             case 10: // White Noise
+#ifdef ADD_FEATURE_WHITE_NOISE
+               {
+                  fastNoise::FastNoise noise;
+                  fastNoise::init(&noise);
+                  noise.m_seed = xform->wfield_seed;
+                  noise.m_noiseType = fastNoise::WhiteNoise;
+                  fastNoise::prepare(&noise);
+                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+               }
 #endif
+               break;
+             case 11: // Image Map -> not supported
              default:
-#ifdef ADD_FEATURE_PERLIN_NOISE
-               return cu_repeaterPerlin(*__wFieldPos, xform->wfield_scale, xform->wfield_seed, xform->wfield_octaves,xform->wfield_lacunarity, xform->wfield_gain);
-#endif
                break;
            }
   return  0.f;
 }
+
 #endif
 
 
@@ -2669,7 +3407,7 @@ int wfield_type;
 
      float __wFieldValue;
 #ifdef ADD_FEATURE_WFIELDS
-     if(xform->wfield_type>1) {
+     if(xform->wfield_type>0) {
          float3 __wFieldPos;
          if(xform->wfield_input == 1) { // Position
            __wFieldPos = make_float3(activePoint[index].x, activePoint[index].y, activePoint[index].z);
@@ -2863,7 +3601,7 @@ __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, f
 	  case 0: // BUBBLE
 	  default:
 	    {
-			float a = 2.0f * PI * rnd2;
+			float a = PI * (rnd1 + rnd2);
 			float dsina, dcosa;
 			sincosf(a, &dsina, &dcosa);
 			point->x = (srcX + dr * dcosa) / zr;
