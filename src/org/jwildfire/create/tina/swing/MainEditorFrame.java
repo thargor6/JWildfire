@@ -6061,7 +6061,7 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldVarParam3NameCmb);
 
       weightingFieldPreviewImgRootPanel = new JPanel();
-      weightingFieldPreviewImgRootPanel.setBounds(239, 283, 76, 42);
+      weightingFieldPreviewImgRootPanel.setBounds(216, 283, 99, 53);
       tinaWeightMapPanel.add(weightingFieldPreviewImgRootPanel);
       weightingFieldPreviewImgRootPanel.setLayout(new BorderLayout(0, 0));
 
@@ -7658,6 +7658,7 @@ public class MainEditorFrame extends JFrame {
     pCmb.addItem(WeightingFieldType.SIMPLEX_FRACTAL_NOISE);
     pCmb.addItem(WeightingFieldType.VALUE_NOISE);
     pCmb.addItem(WeightingFieldType.VALUE_FRACTAL_NOISE);
+    pCmb.addItem(WeightingFieldType.WHITE_NOISE);
     pCmb.addItem(WeightingFieldType.IMAGE_MAP);
   }
 

@@ -185,6 +185,21 @@ public enum WeightingFieldType {
     }
   },
 
+  WHITE_NOISE {
+    @Override
+    public WeightingField getInstance(XForm xform) {
+      WhiteNoiseWeightingField noise = new WhiteNoiseWeightingField();
+      noise.setSeed(xform.getWeightingFieldNoiseSeed());
+      noise.setFrequency(xform.getWeightingFieldNoiseFrequency());
+      return noise;
+    }
+
+    @Override
+    public String toString() {
+      return "White Noise";
+    }
+  },
+
   IMAGE_MAP {
     @Override
     public WeightingField getInstance(XForm xform) {

@@ -131,6 +131,9 @@ public class AbstractFlameWriter {
           attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_SEED, xForm.getWeightingFieldNoiseSeed()));
           attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_FREQUENY, xForm.getWeightingFieldNoiseFrequency()));
           break;
+        case WHITE_NOISE:
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_SEED, xForm.getWeightingFieldNoiseSeed()));
+          break;
         case CUBIC_FRACTAL_NOISE:
         case PERLIN_FRACTAL_NOISE:
         case SIMPLEX_FRACTAL_NOISE:

@@ -37,6 +37,9 @@ public class WeightingFieldControlsUpdaterFactory {
         case VALUE_NOISE:
           instance = new NoiseWeightingFieldControlsUpdater(controller, controls);
           break;
+        case WHITE_NOISE:
+          instance = new WhiteNoiseWeightingFieldControlsUpdater(controller, controls);
+          break;
         case CUBIC_FRACTAL_NOISE:
         case PERLIN_FRACTAL_NOISE:
         case SIMPLEX_FRACTAL_NOISE:

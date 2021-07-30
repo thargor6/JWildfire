@@ -590,6 +590,9 @@ public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
           pSB.append("      xForm.setWeightingFieldNoiseSeed(" + pXForm.getWeightingFieldNoiseSeed() + ");\n");
           pSB.append("      xForm.setWeightingFieldNoiseFrequency(" + Tools.doubleToString(pXForm.getWeightingFieldNoiseFrequency()) + ");\n");
           break;
+        case WHITE_NOISE:
+          pSB.append("      xForm.setWeightingFieldNoiseSeed(" + pXForm.getWeightingFieldNoiseSeed() + ");\n");
+          break;
         case PERLIN_FRACTAL_NOISE:
         case CUBIC_FRACTAL_NOISE:
         case SIMPLEX_FRACTAL_NOISE:

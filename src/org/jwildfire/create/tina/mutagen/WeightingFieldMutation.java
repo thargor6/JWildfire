@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -215,6 +215,7 @@ public class WeightingFieldMutation extends AbstractMutation {
     DEFAULT_WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.PERLIN_FRACTAL_NOISE);
     DEFAULT_WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.PERLIN_FRACTAL_NOISE);
     DEFAULT_WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.PERLIN_FRACTAL_NOISE);
+    DEFAULT_WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.WHITE_NOISE);
     DEFAULT_WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.SIMPLEX_NOISE);
     DEFAULT_WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.SIMPLEX_FRACTAL_NOISE);
     DEFAULT_WEIGHTING_FIELD_TYPE_LIST.add(WeightingFieldType.SIMPLEX_FRACTAL_NOISE);
@@ -245,6 +246,7 @@ public class WeightingFieldMutation extends AbstractMutation {
 
   static {
     cellularNoiseReturnTypes = new ArrayList<>();
+    cellularNoiseReturnTypes.add(CellularNoiseReturnType.CELL_VALUE);
     cellularNoiseReturnTypes.add(CellularNoiseReturnType.DISTANCE2);
     cellularNoiseReturnTypes.add(CellularNoiseReturnType.DISTANCE2);
     cellularNoiseReturnTypes.add(CellularNoiseReturnType.DISTANCE2);
