@@ -118,16 +118,6 @@ public class OscilloscopeFunc extends VariationFunc implements SupportsGPU {
         + "    __py -= __oscilloscope*__y;\n"
         + "else\n"
         + "    __py += __oscilloscope*__y;\n"
-        + "    __3D_SUPPORT_ONLY__\n"
-        + "    __pz += __oscilloscope*__z;\n"
-        + "    ]]>\n"
-        + "    </source>\n"
-        + "</variation>\n"
-        + "<variation name=\"polar2\" default=\"0.f\" >\n"
-        + "    <source license=\"GNU/GPLv3\">\n"
-        + "    <![CDATA[\n"
-        + "__px += __polar2*__phi/PI;\n"
-        + "__py += __polar2*0.5f*logf(__r2)/PI;\n"
-        + (context.isPreserveZCoordinate() ? "__pz += __polar2*__z;\n" : "");
+        + (context.isPreserveZCoordinate() ? "    __pz += __oscilloscope*__z;\n" : "");
   }
 }

@@ -14,7 +14,7 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.facurender;
+package org.jwildfire.create.tina.farender;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -29,17 +29,17 @@ import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.launcher.StreamRedirector;
 
-public class FACURenderTools {
-  private static boolean facuRenderChecked = false;
-  private static boolean facuRenderAvalailable = false;
+public class FARenderTools {
+  private static boolean faRenderChecked = false;
+  private static boolean faRenderAvalailable = false;
 
   private static String cudaLibrary= null;
   private static boolean cudaLibraryChecked = false;
 
-  private static final String FACURENDER_JWF_PATH = "FACURenderJWF";
+  private static final String FARENDER_JWF_PATH = "FARenderJWF";
 
 
-  private static final String FACURENDER_EXE = "FACURender.exe";
+  private static final String FARENDER_EXE = "FARender.exe";
 
   private static void launchSync(String[] pCmd) {
     Runtime runtime = Runtime.getRuntime();
@@ -74,7 +74,7 @@ public class FACURenderTools {
 
   private static String getLaunchCmd(String pFlameFilename, int pWidth, int pHeight, int pQuality, boolean pMergedRender) {
     StringBuilder cmd = new StringBuilder();
-    String exePath=new File(Tools.getPathRelativeToCodeSource(FACURENDER_JWF_PATH), FACURENDER_EXE).getAbsolutePath();
+    String exePath=new File(Tools.getPathRelativeToCodeSource(FARENDER_JWF_PATH), FARENDER_EXE).getAbsolutePath();
     if (exePath.indexOf(" ") >= 0) {
       exePath = "\"" + exePath + "\"";
     }
@@ -90,7 +90,7 @@ public class FACURenderTools {
       cmd.append(" -merge");
     }
 
-    String opts = Prefs.getPrefs().getTinaFACURenderOptions();
+    String opts = Prefs.getPrefs().getTinaFARenderOptions();
     if(opts==null) {
       opts = "-cuda";
     }
@@ -103,14 +103,14 @@ public class FACURenderTools {
     return cmd.toString();
   }
 
-  public static FACURenderResult invokeFACURender(String pFlameFilename, int pWidth, int pHeight, int pQuality, boolean pMergedRender) {
+  public static FARenderResult invokeFARender(String pFlameFilename, int pWidth, int pHeight, int pQuality, boolean pMergedRender) {
     try {
       String outputFilename = Tools.trimFileExt(pFlameFilename) + ".png";
       {
         File outputFile = new File(outputFilename);
         if (outputFile.exists()) {
           if (!outputFile.delete()) {
-            return new FACURenderResult(1, "Could not delete file \"" + outputFilename + "\"");
+            return new FARenderResult(1, "Could not delete file \"" + outputFilename + "\"");
           }
         }
       }
@@ -119,7 +119,7 @@ public class FACURenderTools {
       ByteArrayOutputStream os = new ByteArrayOutputStream();
       int returnCode = launchAsync(cmd, os);
       String msg = new String(os.toByteArray());
-      FACURenderResult res = new FACURenderResult(returnCode, msg);
+      FARenderResult res = new FARenderResult(returnCode, msg);
       res.setCommand(cmd);
       if (returnCode == 0) {
         res.setOutputFilename(outputFilename);
@@ -127,7 +127,7 @@ public class FACURenderTools {
       return res;
     }
     catch (Exception ex) {
-      return new FACURenderResult(1, ex);
+      return new FARenderResult(1, ex);
     }
   }
 
@@ -147,7 +147,7 @@ public class FACURenderTools {
         if (brightnessScl < 0.01) {
           brightnessScl = 0.01;
         }
-        // HACK: misusing the zBufferScale-field because it will never be used by FACURender, can later easily changed if necessary, by introducing a dedicated field
+        // HACK: misusing the zBufferScale-field because it will never be used by FARender, can later easily changed if necessary, by introducing a dedicated field
         newFlame.setZBufferScale(brightnessScl);
         res.add(newFlame);
       }

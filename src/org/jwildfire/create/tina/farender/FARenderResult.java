@@ -14,26 +14,26 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.facurender;
+package org.jwildfire.create.tina.farender;
 
 import org.jwildfire.base.Tools;
 
-public class FACURenderResult {
+public class FARenderResult {
   private String command;
   private int returnCode;
   private String message;
   private String outputFilename;
 
-  public FACURenderResult() {
+  public FARenderResult() {
 
   }
 
-  public FACURenderResult(int returnCode, String message) {
+  public FARenderResult(int returnCode, String message) {
     this.returnCode = returnCode;
     this.message = message;
   }
 
-  public FACURenderResult(int returnCode, Exception ex) {
+  public FARenderResult(int returnCode, Exception ex) {
     this.returnCode = returnCode;
     this.message = Tools.getStacktrace(ex);
   }

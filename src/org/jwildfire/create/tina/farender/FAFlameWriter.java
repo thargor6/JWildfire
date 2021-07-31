@@ -14,7 +14,7 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.facurender;
+package org.jwildfire.create.tina.farender;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,14 +38,14 @@ import org.jwildfire.create.tina.variation.*;
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
-public class FACUFlameWriter extends AbstractFlameWriter {
+public class FAFlameWriter extends AbstractFlameWriter {
   private final MessageLogger messageLogger;
 
-  public FACUFlameWriter() {
+  public FAFlameWriter() {
     this(null);
   }
 
-  public FACUFlameWriter(MessageLogger messageLogger) {
+  public FAFlameWriter(MessageLogger messageLogger) {
     this.messageLogger = messageLogger;
   }
 
@@ -80,7 +80,7 @@ public class FACUFlameWriter extends AbstractFlameWriter {
       }
       attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", variationSet.getUuid()));
       attrList.add(new SimpleXMLBuilder.Attribute<String>("highlight_power", "-1"));
-      // HACK: misusing the zBufferScale-field because it will never be used by FACURender, can later easily changed if necessary, by introducing a dedicated field
+      // HACK: misusing the zBufferScale-field because it will never be used by FARender, can later easily changed if necessary, by introducing a dedicated field
       attrList.add(new SimpleXMLBuilder.Attribute<Double>("intensity_adjust", transformedFlame.getZBufferScale()));
       xb.beginElement("flame", attrList);
       // XForm
@@ -205,46 +205,46 @@ public class FACUFlameWriter extends AbstractFlameWriter {
   }
 
   private String buildGlobalDefinitions(List<Flame> pFlames) {
-    Set<FACURenderKernelSwitches> switches = new HashSet<>();
+    Set<FARenderKernelSwitches> switches = new HashSet<>();
     for(Flame flame: pFlames) {
       if(fabs(flame.getCamDOF())>EPSILON) {
-        switches.add(FACURenderKernelSwitches.ADD_FEATURE_DOF);
+        switches.add(FARenderKernelSwitches.ADD_FEATURE_DOF);
       }
       for(Layer layer: flame.getLayers()) {
         for(List<XForm> xforms: Arrays.asList( layer.getXForms(), layer.getFinalXForms())) {
           for(XForm xform: xforms) {
             if(xform.getWeightingFieldType()!=null && xform.getWeightingFieldType()!=WeightingFieldType.NONE) {
-              switches.add(FACURenderKernelSwitches.ADD_FEATURE_WFIELDS);
+              switches.add(FARenderKernelSwitches.ADD_FEATURE_WFIELDS);
               if(fabs(xform.getWeightingFieldJitterIntensity())>EPSILON) {
-                switches.add(FACURenderKernelSwitches.ADD_FEATURE_WFIELDS_JITTER);
+                switches.add(FARenderKernelSwitches.ADD_FEATURE_WFIELDS_JITTER);
               }
               switch(xform.getWeightingFieldType()) {
                 case CELLULAR_NOISE: {
-                  switches.add(FACURenderKernelSwitches.ADD_FEATURE_CELLULAR_NOISE);
+                  switches.add(FARenderKernelSwitches.ADD_FEATURE_CELLULAR_NOISE);
                   break;
                 }
                 case CUBIC_NOISE:
                 case CUBIC_FRACTAL_NOISE: {
-                  switches.add(FACURenderKernelSwitches.ADD_FEATURE_CUBIC_NOISE);
+                  switches.add(FARenderKernelSwitches.ADD_FEATURE_CUBIC_NOISE);
                   break;
                 }
                 case PERLIN_NOISE:
                 case PERLIN_FRACTAL_NOISE: {
-                  switches.add(FACURenderKernelSwitches.ADD_FEATURE_PERLIN_NOISE);
+                  switches.add(FARenderKernelSwitches.ADD_FEATURE_PERLIN_NOISE);
                   break;
                 }
                 case SIMPLEX_NOISE:
                 case SIMPLEX_FRACTAL_NOISE: {
-                  switches.add(FACURenderKernelSwitches.ADD_FEATURE_SIMPLEX_NOISE);
+                  switches.add(FARenderKernelSwitches.ADD_FEATURE_SIMPLEX_NOISE);
                   break;
                 }
                 case VALUE_NOISE:
                 case VALUE_FRACTAL_NOISE: {
-                  switches.add(FACURenderKernelSwitches.ADD_FEATURE_VALUE_NOISE);
+                  switches.add(FARenderKernelSwitches.ADD_FEATURE_VALUE_NOISE);
                   break;
                 }
                 case WHITE_NOISE: {
-                  switches.add(FACURenderKernelSwitches.ADD_FEATURE_WHITE_NOISE);
+                  switches.add(FARenderKernelSwitches.ADD_FEATURE_WHITE_NOISE);
                   break;
                 }
                 case IMAGE_MAP: {
@@ -256,7 +256,7 @@ public class FACUFlameWriter extends AbstractFlameWriter {
             // GPU-version of crackle uses simplexNoise from the library rather than its own, because this would be much slower
             for(int i=0;i<xform.getVariationCount();i++) {
               if(xform.getVariation(i).getFunc().getName().toLowerCase().contains("crackle")) {
-                switches.add(FACURenderKernelSwitches.ADD_FEATURE_SIMPLEX_NOISE);
+                switches.add(FARenderKernelSwitches.ADD_FEATURE_SIMPLEX_NOISE);
               }
             }
           }
@@ -349,7 +349,7 @@ public class FACUFlameWriter extends AbstractFlameWriter {
     return pSrc.stream().filter(a -> !a.getName().startsWith("grad_edit_") && !a.getName().contains("Curve_") && !a.getName().startsWith("post_symmetry_") && !FLAME_ATTR_BLACKLIST.contains(a.getName())).collect(Collectors.toList());
   }
 
-  // apply some FACURender-specific changes
+  // apply some FARender-specific changes
   private Flame transformFlame(Flame pFlame) {
     Flame flame = pFlame.makeCopy();
     flame.setPixelsPerUnit(flame.getPixelsPerUnit() * flame.getCamZoom());
