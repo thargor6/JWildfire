@@ -10016,6 +10016,12 @@ public class MainEditorFrame extends JFrame {
     return centerNorthPanel;
   }
 
+  public void switchRenderButtonIcon() {
+    String path = getGpuModeToggleButton().isSelected() ? "/org/jwildfire/swing/icons/new/fraqtive4.png" : "/org/jwildfire/swing/icons/new/fraqtive3.png";
+    getTinaRenderFlameButton().setIcon(new ImageIcon(getClass().getResource(path)));
+    getRenderMainButton().setIcon(new ImageIcon(getClass().getResource(path)));
+  }
+
   private JToggleButton getToggleVariationsButton() {
     if (toggleVariationsButton == null) {
       toggleVariationsButton = new JToggleButton();
@@ -10095,6 +10101,7 @@ public class MainEditorFrame extends JFrame {
       gpuModeToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/pill.png")));
       gpuModeToggleButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
+          switchRenderButtonIcon();
           tinaController.toggleGpuMode();
         }
       });

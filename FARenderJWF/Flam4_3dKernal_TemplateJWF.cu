@@ -3579,7 +3579,7 @@ __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, f
 	  case 0: // BUBBLE
 	  default:
 	    {
-			float a = PI * (rnd1 + rnd2);
+			float a = 2 * PI * rnd2;
 			float dsina, dcosa;
 			sincosf(a, &dsina, &dcosa);
 			point->x = (srcX + dr * dcosa) / zr;
@@ -3590,7 +3590,7 @@ __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, f
 	   case 1: // SINEBLUR
          {
 		   float power = 4.2f;
-		   float a = 2.0f * PI * rnd2;
+		   float a = 2 * PI * (rnd2);
 		   float dsina, dcosa;
 		   sincosf(a, &dsina, &dcosa);
 
