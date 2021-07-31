@@ -3560,17 +3560,17 @@ __device__ void applyOnlyCamera(struct point* point, float srcX, float srcY, flo
 	point->z = srcZ;	
 }
 
-__device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, float srcZ, float zdist, float zr, int dofType, float dofScale, float dofFade, float camDOF_10, float rnd1, float rnd2)
+__device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, float srcZ, float zdist, float zr, int dofType, float dofScale, float dofFade, float camDOF_10, unsigned int *randStates)
 {    
     float fade;    
 	if (dofFade <= 1.e-6f) {
       fade = 1.0f;
     }
     else if (dofFade >= 1.0f - 1.e-6f) {
-      fade = rnd1;
+      fade = randFloat(randStates);
     }
     else {
-      fade = rnd2 <= dofFade ? rnd1 : 1.0f;
+      fade = randFloat(randStates) <= dofFade ? randFloat(randStates) : 1.0f;
     }
 
 	float dr = fade * camDOF_10 * zdist * dofScale;
@@ -3579,7 +3579,7 @@ __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, f
 	  case 0: // BUBBLE
 	  default:
 	    {
-			float a = 2 * PI * rnd2;
+			float a = 2 * PI * randFloat(randStates);
 			float dsina, dcosa;
 			sincosf(a, &dsina, &dcosa);
 			point->x = (srcX + dr * dcosa) / zr;
@@ -3590,11 +3590,11 @@ __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, f
 	   case 1: // SINEBLUR
          {
 		   float power = 4.2f;
-		   float a = 2 * PI * (rnd2);
+		   float a = 2 * PI * randFloat(randStates);
 		   float dsina, dcosa;
 		   sincosf(a, &dsina, &dcosa);
 
-           dr *= (acosf(expf(logf(rnd1) * power) * 2.0f - 1.0f) / PI);
+           dr *= (acosf(expf(logf(randFloat(randStates)) * power) * 2.0f - 1.0f) / PI);
 
    		   point->x = (srcX + dr * dcosa) / zr;
 		   point->y = (srcY + dr * dsina) / zr;
@@ -3607,8 +3607,7 @@ __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, f
 
 
 
-__device__ void projectJWF(struct point *p, struct CameraViewProperties *properties,
-float rnd1, float rnd2)
+__device__ void projectJWF(struct point *p, struct CameraViewProperties *properties, unsigned int *randStates)
 {
 #ifndef JWF_EXTENSIONS	
     float px, py, pz, pw;
@@ -3622,8 +3621,8 @@ float rnd1, float rnd2)
 
     if (properties->dof > 1.e-6f) {
         float zdist = properties->zpos - pz;
-        float t     = rnd1 * 2.f * M_PI_F;
-        float dr    = rnd2 * 0.1f * properties->dof * zdist;
+        float t     = randFloat(randStates) * 2.f * M_PI_F;
+        float dr    = randFloat(randStates) * 0.1f * properties->dof * zdist;
         float sina, cosa;
         sincosf(t, &sina, &cosa);
 
@@ -3665,7 +3664,7 @@ float rnd1, float rnd2)
         if (properties->legacyDOF) {
           float zdist = properties->camDist - camPointZ;
           if (zdist > 0.0f) {
-            applyDOFAndCamera(p, camPointX, camPointY, camPointZ, zdist, zr, properties->dofType, properties->dofScale, properties->dofFade, camDOF_10, rnd1, rnd2);
+            applyDOFAndCamera(p, camPointX, camPointY, camPointZ, zdist, zr, properties->dofType, properties->dofScale, properties->dofFade, camDOF_10, randStates);
           }
           else {
             applyOnlyCamera(p, camPointX, camPointY, camPointZ, zdist, zr);
@@ -3678,12 +3677,12 @@ float rnd1, float rnd2)
 
           float dist = powf(xdist * xdist + ydist * ydist + zdist * zdist, 1.0f / properties->camDOFExponent );
           if (dist > area) {
-            applyDOFAndCamera(p, camPointX, camPointY, camPointZ, zdist, zr, properties->dofType, properties->dofScale, properties->dofFade, camDOF_10, rnd1, rnd2);
+            applyDOFAndCamera(p, camPointX, camPointY, camPointZ, zdist, zr, properties->dofType, properties->dofScale, properties->dofFade, camDOF_10, randStates);
           }
           else if (dist > areaMinusFade) {
             double scl = smootherstep(0.0f, 1.0f, (dist - areaMinusFade) / fade);
             double sclDist = scl * dist;
-            applyDOFAndCamera(p, camPointX, camPointY, camPointZ, zdist, zr, properties->dofType, properties->dofScale, properties->dofFade, camDOF_10, rnd1, rnd2);
+            applyDOFAndCamera(p, camPointX, camPointY, camPointZ, zdist, zr, properties->dofType, properties->dofScale, properties->dofFade, camDOF_10, randStates);
           }
           else {
             applyOnlyCamera(p, camPointX, camPointY, camPointZ, zdist, zr);
@@ -3923,7 +3922,7 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
 #endif			
 
 #ifndef FOR_2D
-            projectJWF(&activePoint[index], d_g_Camera, RANDFLOAT(), RANDFLOAT());
+            projectJWF(&activePoint[index], d_g_Camera, randStates);
             applyRotation(&activePoint[index], d_g_Camera->rotatedViewOffsetx, d_g_Camera->rotatedViewOffsety);
 #else
             applyRotation( &activePoint[index], cosRotation, sinRotation);
