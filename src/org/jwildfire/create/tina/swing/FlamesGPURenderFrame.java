@@ -29,6 +29,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -148,6 +149,9 @@ public class FlamesGPURenderFrame extends JFrame {
   private JScrollPane scrollPane;
   private JTextArea flameParamsTextArea;
   private JCheckBox autoSyncCheckbox;
+  private JButton renderImageButton;
+  private JCheckBox autoRenderCBx;
+  private JPanel progressIndicatorPnl;
 
   private JPanel getInteractiveNorthPanel() {
     if (interactiveNorthPanel == null) {
@@ -160,6 +164,7 @@ public class FlamesGPURenderFrame extends JFrame {
       interactiveNorthPanel.add(getPanel_1());
       interactiveNorthPanel.add(getPanel_28());
       interactiveNorthPanel.add(getPanel_32());
+      interactiveNorthPanel.add(getProgressIndicatorPnl());
       interactiveNorthPanel.add(getPanel_33());
       interactiveNorthPanel.add(getPanel_34());
       interactiveNorthPanel.add(getPanel_35());
@@ -273,7 +278,7 @@ public class FlamesGPURenderFrame extends JFrame {
   JButton getInteractiveSaveImageButton() {
     if (interactiveSaveImageButton == null) {
       interactiveSaveImageButton = new JButton();
-      interactiveSaveImageButton.setMinimumSize(new Dimension(100, 24));
+      interactiveSaveImageButton.setMinimumSize(new Dimension(140, 24));
       interactiveSaveImageButton.setMaximumSize(new Dimension(160, 48));
       interactiveSaveImageButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -499,10 +504,35 @@ public class FlamesGPURenderFrame extends JFrame {
   JPanel getPanel_32() {
     if (panel_32 == null) {
       panel_32 = new JPanel();
+      panel_32.setPreferredSize(new Dimension(140, 10));
       panel_32.setBorder(new EmptyBorder(0, 11, 9, 11));
-      panel_32.setMinimumSize(new Dimension(200, 10));
-      panel_32.setMaximumSize(new Dimension(250, 32767));
-      panel_32.setLayout(new BorderLayout(0, 0));
+      panel_32.setMinimumSize(new Dimension(140, 10));
+      panel_32.setMaximumSize(new Dimension(140, 32767));
+      panel_32.setLayout(null);
+
+      autoRenderCBx = new JCheckBox("Auto Render");
+      autoRenderCBx.setSelected(true);
+      autoRenderCBx.setToolTipText("Automatic start of rendering");
+      autoRenderCBx.setFont(null);
+      autoRenderCBx.setBounds(8, 52, 120, 18);
+      panel_32.add(autoRenderCBx);
+
+      renderImageButton = new JButton();
+      renderImageButton.setText("Render image");
+      renderImageButton.setPreferredSize(new Dimension(125, 48));
+      renderImageButton.setMnemonic(KeyEvent.VK_I);
+      renderImageButton.setMinimumSize(new Dimension(100, 24));
+      renderImageButton.setMaximumSize(new Dimension(160, 48));
+      renderImageButton.setFont(null);
+      renderImageButton.setBounds(6, 0, 133, 48);
+      renderImageButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive4.png")));
+      renderImageButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getGpuRendererCtrl().renderFlameButtonClicked();
+        }
+      });
+
+      panel_32.add(renderImageButton);
     }
     return panel_32;
   }
@@ -510,9 +540,10 @@ public class FlamesGPURenderFrame extends JFrame {
   private JPanel getPanel_34() {
     if (panel_34 == null) {
       panel_34 = new JPanel();
+      panel_34.setPreferredSize(new Dimension(50, 10));
       panel_34.setBorder(new EmptyBorder(0, 11, 9, 11));
-      panel_34.setMinimumSize(new Dimension(200, 10));
-      panel_34.setMaximumSize(new Dimension(250, 32767));
+      panel_34.setMinimumSize(new Dimension(50, 10));
+      panel_34.setMaximumSize(new Dimension(1000, 32767));
       panel_34.setLayout(new BoxLayout(panel_34, BoxLayout.Y_AXIS));
     }
     return panel_34;
@@ -652,8 +683,9 @@ public class FlamesGPURenderFrame extends JFrame {
   private JPanel getPanel_1() {
     if (panel_1 == null) {
       panel_1 = new JPanel();
-      panel_1.setMaximumSize(new Dimension(200, 32767));
-      panel_1.setMinimumSize(new Dimension(100, 10));
+      panel_1.setPreferredSize(new Dimension(70, 10));
+      panel_1.setMaximumSize(new Dimension(70, 32767));
+      panel_1.setMinimumSize(new Dimension(120, 10));
       panel_1.setLayout(null);
 
       autoSyncCheckbox = new JCheckBox("AutoSync");
@@ -661,13 +693,13 @@ public class FlamesGPURenderFrame extends JFrame {
       autoSyncCheckbox.setFont(null);
       autoSyncCheckbox.setBounds(0, 28, 82, 18);
       autoSyncCheckbox.addActionListener(
-              new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                  if (tinaController != null && tinaController.getGpuRendererCtrl() != null) {
-                    tinaController.getGpuRendererCtrl().autoSyncCheckbox_clicked();
-                  }
-                }
-              });
+          new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              if (tinaController != null && tinaController.getGpuRendererCtrl() != null) {
+                tinaController.getGpuRendererCtrl().autoSyncCheckbox_clicked();
+              }
+            }
+          });
       panel_1.add(autoSyncCheckbox);
     }
     return panel_1;
@@ -700,5 +732,21 @@ public class FlamesGPURenderFrame extends JFrame {
 
   public JCheckBox getAutoSyncCheckbox() {
     return autoSyncCheckbox;
+  }
+
+  public JButton getRenderImageButton() {
+    return renderImageButton;
+  }
+
+  public JCheckBox getAutoRenderCBx() {
+    return autoRenderCBx;
+  }
+
+  JPanel getProgressIndicatorPnl() {
+    if (progressIndicatorPnl == null) {
+      progressIndicatorPnl = new JPanel();
+      progressIndicatorPnl.setLayout(new BorderLayout(0, 0));
+    }
+    return progressIndicatorPnl;
   }
 }

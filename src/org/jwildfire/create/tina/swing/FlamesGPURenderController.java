@@ -72,6 +72,7 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
   private final JTextArea statsTextArea;
   private final JTextArea gpuFlameParamsTextArea;
   private final JCheckBox editorAutoSyncCheckBox;
+  private final JCheckBox autoRenderCBx;
   private SimpleImage image;
   private Flame currFlame;
   private boolean refreshing = false;
@@ -103,7 +104,8 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
       JButton pFromEditorButton,
       JCheckBox pAiPostDenoiserDisableCheckbox,
       JTextArea pGpuFlameParamsTextArea,
-      JCheckBox pEditorAutoSyncCheckBox) {
+      JCheckBox pEditorAutoSyncCheckBox,
+      JCheckBox pAutoRenderCBx) {
 
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
@@ -124,6 +126,7 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
     aiPostDenoiserDisableCheckbox = pAiPostDenoiserDisableCheckbox;
     gpuFlameParamsTextArea = pGpuFlameParamsTextArea;
     editorAutoSyncCheckBox = pEditorAutoSyncCheckBox;
+    autoRenderCBx = pAutoRenderCBx;
 
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     interactiveQualityProfileCmb = pInteractiveQualityProfileCmb;
@@ -227,7 +230,9 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
         currFlame = newFlame;
         enableControls();
         setupProfiles(currFlame);
-        renderFlame();
+        if (autoRenderCBx.isSelected()) {
+          renderFlame();
+        }
         enableControls();
       }
     } catch (Throwable ex) {
@@ -279,6 +284,14 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
     currFlame = flame.makeCopy();
     enableControls();
     setupProfiles(currFlame);
+    if (autoRenderCBx.isSelected()) {
+      renderFlame();
+    }
+    enableControls();
+  }
+
+  public void renderFlameButtonClicked() {
+    enableControls();
     renderFlame();
     enableControls();
   }
@@ -539,7 +552,9 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
       refreshing = true;
       try {
         refreshImagePanel();
-        renderFlame();
+        if (autoRenderCBx.isSelected()) {
+          renderFlame();
+        }
         enableControls();
       } finally {
         refreshing = oldRefreshing;
@@ -570,7 +585,9 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
         currFlame = newFlame;
         enableControls();
         setupProfiles(currFlame);
-        renderFlame();
+        if (autoRenderCBx.isSelected()) {
+          renderFlame();
+        }
         enableControls();
       }
     } catch (Throwable ex) {
