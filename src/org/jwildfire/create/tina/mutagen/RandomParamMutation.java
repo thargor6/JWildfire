@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -29,10 +29,10 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 public class RandomParamMutation extends AbstractMutation {
 
   @Override
-  public void execute(Layer pLayer) {
-    setRandomFlameProperty(pLayer, 6.0 * (0.25 + 0.75 * Math.random()));
-    setRandomFlameProperty(pLayer, 5.0 * (0.25 + 0.75 * Math.random()));
-    setRandomFlameProperty(pLayer, 2.0 * (0.25 + 0.75 * Math.random()));
+  public void execute(Layer pLayer, double mutationStrength) {
+    setRandomFlameProperty(pLayer, 6.0 * (0.25 + 0.75 * Math.random()) * mutationStrength);
+    setRandomFlameProperty(pLayer, 5.0 * (0.25 + 0.75 * Math.random()) * mutationStrength);
+    setRandomFlameProperty(pLayer, 2.0 * (0.25 + 0.75 * Math.random()) * mutationStrength);
   }
 
   private static List<String> BLACKLIST;

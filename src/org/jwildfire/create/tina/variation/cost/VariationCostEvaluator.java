@@ -220,7 +220,7 @@ public class VariationCostEvaluator {
           long t0 = System.nanoTime();
           for (int i = 0; i < INIT_ROUNDS; i++) {
             try {
-              rndParamMutation.execute(item.getFlame().getFirstLayer());
+              rndParamMutation.execute(item.getFlame().getFirstLayer(), 1.0);
               fnc.init(ctx, flame.getFirstLayer(), flame.getFirstLayer().getXForms().get(0), 1.0);
             } catch (Exception ex) {
               item.setInitError(true);
@@ -258,7 +258,7 @@ public class VariationCostEvaluator {
           long m0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
           long t0 = System.nanoTime();
           for (int i = 0; i < EVAL_ROUNDS; i++) {
-            rndParamMutation.execute(item.getFlame().getFirstLayer());
+            rndParamMutation.execute(item.getFlame().getFirstLayer(), 1.0);
             var.clear();
             affine.x = 0.5 - randGen.random();
             affine.y = 0.5 - randGen.random();

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -41,7 +41,7 @@ public class FractalNoiseRandomWeightingFieldGenerator implements RandomWeightin
     WeightingFieldMutation weightingFieldMutation = new WeightingFieldMutation();
     weightingFieldMutation.setWeightingFieldTypeList(WEIGHTING_FIELD_TYPE_LIST);
     for(Layer layer: pFlame.getLayers()) {
-      weightingFieldMutation.execute(layer);
+      weightingFieldMutation.execute(layer, 1.0);
     }
   }
 

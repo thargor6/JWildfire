@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -25,7 +25,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class AddVariationMutation extends AbstractMutation {
 
   @Override
-  public void execute(Layer pLayer) {
+  public void execute(Layer pLayer, double mutationStrength) {
     XForm xForm;
     if (Math.random() < 0.75 || pLayer.getFinalXForms().size() == 0) {
       int idx = Tools.randomInt(pLayer.getXForms().size());
@@ -49,7 +49,7 @@ public class AddVariationMutation extends AbstractMutation {
       else {
         fName = VariationFuncList.getRandomVariationname();
       }
-      xForm.addVariation(0.01 + Math.random() * 10.0, VariationFuncList.getVariationFuncInstance(fName, true));
+      xForm.addVariation((0.01 + Math.random() * 10.0)*mutationStrength, VariationFuncList.getVariationFuncInstance(fName, true));
     }
   }
 

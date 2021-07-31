@@ -33,6 +33,7 @@ V7.00 (xx.xx.202x)
  - improved the appearance of the WField-tab
  - new white-noise-type for weighting fields (not very spectacular, but interesting some times, though)
  - added the cell-value-type as possible return-type for cellular noise in weighting fields
+ - added a strength-parameter to Quick mutation (which currently works not very predictable/well)
 
  - improved the "Duckies"-random-flame-generator
  - new variations:

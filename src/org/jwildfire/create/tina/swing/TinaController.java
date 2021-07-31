@@ -628,6 +628,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.randomBatchProgressBar = parameterObject.randomBatchProgressBar;
     data.quickMutationTypeCmb = parameterObject.quickMutationTypeCmb;
     data.quickMutationBatchSizeEdit = parameterObject.quickMutationBatchSizeEdit;
+    data.quickMutationStrengthEdit = parameterObject.quickMutationStrengthEdit;
     data.quickMutationButton = parameterObject.quickMutationButton;
     data.quickMutationProgressBar = parameterObject.quickMutationProgressBar;
     data.quickMutationPanel = parameterObject.quickMutationPanel;
@@ -6310,7 +6311,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         Layer layer = getCurrLayer();
         if (layer != null) {
           saveUndoPoint();
-          weightingFieldMutation.execute(layer);
+          weightingFieldMutation.execute(layer, 1.0);
           XForm xForm = getCurrXForm();
           if (xForm != null) {
             refreshXFormUI(xForm);
@@ -6323,7 +6324,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       XForm xForm = getCurrXForm();
       if (xForm != null) {
         saveUndoPoint();
-        weightingFieldMutation.applyRandomWeightField(xForm);
+        weightingFieldMutation.applyRandomWeightField(xForm, 1.0);
         refreshXFormUI(xForm);
         refreshFlameImage(true, false, 1, true, false);
       }
@@ -6714,8 +6715,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     updateQuickMutationThumbnails();
 
     int imgCount = Math.max(1, Tools.stringToInt(data.quickMutationBatchSizeEdit.getText()));
+    double mutationStrength = data.quickMutationStrengthEdit.getDoubleValue();
     List<SimpleImage> imgList = new ArrayList<>();
-    createQuickMutationBatchThread = new CreateQuickMutationBatchThread(this, getCurrFlame(), quickMutationProgressUpdater, imgCount, imgList, quickMutationBatch,  getQuickMutationThumbnailWidth(), getQuickMutationThumbnailHeight(), (MutationType) data.quickMutationTypeCmb.getSelectedItem());
+    createQuickMutationBatchThread = new CreateQuickMutationBatchThread(this, getCurrFlame(), quickMutationProgressUpdater, imgCount, mutationStrength, imgList, quickMutationBatch,  getQuickMutationThumbnailWidth(), getQuickMutationThumbnailHeight(), (MutationType) data.quickMutationTypeCmb.getSelectedItem());
     refreshQuickMutationButton();
     new Thread(createQuickMutationBatchThread).start();
   }

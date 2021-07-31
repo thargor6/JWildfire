@@ -236,6 +236,7 @@ public class TinaControllerData {
   public JProgressBar randomBatchProgressBar;
   public JComboBox quickMutationTypeCmb;
   public JTextField quickMutationBatchSizeEdit;
+  public JWFNumberField quickMutationStrengthEdit;
   public JButton quickMutationButton;
   public JProgressBar quickMutationProgressBar;
   public JPanel quickMutationPanel;

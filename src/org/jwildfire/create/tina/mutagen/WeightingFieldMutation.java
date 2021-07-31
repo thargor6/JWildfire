@@ -28,7 +28,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class WeightingFieldMutation extends AbstractMutation {
 
   @Override
-  public void execute(Layer pLayer) {
+  public void execute(Layer pLayer, double mutationStrength) {
     if(pLayer.getXForms().size()==0) {
       return;
     }
@@ -58,7 +58,7 @@ public class WeightingFieldMutation extends AbstractMutation {
     // apply
     for (XForm xForm : pLayer.getXForms()) {
       if (xForms.contains(xForm)) {
-        applyRandomWeightField(xForm);
+        applyRandomWeightField(xForm, mutationStrength);
       }
       else {
         clearWeightingField(xForm);
@@ -82,7 +82,7 @@ public class WeightingFieldMutation extends AbstractMutation {
   }
 
 
-  public void applyRandomWeightField(XForm xForm) {
+  public void applyRandomWeightField(XForm xForm, double mutationStrength) {
     WeightingFieldType randomWeightingFieldType = randomizeWeightingFieldType();
     xForm.setWeightingFieldType(randomWeightingFieldType);
     xForm.setWeightingFieldInput(Math.random()<0.25 ? WeightingFieldInputType.POSITION : WeightingFieldInputType.AFFINE);
@@ -107,10 +107,10 @@ public class WeightingFieldMutation extends AbstractMutation {
       if(VariationFuncList.isValidVariationForWeightingFields(var.getFunc().getName()) && var.getFunc().getParameterNames().length>0 && Math.random()>0.33) {
         int idx = Math.min((int)(Math.random()*var.getFunc().getParameterNames().length), var.getFunc().getParameterNames().length-1);
         if(Math.random()>0.33) {
-          xForm.setWeightingFieldVarParam1Intensity(0.05 + Math.random() * 0.2);
+          xForm.setWeightingFieldVarParam1Intensity((0.05 + Math.random() * 0.2)*mutationStrength);
         }
         else {
-          xForm.setWeightingFieldVarParam1Intensity(0.25 - Math.random()*0.5);
+          xForm.setWeightingFieldVarParam1Intensity((0.25 - Math.random()*0.5)*mutationStrength);
         }
         xForm.setWeightingFieldVarParam1VarName(var.getFunc().getName());
         xForm.setWeightingFieldVarParam1ParamName(var.getFunc().getParameterNames()[idx]);
@@ -120,10 +120,10 @@ public class WeightingFieldMutation extends AbstractMutation {
             idx2 = Math.min((int)(Math.random()*var.getFunc().getParameterNames().length), var.getFunc().getParameterNames().length-1);
           }
           if(Math.random()>0.33) {
-            xForm.setWeightingFieldVarParam2Intensity(0.05 + Math.random() * 0.2);
+            xForm.setWeightingFieldVarParam2Intensity((0.05 + Math.random() * 0.2)*mutationStrength);
           }
           else {
-            xForm.setWeightingFieldVarParam2Intensity(0.25 - Math.random()*0.5);
+            xForm.setWeightingFieldVarParam2Intensity((0.25 - Math.random()*0.5)*mutationStrength);
           }
           xForm.setWeightingFieldVarParam2VarName(var.getFunc().getName());
           xForm.setWeightingFieldVarParam2ParamName(var.getFunc().getParameterNames()[idx2]);
@@ -136,10 +136,10 @@ public class WeightingFieldMutation extends AbstractMutation {
       int idx = Math.min((int)(Math.random()*xForm.getVariationCount()), xForm.getVariationCount()-1);
       Variation var = xForm.getVariation(idx);
       if(Math.random()>0.33) {
-        xForm.setWeightingFieldVarParam1Intensity(0.05 + Math.random() * 0.2);
+        xForm.setWeightingFieldVarParam1Intensity((0.05 + Math.random() * 0.2)*mutationStrength);
       }
       else {
-        xForm.setWeightingFieldVarParam1Intensity(0.25 - Math.random()*0.5);
+        xForm.setWeightingFieldVarParam1Intensity((0.25 - Math.random()*0.5)*mutationStrength);
       }
       xForm.setWeightingFieldVarParam1VarName(var.getFunc().getName());
       xForm.setWeightingFieldVarParam1ParamName(Variation.WFIELD_AMOUNT_PARAM);
@@ -150,14 +150,14 @@ public class WeightingFieldMutation extends AbstractMutation {
 
     if((hasVarParam && Math.random()>0.66) || (!hasVarParam && Math.random()>0.33)) {
       if(Math.random()>0.33) {
-        xForm.setWeightingFieldVarAmountIntensity(0.05 + Math.random() * 0.5);
+        xForm.setWeightingFieldVarAmountIntensity((0.05 + Math.random() * 0.5)*mutationStrength);
       }
       else {
-        xForm.setWeightingFieldVarAmountIntensity(0.25 - Math.random()*0.5);
+        xForm.setWeightingFieldVarAmountIntensity((0.25 - Math.random()*0.5)*mutationStrength);
       }
     }
     else {
-      xForm.setWeightingFieldVarAmountIntensity(0.01 + Math.random() * 0.15);
+      xForm.setWeightingFieldVarAmountIntensity((0.01 + Math.random() * 0.15)*mutationStrength);
     }
 
 

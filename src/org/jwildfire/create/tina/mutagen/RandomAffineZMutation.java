@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,15 +22,11 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
-import org.jwildfire.create.tina.variation.PostZScaleWFFunc;
-import org.jwildfire.create.tina.variation.Variation;
-import org.jwildfire.create.tina.variation.VariationFunc;
-import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class RandomAffineZMutation extends AbstractMutation {
 
   @Override
-  public void execute(Layer pLayer) {
+  public void execute(Layer pLayer, double mutationStrength) {
     Flame flame = pLayer.getOwner();
 
     if(Math.abs(flame.getCamPitch())<2.5 && Math.abs(flame.getCamBank())<2.5) {
@@ -49,11 +45,11 @@ public class RandomAffineZMutation extends AbstractMutation {
     EditPlane editPlane = flame.getEditPlane();
     try {
       flame.setEditPlane(Math.random() < 0.5 ? EditPlane.YZ : EditPlane.ZX);
-      apply(pLayer, 0.2);
+      apply(pLayer, 0.2*mutationStrength);
       flame.setEditPlane(Math.random() < 0.5 ? EditPlane.YZ : EditPlane.ZX);
-      apply(pLayer, 0.1);
+      apply(pLayer, 0.1*mutationStrength);
       flame.setEditPlane(Math.random() < 0.5 ? EditPlane.YZ : EditPlane.ZX);
-      apply(pLayer, 0.05);
+      apply(pLayer, 0.05*mutationStrength);
     }
     finally {
       flame.setEditPlane(editPlane!=null ? editPlane: EditPlane.XY);

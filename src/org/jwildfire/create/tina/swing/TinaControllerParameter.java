@@ -744,6 +744,7 @@ public class TinaControllerParameter {
   public JProgressBar randomBatchProgressBar;
   public JComboBox quickMutationTypeCmb;
   public JTextField quickMutationBatchSizeEdit;
+  public JWFNumberField quickMutationStrengthEdit;
   public JButton quickMutationButton;
   public JProgressBar quickMutationProgressBar;
   public JPanel quickMutationPanel;
@@ -1454,16 +1455,16 @@ public class TinaControllerParameter {
   }
 
   public void setParams4(JComboBox weightingFieldTypeCmb, JComboBox weightingFieldInputCmb, JWFNumberField weightingFieldColorIntensityREd, JWFNumberField weightingFieldVariationIntensityREd, JWFNumberField weightingFieldJitterIntensityREd,
-    JWFNumberField weightingFieldVarParam1AmountREd, JWFNumberField weightingFieldVarParam2AmountREd, JWFNumberField weightingFieldVarParam3AmountREd,
-    JComboBox weightingFieldVarParam1NameCmb, JComboBox weightingFieldVarParam2NameCmb, JComboBox weightingFieldVarParam3NameCmb,
-    JLabel weightingFieldColorMapFilenameLbl, JButton weightingFieldColorMapFilenameBtn, JLabel weightingFieldColorMapFilenameInfoLbl, JWFNumberField weightingFieldParam01REd, JLabel weightingFieldParam01Lbl,
-    JWFNumberField weightingFieldParam02REd, JLabel weightingFieldParam02Lbl, JWFNumberField weightingFieldParam03REd, JLabel weightingFieldParam03Lbl,
-    JComboBox weightingFieldParam04Cmb, JLabel weightingFieldParam04Lbl, JWFNumberField weightingFieldParam05REd,JLabel weightingFieldParam05Lbl,
-    JWFNumberField weightingFieldParam06REd, JLabel weightingFieldParam06Lbl, JWFNumberField weightingFieldParam07REd, JLabel weightingFieldParam07Lbl,
-    JComboBox weightingFieldParam08Cmb, JLabel weightingFieldParam08Lbl, JPanel weightingFieldPreviewImgRootPanel,
-    JComboBox tinaAIPostDenoiserCmb, JWFNumberField tinaOptiXDenoiserBlendField, JSlider tinaOptiXDenoiserBlendSlider, JButton tinaOptixDenoiseButton,
-    JButton tinaAIPostDenoiseExternalImageBtn, JComboBox quickMutationTypeCmb, JTextField quickMutationBatchSizeEdit, JButton quickMutationButton,
-    JProgressBar quickMutationProgressBar, JPanel quickMutationPanel) {
+                         JWFNumberField weightingFieldVarParam1AmountREd, JWFNumberField weightingFieldVarParam2AmountREd, JWFNumberField weightingFieldVarParam3AmountREd,
+                         JComboBox weightingFieldVarParam1NameCmb, JComboBox weightingFieldVarParam2NameCmb, JComboBox weightingFieldVarParam3NameCmb,
+                         JLabel weightingFieldColorMapFilenameLbl, JButton weightingFieldColorMapFilenameBtn, JLabel weightingFieldColorMapFilenameInfoLbl, JWFNumberField weightingFieldParam01REd, JLabel weightingFieldParam01Lbl,
+                         JWFNumberField weightingFieldParam02REd, JLabel weightingFieldParam02Lbl, JWFNumberField weightingFieldParam03REd, JLabel weightingFieldParam03Lbl,
+                         JComboBox weightingFieldParam04Cmb, JLabel weightingFieldParam04Lbl, JWFNumberField weightingFieldParam05REd, JLabel weightingFieldParam05Lbl,
+                         JWFNumberField weightingFieldParam06REd, JLabel weightingFieldParam06Lbl, JWFNumberField weightingFieldParam07REd, JLabel weightingFieldParam07Lbl,
+                         JComboBox weightingFieldParam08Cmb, JLabel weightingFieldParam08Lbl, JPanel weightingFieldPreviewImgRootPanel,
+                         JComboBox tinaAIPostDenoiserCmb, JWFNumberField tinaOptiXDenoiserBlendField, JSlider tinaOptiXDenoiserBlendSlider, JButton tinaOptixDenoiseButton,
+                         JButton tinaAIPostDenoiseExternalImageBtn, JComboBox quickMutationTypeCmb, JTextField quickMutationBatchSizeEdit, JWFNumberField quickMutationStrengthEdit, JButton quickMutationButton,
+                         JProgressBar quickMutationProgressBar, JPanel quickMutationPanel) {
       this.weightingFieldTypeCmb = weightingFieldTypeCmb;
       this.weightingFieldInputCmb = weightingFieldInputCmb;
       this.weightingFieldColorIntensityREd = weightingFieldColorIntensityREd;
@@ -1502,6 +1503,7 @@ public class TinaControllerParameter {
       this.tinaAIPostDenoiseExternalImageBtn = tinaAIPostDenoiseExternalImageBtn;
       this.quickMutationTypeCmb = quickMutationTypeCmb;
       this.quickMutationBatchSizeEdit = quickMutationBatchSizeEdit;
+      this.quickMutationStrengthEdit = quickMutationStrengthEdit;
       this.quickMutationButton = quickMutationButton;
       this.quickMutationProgressBar = quickMutationProgressBar;
       this.quickMutationPanel = quickMutationPanel;

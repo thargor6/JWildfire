@@ -7241,7 +7241,7 @@ public class MainEditorFrame extends JFrame {
     initAIPostDenoiserCmb(getTinaAIDenoiserCmb());
     MutaGenController.refreshTrendCmb(getQuickMutationTypeCmb(), Prefs.getPrefs().getTinaQuickMutationDefaultMutationType(), false);
     getQuickMutationBatchSizeEdit().setText(String.valueOf(Math.max(1, Prefs.getPrefs().getTinaQuickMutationBatchSize())));
-
+    getQuickMutationStrengthEdit().setValue(1.0);
     TinaControllerParameter params = new TinaControllerParameter();
 
     params.setMutaGenParams(
@@ -7459,7 +7459,7 @@ public class MainEditorFrame extends JFrame {
         getWeightingFieldParam04Cmb(), getWeightingFieldParam04Lbl(), getWeightingFieldParam05REd(), getWeightingFieldParam05Lbl(), getWeightingFieldParam06REd(), getWeightingFieldParam06Lbl(),
         getWeightingFieldParam07REd(), getWeightingFieldParam07Lbl(), getWeightingFieldParam08Cmb(), getWeightingFieldParam08Lbl(), getWeightingFieldPreviewImgRootPanel(),
         getTinaAIDenoiserCmb(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider(), getTinaOptixDenoiseButton(),
-        getTinaAIPostDenoiseExternalImageBtn(), getQuickMutationTypeCmb(), getQuickMutationBatchSizeEdit(), getQuickMutationButton(), getQuickMutationProgressBar(), getQuickMutationPanel());
+        getTinaAIPostDenoiseExternalImageBtn(), getQuickMutationTypeCmb(), getQuickMutationBatchSizeEdit(), getQuickMutationStrengthEdit(), getQuickMutationButton(), getQuickMutationProgressBar(), getQuickMutationPanel());
 
     tinaController = new TinaController(params);
 
@@ -13221,6 +13221,7 @@ public class MainEditorFrame extends JFrame {
   private JButton tinaVariationProfileEditBtn;
   private JButton tinaSendToGPURenderButton;
   private JToggleButton gpuModeToggleButton;
+  private JWFNumberField quickMutationStrengthEdit;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -24339,7 +24340,7 @@ public class MainEditorFrame extends JFrame {
       quickMutationButton.setMaximumSize(new Dimension(32000, 46));
       quickMutationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       quickMutationButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/lightbulb.png")));
-      quickMutationButton.setBounds(1, 6, 139, 46);
+      quickMutationButton.setBounds(1, 4, 139, 38);
       quickMutationButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.quickMutationButton_clicked();
@@ -24358,23 +24359,23 @@ public class MainEditorFrame extends JFrame {
       quickMutationProgressBar.setFocusable(false);
       quickMutationProgressBar.setDoubleBuffered(true);
       quickMutationProgressBar.setAlignmentX(0.0f);
-      quickMutationProgressBar.setBounds(1, 53, 139, 19);
+      quickMutationProgressBar.setBounds(1, 44, 139, 15);
       panel_14.add(quickMutationProgressBar);
 
       quickMutationBatchSizeEdit = new JTextField();
       quickMutationBatchSizeEdit.setText("11");
       quickMutationBatchSizeEdit.setPreferredSize(new Dimension(55, 22));
       quickMutationBatchSizeEdit.setFont(null);
-      quickMutationBatchSizeEdit.setBounds(71, 105, 68, 22);
+      quickMutationBatchSizeEdit.setBounds(64, 84, 75, 24);
       quickMutationBatchSizeEdit.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       panel_14.add(quickMutationBatchSizeEdit);
 
       JLabel label = new JLabel();
-      label.setToolTipText("Number of color points in random gradients (not used by all gradient generators)");
+      label.setToolTipText("Number of flames to be generated");
       label.setText("Batch size");
       label.setPreferredSize(new Dimension(100, 22));
       label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      label.setBounds(4, 110, 67, 14);
+      label.setBounds(4, 89, 60, 14);
       panel_14.add(label);
 
       quickMutationTypeCmb = new JComboBox();
@@ -24384,8 +24385,27 @@ public class MainEditorFrame extends JFrame {
       quickMutationTypeCmb.setMaximumSize(new Dimension(32767, 24));
       quickMutationTypeCmb.setMaximumRowCount(32);
       quickMutationTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      quickMutationTypeCmb.setBounds(2, 78, 139, 24);
+      quickMutationTypeCmb.setBounds(2, 60, 139, 24);
       panel_14.add(quickMutationTypeCmb);
+
+      JLabel lblStrength = new JLabel();
+      lblStrength.setToolTipText("Overall strength of the mutation effect (does not apply to all types of mutations)");
+      lblStrength.setText("Strength");
+      lblStrength.setPreferredSize(new Dimension(100, 22));
+      lblStrength.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblStrength.setBounds(4, 112, 60, 14);
+      panel_14.add(lblStrength);
+
+      quickMutationStrengthEdit = new JWFNumberField();
+      quickMutationStrengthEdit.setValueStep(0.01);
+      quickMutationStrengthEdit.setToolTipText("");
+      quickMutationStrengthEdit.setText("");
+      quickMutationStrengthEdit.setSize(new Dimension(84, 24));
+      quickMutationStrengthEdit.setPreferredSize(new Dimension(76, 24));
+      quickMutationStrengthEdit.setLocation(new Point(24, 26));
+      quickMutationStrengthEdit.setFont(null);
+      quickMutationStrengthEdit.setBounds(64, 107, 75, 24);
+      panel_14.add(quickMutationStrengthEdit);
     }
     return panel_14;
   }
@@ -24507,5 +24527,9 @@ public class MainEditorFrame extends JFrame {
 
   public JToggleButton getGpuModeToggleButton() {
     return gpuModeToggleButton;
+  }
+
+  public JWFNumberField getQuickMutationStrengthEdit() {
+    return quickMutationStrengthEdit;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2029 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -29,10 +29,10 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class BokehMutation extends AbstractMutation {
 
   @Override
-  public void execute(Layer pLayer) {
+  public void execute(Layer pLayer, double mutationStrength) {
     Flame flame = pLayer.getOwner();
 
-    flame.setCamDOF(0.1 + Math.random() * 0.3);
+    flame.setCamDOF((0.1 + Math.random() * 0.3)*mutationStrength);
     flame.setNewCamDOF(true);
     flame.setCamPitch(30 + Math.random() * 20.0);
     flame.setCamYaw(15 - Math.random() * 30.0);

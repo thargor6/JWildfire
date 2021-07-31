@@ -43,15 +43,17 @@ public class MutationSampler {
   private final int imageHeight;
   private final Prefs prefs;
   private final MutationType mutationType;
+  private final double mutationStrength;
   private RandomBatchQuality quality = RandomBatchQuality.QUICK_MUTATIONS;
   private final Flame baseFlame;
 
-  public MutationSampler(Flame pBaseFlame, int pImageWidth, int pImageHeight, Prefs pPrefs, MutationType pMutationType) {
+  public MutationSampler(Flame pBaseFlame, int pImageWidth, int pImageHeight, Prefs pPrefs, MutationType pMutationType, double pMutationStrength) {
     baseFlame = pBaseFlame;
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     prefs = pPrefs;
     mutationType = pMutationType;
+    mutationStrength = pMutationStrength;
   }
 
   public RandomFlameGeneratorSample createSample() {
@@ -61,15 +63,13 @@ public class MutationSampler {
     int bgGreen = prefs.getTinaRandomBatchBGColorGreen();
     int bgBlue = prefs.getTinaRandomBatchBGColorBlue();
     double bestCoverage = 0.0;
-
-
     for (int j = 0; j < quality.getMaxSamples(); j++) {
       // create flame
       Flame flame = baseFlame.makeCopy();
       try {
         Mutation mutation = mutationType.createMutationInstance();
         for (Layer layer : flame.getLayers()) {
-          mutation.execute(layer);
+          mutation.execute(layer, mutationStrength);
         }
         String name = flame.getName();
         int p=name.lastIndexOf(" - ");

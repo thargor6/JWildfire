@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -28,7 +28,7 @@ import java.util.List;
 public class SimilarGradientMutation extends AbstractMutation {
 
   @Override
-  public void execute(Layer pLayer) {
+  public void execute(Layer pLayer, double mutationStrength) {
     List<RGBColor> keyFrames = new SimilarGradientCreator().createKeyFrames(pLayer.getPalette().getTransformedColors());
     RGBPalette palette = RandomGradientGenerator.generatePalette(keyFrames, true, false);
     pLayer.setPalette(palette);

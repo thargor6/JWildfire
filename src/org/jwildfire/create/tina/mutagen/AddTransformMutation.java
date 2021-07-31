@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -25,7 +25,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class AddTransformMutation extends AbstractMutation {
 
   @Override
-  public void execute(Layer pLayer) {
+  public void execute(Layer pLayer, double mutationStrength) {
     if (Math.random() < 0.75) {
       if (Math.random() < 0.5 && pLayer.getXForms().size() > 0) {
         int idx = (int) (Math.random() * pLayer.getXForms().size());
@@ -33,7 +33,7 @@ public class AddTransformMutation extends AbstractMutation {
       }
       XForm xForm = new XForm();
       pLayer.getXForms().add(xForm);
-      xForm.setWeight(0.1 + Math.random() * 2.0);
+      xForm.setWeight((0.1 + Math.random() * 2.0)*mutationStrength);
       String fName;
       if (Math.random() < 0.33) {
         int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
@@ -42,7 +42,7 @@ public class AddTransformMutation extends AbstractMutation {
       else {
         fName = VariationFuncList.getRandomVariationname();
       }
-      xForm.addVariation(0.01 + Math.random() * 10.0, VariationFuncList.getVariationFuncInstance(fName, true));
+      xForm.addVariation((0.01 + Math.random() * 10.0)*mutationStrength, VariationFuncList.getVariationFuncInstance(fName, true));
     }
     else {
       if (Math.random() < 0.5 && pLayer.getFinalXForms().size() > 0) {
@@ -51,7 +51,7 @@ public class AddTransformMutation extends AbstractMutation {
       }
       XForm xForm = new XForm();
       pLayer.getFinalXForms().add(xForm);
-      xForm.setWeight(0.1 + Math.random() * 2.0);
+      xForm.setWeight((0.1 + Math.random() * 2.0)*mutationStrength);
       String fName;
       if (Math.random() < 0.33) {
         int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
@@ -66,7 +66,7 @@ public class AddTransformMutation extends AbstractMutation {
         }
       }
 
-      xForm.addVariation(0.01 + Math.random() * 10.0, VariationFuncList.getVariationFuncInstance(fName, true));
+      xForm.addVariation((0.01 + Math.random() * 10.0)*mutationStrength, VariationFuncList.getVariationFuncInstance(fName, true));
     }
   }
 

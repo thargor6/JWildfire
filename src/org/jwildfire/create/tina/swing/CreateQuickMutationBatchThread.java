@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -44,9 +44,10 @@ public class CreateQuickMutationBatchThread implements Runnable{
   private boolean done;
   private boolean cancelSignalled;
   private final int imgWidth, imgHeight;
+  private final double mutationStrength;
   private final MutationType mutationType;
 
-  public CreateQuickMutationBatchThread(TinaController parentController, Flame baseFlame, ProgressUpdater mainProgressUpdater, int maxCount, List<SimpleImage> imgList, List<FlameThumbnail> randomBatch, int imgWidth, int imgHeight, MutationType mutationType) {
+  public CreateQuickMutationBatchThread(TinaController parentController, Flame baseFlame, ProgressUpdater mainProgressUpdater, int maxCount, double mutationStrength, List<SimpleImage> imgList, List<FlameThumbnail> randomBatch, int imgWidth, int imgHeight, MutationType mutationType) {
     this.parentController = parentController;
     this.baseFlame = baseFlame;
     this.mainProgressUpdater = mainProgressUpdater;
@@ -56,6 +57,7 @@ public class CreateQuickMutationBatchThread implements Runnable{
     this.prefs = Prefs.getPrefs();
     this.imgWidth = imgWidth;
     this.imgHeight = imgHeight;
+    this.mutationStrength = mutationStrength;
     this.mutationType = mutationType!=null ? mutationType: MutationType.ALL;
   }
 
@@ -65,7 +67,7 @@ public class CreateQuickMutationBatchThread implements Runnable{
     try {
       mainProgressUpdater.initProgress(maxCount);
       for (int i = 0; i < maxCount && !cancelSignalled; i++) {
-        MutationSampler sampler = new MutationSampler( baseFlame,imgWidth / 4, imgHeight / 4, prefs, mutationType);
+        MutationSampler sampler = new MutationSampler( baseFlame,imgWidth / 4, imgHeight / 4, prefs, mutationType, mutationStrength);
         RandomFlameGeneratorSample sample = sampler.createSample();
         FlameThumbnail thumbnail;
         thumbnail = new FlameThumbnail( createFinalFlame(sample.getFlame(), baseFlame), null, null, imgWidth, imgHeight);

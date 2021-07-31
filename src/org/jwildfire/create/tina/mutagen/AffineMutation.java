@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,10 +24,10 @@ import org.jwildfire.create.tina.transform.XFormTransformService;
 public class AffineMutation extends AbstractMutation {
 
   @Override
-  public void execute(Layer pLayer) {
-    apply(pLayer, 0.75);
-    apply(pLayer, 0.2);
-    apply(pLayer, 0.1);
+  public void execute(Layer pLayer, double mutationStrength) {
+    apply(pLayer, 0.75 * mutationStrength);
+    apply(pLayer, 0.2 * mutationStrength);
+    apply(pLayer, 0.1 * mutationStrength);
   }
 
   private void apply(Layer pLayer, double pAmount) {
