@@ -69,6 +69,7 @@ public class AbstractFlameReader {
   public static final String ATTR_FILTER = "filter";
   public static final String ATTR_SPATIAL_OVERSAMPLE = "oversample";
   public static final String ATTR_AI_POST_DENOISER = "ai_post_denoiser";
+  public static final String ATTR_AI_POST_DENOISER_ONLY_FOR_CPU = "ai_post_denoiser_only_for_cpu";
   public static final String ATTR_POST_OPTIX_DENOISER = "post_optix_denoiser";
   public static final String ATTR_POST_OPTIX_DENOISER_BLEND = "post_optix_denoiser_blend";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
@@ -340,6 +341,10 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_POST_OPTIX_DENOISER_BLEND)) != null) {
       pFlame.setPostOptiXDenoiserBlend(Double.parseDouble(hs));
     }
+    if ((hs = atts.get(ATTR_AI_POST_DENOISER_ONLY_FOR_CPU)) != null) {
+      pFlame.setPostDenoiserOnlyForCpuRender(Boolean.parseBoolean(hs));
+    }
+
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pFlame.setSampleDensity(Double.parseDouble(hs));
     }

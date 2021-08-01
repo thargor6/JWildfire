@@ -7458,7 +7458,7 @@ public class MainEditorFrame extends JFrame {
         getWeightingFieldParam01REd(), getWeightingFieldParam01Lbl(), getWeightingFieldParam02REd(), getWeightingFieldParam02Lbl(), getWeightingFieldParam03REd(), getWeightingFieldParam03Lbl(),
         getWeightingFieldParam04Cmb(), getWeightingFieldParam04Lbl(), getWeightingFieldParam05REd(), getWeightingFieldParam05Lbl(), getWeightingFieldParam06REd(), getWeightingFieldParam06Lbl(),
         getWeightingFieldParam07REd(), getWeightingFieldParam07Lbl(), getWeightingFieldParam08Cmb(), getWeightingFieldParam08Lbl(), getWeightingFieldPreviewImgRootPanel(),
-        getTinaAIDenoiserCmb(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider(), getTinaOptixDenoiseButton(),
+        getTinaAIDenoiserCmb(), getTinaAIDenoiserOnlyForCPUCBx(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider(), getTinaOptixDenoiseButton(),
         getTinaAIPostDenoiseExternalImageBtn(), getQuickMutationTypeCmb(), getQuickMutationBatchSizeEdit(), getQuickMutationStrengthEdit(), getQuickMutationButton(), getQuickMutationProgressBar(), getQuickMutationPanel());
 
     tinaController = new TinaController(params);
@@ -13222,6 +13222,7 @@ public class MainEditorFrame extends JFrame {
   private JButton tinaSendToGPURenderButton;
   private JToggleButton gpuModeToggleButton;
   private JWFNumberField quickMutationStrengthEdit;
+  private JCheckBox tinaAIDenoiserOnlyForCPUCBx;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -14208,6 +14209,7 @@ public class MainEditorFrame extends JFrame {
       antialiasPanel.add(lblFiltering);
 
       tinaFilterIndicatorCBx = new JCheckBox("Indicator (red=sharp, green=smooth, blue=low density, displays only at the next-quickrender)");
+      tinaFilterIndicatorCBx.setActionCommand("");
       tinaFilterIndicatorCBx.setToolTipText("Enable/disable the Adaptive filter indicator");
       tinaFilterIndicatorCBx.setBounds(565, 127, 553, 18);
       tinaFilterIndicatorCBx.addItemListener(new ItemListener() {
@@ -14387,6 +14389,7 @@ public class MainEditorFrame extends JFrame {
       });
 
       antialiasPanel.add(tinaAIPostDenoiseExternalImageBtn);
+      antialiasPanel.add(getTinaAIDenoiserOnlyForCPUCBx());
     }
     return antialiasPanel;
   }
@@ -24531,5 +24534,25 @@ public class MainEditorFrame extends JFrame {
 
   public JWFNumberField getQuickMutationStrengthEdit() {
     return quickMutationStrengthEdit;
+  }
+
+  private JCheckBox getTinaAIDenoiserOnlyForCPUCBx() {
+    if (tinaAIDenoiserOnlyForCPUCBx == null) {
+      tinaAIDenoiserOnlyForCPUCBx = new JCheckBox("AI-based denoiser only for CPU render");
+      tinaAIDenoiserOnlyForCPUCBx.setToolTipText("In many cases the GPU renders do not require a denoiser, while a CPU-based render would benefit from them. With this setting you may separate your post-denoiser settings between CPU- and GPU-render to some extent.");
+      tinaAIDenoiserOnlyForCPUCBx.setFont(null);
+      tinaAIDenoiserOnlyForCPUCBx.setActionCommand("");
+      tinaAIDenoiserOnlyForCPUCBx.setBounds(565, 100, 432, 18);
+      tinaAIDenoiserOnlyForCPUCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().tinaAIDenoiserOnlyForCPUCBx_changed();
+          }
+        }
+      });
+
+    }
+    return tinaAIDenoiserOnlyForCPUCBx;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

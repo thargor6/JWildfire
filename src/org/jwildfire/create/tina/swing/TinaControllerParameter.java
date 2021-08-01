@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -658,6 +658,7 @@ public class TinaControllerParameter {
   public JSlider tinaSpatialOversamplingSlider;
   public JToggleButton filterKernelFlatPreviewBtn;
   public JComboBox tinaAIPostDenoiserCmb;
+  public JCheckBox tinaAIDenoiserOnlyForCPUCBx;
   public JWFNumberField tinaOptiXDenoiserBlendField;
   public JSlider tinaOptiXDenoiserBlendSlider;
   public JButton tinaOptixDenoiseButton;
@@ -1462,7 +1463,7 @@ public class TinaControllerParameter {
                          JComboBox weightingFieldParam04Cmb, JLabel weightingFieldParam04Lbl, JWFNumberField weightingFieldParam05REd, JLabel weightingFieldParam05Lbl,
                          JWFNumberField weightingFieldParam06REd, JLabel weightingFieldParam06Lbl, JWFNumberField weightingFieldParam07REd, JLabel weightingFieldParam07Lbl,
                          JComboBox weightingFieldParam08Cmb, JLabel weightingFieldParam08Lbl, JPanel weightingFieldPreviewImgRootPanel,
-                         JComboBox tinaAIPostDenoiserCmb, JWFNumberField tinaOptiXDenoiserBlendField, JSlider tinaOptiXDenoiserBlendSlider, JButton tinaOptixDenoiseButton,
+                         JComboBox tinaAIPostDenoiserCmb, JCheckBox tinaAIDenoiserOnlyForCPUCBx, JWFNumberField tinaOptiXDenoiserBlendField, JSlider tinaOptiXDenoiserBlendSlider, JButton tinaOptixDenoiseButton,
                          JButton tinaAIPostDenoiseExternalImageBtn, JComboBox quickMutationTypeCmb, JTextField quickMutationBatchSizeEdit, JWFNumberField quickMutationStrengthEdit, JButton quickMutationButton,
                          JProgressBar quickMutationProgressBar, JPanel quickMutationPanel) {
       this.weightingFieldTypeCmb = weightingFieldTypeCmb;
@@ -1497,6 +1498,7 @@ public class TinaControllerParameter {
       this.weightingFieldParam08Lbl = weightingFieldParam08Lbl;
       this.weightingFieldPreviewImgRootPanel = weightingFieldPreviewImgRootPanel;
       this.tinaAIPostDenoiserCmb = tinaAIPostDenoiserCmb;
+      this.tinaAIDenoiserOnlyForCPUCBx = tinaAIDenoiserOnlyForCPUCBx;
       this.tinaOptiXDenoiserBlendField = tinaOptiXDenoiserBlendField;
       this.tinaOptiXDenoiserBlendSlider = tinaOptiXDenoiserBlendSlider;
       this.tinaOptixDenoiseButton = tinaOptixDenoiseButton;

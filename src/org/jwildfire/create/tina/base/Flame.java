@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -40,7 +40,6 @@ import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
-import org.jwildfire.create.tina.render.denoiser.OptixCmdLineAIPostDenoiser;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
 public class Flame implements Assignable<Flame>, Serializable {
@@ -147,6 +146,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private boolean bgTransparency;
   private AIPostDenoiserType aiPostDenoiser;
   private double postOptiXDenoiserBlend;
+  private boolean postDenoiserOnlyForCpuRender = true;
 
   private double foregroundOpacity;
   private final MotionCurve foregroundOpacityCurve = new MotionCurve();
@@ -843,6 +843,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     spatialOversampling = pFlame.spatialOversampling;
     aiPostDenoiser = pFlame.aiPostDenoiser;
     postOptiXDenoiserBlend = pFlame.postOptiXDenoiserBlend;
+    postDenoiserOnlyForCpuRender = pFlame.postDenoiserOnlyForCpuRender;
     foregroundOpacity = pFlame.foregroundOpacity;
     foregroundOpacityCurve.assign(pFlame.foregroundOpacityCurve);
     postBlurRadius = pFlame.postBlurRadius;
@@ -931,6 +932,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
         (camDOFShape != pFlame.camDOFShape) || (spatialOversampling != pFlame.spatialOversampling) ||
         (aiPostDenoiser != pFlame.aiPostDenoiser) || (fabs(postOptiXDenoiserBlend - pFlame.postOptiXDenoiserBlend) > EPSILON) ||
+        (postDenoiserOnlyForCpuRender != pFlame.postDenoiserOnlyForCpuRender) ||
         (fabs(foregroundOpacity - pFlame.foregroundOpacity) > EPSILON) || !foregroundOpacityCurve.isEqual(pFlame.foregroundOpacityCurve) ||
         (fabs(camDOFScale - pFlame.camDOFScale) > EPSILON) || !camDOFScaleCurve.isEqual(pFlame.camDOFScaleCurve) ||
         (fabs(camDOFAngle - pFlame.camDOFAngle) > EPSILON) || !camDOFAngleCurve.isEqual(pFlame.camDOFAngleCurve) ||
@@ -1681,6 +1683,14 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setPostOptiXDenoiserBlend(double postOptiXDenoiserBlend) {
     this.postOptiXDenoiserBlend = postOptiXDenoiserBlend;
+  }
+
+  public boolean isPostDenoiserOnlyForCpuRender() {
+    return postDenoiserOnlyForCpuRender;
+  }
+
+  public void setPostDenoiserOnlyForCpuRender(boolean postDenoiserOnlyForCpuRender) {
+    this.postDenoiserOnlyForCpuRender = postDenoiserOnlyForCpuRender;
   }
 
   public double getForegroundOpacity() {

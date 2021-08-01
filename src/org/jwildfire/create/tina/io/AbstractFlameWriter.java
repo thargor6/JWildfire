@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -299,6 +299,7 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_LOW_DENSITY, pFlame.getSpatialFilterLowDensity()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SPATIAL_OVERSAMPLE, pFlame.getSpatialOversampling()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_AI_POST_DENOISER, pFlame.getAiPostDenoiser().toString()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_AI_POST_DENOISER_ONLY_FOR_CPU, pFlame.isPostDenoiserOnlyForCpuRender()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_OPTIX_DENOISER_BLEND, pFlame.getPostOptiXDenoiserBlend()));
     attrList.add(xb.createAttr("quality", pFlame.getSampleDensity()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_TYPE, pFlame.getBgColorType().toString()));

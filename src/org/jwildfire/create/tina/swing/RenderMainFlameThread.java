@@ -198,7 +198,7 @@ public class RenderMainFlameThread implements Runnable {
         if (openClRenderRes.getReturnCode() != 0) {
           throw new Exception(openClRenderRes.getMessage());
         } else {
-          if (!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser())) {
+          if (!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser()) && flame.isPostDenoiserOnlyForCpuRender()) {
             AIPostDenoiserFactory.denoiseImage(openClRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend());
           }
         }

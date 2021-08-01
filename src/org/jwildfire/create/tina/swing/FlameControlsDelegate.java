@@ -688,6 +688,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
     enableControl(data.tinaSpatialOversamplingREd, false);
     enableControl(data.tinaAIPostDenoiserCmb, false);
+    enableControl(data.tinaAIDenoiserOnlyForCPUCBx, false);
 
     {
       AIPostDenoiserType denoiserType = (AIPostDenoiserType) data.tinaAIPostDenoiserCmb.getSelectedItem();
@@ -761,6 +762,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0);
       data.tinaAIPostDenoiserCmb.setSelectedItem(getCurrFlame().getAiPostDenoiser());
+      data.tinaAIDenoiserOnlyForCPUCBx.setSelected(getCurrFlame().isPostDenoiserOnlyForCpuRender());
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaOptiXDenoiserBlendSlider, data.tinaOptiXDenoiserBlendField, "postOptiXDenoiserBlend", TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND);
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
@@ -2671,6 +2673,16 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       }
       catch (Throwable ex) {
         owner.errorHandler.handleError(ex);
+      }
+    }
+  }
+
+  public void tinaAIDenoiserOnlyForCPUCBx_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setPostDenoiserOnlyForCpuRender(data.tinaAIDenoiserOnlyForCPUCBx.isSelected());
       }
     }
   }

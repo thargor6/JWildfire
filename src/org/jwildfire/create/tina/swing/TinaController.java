@@ -652,6 +652,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.filterKernelPreviewRootPnl = parameterObject.filterKernelPreviewRootPnl;
     data.filterKernelFlatPreviewBtn = parameterObject.filterKernelFlatPreviewBtn;
     data.tinaAIPostDenoiserCmb = parameterObject.tinaAIPostDenoiserCmb;
+    data.tinaAIDenoiserOnlyForCPUCBx = parameterObject.tinaAIDenoiserOnlyForCPUCBx;
     data.tinaOptiXDenoiserBlendField = parameterObject.tinaOptiXDenoiserBlendField;
     data.tinaOptiXDenoiserBlendSlider = parameterObject.tinaOptiXDenoiserBlendSlider;
     data.tinaOptixDenoiseButton = parameterObject.tinaOptixDenoiseButton;

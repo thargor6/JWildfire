@@ -128,6 +128,7 @@ public class TinaControllerData {
   public JLabel tinaFilterRadiusLbl;
   public JCheckBox tinaFilterIndicatorCBx;
   public JComboBox tinaAIPostDenoiserCmb;
+  public JCheckBox tinaAIDenoiserOnlyForCPUCBx;
   public JWFNumberField tinaOptiXDenoiserBlendField;
   public JSlider tinaOptiXDenoiserBlendSlider;
   public JButton tinaOptixDenoiseButton;
