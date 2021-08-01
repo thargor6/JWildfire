@@ -1014,6 +1014,9 @@ public class VariationFuncList {
     registerVariationFunc(PostFlattenFunc.class);
     registerVariationFunc(PreDiscFunc.class);
     registerVariationFunc(PostRotateZFunc.class);
+    registerVariationFunc(MapleLeafFunc.class);
+    registerVariationFunc(OakLeafFunc.class);
+    registerVariationFunc(JapaneseMapleLeafFunc.class);
 
 
     resolvedAliasMap = new HashMap<>();
