@@ -99,7 +99,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
               WikimediaCommonsRandomFlameGenerator.class.equals(cls) || ColorMapRandomFlameGenerator.class.equals(cls) ||
               SolidExperimentalRandomFlameGenerator.class.equals(cls) || SolidStunningRandomFlameGenerator.class.equals(cls) ||
               SolidJulia3DRandomFlameGenerator.class.equals(cls) || SolidShadowsRandomFlameGenerator.class.equals(cls) ||
-              SolidLabyrinthRandomFlameGenerator.class.equals(cls)) {
+              SolidLabyrinthRandomFlameGenerator.class.equals(cls) || SynthRandomFlameGenerator.class.equals(cls)) {
         gpuSupportedGenerators.remove(i);
       }
       else {

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2019 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -19,10 +19,12 @@ package org.jwildfire.create.tina.randomweightingfield;
 import java.util.ArrayList;
 import java.util.List;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.swing.TinaControllerContextService;
 
 public class AllRandomWeightingFieldGenerator implements RandomWeightingFieldGenerator {
 
   protected static final List<RandomWeightingFieldGenerator> allGenerators;
+  protected static final List<RandomWeightingFieldGenerator> gpuSupportingGenerators;
 
   static {
     allGenerators = new ArrayList<>();
@@ -30,11 +32,22 @@ public class AllRandomWeightingFieldGenerator implements RandomWeightingFieldGen
     allGenerators.add(new BasicNoiseRandomWeightingFieldGenerator());
     allGenerators.add(new FractalNoiseRandomWeightingFieldGenerator());
     allGenerators.add(new ImageMapRandomWeightingFieldGenerator());
+
+    gpuSupportingGenerators = new ArrayList<>();
+    gpuSupportingGenerators.add(new CellularNoiseNoiseRandomWeightingFieldGenerator());
+    gpuSupportingGenerators.add(new BasicNoiseRandomWeightingFieldGenerator());
+    gpuSupportingGenerators.add(new FractalNoiseRandomWeightingFieldGenerator());
   }
 
   @Override
   public void addWeightingField(Flame pFlame) {
-    RandomWeightingFieldGenerator generator = allGenerators.get((int) (Math.random() * allGenerators.size()));
+    RandomWeightingFieldGenerator generator;
+    if(TinaControllerContextService.getContext().isGpuMode()) {
+      generator = gpuSupportingGenerators.get((int) (Math.random() * gpuSupportingGenerators.size()));
+    }
+    else {
+      generator = allGenerators.get((int) (Math.random() * allGenerators.size()));
+    }
     generator.addWeightingField(pFlame);
   }
 

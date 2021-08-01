@@ -207,6 +207,9 @@ public class FAFlameWriter extends AbstractFlameWriter {
   private String buildGlobalDefinitions(List<Flame> pFlames) {
     Set<FARenderKernelSwitches> switches = new HashSet<>();
     for(Flame flame: pFlames) {
+      if(flame.getLayers().size()>1) {
+        throw new RuntimeException("Flames with multiple layers are currently not supported on GPU. Please reduce the layers to one layer and try again.");
+      }
       if(fabs(flame.getCamDOF())>EPSILON) {
         switches.add(FARenderKernelSwitches.ADD_FEATURE_DOF);
       }

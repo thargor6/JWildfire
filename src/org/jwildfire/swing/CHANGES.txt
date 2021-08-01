@@ -34,6 +34,7 @@ V7.00 (xx.xx.202x)
  - new white-noise-type for weighting fields (not very spectacular, but interesting some times, though)
  - added the cell-value-type as possible return-type for cellular noise in weighting fields
  - added a strength-parameter to Quick mutation (which currently works not very predictable/well)
+ - new option to disable ai-based post-denoisers on GPU renders, but to keep the settings for CPU renders at the same time
 
  - improved the "Duckies"-random-flame-generator
  - new variations:
@@ -43,6 +44,9 @@ V7.00 (xx.xx.202x)
    - post_flatten and pre_flatten
    - pre_disc
    - post_rotate_z
+   - oak_leaf
+   - maple_leaf
+   - japanese_maple_leaf
 
   - new family of variations by Jesus Sosa: Symmetries band & network groups variations
      - Symmetry Band Groups 1 to 7 variations: sym_bg1, sym_bg2, sym_bg3, sym_bg4, sym_bg5, sym_bg6, sym_bg7
@@ -62,6 +66,10 @@ V7.00 (xx.xx.202x)
  - fixed the following variations in order to correctly support the "Preserve Z"-setting:
      - bsplit
  - fixed a bad behaviour of the dinis_surface_wf variation
+ - the parameter "filled" of the following variations is now a probability, rather than a switch:
+     - cannabiscurve_wf
+     - cloverleaf_wf
+     - rose_wf
  - changed the initialization behaviour of the w-, x-, y- and z-variation: lituus is initialized to 0 instead to a random number
  - changed the behaviour of post_axis_symmetry_wf and post_mirror_wf so that it only adds a contribution when the amount-parameter is not equal to zero, for consistency reasons
  - improved the gnarl-random-flame-generators to also use waves22, waves23, waves4, waves42 and vibration2 to create more interesting variations of the standard-gnarls

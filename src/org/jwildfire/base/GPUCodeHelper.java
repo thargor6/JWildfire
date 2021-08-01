@@ -24,21 +24,21 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        "double _x0 = x0 < x1 ? x0 : x1;\n"
-            + "double     _x1 = x0 > x1 ? x0 : x1;\n"
-            + "double    _x1_m_x0 = _x1 - _x0 == 0 ? SMALL_EPSILON : _x1 - _x0;\n"
-            + "    double zf = factor * (pAffineTP.color - _x0) / _x1_m_x0;\n"
-            + "    if (clamp != 0)\n"
-            + "      zf = zf < 0 ? 0 : zf > 1 ? 1 : zf;\n"
-            + "    pVarTP.x += pAmount * pAffineTP.x;\n"
-            + "    pVarTP.y += pAmount * pAffineTP.y;\n"
+        " double t = pAffineTP.getPrecalcAtan()-M_PI_2;\n"
+            + "    double r = (filled > 0 && filled > pContext.random()) ? pAmount * pContext.random() : pAmount;\n"
             + "\n"
-            + "    if (overwrite == 0)\n"
-            + "      pVarTP.z += pAmount * pAffineTP.z * zf;\n"
-            + "    else\n"
-            + "      pVarTP.z += pAmount * zf;\n";
+            + "    // maple leaf formula by Hamid Naderi Yeganeh: https://blogs.scientificamerican.com/guest-blog/how-to-draw-with-math/\n"
+            + "    double lx = (1.0+pow((cos(6.0*t)),2.0)+1.0/5.0*pow((cos(6.0*t)*cos(24.0*t)),10.0)+(1/4*pow((cos(30.0*t)),2)+1.0/9.0*pow((cos(30.0*t)),12.0))*(1.0-pow((sin(6.0*t)),10.0)))*(sin(2.0*t))*(1.0-pow((cos(t)),4.0))*(1.0-pow((cos(t)),10.0)*pow((cos(3.0*t)),2.0));\n"
+            + "    double ly = 21.0/20.0*cos(2.0*t)*(1.0-pow((cos(t)),4.0)+1.0/2.0*pow((cos(t)*cos(3.0*t)),10.0))*(1.0+pow((cos(6.0*t)),2.0)+1.0/5.0*pow((cos(6.0*t)*cos(18.0*t)),10.0)+(1.0/4.0*pow((cos(30.0*t)),4)+1.0/10.0*pow((cos(30.0*t)),12.0))*(1.0-pow((cos(t)),10.0)*pow((cos(3.0*t)),2.0))*(1.0-pow((sin(6.0*t)),10.0)));\n"
+            + "\n"
+            + "    pVarTP.x += r * lx;\n"
+            + "    pVarTP.y += r * ly;\n"
+            + "\n"
+            + "    if (pContext.isPreserveZCoordinate()) {\n"
+            + "      pVarTP.z += pAmount * pAffineTP.z;\n"
+            + "    }\n";
 
-    System.err.println(convertCode(code, "dc_ztransl", new String[]{"x0", "x1", "factor"}));
+    System.err.println(convertCode(code, "maple_leaf", new String[]{"filled"}));
   }
 
   private String convertCode(String code, String varName, String paramNames[]) {
@@ -47,7 +47,7 @@ public class GPUCodeHelper {
             // pAffineTP.getPrecalcSumsq()
             .replaceAll("pAffineTP\\.getPrecalcSumsq\\(\\)", "__r2")
             // pAffineTP.getPrecalcAtan()
-            .replaceAll("pAffineTP\\.getPrecalcAtan\\(\\)", "__phi")
+            .replaceAll("pAffineTP\\.getPrecalcAtanf\\(\\)", "__phi")
             // pAffineTP.getPrecalcAtanYX()
             .replaceAll("pAffineTP\\.getPrecalcAtanYX\\(\\)", "__theta")
             // pAffineTP.getPrecalcSqrt()
