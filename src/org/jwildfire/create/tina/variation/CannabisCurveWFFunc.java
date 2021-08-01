@@ -28,7 +28,7 @@ public class CannabisCurveWFFunc extends VariationFunc implements SupportsGPU {
   public static final String PARAM_FILLED = "filled";
   private static final String[] paramNames = {PARAM_FILLED};
 
-  private int filled = 1;
+  private double filled = 0.85;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -38,9 +38,11 @@ public class CannabisCurveWFFunc extends VariationFunc implements SupportsGPU {
     double r = (1 + 9.0 / 10.0 * cos(8.0 * a)) * (1 + 1.0 / 10.0 * cos(24.0 * a)) * (9.0 / 10.0 + 1.0 / 10.0 * cos(200.0 * a)) * (1.0 + sin(a));
     a += M_PI / 2.0;
 
-    if (filled == 1) {
+    if (filled > 0 && filled > pContext.random()) {
       r *= pContext.random();
     }
+
+
 
     double nx = sin(a) * r;
     double ny = cos(a) * r;
@@ -67,7 +69,7 @@ public class CannabisCurveWFFunc extends VariationFunc implements SupportsGPU {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_FILLED.equalsIgnoreCase(pName))
-      filled = Tools.FTOI(pValue);
+      filled = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -87,7 +89,7 @@ public class CannabisCurveWFFunc extends VariationFunc implements SupportsGPU {
     return "float a = __phi;\n"
         + "float r = (1.f + 9.0f / 10.0f * cosf(8.0f * a)) * (1.f + 1.0f / 10.0f * cosf(24.0f * a)) * (9.0f / 10.0f + 1.0f / 10.0f * cosf(200.0f * a)) * (1.0f + sinf(a));\n"
         + "a += PI / 2.0f;\n"
-        + "if (lroundf(__cannabiscurve_wf_filled) == 1) {\n"
+        + "if (__cannabiscurve_wf_filled > 0 && __cannabiscurve_wf_filled>RANDFLOAT()) {\n"
         + "   r *= RANDFLOAT();\n"
         + "}\n"
         + "float nx = sinf(a) * r;\n"

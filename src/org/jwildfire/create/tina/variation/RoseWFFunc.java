@@ -33,14 +33,14 @@ public class RoseWFFunc extends VariationFunc implements SupportsGPU {
 
   private double amp = 0.5;
   private int waves = 4;
-  private int filled = 0;
+  private double filled = 0.85;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = pAffineTP.getPrecalcAtan();
     double r = amp * cos(waves * a);
 
-    if (filled == 1) {
+    if (filled > 0 && filled > pContext.random()) {
       r *= pContext.random();
     }
 
@@ -71,7 +71,7 @@ public class RoseWFFunc extends VariationFunc implements SupportsGPU {
     else if (PARAM_WAVES.equalsIgnoreCase(pName))
       waves = Tools.FTOI(pValue);
     else if (PARAM_FILLED.equalsIgnoreCase(pName))
-      filled = Tools.FTOI(pValue);
+      filled = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -91,7 +91,7 @@ public class RoseWFFunc extends VariationFunc implements SupportsGPU {
     return "   float a = __phi;\n"
         + "    float r = __rose_wf_amp * cosf(lroundf(__rose_wf_waves) * a);\n"
         + "\n"
-        + "    if (lroundf(__rose_wf_filled) == 1) {\n"
+        + "    if (__rose_wf_filled > 0 && __rose_wf_filled>RANDFLOAT()) {\n"
         + "      r *= RANDFLOAT();\n"
         + "    }\n"
         + "\n"

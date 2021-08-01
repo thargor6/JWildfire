@@ -29,7 +29,7 @@ public class CloverLeafWFFunc extends VariationFunc implements SupportsGPU {
   public static final String PARAM_FILLED = "filled";
   private static final String[] paramNames = {PARAM_FILLED};
 
-  private int filled = 1;
+  private double filled = 0.85;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -37,7 +37,7 @@ public class CloverLeafWFFunc extends VariationFunc implements SupportsGPU {
 
     double r = (sin(2 * a) + 0.25 * sin(6 * a));
 
-    if (filled == 1) {
+    if (filled > 0 && filled > pContext.random()) {
       r *= pContext.random();
     }
 
@@ -64,7 +64,7 @@ public class CloverLeafWFFunc extends VariationFunc implements SupportsGPU {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_FILLED.equalsIgnoreCase(pName))
-      filled = Tools.FTOI(pValue);
+      filled = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -83,7 +83,7 @@ public class CloverLeafWFFunc extends VariationFunc implements SupportsGPU {
   public String getGPUCode(FlameTransformationContext context) {
     return "float a = __phi;\n"
         + "float r = (sinf(2.f * a) + 0.25f * sinf(6.f * a));\n"
-        + "if (lroundf(__cloverleaf_wf_filled) == 1) {\n"
+        + "if (__cloverleaf_wf_filled > 0 && __cloverleaf_wf_filled > RANDFLOAT()) {\n"
         + "      r *= RANDFLOAT();\n"
         + "}\n"
         + "float nx = sinf(a) * r;\n"
