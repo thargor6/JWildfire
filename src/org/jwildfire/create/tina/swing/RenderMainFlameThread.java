@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,15 +24,23 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.farender.FAFlameWriter;
+import org.jwildfire.create.tina.farender.FARenderResult;
+import org.jwildfire.create.tina.farender.FARenderTools;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.render.*;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Calendar;
+import java.util.List;
 
 public class RenderMainFlameThread implements Runnable {
   private final Prefs prefs;
@@ -44,9 +52,10 @@ public class RenderMainFlameThread implements Runnable {
   private final ProgressUpdater progressUpdater;
   private boolean finished;
   private boolean forceAbort;
+  private final boolean useGPU;
   private FlameRenderer renderer;
 
-  public RenderMainFlameThread(Prefs pPrefs, Flame pFlame, File pOutFile, QualityProfile pQualProfile, ResolutionProfile pResProfile, RenderMainFlameThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater) {
+  public RenderMainFlameThread(Prefs pPrefs, Flame pFlame, File pOutFile, QualityProfile pQualProfile, ResolutionProfile pResProfile, RenderMainFlameThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater, boolean pUseGPU) {
     prefs = pPrefs;
     flame = pFlame.makeCopy();
     outFile = pOutFile;
@@ -54,6 +63,7 @@ public class RenderMainFlameThread implements Runnable {
     resProfile = pResProfile;
     finishEvent = pFinishEvent;
     progressUpdater = pProgressUpdater;
+    useGPU = pUseGPU;
   }
 
   @Override
@@ -156,11 +166,47 @@ public class RenderMainFlameThread implements Runnable {
     info.setRenderHDR(false);
     info.setRenderZBuffer(false);
     currFlame.setSampleDensity(qualProfile.getQuality());
-    renderer = new FlameRenderer(currFlame, prefs, false, false);
-    RenderedFlame res = renderer.renderFlame(info);
-    if (!forceAbort) {
-      new ImageWriter().saveImage(res.getImage(), RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(), frame, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight()));
+    String outputFilename = RenderMovieUtil.makeFrameName(
+            outFile.getAbsolutePath(),
+            frame,
+            flame.getName(),
+            qualProfile.getQuality(),
+            resProfile.getWidth(),
+            resProfile.getHeight());
+    if(useGPU) {
+      renderFlameOnGPU(currFlame, outputFilename, currFlame.getWidth(), currFlame.getHeight(), qualProfile.getQuality());
+    } else {
+      renderer = new FlameRenderer(currFlame, prefs, false, false);
+      RenderedFlame res = renderer.renderFlame(info);
+      if (!forceAbort) {
+        new ImageWriter()
+            .saveImage(
+                res.getImage(),
+                outputFilename);
+      }
     }
+  }
+
+  private void renderFlameOnGPU(Flame flame, String primaryFilename, int width, int height, int quality) throws Exception {
+      String openClFlameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
+      try {
+        Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
+        FileDialogTools.ensureFileAccess(null, null, openClFlameFilename);
+        List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame);
+        new FAFlameWriter().writeFlame(preparedFlames, openClFlameFilename);
+        FARenderResult openClRenderRes = FARenderTools.invokeFARender(openClFlameFilename, width, height, quality, preparedFlames.size() > 1);
+        if (openClRenderRes.getReturnCode() != 0) {
+          throw new Exception(openClRenderRes.getMessage());
+        } else {
+          if (!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser())) {
+            AIPostDenoiserFactory.denoiseImage(openClRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend());
+          }
+        }
+      } finally {
+        if (!new File(openClFlameFilename).delete()) {
+          new File(openClFlameFilename).deleteOnExit();
+        }
+      }
   }
 
   private void renderSingleFrame() throws Exception {
@@ -177,23 +223,33 @@ public class RenderMainFlameThread implements Runnable {
     boolean renderZBuffer = qualProfile.isWithZBuffer();
     info.setRenderZBuffer(renderZBuffer);
     flame.setSampleDensity(qualProfile.getQuality());
-    renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
-    renderer.setProgressUpdater(progressUpdater);
-    long t0 = Calendar.getInstance().getTimeInMillis();
-    RenderedFlame res = renderer.renderFlame(info);
-    if (forceAbort) {
-      finished = true;
-      return;
+    long t0, t1;
+    if(useGPU) {
+      t0 = Calendar.getInstance().getTimeInMillis();
+      renderFlameOnGPU(flame, outFile.getAbsolutePath(), flame.getWidth(), flame.getHeight(), qualProfile.getQuality());
+      t1 = Calendar.getInstance().getTimeInMillis();
+    } else {
+      renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
+      renderer.setProgressUpdater(progressUpdater);
+      t0 = Calendar.getInstance().getTimeInMillis();
+      RenderedFlame res = renderer.renderFlame(info);
+      if (forceAbort) {
+        finished = true;
+        return;
+      }
+      t1 = Calendar.getInstance().getTimeInMillis();
+      new ImageWriter().saveImage(res.getImage(), outFile.getAbsolutePath());
+      if (res.getHDRImage() != null) {
+        new ImageWriter()
+            .saveImage(res.getHDRImage(), Tools.makeHDRFilename(outFile.getAbsolutePath()));
+      }
+      if (res.getZBuffer() != null) {
+        new ImageWriter()
+            .saveImage(
+                res.getZBuffer(),
+                Tools.makeZBufferFilename(outFile.getAbsolutePath(), flame.getZBufferFilename()));
+      }
     }
-    long t1 = Calendar.getInstance().getTimeInMillis();
-    new ImageWriter().saveImage(res.getImage(), outFile.getAbsolutePath());
-    if (res.getHDRImage() != null) {
-      new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(outFile.getAbsolutePath()));
-    }
-    if (res.getZBuffer() != null) {
-      new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(outFile.getAbsolutePath(), flame.getZBufferFilename()));
-    }
-
     if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
       new FlameWriter().writeFlame(flame, outFile.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(outFile.getName()) + ".flame");
     }
