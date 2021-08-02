@@ -209,6 +209,8 @@ public class RenderMainFlameThread implements Runnable {
       }
   }
 
+  private GpuProgressUpdater gpuProgressUpdater=null;
+
   private void renderSingleFrame() throws Exception {
     int width = resProfile.getWidth();
     int height = resProfile.getHeight();
@@ -225,9 +227,33 @@ public class RenderMainFlameThread implements Runnable {
     flame.setSampleDensity(qualProfile.getQuality());
     long t0, t1;
     if(useGPU) {
-      t0 = Calendar.getInstance().getTimeInMillis();
-      renderFlameOnGPU(flame, outFile.getAbsolutePath(), flame.getWidth(), flame.getHeight(), qualProfile.getQuality());
-      t1 = Calendar.getInstance().getTimeInMillis();
+      final int PROGRESS_STEPS = 25;
+      progressUpdater.initProgress(PROGRESS_STEPS);
+      if(gpuProgressUpdater!=null) {
+        gpuProgressUpdater.signalCancel();
+      }
+      if(gpuProgressUpdater!=null && gpuProgressUpdater.isFinished()) {
+        gpuProgressUpdater = null;
+      }
+      if(gpuProgressUpdater==null) {
+        gpuProgressUpdater = new GpuProgressUpdater(progressUpdater, PROGRESS_STEPS);
+        new Thread(gpuProgressUpdater).start();
+      }
+      try {
+        t0 = Calendar.getInstance().getTimeInMillis();
+        renderFlameOnGPU(flame, outFile.getAbsolutePath(), flame.getWidth(), flame.getHeight(), qualProfile.getQuality());
+        t1 = Calendar.getInstance().getTimeInMillis();
+      }
+      finally {
+        try {
+          if(gpuProgressUpdater!=null) {
+            gpuProgressUpdater.signalCancel();
+          }
+        }
+        catch(Exception ex) {
+          // EMPTY
+        }
+      }
     } else {
       renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
       renderer.setProgressUpdater(progressUpdater);

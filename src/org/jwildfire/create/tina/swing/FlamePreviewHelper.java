@@ -235,20 +235,27 @@ public class FlamePreviewHelper implements IterationObserver {
                 gpuProgressUpdater = null;
               }
               if(gpuProgressUpdater==null) {
-                gpuProgressUpdater = new GpuProgressUpdater(PROGRESS_STEPS);
+                gpuProgressUpdater = new GpuProgressUpdater(mainProgressUpdater, PROGRESS_STEPS);
                 new Thread(gpuProgressUpdater).start();
               }
+              FARenderResult openClRenderRes;
               long t0 = System.currentTimeMillis();
-
-              List<Flame> preparedFlames = FARenderTools.prepareFlame(flame);
-              new FAFlameWriter().writeFlame(preparedFlames, tmpFile.getAbsolutePath());
-              FARenderResult openClRenderRes =
-                  FARenderTools.invokeFARender(
-                      tmpFile.getAbsolutePath(),
-                      width,
-                      height,
-                          prefs.getTinaRenderPreviewQuality(),
-                      preparedFlames.size() > 1);
+              try {
+                List<Flame> preparedFlames = FARenderTools.prepareFlame(flame);
+                new FAFlameWriter().writeFlame(preparedFlames, tmpFile.getAbsolutePath());
+                openClRenderRes = FARenderTools.invokeFARender(tmpFile.getAbsolutePath(), width, height, prefs.getTinaRenderPreviewQuality(),
+                        preparedFlames.size() > 1);
+              }
+              finally {
+                try {
+                  if(gpuProgressUpdater!=null) {
+                    gpuProgressUpdater.signalCancel();
+                  }
+                }
+                catch(Exception ex) {
+                  // EMPTY
+                }
+              }
               if (openClRenderRes.getReturnCode() != 0) {
                 throw new Exception(openClRenderRes.getMessage());
               } else {
@@ -375,47 +382,6 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   private GpuProgressUpdater gpuProgressUpdater=null;
-
-  private class GpuProgressUpdater implements Runnable {
-    private final int maxSteps;
-    private boolean cancelSignalled;
-    private boolean finished;
-
-    public GpuProgressUpdater(int maxSteps) {
-      this.maxSteps = maxSteps;
-    }
-
-    public void signalCancel() {
-      cancelSignalled = true;
-    }
-
-    public boolean isFinished() {
-      return finished;
-    }
-
-    @Override
-    public void run() {
-      finished = false;
-      try {
-        for (int i = 0; i < maxSteps; i++) {
-          if (cancelSignalled) {
-            break;
-          }
-          try {
-            mainProgressUpdater.updateProgress(i);
-            Thread.sleep(150);
-          } catch (Throwable ex) {
-            ex.printStackTrace();
-          }
-          if (cancelSignalled) {
-            break;
-          }
-        }
-      } finally {
-        finished = true;
-      }
-    }
-  }
 
   public SimpleImage renderAnimFrame(double imageScale, double quality) {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
