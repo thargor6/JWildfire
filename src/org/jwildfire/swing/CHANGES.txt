@@ -40,6 +40,7 @@ V7.00 (xx.xx.202x)
  - new variations:
    - ovoid by Rob Richards
    - post_point_crop by Whittaker Courtney
+   - mobius3D_with_inverse by CozyG
    - hole
    - post_flatten and pre_flatten
    - pre_disc

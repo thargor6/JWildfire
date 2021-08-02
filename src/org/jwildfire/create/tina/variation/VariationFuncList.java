@@ -1017,7 +1017,7 @@ public class VariationFuncList {
     registerVariationFunc(MapleLeafFunc.class);
     registerVariationFunc(OakLeafFunc.class);
     registerVariationFunc(JapaneseMapleLeafFunc.class);
-
+    registerVariationFunc(Mobius3DWithInverseFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
