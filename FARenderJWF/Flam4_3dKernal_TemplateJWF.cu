@@ -3539,6 +3539,10 @@ __device__ void iteratePoint(struct VariationListNode *varUsageList,
 	////WFIELD
 	if(__useWFields && fabsf(xform->wfield_color_amount)>EPSILON) {
           activePoint[index].pal *= (1.0f + __wFieldValue *  xform->wfield_color_amount * 0.1);
+		  if(activePoint[index].pal<0.f)
+		    activePoint[index].pal = 0.f;
+		  else if(activePoint[index].pal>1.0f) 
+            activePoint[index].pal = 1.f;  		  
         }
 #endif
 	////WFIELD

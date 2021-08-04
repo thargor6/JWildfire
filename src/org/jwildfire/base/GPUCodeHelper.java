@@ -24,21 +24,32 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        " double t = pAffineTP.getPrecalcAtan()-M_PI_2;\n"
-            + "    double r = (filled > 0 && filled > pContext.random()) ? pAmount * pContext.random() : pAmount;\n"
+        "double _radius1, _radius2, _gamma, _absPow;\n"
+            + "this._radius1 = this.radius + this.thickness;\n"
+            + "    this._radius2 = sqr(this.radius) / this._radius1;\n"
+            + "    this._gamma = this._radius1 / (this._radius1 + this._radius2);\n"
+            + "    this._absPow = fabs(this.pow);\n"
+            + "    double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);\n"
+            + "    double alpha = this.radius / r;\n"
+            + "    if (r < this._radius1) {\n"
+            + "      circle2(pContext, toolPoint);\n"
+            + "      pVarTP.x += pAmount * toolPoint.x;\n"
+            + "      pVarTP.y += pAmount * toolPoint.y;\n"
+            + "    } else {\n"
+            + "      if (pContext.random() > this.contrast * pow(alpha, this._absPow)) {\n"
             + "\n"
-            + "    // maple leaf formula by Hamid Naderi Yeganeh: https://blogs.scientificamerican.com/guest-blog/how-to-draw-with-math/\n"
-            + "    double lx = (1.0+pow((cos(6.0*t)),2.0)+1.0/5.0*pow((cos(6.0*t)*cos(24.0*t)),10.0)+(1/4*pow((cos(30.0*t)),2)+1.0/9.0*pow((cos(30.0*t)),12.0))*(1.0-pow((sin(6.0*t)),10.0)))*(sin(2.0*t))*(1.0-pow((cos(t)),4.0))*(1.0-pow((cos(t)),10.0)*pow((cos(3.0*t)),2.0));\n"
-            + "    double ly = 21.0/20.0*cos(2.0*t)*(1.0-pow((cos(t)),4.0)+1.0/2.0*pow((cos(t)*cos(3.0*t)),10.0))*(1.0+pow((cos(6.0*t)),2.0)+1.0/5.0*pow((cos(6.0*t)*cos(18.0*t)),10.0)+(1.0/4.0*pow((cos(30.0*t)),4)+1.0/10.0*pow((cos(30.0*t)),12.0))*(1.0-pow((cos(t)),10.0)*pow((cos(3.0*t)),2.0))*(1.0-pow((sin(6.0*t)),10.0)));\n"
-            + "\n"
-            + "    pVarTP.x += r * lx;\n"
-            + "    pVarTP.y += r * ly;\n"
-            + "\n"
+            + "        pVarTP.x += pAmount * pAffineTP.x;\n"
+            + "        pVarTP.y += pAmount * pAffineTP.y;\n"
+            + "      } else {\n"
+            + "        pVarTP.x += pAmount * alpha * alpha * pAffineTP.x;\n"
+            + "        pVarTP.y += pAmount * alpha * alpha * pAffineTP.y;\n"
+            + "      }\n"
+            + "    }\n"
             + "    if (pContext.isPreserveZCoordinate()) {\n"
             + "      pVarTP.z += pAmount * pAffineTP.z;\n"
             + "    }\n";
 
-    System.err.println(convertCode(code, "maple_leaf", new String[]{"filled"}));
+    System.err.println(convertCode(code, "glynnSim3", new String[]{"radius", "thickness", "contrast", "pow"}));
   }
 
   private String convertCode(String code, String varName, String paramNames[]) {

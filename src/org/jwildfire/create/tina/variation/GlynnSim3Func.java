@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class GlynnSim3Func extends VariationFunc {
+public class GlynnSim3Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
@@ -128,7 +128,49 @@ public class GlynnSim3Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "float _radius1, _radius2, _gamma, _absPow, tx, ty;\n"
+        + "_radius1 = __glynnSim3_radius + __glynnSim3_thickness;\n"
+        + "    _radius2 = sqrf(__glynnSim3_radius) / _radius1;\n"
+        + "    _gamma = _radius1 / (_radius1 + _radius2);\n"
+        + "    _absPow = fabsf(__glynnSim3_pow);\n"
+        + "    float r = sqrtf(__x * __x + __y * __y);\n"
+        + "    float alpha = __glynnSim3_radius / r;\n"
+        + "    if (r < _radius1) {\n"
+        + "      glynnSim3_circle2(&tx, &ty, RANDFLOAT(), RANDFLOAT(), _radius1, _radius2, _gamma);\n"
+        + "      __px += __glynnSim3 * tx;\n"
+        + "      __py += __glynnSim3 * ty;\n"
+        + "    } else {\n"
+        + "      if (RANDFLOAT() > __glynnSim3_contrast * powf(alpha, _absPow)) {\n"
+        + "        __px += __glynnSim3 * __x;\n"
+        + "        __py += __glynnSim3 * __y;\n"
+        + "      } else {\n"
+        + "        __px += __glynnSim3 * alpha * alpha * __x;\n"
+        + "        __py += __glynnSim3 * alpha * alpha * __y;\n"
+        + "      }\n"
+        + "    }\n"
+        + (context.isPreserveZCoordinate() ?  "      __pz += __glynnSim3 * __z;\n" : "");
+  }
+
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+    return "__device__ void glynnSim3_circle2(float *x, float *y, float rnd1, float rnd2, float radius1, float radius2, float gamma) {\n"
+        + "    float phi = 2.0 * PI * rnd1;\n"
+        + "    float sinPhi = sinf(phi);\n"
+        + "    float cosPhi = cosf(phi);\n"
+        + "    float r;\n"
+        + "    if (rnd2 < gamma) {\n"
+        + "      r = radius1;\n"
+        + "    } else {\n"
+        + "      r = radius2;\n"
+        + "    }\n"
+        + "    *x = r * cosPhi;\n"
+        + "    *y = r * sinPhi;\n"
+        + "}";
   }
 
 }
