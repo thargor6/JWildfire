@@ -297,6 +297,8 @@ Automatically adds the currently loaded flame as the first keyframe inside the E
 Opens the <<flame_browser_module, Flame Browser>>.
 
 ===== _GPU render_
+image::images/gpu_cpu_render.jpg[scaledwidth=75%]
+
 Opens the <<gpu_rendering, GPU render module>>.
 Automatically imports the currently selected flame into the <<gpu_rendering, GPU render module>>
 and starts to render the flame.
@@ -321,7 +323,7 @@ You can set a default title for flames which are created using the
 <<new_from_scratch, _New from Scratch_>>-button, by setting the
 property *tinaDefaultNewFlameTitle* in the <<preferences, _Preferences_>>-window.
 
-===== _3D_
+===== _Solid_ (formerly named "3D")
 Switch between "classic" rendering and solid rendering.
 
 Solid rendering basically works by treating each sample of the fractal flame as a solid particle.
@@ -337,6 +339,27 @@ image::images/jwf_mandelbulb.jpg[scaledwidth=50%]
 ===== _Animations controls on/off_
 Using this button you may turn on or off animation controls.
 You may set up your preference for this setting in the <<preferences, _Preferences_>>-window.
+
+[#gpu_mode]
+===== _GPU-mode on/off_
+This button is only available, when <<gpu_rendering, GPU-rendering>> is supported on your system.
+
+It is a switch to turn GPU-mode on or off.
+
+GPU-mode helps you to integrate GPU-rendering into your artistic process.
+When activated, it changes the behaviour of JWildfire in the following ways:
+ - random-flame-generators try to avoid features which are not supported by GPU-rendering (which uses heuristics and is currently limited)
+ - the Render-function of the main-editor automatically uses GPU for rendering (without the need to transfer the flame to
+   the separate GPU-renderer-window)
+ - the Preview-Render-function (button at the lower right area of the prewiew area) also uses the GPU.
+ - there is an implicit GPU-filter for the list of variations, so when creating new fractals you can select only variations which are
+supported on GPU
+
+Please note, that the GPU-mode does not affect the real-time-preview, which is used for editing.
+
+You may change the initial state of the GPU-mode by adjusting the
+property *tinaGpuModeDefaultEnabled* in the <<preferences, _Preferences_>>-window.
+
 
 === _Thumbnail ribbon_
 [.thumb]
@@ -2664,7 +2687,7 @@ These are the output-options for generating a movie:
 - *Flames*: Produces a batch of flame-files (one flame file for each frame position), which are rendered later
 using the <<batch_renderer, Batch renderer>>. This is the recommended setting for larger projects, because
 using the <<batch_renderer, Batch renderer>> for rendering images is the most comfortable way in JWildfire.
-It supports pausing/resuming and limited <<gpu_rendering, GPU-rendering>>.
+It supports pausing/resuming and <<gpu_rendering, GPU-rendering>>.
 - *PNG-Images*: Produces a batch of .png-images by taking into account the selected resolution- and quality-settings.
 You need some external software (like _VirtualDub_) to actually create a video-file from this batch of images.
 Recommended for simple projects, which can be completely rendered in two hours or less.
@@ -3000,8 +3023,8 @@ You can change this by activating this checkbox.
 === _GPU_ toggle button
 This toggle is only enabled when <<gpu_rendering, _GPU rendering_>> is configured on your system.
 When you activate this button, all images are rendered using the _GPU renderer_.
-But please be aware that this is currently very limited and does not work well for many fractal flames.
-You should test it with a single flame before GPU-rendering a longer batch.
+But please be aware that this may not work well on some kind of flames and does not support all possible features.
+For example, sub-flames are not supported. So, you should test it with a single flame before GPU-rendering a longer batch.
 
 === _Show image_ button
 Loads and displays the corresponding image of the currently selected flame, if already rendered.
@@ -3189,6 +3212,30 @@ image::images/gpu_render.jpg[scaledwidth=75%]
 
 GPU rendering in JWildfire is enabled by integrating FAEngine, a GPU-rendering-engine
 created by Steven Brodhead.
+In JWildfire 7.0, GPU-rendering was re-implemented in a fundamental way:
+
+- It is still using FAEngine as GPU-gateway, but most of the GPU-code is actually JWildfire-specific
+- Most of the actual GPU code is provided by JWildfire during runtime and compiled and executed during FAEngine on the GPU
+It would be impossible to create a variation set which contains all GPU-supported variations.
+They would be too many, and compilation at the device would fail or even crash the whole system.
+Therefore, JWildfire always sends only the code to FAEngine which is actually required.
+This makes the rendering startup for each flame a little bit slower (and does not allow for a realtime-display),
+but actually works very good and reliable)
+- uses a special binary (FARenderJWF) and and custom kernel which already provides many of JWildfire's features
+- only this gives actual control over the behaviour of variations and allows us to implement features which are not supported naturally by FAEngine
+
+=== Currently supported features:
+- support for about 550 variations (of a total of 850)
+- motion blur
+- some of the additional color balancing options
+- 3d-affine-transformations ("XY"-, "YZ"-, "ZX"-buttons)
+- weighting fields
+- custom variations
+
+=== Currently not supported:
+- layers
+- local gamma effects
+- solid rendering
 
 === Limitations
 Currently, the engine is limited in terms of features (for example, supported variations) and
@@ -3197,78 +3244,53 @@ supported frameworks, but it actually works. And, it works very well.
 For now, it only supports the Windows platform, uses OpenCl and has a very limited
 set of features (in comparison to the full JWildfire application); for example, there is no 3D-rendering.
 
-=== Requirements
+=== Supported platform
+GPU-rendering is currently only supported on Windows 10 and requires a CUDA-capable graphics card.
+
 You will need a modern graphics card with plenty of memory to get the best use of this
 engine.
 
-=== Installation
-The FAEngine comes as a separate package you must download separately. This enables us to
-update it more often than the main JWildfire application, if required.
+For example: NVIDIA 1060 or better. This is also the minimum requirement supported from my side.
+So, when you have an card which is older, it may also work, but when not, I can not help you with it.
 
-The overall installation is simple:
+=== Note about Performance
+Please note: the more features you use in your flame, the more code is created, compiled and executed.
+Especially, weighting-fields are very expensive in comparison to other features.
+At higher resolution the GPU render will always be faster - MUCH faster.
+But, it is possible, that a small preview on GPU takes more time than a CPU render.
+This is due to the complicated process to invoke a GPU render (while a CPU render can start
+instantly at every time).
 
- . Download the recent FACLRender-package from http://www.andreas-maschke.com/
- . Extract the download *.zip-file to some permanent path on your hard disk, preferably
-not on the Desktop, for example, on D:\Program Files\FACLRender.
-If you look into this folder, you should see the file FACLRender.exe
- . Start JWildfire and open the <<preferences, _Preferences_>> window. Locate the parameter
-*tinaFACLRenderPath* and enter the path to the folder which contains the FACLRender.exe.
-In this example, enter "D:\Program Files\FACLRender".
-  . Press the "Save and Close" button and exit JWildfire.
- . Start JWildfire again, now you should see a new entry "Fractal flames: GPU render"
-in the <<main_menu, main Window-menu>>.
+=== Installation/Automatic Self-test/Troubleshooting
+In comparison to previous versions there is no separate installation required nor possible.
+Everything, which is required from the side of JWildfire, is already included and installed.
+(What is not included, is for example the driver for your graphics card.)
 
-==== Self-Test
-To test the GPU rendering itself (and to simplify further troubleshooting), please invoke
-the self-test. Just enter the directory where you installed FACLRender and open the subfolder
-"selftest" ( In this example "D:\Program Files\FACLRender\selftest" ).
-Double-click at the selftest.bat. If everything works as expected, you should see that a
-file with the name "selftest.png" was created. Otherwise, the console output hopefully will help to solve any problems.
+A self-test is performed at the startup of JWildfire. When the self-test passed, you will see two "GPU"-buttons in the left of the preview
+area inside the main editor.
+
+When you do not see the buttons, but meet the system requirements, please check if you have the latest NVIDIA drivers
+for your device. This actually seems to solve about 90% of the problems I have seen so far.
 
 === Rendering flames using the GPU
-Use the "GPU renderer"-window to play with flames. This window works similar to the
+==== GPU renderer module
+There is a separate "GPU renderer"-window to explore GPU rendering. This window works similar to the
 Interactive renderer; you may import flames from the editor or load them from your hard disk.
 
-Most flames will not work flawlessy, as most flames have at least one feature which is not
-supported by GPU rendering at this time. But, of course, you will still be able to create endless
-beautiful flames.
+In this window, you will be able to see the exported GPU-code. And you will get the most detailled information messages,
+compared to all other places where also GPU-rendering is supported
 
-=== Using the "Linear Only"-random-flame-generator
-A good starting point is to use the "Linear Only"-random-flame-generator to create a batch
-of flames which are guaranteed to work. Pick a nice one, transfer it to the GPU-render
-and see how it performs. Add some features and see if it is still supported by GPU.
+==== Main editor
+When you have activated the <<gpu_mode, GPU-mode>> inside the main-editor, all rendering is done automatically using GPU.
+This applies also to the rendered preview (the button at the lower right corner of the preview-area), but not to the real-time-preview
+which is used for editing.
 
-=== Batch rendering
-When FACLRender is properly integrated into JWildfire, a new "GPU" button will appear in the <<batch_renderer, Batch-renderer>>.
+==== Batch rendering
+When GPU-rendering is available at your system, a "GPU" button will appear in the <<batch_renderer, Batch-renderer>>.
 You may use it to render whole batches using the GPU.
 But, before you render a huge sequence, you should be sure that the flames do not use
-features which are not supported by FACLRender. You may quickly do so by transferring
-one of the flames to the "GPU renderer" window and see if it works.
-
-=== Troubleshooting
-If rendering fails, you should check if the FACLRender.exe can detect any devices (or is
-missing some vital library, for example). To do so, open a console/terminal window
-and enter the directory where the FACLRender.exe resides.
-Enter the command:
-FACLRender
-If the program can be started at all, it should output a list of options, one of then
-being "-list"
-
-Enter the command:
-[source]
-----
-FACLRender -list
-----
-to get a list of detected devices. When something is wrong, you hopefully will get some
-useful information displayed here.
-
-==== Visual C++ Redistributable for Visual Studio 2015
-If some *.dlls are missing, installing the the
-  "Visual C++ Redistributable for Visual Studio 2015"-Kit
-from Microsoft will help in most cases.
-
-==== OpenCl drivers
-Also, be sure to have OpenCl-drivers for your graphics card installed.
+features which are not supported by GPU-rendering (for example: sub-flames).
+You may quickly do so by transferring one of the flames to the "GPU renderer" window and see if it works.
 
 [#iflames_module]
 == _IFlames_ module
