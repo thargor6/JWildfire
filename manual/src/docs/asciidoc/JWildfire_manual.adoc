@@ -3237,20 +3237,15 @@ but actually works very good and reliable)
 - local gamma effects
 - solid rendering
 
-=== Limitations
-Currently, the engine is limited in terms of features (for example, supported variations) and
-supported frameworks, but it actually works. And, it works very well.
-
-For now, it only supports the Windows platform, uses OpenCl and has a very limited
-set of features (in comparison to the full JWildfire application); for example, there is no 3D-rendering.
-
 === Supported platform
-GPU-rendering is currently only supported on Windows 10 and requires a CUDA-capable graphics card.
+The new solution is using CUDA instead of OpenCl, so AMD devices are no more supported.
+I had to choose between supporting more devices or supporting more possible features (and a better developer speed),
+therefore I switched to CUDA.
 
-You will need a modern graphics card with plenty of memory to get the best use of this
-engine.
+So, GPU-rendering is currently only supported on Windows 10 and requires a CUDA-capable graphics card.
 
-For example: NVIDIA 1060 or better. This is also the minimum requirement supported from my side.
+For example: NVIDIA 1060 or better will work very well. This card is also the minimum requirement
+which is supported from my side.
 So, when you have an card which is older, it may also work, but when not, I can not help you with it.
 
 === Note about Performance
