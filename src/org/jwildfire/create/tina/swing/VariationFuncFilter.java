@@ -24,13 +24,15 @@ public class VariationFuncFilter {
 
   private final VariationProfileFilter filter1;
   private final VariationProfileFilter filter2;
+  private final VariationProfileFilter filter3;
 
   public VariationFuncFilter(String profileName1, String profileName2) {
     this.filter1 = VariationProfileRepository.getVariationProfileFilter(profileName1);
     this.filter2 = VariationProfileRepository.getVariationProfileFilter(profileName2);
+    this.filter3 = TinaControllerContextService.getContext().isGpuMode() ? VariationProfileRepository.getGpuFilter() : VariationProfileRepository.getEmptyFilter();
   }
 
   public boolean evaluate(String variationName) {
-    return filter1.evaluate(variationName) && (filter2.isNegative() ^ filter2.evaluate(variationName));
+    return filter1.evaluate(variationName) && (filter2.isNegative() ^ filter2.evaluate(variationName)) && (filter3.isNegative() ^ filter3.evaluate(variationName));
   }
 }

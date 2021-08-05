@@ -142,6 +142,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS = "tina.initially_expand_nonlinear_params";
   static final String KEY_TINA_ENABLE_LEAP_MOTION_TAB = "tina.enable_leap_motion_tab";
+  static final String KEY_TINA_GPU_MODE_DEFAULT_ENABLED = "tina.gpu_mode_default_enabled";
 
   static final String KEY_TINA_FARENDER_OPTS = "tina.farender_opts";
   static final String KEY_TINA_DEFAULT_NEW_FLAME_TITLE = "tina.default.new_flame_title";
@@ -235,12 +236,14 @@ public class Prefs extends ManagedObject {
   @Property(description = "Enable the \"Leap Motion\"-tab (because this feature is very rarely used, it is hidden by default. Requires restart of the application after change.)", category = PropertyCategory.TINA)
   private boolean tinaEnableLeapMotionTab = false;
 
+  @Property(description = "Enable the GPU-mode in the main editor per default (if available). Requires restart of the application after change.", category = PropertyCategory.TINA)
+  private boolean tinaGpuModeDefaultEnabled = false;
+
   @Property(description = "Commandline-options added when invokling the external GPU-renderer. Refer to the documentation or sourcecode for more information.", category = PropertyCategory.TINA)
   private String tinaFARenderOptions = "-nde";
 
   @Property(description = "Default title for fractal flames which are created using the \"New from scratch\"-button.", category = PropertyCategory.TINA)
   private String tinaDefaultNewFlameTitle= "";
-
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA, editorClass = FolderPropertyEditor.class)
   private String tinaJWFMoviePath = null;
@@ -860,6 +863,7 @@ public class Prefs extends ManagedObject {
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
     tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
     tinaEnableLeapMotionTab = pSrc.tinaEnableLeapMotionTab;
+    tinaGpuModeDefaultEnabled = pSrc.tinaGpuModeDefaultEnabled;
     tinaFARenderOptions = pSrc.tinaFARenderOptions;
     tinaDefaultNewFlameTitle = pSrc.tinaDefaultNewFlameTitle;
 
@@ -914,6 +918,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRenderMovieFrames(int tinaRenderMovieFrames) {
     this.tinaRenderMovieFrames = tinaRenderMovieFrames;
+  }
+
+  public boolean isTinaGpuModeDefaultEnabled() {
+    return tinaGpuModeDefaultEnabled;
+  }
+
+  public void setTinaGpuModeDefaultEnabled(boolean tinaGpuModeDefaultEnabled) {
+    this.tinaGpuModeDefaultEnabled = tinaGpuModeDefaultEnabled;
   }
 
   public double getTinaRenderRealtimeQuality() {

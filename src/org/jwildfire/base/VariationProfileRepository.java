@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 public class VariationProfileRepository {
   private static final VariationProfileFilter EMPTY_FILTER = new EmptyVariationProfile();
+  private static final VariationProfileFilter GPU_FILTER = new GpuSupportingVariationsProfile();
 
   static {
     if(Prefs.getPrefs().getVariationProfiles().isEmpty()) {
@@ -240,4 +241,13 @@ public class VariationProfileRepository {
     }
     return EMPTY_FILTER;
   }
+
+  public static VariationProfileFilter getEmptyFilter() {
+    return EMPTY_FILTER;
+  }
+
+  public static VariationProfileFilter getGpuFilter() {
+    return GPU_FILTER;
+  }
+
 }

@@ -17,8 +17,10 @@ public class VariationInstance {
   private final boolean singleton; // one instance per variation set which is the default
   private final String transformedName;
   private final VariationFunc func;
+  private final boolean hasWFields;
 
-  public VariationInstance(FlameTransformationContext transformCtx, VariationFunc func, boolean singleton, int instanceId) {
+  public VariationInstance(FlameTransformationContext transformCtx, VariationFunc func, boolean singleton, int instanceId, boolean hasWFields) {
+    this.hasWFields = hasWFields;
     this.originalName = getVariationName(transformCtx, func);
     this.singleton = singleton;
     this.instanceId = instanceId;
@@ -126,38 +128,79 @@ public class VariationInstance {
 
   private String getWFieldsInitCode(String funcName) {
     StringBuffer sb = new StringBuffer();
-    sb.append("float wFieldScale;\n");
-    sb.append("if(-1==xform->wfield_param1_param_idx && varCounter==xform->wfield_param1_var_idx)\n");
-    sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param1_amount);\n");
-    sb.append("else if(-1==xform->wfield_param2_param_idx && varCounter==xform->wfield_param2_var_idx)\n");
-    sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param2_amount);\n");
-    sb.append("else if(-1==xform->wfield_param3_param_idx && varCounter==xform->wfield_param3_var_idx)\n");
-    sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param3_amount);\n");
-    sb.append("else\n");
-    sb.append("  wFieldScale = 1.f;\n");
-    sb.append("float __"+originalName+" = varpar->"+originalName+" * __wFieldAmountScale * wFieldScale;\n");
-    if (func.getParameterNames().length > 0) {
-      int idx = 0;
-      for (String param : func.getParameterNames()) {
-        sb.append("if(" + idx + "==xform->wfield_param1_param_idx && varCounter==xform->wfield_param1_var_idx)\n");
-        sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param1_amount);\n");
-        sb.append("else if(" + idx + "==xform->wfield_param2_param_idx && varCounter==xform->wfield_param2_var_idx)\n");
-        sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param2_amount);\n");
-        sb.append("else if(" + idx + "==xform->wfield_param3_param_idx && varCounter==xform->wfield_param3_var_idx)\n");
-        sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param3_amount);\n");
-        sb.append("else\n");
-        sb.append("  wFieldScale = 1.f;\n");
-        sb.append(
-            "float __"
-                + originalName
-                + "_"
-                + param
-                + " = varpar->"
-                + originalName
-                + "_"
-                + param
-                + " * wFieldScale;\n");
-        idx++;
+    if(!hasWFields) {
+      sb.append(
+              "float __"
+                      + originalName
+                      + " = varpar->"
+                      + originalName
+                      + ";\n");
+
+      if (func.getParameterNames().length > 0) {
+        for (String param : func.getParameterNames()) {
+          sb.append(
+                  "float __"
+                          + originalName
+                          + "_"
+                          + param
+                          + " = varpar->"
+                          + originalName
+                          + "_"
+                          + param
+                          + ";\n");
+        }
+      }
+    } else {
+      sb.append("float wFieldScale;\n");
+      sb.append(
+          "if(-1==xform->wfield_param1_param_idx && varCounter==xform->wfield_param1_var_idx)\n");
+      sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param1_amount);\n");
+      sb.append(
+          "else if(-1==xform->wfield_param2_param_idx && varCounter==xform->wfield_param2_var_idx)\n");
+      sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param2_amount);\n");
+      sb.append(
+          "else if(-1==xform->wfield_param3_param_idx && varCounter==xform->wfield_param3_var_idx)\n");
+      sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param3_amount);\n");
+      sb.append("else\n");
+      sb.append("  wFieldScale = 1.f;\n");
+      sb.append(
+          "float __"
+              + originalName
+              + " = varpar->"
+              + originalName
+              + " * __wFieldAmountScale * wFieldScale;\n");
+      if (func.getParameterNames().length > 0) {
+        int idx = 0;
+        for (String param : func.getParameterNames()) {
+          sb.append(
+              "if("
+                  + idx
+                  + "==xform->wfield_param1_param_idx && varCounter==xform->wfield_param1_var_idx)\n");
+          sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param1_amount);\n");
+          sb.append(
+              "else if("
+                  + idx
+                  + "==xform->wfield_param2_param_idx && varCounter==xform->wfield_param2_var_idx)\n");
+          sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param2_amount);\n");
+          sb.append(
+              "else if("
+                  + idx
+                  + "==xform->wfield_param3_param_idx && varCounter==xform->wfield_param3_var_idx)\n");
+          sb.append("  wFieldScale = (1.f + __wFieldValue * xform->wfield_param3_amount);\n");
+          sb.append("else\n");
+          sb.append("  wFieldScale = 1.f;\n");
+          sb.append(
+              "float __"
+                  + originalName
+                  + "_"
+                  + param
+                  + " = varpar->"
+                  + originalName
+                  + "_"
+                  + param
+                  + " * wFieldScale;\n");
+          idx++;
+        }
       }
     }
     return sb.toString();

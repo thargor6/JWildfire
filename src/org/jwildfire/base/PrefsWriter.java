@@ -130,6 +130,7 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_DISABLE_SOLID_RANDGENS, pPrefs.isTinaDisableSolidFlameRandGens());
     addValue(sb, Prefs.KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS, pPrefs.isTinaDefaultExpandNonlinearParams());
     addValue(sb, Prefs.KEY_TINA_ENABLE_LEAP_MOTION_TAB, pPrefs.isTinaEnableLeapMotionTab());
+    addValue(sb, Prefs.KEY_TINA_GPU_MODE_DEFAULT_ENABLED, pPrefs.isTinaGpuModeDefaultEnabled());
     addValue(sb, Prefs.KEY_TINA_FARENDER_OPTS, pPrefs.getTinaFARenderOptions());
     addValue(sb, Prefs.KEY_TINA_DEFAULT_NEW_FLAME_TITLE, pPrefs.getTinaDefaultNewFlameTitle());
     addValue(sb, Prefs.KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION, pPrefs.getTinaEditorDoubleClickAction().toString());

@@ -257,6 +257,12 @@ public class JWildfire extends JApplet {
 
       tinaController.setMainController(mainController);
 
+      if (prefs.isTinaGpuModeDefaultEnabled() && GPURendererFactory.isAvailable()) {
+        mainEditorFrame.getGpuModeToggleButton().setSelected(true);
+        mainEditorFrame.switchRenderButtonIcon();
+        tinaController.toggleGpuMode();
+      }
+
       operatorsFrame.setMainController(mainController);
       formulaExplorerFrame.setMainController(mainController);
       formulaExplorerFrame.setFormulaExplorerController(formulaExplorerController);

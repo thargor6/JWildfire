@@ -233,6 +233,7 @@ public class PrefsReader {
 
         pPrefs.setTinaDefaultExpandNonlinearParams(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS, pPrefs.isTinaDefaultExpandNonlinearParams()));
         pPrefs.setTinaEnableLeapMotionTab(getBooleanProperty(props, Prefs.KEY_TINA_ENABLE_LEAP_MOTION_TAB, pPrefs.isTinaEnableLeapMotionTab()));
+        pPrefs.setTinaGpuModeDefaultEnabled(getBooleanProperty(props, Prefs.KEY_TINA_GPU_MODE_DEFAULT_ENABLED, pPrefs.isTinaGpuModeDefaultEnabled()));
         try {
           RasterCreator rasterPointPrecision = RasterCreator.valueOf(getProperty(props, Prefs.KEY_TINA_RASTER_TYPE, RasterCreator.getDefaultValue().toString()));
           pPrefs.setTinaRasterType(rasterPointPrecision);

@@ -4370,13 +4370,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           ResolutionProfile resProfile = getResolutionProfile();
           final Flame flame = getCurrFlame();
           prefs.setLastOutputImageFile(file);
+          final boolean gpuMode = GPURendererFactory.isAvailable() && data.gpuModeToggleButton.isSelected();
 
           RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
 
             @Override
             public void succeeded(double pElapsedTime) {
               try {
-                messageHelper.showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
+                messageHelper.showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s"+ (gpuMode ? " (GPU)" : " (CPU)"));
                 if (Tools.isImageFile(file.getAbsolutePath())) {
                   mainController.loadImage(file.getAbsolutePath(), false);
                   File zBuffer = new File(Tools.makeZBufferFilename(file.getAbsolutePath(), flame.getZBufferFilename()));
@@ -4403,7 +4404,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             }
 
           };
-          mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, finishEvent, mainProgressUpdater, GPURendererFactory.isAvailable() && data.gpuModeToggleButton.isSelected());
+          mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, finishEvent, mainProgressUpdater, gpuMode);
 
           enableMainRenderControls();
           Thread worker = new Thread(mainRenderThread);

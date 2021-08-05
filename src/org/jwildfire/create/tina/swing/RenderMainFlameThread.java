@@ -188,23 +188,23 @@ public class RenderMainFlameThread implements Runnable {
   }
 
   private void renderFlameOnGPU(Flame flame, String primaryFilename, int width, int height, int quality) throws Exception {
-      String openClFlameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
+      String gpuRenderFlameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
       try {
         Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
-        FileDialogTools.ensureFileAccess(null, null, openClFlameFilename);
+        FileDialogTools.ensureFileAccess(null, null, gpuRenderFlameFilename);
         List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame);
-        new FAFlameWriter().writeFlame(preparedFlames, openClFlameFilename);
-        FARenderResult openClRenderRes = FARenderTools.invokeFARender(openClFlameFilename, width, height, quality, preparedFlames.size() > 1);
-        if (openClRenderRes.getReturnCode() != 0) {
-          throw new Exception(openClRenderRes.getMessage());
+        new FAFlameWriter().writeFlame(preparedFlames, gpuRenderFlameFilename);
+        FARenderResult gpuRenderRes = FARenderTools.invokeFARender(gpuRenderFlameFilename, width, height, quality, preparedFlames.size() > 1);
+        if (gpuRenderRes.getReturnCode() != 0) {
+          throw new Exception(gpuRenderRes.getMessage());
         } else {
-          if (!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser()) && flame.isPostDenoiserOnlyForCpuRender()) {
-            AIPostDenoiserFactory.denoiseImage(openClRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend());
+          if (!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser()) && !flame.isPostDenoiserOnlyForCpuRender()) {
+            AIPostDenoiserFactory.denoiseImage(gpuRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend());
           }
         }
       } finally {
-        if (!new File(openClFlameFilename).delete()) {
-          new File(openClFlameFilename).deleteOnExit();
+        if (!new File(gpuRenderFlameFilename).delete()) {
+          new File(gpuRenderFlameFilename).deleteOnExit();
         }
       }
   }

@@ -57,17 +57,17 @@ public class JobRenderThread implements Runnable {
   private boolean cancelSignalled;
   private final boolean doOverwriteExisting;
   private FlameRenderer renderer;
-  private final boolean useOpenCl;
+  private final boolean useGPU;
   private final boolean disablePostDenoiser;
 
-  public JobRenderThread(TinaController pParentCtrl, JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, boolean pDoOverwriteExisting, boolean pUseOpenCl, boolean pDisablePostDenoiser) {
+  public JobRenderThread(TinaController pParentCtrl, JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, boolean pDoOverwriteExisting, boolean pUseGPU, boolean pDisablePostDenoiser) {
     parentCtrl = pParentCtrl;
     controller = pController;
     activeJobList = pActiveJobList;
     resolutionProfile = pResolutionProfile;
     qualityProfile = pQualityProfile;
     doOverwriteExisting = pDoOverwriteExisting;
-    useOpenCl = pUseOpenCl;
+    useGPU = pUseGPU;
     disablePostDenoiser = pDisablePostDenoiser;
   }
 
@@ -150,7 +150,7 @@ public class JobRenderThread implements Runnable {
   }
 
   private void renderSingleFrame(Job job, int width, int height, RenderInfo info, Flame flame, String primaryFilename, boolean updateProgress) throws Exception {
-    if (useOpenCl) {
+    if (useGPU) {
       String openClFlameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
       try {
         Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
