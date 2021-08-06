@@ -1,172 +1,172 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-  <property name="release" value="7.00ALPHA12" />
-  <property name="dist.dir" location="build/dist" />
-  <property name="installer.dir" location="build/installer" />
-	<property name="build.dir" location="build/classes" />
-	<property name="lib.dir" location="lib" />
-	<property name="src.dir" location="src/" />
-	<property name="jwildfire.jar.name" value="build/j-wildfire.jar" />
-  <property name="launcher.jar.name" value="build/j-wildfire-launcher.jar" />
-  <property name="dist.name" value="build/j-wildfire-${release}.zip" />
-  <property name="dist.dll32.name" value="build/j-wildfire-dlls-win32-${release}.zip" />
-  <property name="dist.dll64.name" value="build/j-wildfire-dlls-win64-${release}.zip" />
+    <property name="release" value="7.00"/>
+    <property name="dist.dir" location="build/dist"/>
+    <property name="installer.dir" location="build/installer"/>
+    <property name="build.dir" location="build/classes"/>
+    <property name="lib.dir" location="lib"/>
+    <property name="src.dir" location="src/"/>
+    <property name="jwildfire.jar.name" value="build/j-wildfire.jar"/>
+    <property name="launcher.jar.name" value="build/j-wildfire-launcher.jar"/>
+    <property name="dist.name" value="build/j-wildfire-${release}.zip"/>
+    <property name="dist.dll32.name" value="build/j-wildfire-dlls-win32-${release}.zip"/>
+    <property name="dist.dll64.name" value="build/j-wildfire-dlls-win64-${release}.zip"/>
 
-	<path id="build.classpath">
-		<fileset dir="${lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-		<pathelement path="${build.dir}" />
-	</path>
+    <path id="build.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${build.dir}"/>
+    </path>
 
-	<target name="init">
-    <delete dir="${build.dir}" />
-		<mkdir dir="${build.dir}" />
-    <delete dir="${dist.dir}" />
-    <mkdir dir="${dist.dir}" />
-	</target>
+    <target name="init">
+        <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
 
-	<target name="compile" depends="init" 
-          description="Compile main source tree java files">
-    <javac destdir="${build.dir}"
-           target="1.8"
-           source="1.8"
-           debug="false"
-           deprecation="false"    	
-           encoding="ISO-8859-1"
-           optimize="true"
-           failonerror="true">
-      <src path="${src.dir}" />
-      <classpath refid="build.classpath" />
-    </javac>
-  </target>
-	
-	<target name="packageJWildfireJar" depends="compile" description="Package the JWildfire jar file">
-		<jar destfile="${jwildfire.jar.name}">
-			<fileset dir="${build.dir}" includes="org/jwildfire/"/>
-      <fileset dir="${src.dir}" includes="logback.xml"/>
-      <fileset dir="${src.dir}" includes="com/**/*.properties"/>
-      <fileset dir="${src.dir}" includes="com/**/*.gif"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/**/*.xml"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/**/*.html"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/swing/CHANGES.txt"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/swing/OptiX_Denoiser.txt"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/swing/OIDN_Denoiser.txt"/>
-	  <fileset dir="${src.dir}" includes="org/jwildfire/icons/**/*.gif"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.png"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.gif"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.png"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/swing/backgrounds/*.png"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.jpg"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.jwfscript"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.ugr"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.txt"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/*.obj"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/plot/*.txt"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/lsystems.txt"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/lsystems3D.txt"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/variation_costs.txt"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/base/weightingfield/mb3dhm.jpg"/>
-	  <fileset dir="${build.dir}" includes="csk/"/>
-      <fileset dir="${build.dir}" includes="com/"/>
-      <fileset dir="${build.dir}" includes="odk/"/>
-      <fileset dir="${build.dir}" includes="net/goui/"/>
-      <fileset dir="${build.dir}" includes="megamu/"/>
-	  <fileset dir="${build.dir}" includes="js/"/>
-	  <fileset dir="${build.dir}" includes="hehl/"/>
-      <fileset dir="${build.dir}" includes="fastnoise/"/>
-      <zipfileset src="lib/quickhull3d.1.4.jar"/>
-      <zipfileset src="lib/jep-2.4.1.jar"/>
-      <zipfileset src="lib/sunflow.jar"/>
-      <zipfileset src="lib/janino.jar"/>
-      <zipfileset src="lib/JTattoo-1.6.10.jar"/>
-      <zipfileset src="lib/jl1.0.1.jar"/>
-      <zipfileset src="lib/jtransforms-2.4.jar"/>
-      <zipfileset src="lib/svgSalamander-tiny.jar"/>
-      <zipfileset src="lib/colt-1.2.0.jar"/>
-      <zipfileset src="lib/JOCL-0.1.9.jar"/>
-      <zipfileset src="lib/vecmath-1.5.1.jar"/>
-      <zipfileset src="lib/logback-classic-1.2.3.jar"/>
-      <zipfileset src="lib/logback-core-1.2.3.jar"/>
-      <zipfileset src="lib/slf4j-api-1.7.25.jar"/>
-      <zipfileset src="lib/commons-cli-1.4.jar"/>
-      <zipfileset src="lib/jcodec-0.2.6-SNAPSHOT.jar"/>
-      <zipfileset src="lib/jcodec-javase-0.2.6-SNAPSHOT.jar"/>
-      <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
-      <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
-	  <zipfileset src="lib/j-wildfire-lib.jar"/>
-      <manifest>
-        <attribute name="Main-Class" value="org.jwildfire.swing.JWildfire"/>
-      </manifest>			
-		</jar>
-	</target>
+    <target name="compile" depends="init"
+            description="Compile main source tree java files">
+        <javac destdir="${build.dir}"
+               target="1.8"
+               source="1.8"
+               debug="false"
+               deprecation="false"
+               encoding="ISO-8859-1"
+               optimize="true"
+               failonerror="true">
+            <src path="${src.dir}"/>
+            <classpath refid="build.classpath"/>
+        </javac>
+    </target>
 
-  <target name="packageLauncherJar" depends="compile" description="Package the Launcher jar file">
-    <jar destfile="${launcher.jar.name}">
-      <fileset dir="${build.dir}" includes="org/jwildfire/launcher/*"/>
-      <fileset dir="${build.dir}" includes="org/jwildfire/base/Tools.*"/>
-      <fileset dir="${build.dir}" includes="org/jwildfire/image/*"/>
-      <fileset dir="${build.dir}" includes="org/jwildfire/swing/ImagePanel.*"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/launcher/images/*.png"/>
-      <fileset dir="${src.dir}" includes="org/jwildfire/launcher/images/*.jpg"/>
-      <manifest>
-        <attribute name="Main-Class" value="org.jwildfire.launcher.Launcher"/>
-      </manifest>     
-    </jar>
-  </target>
+    <target name="packageJWildfireJar" depends="compile" description="Package the JWildfire jar file">
+        <jar destfile="${jwildfire.jar.name}">
+            <fileset dir="${build.dir}" includes="org/jwildfire/"/>
+            <fileset dir="${src.dir}" includes="logback.xml"/>
+            <fileset dir="${src.dir}" includes="com/**/*.properties"/>
+            <fileset dir="${src.dir}" includes="com/**/*.gif"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/**/*.xml"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/**/*.html"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/swing/CHANGES.txt"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/swing/OptiX_Denoiser.txt"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/swing/OIDN_Denoiser.txt"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/icons/**/*.gif"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.png"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.gif"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.png"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/swing/backgrounds/*.png"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.jpg"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.jwfscript"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.ugr"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.txt"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/*.obj"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/plot/*.txt"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/lsystems.txt"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/lsystems3D.txt"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/variation_costs.txt"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/base/weightingfield/mb3dhm.jpg"/>
+            <fileset dir="${build.dir}" includes="csk/"/>
+            <fileset dir="${build.dir}" includes="com/"/>
+            <fileset dir="${build.dir}" includes="odk/"/>
+            <fileset dir="${build.dir}" includes="net/goui/"/>
+            <fileset dir="${build.dir}" includes="megamu/"/>
+            <fileset dir="${build.dir}" includes="js/"/>
+            <fileset dir="${build.dir}" includes="hehl/"/>
+            <fileset dir="${build.dir}" includes="fastnoise/"/>
+            <zipfileset src="lib/quickhull3d.1.4.jar"/>
+            <zipfileset src="lib/jep-2.4.1.jar"/>
+            <zipfileset src="lib/sunflow.jar"/>
+            <zipfileset src="lib/janino.jar"/>
+            <zipfileset src="lib/JTattoo-1.6.10.jar"/>
+            <zipfileset src="lib/jl1.0.1.jar"/>
+            <zipfileset src="lib/jtransforms-2.4.jar"/>
+            <zipfileset src="lib/svgSalamander-tiny.jar"/>
+            <zipfileset src="lib/colt-1.2.0.jar"/>
+            <zipfileset src="lib/JOCL-0.1.9.jar"/>
+            <zipfileset src="lib/vecmath-1.5.1.jar"/>
+            <zipfileset src="lib/logback-classic-1.2.3.jar"/>
+            <zipfileset src="lib/logback-core-1.2.3.jar"/>
+            <zipfileset src="lib/slf4j-api-1.7.25.jar"/>
+            <zipfileset src="lib/commons-cli-1.4.jar"/>
+            <zipfileset src="lib/jcodec-0.2.6-SNAPSHOT.jar"/>
+            <zipfileset src="lib/jcodec-javase-0.2.6-SNAPSHOT.jar"/>
+            <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
+            <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
+            <zipfileset src="lib/j-wildfire-lib.jar"/>
+            <manifest>
+                <attribute name="Main-Class" value="org.jwildfire.swing.JWildfire"/>
+            </manifest>
+        </jar>
+    </target>
 
-  <target name="packageDist" depends="packageJWildfireJar, packageLauncherJar" description="Package the distributable zip file">
-    <copy todir="${dist.dir}/lib">
-       <fileset file="${jwildfire.jar.name}"/>
-     </copy>  	
-    <copy todir="${dist.dir}/">
-       <fileset file="${launcher.jar.name}"/>
-     </copy>   
-     <!--   
-    <copy todir="${dist.dir}/plugins32">
-      <fileset dir="${src.dir}/../plugins32" includes="*.dll"/>
-     </copy>
-    <copy todir="${dist.dir}/plugins64">
-      <fileset dir="${src.dir}/../plugins64" includes="*.dll"/>
-     </copy>
-     -->
-    <copy todir="${dist.dir}/">
-       <fileset dir="build/launcher" includes="start_linux.sh"/>
-     </copy>
-  	<copy todir="${dist.dir}/">
-       <fileset file="src/org/jwildfire/swing/CHANGES.txt" />
-       <fileset file="src/org/jwildfire/swing/GPU_RENDERING.txt" />
-       <fileset file="src/org/jwildfire/swing/OptiX_Denoiser.txt" />
-       <fileset file="src/org/jwildfire/swing/OIDN_Denoiser.txt" />
-       <fileset file="README_LAUNCHING_JWILDFIRE.txt" />
-       <fileset file="README!!!.txt" />
-       <fileset file="README_LINUX.txt" />
-       <fileset file="README_SUPPORT.txt" />
-       <fileset file="Delphi/JWildfire.exe" />
-    </copy>    
-    <copy todir="${dist.dir}/lib/x64">
-       <fileset file="${src.dir}/../lib/x64/*.txt" />
-    </copy>    
-    <copy todir="${dist.dir}/lib/x86">
-       <fileset file="${src.dir}/../lib/x86/*.txt" />
-    </copy>    
-    <copy todir="${dist.dir}/lib/Denoiser">
-       <fileset file="${src.dir}/../Denoiser/**" />
-    </copy>
-      <copy todir="${dist.dir}/lib/FACURenderJWF">
-          <fileset file="${src.dir}/../FACURenderJWF/**" />
-      </copy>
-      <copy todir="${dist.dir}/lib">
-          <fileset file="${src.dir}/../manual/build/docs/asciidocPdf/JWildfire_manual.pdf" />
-      </copy>
-      <zip destfile="${dist.name}">
-      <zipfileset dir="${dist.dir}/" excludes="start_*" />
-      <zipfileset filemode="755" dir="${dist.dir}/" includes="start_*" />
-    </zip>
-  </target>
-  
-  <target name="packageAll" depends="packageDist" description="Package all"/>
-	
+    <target name="packageLauncherJar" depends="compile" description="Package the Launcher jar file">
+        <jar destfile="${launcher.jar.name}">
+            <fileset dir="${build.dir}" includes="org/jwildfire/launcher/*"/>
+            <fileset dir="${build.dir}" includes="org/jwildfire/base/Tools.*"/>
+            <fileset dir="${build.dir}" includes="org/jwildfire/image/*"/>
+            <fileset dir="${build.dir}" includes="org/jwildfire/swing/ImagePanel.*"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/launcher/images/*.png"/>
+            <fileset dir="${src.dir}" includes="org/jwildfire/launcher/images/*.jpg"/>
+            <manifest>
+                <attribute name="Main-Class" value="org.jwildfire.launcher.Launcher"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="packageDist" depends="packageJWildfireJar, packageLauncherJar"
+            description="Package the distributable zip file">
+        <copy todir="${dist.dir}/lib">
+            <fileset file="${jwildfire.jar.name}"/>
+        </copy>
+        <copy todir="${dist.dir}/">
+            <fileset file="${launcher.jar.name}"/>
+        </copy>
+        <!--
+       <copy todir="${dist.dir}/plugins32">
+         <fileset dir="${src.dir}/../plugins32" includes="*.dll"/>
+        </copy>
+       <copy todir="${dist.dir}/plugins64">
+         <fileset dir="${src.dir}/../plugins64" includes="*.dll"/>
+        </copy>
+        -->
+        <copy todir="${dist.dir}/">
+            <fileset dir="build/launcher" includes="start_linux.sh"/>
+        </copy>
+        <copy todir="${dist.dir}/">
+            <fileset file="src/org/jwildfire/swing/CHANGES.txt"/>
+            <fileset file="src/org/jwildfire/swing/OptiX_Denoiser.txt"/>
+            <fileset file="src/org/jwildfire/swing/OIDN_Denoiser.txt"/>
+            <fileset file="README_LAUNCHING_JWILDFIRE.txt"/>
+            <fileset file="README!!!.txt"/>
+            <fileset file="README_LINUX.txt"/>
+            <fileset file="README_SUPPORT.txt"/>
+            <fileset file="Delphi/JWildfire.exe"/>
+        </copy>
+        <copy todir="${dist.dir}/lib/x64">
+            <fileset file="${src.dir}/../lib/x64/*.txt"/>
+        </copy>
+        <copy todir="${dist.dir}/lib/x86">
+            <fileset file="${src.dir}/../lib/x86/*.txt"/>
+        </copy>
+        <copy todir="${dist.dir}/lib/Denoiser">
+            <fileset file="${src.dir}/../Denoiser/**"/>
+        </copy>
+        <copy todir="${dist.dir}/lib/FARenderJWF">
+            <fileset file="${src.dir}/../FARenderJWF/**"/>
+        </copy>
+        <copy todir="${dist.dir}/lib">
+            <fileset file="${src.dir}/../manual/build/docs/asciidocPdf/JWildfire_manual.pdf"/>
+        </copy>
+        <zip destfile="${dist.name}">
+            <zipfileset dir="${dist.dir}/" excludes="start_*"/>
+            <zipfileset filemode="755" dir="${dist.dir}/" includes="start_*"/>
+        </zip>
+    </target>
+
+    <target name="packageAll" depends="packageDist" description="Package all"/>
+
 </project>

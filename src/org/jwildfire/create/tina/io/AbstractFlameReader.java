@@ -342,7 +342,7 @@ public class AbstractFlameReader {
       pFlame.setPostOptiXDenoiserBlend(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_AI_POST_DENOISER_ONLY_FOR_CPU)) != null) {
-      pFlame.setPostDenoiserOnlyForCpuRender(Boolean.parseBoolean(hs));
+      pFlame.setPostDenoiserOnlyForCpuRender("1".equals(hs));
     }
 
     if ((hs = atts.get(ATTR_QUALITY)) != null) {

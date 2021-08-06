@@ -1,16 +1,49 @@
-V7.00 (xx.xx.202x)
- - Created a new extended mode for running the external GPU renderer which provides the actual code for the actually used variations (on a per flame basis).
-   This needs more time to initialize than the regular mode, because the variation code must be compiled for each individual set of variations.
-   The goal behind this is to allow support for more complex/beautiful flames in the GPU renderer.
+V7.00 (07.08.2021)
+ - Re-implementation of GPU-rendering (PLEASE NOTE: this works only on Windows and requires a modern NVIDIA graphics card)
+   In Version 6.50 GPU rendering was VERY limited because it used only the internal pre-defined variation set for "classic" flam3-variations.
+   There is also some built-in "3d-standard set" of variations (which never worked for me). But even with this set of variations
+   the usage would be very limited, because mayn of these built-in variations work slightly different or did not work at all.
+   It would always be impossible to get predictable results, which is often very important for artistic work.
+ - So, I re-implemented GPU-rendering in a fundamental way:
+     - it is still using FAEngine as GPU-gateway, but most of the GPU-code is actually JWildfire-specific
+     - most of the actual GPU code is provided by JWildfire during runtime and compiled and executed during FAEngine on the GPU
+       It would be impossible to create a variation set which contains all gpu-supported variations. They would be too many, and compilation
+       at the device would fail or even crash the whole system. Therefore, JWildfire always sends only the code to FAEngine which is actaully
+       required. This makes the rendering startup for each flame a little bit slower (and does not allow for a realtime-display),
+       but actually works very good and reliable)
+     - uses a special binary (FARenderJWF) and and custom kernel which already provides many of JWildfire's features
+     - using CUDA instead of OpenCl, so AMD devices are no more supported. I had to choose between supporting more devices or
+       supporting more possible features (and a better developer speed), therefore I switched to CUDA.
+     - only this gives actual control over the behaviour of variations and allows us to implement features which are not supported naturally by FAEngine
+     - currently supported features:
+         - support for about 550 variations (of a total of 850)
+         - motion blur
+         - some of the additional color balancing options
+         - 3d-affine-transformations ("XY"-, "YZ"-, "ZX"-buttons)
+         - weighting fields
+         - custom variations
+     - currently not supported:
+         - layers
+         - local gamma effects
+         - solid rendering
+     - supported platform: only Windows10 + CUDA-capable graphics card, e.g. NVIDIA 1060 or better
+     - Please note, that the GPU renderer is not a replacement for the CPU renderer. It is just an additional toy.
+         - there will always be features which are not possible on GPU (for example, probably, sub-flames).
+         - there will be platforms, where it will be never supported
+         - all calculations on GPU are done using single precision, while CPU uses double precision.
+           And some mathematical functions on GPU are just approximations in cotrast to the more precise CPU-variants.
+           So, likely, there will be differences, often very small, but they will there.
+     - Please also note: the more features you use, the more code is created, compiled and executed. Especially,
+       weighting-fields are very expensive in comparison to other features. At higher resolution the GPU render will always
+       be faster. But, it is possible, that a small preview on GPU takes more time than a CPU render.
+       This is due to the complicated process to invoke a GPU render.
 
-   Currently, the usage of the renderer is very limited because it used only the internal pre-defined variation set for "classic" flam3-variations.
-   There is also some other "3d-standard set" of variations, which also could be used (but which did never work for me). But, also in this mode would be very limited, because it would only use these fixed variations.
-
-   On the other side, it would be impossible to create a variation set which contains all gpu-supported variations. They would be too many, and compilation at the device would fail or even crash the whole system.
-   Therefore, the idea to compile the variations needed for each flame individually. This makes the rendering startup slower, but this would only affect gpu-flame-realtime editing, which is not supported in JWildfire. And when rendering final images a few seconds more for initialization would not make much difference.
  - added a new GPU-mode-button in the main editor. If enabled, it has the following functions:
     - full preview uses GPU rendering
     - random-flame-generators try to avoid to use variations which are not supported by GPU
+    - new option tinaGpuModeDefaultEnabled in the Preferences to activate the GPU-mode per default
+    - there is an implicit GPU-filter for the list of variations, so when creating new fractals you can select only variations which are
+      supported on GPU
  - added a new tab in the GPU renderer for viewing the generated gpu-flame-parameters
  - displaying the name of variations where no code could be found
  - added a new option to enable automatic synchronization of changes between the Main Editor and GPU renderer
@@ -35,6 +68,8 @@ V7.00 (xx.xx.202x)
  - added the cell-value-type as possible return-type for cellular noise in weighting fields
  - added a strength-parameter to Quick mutation (which currently works not very predictable/well)
  - new option to disable ai-based post-denoisers on GPU renders, but to keep the settings for CPU renders at the same time
+
+ - fixed a fft-related problem with the import of mp3-files in the motion-curves-editor
 
  - improved the "Duckies"-random-flame-generator
  - new variations:

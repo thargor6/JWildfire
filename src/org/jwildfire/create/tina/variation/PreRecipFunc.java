@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
   License, or (at your option) any later version.
@@ -19,7 +19,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.base.mathlib.Complex;
 import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
 
-public class PreRecipFunc extends VariationFunc {
+public class PreRecipFunc extends VariationFunc implements SupportsGPU {
 
 	private static final long serialVersionUID = 1L;
 
@@ -290,7 +290,118 @@ public class PreRecipFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_PRE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_PRE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+	@Override
+	public String getGPUCode(FlameTransformationContext context) {
+    return "float xx = 0.0, yy = 0.0;\n"
+        + "float xr = __x, yr = __y;\n"
+        + "\n"
+        + "if (__pre_recip_reciprocalpow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, __x * __pre_recip_zx_mult + __pre_recip_zx_add, __y * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex_Recip(&z);\n"
+        + "   Complex_Scale(&z, __pre_recip);\n"
+        + "   xr = __pre_recip_reciprocalpow * z.re;\n"
+        + "   yr = __pre_recip_reciprocalpow * z.im;\n"
+        + "}\n"
+        + "if (__pre_recip_dividepow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, xr * __pre_recip_zx_mult + __pre_recip_zx_add, yr * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex z2; Complex_Init(&z2, xr, yr);\n"
+        + "   Complex_Dec(&z2);\n"
+        + "   Complex_Inc(&z);\n"
+        + "   Complex_Div(&z, &z2);\n"
+        + "   Complex_Scale(&z, __pre_recip * (2.0f / PI));\n"
+        + "   xr = __pre_recip_dividepow * z.re;\n"
+        + "   yr = __pre_recip_dividepow * z.im;\n"
+        + "}\n"
+        + "if (__pre_recip_sqrtpow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, xr * __pre_recip_zx_mult + __pre_recip_zx_add, yr * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex_Sqrt(&z);\n"
+        + "   Complex_Scale(&z, __pre_recip);\n"
+        + "   if (RANDFLOAT() < 0.5) {\n"
+        + "    xr = __pre_recip_sqrtpow * z.re;\n"
+        + "    yr = __pre_recip_sqrtpow * z.im;\n"
+        + "   } else {\n"
+        + "    xr = __pre_recip_sqrtpow * -z.re;\n"
+        + "    yr = __pre_recip_sqrtpow * -z.im;\n"
+        + "   }\n"
+        + "}\n"
+        + "if (__pre_recip_asinhpow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, xr * __pre_recip_zx_mult + __pre_recip_zx_add, yr * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex_AsinH(&z);\n"
+        + "   Complex_Scale(&z, __pre_recip * (2.0f / PI));\n"
+        + "   xx += __pre_recip_asinhpow * z.re;\n"
+        + "   yy += __pre_recip_asinhpow * z.im;\n"
+        + "}\n"
+        + "if (__pre_recip_acoshpow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, xr * __pre_recip_zx_mult + __pre_recip_zx_add, yr * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex_AcosH(&z);\n"
+        + "   Complex_Scale(&z, __pre_recip * (2.0f / PI));\n"
+        + "   if (RANDFLOAT() < 0.5) {\n"
+        + "    xx += __pre_recip_acoshpow * z.re;\n"
+        + "    yy += __pre_recip_acoshpow * z.im;\n"
+        + "   } else {\n"
+        + "    xx += __pre_recip_acoshpow * -z.re;\n"
+        + "    yy += __pre_recip_acoshpow * -z.im;\n"
+        + "   }\n"
+        + "}\n"
+        + "if (__pre_recip_atanhpow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, xr * __pre_recip_zx_mult + __pre_recip_zx_add, yr * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex_AtanH(&z);\n"
+        + "   Complex_Scale(&z, __pre_recip * (2.0f / PI));\n"
+        + "   xx += __pre_recip_atanhpow * z.re;\n"
+        + "   yy += __pre_recip_atanhpow * z.im;\n"
+        + "}\n"
+        + "if (__pre_recip_asechpow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, xr * __pre_recip_zx_mult + __pre_recip_zx_add, yr * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex_AsecH(&z);\n"
+        + "   Complex_Scale(&z, __pre_recip * (2.0f / PI));\n"
+        + "   xx += __pre_recip_asechpow * z.re;\n"
+        + "   yy += __pre_recip_asechpow * z.im;\n"
+        + "}\n"
+        + "if (__pre_recip_acosechpow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, xr * __pre_recip_zx_mult + __pre_recip_zx_add, yr * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex_AcosecH(&z);\n"
+        + "   Complex_Scale(&z, __pre_recip * (2.0f / PI));\n"
+        + "   if (RANDFLOAT() < 0.5) {\n"
+        + "    xx += __pre_recip_acosechpow * z.re;\n"
+        + "    yy += __pre_recip_acosechpow * z.im;\n"
+        + "   } else {\n"
+        + "    xx += __pre_recip_acosechpow * -z.re;\n"
+        + "    yy += __pre_recip_acosechpow * -z.im;\n"
+        + "   }\n"
+        + "}\n"
+        + "if (__pre_recip_acothpow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, xr * __pre_recip_zx_mult + __pre_recip_zx_add, yr * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex_AcotH(&z);\n"
+        + "   Complex_Scale(&z, __pre_recip * (2.0f / PI));\n"
+        + "   xx += __pre_recip_acothpow * z.re;\n"
+        + "   yy += __pre_recip_acothpow * z.im;\n"
+        + "}\n"
+        + "if (__pre_recip_logpow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, xr * __pre_recip_zx_mult + __pre_recip_zx_add, yr * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex_Log(&z);\n"
+        + "   Complex_Scale(&z, __pre_recip * (2.0f / PI));\n"
+        + "   xx += __pre_recip_logpow * z.re;\n"
+        + "   yy += __pre_recip_logpow * z.im;\n"
+        + "}\n"
+        + "if (__pre_recip_exppow != 0) {\n"
+        + "   Complex z; Complex_Init(&z, xr * __pre_recip_zx_mult + __pre_recip_zx_add, yr * __pre_recip_zy_mult + __pre_recip_zy_add);\n"
+        + "   Complex_Exp(&z);\n"
+        + "   Complex_Scale(&z, __pre_recip * (2.0f / PI));\n"
+        + "   xx += __pre_recip_exppow * z.re;\n"
+        + "   yy += __pre_recip_exppow * z.im;\n"
+        + "}\n"
+        + "if (__pre_recip_asinhpow + __pre_recip_acoshpow + __pre_recip_atanhpow + __pre_recip_asechpow + __pre_recip_acosechpow + __pre_recip_acothpow + __pre_recip_logpow + __pre_recip_exppow == 0) {\n"
+        + "   __x = xr;\n"
+        + "   __y = yr;\n"
+        + "}\n"
+        + "else {\n"
+        + "   __x = xx;\n"
+        + "   __y = yy;\n"
+        + "}\n"
+        + "\n"
+        + (context.isPreserveZCoordinate() ? "   __pz += __pre_recip * __z;\n" : "");
+	}
 }

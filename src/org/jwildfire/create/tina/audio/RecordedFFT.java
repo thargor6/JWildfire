@@ -67,7 +67,8 @@ public class RecordedFFT implements Serializable {
       }
 
       FloatFFT_1D fftlib = new FloatFFT_1D(length);
-      fftlib.complexForward(input);
+      //fftlib.complexForward(input);
+      fftlib.realForward(input);
       //        int multiplier = (int) (BASE_FREQUENCY / ((float) SAMPLE_RATE / (float) FFT_SIZE));
 
       float outputData[] = new float[(input.length + 1) / 2];

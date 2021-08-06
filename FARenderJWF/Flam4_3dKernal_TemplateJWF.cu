@@ -122,8 +122,6 @@ __device__ float fracf(float x) {
 // restrictions:
 //  - only 3d-noise is supported
 // -  and NoiseLookup-return-type of cellular noise is not supported because it is very complicated to set up (at least on GPU, in comparison to all other types)
-namespace fastNoise {
-
 typedef enum {Value, ValueFractal, Perlin, PerlinFractal, Simplex, SimplexFractal, Cellular, WhiteNoise, Cubic, CubicFractal} NoiseType;
 typedef enum {Linear, Hermite, Quintic} Interp;
 typedef enum {FBM, Billow, RigidMulti} FractalType;
@@ -166,7 +164,7 @@ __device__ void calculateFractalBounding(FastNoise* n) {
     n->m_fractalBounding = 1 / ampFractal;
 }
 
-__device__ void init(FastNoise* n) {
+__device__ void fastNoise_init(FastNoise* n) {
   n->m_seed = 1337;
   n->m_frequency = 0.01f;
   n->m_interp = Quintic;
@@ -180,7 +178,7 @@ __device__ void init(FastNoise* n) {
   calculateFractalBounding(n);
 }
 
-__device__ void prepare(FastNoise* n) {
+__device__ void fastNoise_prepare(FastNoise* n) {
   calculateFractalBounding(n);
 }
 
@@ -1327,9 +1325,6 @@ __device__ float getNoise(FastNoise* n, float x, float y, float z) {
             return 0;
     }
 }
-
-}
-
 #endif // ADD_FEATURE_FAST_NOISE
 
 //------------- START of JS CODE--------------------------
@@ -2652,6 +2647,18 @@ __device__ void Complex_AsinH(Complex *c) {
   Complex_Log(c);
 }
 
+__device__ void Complex_AsecH(Complex *c) {
+   Complex_Recip(c);
+   Complex_AsinH(c);
+}
+
+__device__ void Complex_Exp(Complex *c) {
+   c->re = expf(c->re);
+   Complex unp;
+   Complex_UnP(c, &unp);
+   Complex_Copy(c, &unp);
+}
+
 __device__ void Complex_AcosH(Complex *c) {
   Complex D;
   Complex_Init(&D, c->re, c->im);
@@ -3142,183 +3149,186 @@ __VARIATION_FUNCTIONS__
 #ifdef ADD_FEATURE_WFIELDS
 __device__ float calcWFieldIntensity(float3 *__wFieldPos, struct xForm* xform) {
         switch(xform->wfield_type) {
-             case 1: // Cellular Noise
 #ifdef ADD_FEATURE_CELLULAR_NOISE
+             case 1: // Cellular Noise
                {
-                  fastNoise::FastNoise noise;
-                  fastNoise::init(&noise);
+                  FastNoise noise;
+                  fastNoise_init(&noise);
                   noise.m_seed = xform->wfield_seed;
                   noise.m_frequency = xform->wfield_scale;
-                  noise.m_noiseType = fastNoise::Cellular;
+                  noise.m_noiseType = Cellular;
                   switch(xform->wfield_cell_noise_ret_val) {
                     case 0: // Cell value
-                      noise.m_cellularReturnType = fastNoise::CellValue;
+                      noise.m_cellularReturnType = CellValue;
                       break;
                     case 1: // Distance1
-                      noise.m_cellularReturnType = fastNoise::Distance;
+                      noise.m_cellularReturnType = Distance;
                       break;
                     case 2: // Distance2
-                      noise.m_cellularReturnType = fastNoise::Distance2;
+                      noise.m_cellularReturnType = Distance2;
                       break;
                     case 3: // Dist add
-                      noise.m_cellularReturnType = fastNoise::Distance2Add;
+                      noise.m_cellularReturnType = Distance2Add;
                       break;
                     case 4: // Dist sub
-                      noise.m_cellularReturnType = fastNoise::Distance2Sub;
+                      noise.m_cellularReturnType = Distance2Sub;
                       break;
                     case 5: // Dist mul
-                      noise.m_cellularReturnType = fastNoise::Distance2Mul;
+                      noise.m_cellularReturnType = Distance2Mul;
                       break;
                     case 6: // Dist div
-                      noise.m_cellularReturnType = fastNoise::Distance2Div;
+                      noise.m_cellularReturnType = Distance2Div;
                       break;
                     default:
-                      noise.m_cellularReturnType = fastNoise::Distance2;
+                      noise.m_cellularReturnType = Distance2;
                       break;
                   }
-                  noise.m_cellularDistanceFunction = xform->wfield_cell_noise_dist_func == 1 ? fastNoise::Manhattan : xform->wfield_cell_noise_dist_func == 2 ? fastNoise::Natural : fastNoise::Euclidean;
-                  fastNoise::prepare(&noise);
-                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+                  noise.m_cellularDistanceFunction = xform->wfield_cell_noise_dist_func == 1 ? Manhattan : xform->wfield_cell_noise_dist_func == 2 ? Natural : Euclidean;
+                  fastNoise_prepare(&noise);
+                  return getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
                }
-#endif
                break;
+#endif
+#ifdef ADD_FEATURE_CUBIC_NOISE
              case 2: // Cubic Noise
-#ifdef ADD_FEATURE_CUBIC_NOISE
                {
-                  fastNoise::FastNoise noise;
-                  fastNoise::init(&noise);
+                  FastNoise noise;
+                  fastNoise_init(&noise);
                   noise.m_seed = xform->wfield_seed;
                   noise.m_frequency = xform->wfield_scale;
-                  noise.m_noiseType = fastNoise::Cubic;
-                  fastNoise::prepare(&noise);
-                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+                  noise.m_noiseType = Cubic;
+                  fastNoise_prepare(&noise);
+                  return getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
                }
-#endif
                break;
+#endif
+#ifdef ADD_FEATURE_CUBIC_NOISE
              case 3: // Cubic Fractal Noise
-#ifdef ADD_FEATURE_CUBIC_NOISE
                 {
-                  fastNoise::FastNoise noise;
-                  fastNoise::init(&noise);
+                  FastNoise noise;
+                  fastNoise_init(&noise);
                   noise.m_seed = xform->wfield_seed;
                   noise.m_frequency = xform->wfield_scale;
-                  noise.m_noiseType = fastNoise::CubicFractal;
+                  noise.m_noiseType = CubicFractal;
                   noise.m_octaves = xform->wfield_octaves;
                   noise.m_lacunarity = xform->wfield_lacunarity;
                   noise.m_gain = xform->wfield_gain;
-                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? fastNoise::Billow : xform->wfield_fractal_type == 2 ? fastNoise::RigidMulti : fastNoise::FBM;
-                  fastNoise::prepare(&noise);
-                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? Billow : xform->wfield_fractal_type == 2 ? RigidMulti : FBM;
+                  fastNoise_prepare(&noise);
+                  return getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
                }
-#endif
                break;
+#endif
+#ifdef ADD_FEATURE_PERLIN_NOISE
              case 4: // Perlin Noise
-#ifdef ADD_FEATURE_PERLIN_NOISE
                {
-                  fastNoise::FastNoise noise;
-                  fastNoise::init(&noise);
+                  FastNoise noise;
+                  fastNoise_init(&noise);
                   noise.m_seed = xform->wfield_seed;
                   noise.m_frequency = xform->wfield_scale;
-                  noise.m_noiseType = fastNoise::Perlin;
-                  fastNoise::prepare(&noise);
-                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+                  noise.m_noiseType = Perlin;
+                  fastNoise_prepare(&noise);
+                  return getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
                }
-#endif
                break;
+#endif
+#ifdef ADD_FEATURE_PERLIN_NOISE
              case 5: // Perlin Fractal Noise
-#ifdef ADD_FEATURE_PERLIN_NOISE
                {
-                  fastNoise::FastNoise noise;
-                  fastNoise::init(&noise);
+                  FastNoise noise;
+                  fastNoise_init(&noise);
                   noise.m_seed = xform->wfield_seed;
                   noise.m_frequency = xform->wfield_scale;
-                  noise.m_noiseType = fastNoise::PerlinFractal;
+                  noise.m_noiseType = PerlinFractal;
                   noise.m_octaves = xform->wfield_octaves;
                   noise.m_lacunarity = xform->wfield_lacunarity;
                   noise.m_gain = xform->wfield_gain;
-                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? fastNoise::Billow : xform->wfield_fractal_type == 2 ? fastNoise::RigidMulti : fastNoise::FBM;
-                  fastNoise::prepare(&noise);
-                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? Billow : xform->wfield_fractal_type == 2 ? RigidMulti : FBM;
+                  fastNoise_prepare(&noise);
+                  return getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
                }
-#endif
                break;
+#endif
+#ifdef ADD_FEATURE_SIMPLEX_NOISE
              case 6: // Simplex Noise
-#ifdef ADD_FEATURE_SIMPLEX_NOISE
                {
-                  fastNoise::FastNoise noise;
-                  fastNoise::init(&noise);
+                  FastNoise noise;
+                  fastNoise_init(&noise);
                   noise.m_seed = xform->wfield_seed;
                   noise.m_frequency = xform->wfield_scale;
-                  noise.m_noiseType = fastNoise::Simplex;
-                  fastNoise::prepare(&noise);
-                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+                  noise.m_noiseType = Simplex;
+                  fastNoise_prepare(&noise);
+                  return getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
                }
-#endif
                break;
+#endif
+#ifdef ADD_FEATURE_SIMPLEX_NOISE
              case 7: // Simplex Fractal Noise
-#ifdef ADD_FEATURE_SIMPLEX_NOISE
                {
-                  fastNoise::FastNoise noise;
-                  fastNoise::init(&noise);
+                  FastNoise noise;
+                  fastNoise_init(&noise);
                   noise.m_seed = xform->wfield_seed;
                   noise.m_frequency = xform->wfield_scale;
-                  noise.m_noiseType = fastNoise::SimplexFractal;
+                  noise.m_noiseType = SimplexFractal;
                   noise.m_octaves = xform->wfield_octaves;
                   noise.m_lacunarity = xform->wfield_lacunarity;
                   noise.m_gain = xform->wfield_gain;
-                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? fastNoise::Billow : xform->wfield_fractal_type == 2 ? fastNoise::RigidMulti : fastNoise::FBM;
-                  fastNoise::prepare(&noise);
-                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? Billow : xform->wfield_fractal_type == 2 ? RigidMulti : FBM;
+                  fastNoise_prepare(&noise);
+                  return getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
                }
-#endif
                break;
+#endif
+#ifdef ADD_FEATURE_VALUE_NOISE
              case 8: // Value Noise
-#ifdef ADD_FEATURE_VALUE_NOISE
                {
-                  fastNoise::FastNoise noise;
-                  fastNoise::init(&noise);
+                  FastNoise noise;
+                  fastNoise_init(&noise);
                   noise.m_seed = xform->wfield_seed;
                   noise.m_frequency = xform->wfield_scale;
-                  noise.m_noiseType = fastNoise::Value;
-                  fastNoise::prepare(&noise);
-                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+                  noise.m_noiseType = Value;
+                  fastNoise_prepare(&noise);
+                  return getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
                }
-#endif
                break;
-             case 9: // Value Fractal Noise
+#endif
 #ifdef ADD_FEATURE_VALUE_NOISE
+             case 9: // Value Fractal Noise
                {
-                  fastNoise::FastNoise noise;
-                  fastNoise::init(&noise);
+                  FastNoise noise;
+                  fastNoise_init(&noise);
                   noise.m_seed = xform->wfield_seed;
                   noise.m_frequency = xform->wfield_scale;
-                  noise.m_noiseType = fastNoise::ValueFractal;
+                  noise.m_noiseType = ValueFractal;
                   noise.m_octaves = xform->wfield_octaves;
                   noise.m_lacunarity = xform->wfield_lacunarity;
                   noise.m_gain = xform->wfield_gain;
-                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? fastNoise::Billow : xform->wfield_fractal_type == 2 ? fastNoise::RigidMulti : fastNoise::FBM;
-                  fastNoise::prepare(&noise);
-                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+                  noise.m_fractalType = xform->wfield_fractal_type == 1 ? Billow : xform->wfield_fractal_type == 2 ? RigidMulti : FBM;
+                  fastNoise_prepare(&noise);
+                  return getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
                }
-#endif
                break;
-             case 10: // White Noise
+#endif
 #ifdef ADD_FEATURE_WHITE_NOISE
+             case 10: // White Noise
                {
-                  fastNoise::FastNoise noise;
-                  fastNoise::init(&noise);
+                  FastNoise noise;
+                  fastNoise_init(&noise);
                   noise.m_seed = xform->wfield_seed;
-                  noise.m_noiseType = fastNoise::WhiteNoise;
-                  fastNoise::prepare(&noise);
-                  return fastNoise::getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
+                  noise.m_noiseType = WhiteNoise;
+                  fastNoise_prepare(&noise);
+                  return getNoise(&noise, __wFieldPos->x, __wFieldPos->y, __wFieldPos->z);
                }
-#endif
                break;
+#endif
+/*
              case 11: // Image Map -> not supported
+*/
              default:
+               return  0.f;
                break;
            }
-  return  0.f;
+  //return  0.f;
 }
 
 #endif
@@ -3380,6 +3390,7 @@ __device__ void iteratePoint(struct VariationListNode *varUsageList,
 ////WFIELD
      bool __useWFields = false;
      float __wFieldValue;
+     float __wFieldAmountScale;
 #ifdef ADD_FEATURE_WFIELDS
      if(xform->wfield_type>0) {
          float3 __wFieldPos;
@@ -3390,19 +3401,20 @@ __device__ void iteratePoint(struct VariationListNode *varUsageList,
            __wFieldPos = make_float3(__x, __y, __z); // Affine
          }
          __wFieldValue = calcWFieldIntensity(&__wFieldPos, xform);
+          if(fabs(__wFieldValue)>EPSILON) {
+                __useWFields = true;
+                __wFieldAmountScale = 1.0f + __wFieldValue * xform->wfield_var_amount;
+          }
+          else {
+                __wFieldAmountScale = 1.f;
+          }
      }
 #else
+     __wFieldAmountScale = 1.f;
      __wFieldValue = 0.f;
 #endif
 
-     float __wFieldAmountScale;
-     if(fabs(__wFieldValue)>EPSILON) {
-       __useWFields = true;
-       __wFieldAmountScale = 1.0f + __wFieldValue * xform->wfield_var_amount;
-     }
-     else {
-       __wFieldAmountScale = 1.f;
-     }
+
 ////WFIELD
 	float __r2, __r, __rinv, __phi, __theta;
     float __px = __x;  // note that enterGroup action will handle resetting these to zero -- also works correctly for xforms with NO variations set
@@ -3538,6 +3550,10 @@ __device__ void iteratePoint(struct VariationListNode *varUsageList,
 #ifdef ADD_FEATURE_WFIELDS
 	////WFIELD
 	if(__useWFields && fabsf(xform->wfield_color_amount)>EPSILON) {
+		  if(activePoint[index].pal<0.f)
+		    activePoint[index].pal = 0.f;
+		  else if(activePoint[index].pal>1.0f)
+            activePoint[index].pal = 1.f;
           activePoint[index].pal *= (1.0f + __wFieldValue *  xform->wfield_color_amount * 0.1);
 		  if(activePoint[index].pal<0.f)
 		    activePoint[index].pal = 0.f;

@@ -1540,6 +1540,10 @@ This creates a new flame in a new slot and does not alter the original flame in 
 You may set the default batch size for quick mutations in the <<preferences, _Preferences_>> (property *tinaQuickMutationBatchSize*).
 You may also set the default mutation-type for quick mutations in the <<preferences, _Preferences_>> (property *tinaQuickMutationDefaultMutationType*).
 
+There is also an experimental strength-parameter which effects the stengths of the mutation.
+But, due to the complex overall nature of the mutation process, it is not very predictable (yet)
+and does not work well in many cases.
+
 [#quick_mutation_types]
 ===== _Mutation type_ drop-down list
 Here you can choose the type of mutation to be executed:
