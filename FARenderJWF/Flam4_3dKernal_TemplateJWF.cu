@@ -3409,6 +3409,10 @@ __device__ void iteratePoint(struct VariationListNode *varUsageList,
                 __wFieldAmountScale = 1.f;
           }
      }
+     else {
+         __wFieldAmountScale = 1.f;
+         __wFieldValue = 0.f;
+     }
 #else
      __wFieldAmountScale = 1.f;
      __wFieldValue = 0.f;
