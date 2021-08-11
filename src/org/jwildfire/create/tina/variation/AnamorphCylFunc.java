@@ -4,7 +4,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class AnamorphCylFunc extends VariationFunc {
+public class AnamorphCylFunc extends VariationFunc implements SupportsGPU {
   /**
    * @author Jesus Sosa
    * @date July 11, 2018
@@ -96,7 +96,13 @@ public class AnamorphCylFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float xt = __anamorphcyl_a * (__y + __anamorphcyl_b) * cosf(__anamorphcyl_k * __x);"
+    		+"    float yt = __anamorphcyl_a * (__y + __anamorphcyl_b) * sinf(__anamorphcyl_k * __x);"
+    		+"    __px = xt * __anamorphcyl;"
+    		+"    __py = yt * __anamorphcyl;";
+  }
 }

@@ -7,7 +7,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class LaceFunc extends SimpleVariationFunc {
+public class LaceFunc extends SimpleVariationFunc implements SupportsGPU {
 
   /**
    * Lace variation
@@ -62,7 +62,34 @@ public class LaceFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x = 0.5, y = 0.75;"
+    		+"    float w = 0.0;"
+    		+"    float r = 2.0;"
+    		+"    float r0 = sqrtf(__x * __x + __y * __y);"
+    		+"    float weight = RANDFLOAT();"
+    		+"    if (weight > 0.75) {"
+    		+"      w = atan2f(__y, __x - 1.0);"
+    		+"      y = -r0 * cosf(w) / r + 1.0;"
+    		+"      x = -r0 * sinf(w) / r;"
+    		+"    } else if (weight > 0.50) {"
+    		+"      w = atan2f(__y - sqrtf(3.0) / 2.0, __x + 0.5);"
+    		+"      y = -r0 * cosf(w) / r - 0.5;"
+    		+"      x = -r0 * sinf(w) / r + sqrtf(3.0) / 2.0;"
+    		+"    } else if (weight > 0.25) {"
+    		+"      w = atan2f(__y + sqrtf(3.0) / 2.0, __x + 0.5);"
+    		+"      y = -r0 * cosf(w) / r - 0.5;"
+    		+"      x = -r0 * sinf(w) / r - sqrtf(3.0) / 2.0;"
+    		+"    } else {"
+    		+"      w = atan2f(__y, __x);"
+    		+"      y = -r0 * cosf(w) / r;"
+    		+"      x = -r0 * sinf(w) / r;"
+    		+"    }"
+    		+"    __px += x * __lace_js;"
+    		+"    __py += y * __lace_js;";
   }
 
 }

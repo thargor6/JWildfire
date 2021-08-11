@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class Ellipsoid3DFunc extends VariationFunc {
+public class Ellipsoid3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -112,7 +112,33 @@ public class Ellipsoid3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float3 d=make_float3( __ellipsoid3D_dx ,__ellipsoid3D_dy,__ellipsoid3D_dz);  "
+	    		+"    float distance=ellipsoid3D_sdEllipsoid(p,d);"
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__ellipsoid3D*x;"
+	    		+"    	__py=__ellipsoid3D*y;"
+	    		+"    	__pz=__ellipsoid3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__   float  ellipsoid3D_sdEllipsoid (  float3 p, float3 r ) "
+		    		+"  {"
+		    		+"      float k0 = length(p/r);"
+		    		+"      float k1 = length(p/(r*r));"
+		    		+"      return k0*(k0-1.0)/k1;"
+		    		+"  }";
+	  }
 }

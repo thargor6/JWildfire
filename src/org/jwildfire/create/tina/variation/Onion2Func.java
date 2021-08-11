@@ -27,7 +27,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
 /**
  * @author Nicolaus Anderson
  */
-public class Onion2Func extends VariationFunc {
+public class Onion2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PN_MEETING_PT = "meeting_pt";
@@ -208,7 +208,51 @@ public class Onion2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float3 ini=make_float3(__x, __y,__z);"
+    		+"	  ini= ini - make_float3( __onion2_shift_x ,__onion2_shift_y,__onion2_shift_z);"
+    		+"    float r;"
+    		+"    float z;"
+    		+"    float t = onion2_getPrecalcSqrt(ini) /  __onion2_stretch  - PI / 2;"
+    		+"    if (t >  __onion2_meeting_pt ) {"
+    		+"      r = cosf(t);"
+    		+"      if (tanf( __onion2_meeting_pt ) != 0.0) {"
+    		+"        z = expf(cosf( __onion2_meeting_pt ) - r) / tanf( __onion2_meeting_pt )"
+    		+"                + sinf( __onion2_meeting_pt )"
+    		+"                - 1 / tanf( __onion2_meeting_pt );"
+    		+"        if (z >  __onion2_top_crop  &&  __onion2_top_crop  > 0) { "
+    		+"          z =  __onion2_top_crop ;"
+    		+"          r = 0.0;"
+    		+"        }"
+    		+"      } else {"
+    		+"        z =  __onion2_top_crop ;"
+    		+"      }"
+    		+"    } else {"
+    		+"      r = cosf(t);"
+    		+"      z = sinf(t);"
+    		+"    }"
+    		+"    r *=  __onion2_circle_a  * __onion2;"
+    		+"    z *=  __onion2_circle_b  * __onion2;"
+    		+"    __px += r * (ini.x / onion2_getPrecalcSqrt(ini));"
+    		+"    __py += r * (ini.y / onion2_getPrecalcSqrt(ini));"
+    		+"    __pz += z;"
+    		+"    {"
+    		+"      __px += r * ini.z * (ini.x / onion2_getPrecalcSqrt(ini));"
+    		+"      __py += r * ini.z * (ini.y / onion2_getPrecalcSqrt(ini));"
+    		+"      __pz += ini.z * z / (r * r + z * z);"
+    		+"    }"
+    		+"    __px +=  __onion2_shift_x ;"
+    		+"    __py +=  __onion2_shift_y ;"
+    		+"    __pz +=  __onion2_shift_z ;";
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float  onion2_getPrecalcSqrt (float3 v) {"
+	    		+"    float val = sqrtf(v.x * v.x + v.y * v.y) + 1.0e-6;"
+	    		+"    return val;"
+	    		+"  }";
+  }
 }

@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import js.glsl.G;
 import js.glsl.vec3;
 
-public class Box3DFunc extends VariationFunc {
+public class Box3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -108,7 +108,33 @@ public class Box3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float3 d=make_float3( __box3D_dx ,__box3D_dy,__box3D_dz);"
+	    		+"    float distance=box3D_sdBox(p,d);"
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__box3D *x;"
+	    		+"    	__py=__box3D *y;"
+	    		+"    	__pz=__box3D *z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__  float  box3D_sdBox ( float3 p, float3 b )"
+		    		+"  {"
+		    		+"    float3 q = abs(p)-b;"
+		    		+"    return length(max(q,0.0)) + fminf(fmaxf(q.x,fmaxf(q.y,q.z)),0.0);"
+		    		+"    return 1.0f;"
+		    		+"  }  ";
+	  }
 }
