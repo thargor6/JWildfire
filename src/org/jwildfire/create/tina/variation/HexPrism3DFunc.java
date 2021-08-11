@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class HexPrism3DFunc extends VariationFunc {
+public class HexPrism3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -118,7 +118,41 @@ public class HexPrism3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x = (RANDFLOAT() - 0.5);"
+    		+"    float y = (RANDFLOAT() - 0.5);"
+    		+"    float z = (RANDFLOAT() - 0.5);"
+    		+"    "
+    		+"    float3 p=make_float3(x,y,z);"
+    		+"    "
+    		+"    float distance=hexprism3D_sdHexPrism(p,make_float2(__hexprism3D_d,__hexprism3D_H)); "
+    		+"    __doHide=true;"
+    		+"    if(distance <0.0)"
+    		+"    {"
+    		+" 	    __doHide=false;"
+    		+"    	__px=__hexprism3D*x;"
+    		+"    	__py=__hexprism3D*y;"
+    		+"    	__pz=__hexprism3D*z;"
+    		+"    }";
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__   float  hexprism3D_sdHexPrism ( float3 p, float2 h )"
+	    		+"  {"
+	    		+"      float3 q = abs(p);"
+	    		+"      float3 k = make_float3(-0.8660254, 0.5, 0.57735);"
+	    		+"      p = abs(p);"
+	    		+"      float2 t0=make_float2(p.x,p.y);"
+	    		+"      t0 = t0-(make_float2(k.x,k.y)*(2.*fminf(dot(make_float2(k.x,k.y), make_float2(p.x,p.y)), 0.0)));"
+	    		+"      p.x=t0.x;"
+	    		+"      p.y=t0.y;"
+	    		+"      float2 d = make_float2("
+	    		+"         length(make_float2(p.x,p.y)-( make_float2(clamp(p.x, -k.z*h.x, k.z*h.x), h.x)))*sign(p.y - h.x),"
+	    		+"         p.z-h.y );"
+	    		+"      return fminf(fmaxf(d.x,d.y),0.0) + length(max(d,0.0));"
+	    		+"  }";
+  }
 }

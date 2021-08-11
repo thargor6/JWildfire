@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class BoundingBox3DFunc extends VariationFunc {
+public class BoundingBox3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -119,7 +119,36 @@ public class BoundingBox3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float3 d=make_float3( __bbox3D_dx ,__bbox3D_dy,__bbox3D_dz);"
+	    		+"    float distance=bbox3D_sdBoundingBox(p,d,__bbox3D_r);"
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__bbox3D*x;"
+	    		+"    	__py=__bbox3D*y;"
+	    		+"    	__pz=__bbox3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__    float  bbox3D_sdBoundingBox ( float3 p, float3 b, float e )"
+		    		+"  {"
+		    		+"    p = abs(p  )-b;"
+		    		+"    float3 q = abs(p+e)-e;"
+		    		+"    return fminf(fminf("
+		    		+"        length(max(make_float3(p.x,q.y,q.z),0.0))+fminf(fmaxf(p.x,fmaxf(q.y,q.z)),0.0),"
+		    		+"        length(max(make_float3(q.x,p.y,q.z),0.0))+fminf(fmaxf(q.x,fmaxf(p.y,q.z)),0.0)),"
+		    		+"        length(max(make_float3(q.x,q.y,p.z),0.0))+fminf(fmaxf(q.x,fmaxf(q.y,p.z)),0.0));"
+		    		+"  }";
+	  }
 }

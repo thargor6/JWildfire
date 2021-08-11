@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class Octahedron3DFunc extends VariationFunc {
+public class Octahedron3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -118,7 +118,42 @@ public class Octahedron3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance=octahedron3D_sdOctahedron(p,__octahedron3D_h);"
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__octahedron3D*x;"
+	    		+"    	__py=__octahedron3D*y;"
+	    		+"    	__pz=__octahedron3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__   float  octahedron3D_sdOctahedron (float3 p, float s)  "
+		    		+"  {"
+		    		+"      p = abs(p);"
+		    		+"      float m = p.x + p.y + p.z - s;"
+		    		+"   	float3 q;"
+		    		+"           if( 3.0*p.x < m ) "
+		    		+"        	   q = make_float3(p.x,p.y,p.z);"
+		    		+"      else if( 3.0*p.y < m ) "
+		    		+"    	  q = make_float3(p.y,p.z,p.x);"
+		    		+"      else if( 3.0*p.z < m ) "
+		    		+"    	  q = make_float3(p.z,p.x,p.y);"
+		    		+"      else "
+		    		+"    	  return m*0.57735027;"
+		    		+"      float k = clamp(0.5*(q.z-q.y+s),0.0,s); "
+		    		+"      return length(make_float3(q.x,q.y-s+k,q.z-k)); "
+		    		+"  }";
+	  }
 }

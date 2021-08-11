@@ -6,7 +6,7 @@ package org.jwildfire.create.tina.variation;
  *
  * @author Jesus Sosa
  * @date January 11 , 2018
- * Attractors came from the book  “Symmetry in Chaos” by Michael Field and Martin Golubitsky
+ * Attractors came from the book  Symmetry in Chaos by Michael Field and Martin Golubitsky
  * Reference:
  * https://softologyblog.wordpress.com/2017/03/04/2d-strange-attractors/
  */
@@ -18,7 +18,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class IconAttractorFunc extends VariationFunc {
+public class IconAttractorFunc extends VariationFunc implements SupportsGPU {
 
   private static final long serialVersionUID = 1L;
   private static final String PARAM_PRESETID = "presetId";
@@ -147,9 +147,30 @@ public class IconAttractorFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float bdcs = 1.0 / ( __iconattractor_js_scale  == 0.0 ? 10.0e-6 :  __iconattractor_js_scale );"
+    		+"    float x, y;"
+    		+"    float zzbar = __x*__x + __y*__y;"
+    		+"    float p = __iconattractor_js_a * zzbar + __iconattractor_js_l;"
+    		+"    float zreal = __x;"
+    		+"    float zimag = __y;"
+    		+"    for (int i = 1; i <=  __iconattractor_js_degree  - 2; i++) {"
+    		+"      float za = zreal * __x - zimag * __y;"
+    		+"      float zb = zimag * __x + zreal * __y;"
+    		+"      zreal = za;"
+    		+"      zimag = zb;"
+    		+"    }"
+    		+"    float zn = __x * zreal - __y * zimag;"
+    		+"    p = p + __iconattractor_js_b * zn;"
+    		+"    x = p * __x + __iconattractor_js_g * zreal - __iconattractor_js_o * __y;"
+    		+"    y = p * __y - __iconattractor_js_g * zimag + __iconattractor_js_o * __x;"
+    		+"    __px = x * __iconattractor_js;"
+    		+"    __py = y * __iconattractor_js;"
+    		+"    __pal = fmodf(fabsf(bdcs * (sqrf(__px +  __iconattractor_js_centerx ) + sqrf(__py +  __iconattractor_js_centery ))), 1.0);";
+  }
 }
 
 

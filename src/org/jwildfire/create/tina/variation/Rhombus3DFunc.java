@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class Rhombus3DFunc extends VariationFunc {
+public class Rhombus3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -123,7 +123,39 @@ public class Rhombus3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance=rhombus3D_sdRhombus(p,__rhombus3D_la,__rhombus3D_lb,__rhombus3D_h,__rhombus3D_r);"
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__rhombus3D*x;"
+	    		+"    	__py=__rhombus3D*y;"
+	    		+"    	__pz=__rhombus3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__   float  rhombus3D_ndot (  float2 a, float2 b )"
+		    		+"  { "
+		    		+"	  return a.x*b.x - a.y*b.y; "
+		    		+"  }"
+		    		
+		    		+"__device__  float  rhombus3D_sdRhombus (float3 p, float la, float lb, float h, float ra)"
+		    		+"  {"
+		    		+"      p = abs(p);"
+		    		+"      float2 b = make_float2(la,lb);"
+		    		+"      float f = clamp( ( rhombus3D_ndot (b,b-(make_float2(p.x,p.z)*(2.0))))/dot(b,b), -1.0, 1.0 );"
+		    		+"  	float2 q = make_float2(length( make_float2(p.x,p.z)-( b*(make_float2(1.0-f,1.0+f))*(0.5))  )*sign(p.x*b.y+p.z*b.x-b.x*b.y)-ra, p.y-h);"
+		    		+"      return fminf(fmaxf(q.x,q.y),0.0) + length(max(q,0.0));"
+		    		+"  }";
+	  }
 }

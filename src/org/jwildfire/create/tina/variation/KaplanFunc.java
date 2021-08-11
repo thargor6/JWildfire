@@ -18,7 +18,7 @@ import js.glsl.vec4;
 
 
 
-public class KaplanFunc  extends VariationFunc {
+public class KaplanFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation :kaplan
@@ -33,7 +33,7 @@ public class KaplanFunc  extends VariationFunc {
 
 
 	private static final String PARAM_SEED = "seed";	
-	private static final String PARAM_N = "Density";
+	private static final String PARAM_N = "N";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_INVERT = "invert";
 	
@@ -68,8 +68,8 @@ public class KaplanFunc  extends VariationFunc {
 		      xv = zoom* ( x  - (int) N/2.0);
 		      yv = zoom* ( y  - (int) N/2.0);
     
-		    double r0 = G.mod(time / 100.0 + Math.acos(-1.0) / 4.0, Math.acos(-1.0)*2.0);
-		    r0 = G.atan(xv, yv);
+//		    double r0 = G.mod(time / 100.0 + Math.acos(-1.0) / 4.0, Math.acos(-1.0)*2.0);
+		    double r0 = G.atan(xv, yv);
 		    mat2 rot = new mat2(Math.cos(r0), -Math.sin(r0), Math.sin(r0), Math.cos(r0));
 			vec2 uv = new vec2(xv,yv).times(rot);
 		    xv=uv.x;
@@ -162,8 +162,43 @@ public class KaplanFunc  extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "	        int x =  (int)(__kaplan_N * RANDFLOAT());"
+	    		+"	        int y =  (int)(__kaplan_N * RANDFLOAT());"
+	    		+"		    float zoom=floorf( __kaplan_time );"
+	    		+"		    float xv = zoom* ( x  - (int) __kaplan_N/2.0);"
+	    		+"		    float yv = zoom* ( y  - (int) __kaplan_N/2.0);"
+	    		+"		    float r0 = atan2f(xv, yv);"
+	    		+"          Mat2 rot;"
+	    		+"		    Mat2_Init(&rot,cosf(r0), -sinf(r0), sinf(r0), cosf(r0));"
+	    		+"			float2 uv = times(&rot,make_float2(xv,yv));"
+	    		+"		    float value = uv.x*uv.x + uv.y*uv.y;"
+	    		+"		    float exponent =  floorf(logf(value)/logf(2.0f));"
+	    		+"		    float mantissa =  value*powf(2.0f, -exponent)-1.0f;"
+	    		+"		    float r = mantissa - floorf(mantissa*powf(2.0f,16.0f)+0.5)/powf(2.0f,16.0f);"
+	    		+"		    float color = sign(r);"
+	    		+"		    __doHide=false;"
+	    		+"		    if( __kaplan_invert ==0.0f)"
+	    		+"		    {"
+	    		+"		      if (color>0.0f)"
+	    		+"		      { x=0;"
+	    		+"		        y=0;"
+	    		+"		        __doHide = true;"
+	    		+"		      }"
+	    		+"		    } else"
+	    		+"		    {"
+	    		+"			      if (color<=0.0f)"
+	    		+"			      { x=0;"
+	    		+"			        y=0;"
+	    		+"			        __doHide = true;"
+	    		+"			      }"
+	    		+"		    }"
+	    		+"		    __px = __kaplan * ( (float)x /__kaplan_N - 0.5f);"
+	    		+"		    __py = __kaplan * ( (float)y /__kaplan_N - 0.5f);"
+	            + (context.isPreserveZCoordinate() ? "__pz += __kaplan * __z;" : "");
+	  }
 }
 

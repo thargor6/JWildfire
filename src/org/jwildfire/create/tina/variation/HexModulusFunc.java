@@ -22,7 +22,7 @@ import static java.lang.Math.abs;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class HexModulusFunc extends VariationFunc {
+public class HexModulusFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
 
@@ -106,7 +106,39 @@ public class HexModulusFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+	public String getGPUCode(FlameTransformationContext context) {
+		 return	  " float M_SQRT3_2 = 0.86602540378443864676372317075249;"
+				 +" float M_SQRT3 = 1.7320508075688772935274463415059;"
+				 +" float hsize= M_SQRT3_2 /  __hex_modulus_size ;"
+				 +"	float weight = __hex_modulus / M_SQRT3_2;"
+				 +"    "
+				 +"    float X = __x * hsize;"
+				 +"    float Y = __y * hsize;"
+				 +"    float x = (0.57735026918962576450914878050196 * X - Y / 3.0); "
+				 +"    float z = (2.0 * Y / 3.0);"
+				 +"    float y = -x - z;"
+				 +"    "
+				 +"    float rx = roundf(x);"
+				 +"    float ry = roundf(y);"
+				 +"    float rz = roundf(z);"
+				 +"    float x_diff = fabsf(rx - x);"
+				 +"    float y_diff = fabsf(ry - y);"
+				 +"    float z_diff = fabsf(rz - z);"
+				 +"    if ((x_diff > y_diff) & (x_diff > z_diff)){"
+				 +"        rx = -ry-rz;"
+				 +"    } else if (y_diff > z_diff){"
+				 +"        ry = -rx-rz;"
+				 +"    } else {"
+				 +"        rz = -rx-ry;"
+				 +"    }"
+				 +"    float FX_h = M_SQRT3 * rx + M_SQRT3_2 * rz;"
+				 +"    float FY_h = 1.5 * rz;"
+				 +"    float FX = X - FX_h;"
+				 +"    float FY = Y - FY_h;"
+				 +"    __px += FX * weight;"
+				 +"    __py += FY * weight;"
+		         + (context.isPreserveZCoordinate() ? "__pz += hex_modulus * __z;" : "");
+		}
 }

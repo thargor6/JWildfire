@@ -18,7 +18,7 @@ import js.glsl.vec4;
 
 
 
-public class TunnelFunc  extends VariationFunc {
+public class TunnelFunc  extends VariationFunc implements SupportsGPU {
 
 	/*
 	 * Variation : tunnel
@@ -44,10 +44,10 @@ public class TunnelFunc  extends VariationFunc {
 	private static final String[] additionalParamNames = { PARAM_SX,PARAM_SY};
 	
 	
-	double distance(vec2 p0,vec2 p1)
-	{
-	  return G.length(p0.minus(p1));
-	}
+//	double distance(vec2 p0,vec2 p1)
+//	{
+//	  return G.length(p0.minus(p1));
+//	}
 	 	
 	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
 		  
@@ -119,7 +119,23 @@ public class TunnelFunc  extends VariationFunc {
 	}	
 	  @Override
 	  public VariationFuncType[] getVariationTypes() {
-	    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+	    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	  }
+		
+		public String getGPUCode(FlameTransformationContext context) {
+		 return	"		    float2 uv=make_float2( __x, __y)+(make_float2(0.5,0.5));"
+				 +"		    float4 deform =make_float4(0.1,0.1,0.1,0.1);"
+				 +"		    float DEFORM_SIZE = deform.z;"
+				 +"		    float MAX_DISTORTION = deform.w;"
+				 +"		    float2 dist = make_float2(0.5,0.5)-uv;"
+				 +"		    float2 sample_shift=make_float2(0.0,0.0);"
+				 +"		    float distortion = -sqrtf(0.25 - powf(uv.y * deform.x - deform.x * 0.5, 2.0)) * DEFORM_SIZE + DEFORM_SIZE * 0.5; "
+				 +"		    sample_shift.x = distortion * dist.x * __tunnel_Sx;"
+				 +"		    float deform_y_fixed = (MAX_DISTORTION - distortion) * deform.y;"
+				 +"		    sample_shift.y = __tunnel_Sy* deform_y_fixed * dist.y;"
+				 +"		    __px = __tunnel * (__px + sample_shift.x);"
+				 +"		    __py = __tunnel * (__py + sample_shift.y);"
+		            + (context.isPreserveZCoordinate() ? "__pz += __tunnel * __z;" : "");
+		}
 }
 

@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class Cylinder3DFunc extends VariationFunc {
+public class Cylinder3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -108,7 +108,31 @@ public class Cylinder3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance=cylinder3D_sdCylinder(p,make_float2(__cylinder3D_d,__cylinder3D_H)); "
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__cylinder3D*x;"
+	    		+"    	__py=__cylinder3D*y;"
+	    		+"    	__pz=__cylinder3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__   float  cylinder3D_sdCylinder ( float3 p, float2 h )"
+		    		+"  {"
+		    		+"      float2 d = abs(make_float2(length(make_float2(p.x,p.z)),p.y))-(h);"
+		    		+"      return fminf(fmaxf(d.x,d.y),0.0) + length(max(d,0.0));"
+		    		+"  }";
+	  }
 }

@@ -27,7 +27,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
 
 import org.jwildfire.base.Tools;
 
-public class JoukowskiFunc extends VariationFunc {
+public class JoukowskiFunc extends VariationFunc implements SupportsGPU {
 	/*
 	 * Variation :  joukowski
 	 * Date: august 29, 2019
@@ -157,7 +157,66 @@ public class JoukowskiFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		    float x = __x;"
+	    		+"		    float y = __y;"
+	    		+"		    float2 uv=make_float2(x,y);"
+	    		+"		    float2 Z;"
+	    		+"		    if(__joukowski_inverse==0)"
+	    		+"		       Z = joukowski_Jouk   (uv, __joukowski_P1, __joukowski_P2);"
+	    		+"		    else"
+	    		+"		       Z = joukowski_invJouk(uv, __joukowski_P1, __joukowski_P2);"
+	    		
+	    		+"		    __px += __joukowski * Z.x;"
+	    		+"		    __py += __joukowski * Z.y;";
+	  }
 
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__	float2 joukowski_cexp( float b )"
+		    		+"{"
+		    		+"  return make_float2(cosf(b), sinf(b));"
+		    		+"}"
+		    		
+		    		+"__device__	float2 joukowski_cmul( float2 a, float2 b ) "
+		    		+"	{"
+		    		+"		return make_float2( a.x*b.x - a.y*b.y , a.x*b.y + a.y*b.x ); "
+		    		+"	}"
+		    		
+		    		+"__device__	float2 joukowski_cdiv( float2 a, float2 b )  "
+		    		+"	{  float d = dot(b,b);"
+		    		+"	   return make_float2( dot(a,b), a.y*b.x - a.x*b.y )/d;"
+		    		+"	}"
+		    		
+		    		+"__device__	float2 joukowski_csqrt( float2 z )"
+		    		+"	{ float m = length(z);"
+		    		+"	  return sqrt( make_float2(m+z.x, m-z.x)*(0.5) )*( make_float2( 1.0, sign(z.y) ));"
+		    		+"	}"
+		    		
+		    		+"__device__	float joukowski_cnorm( float2 z )"
+		    		+"	{ "
+		    		+"		return length(z);"
+		    		+"	}"
+		    		
+		    		+"__device__	float2  joukowski_Jouk (float2 z, float p1,float p2)"
+		    		+"	{   float2 z0=make_float2(-p2,0.2);"
+		    		+"	    return joukowski_cmul(joukowski_cexp(-0.0), (z+z0)+(joukowski_cdiv(make_float2(p1*p1, 0.), (z+z0))));"
+		    		+"	}"
+		    		
+		    		+"__device__	float2  joukowski_invJouk (float2 z, float p1, float p2)"
+		    		+"	{"
+		    		+"	    float2 z0=make_float2(-p2,0.2);"
+		    		+"	    z = joukowski_cmul(joukowski_cexp(0.0), z);"
+		    		+"	    "
+		    		+"	    float2 r1 = z/(2.)+(joukowski_csqrt(joukowski_cmul(z,z)/(4.)-( make_float2(p1*p1, 0.))))-z0;"
+		    		+"	    float2 r2 = z/(2.)-(joukowski_csqrt(joukowski_cmul(z,z)/(4.)-( make_float2(p1*p1, 0.))))-z0;"
+		    		+"	    if (joukowski_cnorm(r1) > joukowski_cnorm(r2))"
+		    		+"	        return r1;"
+		    		+"	    else"
+		    		+"	        return r2;"
+		    		+"	}";
+	  }
 }

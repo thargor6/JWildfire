@@ -6,7 +6,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class SvenssonFunc extends VariationFunc {
+public class SvenssonFunc extends VariationFunc implements SupportsGPU {
 
   /**
    * Jhonny Svensson Attractor
@@ -75,7 +75,14 @@ public class SvenssonFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x = __svensson_js_d * sinf(__svensson_js_a * __x) - sinf(__svensson_js_b * __y);"
+    		+"    float y = __svensson_js_c * cosf(__svensson_js_a * __x) + cosf(__svensson_js_b * __y);"
+    		+"    __px = x * __svensson_js;"
+    		+"    __py = y * __svensson_js;"
+            + (context.isPreserveZCoordinate() ? "__pz += __svensson_js * __z;" : "");
+  }
 }
