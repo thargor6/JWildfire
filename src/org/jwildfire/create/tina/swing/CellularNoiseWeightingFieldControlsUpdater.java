@@ -80,6 +80,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
     controls.weightingFieldParam04Lbl.setToolTipText("Type of cellular noise");
     fillingComboBox = true;
     try {
+      int idx = controls.weightingFieldParam04Cmb.getSelectedIndex();
       controls.weightingFieldParam04Cmb.removeAllItems();
       controls.weightingFieldParam04Cmb.addItem(CellularNoiseReturnType.CELL_VALUE);
       controls.weightingFieldParam04Cmb.addItem(CellularNoiseReturnType.DISTANCE);
@@ -88,6 +89,9 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
       controls.weightingFieldParam04Cmb.addItem(CellularNoiseReturnType.DISTANCE_SUB);
       controls.weightingFieldParam04Cmb.addItem(CellularNoiseReturnType.DISTANCE_MUL);
       controls.weightingFieldParam04Cmb.addItem(CellularNoiseReturnType.DISTANCE_DIV);
+      if(idx>=0) {
+        controls.weightingFieldParam04Cmb.setSelectedIndex(idx);
+      }
     }
     finally {
       fillingComboBox = false;
@@ -113,10 +117,14 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
     controls.weightingFieldParam08Lbl.setToolTipText("Method for measuring distances between cells");
     fillingComboBox = true;
     try {
+      int idx = controls.weightingFieldParam08Cmb.getSelectedIndex();
       controls.weightingFieldParam08Cmb.removeAllItems();
       controls.weightingFieldParam08Cmb.addItem(CellularNoiseDistanceFunction.EUCLIDIAN);
       controls.weightingFieldParam08Cmb.addItem(CellularNoiseDistanceFunction.MANHATTAN);
       controls.weightingFieldParam08Cmb.addItem(CellularNoiseDistanceFunction.NATURAL);
+      if(idx>=0) {
+        controls.weightingFieldParam08Cmb.setSelectedIndex(idx);
+      }
     }
     finally {
       fillingComboBox = false;
