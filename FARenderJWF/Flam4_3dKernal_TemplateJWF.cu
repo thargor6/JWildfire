@@ -1,4 +1,5 @@
 /*
+/*
 Copyright 2008 Steven Brodhead, Jr.
 Copyright 2011-2016 Steven Brodhead, Sr., Centcom Inc.
 
@@ -1027,10 +1028,13 @@ __device__ __constant__ float CELL_3D_z[] = {
     0.2756962409f, -0.3029914042f, 0.4375151083f, 0.08105160988f, -0.4274764309f, -0.1231199324f, -0.4021797064f, -0.1251477955f,
 };
 
+#define MAX_CELL_POS 32000
+#define MIN_CELL_POS -32000
+
 __device__ float singleCellular(FastNoise* n, float x, float y, float z) {
-    int xr = fastRound(x);
-    int yr = fastRound(y);
-    int zr = fastRound(z);
+    int xr = max(min(fastRound(x), MAX_CELL_POS), MIN_CELL_POS);
+    int yr = max(min(fastRound(y), MAX_CELL_POS), MIN_CELL_POS);
+    int zr = max(min(fastRound(z), MAX_CELL_POS), MIN_CELL_POS);
 
     float distance = 999999;
     int xc = 0, yc = 0, zc = 0;
@@ -1116,9 +1120,9 @@ __device__ float singleCellular(FastNoise* n, float x, float y, float z) {
 }
 
 __device__ float singleCellular2Edge(FastNoise* n, float x, float y, float z) {
-    int xr = fastRound(x);
-    int yr = fastRound(y);
-    int zr = fastRound(z);
+    int xr = max(min(fastRound(x), MAX_CELL_POS), MIN_CELL_POS);
+    int yr = max(min(fastRound(y), MAX_CELL_POS), MIN_CELL_POS);
+    int zr = max(min(fastRound(z), MAX_CELL_POS), MIN_CELL_POS);
 
     float distance = 999999;
     float distance2 = 999999;

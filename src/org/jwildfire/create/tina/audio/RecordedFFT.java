@@ -22,6 +22,8 @@ import java.util.List;
 
 import edu.emory.mathcs.jtransforms.fft.FloatFFT_1D;
 
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
 public class RecordedFFT implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -67,13 +69,14 @@ public class RecordedFFT implements Serializable {
       }
 
       FloatFFT_1D fftlib = new FloatFFT_1D(length);
-      //fftlib.complexForward(input);
-      fftlib.realForward(input);
+      fftlib.complexForward(input);
       //        int multiplier = (int) (BASE_FREQUENCY / ((float) SAMPLE_RATE / (float) FFT_SIZE));
 
       float outputData[] = new float[(input.length + 1) / 2];
       for (int i = 0; i < length / 2; i++) {
-        outputData[i] = (float) Math.sqrt((Math.pow(input[2 * i], 2)) + (Math.pow(input[2 * i + 1], 2)));
+        float re = input[2 * i];
+        float im = input[2 * i + 1];
+        outputData[i] = (float) sqrt(re*re + im*im);
       }
       for (int i = 0; i < length; i++) {
         data[i] = (short) (outputData[i] * 0.07 + 0.5f);
@@ -97,8 +100,7 @@ public class RecordedFFT implements Serializable {
   }
 
   public short[] getDataByTimeOffset(long pTimeOffsetInMS) {
-    double intervals = (double) pTimeOffsetInMS / (double) recordedIntervalInMilliseconds;
-    long position = (long) (inputSamplePerFFTRowCount * intervals / (double) recordedChannels + 0.5);
+    long position = (long) ((double)(inputSamplePerFFTRowCount * pTimeOffsetInMS) / (double) (recordedChannels*recordedIntervalInMilliseconds) + 0.5);
     return getData(position);
   }
 
