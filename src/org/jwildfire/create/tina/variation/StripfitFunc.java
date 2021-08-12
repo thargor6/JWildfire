@@ -19,7 +19,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.fmod;
 
-public class StripfitFunc extends VariationFunc {
+public class StripfitFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_DX = "dx";
@@ -82,7 +82,26 @@ public class StripfitFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float fity;"
+    		+"    float dxp = -0.5 *  __stripfit_dx;"
+    		+"    if (__stripfit != 0.) {"
+    		+"      __px += __stripfit * __x;"
+    		+"      if (__y > 1.) {"
+    		+"        fity = fmodf(__y + 1., 2.);"
+    		+"        __py += __stripfit * (-1. + fity);"
+    		+"        __px += (__y - fity + 1) * dxp;"
+    		+"      } else if (__y < -1.) {"
+    		+"        fity = fmodf(1. - __y, 2.);"
+    		+"        __py += __stripfit * (1. - fity);"
+    		+"        __px += (__y + fity - 1) * dxp;"
+    		+"      } else {"
+    		+"        __py += __stripfit * __y;"
+    		+"      }"
+            + (context.isPreserveZCoordinate() ? "__pz += __stripfit * __z;" : "")
+    		+"   }";
+  }
 }

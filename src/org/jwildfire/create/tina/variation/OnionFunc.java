@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-public class OnionFunc extends VariationFunc {
+public class OnionFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CENTRE_X = "centre_x";
@@ -125,7 +125,42 @@ public class OnionFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float r0 = __onion;"
+    		+"    float x0 = __x;"
+    		+"    float y0 = __y;"
+    		+"    if (r0 == 0.0) {"
+    		+"      r0 = 1.0;"
+    		+"    }"
+    		+"    x0 -=  __onion_centre_x ;"
+    		+"    y0 -=  __onion_centre_y ;"
+    		+"    float d0 = (x0 * x0) + (y0 * y0); "
+    		+"    float dr = sqrtf(d0);"
+    		+"    float x1 = 0.0;"
+    		+"    float y1 = 0.0;"
+    		+"    float z1 = 0.0;"
+    		+"    if (d0 <= r0 * r0) "
+    		+"    {"
+    		+"      z1 -= sqrtf((r0 * r0) - d0); "
+    		+"      x1 = x0;"
+    		+"      y1 = y0;"
+    		+"    } else if (2 * r0 - dr > r0 / 1.41421356) "
+    		+"    {"
+    		+"      x1 = (2 * r0 - dr) * x0 / dr; "
+    		+"      y1 = (2 * r0 - dr) * y0 / dr; "
+    		+"      z1 = sqrtf(r0 * r0 - ((x1 * x1) + (y1 * y1)));"
+    		+"    } else {"
+    		+"      z1 = expf(dr - r0 - (r0 - r0 / 1.414213569)) - 1.0 + (r0 / 1.414213569);"
+    		+"      x1 = (2 * r0 - dr) * x0 / dr; "
+    		+"      y1 = (2 * r0 - dr) * y0 / dr; "
+    		+"    }"
+    		+"    x1 +=  __onion_centre_x ;"
+    		+"    y1 +=  __onion_centre_y ;"
+    		+"    __px += x1;"
+    		+"    __py += y1;"
+            + (context.isPreserveZCoordinate() ? "__pz += __onion * __z;" : "");
+  }
 }

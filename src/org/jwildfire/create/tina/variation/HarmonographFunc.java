@@ -10,7 +10,7 @@ import java.util.Random;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public class HarmonographFunc extends VariationFunc {
+public class HarmonographFunc extends VariationFunc implements SupportsGPU {
   /**
    * Harmonograph
    *
@@ -188,7 +188,25 @@ public class HarmonographFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x, y;"
+    		+"    float t = (float) (RANDFLOAT() *  __harmonograph_js_time );"
+    		+"    x = harmonograph_js_mo(t,  __harmonograph_js_a1 ,  __harmonograph_js_f1 ,  __harmonograph_js_p1 ,  __harmonograph_js_d1 ,  __harmonograph_js_a2 ,  __harmonograph_js_f2 ,  __harmonograph_js_p2 ,  __harmonograph_js_d2 ) / 180;"
+    		+"    y = harmonograph_js_mo(t,  __harmonograph_js_a3 ,  __harmonograph_js_f3 ,  __harmonograph_js_p3  + 90.0,  __harmonograph_js_d3 ,  __harmonograph_js_a4 ,  __harmonograph_js_f4 ,  __harmonograph_js_p4  + 90.0,  __harmonograph_js_d4 ) / 180;"
+    		+"    __px += x * __harmonograph_js;"
+    		+"    __py += y * __harmonograph_js;";
   }
 
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   
+  "  __device__ float  harmonograph_js_mo (float t, float a1, float f1, float p_1, float d1, float a2, float f2, float p_2, float d2) {"
+  +"    float p1 = p_1 * PI / 180.0;"
+  +"    float p2 = p_2 * PI / 180.0;"
+  +"    return a1 * sinf(t * f1 + p1) * expf(-1 * d1 * t) + a2 * sinf(t * f2 + p2) * expf(-1 * d2 * t);"
+  +"  }";
+  }
 }

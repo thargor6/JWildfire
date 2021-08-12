@@ -6,7 +6,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class LorenzFunc extends VariationFunc {
+public class LorenzFunc extends VariationFunc implements SupportsGPU {
 
   private static final long serialVersionUID = 1L;
 
@@ -87,7 +87,17 @@ public class LorenzFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float bdcs = 1.0 / ( __lorenz_js_scale  == 0.0 ? 10.0e-6 :  __lorenz_js_scale );"
+    		+"    float x = __x + __lorenz_js_h * __lorenz_js_a * (__y - __x);"
+    		+"    float y = __y + __lorenz_js_h * (__x * (__lorenz_js_b - __z) - __y);"
+    		+"    float z = __z + __lorenz_js_h * (__x * __y - __lorenz_js_c * __z);"
+    		+"    __px += x * __lorenz_js;"
+    		+"    __py += y * __lorenz_js;"
+    		+"    __pz += z * __lorenz_js;"
+    		+"    __pal = fmodf(fabsf(bdcs * ((__px +  __lorenz_js_centerx )*(__px +  __lorenz_js_centerx ) + (__py +  __lorenz_js_centery )*(__py +  __lorenz_js_centery ))), 1.0);";
+  }
 }

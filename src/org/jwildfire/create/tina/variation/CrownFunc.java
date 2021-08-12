@@ -8,7 +8,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CrownFunc extends VariationFunc {
+public class CrownFunc extends VariationFunc implements SupportsGPU {
 
   /**
    * Roger Bagula Function
@@ -83,8 +83,29 @@ public class CrownFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x, y, z;"
+    		+"    float t = (-PI + 2.0 * PI * RANDFLOAT());"
+    		+"    Complex wt;"
+    		+"    Complex_Init(&wt,0.0, 0.0);"
+    		+"    for (int k = 1; k < 15; k++) {"
+    		+"      float denom = powf( __crown_js_a ,  __crown_js_b  * k);"
+    		+"      float th = powf(__crown_js_a, (float) k) * powf(-1.0, (float) k) * t;"
+    		+"      Complex tmp;"
+    		+ "     Complex_Init(&tmp,sinf(th) / denom, cosf(th) / denom);"
+    		+"      Complex_Add(&wt,&tmp );"
+    		+"    }"
+    		+"    x = wt.re;"
+    		+"    y = wt.im;"
+    		+"    float m=Complex_Mag2(&wt);"
+    		+"    z = powf(m, 2);"
+    		+"    __px += x * __crown_js;"
+    		+"    __py += y * __crown_js;"
+    		+"    __pz += z * __crown_js;"
+    		+"    __pal = fmodf(fabsf((__px*__px + __py*__py)), 1.0);";
+  }
 }
 

@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class HOFunc extends VariationFunc {
+public class HOFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_XPOW = "xpow";
@@ -94,7 +94,23 @@ public class HOFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+	public String getGPUCode(FlameTransformationContext context) {
+		 return	  "    float u = __x;"
+				 +"    float v = __y;"
+				 +"    float w = __z;"
+				 +"    float at_omega_x = atan2f(v * v, w * w);"
+				 +"    float at_omega_y = atan2f(u * u, w * w);"
+				 +"    float sv = sinf(v);"
+				 +"    float cv = cosf(v);"
+				 +"    float su = sinf(u);"
+				 +"    float cu = cosf(u);"
+				 +"    float x = powf((cu * cv),  __ho_xpow ) + ((cu * cv) *  __ho_xpow ) + (0.25 * at_omega_x);"
+				 +"    float y = powf((su * cv),  __ho_ypow ) + ((su * cv) *  __ho_ypow ) + (0.25 * at_omega_y);"
+				 +"    float z = powf(sv,  __ho_zpow ) + sv *  __ho_zpow ;"
+				 +"    __px += __ho * x;"
+				 +"    __py += __ho * y;"
+				 +"    __pz += __ho * z;";
+		}
 }

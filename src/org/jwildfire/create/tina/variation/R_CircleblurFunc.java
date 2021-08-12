@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class R_CircleblurFunc extends VariationFunc {
+public class R_CircleblurFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_N = "n";
   private static final String PARAM_SEED = "seed";
@@ -109,7 +109,32 @@ public class R_CircleblurFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_BLUR};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_BLUR, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float rcn = fabsf(__r_circleblur_n);"
+    		+"    float angle = atan2f(__y, __x);"
+    		+"    float rad = sqrtf(__x*__x + __y*__y);"
+    		+"    rad = fmodf(rad, rcn);"
+    		+"    float by = sinf(angle + rad);"
+    		+"    float bx = cosf(angle + rad);"
+    		+"    by = roundf(by * rad);"
+    		+"    bx = roundf(bx * rad);"
+    		+"    float rad2 = sqrtf( RANDFLOAT() ) * 0.5;"
+    		+"    float angle2 = RANDFLOAT()  * (2.0f*PI);"
+    		+"    float a1 = sinf(bx * 127.1 + by * 311.7 +  __r_circleblur_seed ) * 43758.5453;"
+    		+"    a1 = a1 - truncf(a1);"
+    		+"    float a2 = sinf(bx * 269.5 + by * 183.3 +  __r_circleblur_seed ) * 43758.5453;"
+    		+"    a2 = a2 - truncf(a2);"
+    		+"    float a3 = sinf(by * 12.9898 + bx * 78.233 +  __r_circleblur_seed ) * 43758.5453;"
+    		+"    a3 = a3 - truncf(a3);"
+    		+"    a3 = a3 * ( __r_circleblur_max  -  __r_circleblur_min ) + __r_circleblur_min;"
+    		+"    rad2 *= a3;"
+    		+"    by = by + rad2 * sinf(angle2) + a1 *  __r_circleblur_dist ;"
+    		+"    bx = bx + rad2 * cosf(angle2) + a2 *  __r_circleblur_dist ;"
+    		+"    __px += __r_circleblur * (bx);"
+    		+"    __py += __r_circleblur * (by);"
+            + (context.isPreserveZCoordinate() ? "__pz += __r_circleblur * __z;" : "");
+  }
 }

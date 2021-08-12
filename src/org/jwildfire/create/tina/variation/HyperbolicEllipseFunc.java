@@ -4,7 +4,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class HyperbolicEllipseFunc extends VariationFunc {
+public class HyperbolicEllipseFunc extends VariationFunc implements SupportsGPU {
   /**
    *
    */
@@ -80,7 +80,15 @@ public class HyperbolicEllipseFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float xt, yt;"
+    		+"    xt = ((expf(__x) - expf(-__x)) / 2) * cosf( __hyperbolicellipse_a  * __y);"
+    		+"    yt = ((expf(__x) + expf(-__x)) / 2) * sinf( __hyperbolicellipse_a  * __y);"
+    		+"    __px = xt * __hyperbolicellipse;"
+    		+"    __py = yt * __hyperbolicellipse;"
+    + (context.isPreserveZCoordinate() ? "__pz += __hyperbolicellipse *__z;\n" : "");
+  }
 }

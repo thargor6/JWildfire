@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class Pyramid3DFunc extends VariationFunc {
+public class Pyramid3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -133,8 +133,51 @@ public class Pyramid3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x = (RANDFLOAT() - 0.5);"
+    		+"    float y = (RANDFLOAT() - 0.5);"
+    		+"    float z = (RANDFLOAT() - 0.5);"
+    		+"    "
+    		+"    float3 p=make_float3(x,y,z);"
+    		+"    float distance=pyramid3D_sdPyramid(p,__pyramid3D_h);"
+    		+"    __doHide=true;"
+    		+"    if(distance <0.0)"
+    		+"    {"
+    		+" 	    __doHide=false;"
+    		+"    	__px=__pyramid3D*x;"
+    		+"    	__py=__pyramid3D*y;"
+    		+"    	__pz=__pyramid3D*z;"
+    		+"    }";
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__    float  pyramid3D_sdPyramid (  float3 p,  float h )"
+	    		+"  {"
+	    		+"      float m2 = h*h + 0.25;"
+	    		+"      p.x = fabsf(p.x);"
+	    		+"      p.z = fabsf(p.z);"
+	    		+"      if(p.z>p.x )"
+	    		+"      {"
+	    		+"    	  p.x=p.z;"
+	    		+"    	  p.z=p.x;"
+	    		+"      }	  "
+	    		+"      else"
+	    		+"      {  p.x=p.x;"
+	    		+"         p.z=p.z;"
+	    		+"     }"
+	    		+"      p.x =p.x - 0.5;"
+	    		+"      p.z= p.z - 0.5;"
+	    		+"      float3 q = make_float3( p.z, h*p.y - 0.5*p.x, h*p.x + 0.5*p.y);"
+	    		+"      float s = fmaxf(-q.x,0.0);"
+	    		+"      float t = clamp( (q.y-0.5*p.z)/(m2+0.25), 0.0, 1.0 );"
+	    		+"      float a = m2*(q.x+s)*(q.x+s) + q.y*q.y;"
+	    		+"  	float b = m2*(q.x+0.5*t)*(q.x+0.5*t) + (q.y-m2*t)*(q.y-m2*t);"
+	    		+"      float d2 = fminf(q.y,-q.x*m2-q.y*0.5) > 0.0 ? 0.0 : fminf(a,b);"
+	    		+"      return sqrtf( (d2+q.z*q.z)/m2 ) * sign(fmaxf(q.z,-p.y));"
+	    		+"  }";
+  }
 
 }

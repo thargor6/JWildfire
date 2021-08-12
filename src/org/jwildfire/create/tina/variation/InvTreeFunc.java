@@ -3,7 +3,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class InvTreeFunc extends SimpleVariationFunc {
+public class InvTreeFunc extends SimpleVariationFunc implements SupportsGPU {
 
   /**
    * Inverse Tree IFS
@@ -48,7 +48,23 @@ public class InvTreeFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x, y;"
+    		+"    if (RANDFLOAT() < 0.333) {"
+    		+"      x = __x / 2.0;"
+    		+"      y = __y / 2.0;"
+    		+"    } else if (RANDFLOAT() < 0.666) {"
+    		+"      x = 1.0 / (__x + 1);"
+    		+"      y = __y / (__y + 1.0);"
+    		+"    } else {"
+    		+"      x = __x / (__x + 1);"
+    		+"      y = 1.0 / (__y + 1.0);"
+    		+"    }"
+    		+"    __px += x * __invtree_js;"
+    		+"    __py += y * __invtree_js;"
+            + (context.isPreserveZCoordinate() ? "__pz += __invtree_js * __z;" : "");
+  }
 }
