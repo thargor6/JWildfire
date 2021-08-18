@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.max;
 import static org.jwildfire.base.mathlib.MathLib.min;
 
-public class PostCropFunc extends VariationFunc {
+public class PostCropFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_LEFT = "left";
@@ -119,8 +119,33 @@ public class PostCropFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float xmin = fminf( __post_crop_left ,  __post_crop_right );"
+    		+"    float ymin = fminf( __post_crop_top ,  __post_crop_bottom );"
+    		+"    float xmax = fmaxf( __post_crop_left ,  __post_crop_right );"
+    		+"    float ymax = fmaxf( __post_crop_top ,  __post_crop_bottom );"
+    		+"    float w = (xmax - xmin) * 0.5 *  __post_crop_scatter_area ;"
+    		+"    float h = (ymax - ymin) * 0.5 *  __post_crop_scatter_area ;"
+    		+"    float x = __px;"
+    		+"    float y = __py;"
+    		+"    if (((x < xmin) || (x > xmax) || (y < ymin) || (y > ymax)) && ( __post_crop_zero  != 0)) {"
+    		+"      __px = __py = 0;"
+    		+"      __doHide = true;"
+    		+"    } else {"
+    		+"      __doHide = false;"
+    		+"      if (x < xmin)"
+    		+"        x = xmin + RANDFLOAT() * w;"
+    		+"      else if (x > xmax)"
+    		+"        x = xmax - RANDFLOAT() * w;"
+    		+"      if (y < ymin)"
+    		+"        y = ymin + RANDFLOAT() * h;"
+    		+"      else if (y > ymax)"
+    		+"        y = ymax - RANDFLOAT() * h;"
+    		+"     __px = __post_crop * x;"
+    		+"     __py = __post_crop * y;"
+    		+"    }";
+  }
 }

@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class OrientedCylinder3DFunc extends VariationFunc {
+public class OrientedCylinder3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -137,7 +137,39 @@ double sdCylinder(vec3 p, vec3 a, vec3 b, double r)
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance=ocylinder3D_sdCylinder(p,make_float3(__ocylinder3D_dx,__ocylinder3D_dy,__ocylinder3D_dz),make_float3(__ocylinder3D_tx,__ocylinder3D_ty,__ocylinder3D_tz),__ocylinder3D_r);"
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__ocylinder3D*x;"
+	    		+"    	__py=__ocylinder3D*y;"
+	    		+"    	__pz=__ocylinder3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__ float  ocylinder3D_sdCylinder (float3 p, float3 a, float3 b, float r)"
+		    		+"{"
+		    		+"    float3 pa = p-(a);"
+		    		+"    float3 ba = b-(a);"
+		    		+"    float baba = dot(ba,ba);"
+		    		+"    float paba = dot(pa,ba);"
+		    		+"    float x = length(pa*(baba)-(ba*(paba)))-( r*baba);"
+		    		+"    float y = fabsf(paba-baba*0.5)-baba*0.5;"
+		    		+"    float x2 = x*x;"
+		    		+"    float y2 = y*y*baba;"
+		    		+"    float d = (fmaxf(x,y)<0.0)?-fminf(x2,y2):(((x>0.0)?x2:0.0)+((y>0.0)?y2:0.0));"
+		    		+"    return sign(d)*sqrtf(fabsf(d))/baba;"
+		    		+"}	";
+	  }
 }

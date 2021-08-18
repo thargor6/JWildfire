@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class CappedCone3DFunc extends VariationFunc {
+public class CappedCone3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -126,7 +126,42 @@ public class CappedCone3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance=cappedcone3D_sdCappedCone(p,__cappedcone3D_h,__cappedcone3D_r1,__cappedcone3D_r2); "
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__cappedcone3D*x;"
+	    		+"    	__py=__cappedcone3D*y;"
+	    		+"    	__pz=__cappedcone3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__   float  cappedcone3D_dot2 (  float2 v )"
+		    		+"  {"
+		    		+"	  return dot(v,v); "
+		    		+"  }"
 
+		    		+"__device__  float  cappedcone3D_sdCappedCone ( float3 p, float h,  float r1,  float r2 )"
+		    		+"  {"
+		    		+"      float2 q = make_float2( length(make_float2(p.x,p.z)), p.y );"
+		    		+"      "
+		    		+"      float2 k1 = make_float2(r2,h);"
+		    		+"      float2 k2 = make_float2(r2-r1,2.0*h);"
+		    		+"      float2 ca = make_float2(q.x-fminf(q.x,(q.y < 0.0)?r1:r2), fabsf(q.y)-h);"
+		    		+"      float2 cb = q-(k1)+( k2*(clamp( dot(k1-(q),k2)/cappedcone3D_dot2(k2), 0.0, 1.0 )  ));"
+		    		+"      float s = (cb.x < 0.0 && ca.y < 0.0) ? -1.0 : 1.0;"
+		    		+"      return s*sqrtf( fminf( cappedcone3D_dot2 (ca),cappedcone3D_dot2(cb)) );"
+		    		+"  }";
+	  }
 }

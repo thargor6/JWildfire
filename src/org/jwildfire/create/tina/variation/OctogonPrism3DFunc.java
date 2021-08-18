@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class OctogonPrism3DFunc extends VariationFunc {
+public class OctogonPrism3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_R = "R";
@@ -121,8 +121,47 @@ public class OctogonPrism3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x = (RANDFLOAT() - 0.5);"
+    		+"    float y = (RANDFLOAT() - 0.5);"
+    		+"    float z = (RANDFLOAT() - 0.5);"
+    		+"    "
+    		+"    float3 p=make_float3(x,y,z);"
+    		+"    float distance=octogonprism3D_sdOctogonPrism(p,__octogonprism3D_R,__octogonprism3D_H);"
+    		+"    __doHide=true;"
+    		+"    if(distance <0.0)"
+    		+"    {"
+    		+" 	    __doHide=false;"
+    		+"    	__px=__octogonprism3D*x;"
+    		+"    	__py=__octogonprism3D*y;"
+    		+"    	__pz=__octogonprism3D*z;"
+    		+"    }";
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__    float  octogonprism3D_sdOctogonPrism (  float3 p,  float r, float h )"
+	    		+"  {"
+	    		+"    float3 k = make_float3(-0.9238795325,"
+	    		+"                         0.3826834323,"
+	    		+"                         0.4142135623 );"
+	    		+"    "
+	    		+"    p = abs(p);"
+	    		+"    float2 t0=make_float2(p.x,p.y)-(make_float2( k.x,k.y)*(2.0*fminf( dot(make_float2( k.x,k.y),make_float2 (p.x,p.y))  ,0.0)));"
+	    		+"    p.x = t0.x;"
+	    		+"    p.y = t0.y;"
+	    		+"    float2 t1= make_float2(p.x,p.y)-( make_float2(-k.x,k.y)*(2.0*fminf(dot(make_float2(-k.x,k.y),make_float2(p.x,p.y)),0.0)));"
+	    		+"    p.x = t1.x;"
+	    		+"    p.y = t1.y;"
+	    		+"    "
+	    		+"    float2 t2= make_float2(p.x,p.y)-(make_float2(clamp(p.x, -k.z*r, k.z*r), r));"
+	    		+"    p.x = t2.x;"
+	    		+"    p.y = t2.y;"
+	    		+"    float2 d = make_float2( length(make_float2(p.x,p.y))*sign(p.y), p.z-h );"
+	    		+"    return fminf(fmaxf(d.x,d.y),0.0) + length(fmaxf(d,0.0));"
+	    		+"  }";
+  }
 
 }
