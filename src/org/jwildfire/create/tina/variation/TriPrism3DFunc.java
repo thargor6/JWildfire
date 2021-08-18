@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class TriPrism3DFunc extends VariationFunc {
+public class TriPrism3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -125,5 +125,44 @@ public class TriPrism3DFunc extends VariationFunc {
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+  }
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "   float x = (RANDFLOAT() - 0.5);"
+    		+"    float y = (RANDFLOAT() - 0.5);"
+    		+"    float z = (RANDFLOAT() - 0.5);"
+    		+"    "
+    		+"    float3 p=make_float3(x,y,z);"
+    		+"    float distance=triprism3D_sdTriPrism(p,make_float2( __triprism3D_d ,__triprism3D_h));"
+    		+"    __doHide=true;"
+    		+"    if(distance <0.0)"
+    		+"    {"
+    		+" 	    __doHide=false;"
+    		+"    	__px=__triprism3D*x;"
+    		+"    	__py=__triprism3D*y;"
+    		+"    	__pz=__triprism3D*z;"
+    		+"    }";
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__    float  triprism3D_sdTriPrism ( float3 p, float2 h )"
+	    		+"  {"
+	    		+"      float k = sqrtf(3.0);"
+	    		+"      h.x *= 0.5*k;"
+	    		+"      p.x = p.x/h.x;"
+	    		+"      p.y = p.y/h.x;"
+	    		+"      p.x = fabsf(p.x) - 1.0;"
+	    		+"      p.y = p.y + 1.0/k;"
+	    		+"      if( p.x+k*p.y>0.0 )"
+	    		+"      {"
+	    		+"    	  float2 t0=make_float2(p.x-k*p.y,-k*p.x-p.y)/(2.0);"
+	    		+"    	  p.x=t0.x;"
+	    		+"    	  p.y=t0.y;"
+	    		+"      }"
+	    		+"      p.x = p.x- clamp( p.x, -2.0, 0.0 );"
+	    		+"      float d1 = length(make_float2(p.x,p.y))*sign(-p.y)*h.x;"
+	    		+"      float d2 = fabsf(p.z)-h.y;"
+	    		+"      return length(fmaxf(make_float2(d1,d2),0.0)) + fminf(fmaxf(d1,d2), 0.);"
+	    		+"  }";
   }
 }

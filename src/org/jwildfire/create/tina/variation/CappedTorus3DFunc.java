@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class CappedTorus3DFunc extends VariationFunc {
+public class CappedTorus3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -115,7 +115,32 @@ public class CappedTorus3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance=cappedtorus3D_sdCappedTorus(p,make_float2( __cappedtorus3D_dx ,__cappedtorus3D_dy),__cappedtorus3D_R1,__cappedtorus3D_R2);"
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__cappedtorus3D*x;"
+	    		+"    	__py=__cappedtorus3D*y;"
+	    		+"    	__pz=__cappedtorus3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__   float  cappedtorus3D_sdCappedTorus ( float3 p,  float2 sc,  float ra,  float rb)"
+		    		+"  {"
+		    		+"      p.x = fabsf(p.x);"
+		    		+"      float k = (sc.y*p.x>sc.x*p.y) ? dot(make_float2(p.x,p.y),sc) : length(make_float2(p.x,p.y));"
+		    		+"      return sqrtf( dot(p,p) + ra*ra - 2.0*ra*k ) - rb;"
+		    		+"  }";
+	  }
 }

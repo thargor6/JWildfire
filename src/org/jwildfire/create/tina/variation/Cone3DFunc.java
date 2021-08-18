@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class Cone3DFunc extends VariationFunc {
+public class Cone3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -118,7 +118,38 @@ double sdCone( vec3 p, vec2 c, double h )
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance=cone3D_sdCone(p,make_float2( __cone3D_w ,__cone3D_h),__cone3D_Ty); "
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__cone3D*x;"
+	    		+"    	__py=__cone3D*y;"
+	    		+"    	__pz=__cone3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   " __device__ float  cone3D_sdCone ( float3 p, float2 c, float h )"
+		    		+"{"
+		    		+"   float2 q = make_float2(c.x,-c.y)*(h/c.y);"
+		    		+"   float2 w = make_float2( length(make_float2 (p.x,p.z)), p.y );"
+		    		+"   "
+		    		+"   float2 a = w-(q*(clamp( dot(w,q)/dot(q,q), 0.0, 1.0 )));"
+		    		+"   float2 b = w-(q*(make_float2( clamp( w.x/q.x, 0.0, 1.0 ), 1.0 )));"
+		    		+"   float k = sign( q.y );"
+		    		+"   float d = fminf(dot( a, a ),dot(b, b));"
+		    		+"   float s = fmaxf( k*(w.x*q.y-w.y*q.x),k*(w.y-q.y)  );"
+		    		+"	return sqrtf(d)*sign(s);"
+		    		+"}";
+	  }	
 }

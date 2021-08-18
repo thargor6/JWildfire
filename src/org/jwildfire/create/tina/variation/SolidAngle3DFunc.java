@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class SolidAngle3DFunc extends VariationFunc {
+public class SolidAngle3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -114,7 +114,33 @@ public class SolidAngle3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance=solidangle3D_sdSolidAngle(p,make_float2( __solidangle3D_p1 ,__solidangle3D_p2),__solidangle3D_p3);"
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__solidangle3D*x;"
+	    		+"    	__py=__solidangle3D*y;"
+	    		+"    	__pz=__solidangle3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__   float  solidangle3D_sdSolidAngle (float3 pos, float2 c, float ra)"
+		    		+"  {"
+		    		+"      float2 p = make_float2( length(make_float2(pos.x,pos.z)), pos.y );"
+		    		+"      float l = length(p) - ra;"
+		    		+"  	float m = length(p-( c*(clamp(dot(p,c),0.0,ra)) ));"
+		    		+"      return max(l,m*sign(c.y*p.x-c.x*p.y));"
+		    		+"  }	";
+	  }
 }

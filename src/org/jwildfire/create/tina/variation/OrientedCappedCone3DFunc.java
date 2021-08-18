@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class OrientedCappedCone3DFunc extends VariationFunc {
+public class OrientedCappedCone3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -150,7 +150,46 @@ public class OrientedCappedCone3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance = ocappedcone3D_sdCappedCone(p,make_float3( __ocappedcone3D_dx ,__ocappedcone3D_dy,__ocappedcone3D_dz),make_float3( __ocappedcone3D_tx ,__ocappedcone3D_ty,__ocappedcone3D_tz),__ocappedcone3D_r1,__ocappedcone3D_r2);"
+	    		+"  "
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__ocappedcone3D*x;"
+	    		+"    	__py=__ocappedcone3D*y;"
+	    		+"    	__pz=__ocappedcone3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   " __device__   float  ocappedcone3D_sdCappedCone (float3 p, float3 a, float3 b, float ra, float rb)"
+		    		+"  {"
+		    		+"      float rba  = rb-ra;"
+		    		+"      float baba = dot(b-(a),b-(a));"
+		    		+"      float papa = dot(p-(a),p-(a));"
+		    		+"      float paba = dot(p-(a),b-(a))/baba;"
+		    		+"      float x = sqrtf( papa - paba*paba*baba );"
+		    		+"      float cax = fmaxf(0.0,x-((paba<0.5)?ra:rb));"
+		    		+"      float cay = fabsf(paba-0.5)-0.5;"
+		    		+"      float k = rba*rba + baba;"
+		    		+"      float f = clamp( (rba*(x-ra)+paba*baba)/k, 0.0, 1.0 );"
+		    		+"      float cbx = x-ra - f*rba;"
+		    		+"      float cby = paba - f;"
+		    		+"      "
+		    		+"      float s = (cbx < 0.0 && cay < 0.0) ? -1.0 : 1.0;"
+		    		+"      "
+		    		+"      return s*sqrtf( fminf(cax*cax + cay*cay*baba,"
+		    		+"                         cbx*cbx + cby*cby*baba) );"
+		    		+"  }";
+	  }	
 }

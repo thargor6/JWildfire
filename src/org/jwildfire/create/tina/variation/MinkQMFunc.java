@@ -18,7 +18,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class MinkQMFunc extends VariationFunc {
+public class MinkQMFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
@@ -126,7 +126,58 @@ public class MinkQMFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float mnkX = __x;"
+    		+"    float mnkY = __y;"
+    		+"    int is = 0;"
+    		+"    if (mnkX < 0) {"
+    		+"      mnkX = -mnkX;"
+    		+"      is = 1;"
+    		+"    }"
+    		+"    if ((mnkX > 0.) && (mnkX < 1.)) {"
+    		+"      mnkX = minkQM_minkowski(mnkX,__minkQM_a,__minkQM_b,__minkQM_c,__minkQM_dd,__minkQM_e,__minkQM_f);"
+    		+"    }"
+    		+"    if (is == 1) {"
+    		+"      mnkX = -mnkX;"
+    		+"      is = 0;"
+    		+"    }"
+    		+"    if (mnkY < 0) {"
+    		+"      mnkY = -mnkY;"
+    		+"      is = 1;"
+    		+"    }"
+    		+"    if ((mnkY > 0.) && (mnkY < 1.)) {"
+    		+"      mnkY = minkQM_minkowski(mnkY,__minkQM_a,__minkQM_b,__minkQM_c,__minkQM_dd,__minkQM_e,__minkQM_f);"
+    		+"    }"
+    		+"    if (is == 1) {"
+    		+"      mnkY = -mnkY;"
+    		+"    }"
+    		+"    __px += __minkQM * mnkX;"
+    		+"    __py += __minkQM * mnkY;"
+            +     (context.isPreserveZCoordinate() ? "__pz += __minkQM * __z;" : "");
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   " __device__  float  minkQM_minkowski (float x, float a, float b, float c, float dd,float e, float f) {"
+	    		+"    float p = 0;"
+	    		+"    float q = a, r = p + b, s = c, m = 0.0, n = 0.;"
+	    		+"    float d = dd, y = p;"
+	    		+"    for (int it = 0; it < f; it++) {"
+	    		+"      d = d * e; "
+	    		+"      m = p + r;"
+	    		+"      n = q + s;"
+	    		+"      if (x < (m / n)) {"
+	    		+"        r = m;"
+	    		+"        s = n;"
+	    		+"      } else {"
+	    		+"        y += d;"
+	    		+"        p = m;"
+	    		+"        q = n;"
+	    		+"      }"
+	    		+"    }"
+	    		+"    return y + d;"
+	    		+"  }";
+  }
 }

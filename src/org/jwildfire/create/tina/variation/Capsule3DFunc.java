@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class Capsule3DFunc extends VariationFunc {
+public class Capsule3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -127,7 +127,32 @@ public class Capsule3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance=capsule3D_sdCapsule(p,make_float3( __capsule3D_dx ,__capsule3D_dy,__capsule3D_dz),make_float3( __capsule3D_tx ,__capsule3D_ty,__capsule3D_tz),__capsule3D_R);"
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__capsule3D*x;"
+	    		+"    	__py=__capsule3D*y;"
+	    		+"    	__pz=__capsule3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   " __device__   float  capsule3D_sdCapsule ( float3 p, float3 a, float3 b, float r )"
+		    		+"  {"
+		    		+"  	float3 pa = p-(a), ba = b-(a);"
+		    		+"  	float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );"
+		    		+"  	return length( pa-(ba*(h)) ) - r;"
+		    		+"  }";
+	  }	
 }

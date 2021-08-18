@@ -19,7 +19,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.Complex;
 
-public class JuliaOutsideFunc extends VariationFunc {
+public class JuliaOutsideFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   
   private static final String PARAM_RE_DIV = "re_div";
@@ -109,7 +109,47 @@ else{
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return    "Complex z,z2,z3;"
+    		+ "Complex_Init(&z ,__x, __y);"
+    		+" Complex_Init(&z2,__x, __y);"
+    		+" Complex_Init(&z3, __julia_outside_re_div ,  __julia_outside_im_div );"
+    		+" if ( __julia_outside_mode  == 0.0 ||  __julia_outside_mode  == 2.0){"
+    		+"     Complex_Sqrt(&z);"
+    		+" }"
+    		+"Complex_Inc(&z);"
+    		+" if ( __julia_outside_mode  == 0.0 ||  __julia_outside_mode  == 2.0){"
+    		+"   Complex_Sqr(&z);"
+    		+" }"
+    		+" if ( __julia_outside_mode  == 0.0 ||  __julia_outside_mode  == 2.0){"
+    		+"   Complex_Sqrt(&z2);"
+    		+" }"
+    		+"Complex_Dec(&z2);"
+    		+"if ( __julia_outside_mode  == 0.0 ||  __julia_outside_mode  == 2.0){"
+    		+"   Complex_Sqr(&z2);"
+    		+"}"
+    		+"Complex_Div(&z,&z2);"
+    		+"if ( __julia_outside_mode  == 0.0 ||  __julia_outside_mode  == 1.0){"
+    		+"   Complex_Sqrt(&z);"
+    		+"}"
+    		+"Complex_Div(&z,&z3);"
+    		+"if ( __julia_outside_mode  == 0.0 ||  __julia_outside_mode  == 1.0){                                                                   "
+    		+"   if (RANDFLOAT() < 0.5){"
+    		+"       __px += __julia_outside * z.re;"
+    		+"       __py += __julia_outside * z.im;"
+    		+"    }"
+    		+"    else{"
+    		+"       __px += __julia_outside * (-z.re);"
+    		+"       __py += __julia_outside * (-z.im);"
+    		+"    }"
+    		+"}"
+    		+"else{"
+    		+"       __px += __julia_outside * z.re;"
+    		+"       __py += __julia_outside * z.im;"
+    		+"    }"
+            + (context.isPreserveZCoordinate() ? "__pz += __julia_outside * __z;" : "");
+  }
 }
