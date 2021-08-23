@@ -24,7 +24,7 @@ import js.glsl.G;
 import js.glsl.vec2;
 import js.glsl.vec3;
 
-public class OrientedRoundCone3DFunc extends VariationFunc {
+public class OrientedRoundCone3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   
@@ -156,8 +156,56 @@ public class OrientedRoundCone3DFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "    float x = (RANDFLOAT() - 0.5);"
+	    		+"    float y = (RANDFLOAT() - 0.5);"
+	    		+"    float z = (RANDFLOAT() - 0.5);"
+	    		+"    "
+	    		+"    float3 p=make_float3(x,y,z);"
+	    		+"    float distance=oroundcone3D_sdRoundCone(p,make_float3( __oroundcone3D_dx ,__oroundcone3D_dy,__oroundcone3D_dz),make_float3( __oroundcone3D_tx ,__oroundcone3D_ty,__oroundcone3D_tz),__oroundcone3D_r1,__oroundcone3D_r2);"
+	    		+"    __doHide=true;"
+	    		+"    if(distance <0.0)"
+	    		+"    {"
+	    		+" 	    __doHide=false;"
+	    		+"    	__px=__oroundcone3D*x;"
+	    		+"    	__py=__oroundcone3D*y;"
+	    		+"    	__pz=__oroundcone3D*z;"
+	    		+"    }";
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   "__device__   float  oroundcone3D_dot2 (  float3 v )"
+		    		+"  { "
+		    		+"	  return dot(v,v);"
+		    		+"  }"
 
+		    		+" __device__ float  oroundcone3D_sdRoundCone (float3 p, float3 a, float3 b, float r1, float r2)"
+		    		+"  {"
+		    		+"      "
+		    		+"      float3  ba = b-( a);"
+		    		+"      float l2 = dot(ba,ba);"
+		    		+"      float rr = r1 - r2;"
+		    		+"      float a2 = l2 - rr*rr;"
+		    		+"      float il2 = 1.0/l2;"
+		    		+"      "
+		    		+"      "
+		    		+"      float3 pa = p-(a);"
+		    		+"      float y = dot(pa,ba);"
+		    		+"      float z = y - l2;"
+		    		+"      float x2 =  oroundcone3D_dot2 ( pa*(l2)-( ba*(y) ));"
+		    		+"      float y2 = y*y*l2;"
+		    		+"      float z2 = z*z*l2;"
+		    		+"      "
+		    		+"      float k = sign(rr)*rr*rr*x2;"
+		    		+"      if( sign(z)*a2*z2 > k )"
+		    		+"    	  return  sqrtf(x2 + z2)        *il2 - r2;"
+		    		+"      if( sign(y)*a2*y2 < k )"
+		    		+"    	  return  sqrtf(x2 + y2)        *il2 - r1;"
+		    		+"      return (sqrtf(x2*a2*il2)+y*rr)*il2 - r1;"
+		    		+"  }";
+	  }	  
 }

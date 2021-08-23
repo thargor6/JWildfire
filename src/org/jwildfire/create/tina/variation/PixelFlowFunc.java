@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import static org.jwildfire.base.mathlib.MathLib.*;
 import org.jwildfire.base.Tools;
 
-public class PixelFlowFunc extends VariationFunc {
+public class PixelFlowFunc extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_ANGLE = "angle";
@@ -114,7 +114,36 @@ public class PixelFlowFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		float a_rad =  __pixel_flow_angle  * 0.0174532925;"
+	    		+"		float sina = sinf(a_rad);"
+	    		+"		float cosa = cosf(a_rad);"
+	    		+"		int blockx = (int) floorf(__x *  __pixel_flow_width );"
+	    		+"		blockx += (2.0 - 4.0 * pixel_flow_hash(blockx *  __pixel_flow_seed  + 1));"
+	    		+"		int blocky = (int) floorf(__y *  __pixel_flow_width );"
+	    		+"		blocky += (2.0 - 4.0 * pixel_flow_hash(blocky *  __pixel_flow_seed  + 1));"
+	    		+"		float fLen = (pixel_flow_hash(blocky + blockx * (- __pixel_flow_seed ) ) + pixel_flow_hash(blockx + blocky *  __pixel_flow_seed  / 2)) * 0.5;"
+	    		+"		float r01 = RANDFLOAT();"
+	    		+"		float fade = 1.0 * r01 * r01 * r01 * r01;"
+	    		+"		__px += __pixel_flow *  __pixel_flow_len  * cosa * fade;"
+	    		+"		__py += __pixel_flow *  __pixel_flow_len  * sina * fade;"
+	    		+"		if ( __pixel_flow_enable_dc  == 1)"
+	    		+"			__pal = r01;"
+	            +       (context.isPreserveZCoordinate() ? "__pz += __pixel_flow * __z;" : "");
+	  }
+	  @Override
+	  public String getGPUFunctions(FlameTransformationContext context) {
+		    return   " __device__ float  pixel_flow_hash (int a) { "
+		    		+"		a = (a ^ 61) ^ (a >> 16);"
+		    		+"		a = a + (a << 3);"
+		    		+"		a = a ^ (a >> 4);"
+		    		+"		a = a * 0x27d4eb2d;"
+		    		+"		a = a ^ (a >> 15);"
+//		    		+"		return (float) a / (float) INT_MAX;"
+		    		+"      return (float) a/ exp2f(32.0);"
+		    		+"	}";
+	  }	  
 }
