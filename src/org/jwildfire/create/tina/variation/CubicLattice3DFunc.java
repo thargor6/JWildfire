@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CubicLattice3DFunc extends VariationFunc {
+public class CubicLattice3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_XPAND = "xpand";
@@ -128,7 +128,67 @@ public class CubicLattice3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    int _iStyle;"
+    		+ "   if (fabsf(__cubicLattice_3D_style) >= 2.0) {"
+    		+"      _iStyle = 2;"
+    		+"    } else {"
+    		+"      _iStyle = 1;"
+    		+"    }"
+    		+"     float fill, exnze, wynze, znxy;"
+    		+"    if (fabsf(__cubicLattice_3D_xpand) <= 1.0) {"
+    		+"      fill = __cubicLattice_3D_xpand * 0.5; "
+    		+"    } else {"
+    		+"      fill = sqrtf(__cubicLattice_3D_xpand) * 0.5; "
+    		+"    }"
+    		+"    if (_iStyle == 2) {"
+    		+"      exnze = cosf(atan2f(__x, __z));"
+    		+"      wynze = sinf(atan2f(__y, __z));"
+    		+"      znxy = (exnze + wynze) / 2.0;"
+    		+"    } else {"
+    		+"      exnze = 1.0;"
+    		+"      wynze = 1.0;"
+    		+"      znxy = 1.0;"
+    		+"    }"
+    		+"    float lattd = __cubicLattice_3D; "
+    		+"    int useNode = 0;"
+    		+"    int rchoice = (int) truncf(RANDFLOAT() * 8.0);"
+    		+"    useNode = rchoice;"
+    		+"    if (useNode == 0) {"
+    		+"      __px = (__px + __x) * fill * exnze + lattd;"
+    		+"      __py = (__py + __y) * fill * wynze + lattd;"
+    		+"      __pz = (__pz + __z) * fill * znxy + lattd;"
+    		+"    } else if (useNode == 1) {"
+    		+"      __px = (__px + __x) * fill * exnze + lattd;"
+    		+"      __py = (__py + __y) * fill * wynze - lattd;"
+    		+"      __pz = (__pz + __z) * fill * znxy + lattd;"
+    		+"    } else if (useNode == 2) {"
+    		+"      __px = (__px + __x) * fill * exnze + lattd;"
+    		+"      __py = (__py + __y) * fill * wynze + lattd;"
+    		+"      __pz = (__pz + __z) * fill * znxy - lattd;"
+    		+"    } else if (useNode == 3) {"
+    		+"      __px = (__px + __x) * fill * exnze + lattd;"
+    		+"      __py = (__py + __y) * fill * wynze - lattd;"
+    		+"      __pz = (__pz + __z) * fill * znxy - lattd;"
+    		+"    } else if (useNode == 4) {"
+    		+"      __px = (__px + __x) * fill * exnze - lattd;"
+    		+"      __py = (__py + __y) * fill * wynze + lattd;"
+    		+"      __pz = (__pz + __z) * fill * znxy + lattd;"
+    		+"    } else if (useNode == 5) {"
+    		+"      __px = (__px + __x) * fill * exnze - lattd;"
+    		+"      __py = (__py + __y) * fill * wynze - lattd;"
+    		+"      __pz = (__pz + __z) * fill * znxy + lattd;"
+    		+"    } else if (useNode == 6) {"
+    		+"      __px = (__px + __x) * fill * exnze - lattd;"
+    		+"      __py = (__py + __y) * fill * wynze + lattd;"
+    		+"      __pz = (__pz + __z) * fill * znxy - lattd;"
+    		+"    } else if (useNode == 7) {"
+    		+"      __px = (__px + __x) * fill * exnze - lattd;"
+    		+"      __py = (__py + __y) * fill * wynze - lattd;"
+    		+"      __pz = (__pz + __z) * fill * znxy - lattd;"
+    		+"    }";
+  }
 }

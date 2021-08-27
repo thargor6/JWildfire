@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 
-public class CSinFunc extends VariationFunc {
+public class CSinFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_STRETCH = "stretch";
@@ -77,7 +77,15 @@ public class CSinFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "     Complex c;"
+    		+"     Complex_Init(&c,__x*__csin_stretch ,__y*__csin_stretch );"
+    		+"     Complex_Sin(&c);"
+    		+"     __px += __csin * c.re;"
+    		+"     __py += __csin * c.im;"
+            + (context.isPreserveZCoordinate() ? "__pz += __csin * __z;": "");
+  }
 }
