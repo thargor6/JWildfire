@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class CheckerboardWFFunc extends VariationFunc {
+public class CheckerboardWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POSITION = "position";
@@ -170,7 +170,86 @@ public class CheckerboardWFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
 
+    return   "     int AXIS_XY = 0;"
+    		+"     int AXIS_YZ = 1;"
+    		+"     int AXIS_ZX = 2;"
+    		+"     float x, y, z;"
+//    		
+    		+"     float side_area = 4.0 *  __checkerboard_wf_displ_amount;"
+    		+"     float _side_prob = side_area / (1.0 + side_area);"
+    		+"     int _max_checks = (int) (1.0 /  __checkerboard_wf_checker_size );"
+    		+"     if ((_max_checks) *  __checkerboard_wf_checker_size  >= 1.0) {"
+    		+"      _max_checks--;"
+    		+"     }"
+
+    		+"    if ( __checkerboard_wf_with_sides  == 0 || fabsf( __checkerboard_wf_displ_amount ) < 1.e-6f) {"
+    		+"      x = RANDFLOAT();"
+    		+"      y = RANDFLOAT();"
+    		+"      z =  checkerboard_wf_getDisplacement(x, y,__checkerboard_wf_checker_size,__checkerboard_wf_displ_amount);"
+    		+"      __pal =  checkerboard_wf_getColor(x, y,__checkerboard_wf_checker_size,__checkerboard_wf_checker_color1,__checkerboard_wf_checker_color2);"
+    		+"    } else {"
+    		+"      if (_max_checks > 0 && RANDFLOAT() < _side_prob) {"
+    		+"        __pal =  __checkerboard_wf_side_color ;"
+    		+"        if (RANDFLOAT() < 0.5) {"
+    		+"          x = RANDFLOAT()*(_max_checks + 1) *  __checkerboard_wf_checker_size ;"
+    		+"          y = RANDFLOAT();"
+    		+"        } else {"
+    		+"          x = RANDFLOAT();"
+    		+"          y = RANDFLOAT()*(_max_checks + 1) *  __checkerboard_wf_checker_size ;"
+    		+"        }"
+    		+"        z =  __checkerboard_wf_displ_amount  * RANDFLOAT();"
+    		+"      } else {"
+    		+"        x = RANDFLOAT();"
+    		+"        y = RANDFLOAT();"
+    		+"        z = checkerboard_wf_getDisplacement(x, y,__checkerboard_wf_checker_size,__checkerboard_wf_displ_amount);"
+    		+"        __pal = checkerboard_wf_getColor(x, y,__checkerboard_wf_checker_size,__checkerboard_wf_checker_color1,__checkerboard_wf_checker_color2);"
+    		+"      }"
+    		+"    }"
+    		+"    x = (x - 0.5) *  __checkerboard_wf_size;"
+    		+"    y = (y - 0.5) *  __checkerboard_wf_size;"
+    		+"    z =  z *  __checkerboard_wf_size  +  __checkerboard_wf_position;"
+    		+"    switch (  (int) __checkerboard_wf_axis ) {"
+    		+"      case 0 :"
+    		+"        __px += __checkerboard_wf * x;"
+    		+"        __py += __checkerboard_wf * y;"
+    		+"        __pz += __checkerboard_wf * z;"
+    		+"        break;"
+    		+"      case 1 :"
+    		+"        __py += __checkerboard_wf * x;"
+    		+"        __pz += __checkerboard_wf * y;"
+    		+"        __px += __checkerboard_wf * z;"
+    		+"        break;"
+    		+"      case 2 :"
+    		+"        __pz += __checkerboard_wf * x;"
+    		+"        __px += __checkerboard_wf * y;"
+    		+"        __py += __checkerboard_wf * z;"
+    		+"        break;"
+	        +"      default :"
+            +"        __pz += __checkerboard_wf * x;"
+            +"        __px += __checkerboard_wf * y;"
+            +"        __py += __checkerboard_wf * z;"
+    		+"        break;"
+    		+"    }";
+  }
+  
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "  __device__  float checkerboard_wf_getColor(float u, float v, float checker_size, float checker_color1, float checker_color2) {"
+	    		+"    float color = fmodf(floorf(u / checker_size) + floorf(v / checker_size), 2) < 1 ? checker_color1 : checker_color2;"
+	    		+"    if (color < 0.0)"
+	    		+"      color = 0.0;"
+	    		+"    else if (color > 1.0)"
+	    		+"      color = 1.0;"
+	    		+"    return color;"
+	    		+"  }"
+	    		
+	    		+"__device__ float checkerboard_wf_getDisplacement(float u, float v, float checker_size, float displ_amount) {"
+	    		+"    return fmodf(floorf(u / checker_size) + floorf(v / checker_size), 2.0) < 1 ? displ_amount : 0.0;"
+	    		+"  }";
+  }
 }

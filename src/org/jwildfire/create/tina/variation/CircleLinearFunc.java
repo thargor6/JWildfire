@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.floor;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-public class CircleLinearFunc extends VariationFunc {
+public class CircleLinearFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SC = "Sc";
@@ -137,7 +137,51 @@ public class CircleLinearFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float  X ,  Y , Z, Z1, U, V;"
+    		+"    int M, N;"
+    		+"    M = (int) floorf(0.5 * __x / __circleLinear_Sc);"
+    		+"    N = (int) floorf(0.5 * __y / __circleLinear_Sc);"
+    		+"     X  = __x - (M * 2 + 1) * __circleLinear_Sc;"
+    		+"     Y  = __y - (N * 2 + 1) * __circleLinear_Sc;"
+    		+"    U = sqrtf( X  * X +  Y  * Y);"
+    		+"    V = (0.3 + 0.7 * circleLinear_DiscretNoise2(M + 10, N + 3)) * __circleLinear_Sc;"
+    		+"    Z1 = circleLinear_DiscretNoise2(M + __circleLinear_Seed, N);"
+    		+"    if ((Z1 < __circleLinear_Dens1) && (U < V)) {"
+    		+"      if (__circleLinear_Reverse > 0) {"
+    		+"        if (Z1 < __circleLinear_Dens1 * __circleLinear_Dens2) {"
+    		+"           X  = __circleLinear_K *  X ;"
+    		+"           Y  = __circleLinear_K *  Y ;"
+    		+"        } else {"
+    		+"          Z = V / U * (1 - __circleLinear_K) + __circleLinear_K;"
+    		+"           X  = Z *  X ;"
+    		+"           Y  = Z *  Y ;"
+    		+"        }"
+    		+"      } else {"
+    		+"        if (Z1 > __circleLinear_Dens1 * __circleLinear_Dens2) {"
+    		+"           X  = __circleLinear_K *  X ;"
+    		+"           Y  = __circleLinear_K *  Y ;"
+    		+"        } else {"
+    		+"          Z = V / U * (1 - __circleLinear_K) + __circleLinear_K;"
+    		+"          X  = Z *  X ;"
+    		+"          Y  = Z *  Y ;"
+    		+"        }"
+    		+"      }"
+    		+"    }"
+    		+"    __px += __circleLinear * (X  + (M * 2 + 1) * __circleLinear_Sc);"
+    		+"    __py += __circleLinear * (Y  + (N * 2 + 1) * __circleLinear_Sc);"
+            + (context.isPreserveZCoordinate() ? "__pz += __circleLinear *__z;" : "");
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__  float  circleLinear_DiscretNoise2 (int X, int Y) {"
+	    		+"    float AM = 1.0 / 2147483647;"
+	    		+"    int n = X + Y * 57;"
+	    		+"    n = (n << 13) ^ n;"
+	    		+"    return ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) * AM;"
+	    		+"  }";
+  }
 }
