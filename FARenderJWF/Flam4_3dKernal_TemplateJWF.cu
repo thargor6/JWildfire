@@ -2678,6 +2678,62 @@ __device__ void Complex_AcosecH(Complex *c) {
    Complex_AcosH(c);
 }
 
+__device__ void Complex_SinH(Complex *c) {
+    float rr = 0.0;
+    float ri = 0.0;
+    float er = 1.0;
+    c->re = expf(c->re);
+    er /= c->re;
+    rr = 0.5 * (c->re - er);
+    ri = rr + er;
+    c->re = cosf(c->im) * rr;
+    c->im = sinf(c->im) * ri;
+}
+  
+__device__ void Complex_CosH(Complex *c) {
+    float rr = 0.0;
+    float ri = 0.0;
+    float er = 1.0;
+    c->re = expf(c->re);
+    er /= c->re;
+    rr = 0.5 * (c->re - er);
+    ri = rr + er;
+    c->re = cosf(c->im) * ri;
+    c->im = sinf(c->im) * rr;
+}
+
+__device__ void Complex_Sin(Complex *c) {
+    Complex_Flip(c);
+    Complex_SinH(c);
+    Complex_Flip(c);
+}
+
+__device__ void Complex_Cos(Complex *c) {
+    Complex_Flip(c);
+    Complex_CosH(c);
+    Complex_Flip(c);
+}
+
+__device__ void Complex_Asin(Complex *c) {
+    Complex_Flip(c);
+    Complex_AsinH(c);
+    Complex_Flip(c);
+}
+
+__device__ void Complex_Acos(Complex *c) {
+    Complex_Flip(c);
+    Complex_AsinH(c);
+    Complex_Flip(c); 
+    c->re = (M_PI_F/2.0) - (c->re);
+    c->im = -(c->im); 
+}
+
+__device__ void Complex_Atan(Complex *c) { 
+    Complex_Flip(c);
+    Complex_AtanH(c);
+    Complex_Flip(c);
+} 
+
   
 #endif
 
