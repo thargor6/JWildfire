@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Cubic_3DFunc extends VariationFunc implements SupportsGPU {
+public class Cubic_3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_XPAND = "xpand";
   private static final String PARAM_STYLE = "style";
@@ -140,82 +140,7 @@ public class Cubic_3DFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
   }
-  @Override
-  public String getGPUCode(FlameTransformationContext context) {
-    return   "    float fill, exnze, wynze, znxy;"
-    		+"    float smooth = 1.0;"
-    		+"    float smoothStyle = 1.0;"
-    		+"    int useNode = 0;"
-    		+"    int rchoice = (int) truncf(RANDFLOAT() * 8.0);"
-    		+"    float lattd = __cubic3D * 0.5;"
-    		+"    if (fabsf(__cubic3D_xpand) <= 1.0) {"
-    		+"      fill = __cubic3D_xpand * 0.5; "
-    		+"    } else {"
-    		+"      fill = sqrtf(__cubic3D_xpand) * 0.5; "
-    		+"    }"
-    		+"    if (fabsf(__cubic3D) <= 0.5) {"
-    		+"      smooth = __cubic3D * 2.0; "
-    		+"    } else {"
-    		+"      smooth = 1.0;"
-    		+"    }"
-    		+"    if (fabsf(__cubic3D_style) <= 1.0) {"
-    		+"      smoothStyle = __cubic3D_style;"
-    		+"    } else {"
-    		+"      if (__cubic3D_style > 1.0) {"
-    		+"        smoothStyle = 1.0 + (__cubic3D_style - 1.0) * 0.25;"
-    		+"      } else {"
-    		+"        smoothStyle = (__cubic3D_style + 1.0) * 0.25 - 1.0;"
-    		+"      }"
-    		+"    }"
-    		+"    exnze = 1.0 - (smoothStyle * (1.0 - (cosf(atan2f(__x, __z)))));"
-    		+"    wynze = 1.0 - (smoothStyle * (1.0 - (sinf(atan2f(__y, __z)))));"
-    		+"    if (smoothStyle > 1.0) {"
-    		+"      znxy = 1.0 - (smoothStyle * (1.0 - ((exnze + wynze) / 2.0 * smoothStyle)));"
-    		+"    } else {"
-    		+"      znxy = 1.0 - (smoothStyle * (1.0 - ((exnze + wynze) / 2.0)));"
-    		+"    }"
-    		+"    useNode = rchoice;"
-    		+"    if (useNode == 0) {"
-    		+"      __px = ((__px - (smooth * (1.0 - fill) * __px * exnze)) + (__x * smooth * fill * exnze)) + lattd;"
-    		+"      __py = ((__py - (smooth * (1.0 - fill) * __py * wynze)) + (__y * smooth * fill * wynze)) + lattd;"
-    		+"      __pz = ((__pz - (smooth * (1.0 - fill) * __pz * znxy)) + (__z * smooth * fill * znxy)) + lattd;"
-    		+"    }"
-    		+"    if (useNode == 1) {"
-    		+"      __px = ((__px - (smooth * (1.0 - fill) * __px * exnze)) + (__x * smooth * fill * exnze)) + lattd;"
-    		+"      __py = ((__py - (smooth * (1.0 - fill) * __py * wynze)) + (__y * smooth * fill * wynze)) - lattd;"
-    		+"      __pz = ((__pz - (smooth * (1.0 - fill) * __pz * znxy)) + (__z * smooth * fill * znxy)) + lattd;"
-    		+"    }"
-    		+"    if (useNode == 2) {"
-    		+"      __px = ((__px - (smooth * (1.0 - fill) * __px * exnze)) + (__x * smooth * fill * exnze)) + lattd;"
-    		+"      __py = ((__py - (smooth * (1.0 - fill) * __py * wynze)) + (__y * smooth * fill * wynze)) + lattd;"
-    		+"      __pz = ((__pz - (smooth * (1.0 - fill) * __pz * znxy)) + (__z * smooth * fill * znxy)) - lattd;"
-    		+"    }"
-    		+"    if (useNode == 3) {"
-    		+"      __px = ((__px - (smooth * (1.0 - fill) * __px * exnze)) + (__x * smooth * fill * exnze)) + lattd;"
-    		+"      __py = ((__py - (smooth * (1.0 - fill) * __py * wynze)) + (__y * smooth * fill * wynze)) - lattd;"
-    		+"      __pz = ((__pz - (smooth * (1.0 - fill) * __pz * znxy)) + (__z * smooth * fill * znxy)) - lattd;"
-    		+"    }"
-    		+"    if (useNode == 4) {"
-    		+"      __px = ((__px - (smooth * (1.0 - fill) * __px * exnze)) + (__x * smooth * fill * exnze)) - lattd;"
-    		+"      __py = ((__py - (smooth * (1.0 - fill) * __py * wynze)) + (__y * smooth * fill * wynze)) + lattd;"
-    		+"      __pz = ((__pz - (smooth * (1.0 - fill) * __pz * znxy)) + (__z * smooth * fill * znxy)) + lattd;"
-    		+"    }"
-    		+"    if (useNode == 5) {"
-    		+"      __px = ((__px - (smooth * (1.0 - fill) * __px * exnze)) + (__x * smooth * fill * exnze)) - lattd;"
-    		+"      __py = ((__py - (smooth * (1.0 - fill) * __py * wynze)) + (__y * smooth * fill * wynze)) - lattd;"
-    		+"      __pz = ((__pz - (smooth * (1.0 - fill) * __pz * znxy)) + (__z * smooth * fill * znxy)) + lattd;"
-    		+"    }"
-    		+"    if (useNode == 6) {"
-    		+"      __px = ((__px - (smooth * (1.0 - fill) * __px * exnze)) + (__x * smooth * fill * exnze)) - lattd;"
-    		+"      __py = ((__py - (smooth * (1.0 - fill) * __py * wynze)) + (__y * smooth * fill * wynze)) + lattd;"
-    		+"      __pz = ((__pz - (smooth * (1.0 - fill) * __pz * znxy)) + (__z * smooth * fill * znxy)) - lattd;"
-    		+"    }"
-    		+"    if (useNode == 7) {"
-    		+"      __px = ((__px - (smooth * (1.0 - fill) * __px * exnze)) + (__x * smooth * fill * exnze)) - lattd;"
-    		+"      __py = ((__py - (smooth * (1.0 - fill) * __py * wynze)) + (__y * smooth * fill * wynze)) - lattd;"
-    		+"      __pz = ((__pz - (smooth * (1.0 - fill) * __pz * znxy)) + (__z * smooth * fill * znxy)) - lattd;"
-    		+"    }";
-  }
+
 }

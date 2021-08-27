@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CscqFunc extends SimpleVariationFunc implements SupportsGPU {
+public class CscqFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -50,19 +50,7 @@ public class CscqFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
   }
-  @Override
-  public String getGPUCode(FlameTransformationContext context) {
-    return   "    float abs_v = hypotf(__y, __z);"
-    		+"    float s = sinf(__x);"
-    		+"    float c = cosf(__x);"
-    		+"    float sh = sinhf(abs_v);"
-    		+"    float ch = coshf(abs_v);"
-    		+"    float ni = __cscq / (__x*__x + __y*__y + __z*__z);"
-    		+"    float C = ni * c * sh / abs_v;"
-    		+"    __px += s * ch * ni;"
-    		+"    __py -= C * __y;"
-    		+"    __pz -= C * __z;";
-  }
+
 }

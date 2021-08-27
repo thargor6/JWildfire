@@ -19,16 +19,16 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CscSquaredFunc extends VariationFunc implements SupportsGPU {
+public class CscSquaredFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_CSC_DIV = "csc_div";
-  private static final String PARAM_COS_DIV = "cos_div";
-  private static final String PARAM_TAN_DIV = "tan_div";
-  private static final String PARAM_CSC_POW = "csc_pow";
-  private static final String PARAM_PI_MULT = "pi_mult";
-  private static final String PARAM_CSC_ADD = "csc_add";
-  private static final String PARAM_SCALEY = "scale_y";
+  private static final String PARAM_CSC_DIV = "csc div";
+  private static final String PARAM_COS_DIV = "cos div";
+  private static final String PARAM_TAN_DIV = "tan div";
+  private static final String PARAM_CSC_POW = "csc pow";
+  private static final String PARAM_PI_MULT = "pi mult";
+  private static final String PARAM_CSC_ADD = "csc add";
+  private static final String PARAM_SCALEY = "scale y";
 
   private static final String[] paramNames = {PARAM_CSC_DIV, PARAM_COS_DIV, PARAM_TAN_DIV, PARAM_CSC_POW, PARAM_PI_MULT, PARAM_CSC_ADD, PARAM_SCALEY};
   private double csc_div = 1.0;
@@ -99,16 +99,7 @@ public class CscSquaredFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
   }
-  @Override
-  public String getGPUCode(FlameTransformationContext context) {
-    return   "    float x = __x;"
-    		+"    float y = __y;"
-    		+"    float csc =  __csc_squared_csc_div  / cosf(x /  __csc_squared_cos_div ) / tanf(x /  __csc_squared_tan_div );"
-    		+"    float fx = powf(csc * csc + (PI *  __csc_squared_pi_mult ),  __csc_squared_csc_pow ) +  __csc_squared_csc_add ;"
-    		+"    __px += __csc_squared * x * fx;"
-    		+"    __py += __csc_squared * y * fx * __csc_squared_scale_y;"
-            + (context.isPreserveZCoordinate() ? "__pz += __csc_squared * __z;": "");
-  }
+
 }
