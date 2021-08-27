@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class PostBWraps2Func extends VariationFunc {
+public class PostBWraps2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CELLSIZE = "cellsize";
@@ -161,7 +161,59 @@ public class PostBWraps2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float Vx, Vy; "
+    		+"    float Cx, Cy; "
+    		+"    float Lx, Ly; "
+    		+"    float r, theta, s, c;"
+    		+"    float _r2;"  
+    		+"    float _rfactor;"
+    		+"    float radius = 0.5 * ( __post_bwraps2_cellsize  / (1.0 +  __post_bwraps2_space  * __post_bwraps2_space));"
+    		+"    float _g2 =  __post_bwraps2_gain  * __post_bwraps2_gain /  __post_bwraps2_cellsize  + 1.0e-6;"
+    		+"    float max_bubble = _g2 * radius;"
+    		+"    if (max_bubble > 2.0) {"
+    		+"      max_bubble = 1.0;"
+    		+"    } else {"
+    		+"      max_bubble *= 1.0 / ((max_bubble * max_bubble) / 4.0 + 1.0);"
+    		+"    }"
+    		+"    _r2 = radius * radius;"
+    		+"    _rfactor = radius / max_bubble;"
+    		+"    Vx = __px;"
+    		+"    Vy = __py;"    		
+    		+"    if (fabsf( __post_bwraps2_cellsize ) < 1.e-6f) {"
+    		+"      "
+    		+"      __px = __post_bwraps2 * Vx;"
+    		+"      __py = __post_bwraps2 * Vy;"
+    		+"    }"
+    		+ "   else"
+    		+ "   {"
+    		+"      Cx = (floorf(Vx /  __post_bwraps2_cellsize ) + 0.5) *  __post_bwraps2_cellsize ;"
+    		+"      Cy = (floorf(Vy /  __post_bwraps2_cellsize ) + 0.5) *  __post_bwraps2_cellsize ;"
+    		+"      Lx = Vx - Cx;"
+    		+"      Ly = Vy - Cy;"
+    		+"      if ((Lx * Lx + Ly * Ly) > _r2) {"
+    		+"        __px = __post_bwraps2 * Vx;"
+    		+"        __py = __post_bwraps2 * Vy;"
+    		+"      }"
+    		+ "     else"
+    		+ "     {"
+    		+"        Lx *= _g2;"
+    		+"        Ly *= _g2;"
+    		+"        r = _rfactor / ((Lx * Lx + Ly * Ly) / 4.0 + 1.0);"
+    		+"        Lx *= r;"
+    		+"        Ly *= r;"
+    		+"        r = (Lx * Lx + Ly * Ly) / _r2; "
+    		+"        theta =  __post_bwraps2_inner_twist  * (1.0 - r) +  __post_bwraps2_outer_twist  * r;"
+    		+"        s = sinf(theta);"
+    		+"        c = cosf(theta);"
+    		+"        Vx = Cx + c * Lx + s * Ly;"
+    		+"        Vy = Cy - s * Lx + c * Ly;"
+    		+"        __px = __post_bwraps2 * Vx;"
+    		+"        __py = __post_bwraps2 * Vy;"
+    		+"     }"
+    		+"   }";
+  }
 }

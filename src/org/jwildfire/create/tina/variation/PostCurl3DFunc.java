@@ -20,7 +20,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class PostCurl3DFunc extends VariationFunc {
+public class PostCurl3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CX = "cx";
@@ -98,7 +98,25 @@ public class PostCurl3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "float _cx, _cy, _cz, _c2x, _c2y, _c2z, _cx2, _cy2, _cz2, _c_2;"
+    		+"    _cx = __post_curl3D *  __post_curl3D_cx ;"
+    		+"    _cy = __post_curl3D *  __post_curl3D_cy ;"
+    		+"    _cz = __post_curl3D *  __post_curl3D_cz ;"
+    		+"    _c2x = 2 * _cx;"
+    		+"    _c2y = 2 * _cy;"
+    		+"    _c2z = 2 * _cz;"
+    		+"    _cx2 = _cx*_cx;"
+    		+"    _cy2 = _cy*_cy;"
+    		+"    _cz2 = _cz*_cz;"
+    		+"    _c_2 = _cx2 + _cy2 + _cz2;"
+    		+"    float r2 = __px*__px + __py*__py + __pz*__pz;"
+    		+"    float r = 1.0 / (r2 * _c_2 + _c2x * __px - _c2y * __py + _c2z * __pz + 1.0);"
+    		+"    __px = r * (__px + _cx * r2);"
+    		+"    __py = r * (__py + _cy * r2);"
+    		+"    __pz = r * (__pz + _cz * r2);";
+  }
 }

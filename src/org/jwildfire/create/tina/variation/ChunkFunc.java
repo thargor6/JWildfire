@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 
-public class ChunkFunc extends VariationFunc {
+public class ChunkFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
@@ -127,7 +127,31 @@ public class ChunkFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float aa = __chunk *  __chunk_a ;"
+    		+"    float bb = __chunk *  __chunk_b ;"
+    		+"    float cc = __chunk *  __chunk_c ;"
+    		+"    float dd = __chunk *  __chunk_d ;"
+    		+"    float ee = __chunk *  __chunk_e ;"
+    		+"    float ff = __chunk *  __chunk_f ;"
+    		+"    float r = aa * __x*__x + bb * __x * __y + cc * __y*__y + dd * __x + ee * __y + ff;"
+    		+"    switch ( (int) __chunk_mode ) {"
+    		+"      case 0:"
+    		+"        if (r <= 0) {"
+    		+"          __px += __x;"
+    		+"          __py += __y;"
+    		+"        }"
+    		+"        break;"
+    		+"      case 1:"
+    		+"        if (r > 0) {"
+    		+"          __px += __x;"
+    		+"          __py += __y;"
+    		+"          break;"
+    		+"        }"
+    		+"    }"
+            + (context.isPreserveZCoordinate() ? "__pz += __chunk *__z;" : "");
+  }
 }
