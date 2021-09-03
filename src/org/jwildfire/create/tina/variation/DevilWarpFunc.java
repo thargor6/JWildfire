@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.pow;
 
-public class DevilWarpFunc extends VariationFunc {
+public class DevilWarpFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
@@ -92,7 +92,21 @@ public class DevilWarpFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float xx = __x;"
+    		+"    float yy = __y;"
+    		+"    float r2 = 1.0 / (xx * xx + yy * yy);"
+    		+"    float r = powf(xx * xx + r2 *  __devil_warp_b  * yy * yy,  __devil_warp_warp ) - powf(yy * yy + r2 *  __devil_warp_a  * xx * xx,  __devil_warp_warp );"
+    		+"    if (r >  __devil_warp_rmax )"
+    		+"      r =  __devil_warp_rmax ;"
+    		+"    else if (r <  __devil_warp_rmin )"
+    		+"      r =  __devil_warp_rmin ;"
+    		+"    r =  __devil_warp_effect  * (r);"
+    		+"    __px += xx * (1 + r);"
+    		+"    __py += yy * (1 + r);"
+            + (context.isPreserveZCoordinate() ? "__pz += __devil_warp * __z;": "");
+  }
 }

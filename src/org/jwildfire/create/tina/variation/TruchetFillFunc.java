@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class TruchetFillFunc extends VariationFunc {
+public class TruchetFillFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_EXPONENT = "exponent";
@@ -139,6 +139,71 @@ public class TruchetFillFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "   float pexponent;"
+    		+"   float  width = 0.5;"
+    		+"   float  seed2 = 0.0;"
+    		+"   float onen = 0.5;"
+
+    		+"    onen = 1.0 /  __truchet_fill_exponent ;"
+    		+"    width =  __truchet_fill_arc_width  > 1.0 ? 1.0 :  __truchet_fill_arc_width  < 0.001 ? 0.001 :  __truchet_fill_arc_width ;"
+    		+"    seed2 = sqrtf( __truchet_fill_seed  * 1.5) / ( __truchet_fill_seed  * 0.5) * 0.25;"
+    		+"    float rmax = 0.5 * (powf(2.0, onen) - 1.0) * width;"
+    		+"    float scale = 1.0 / __truchet_fill;"
+    		+"    float modbase = 65535.0;"
+    		+"    float multiplier = 32747.0;"
+    		+"    float offset = 12345.0;"
+    		+"    float x = __x * scale;"
+    		+"    float y = __y * scale;"
+    		+"    float intx = roundf(x);"
+    		+"    float inty = roundf(y);"
+    		+"    float r = x - intx;"
+    		+"    x = r < 0.0 ? 1.0 + r : r;"
+    		+"    r = y - inty;"
+    		+"    y = r < 0.0 ? 1.0 + r : r;"
+    		+"    float tiletype;"
+    		+"    if ( __truchet_fill_seed  == 0)"
+    		+"      tiletype = 0.0;"
+    		+"    else if ( __truchet_fill_seed  == 1.0)"
+    		+"      tiletype = 1.0;"
+    		+"    else {"
+    		+"      float xrand = __x;"
+    		+"      float yrand = __y;"
+    		+"      xrand = roundf(fabsf(xrand)) * seed2;"
+    		+"      yrand = roundf(fabsf(yrand)) * seed2;"
+    		+"      float niter = xrand + yrand + xrand * yrand;"
+    		+"      float randint = ( __truchet_fill_seed  + niter) * seed2 * 0.5;"
+    		+"      randint = fmodf((randint * multiplier + offset), modbase);"
+    		+"      tiletype = fmodf(randint, 2.0);"
+    		+"    }"
+    		+"    float r0, r1;"
+    		+"    if (tiletype < 1.0) {  "
+    		+"      r0 = powf((powf(fabsf(x),  __truchet_fill_exponent ) + powf(fabsf(y),  __truchet_fill_exponent )), onen);"
+    		+"      r1 = powf((powf(fabsf(x - 1.0),  __truchet_fill_exponent ) + powf(fabsf(y - 1.0),  __truchet_fill_exponent )), onen);"
+    		+"    } else {"
+    		+"      r0 = powf((powf(fabsf(x - 1.0),  __truchet_fill_exponent ) + powf(fabsf(y),  __truchet_fill_exponent )), onen);"
+    		+"      r1 = powf((powf(fabsf(x),  __truchet_fill_exponent ) + powf(fabsf(y - 1.0),  __truchet_fill_exponent )), onen);"
+    		+"    }"
+    		+"    float x1, y1;"
+    		+"    float r00 = fabsf(r0 - 0.5) / rmax;"
+    		+"    if (r00 < 1.0) {"
+    		+"      x1 = 2.0 * (x + floorf(__x));"
+    		+"      y1 = 2.0 * (y + floorf(__y));"
+    		+"    } else {"
+    		+"      x1 = 0.0;"
+    		+"      y1 = 0.0;"
+    		+"    }"
+    		+"    float r11 = fabsf(r1 - 0.5) / rmax;"
+    		+"    if (r11 < 1.0) {"
+    		+"      __px += x1 + 2.0 * (x + floorf(__x)) - __x;"
+    		+"      __py += y1 + 2.0 * (y + floorf(__y)) - __y;"
+    		+"    } else {"
+    		+"      __px += x1 - __x;"
+    		+"      __py += y1 - __y;"
+    		+"    }"
+    		+ (context.isPreserveZCoordinate() ? "__pz += __truchet_fill *__z;" : "");
   }
 }

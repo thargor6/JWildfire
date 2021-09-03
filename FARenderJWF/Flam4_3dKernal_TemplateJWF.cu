@@ -110,7 +110,7 @@ __device__ float blerpf(float c00, float c10, float c01, float c11, float tx, fl
 }
 
 __device__ float fracf(float x) {
-  x - truncf(x);
+  return x - truncf(x);
 }
 
 #define EPSILON 0.000000001f
@@ -2494,6 +2494,14 @@ __device__ void Complex_Div(Complex *c, Complex *zz) {
   c->im = i2 * M2;
 }
   
+  __device__ void Complex_DivR(Complex *T,Complex *zz) {
+	float r2 = zz->im * T->im + zz->re * T->re;
+	float i2 = zz->im * T->re - zz->re * T->im;
+	float M2 = Complex_MagInv(T);
+	T->re = r2 * M2;
+	T->im = i2 * M2;
+} 
+
 __device__ void Complex_Copy(Complex *c, Complex *zz) {
   c->re = zz->re;
   c->im = zz->im;

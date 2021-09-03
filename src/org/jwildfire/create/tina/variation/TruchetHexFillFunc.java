@@ -22,7 +22,7 @@ import static org.jwildfire.base.mathlib.MathLib.M_PI;
 //import static java.lang.Math.*;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class TruchetHexFillFunc extends VariationFunc {
+public class TruchetHexFillFunc extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_N = "n";
@@ -156,6 +156,67 @@ public class TruchetHexFillFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION,VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "	    float M_SQRT3_2 = 0.86602540378443864676372317075249;"
+	    		+"	    float M_SQRT3 = 1.7320508075688772935274463415059;"
+	    		+"		float rx = floorf(logf(RANDFLOAT()) * (RANDFLOAT() < 0.5 ?  __truchet_hex_fill_spreadx  : - __truchet_hex_fill_spreadx ));"
+	    		+"		float rz = floorf(logf(RANDFLOAT()) * (RANDFLOAT() < 0.5 ?  __truchet_hex_fill_spready  : - __truchet_hex_fill_spready ));"
+	    		+"		float FX_h = M_SQRT3 * rx + M_SQRT3_2 * (RANDFLOAT() < 0.5 ? rz : -rz);"
+	    		+"		float FY_h = 1.5 * rz;"
+	    		+"		bool add=true;"
+	    		+"      if ( __truchet_hex_fill_seed  == 1.0) {"
+	    		+"		  if( ( ((int) rx % 2) == 0.0 ) && ( ((int)rz % 2) == 0.0 ) ) {"
+	    		+"           add = false;"
+	    		+"        }"
+	    		+"		}"
+	    		+"		if ( __truchet_hex_fill_seed  >= 2) {"
+	    		+"			float hash_f = sinf(FX_h * 12.9898 + FY_h * 78.233 +  __truchet_hex_fill_seed ) * 43758.5453;"
+	    		+"			hash_f = hash_f - floorf(hash_f);"
+	    		+"			if (hash_f < 0.5) {"
+	    		+"				add = false; "
+	    		+"			}"
+	    		+"		}"
+	    		+"		float nnn = 3.0 *  __truchet_hex_fill_n;"
+	    		+"		float nnnn = 1.0 / nnn;"
+	    		+"		"
+	    		+"		float s1 = expf(PI * nnnn);"
+	    		+"		float k_factor = 2.0 / (s1 + 1.0 / s1);"
+	    		+"		"
+	    		+"		float rangle = floorf(RANDFLOAT() * nnn) * (2.0f*PI) * nnnn;"
+	    		+"		float y_aux = ( __truchet_hex_fill_flipy  == 0 ? (add ? __y : -__y) : __y);"
+	    		+"		float x_aux = ( __truchet_hex_fill_flipx  == 0 ? (add ? __x : -__x) : __x);"
+	    		+"		float FY = y_aux * nnnn;"
+	    		+"		float FX = x_aux * nnnn;"
+	    		+"		float sn = sinf(FY * PI + rangle);"
+	    		+"		float cs = cosf(FY * PI + rangle);"
+
+	    		+"		float a = k_factor * expf(FX * PI); "
+	    		+"		FX = a * cs;"
+	    		+"		FY = a * sn;"
+
+	    		+"		float A = atan2f(FY, FX);"
+	    		+"		if (A < 0)"
+	    		+"			A += (2.0f*PI);"
+	    		+"		A = floorf(1.5 * A * (1.0f / PI));"
+	    		+"		float ang = (PI + A * (2.0f*PI)) / 3.0;"
+	    		+"		float sn2 = sinf(ang);"
+	    		+"		float cs2 = cosf(ang);"
+	    		+"		"
+	    		+"		float FX_new = FX - cs2 * 2.0;"
+	    		+"		float FY_new = FY - sn2 * 2.0;"
+	    		+"		"
+	    		+"		if (add) {"
+	    		+"			FX = M_SQRT3_2 * FX_new - 0.5 * FY_new;"
+	    		+"			FY = 0.5 * FX_new + M_SQRT3_2 * FY_new;"
+	    		+"		} else {"
+	    		+"			FX = M_SQRT3_2 * FX_new + 0.5 * FY_new;"
+	    		+"			FY = -0.5 * FX_new + M_SQRT3_2 * FY_new;"
+	    		+"		}"
+
+	    		+"		__px += __truchet_hex_fill * (FX * 0.5 + FX_h);"
+	    		+"		__py += __truchet_hex_fill * (FY * 0.5 + FY_h);";
+	  }
 }

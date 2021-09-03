@@ -19,7 +19,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class HolesqFunc extends SimpleVariationFunc {
+public class HolesqFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -60,8 +60,33 @@ public class HolesqFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x = __holesq * __x;"
+    		+"    float y = __holesq * __y;"
+    		+"    float fax = fabsf(x);"
+    		+"    float fay = fabsf(y);"
+    		+"    if (fax+fay>1) {"
+    		+"      __px += x;"
+    		+"      __py += y;"
+    		+"    } else {"
+    		+"      float t;"
+    		+"      if (fax > fay) {"
+    		+"        t = (x-fay+1)*.5;"
+    		+"        if (x<0) t = (x+fay-1)*.5;"
+    		+"        __px += t;"
+    		+"        __py += y;"
+    		+"      }"
+    		+"      else {"
+    		+"        t = (y-fax+1)*.5;"
+    		+"        if (y<0) t = (y+fax-1)*.5;"
+    		+"        __px += x;"
+    		+"        __py += t;"
+    		+"      }"
+    		+"    }"
+            + (context.isPreserveZCoordinate() ? "__pz += __holesq *__z;" : "");
+  }
 
 }
