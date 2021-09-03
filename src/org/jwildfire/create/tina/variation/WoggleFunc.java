@@ -6,7 +6,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class WoggleFunc extends VariationFunc {
+public class WoggleFunc extends VariationFunc implements SupportsGPU {
 
   /**
    * Woogle
@@ -84,6 +84,29 @@ public class WoggleFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x, y;"
+    		+"    float a[25];"  
+    		+"    float b[25];"
+    		+"    float r = sqrtf(1.25) * sqrtf(  __woggle_js_m );"
+    		+"    int c = (int) ( __woggle_js_m  * RANDFLOAT());"
+    		+"    for (int i = 0; i < (int) __woggle_js_m; i++) {" 
+    		+"        a[i] = cosf(2.0 * PI * (float) i /  __woggle_js_m);" 
+    		+"        b[i] = sinf(2.0 * PI * (float) i /  __woggle_js_m);" 
+    		+"    }"
+    		+"    float ra = 1.0 / (sqrtf(3.0) * sqrtf(__x * __x + __y * __y));"
+    		+"    if (c % 2 == 0) {"
+    		+"      x = -__x / r + ra * __y / r + a[c];"
+    		+"      y = -ra * __x / r - __y / r + b[c];"
+    		+"    } else {"
+    		+"      x = __x / r + ra * __y / r  + a[c];"
+    		+"      y = -ra * __x / r + __y /r  + b[c];"
+    		+"    }"
+    		+"    __px += x * __woggle_js;"
+    		+"    __py += y * __woggle_js;"
+            + (context.isPreserveZCoordinate() ? "__pz += __woggle_js *__z;" : "");
   }
 }

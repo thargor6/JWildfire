@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class IntersectionFunc extends VariationFunc {
+public class IntersectionFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_XWIDTH = "xwidth";
@@ -145,7 +145,37 @@ public class IntersectionFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float _xr1 =  __intersection_xmod2  *  __intersection_xmod1 ;"
+    		+"    float _yr1 =  __intersection_ymod2  *  __intersection_ymod1 ;"
+    		+"    if (RANDFLOAT() < 0.5) {"
+    		+"      float x = - __intersection_xwidth ;"
+    		+"      if (RANDFLOAT() < 0.5)"
+    		+"        x =  __intersection_xwidth ;"
+    		+"      __px +=  __intersection_xtilesize  * (__x + roundf(x * logf(RANDFLOAT())));"
+    		+"      if (__y >  __intersection_xmod1 ) {"
+    		+"        __py +=  __intersection_xheight  * (- __intersection_xmod1  + fmodf(__y +  __intersection_xmod1 , _xr1));"
+    		+"      } else if (__y < - __intersection_xmod1 ) {"
+    		+"        __py +=  __intersection_xheight  * ( __intersection_xmod1  - fmodf( __intersection_xmod1  - __y, _xr1));"
+    		+"      } else {"
+    		+"        __py +=  __intersection_xheight  * __y;"
+    		+"      }"
+    		+"    } else {"
+    		+"      float y = - __intersection_yheight ;"
+    		+"      if (RANDFLOAT() < 0.5)"
+    		+"        y =  __intersection_yheight ;"
+    		+"      __py +=  __intersection_ytilesize  * (__y + roundf(y * logf(RANDFLOAT())));"
+    		+"      if (__x >  __intersection_ymod1 ) {"
+    		+"        __px +=  __intersection_ywidth  * (- __intersection_ymod1  + fmodf(__x +  __intersection_ymod1 , _yr1));"
+    		+"      } else if (__x < - __intersection_ymod1 ) {"
+    		+"        __px +=  __intersection_ywidth  * ( __intersection_ymod1  - fmodf( __intersection_ymod1  - __x, _yr1));"
+    		+"      } else {"
+    		+"        __px +=  __intersection_ywidth  * __x;"
+    		+"      }"
+    		+"    }"
+    		+ (context.isPreserveZCoordinate() ? "__pz += __intersection *__z;" : "");
+  }
 }
