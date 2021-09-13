@@ -6,7 +6,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SiercarpetFunc extends VariationFunc {
+public class SiercarpetFunc extends VariationFunc implements SupportsGPU {
 
   /**
    * Cross Carpet by Bagula
@@ -46,11 +46,11 @@ public class SiercarpetFunc extends VariationFunc {
 
     int l = 1 + (int) (2.0 * (double) m * pContext.random());
 
-    if (d % (2 * m) != (5) % 2 * m) {
+ //   if (d % (2 * m) != (5) % 2 * m) {
       d = 1;
       x = pAffineTP.x / 3.0 + (a[l] - b[l]) / MathLib.sqrt(2.0);
       y = pAffineTP.y / 3.0 + (a[l] + b[l]) / MathLib.sqrt(2.0);
-    }
+//    }
 
     pVarTP.x += x * pAmount;
     pVarTP.y += y * pAmount;
@@ -87,7 +87,25 @@ public class SiercarpetFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x = 1.0, y = 1.0;"
+    		+ "   float a[25],b[25];"
+    		+"    for (int i = 1; i <=  __siercarpet_js_m ; i++) {"
+    		+"      a[2 * i - 1] = cosf(2.0 * PI * (float) i / (float)  __siercarpet_js_m );"
+    		+"      b[2 * i - 1] = sinf(2.0 * PI * (float) i / (float)  __siercarpet_js_m );"
+    		+"    }"
+    		+"    for (int i = 1; i <=  __siercarpet_js_m ; i++) {"
+    		+"      a[2 * i] = (cosf(2.0 * PI * i / (float)  __siercarpet_js_m ) + cosf(2.0 * PI * (i - 1) / (float)  __siercarpet_js_m )) / 2.0;"
+    		+"      b[2 * i] = (sinf(2.0 * PI * i / (float)  __siercarpet_js_m ) + sinf(2.0 * PI * (i - 1) / (float)  __siercarpet_js_m )) / 2.0;"
+    		+"    }"
+    		+"    int l = 1 + (int) (2.0 *  __siercarpet_js_m  * RANDFLOAT());"
+    		+"      x = __x / 3.0 + (a[l] - b[l]) / sqrtf(2.0);"
+    		+"      y = __y / 3.0 + (a[l] + b[l]) / sqrtf(2.0);"
+    		+"    __px += x * __siercarpet_js;"
+    		+"    __py += y * __siercarpet_js;"
+            + (context.isPreserveZCoordinate() ? "__pz += __siercarpet_js *__z;" : "");
+  }
 }

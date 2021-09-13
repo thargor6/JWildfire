@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SplipticBSFunc extends VariationFunc {
+public class SplipticBSFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
@@ -94,7 +94,33 @@ public class SplipticBSFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "float _v= __spliptic_bs / (PI / 2.0);"
+    		+"    float tmp = __y * __y + __x * __x + 1.0;"
+    		+"    float x2 = 2.0 * __x;"
+    		+"    float xmax = 0.5 * (sqrtf(tmp + x2) + sqrtf(tmp - x2));"
+    		+"    float a = __x / xmax;"
+    		+"    float b = spliptic_bs_sqrt_safe(1.0 - a * a);"
+    		+"    if (__x >= 0) {"
+    		+"      __px += _v * atan2f(a, b) +  __spliptic_bs_x;"
+    		+"    } else {"
+    		+"      __px += _v * atan2f(a, b) -  __spliptic_bs_x;"
+    		+"    }"
+    		+"    "
+    		+"    if (RANDFLOAT() < 0.5)"
+    		+"      __py += _v * logf(xmax + spliptic_bs_sqrt_safe(xmax - 1.0)) +  __spliptic_bs_y;"
+    		+"    else"
+    		+"      __py -= _v * logf(xmax + spliptic_bs_sqrt_safe(xmax - 1.0)) +  __spliptic_bs_y;"
+            + (context.isPreserveZCoordinate() ? "__pz += __spliptic_bs *__z;" : "");
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__  float spliptic_bs_sqrt_safe (  float x )"
+	    		+"  {"
+	    		+"	  return (x < EPSILON) ? 0.0 : sqrtf(x); "
+	    		+"  }";
+  }
 }

@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 
-public class SintrangeFunc extends VariationFunc {
+public class SintrangeFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_W = "w";
@@ -66,7 +66,13 @@ public class SintrangeFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float v = ((__x*__x + __y*__y) * __sintrange_w);"
+    		+"    __px = __sintrange * (sinf(__x)) * (__x * __x + __sintrange_w - v);"
+    		+"    __py = __sintrange * (sinf(__y)) * (__y * __y + __sintrange_w - v);"
+            + (context.isPreserveZCoordinate() ? "__pz += __sintrange *__z;" : "");
+  }
 }

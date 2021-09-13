@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Sin2_BSFunc extends VariationFunc {
+public class Sin2_BSFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X1 = "x1";
@@ -82,7 +82,16 @@ public class Sin2_BSFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float sinsin = sinf(__x *  __sin2_bs_x1 );"
+    		+"    float sincos = cosf(__x *  __sin2_bs_x2 );"
+    		+"    float sinsinh = sinhf(__y *  __sin2_bs_y1 );"
+    		+"    float sincosh = coshf(__y *  __sin2_bs_y2 );"
+    		+"    __px += __sin2_bs * sinsin * sincosh;"
+    		+"    __py += __sin2_bs * sincos * sinsinh;"
+            + (context.isPreserveZCoordinate() ? "__pz += __sin2_bs *__z;" : "");
+  }
 }

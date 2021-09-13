@@ -6,7 +6,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SattractorFunc extends VariationFunc {
+public class SattractorFunc extends VariationFunc implements SupportsGPU {
 
   /**
    * Hennon IFS
@@ -94,7 +94,29 @@ public class SattractorFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "  float a[13];"
+    		+"  float b[13];"
+    		+"    for (int i = 1; i <= __sattractor_js_m; i++) {"
+    		+"      a[i] = cosf(2.0 * PI * (float) i /  __sattractor_js_m);"
+    		+"      b[i] = sinf(2.0 * PI * (float) i /  __sattractor_js_m);"
+    		+"    }"
+    		+"    float x, y;"
+    		+"    int l = (int) (RANDFLOAT() *  __sattractor_js_m) + 1;"
+    		+"    if (RANDFLOAT() < 0.5) {"
+    		+"      x = __x / 2.0 + a[l];"
+    		+"      y = __y / 2.0 + b[l];"
+    		+"    } else {"
+    		+"      x = __x * a[l] + __y * b[l] + __x * __x * b[l];"
+    		+"      y = __y * a[l] - __x * b[l] + __x * __x * a[l];"
+    		+"    }"
+    		+"    x /= 2.0;"
+    		+"    y /= 2.0;"
+    		+"    __px += x * __sattractor_js;"
+    		+"    __py += y * __sattractor_js;"
+            + (context.isPreserveZCoordinate() ? "__pz += __sattractor_js *__z;" : "");
+  }
 }
