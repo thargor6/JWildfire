@@ -18,7 +18,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class ShreddedFunc extends VariationFunc {
+public class ShreddedFunc extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_X1 = "x1";
@@ -154,7 +154,50 @@ public class ShreddedFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
-
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+	    return   "		if ( __shredded_blur  != 0) {"
+	    		+"			if ( __shredded_type  == 2) {"
+	    		+"				__px += __shredded *  __shredded_x3  * (sinf( __shredded_x1  * floorf( __shredded_x2  * __x)))"
+	    		+"						+ ( __shredded_x_blur_amount  * sinf((2.0f*PI) * RANDFLOAT())) * __x;"
+	    		+"				__py += __shredded *  __shredded_y3  * (cosf( __shredded_y1  * floorf( __shredded_y2  * __y)))"
+	    		+"						+ ( __shredded_y_blur_amount * sinf((2.0f*PI) * RANDFLOAT())) * __y;"
+	    		+"				__pz += __shredded *  __shredded_z3  * (sinf( __shredded_z1  * floorf( __shredded_z2  * __z)))"
+	    		+"						+ ( __shredded_z_blur_amount  * sinf((2.0f*PI) * RANDFLOAT()));"
+	    		+"			} else if ( __shredded_type  == 1) {"
+	    		+"				__px += __shredded *  __shredded_x3  * (sinf( __shredded_x1  * floorf( __shredded_x2  * __x)))"
+	    		+"						+ ( __shredded_x_blur_amount  * sinf((2.0f*PI) * RANDFLOAT())) * __y;"
+	    		+"				__py += __shredded *  __shredded_y3  * (cosf( __shredded_y1  * floorf( __shredded_y2  * __y)))"
+	    		+"						+ ( __shredded_y_blur_amount * sinf((2.0f*PI) * RANDFLOAT())) * __x;"
+	    		+"				__pz += __shredded *  __shredded_z3  * (sinf( __shredded_z1  * floorf( __shredded_z2  * __z)))"
+	    		+"						+ ( __shredded_z_blur_amount  * sinf((2.0f*PI) * RANDFLOAT()));"
+	    		+"			} else if ( __shredded_type  == 0) {"
+	    		+"				__px += __shredded *  __shredded_x3  * (sinf( __shredded_x1  * floorf( __shredded_x2  * __x)) + cosf( __shredded_x1  * floorf( __shredded_x2  * __y)))"
+	    		+"						+ ( __shredded_x_blur_amount  * sinf((2.0f*PI) * RANDFLOAT())) * __y;"
+	    		+"				__py += __shredded *  __shredded_y3  * (cosf( __shredded_y1  * floorf( __shredded_y2  * __y)) + sinf( __shredded_y1  * floorf( __shredded_y2  * __x)))"
+	    		+"						+ (__shredded_y_blur_amount * sinf((2.0f*PI) * RANDFLOAT())) * __x;"
+	    		+"				__pz += __shredded *  __shredded_z3  * (sinf( __shredded_z1  * floorf( __shredded_z2  * __z)) + cosf( __shredded_z1  * floorf( __shredded_z2  * __z)))"
+	    		+"						+ ( __shredded_z_blur_amount  * sinf((2.0f*PI) * RANDFLOAT())) * __z;"
+	    		+"			}"
+	    		+"		} else {"
+	    		+"			if ( __shredded_type  == 2) {"
+	    		+"				__px += __shredded *  __shredded_x3  * sinf( __shredded_x1  * floorf( __shredded_x2  * __x)) * __x;"
+	    		+"				__py += __shredded *  __shredded_y3  * cosf( __shredded_y1  * floorf( __shredded_y2  * __y)) * __y;"
+	    		+"				__pz += __shredded *  __shredded_z3  * sinf( __shredded_z1  * floorf( __shredded_z2  * __z)) * __z;"
+	    		+"			} else if ( __shredded_type  == 1) {"
+	    		+"				__px += __shredded *  __shredded_x3  * sinf( __shredded_x1  * floorf( __shredded_x2  * __x)) * __y;"
+	    		+"				__py += __shredded *  __shredded_y3  * cosf( __shredded_y1  * floorf( __shredded_y2  * __y)) * __x;"
+	    		+"				__pz += __shredded *  __shredded_z3  * sinf( __shredded_z1  * floorf( __shredded_z2  * __z)) * __z;"
+	    		+"			} else if ( __shredded_type  == 0) {"
+	    		+"				__px += __shredded *  __shredded_x3  * (sinf( __shredded_x1  * floorf( __shredded_x2  * __x)) + cosf( __shredded_x1  * floorf( __shredded_x2  * __y)))"
+	    		+"						* __y;"
+	    		+"				__py += __shredded *  __shredded_y3  * (cosf( __shredded_y1  * floorf( __shredded_y2  * __y)) + sinf( __shredded_y1  * floorf( __shredded_y2  * __x)))"
+	    		+"						* __x;"
+	    		+"				__pz += __shredded *  __shredded_z3  * (sinf( __shredded_z1  * floorf( __shredded_z2  * __z)) + cosf( __shredded_z1  * floorf( __shredded_z2  * __z)))"
+	    		+"						* __z;"
+	    		+"			}"
+	    		+"		}";
+	  }
 }

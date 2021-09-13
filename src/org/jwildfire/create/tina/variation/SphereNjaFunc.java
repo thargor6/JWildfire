@@ -24,7 +24,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
 /**
  * @author Nicolaus Anderson
  */
-public class SphereNjaFunc extends VariationFunc {
+public class SphereNjaFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_CIRCLE_A = "circle_a";
   private static final String PARAM_CIRCLE_B = "circle_b";
@@ -129,7 +129,43 @@ public class SphereNjaFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float3 ini;"
+    		+"    ini=make_float3(__x,__y,__z);"
+    		+"    ini.x = ini.x - __sphere_nja_shift_x ;"
+    		+"    ini.y = ini.y - __sphere_nja_shift_y ;"
+    		+"    ini.z = ini.z - __sphere_nja_shift_z ;"
+//    		+"    ini.invalidate();"
+    		+"    float iniSqrt= sqrtf(ini.x*ini.x+ ini.y*ini.y) + EPSILON; "
+    		+"    /* Convert x and y of point to parametric space,"
+    		+"     noting they are the radius outward in real space. */"
+    		+"    float t = iniSqrt /  __sphere_nja_stretch  - PI / 2;"
+    		+"    "
+    		+"    float r = cosf(t) * __sphere_nja;"
+    		+"    float z = sinf(t) * __sphere_nja;"
+    		+"    "
+    		+"    /* A new coordinate equals the new factor times a unit vector in the"
+    		+"     direction of the coordinate of interest. */"
+    		+"    __px += r * (ini.x / iniSqrt);"
+    		+"    __py += r * (ini.y / iniSqrt);"
+    		+"    __pz += z;"
+    		+"    {"
+    		+"      "
+    		+"      /* Treating z as a vector that is split into two components, one being"
+    		+"       an x-component of parametric space which becomes a new radius for"
+    		+"       real space, taking into account conversion through unit vectors */"
+    		+"      __px += r * ini.z * (ini.x / iniSqrt);"
+    		+"      __py += r * ini.z * (ini.y / iniSqrt);"
+    		+"      /* The z-component is a normalized value from the parametric space y"
+    		+"       (which is real space z), taking into account the amount that went into"
+    		+"       the x component. */"
+    		+"      __pz += ini.z * z / (r * r + z * z);"
+    		+"    }"
+    		+"    __px +=  __sphere_nja_shift_x ;"
+    		+"    __py +=  __sphere_nja_shift_y ;"
+    		+"    __pz +=  __sphere_nja_shift_z ;";
+  }
 }
