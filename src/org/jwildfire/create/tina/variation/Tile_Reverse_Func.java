@@ -18,7 +18,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class Tile_Reverse_Func extends VariationFunc {
+public class Tile_Reverse_Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SPACE = "space";
@@ -98,6 +98,34 @@ public class Tile_Reverse_Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float rev = -1;"
+    		+"    float n = RANDFLOAT();"
+    		+"    if ( __tile_reverse_reversal  == 1){"
+    		+"      rev = -1;"
+    		+"    }"
+    		+"    else{"
+    		+"      rev = 1;"
+    		+"    }"
+    		+"    if (n < 0.5 &&  __tile_reverse_vertical  != 1) {"
+    		+"      __px = __tile_reverse * (rev * __x) + ( __tile_reverse_space );"
+    		+"      __py = __tile_reverse * __y;"
+    		+"    }"
+    		+"    else if (n > 0.5 &&  __tile_reverse_vertical  != 1){"
+    		+"      __px = __tile_reverse * (rev * __x) - ( __tile_reverse_space );"
+    		+"      __py = __tile_reverse * __y;"
+    		+"    }"
+    		+"    else if (n < 0.5 &&  __tile_reverse_vertical  == 1){"
+    		+"      __py = __tile_reverse * (rev * __y) + ( __tile_reverse_space );"
+    		+"      __px = __tile_reverse * __x;"
+    		+"    }"
+    		+"    else if (n > 0.5 &&  __tile_reverse_vertical  == 1){"
+    		+"      __py = __tile_reverse * (rev * __y) - ( __tile_reverse_space );"
+    		+"      __px = __tile_reverse * __x;"
+    		+"    }"
+    		+ (context.isPreserveZCoordinate() ? "__pz += __tile_reverse *__z;" : "");
   }
 }

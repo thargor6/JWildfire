@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SpligonFunc extends VariationFunc {
+public class SpligonFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SIDES = "sides";
@@ -87,7 +87,23 @@ public class SpligonFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "   float j = 0;"
+    		+"   float th = 0;"
+    		+"   float thi = 0;"
+    		+"  "
+    		+"    th =  __spligon_sides  * (1.0f / (PI + PI));"
+    		+"    thi = 1.0 / th;"
+    		+"    j = 3.14159265358979323846 *  __spligon_i  / (-2.0 *  __spligon_sides ) ;"
+    		+"	"
+    		+"    float dx,dy;"
+    		+"    float t = thi * floorf(__theta * th ) + j;"
+    		+"    dx = sinf(t); dy = cosf(t);"
+    		+"    __px += __spligon * (__x + dy *  __spligon_r );"
+    		+"    __py += __spligon * (__y + dx *  __spligon_r );"
+            + (context.isPreserveZCoordinate() ? "__pz += __spligon *__z;" : "");
+  }
 }

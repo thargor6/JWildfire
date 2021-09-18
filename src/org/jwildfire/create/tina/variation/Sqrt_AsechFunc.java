@@ -20,7 +20,7 @@ import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class Sqrt_AsechFunc extends SimpleVariationFunc {
+public class Sqrt_AsechFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -54,7 +54,23 @@ public class Sqrt_AsechFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    Complex z;"
+    		+"    Complex_Init(&z,__x, __y);"
+    		+"    Complex_Sqrt(&z);"
+    		+"    Complex_AsecH(&z);"
+    		+"    Complex_Scale(&z,__sqrt_asech * (2.0f / PI));"
+    		+"    if (RANDFLOAT() < 0.5){"
+    		+"      __py += z.im;"
+    		+"      __px += z.re;"
+    		+"    }"
+    		+"    else{"
+    		+"      __py += -z.im;"
+    		+"      __px += -z.re;"
+    		+"    }"
+            + (context.isPreserveZCoordinate() ? "__pz += __sqrt_asech *__z;" : "");
+  }
 }

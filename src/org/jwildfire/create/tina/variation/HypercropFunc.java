@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class HypercropFunc extends VariationFunc {
+public class HypercropFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_N = "n";
@@ -104,7 +104,41 @@ public class HypercropFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float coef = __hypercrop_n * 0.5 / PI;"
+    		+"    float FX = __x;"
+    		+"    float FY = __y;"
+    		+"    float FZ = __z;"
+    		+"    float a0 = PI / __hypercrop_n;"
+    		+"    float len = 1.0 / cosf(a0);"
+    		+"    float d =  __hypercrop_rad  * sinf(a0) * len;"
+    		+"    float angle = atan2f(__y, __x);"
+    		+"    angle = floorf(angle * coef) / coef + PI / __hypercrop_n;"
+    		+"    float x0 = cosf(angle) * len;"
+    		+"    float y0 = sinf(angle) * len;"
+    		+"    if (sqrtf((__x - x0)*(__x - x0) + (__y - y0)*(__y - y0)) < d) {"
+    		+"      if ( __hypercrop_zero  > 1.5) {"
+    		+"        FX = x0;"
+    		+"        FY = y0;"
+    		+"        FZ = 0.0;"
+    		+"      } else {"
+    		+"        if ( __hypercrop_zero  > 0.5) {"
+    		+"          FX = 0.0;"
+    		+"          FY = 0.0;"
+    		+"          FZ = 0.0;"
+    		+"        } else {"
+    		+"          float rangle = atan2f(__y - y0, __x - x0);"
+    		+"          FX = x0 + cosf(rangle) * d;"
+    		+"          FY = y0 + sinf(rangle) * d;"
+    		+"          FZ = 0.0;"
+    		+"        }"
+    		+"      }"
+    		+"    }"
+    		+"    __px += FX * __hypercrop;"
+    		+"    __py += FY * __hypercrop;"
+    		+"    __pz += FZ * __hypercrop;";
+  }
 }

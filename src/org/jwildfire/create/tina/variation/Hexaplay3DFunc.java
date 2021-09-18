@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Hexaplay3DFunc extends VariationFunc {
+public class Hexaplay3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private double _seg60x[] = new double[6];
@@ -158,7 +158,85 @@ public class Hexaplay3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "  float _seg60x[6];"
+    		+"  float _seg60y[6];"
+    		+"  float _seg120x[3];"
+    		+"  float _seg120y[3];"
+    		+"  int _rswtch; "
+    		+"  int _fcycle; "
+    		+"  int _bcycle;"
+    		+"    _rswtch = (int) truncf(RANDFLOAT() * 3.0); "
+    		+"    float hlift = sinf(PI / 3.0);"
+    		+"    _fcycle = (int) truncf(RANDFLOAT() * 6.0);"
+    		+"    _bcycle = (int) truncf(RANDFLOAT() * 3.0);"
+    		+"    _seg60x[0] = 1.0;"
+    		+"    _seg60x[1] = 0.5;"
+    		+"    _seg60x[2] = -0.5;"
+    		+"    _seg60x[3] = -1.0;"
+    		+"    _seg60x[4] = -0.5;"
+    		+"    _seg60x[5] = 0.5;"
+    		+"    _seg60y[0] = 0.0;"
+    		+"    _seg60y[1] = hlift;"
+    		+"    _seg60y[2] = hlift;"
+    		+"    _seg60y[3] = 0.0;"
+    		+"    _seg60y[4] = -hlift;"
+    		+"    _seg60y[5] = -hlift;"
+    		+"    _seg120x[0] = 1.0;"
+    		+"    _seg120x[1] = -0.5;"
+    		+"    _seg120x[2] = -0.5;"
+    		+"    _seg120y[0] = 0.0;"
+    		+"    _seg120y[1] = hlift;"
+    		+"    _seg120y[2] = -hlift;"
+    		+"	"
+ //   		+"    if (_fcycle > 5) {"
+ //   		+"      _fcycle = 0;"
+ //   		+"      _rswtch = (int) truncf(RANDFLOAT() * 3.0); "
+ //   		+"    }"
+ //   		+"    if (_bcycle > 2) {"
+//    		+"      _bcycle = 0;"
+//    		+"      _rswtch = (int) truncf(RANDFLOAT() * 3.0); "
+//    		+"    }"
+    		+"    float lrmaj = __hexaplay3D; "
+    		+"    float boost = 0; "
+    		+"    int posNeg = 1;"
+    		+"    int loc60;"
+    		+"    int loc120;"
+    	    +"    float scale = __hexaplay3D_scale * 0.5;"
+    		+"    if (RANDFLOAT() < 0.5) {"
+    		+"      posNeg = -1;"
+    		+"    }"
+    		+"    "
+    		+"    int majplane = 1;"
+    		+"    float abmajp = fabsf(__hexaplay3D_majp);"
+    		+"    if (abmajp <= 1.0) {"
+    		+"      majplane = 1; "
+    		+"    } else {"
+    		+"      majplane = 2;"
+    		+"      boost = (abmajp - 1.0) * 0.5; "
+    		+"    }"
+    		+"    "
+    		+"    if (majplane == 2) {"
+    		+"      __pz += __z * 0.5 * __hexaplay3D_zlift + (posNeg * boost);"
+    		+"    } else {"
+    		+"      __pz += __z * 0.5 * __hexaplay3D_zlift;"
+    		+"    }"
+    		+"    "
+    		+"    if (_rswtch <= 1) { "
+    		+"      "
+    		+"      loc60 = _fcycle; "
+    		+"      __px = ((__px + __x) *  scale ) + (lrmaj * _seg60x[loc60]);"
+    		+"      __py = ((__py + __y) *  scale ) + (lrmaj * _seg60y[loc60]);"
+//    		+"      _fcycle += 1;"
+    		+"    } else {"
+    		+"      "
+    		+"      loc120 = _bcycle; "
+    		+"      __px = ((__px + __x) *  scale ) + (lrmaj * _seg120x[loc120]);"
+    		+"      __py = ((__py + __y) *  scale ) + (lrmaj * _seg120y[loc120]);"
+//    		+"      _bcycle += 1;"
+    		+"    }";
+  }
 }

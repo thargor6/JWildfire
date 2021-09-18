@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SphereCropFunc extends VariationFunc {
+public class SphereCropFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
@@ -131,7 +131,46 @@ public class SphereCropFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float cA = fmaxf(-1.0, fminf( __spherecrop_scatter_area , 1.0));"
+    		+"    float x0 =  __spherecrop_x ;"
+    		+"    float y0 =  __spherecrop_y ;"
+    		+"    float z0 =  __spherecrop_z ;"
+    		+"    float cr =  __spherecrop_radius ;"
+    		+"    float ca = cA;"
+    		+"    float vv = __spherecrop;"
+    		+"    __x -= x0;"
+    		+"    __y -= y0;"
+    		+"    __z -= z0;"
+    		+"    float rad = sqrtf(__x * __x + __y * __y + __z * __z);"
+    		+"    float ang = atan2f(__y, __x);"
+    		+"    float az = acosf(__z / rad);"
+    		+"    float rdc = cr + (RANDFLOAT() * 0.5 * ca);"
+    		+"    bool esc = rad > cr;"
+    		+"    bool cr0 =  (__spherecrop_zero  == 1);"
+    		+"    float s = sinf(ang);"
+    		+"    float c = cosf(ang);"
+    		+"    float saz = sinf(az);"
+    		+"    float caz = cosf(az);"
+    		+"    __doHide = false;"
+    		+"    if (cr0 && esc) {"
+    		+"      __px = __py = __pz = 0;"
+    		+"      __doHide = true;"
+    		+"    } else if (cr0 && !esc) {"
+    		+"      __px += vv * __x + x0;"
+    		+"      __py += vv * __y + y0;"
+    		+"      __pz += vv * __z + z0;"
+    		+"    } else if (!cr0 && esc) {"
+    		+"      __px += vv * rdc * c * saz + x0;"
+    		+"      __py += vv * rdc * s * saz + y0;"
+    		+"      __pz += vv * rdc * caz + z0;"
+    		+"    } else if (!cr0 && !esc) {"
+    		+"      __px += vv * __x + x0;"
+    		+"      __py += vv * __y + y0;"
+    		+"      __pz += vv * __z + z0;"
+    		+"    }";
+  }
 }

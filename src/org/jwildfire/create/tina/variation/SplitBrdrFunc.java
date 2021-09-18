@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class SplitBrdrFunc extends VariationFunc {
+public class SplitBrdrFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
@@ -112,7 +112,44 @@ public class SplitBrdrFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float B, b;"
+    		+"    B = (__x*__x + __y*__y) / 4 + 1; "
+    		+"    b = __splitbrdr / B;"
+    		+"    __px += __x * b;"
+    		+"    __py += __y * b;"
+    		+"    float roundX, roundY, offsetX, offsetY;"
+    		+"    roundX = rintf(__x);"
+    		+"    roundY = rintf(__y);"
+    		+"    offsetX = __x - roundX;"
+    		+"    offsetY = __y - roundY;"
+    		+"    if ( RANDFLOAT() >= 0.75) {"
+    		+"      __px += __splitbrdr * (offsetX * 0.5 + roundX);"
+    		+"      __py += __splitbrdr * (offsetY * 0.5 + roundY);"
+    		+"    } else {"
+    		+"      if (fabsf(offsetX) >= fabsf(offsetY)) {"
+    		+"        if (offsetX >= 0.0) {"
+    		+"          __px += __splitbrdr * (offsetX * 0.5 + roundX +  __splitbrdr_x );"
+    		+"          __py += __splitbrdr * (offsetY * 0.5 + roundY +  __splitbrdr_y  * offsetY / offsetX);"
+    		+"        } else {"
+    		+"          __px += __splitbrdr * (offsetX * 0.5 + roundX -  __splitbrdr_y );"
+    		+"          __py += __splitbrdr * (offsetY * 0.5 + roundY -  __splitbrdr_y  * offsetY / offsetX);"
+    		+"        }"
+    		+"      } else {"
+    		+"        if (offsetY >= 0.0) {"
+    		+"          __py += __splitbrdr * (offsetY * 0.5 + roundY +  __splitbrdr_y );"
+    		+"          __px += __splitbrdr * (offsetX * 0.5 + roundX + offsetX / offsetY *  __splitbrdr_y );"
+    		+"        } else {"
+    		+"          __py += __splitbrdr * (offsetY * 0.5 + roundY -  __splitbrdr_y );"
+    		+"          __px += __splitbrdr * (offsetX * 0.5 + roundX - offsetX / offsetY *  __splitbrdr_x );"
+    		+"        }"
+    		+"      }"
+    		+"    }"
+    		+"    __px += __x *  __splitbrdr_px ;"
+    		+"    __py += __y *  __splitbrdr_py ;"
+            + (context.isPreserveZCoordinate() ? "__pz += __splitbrdr *__z;" : "");
+  }
 }

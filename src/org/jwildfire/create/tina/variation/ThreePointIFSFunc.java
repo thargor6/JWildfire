@@ -4,7 +4,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class ThreePointIFSFunc extends SimpleVariationFunc {
+public class ThreePointIFSFunc extends SimpleVariationFunc implements SupportsGPU {
 
 
   /**
@@ -52,6 +52,23 @@ public class ThreePointIFSFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float x, y;"
+    		+"    if (RANDFLOAT() < 0.333) {"
+    		+"      x = __x / 2.0 - __y / 2.0 + 0.5;"
+    		+"      y = -__x / 2.0 - __y / 2.0 + 0.5;"
+    		+"    } else if (RANDFLOAT() < 0.666) {"
+    		+"      x = __y;"
+    		+"      y = __x;"
+    		+"    } else {"
+    		+"      x = -__y / 2.0 + 0.5;"
+    		+"      y = -__x / 2.0 + 0.5;"
+    		+"    }"
+    		+"    __px += x * __threepoint_js;"
+    		+"    __py += y * __threepoint_js;"
+            + (context.isPreserveZCoordinate() ? "__pz += __threepoint_js *__z;" : "");
   }
 }

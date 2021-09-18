@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Truchet2Func extends VariationFunc {
+public class Truchet2Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_EXPONENT1 = "exponent1";
@@ -201,6 +201,90 @@ public class Truchet2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+  }
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float xp = fabsf((__x /  __truchet2_scale  - floorf(__x /  __truchet2_scale )) - 0.5) * 2.0;"
+    		+"    float width =  __truchet2_width1  * (1 - xp) + xp *  __truchet2_width2 ;"
+    		+"    width = (width < 1.0) ? width : 1.0;"
+    		+"    if (width <= 0.0) {"
+    		+"      __px += (__x) * __truchet2;"
+    		+"      __py += (__y) * __truchet2;"
+    		+"    } else {"
+    		+"      float xp2 =  __truchet2_exponent1  * (1 - xp) + xp *  __truchet2_exponent2 ;"
+    		+"      float n = xp2;"
+    		+"      n = (n < 2.0) ? n : 2.0;"
+    		+"      if (n <= 0) {"
+    		+"        __px += (__x) * __truchet2;"
+    		+"        __py += (__y) * __truchet2;"
+    		+"      } else {"
+    		+"        float onen = 1.0 / xp2;"
+    		+"         __truchet2_seed  = fabsf( __truchet2_seed );"
+    		+"        float seed2 = sqrtf( __truchet2_seed  + ( __truchet2_seed  / 2) + 1.e-6f) / (( __truchet2_seed  * 0.5) + 1.e-6f) * 0.25;"
+    		+"        float r0 = 0.0;"
+    		+"        float r1 = 0.0;"
+    		+"        "
+    		+"        float x = __x;"
+    		+"        float y = __y;"
+    		+"        float intx = roundf(x);"
+    		+"        float inty = roundf(y);"
+    		+"        float r = x - intx;"
+    		+"        if (r < 0.0)"
+    		+"          x = 1.0 + r;"
+    		+"        else"
+    		+"          x = r;"
+    		+"        r = y - inty;"
+    		+"        if (r < 0.0)"
+    		+"          y = 1.0 + r;"
+    		+"        else"
+    		+"          y = r;"
+    		+"        float tiletype = 0.0;"
+    		+"        if ( __truchet2_seed  == 0.0)"
+    		+"          tiletype = 0.0;"
+    		+"        else if ( __truchet2_seed  == 1.0)"
+    		+"          tiletype = 1.0;"
+    		+"        else {"
+    		+"          float xrand = roundf(__x);"
+    		+"          float yrand = roundf(__y);"
+    		+"          xrand = xrand * seed2;"
+    		+"          yrand = yrand * seed2;"
+    		+"          float niter = xrand + yrand + xrand * yrand;"
+    		+"          float randint = (niter +  __truchet2_seed ) * seed2 / 2.0;"
+    		+"          randint = fmodf((randint * 32747.0 + 12345.0), 65535.0);"
+    		+"          tiletype = fmodf(randint, 2.0);"
+    		+"        }"
+    		+"        "
+    		+"        if (tiletype < 1.0) {"
+    		+"          r0 = powf((powf(fabsf(x), n) + powf(fabsf(y), n)), onen);"
+    		+"          r1 = powf((powf(fabsf(x - 1.0), n) + powf(fabsf(y - 1.0), n)), onen);"
+    		+"        } else {"
+    		+"          r0 = powf((powf(fabsf(x - 1.0), n) + powf(fabsf(y), n)), onen);"
+    		+"          r1 = powf((powf(fabsf(x), n) + powf(fabsf(y - 1.0), n)), onen);"
+    		+"        }"
+    		+"        float rmax = 0.5 * (powf(2.0, onen) - 1.0) * width;"
+    		+"        float r00 = fabsf(r0 - 0.5) / rmax;"
+    		+"        float r11 = fabsf(r1 - 0.5) / rmax;"
+    		+"        if ( __truchet2_inverse  == 0) {"
+    		+"          if (r00 < 1.0 || r11 < 1.0) {"
+    		+"            __px += (x + floorf(__x)) * __truchet2;"
+    		+"            __py += (y + floorf(__y)) * __truchet2;"
+    		+"          } else "
+    		+"          {"
+    		+"            __px += 100.0;"
+    		+"            __py += 100.0;"
+    		+"          }"
+    		+"        } else {"
+    		+"          if (r00 > 1.0 && r11 > 1.0) {"
+    		+"            __px += (x + floorf(__x)) * __truchet2;"
+    		+"            __py += (y + floorf(__y)) * __truchet2;"
+    		+"          } else "
+    		+"          {"
+    		+"            __px += 10000.0;"
+    		+"            __py += 10000.0;"
+    		+"          }"
+    		+"        }"
+    		+"      }"
+    		+"    }";
   }
 }

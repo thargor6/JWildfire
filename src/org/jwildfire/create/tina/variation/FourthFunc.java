@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class FourthFunc extends VariationFunc {
+public class FourthFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SPIN = "spin";
@@ -135,7 +135,58 @@ public class FourthFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return  "     float sqrvvar = __fourth * __fourth;"
+    		+"    if (__x > 0.0 && __y > 0.0) "
+    		+"    {"
+    		+"      float a = atan2f(__y, __x);"
+    		+"      float r = 1.0 / sqrtf(__x*__x + __y*__y);"
+    		+"      float s = sinf(a);"
+    		+"      float c = cosf(a);"
+    		+"      __px += __fourth * r * c;"
+    		+"      __py += __fourth * r * s;"
+    		+"    } "
+    		+"    else if (__x > 0.0 && __y < 0.0) "
+    		+"    {"
+    		+"      float r2 = __x*__x + __y*__y;"
+    		+"      if (r2 < sqrvvar) {"
+    		+"        float r = __fourth * sqrtf(sqrvvar / r2 - 1.0);"
+    		+"        __px += r * __x;"
+    		+"        __py += r * __y;"
+    		+"      } else {"
+    		+"        __px += __fourth * __x;"
+    		+"        __py += __fourth * __y;"
+    		+"      }"
+    		+"    }"
+           +"    else if (__x < 0.0 && __y > 0.0) "
+    		+"    {"
+    		+"      float r;"
+    		+"      float sina, cosa;"
+    		+"      float  x  = __x - __fourth_x;"
+    		+"      float  y  = __y + __fourth_y;"
+    		+"      r = sqrtf(x  * x +  y  * y);"
+    		+"      if (r < __fourth) {"
+    		+"        float a = atan2f( y ,  x ) + __fourth_spin + __fourth_twist * (__fourth - r);"
+    		+"        sina = sinf(a);"
+    		+"        cosa = cosf(a);"
+    		+"        r = __fourth * r;"
+    		+"        __px += r * cosa + __fourth_x;"
+    		+"        __py += r * sina - __fourth_y;"
+    		+"      }"
+            +"      else {"
+    		+"        r = __fourth * (1.0 + __fourth_space / r);"
+    		+"        __px += r *  x  + __fourth_x;"
+    		+"        __py += r *  y  - __fourth_y;"
+    		+"      }"
+    		+"    }"
+            +"    else "
+    		+"    {"
+    		+"      __px += __fourth * __x;"
+    		+"      __py += __fourth * __y;"
+    		+"    }"
+    		+ (context.isPreserveZCoordinate() ? "__pz += __fourth *__z;" : "");
+  }
 }

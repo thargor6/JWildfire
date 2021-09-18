@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Spirograph3DFunc extends VariationFunc {
+public class Spirograph3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
@@ -126,7 +126,47 @@ public class Spirograph3DFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float t = ( __spirograph3D_tmax  - __spirograph3D_tmin) * RANDFLOAT() + __spirograph3D_tmin;"
+    		+"    float w1, w2, w3;"
+    		+"    switch ( (int) __spirograph3D_mode ) {"
+    		+"      case 0:"
+    		+"        w1 = w2 = w3 =  __spirograph3D_width  * RANDFLOAT() -  __spirograph3D_width  / 2;"
+    		+"        break;"
+    		+"      case 1:"
+    		+"        w1 =  __spirograph3D_width  * RANDFLOAT() -  __spirograph3D_width  / 2;"
+    		+"        w2 = w1 * sinf(36 * t + (2.0f*PI) / 3);"
+    		+"        w3 = w1 * sinf(36 * t + 2 * (2.0f*PI) / 3);"
+    		+"        w1 = w1 * sinf(36 * t);"
+    		+"        break;"
+    		+"      case 2:"
+    		+"        w1 =  __spirograph3D_width  * RANDFLOAT() -  __spirograph3D_width  / 2;"
+    		+"        w2 =  __spirograph3D_width  * RANDFLOAT() -  __spirograph3D_width  / 2;"
+    		+"        w3 =  __spirograph3D_width  * RANDFLOAT() -  __spirograph3D_width  / 2;"
+    		+"        break;"
+    		+"      case 3:"
+    		+"        w1 =  __spirograph3D_width  * (RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() - 2) / 2;"
+    		+"        w2 =  __spirograph3D_width  * (RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() - 2) / 2;"
+    		+"        w3 =  __spirograph3D_width  * (RANDFLOAT() + RANDFLOAT() + RANDFLOAT() + RANDFLOAT() - 2) / 2;"
+    		+"        break;"
+    		+"      case 4:"
+    		+"        w1 = (RANDFLOAT() < 0.5) ?  __spirograph3D_width  : - __spirograph3D_width ;"
+    		+"        w2 = w3 = 0;"
+    		+"        break;"
+    		+"      default:"
+    		+"        w1 = w2 = w3 = 0;"
+    		+"    }"
+    		+"    float x1 = (  __spirograph3D_a  +  __spirograph3D_b  ) * cosf(t) -  __spirograph3D_c  * cosf((  __spirograph3D_a  +  __spirograph3D_b ) / __spirograph3D_b * t);"
+    		+"    float y1 = (  __spirograph3D_a  +  __spirograph3D_b  ) * sinf(t) -  __spirograph3D_c  * sinf((  __spirograph3D_a  +  __spirograph3D_b ) / __spirograph3D_b * t);"
+    		+"    float z1 =  __spirograph3D_c  * sinf((  __spirograph3D_a  +  __spirograph3D_b ) / __spirograph3D_b * t);"
+    		+"    __px += __spirograph3D * (x1 + w1);"
+    		+"    __py += __spirograph3D * (y1 + w2);"
+    		+"    __pz += __spirograph3D * (z1 + w3);"
+    		+"    if ( __spirograph3D_direct_color  != 0) {"
+    		+"      __pal = fmodf(t / (2.0f*PI), 1);"
+    		+"     }";
+  }
 }
