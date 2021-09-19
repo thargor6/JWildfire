@@ -25,7 +25,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 // Jacobi-elliptic-integral by dark-beam,
 //  https://www.deviantart.com/dark-beam/art/Jacobi-incomp-ell-int-of-the-1st-kind-plugin-462461247
 
-public class JacElkFunc extends VariationFunc {
+public class JacElkFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_K = "k";
@@ -254,7 +254,123 @@ public class JacElkFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+	  return "    float e_phi, e_psi;" 
+    		+"    float result = 0.0;"
+    		+"    float sinA, cosA;"
+    		+"    float phi, psi;"
+    		+"    phi = __x;"
+    		+"    psi = __y;"
+    		+"    float cotphi = jac_elk_safe_cot(phi);"
+    		+"    float cotphi2 = cotphi*cotphi;"
+    		+"    float b = -(cotphi2 +  __jac_elk_k  * sqrf(sinhf(psi) / (EPSILON + sinf(phi))) - 1. +  __jac_elk_k );"
+    		+"    b = b / 2;"
+    		+"    float c = -(1. -  __jac_elk_k ) * cotphi2;"
+    		+"    c = jac_elk_safe_sqrt2(b*b - c);"
+    		+"    float X1 = fmaxf(-b + c, -b - c);"
+    		+"    float mu = jac_elk_safe_sqrt2("
+    		+"        (X1 / jac_elk_nonz(cotphi2) - 1.0) / jac_elk_nonz( __jac_elk_k )); "
+    		+"    mu = sign(psi) * mu;"
+    		+"    float lambda = sign(phi) * jac_elk_safe_sqrt2(X1);"
+    		+"    sinA = sign(lambda) / sqrtf(lambda*lambda + 1.0);"
+    		+"    cosA = lambda * sinA;"
+    		+"    e_phi = sinA * jac_elk_RF(cosA*cosA,"
+    		+"        1.0 -  __jac_elk_k  * sinA*sinA, 1.0);"
+    		+"    "
+    		+"    cosA = 1.0 / sqrtf(mu*mu + 1.0);"
+    		+"    sinA = mu * cosA;"
+    		+"    e_psi = sinA * jac_elk_RF(cosA*cosA,"
+    		+"        1.0 - (1. -  __jac_elk_k ) * sinA*sinA, 1.0);"
+    		+"    __px += __jac_elk * e_phi;"
+    		+"    __py += __jac_elk * e_psi;"
+            + (context.isPreserveZCoordinate() ? "__pz += __jac_elk *__z;" : "");
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__  float  jac_elk_intpow (float X, int p) {"
+	    		+"    float ipret = 1.0;"
+	    		+"    float mulf = X;"
+	    		+"    int i;"
+	    		+"    int pwr = (int) (p * sign(p));"
+	    		+"    if (p < 0)"
+	    		+"      mulf = 1.0 / (1E-8 + fabsf(mulf));"
+	    		+"    for (i = 1; i <= pwr; i++) {"
+	    		+"      ipret *= mulf;"
+	    		+"    }"
+	    		+"    return ipret;"
+	    		+"  }"
+	    		+"__device__   float  jac_elk_nonz (float nz) {"
+	    		+"    if (fabsf(nz) <= EPSILON) {"
+	    		+"      return EPSILON * sign(nz);"
+	    		+"    }"
+	    		+"    return nz;"
+	    		+"  }"
+	    		+"__device__   float  jac_elk_safe_acot (float angle) {"
+	    		+"    if (fabsf(angle) <= EPSILON) {"
+	    		+"      return 0.0;"
+	    		+"    }"
+	    		+"    return atan2f(1.0, angle);"
+	    		+"  }"
+	    		+"__device__   float  jac_elk_safe_cot (float angle) {"
+	    		+"    float sinA, cosA;"
+	    		+"    "
+	    		+"    sinA = sinf(angle);"
+	    		+"    cosA = cosf(angle);"
+	    		+"    return cosA /  jac_elk_nonz (sinA);"
+	    		+"  }"
+	    		+"__device__   float  jac_elk_safe_tan (float angle) {"
+	    		+"    float sinA, cosA;"
+	    		+"    "
+	    		+"    sinA = sinf(angle);"
+	    		+"    cosA = cosf(angle);"
+	    		+"    return sinA /  jac_elk_nonz (cosA);"
+	    		+"  }"
+	    		+"__device__   float  jac_elk_safe_sqrt (float ssq) {"
+	    		+"    return sign(ssq) * sqrtf(fabsf(ssq));"
+	    		+"  }"
+	    		
+	    		+"__device__   float  jac_elk_safe_sqrt2 (float ssq) {"
+	    		+"    return sqrt(fabsf(ssq));"
+	    		+"  }"
+	    		
+	    		+"__device__   float  jac_elk_RF (float X, float Y, float Z) "
+	    		+"  {"
+	    		+"    float result = 0;"
+	    		+"    float A = 0;"
+	    		+"    float lamda = 0;"
+	    		+"    float dx = 0;"
+	    		+"    float dy = 0;"
+	    		+"    float dz = 0;"
+	    		+"    float MinError = 1E-5; "
+	    		+"    int MaxIt = 25; "
+	    		+"    int ItC = 0;"
+	    		+"    do {"
+	    		+"      lamda = sqrtf(X * Y) + sqrtf(Y * Z) + sqrtf(Z * X);"
+	    		+"      X = (X + lamda) / 4.;"
+	    		+"      Y = (Y + lamda) / 4.;"
+	    		+"      Z = (Z + lamda) / 4.;"
+	    		+"      A = (X + Y + Z) / 3.;"
+	    		+"      dx = (1. - X / A);"
+	    		+"      dy = (1. - Y / A);"
+	    		+"      dz = (1. - Z / A);"
+	    		+"      ItC++;"
+	    		+"      if (ItC >= MaxIt)"
+	    		+"        break;"
+	    		+"    }"
+	    		+"    while (fmaxf(fmaxf(fabsf(dx), fabsf(dy)), fabsf(dz)) > MinError);"
+	    		+"    float E2 = 0;"
+	    		+"    float E3 = 0;"
+	    		+"    E2 = dx * dy + dy * dz + dz * dx;"
+	    		+"    E3 = dy * dx * dz;"
+	    		+"    result = 1.0 - (1. / 10.) * E2 + (1. / 14.) * E3 + (1. / 24.) *  jac_elk_intpow (E2, 2)"
+	    		+"        - (3. / 44.) * E2 * E3 - (5. / 208.) *  jac_elk_intpow (E2, 3)"
+	    		+"        + (3. / 104.) *  jac_elk_intpow (E3, 2)"
+	    		+"        + (1. / 16.) *  jac_elk_intpow (E2, 2) * E3;"
+	    		+"    result *= (1.0 / sqrtf(A));"
+	    		+"    return result;"
+	    		+"  }";
+  }
 }

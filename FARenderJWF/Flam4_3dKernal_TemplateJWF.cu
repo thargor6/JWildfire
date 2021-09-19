@@ -2436,6 +2436,86 @@ __device__ float3  hsv2rgb (float3 c)
 	  float3 p = abs(fract(make_float3(c.x,c.x,c.x)+(make_float3(K.x,K.y,K.z)))*(6.0f)-(make_float3(K.w,K.w,K.w)));
 	  return mix(make_float3(K.x,K.x,K.x), clamp(p - make_float3(K.x,K.x,K.x), 0.0f, 1.0f), c.y)*c.z;
 	}
+	
+	struct __align__(8) Jacobi_elliptic_result
+{ float cn;
+  float dn;
+  float sn;
+};
+	
+__device__ void Jacobi_elliptic( float uu, float emmc, Jacobi_elliptic_result *res)
+{
+    res->cn=0.0;
+	res->dn=0.0;
+	res->sn=0.0;
+    
+    float CA = 0.0003; 
+    float a, b, c = 0.0, d = 0.0, em[13] , en[13];
+    int bo;
+    int l = 0;
+    int ii;
+    int i;
+    
+    
+    float emc = emmc;
+    float u = uu;
+    if (emc != 0.0) {
+      bo = 0;
+      if (emc < 0.0)
+        bo = 1;
+      if (bo != 0) {
+        d = 1.0 - emc;
+        emc = -emc / d;
+        d = sqrtf(d);
+        u = d * u;
+      }
+      a = 1.0;
+      res->dn = 1.0;
+      
+      for (i = 0; i < 8; i++) {
+        l = i;
+        em[i] = a;
+        emc = sqrtf(emc);
+        en[i] = emc;
+        c = 0.5 * (a + emc);
+        if (fabsf(a - emc) <= CA * a)
+          break;
+        emc = a * emc;
+        a = c;
+      }
+      u = c * u;
+      res->sn = sinf(u);
+      res->cn = cosf(u);
+      if (res->sn != 0.0) {
+        a = res->cn / res->sn;
+        c = a * c;
+        for (ii = l; ii >= 0; --ii) {
+          b = em[ii];
+          a = c * a;
+          c = res->dn * c;
+          res->dn = (en[ii] + a) / (b + a);
+          a = c / b;
+        }
+        a = 1.0 / sqrtf(c * c + 1.0);
+        if (res->sn < 0.0)
+          (res->sn) = -a;
+        else
+          res->sn = a;
+        res->cn = c * (res->sn);
+      }
+      if (bo != 0) {
+        a = res->dn;
+        res->dn = res->cn;
+        res->cn = a;
+        res->sn = (res->sn) / d;
+      }
+    } else {
+      res->cn = 1.0 / coshf(u);
+      res->dn = res->cn;
+      (res->sn) = tanhf(u);
+    }
+}
+
 //------------- END of JS CODE--------------------------
 
 
@@ -2737,6 +2817,126 @@ __device__ void Complex_Atan(Complex *c) {
     Complex_AtanH(c);
     Complex_Flip(c);
 } 
+
+
+// Additional complex Functions
+
+__device__ float Complex_arg (Complex z) {
+    float result;
+    result = atan2f(z.im, z.re);
+    return result;
+  }
+  
+__device__ float Complex_norm(Complex z) {
+    double u = z.re;
+    double v = z.im;
+    return (u * u + v * v);
+  }
+  
+__device__ float Complex_mag (Complex z) {
+    return sqrtf(z.re*z.re + z.im*z.im);
+ }
+__device__ Complex Complex_plus (Complex a,Complex z) {
+   Complex tmp;
+   Complex_Init(&tmp, a.re+ z.re, a.im + z.im);
+   return tmp;
+  }
+  
+__device__ Complex Complex_minus (Complex a,Complex z) {
+   Complex tmp;
+   Complex_Init(&tmp, a.re - z.re, a.im - z.im);
+   return tmp;
+  }
+
+__device__ Complex Complex_times (Complex a, float x) {
+    Complex tmp;
+    Complex_Init(&tmp,x*a.re,x*a.im);
+	return tmp;
+}
+
+__device__ Complex Complex_times (Complex a, Complex z) {
+   Complex tmp;
+   Complex_Init(&tmp, a.re*z.re - a.im*z.im,a.re*z.im + a.im*z.re);
+   return tmp;
+}
+
+__device__ Complex Complex_divideBy (Complex a, Complex z) {
+    Complex tmp;
+    float rz = Complex_mag(z);
+    if(fabsf(rz) > 1.0e-12)
+    {
+	  Complex_Init(&tmp,(a.re * z.re + a.im * z.im)/(rz * rz),
+                        (a.im * z.re - a.re * z.im)/(rz * rz));
+    }	
+	return tmp;
+}
+
+__device__ Complex Complex_sqrt(Complex z) {
+    Complex tmp;
+	float r = sqrtf(Complex_mag(z));
+    float phi = Complex_arg(z)/2.0;
+	Complex_Init(&tmp,r*cosf(phi),r*sinf(phi));
+	return tmp;
+}
+
+__device__ Complex Complex_ln(Complex z) {
+    Complex tmp;
+    float rr = logf(Complex_mag(z))/logf(2.718);
+    float ii = Complex_arg(z);
+    Complex_Init(&tmp,rr,ii);
+	return tmp;
+}
+  
+__device__ Complex Complex_sin(Complex z) { 
+    float r = sinf(z.re) * coshf(z.im);
+    float i = cosf(z.re) * sinhf(z.im);
+	Complex tmp;
+	Complex_Init(&tmp,r,i);
+    return tmp;
+  }
+
+__device__ Complex Complex_asinh(Complex zz)  {
+    Complex i,z;
+	Complex_Init(&i,1.0,0.0);
+	z = Complex_plus(i,Complex_times(zz,zz));
+    z = Complex_sqrt(z);
+    z = Complex_plus(zz,z);
+    z = Complex_ln(z);
+    return z;
+}
+
+__device__ Complex Complex_asin(Complex z) {
+    Complex j,zz;
+	Complex_Init(&j,0.0, 1.0);
+	Complex one;
+	Complex_Init(&one,1.0,0.0);
+	zz = Complex_minus(one , Complex_times(z,z));
+    zz = Complex_sqrt(zz);
+    zz = Complex_plus(zz,Complex_times(j,z));
+    zz = Complex_times(Complex_times(j,Complex_ln(zz)), -1.0);
+    return zz;
+  }
+
+__device__ Complex Complex_acos(Complex z) {
+      Complex i,j,zz;
+	  Complex_Init(&i,1.0,0.0);
+	  Complex_Init(&j,0.0,1.0);
+	  zz=Complex_minus(Complex_times(z,z),i);
+      zz = Complex_sqrt(zz);
+      zz = Complex_plus(z,zz);
+      zz = Complex_times(Complex_times(j,Complex_ln(zz)),-1.0);
+      return zz;
+}
+
+__device__ Complex Complex_tan(Complex z) {
+    Complex tmp;
+    float nenner = cosf(2.*z.re) + coshf(2*z.im);
+    float r = sinf(2.*z.re) / nenner;
+    float i = sinhf(2.*z.im) / nenner;
+	Complex_Init(&tmp,r,i);
+    return tmp;;
+}
+
 
   
 #endif
