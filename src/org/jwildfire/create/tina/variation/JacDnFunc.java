@@ -24,7 +24,7 @@ import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.create.tina.variation.JacCnFunc.Jacobi_elliptic;
 
-public class JacDnFunc extends VariationFunc {
+public class JacDnFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_K = "k";
@@ -78,7 +78,21 @@ public class JacDnFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return "    float NumX, NumY, Denom;"
+    		+"    Jacobi_elliptic_result jac_x ;"
+    		+"    Jacobi_elliptic(__x,  __jac_dn_k , &jac_x);"
+    		+"    Jacobi_elliptic_result jac_y ;"
+    		+"    Jacobi_elliptic(__y, 1.0 -  __jac_dn_k , &jac_y);"
+    		+"    NumX = jac_x.dn * jac_y.cn * jac_y.dn;"
+    		+"    NumY = -jac_x.cn * jac_x.sn * jac_y.sn *  __jac_dn_k ;"
+    		+"    Denom = (jac_x.sn * jac_x.sn) * (jac_y.sn * jac_y.sn ) *  __jac_dn_k  + (jac_y.cn * jac_y.cn);"
+    		+"    Denom = __jac_dn / (EPSILON  + Denom);"
+    		+"    __px += Denom * NumX;"
+    		+"    __py += Denom * NumY;"
+          + (context.isPreserveZCoordinate() ? "__pz += __jac_dn *__z;\n" : "");
+  }
 }

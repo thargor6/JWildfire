@@ -8,7 +8,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 
-public class JacAsnFunc extends VariationFunc {
+public class JacAsnFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_KR = "kr";
@@ -71,7 +71,7 @@ public class JacAsnFunc extends VariationFunc {
       }
       case 2:
       case 6: {
-        (Complex.acos(phi).plus(asin(modul.times(Complex.sqrt(t1.minus(phi.times(phi))))))).times(0.5);
+        phi=(Complex.acos(phi).plus(asin(modul.times(Complex.sqrt(t1.minus(phi.times(phi))))))).times(0.5);
         break;
       }
       case 3:
@@ -99,12 +99,12 @@ public class JacAsnFunc extends VariationFunc {
     // elliptic integrals of the first and second kind
     // by Landen transformation. (2011)
 
-    for (int j = 0; j < 10; j++) {
+    for (int jj = 0; jj < 10; jj++) {
 
       if (norm(t1.minus(modul)) < MathLib.SMALL_EPSILON) {
         break; // enough iters.
       }
-      if (j > 0)
+      if (jj > 0)
         phi = ((phi.plus(asin(modul.times(Complex.sin(phi)))))).times(0.5);
 
       try {
@@ -157,7 +157,71 @@ public class JacAsnFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    Complex geo1;"
+    		+"    Complex_Init(&geo1,0.0, 0.0);"
+    		+"    Complex phi;"
+    		+"    Complex_Init(&phi,__x, __y);"
+    		+"    Complex t1,j;"
+    		+"    Complex_Init(&t1,1.0,0.0);"
+    		+"    Complex_Init(&j,0.0,1.0);"
+    		+"    Complex modul;"
+    		+"    Complex_Init(&modul, __jac_asn_kr ,  __jac_asn_ki );"
+    		+"    switch ( (int) __jac_asn_type ) {"
+    		+"      case 0:"
+    		+"      case 4: {"
+//          phi = (phi.plus(asin(modul.times(Complex.sin(phi))))).times(0.5);
+            +"        phi= Complex_times(Complex_plus(phi, Complex_asin( Complex_times(modul,Complex_sin(phi)) )), 0.5);"
+    		+"        break;"
+    		+"      }"
+    		+"      case 1:"
+    		+"      case 5: {"
+//   phi = (asin(phi).plus(asin(modul.times(phi)))).times(0.5);
+    		+"      phi= Complex_times( Complex_plus( Complex_asin(phi) ,  Complex_asin( Complex_times(modul,phi) ) ) , 0.5);"
+    		+"        break;"
+    		+"      }"
+    		+"      case 2:"
+    		+"      case 6: {"
+//   phi= (Complex.acos(phi).plus(asin(modul.times(Complex.sqrt(t1.minus(phi.times(phi))))))).times(0.5);	
+ 			+"        phi= Complex_times( Complex_plus( Complex_acos(phi) , Complex_asin(Complex_times(modul, Complex_sqrt(Complex_minus(t1,Complex_times(phi,phi) )) ) ) ) , 0.5) ;"
+    		+"        break;"
+    		+"      }"
+    		+"      case 3:"
+    		+"      case 7: {"
+//   phi = Complex.j.times(asinh(phi));
+  			+"        phi=Complex_times(j,Complex_asinh(phi));"
+//   phi = phi.plus(asin(modul.times(Complex.sin(phi)))).times(0.5);
+  			+"        phi= Complex_times( Complex_plus(phi, Complex_asin(Complex_times(modul,Complex_sin(phi)))), 0.5);"
+    		+"        break;"
+    		+"      }"
+    		+"    }"
+    		+"    if ( (int) __jac_asn_type  > 3) { "
+    		+"      Complex_Copy(&geo1,&phi);"
+    		+"      Complex_Copy(&phi,&modul);"
+    		+"      Complex_Copy(&modul,&geo1);"
+    		+"    }"
+    		+"    Complex geo;"
+    		+"    Complex_Init(&geo,__jac_asn, 0.0);"
 
+    		+"    for (int jj = 0; jj < 10; jj++) {"
+    		+"      if ( Complex_norm( Complex_minus(t1,modul) ) < 1.0e-6f) {"
+    		+"        break; "
+    		+"      }"
+    		+"      if (jj > 0)"
+    		+"        phi = Complex_times(Complex_plus(phi , Complex_asin( Complex_times(modul,Complex_sin(phi) ))) , 0.5);"
+    		+"      Complex_Init(&geo1,2.0,0.0);"
+    		+"      geo1 = Complex_divideBy(geo1,  Complex_plus(t1,modul) );"
+    		+"      geo =  Complex_times(geo,geo1);"
+    		+"      modul = Complex_times(geo1, Complex_sqrt(modul));"
+			+"    }"
+    		+"    Complex t2;"
+    		+"    Complex_Init(&t2, 0.25*PI, 0.0);"
+    		+"    phi = Complex_times( geo , Complex_ln( Complex_tan( Complex_plus( Complex_times (phi,0.5), t2 ) ) ) );"
+    		+"    __px += phi.re;"
+    		+"    __py += phi.im;"
+    		+ (context.isPreserveZCoordinate() ? "__pz += __jac_asn *__z;" : "");
+  }
 }
