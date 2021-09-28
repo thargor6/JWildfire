@@ -18,7 +18,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.base.Tools;
 
-public class TQMirrorFunc extends VariationFunc {
+public class TQMirrorFunc extends VariationFunc implements SupportsGPU {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PARAM_PRESET = "preset";
@@ -304,6 +304,71 @@ public class TQMirrorFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
+	  @Override
+	  public String getGPUCode(FlameTransformationContext context) {
+		  return   " 		float x = __x;"
+				  +"		float y = __y;"
+				  +"     float a= __tqmirror_a;"
+				  +"     float b= __tqmirror_b;"
+				  +"     float c= __tqmirror_c;"
+				  +"     float d= __tqmirror_d;"
+				  +"     float e= __tqmirror_e;"
+				  +"     float f= __tqmirror_f;"
+				  +"     float g= __tqmirror_g;"
+				  +"     float h= __tqmirror_h;"
+				  +"     float i= __tqmirror_i;"
+				  +"     float j= __tqmirror_j;"
+				  +"     float k= __tqmirror_k;"
+				  +"     float l= __tqmirror_l;"
+				  +"     float m= __tqmirror_m;"
+				  +"     float n= __tqmirror_n;"
+				  +"     float o= __tqmirror_o;"
+				  +"     float p= __tqmirror_p;"
+				  +"     float q= __tqmirror_q;"
+				  +"     float r= __tqmirror_r;"
+				  +"     float s= __tqmirror_s;"
+				  +"		if (__tqmirror * d + x < l || __tqmirror * e + y < m) "
+				  +"		{"
+				  +"			if ( __tqmirror_type  != 0) {"
+				  +"				__px += x * r;"
+				  +"				__py += y * s;"
+				  +"			} else {"
+				  +"				__px += y * r;"
+				  +"				__py += x * s;"
+				  +"			}"
+				  +"		}"
+				  +"		else  if (x < n && y < o) {"
+				  +"			  __px += x + __tqmirror * f;"
+				  +"			  __py += y + __tqmirror * g;"
+				  +"		   } else {"
+				  +"			  if ( __tqmirror_mode  == 0) {"
+				  +"				if (x + q < __tqmirror && y < __tqmirror * a && x + __tqmirror * b > l && y + __tqmirror * c > p) {"
+				  +"					__px -= y * h;"
+				  +"					__py -= x * i;"
+				  +"				} else {"
+				  +"					__px += x * j;"
+				  +"					__py += y * k;"
+				  +"				}"
+				  +"			  } else if ( __tqmirror_mode  == 1) {"
+				  +"				if (x + q < __tqmirror && y < __tqmirror * a && x + __tqmirror * b > l && y + __tqmirror * c > p) {"
+				  +"					__px -= y * h;"
+				  +"					__py -= x * i;"
+				  +"				} else {"
+				  +"					__px -= x * j;"
+				  +"					__py -= y * k;"
+				  +"				}"
+				  +"			  } else if ( __tqmirror_mode  == 2) {"
+				  +"				if (x + q < __tqmirror && y < __tqmirror * a && x + __tqmirror * b > l && y + __tqmirror * c > p) {"
+				  +"					__px += y * h;"
+				  +"					__py -= x * i;"
+				  +"				} else {"
+				  +"					__px += x * j;"
+				  +"					__py -= y * k;"
+				  +"				}"
+				  +"			}"
+				  +"		}"
+		          +         (context.isPreserveZCoordinate() ? "__pz += __tqmirror *__z;" : "");
+	  }
 }

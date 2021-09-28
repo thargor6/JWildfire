@@ -44,7 +44,8 @@ public class CrownFunc extends VariationFunc implements SupportsGPU {
 
     for (int k = 1; k < 15; k++) {
       double denom = MathLib.pow(a, b * k);
-      double th = MathLib.pow(a, (double) k) * MathLib.pow(-1.0, (double) k) * t;
+      double sign= (k%2==0)?-1.0:1.0; 
+      double th = MathLib.pow(a, (double) k)* t *sign;
       wt.Add(new Complex(sin(th) / denom, cos(th) / denom));
     }
     x = wt.re;
@@ -91,17 +92,18 @@ public class CrownFunc extends VariationFunc implements SupportsGPU {
     		+"    float t = (-PI + 2.0 * PI * RANDFLOAT());"
     		+"    Complex wt;"
     		+"    Complex_Init(&wt,0.0, 0.0);"
+    		+"    Complex tmp;"
     		+"    for (int k = 1; k < 15; k++) {"
-    		+"      float denom = powf( __crown_js_a ,  __crown_js_b  * k);"
-    		+"      float th = powf(__crown_js_a, (float) k) * powf(-1.0, (float) k) * t;"
-    		+"      Complex tmp;"
+    		+"      float denom = powf( __crown_js_a , __crown_js_b  * (float) k);"
+    		+"      float sign=(k%2==0)?-1.0:1.0;"
+    		+"      float th = powf(__crown_js_a, (float) k)*t*sign;"
     		+ "     Complex_Init(&tmp,sinf(th) / denom, cosf(th) / denom);"
     		+"      Complex_Add(&wt,&tmp );"
     		+"    }"
     		+"    x = wt.re;"
     		+"    y = wt.im;"
     		+"    float m=Complex_Mag2(&wt);"
-    		+"    z = powf(m, 2);"
+    		+"    z = powf(m, 2.0);"
     		+"    __px += x * __crown_js;"
     		+"    __py += y * __crown_js;"
     		+"    __pz += z * __crown_js;"
