@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class CircleTrans1Func extends VariationFunc {
+public class CircleTrans1Func extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SC = "Sc";
@@ -141,7 +141,69 @@ public class CircleTrans1Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
-
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return   "    float U, X, Y;"
+    		+"    int M, N;"
+    		+"    float2 Uxy = make_float2(0.0,0.0);"
+    		+"    Uxy=circleTrans1_Trans(__circleTrans1_X, __circleTrans1_Y, __x, __y);"
+    		+"    M = (int) floorf(0.5 * Uxy.x / __circleTrans1_Sc);"
+    		+"    N = (int) floorf(0.5 * Uxy.y / __circleTrans1_Sc);"
+    		+"    X = Uxy.x - (M * 2 + 1) * __circleTrans1_Sc;"
+    		+"    Y = Uxy.y - (N * 2 + 1) * __circleTrans1_Sc;"
+    		+"    U = sqrtf(X * X + Y * Y);"
+    		+"    bool b1=( circleTrans1_DiscretNoise2(M + __circleTrans1_Seed, N) > __circleTrans1_Dens );"
+    		+"    bool b2=( U  >  (0.3 + 0.7 * circleTrans1_DiscretNoise2(M + 10, N + 3)) * __circleTrans1_Sc );"
+    		+"    if (! (b1 || b2 ) ) {"
+    		+"     float f1=RANDFLOAT();"
+    		+"     float f2=RANDFLOAT();"
+    		+"     float f3=RANDFLOAT();"
+    		+"      Uxy=circleTrans1_CircleR( __circleTrans1_X,__circleTrans1_Y,__circleTrans1_Sc,__circleTrans1_Seed,__circleTrans1_Dens,f1,f2,f3);"
+    		+"    }"
+    		+"    __px += __circleTrans1 * Uxy.x;"
+    		+"    __py += __circleTrans1 * Uxy.y;"
+            + (context.isPreserveZCoordinate() ? "__pz += __circleTrans1 *__z;" : "");
+  }
+  @Override
+  public String getGPUFunctions(FlameTransformationContext context) {
+	    return   "__device__ float  circleTrans1_DiscretNoise2 (int X, int Y) {"
+	    		+"  float AM = 1.0 / 2147483647;"
+	    		+"    int n = X + Y * 57;"
+	    		+"    n = (n << 13) ^ n;"
+	    		+"    return ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) * AM;"
+	    		+"  }"
+	    		
+	    		+"__device__ float2  circleTrans1_CircleR (  float X1,float Y1,float Sc, float Seed, float Dens,float f1,float f2, float f3) {"
+	    		+"    float X, Y, s, c, alpha, U;"
+	    		+"    int M, N;"
+	    		+"    int maxIter = 100;"
+	    		+"    int iter = 0;"
+	    		+"    float2 uv;"
+	    		+"    do {"
+	    		+"      X = fabsf(X1) * (1.0 - 2.0 * f1);"
+	    		+"      Y = fabsf(Y1) * (1.0 - 2.0 * f2);"
+	    		+"      M = (int) floorf(0.5 * X / Sc);"
+	    		+"      N = (int) floorf(0.5 * Y / Sc);"
+	    		+"      alpha = 2.0 * PI * f3;"
+	    		+"      s = sinf(alpha);"
+	    		+"      c = cosf(alpha);"
+	    		+"      U = 0.3 + 0.7 *  circleTrans1_DiscretNoise2 (M + 10, N + 3);"
+	    		+"      X = U * c;"
+	    		+"      Y = U * s;"
+	    		+"      if (++iter > maxIter) break;"
+	    		+"    } while ( circleTrans1_DiscretNoise2 (M + Seed, N) > Dens);"
+	    		+"    uv.x = X + (M * 2 + 1) * Sc;"
+	    		+"    uv.y = Y + (N * 2 + 1) * Sc;"
+	    		+"    return uv;"
+	    		+"  }" 
+	    		
+	    		+"__device__  float2  circleTrans1_Trans (float A, float B, float X, float Y) {"
+	    		+"   float2 v;"
+	    		+"    v.x = (X - A) * 0.5 + A;"
+	    		+"    v.y = (Y - B) * 0.5 + B;"
+	    		+"    return v;"
+	    		+"  }";
+  }
 }
