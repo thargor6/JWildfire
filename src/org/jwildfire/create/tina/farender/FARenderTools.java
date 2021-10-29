@@ -135,7 +135,7 @@ public class FARenderTools {
     return formula.replaceAll("(atan2|asin|sin|acos|lerp|cos|fabs|log|pow|sqrt|sqr|sgn|exp|fmod|sinh|round|tan|cosh|hypot|rint|trunc|floor)\\(", "$1f(");
   }
 
-  public static List<Flame> prepareFlame(Flame pFlame) {
+  public static List<Flame> prepareFlame(Flame pFlame, boolean zPass) {
     List<Flame> res = new ArrayList<>();
     double time = pFlame.getFrame() >= 0 ? pFlame.getFrame() : 0;
     if (pFlame.getMotionBlurLength() > 0) {
@@ -147,14 +147,19 @@ public class FARenderTools {
         if (brightnessScl < 0.01) {
           brightnessScl = 0.01;
         }
-        // HACK: misusing the zBufferScale-field because it will never be used by FARender, can later easily changed if necessary, by introducing a dedicated field
-        newFlame.setZBufferScale(brightnessScl);
+        // HACK: misusing the stereo3dAngle-field because it will never be used by FARender, can later easily be changed if necessary, by introducing a dedicated field
+        newFlame.setStereo3dAngle(brightnessScl);
+        // HACK: misusing the spatialFilterIndicator-field because it will never be used by FARender, can later easily be changed if necessary, by introducing a dedicated field
+        newFlame.setSpatialFilterIndicator(zPass);
         res.add(newFlame);
       }
     }
     else {
       Flame newFlame=pFlame.makeCopy();
-      newFlame.setLowDensityBrightness(1.0);
+      // HACK: misusing the stereo3dAngle-field because it will never be used by FARender, can later easily be changed if necessary, by introducing a dedicated field
+      newFlame.setStereo3dAngle(1.0);
+      // HACK: misusing the spatialFilterIndicator-field because it will never be used by FARender, can later easily be changed if necessary, by introducing a dedicated field
+      newFlame.setSpatialFilterIndicator(zPass);
       res.add(AnimationService.evalMotionCurves(newFlame, time));
     }
     return res;

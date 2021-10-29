@@ -47,11 +47,7 @@ import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
-import org.jwildfire.create.tina.render.image.RenderHDRImageThread;
-import org.jwildfire.create.tina.render.image.RenderImageSimpleScaledThread;
-import org.jwildfire.create.tina.render.image.RenderImageSimpleThread;
-import org.jwildfire.create.tina.render.image.RenderImageThread;
-import org.jwildfire.create.tina.render.image.RenderZBufferThread;
+import org.jwildfire.create.tina.render.image.*;
 import org.jwildfire.create.tina.render.postdof.PostDOFBuffer;
 import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -171,12 +167,12 @@ public class FlameRenderer {
       raster = pRenderInfo.getRestoredRaster();
     }
     else {
-      raster = allocRaster(oversample, pSampleDensity);
+      raster = allocRaster(oversample, pSampleDensity, pRenderInfo.isRenderZBuffer());
     }
   }
 
-  private AbstractRaster allocRaster(int pOversample, double pSampleDensity) {
-    Class<? extends AbstractRaster> rasterClass = prefs.getTinaRasterType().getRasterClass(flame);
+  private AbstractRaster allocRaster(int pOversample, double pSampleDensity, boolean pWithZBuffer) {
+    Class<? extends AbstractRaster> rasterClass = prefs.getTinaRasterType().getRasterClass(flame, pWithZBuffer);
     AbstractRaster raster;
     try {
       raster = rasterClass.newInstance();
@@ -573,8 +569,9 @@ public class FlameRenderer {
   }
 
   private void renderZBuffer(SimpleGrayImage pGreyImage) {
-    double zScale = 0.001 * flame.getZBufferScale();
+    double zScale = flame.getZBufferScale();
     double zBias = flame.getZBufferBias();
+    double zShift = flame.getZBufferShift();
     if (pGreyImage != null) {
       int threadCount = prefs.getTinaRenderThreads();
       if (threadCount < 1 || pGreyImage.getImageHeight() < 8 * threadCount) {
@@ -585,7 +582,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pGreyImage.getImageHeight();
-        RenderZBufferThread thread = new RenderZBufferThread(flame, logDensityFilter, startRow, endRow, pGreyImage, zScale, zBias);
+        RenderZBufferThread thread = new RenderZBufferThread(flame, logDensityFilter, startRow, endRow, pGreyImage, zScale, zBias, zShift);
         threads.add(thread);
         if (threadCount > 1) {
           Thread t = new Thread(thread);
@@ -597,6 +594,18 @@ public class FlameRenderer {
         }
       }
       ThreadTools.waitForThreads(threadCount, threads);
+      if (renderInfo != null /*&& renderInfo.isSuggestZBufferParams()*/) {
+        ZBufferInfo zBufInfo =
+            new ZBufferAnalyzer(flame, logDensityFilter, pGreyImage, zScale, zShift).analyze();
+        renderInfo.setzBufferInfo(zBufInfo);
+        System.err.println("ZBUF:\n");
+        System.err.println("  " + zBufInfo.getzMin() + " ... " + zBufInfo.getzMax() + "\n");
+        System.err.println("  " + zBufInfo.getzBorderMin() + " ... " + zBufInfo.getzBorderMax() + "\n");
+        System.err.println(
+            "  " + zBufInfo.getGrayBorderMinValue() + " ... " + zBufInfo.getGrayBorderMaxValue() + "\n");
+        System.err.println(
+            "  " + zBufInfo.getSuggestedZScale() + " ... " + zBufInfo.getSuggestedZShift() + "\n");
+      }
     }
   }
 
@@ -1048,7 +1057,7 @@ public class FlameRenderer {
       initRasterSizes(pSliceRenderInfo.getImageWidth(), pSliceRenderInfo.getImageHeight());
       List<RenderSlice> slices = new ArrayList<RenderSlice>();
       for (int i = 0; i < pSliceRenderInfo.getSlicesPerRender() && currSlice < pSliceRenderInfo.getSlices(); i++) {
-        RenderSlice slice = new RenderSlice(allocRaster(flame.getSpatialOversampling(), flame.getSampleDensity()), currZ - thickness, currZ);
+        RenderSlice slice = new RenderSlice(allocRaster(flame.getSpatialOversampling(), flame.getSampleDensity(), false), currZ - thickness, currZ);
         slices.add(slice);
         currZ -= thickness;
         currSlice++;

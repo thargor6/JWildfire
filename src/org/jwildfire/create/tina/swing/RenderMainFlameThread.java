@@ -36,7 +36,6 @@ import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Calendar;
@@ -98,7 +97,10 @@ public class RenderMainFlameThread implements Runnable {
       }
       String fn = RenderMovieUtil.makeFrameName(outFile.getAbsolutePath(), i, flame.getName(), qualProfile.getQuality(), resProfile.getWidth(), resProfile.getHeight());
       if (!new File(fn).exists()) {
-        renderMovieFrame(i);
+        renderMovieFrame(i, false);
+        if(qualProfile.isWithZBuffer()) {
+          renderMovieFrame(i, true);
+        }
       }
       progressUpdater.updateProgress(step++);
     }
@@ -152,7 +154,7 @@ public class RenderMainFlameThread implements Runnable {
   }
 
 
-  private void renderMovieFrame(int frame) throws Exception {
+  private void renderMovieFrame(int frame, boolean zForPass) throws Exception {
     Flame currFlame = flame.makeCopy();
     currFlame.setFrame(frame);
     int width = resProfile.getWidth();
@@ -164,18 +166,18 @@ public class RenderMainFlameThread implements Runnable {
     currFlame.setWidth(info.getImageWidth());
     currFlame.setHeight(info.getImageHeight());
     info.setRenderHDR(false);
-    info.setRenderZBuffer(false);
     currFlame.setSampleDensity(qualProfile.getQuality());
     String outputFilename = RenderMovieUtil.makeFrameName(
             outFile.getAbsolutePath(),
             frame,
-            flame.getName(),
+            (zForPass ? "zbuf_" : "") + flame.getName(),
             qualProfile.getQuality(),
             resProfile.getWidth(),
             resProfile.getHeight());
     if(useGPU) {
-      renderFlameOnGPU(currFlame, outputFilename, currFlame.getWidth(), currFlame.getHeight(), qualProfile.getQuality());
+      renderFlameOnGPU(currFlame, outputFilename, currFlame.getWidth(), currFlame.getHeight(), qualProfile.getQuality(), zForPass);
     } else {
+      info.setRenderZBuffer(zForPass);
       renderer = new FlameRenderer(currFlame, prefs, false, false);
       RenderedFlame res = renderer.renderFlame(info);
       if (!forceAbort) {
@@ -187,12 +189,13 @@ public class RenderMainFlameThread implements Runnable {
     }
   }
 
-  private void renderFlameOnGPU(Flame flame, String primaryFilename, int width, int height, int quality) throws Exception {
-      String gpuRenderFlameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
+  private void renderFlameOnGPU(Flame flame, String primaryFilename, int width, int height, int quality, boolean zForPass) throws Exception {
+      String flameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
+      String gpuRenderFlameFilename = zForPass ? Tools.makeZBufferFilename(flameFilename, flame.getZBufferFilename()) : flameFilename;
       try {
         Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
         FileDialogTools.ensureFileAccess(null, null, gpuRenderFlameFilename);
-        List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame);
+        List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame, zForPass);
         new FAFlameWriter().writeFlame(preparedFlames, gpuRenderFlameFilename);
         FARenderResult gpuRenderRes = FARenderTools.invokeFARender(gpuRenderFlameFilename, width, height, quality, preparedFlames.size() > 1);
         if (gpuRenderRes.getReturnCode() != 0) {
@@ -222,8 +225,7 @@ public class RenderMainFlameThread implements Runnable {
     flame.setHeight(info.getImageHeight());
     boolean renderHDR = qualProfile.isWithHDR();
     info.setRenderHDR(renderHDR);
-    boolean renderZBuffer = qualProfile.isWithZBuffer();
-    info.setRenderZBuffer(renderZBuffer);
+    info.setRenderZBuffer(qualProfile.isWithZBuffer());
     flame.setSampleDensity(qualProfile.getQuality());
     long t0, t1;
     if(useGPU) {
@@ -241,7 +243,10 @@ public class RenderMainFlameThread implements Runnable {
       }
       try {
         t0 = Calendar.getInstance().getTimeInMillis();
-        renderFlameOnGPU(flame, outFile.getAbsolutePath(), flame.getWidth(), flame.getHeight(), qualProfile.getQuality());
+        renderFlameOnGPU(flame, outFile.getAbsolutePath(), flame.getWidth(), flame.getHeight(), qualProfile.getQuality(), false);
+        if(qualProfile.isWithZBuffer()) {
+          renderFlameOnGPU(flame, outFile.getAbsolutePath(), flame.getWidth(), flame.getHeight(), qualProfile.getQuality(), true);
+        }
         t1 = Calendar.getInstance().getTimeInMillis();
       }
       finally {

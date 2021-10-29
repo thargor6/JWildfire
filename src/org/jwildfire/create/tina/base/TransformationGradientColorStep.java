@@ -43,10 +43,10 @@ public final class TransformationGradientColorStep extends AbstractTransformatio
       colorIdx = RGBPalette.PALETTE_SIZE - 1;
     
     RenderColor color = colorMap[colorIdx];
+
     pDstPoint.redColor = color.red;
     pDstPoint.greenColor = color.green;
     pDstPoint.blueColor = color.blue;
-
   }
 
 }

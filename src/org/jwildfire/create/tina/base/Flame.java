@@ -229,7 +229,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int fps = 25;
   private double zBufferScale = 1.0;
   private double zBufferBias = 0.0;
-  private ZBufferFilename zBufferFilename = ZBufferFilename.PRE_ZBUF;
+  private double zBufferShift = 0.0;
+  private ZBufferFilename zBufferFilename = ZBufferFilename.POST_DEPTH;
 
   private int postBlurRadius;
   private double postBlurFade;
@@ -851,7 +852,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     postBlurFallOff = pFlame.postBlurFallOff;
     zBufferScale = pFlame.zBufferScale;
     zBufferBias = pFlame.zBufferBias;
-    zBufferFilename = pFlame.zBufferFilename; 
+    zBufferShift = pFlame.zBufferShift;
+    zBufferFilename = pFlame.zBufferFilename;
 
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
@@ -1012,7 +1014,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         !mixerBBCurve.isEqual(pFlame.mixerBBCurve) || !solidRenderSettings.isEqual(pFlame.solidRenderSettings) ||
         postBlurRadius != pFlame.postBlurRadius || (fabs(postBlurFade - pFlame.postBlurFade) > EPSILON) ||
         (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON) || !zBufferFilename.equals(pFlame.zBufferFilename) ||
-        (fabs(zBufferScale - pFlame.zBufferScale) > EPSILON) || (fabs(zBufferBias - pFlame.zBufferBias) > EPSILON)) {
+        (fabs(zBufferScale - pFlame.zBufferScale) > EPSILON) || (fabs(zBufferBias - pFlame.zBufferBias) > EPSILON) ||
+        (fabs(zBufferShift - pFlame.zBufferShift) > EPSILON)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -1768,10 +1771,18 @@ public class Flame implements Assignable<Flame>, Serializable {
     return zBufferBias;
   }
 
+  public double getZBufferShift() {
+    return zBufferShift;
+  }
+
   public void setZBufferBias(double zBufferBias) {
     this.zBufferBias = zBufferBias;
   }
-  
+
+  public void setZBufferShift(double zBufferShift) {
+    this.zBufferShift = zBufferShift;
+  }
+
   public ZBufferFilename getZBufferFilename() {
     return zBufferFilename;
   }

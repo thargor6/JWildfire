@@ -241,7 +241,7 @@ public class FlamePreviewHelper implements IterationObserver {
               FARenderResult openClRenderRes;
               long t0 = System.currentTimeMillis();
               try {
-                List<Flame> preparedFlames = FARenderTools.prepareFlame(flame);
+                List<Flame> preparedFlames = FARenderTools.prepareFlame(flame, TinaControllerContextService.getContext().isZPass());
                 new FAFlameWriter().writeFlame(preparedFlames, tmpFile.getAbsolutePath());
                 openClRenderRes = FARenderTools.invokeFARender(tmpFile.getAbsolutePath(), width, height, prefs.getTinaRenderPreviewQuality(),
                         preparedFlames.size() > 1);
@@ -296,6 +296,10 @@ public class FlamePreviewHelper implements IterationObserver {
             }
             flame.setWidth(info.getImageWidth());
             flame.setHeight(info.getImageHeight());
+
+            boolean zpass = TinaControllerContextService.getContext().isZPass();
+            info.setRenderZBuffer(zpass);
+
             if (pMouseDown) {
               flame.setMotionBlurLength(0);
             }
@@ -324,6 +328,7 @@ public class FlamePreviewHelper implements IterationObserver {
 
               long t0 = System.currentTimeMillis();
               renderer.setRenderScale(renderScale);
+              info.setRenderZBuffer(TinaControllerContextService.getContext().isZPass());
 
               RenderedFlame res;
               if (prevRaster != null && pAllowUseCache) {
@@ -332,12 +337,24 @@ public class FlamePreviewHelper implements IterationObserver {
                 flame.setSampleDensity(prevRaster.getSampleDensity());
                 res = renderer.renderFlame(info);
               } else {
-                info.setStoreRaster(true);
-                res = renderer.renderFlame(info);
-                prevRaster = res.getRaster();
+                if(zpass) {
+                  info.setStoreRaster(false);
+                  res = renderer.renderFlame(info);
+                  prevRaster = null;
+                } else {
+                  info.setStoreRaster(true);
+                  res = renderer.renderFlame(info);
+                  prevRaster = res.getRaster();
+                }
               }
 
-              SimpleImage img = res.getImage();
+              SimpleImage img;
+              if(zpass) {
+                img = new SimpleImage(res.getZBuffer().getImageWidth(), res.getZBuffer().getImageHeight());
+                img.setBufferedImage(res.getZBuffer().getBufferedImg(), res.getZBuffer().getImageWidth(), res.getZBuffer().getImageHeight());
+              } else {
+                img = res.getImage();
+              }
               long t1 = System.currentTimeMillis();
               // img.getBufferedImg().setAccelerationPriority(1.0f);
 
@@ -408,6 +425,7 @@ public class FlamePreviewHelper implements IterationObserver {
         try {
           flame.setSampleDensity(quality);
           flame.setSpatialOversampling(1);
+          info.setRenderZBuffer(TinaControllerContextService.getContext().isZPass());
           FlameRenderer renderer = new FlameRenderer(flame, prefs, isTransparencyEnabled(), false);
           RenderedFlame res = renderer.renderFlame(info);
           SimpleImage img = res.getImage();
@@ -587,6 +605,7 @@ public class FlamePreviewHelper implements IterationObserver {
             flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
             flame.applyFastOversamplingSettings();
             renderer.setRenderScale(renderScale);
+            info.setRenderZBuffer(TinaControllerContextService.getContext().isZPass());
             RenderedFlame res = renderer.renderFlame(info);
             SimpleImage img = res.getImage();
             // img.getBufferedImg().setAccelerationPriority(1.0f);
@@ -698,7 +717,7 @@ public class FlamePreviewHelper implements IterationObserver {
     flame.setHeight(info.getImageHeight());
     flame.setSampleDensity(10.0);
     info.setRenderHDR(false);
-    info.setRenderZBuffer(false);
+    info.setRenderZBuffer(TinaControllerContextService.getContext().isZPass());
     renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
     renderer.registerIterationObserver(this);
 

@@ -3090,6 +3090,8 @@ struct __align__(16) FlameParams
 	float dof_fade;
     float balanceRed, balanceGreen, balanceBlue;
 	float intensityAdjust;
+	int render_pass;
+	float z_buffer_scale, z_buffer_shift, z_buffer_bias;
 #endif
 };
 
@@ -3849,7 +3851,6 @@ __device__ void applyOnlyCamera(struct point* point, float srcX, float srcY, flo
 {
     point->x = srcX / zr;
     point->y = srcY / zr;
-	point->z = srcZ;	
 }
 
 __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, float srcZ, float zdist, float zr, int dofType, float dofScale, float dofFade, float camDOF_10, unsigned int *randStates)
@@ -3876,7 +3877,6 @@ __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, f
 			sincosf(a, &dsina, &dcosa);
 			point->x = (srcX + dr * dcosa) / zr;
 			point->y = (srcY + dr * dsina) / zr;
-			point->z = srcZ;
 			break;
 		}
 	   case 1: // SINEBLUR
@@ -3890,7 +3890,6 @@ __device__ void applyDOFAndCamera(struct point* point, float srcX, float srcY, f
 
    		   point->x = (srcX + dr * dcosa) / zr;
 		   point->y = (srcY + dr * dsina) / zr;
-		   point->z = srcZ;
 		   break;
          }		 
 	}
@@ -3935,9 +3934,9 @@ __device__ void projectJWF(struct point *p, struct CameraViewProperties *propert
         p->z = pz/pw;
     }
 #else 
-    float camPointX = properties->matrix[0]*p->x + properties->matrix[4]*p->y + properties->matrix[8]*p->z+ properties->matrix[12];
-    float camPointY = properties->matrix[1]*p->x + properties->matrix[5]*p->y + properties->matrix[9]*p->z+ properties->matrix[13];
-    float camPointZ = properties->matrix[2]*p->x + properties->matrix[6]*p->y + properties->matrix[10]*p->z+ properties->matrix[14];
+    float camPointX = properties->matrix[0]*p->x + properties->matrix[4]*p->y + properties->matrix[8]*p->z;
+    float camPointY = properties->matrix[1]*p->x + properties->matrix[5]*p->y + properties->matrix[9]*p->z;
+    float camPointZ = properties->matrix[2]*p->x + properties->matrix[6]*p->y + properties->matrix[10]*p->z;
 	  float camDOF_10 = 0.1 * properties->camDOF; 	  
 	  float area = properties->camDOFArea;
       float fade = properties->camDOFArea / 2.25f;
@@ -3951,6 +3950,7 @@ __device__ void projectJWF(struct point *p, struct CameraViewProperties *propert
       if (zr < 1.e-6f) {
         zr = 1.e-6f;
       }
+      p->z = camPointZ;
 #ifdef ADD_FEATURE_DOF
       if (properties->camDOF > 1.e-6f) {
         if (properties->legacyDOF) {
@@ -3984,7 +3984,6 @@ __device__ void projectJWF(struct point *p, struct CameraViewProperties *propert
       else {
 #endif // ADD_FEATURE_DOF
         p->x = camPointX / zr;
-        p->y = camPointY / zr;
         p->y = camPointY / zr;
 #ifdef ADD_FEATURE_DOF
       }
@@ -4213,13 +4212,13 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
          if(!activePoint[index].doHide) {
 #endif			
 
+
 #ifndef FOR_2D
             projectJWF(&activePoint[index], d_g_Camera, randStates);
             applyRotation(&activePoint[index], d_g_Camera->rotatedViewOffsetx, d_g_Camera->rotatedViewOffsety);
 #else
             applyRotation( &activePoint[index], cosRotation, sinRotation);
 #endif
-
             //Finally, we randomly jitter the point within a 1/2 pixel radius to obtain antialiasing
             float dr;
             dr = randFloat(randStates);
@@ -4237,50 +4236,88 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
             x = floorf((((activePoint[index].x-d_g_Flame.center[0])/d_g_Flame.size[0]+.5f)*(float)xDim)+dr*cosa);
             y = floorf(((-(activePoint[index].y-d_g_Flame.center[1])/d_g_Flame.size[1]+.5f)*(float)yDim)+dr*sina);
             //And render the point to the accumulation buffer
-            if ((z >= -1.f) && (z <= 1.f) && (x < xDim)&&(y < yDim)&&(x>=0)&&(y>=0))
-            {
-                float4 output;
-#ifdef JWF_EXTENSIONS
-             if(activePoint[index].useRgb) {
-               output.x = activePoint[index].colorR;			 
-               output.y = activePoint[index].colorG;			 
-               output.z = activePoint[index].colorB;			 
-               output.w = activePoint[index].colorA;			 
-             }
-             else {			 
-#endif				
-                if (paletteStepMode)
-                    output = read_imageStepMode(palette, numColors, activePoint[index].pal);
-                else
-                    output = read_image(palette, numColors, activePoint[index].pal);
-                // output = tex1D(texRef,activePoint[threadIdx.x].pal);
-				
-#ifdef JWF_EXTENSIONS
-            } // if(activePoint[index].useRgb) {
-            if(d_g_Flame.intensityAdjust!=1) {
-			  output.x *= d_g_Flame.intensityAdjust;
-			  output.y *= d_g_Flame.intensityAdjust;
-			  output.z *= d_g_Flame.intensityAdjust;
-			  output.w *= d_g_Flame.intensityAdjust;
-			}		
-#endif				
+            if ((z >= -1.f) && (z <= 1.f) && (x < xDim)&&(y < yDim)&&(x>=0)&&(y>=0)) {
+              if(d_g_Flame.render_pass==1) {
+                 float zBias = d_g_Flame.z_buffer_bias;
+                 float zScale = d_g_Flame.z_buffer_scale;
+                 float zOffset = d_g_Flame.z_buffer_shift;
 
-#ifdef USE_ATOMICS
-                float *ptr = (float *)&(renderTarget[y*xDim+x]);
-                atomicAdd(ptr,     output.x*d_g_Xforms[r].opacity);
-                atomicAdd(ptr + 1, output.y*d_g_Xforms[r].opacity);
-                atomicAdd(ptr + 2, output.z*d_g_Xforms[r].opacity);
-                atomicAdd(ptr + 3, output.w*d_g_Xforms[r].opacity);
-                atomicAdd(&pixelCounts[y*xDim+x], 1);
-#else
-                renderTarget[y*xDim+x].x += output.x*d_g_Xforms[r].opacity;
-                renderTarget[y*xDim+x].y += output.y*d_g_Xforms[r].opacity;
-                renderTarget[y*xDim+x].z += output.z*d_g_Xforms[r].opacity;
-                renderTarget[y*xDim+x].w += output.w*d_g_Xforms[r].opacity;
-                pixelCounts[y*xDim+x]++;
-#endif
-            }
+                  // negative zScale: white to black (black near camera, white background)
+                  int grayValue;
+                  if (zScale < 0.0) {
+                      int lvl = (int)(-zScale * (activePoint[index].z + zOffset) * 32767.0 + 32767.5);
+                      if (lvl < 0) {
+                        lvl = 0;
+                      } else if (lvl > 0xffff) {
+                        lvl = 0xffff;
+                      }
+                      grayValue = 0xffff - lvl & 0xffff;
+                  }
+                  // positive zScale: black to white (white near camera, black background, which is the default)
+                  else {
+                      int lvl = (int)(zScale * (activePoint[index].z + zOffset) * 32767.0 + 32767.5);
+                      if (lvl < 0) {
+                        lvl = 0;
+                      } else if (lvl > 0xffff) {
+                        lvl = 0xffff;
+                      }
+                      grayValue = lvl & 0xffff;
+                  }
+
+                  float zValue = (float)grayValue / 65536.0f;
+
+                 if(zValue > renderTarget[y*xDim+x].x) {
+                   renderTarget[y*xDim+x].x = zValue;
+                   renderTarget[y*xDim+x].y = 0.0f;
+                   renderTarget[y*xDim+x].z = 0.0f;
+                   renderTarget[y*xDim+x].w = 1.0f;
+                   pixelCounts[y*xDim+x]++;
+                 }
+              }
+              else {
+                  float4 output;
+    #ifdef JWF_EXTENSIONS
+                if(activePoint[index].useRgb) {
+                   output.x = activePoint[index].colorR;
+                   output.y = activePoint[index].colorG;
+                   output.z = activePoint[index].colorB;
+                   output.w = activePoint[index].colorA;
+                 }
+                 else {
+    #endif
+                    if (paletteStepMode)
+                        output = read_imageStepMode(palette, numColors, activePoint[index].pal);
+                    else
+                        output = read_image(palette, numColors, activePoint[index].pal);
+                    // output = tex1D(texRef,activePoint[threadIdx.x].pal);
+
+    #ifdef JWF_EXTENSIONS
+                } // if(activePoint[index].useRgb) {
+                if(d_g_Flame.intensityAdjust!=1) {
+                  output.x *= d_g_Flame.intensityAdjust;
+                  output.y *= d_g_Flame.intensityAdjust;
+                  output.z *= d_g_Flame.intensityAdjust;
+                  output.w *= d_g_Flame.intensityAdjust;
+                }
+    #endif
+
+    #ifdef USE_ATOMICS
+                    float *ptr = (float *)&(renderTarget[y*xDim+x]);
+                    atomicAdd(ptr,     output.x*d_g_Xforms[r].opacity);
+                    atomicAdd(ptr + 1, output.y*d_g_Xforms[r].opacity);
+                    atomicAdd(ptr + 2, output.z*d_g_Xforms[r].opacity);
+                    atomicAdd(ptr + 3, output.w*d_g_Xforms[r].opacity);
+                    atomicAdd(&pixelCounts[y*xDim+x], 1);
+    #else
+                    renderTarget[y*xDim+x].x += output.x*d_g_Xforms[r].opacity;
+                    renderTarget[y*xDim+x].y += output.y*d_g_Xforms[r].opacity;
+                    renderTarget[y*xDim+x].z += output.z*d_g_Xforms[r].opacity;
+                    renderTarget[y*xDim+x].w += output.w*d_g_Xforms[r].opacity;
+                    pixelCounts[y*xDim+x]++;
+    #endif
+                }
 #ifdef JWF_EXTENSIONS
+             }
          } // if(activePoint[index].doHide==0) {
 #endif			
 			
@@ -4306,19 +4343,28 @@ extern "C" __global__ void postProcessStep1Kernal(
 {
     const uint ix = (blockDim.x*blockIdx.x)+threadIdx.x;
     const uint iy = (blockDim.y*blockIdx.y)+threadIdx.y;
-    if ((ix < xDim)&&(iy < yDim))
-    {
-        float k1 = (d_g_Flame.brightness*268.0f)/255.0f;
-        float area = fabsf(d_g_Flame.size[0]*d_g_Flame.size[1]);
-        float k2 = ((float)(xDim*yDim))/(area*fuseCompensation*((float)(NUM_ITERATIONS))*d_g_Flame.numBatches*32.f*1024.0f*((float)blocksY/32.f));
-        float4 rgba = accumBuffer[iy*xDim+ix];
-        float a = (k1* logf(1.0f+k2*rgba.w));
-        float ls = a/rgba.w;
-        rgba.x = ls*rgba.x;
-        rgba.y = ls*rgba.y;
-        rgba.z = ls*rgba.z;
 
-        accumBuffer[iy*xDim+ix] = rgba;
+    if ((ix < xDim)&&(iy < yDim)) {
+        if(d_g_Flame.render_pass==1) {
+            float4 rgba = accumBuffer[iy*xDim+ix];
+            rgba.y = rgba.x;
+            rgba.z = rgba.x;
+            rgba.w = 1.0;
+            accumBuffer[iy*xDim+ix] = rgba;
+        }
+        else {
+            float k1 = (d_g_Flame.brightness*268.0f)/255.0f;
+            float area = fabsf(d_g_Flame.size[0]*d_g_Flame.size[1]);
+            float k2 = ((float)(xDim*yDim))/(area*fuseCompensation*((float)(NUM_ITERATIONS))*d_g_Flame.numBatches*32.f*1024.0f*((float)blocksY/32.f));
+            float4 rgba = accumBuffer[iy*xDim+ix];
+            float a = (k1* logf(1.0f+k2*rgba.w));
+            float ls = a/rgba.w;
+            rgba.x = ls*rgba.x;
+            rgba.y = ls*rgba.y;
+            rgba.z = ls*rgba.z;
+
+            accumBuffer[iy*xDim+ix] = rgba;
+        }
     }
 }
 
@@ -4331,101 +4377,110 @@ extern "C" __global__ void postProcessStep2Kernal(
                                 float fuseCompensation,
                                 float4 adjust)
 {
+
     const uint ix = (blockDim.x*blockIdx.x)+threadIdx.x;
     const uint iy = (blockDim.y*blockIdx.y)+threadIdx.y;
-    if ((ix < xDim)&&(iy < yDim))
-    {
-        float k1   = (d_g_Flame.brightness*268.0f)/255.0f;
-        float area = fabsf(d_g_Flame.size[0]*d_g_Flame.size[1]);
-        float _k2  = ((float)(xDim*yDim))/
-                (area*fuseCompensation*((float)(NUM_ITERATIONS))*d_g_Flame.numBatches*32.f*1024.0f*((float)blocksY/32.f));
-        float gammaThreshold = d_g_Flame.gammaThreshold;
-        float gamma          = d_g_Flame.gamma;
-        float alphaGamma     = d_g_Flame.alphaGamma;
-
-        float4 k2   = make_float4(_k2/adjust.x, _k2/adjust.y, _k2/adjust.z, _k2/adjust.w);
-        float4 rgba = accumBuffer[iy*xDim+ix];
-        
-        float4 a = make_float4(k1 * logf(1.0f + k2.x*rgba.w), 
-                               k1 * logf(1.0f + k2.y*rgba.w), 
-                               k1 * logf(1.0f + k2.z*rgba.w), 
-                               k1 * logf(1.0f + k2.w*rgba.w));
-                    
-                                
-        float4 fraction = make_float4(a.x/gammaThreshold, 
-                                      a.y/gammaThreshold, 
-                                      a.z/gammaThreshold, 
-                                      a.w/gammaThreshold);
-                                    
-        float4 alpha = make_float4(powf(a.x, 1.0f/gamma-1.0f), 
-                                    powf(a.y, 1.0f/gamma-1.0f), 
-                                    powf(a.z, 1.0f/gamma-1.0f), 
-                                    powf(a.w, 1.0f/gamma-1.0f));
-                                    
-        
-        float alphaTx =  (1.f - fraction.x) * a.x * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.x * alpha.x;
-        float alphaTy =  (1.f - fraction.y) * a.y * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.y * alpha.y;
-        float alphaTz =  (1.f - fraction.z) * a.z * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.z * alpha.z;
-        float alphaTw =  (1.f - fraction.w) * a.w * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.w * alpha.w;
-                                    
-        float4 alphaT   = make_float4(alphaTx, alphaTy, alphaTz, alphaTw);
-        
-        float4 ls = make_float4(
-            d_g_Flame.vibrancy * (a.x < gammaThreshold ? alphaT.x : alpha.x),
-            d_g_Flame.vibrancy * (a.y < gammaThreshold ? alphaT.y : alpha.y),
-            d_g_Flame.vibrancy * (a.z < gammaThreshold ? alphaT.z : alpha.z),
-            d_g_Flame.vibrancy * (a.w < gammaThreshold ? alphaT.w : alpha.w));
-
-        float4 sign = make_float4(
-            rgba.x >= 0.f ? 1.f : -1.f,
-            rgba.y >= 0.f ? 1.f : -1.f,
-            rgba.z >= 0.f ? 1.f : -1.f,
-            rgba.w >= 0.f ? 1.f : -1.f);
-       
-        rgba.x        = ls.x*rgba.x + (1.0f-d_g_Flame.vibrancy)*sign.x*powf(fabsf(rgba.x), 1.0f/gamma);
-        rgba.y        = ls.y*rgba.y + (1.0f-d_g_Flame.vibrancy)*sign.y*powf(fabsf(rgba.y), 1.0f/gamma);
-        rgba.z        = ls.z*rgba.z + (1.0f-d_g_Flame.vibrancy)*sign.z*powf(fabsf(rgba.z), 1.0f/gamma);
-        rgba.w        = ls.w*rgba.w + (1.0f-d_g_Flame.vibrancy)*sign.w*powf(fabsf(rgba.w), 1.0f/gamma);
-        
-        alpha.x       = powf(a.x, 1.0f/gamma);
-        alpha.y       = powf(a.y, 1.0f/gamma);
-        alpha.z       = powf(a.z, 1.0f/gamma);
-        alpha.w       = powf(a.w, 1.0f/gamma);
-        
-        alphaT.x      = (1.f - fraction.x) * a.x * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.x * alpha.x;
-        alphaT.y      = (1.f - fraction.y) * a.y * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.y * alpha.y;
-        alphaT.z      = (1.f - fraction.z) * a.z * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.z * alpha.z;
-        alphaT.w      = (1.f - fraction.w) * a.w * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.w * alpha.w;
-        
-        alpha.x      = fminf((a.x < gammaThreshold ? alphaT.x : alpha.x), 1.f);
-        alpha.y      = fminf((a.y < gammaThreshold ? alphaT.y : alpha.y), 1.f);
-        alpha.z      = fminf((a.z < gammaThreshold ? alphaT.z : alpha.z), 1.f);
-        alpha.w      = fminf((a.w < gammaThreshold ? alphaT.w : alpha.w), 1.f);
-
-
-        float alphaCw  = powf(a.w, 1.0f/alphaGamma);
-        float alphaTCw =  (1.f - fraction.w) * a.w * (powf(gammaThreshold, alphaGamma)/gammaThreshold) + fraction.w * alphaCw;
-        alphaCw        = fminf((a.w < gammaThreshold ? alphaTCw : alphaCw), 1.f);
-
-
-        if (d_g_Flame.highlightPower >= 0.f) {
-            rgba = RGBtoHSVHueAdjusted(rgba);
-            if (rgba.z > 1.0f)
-            {
-                //rgba.y /= rgba.z;
-                rgba.z = 1.0f;
-            }
-            rgba = HSVtoRGB(rgba);
-        }
-        if (isfinite(rgba.x + rgba.y + rgba.z + rgba.w))
-        {
-            renderTarget[iy*xDim+ix].x=rgba.x+renderTarget[iy*xDim+ix].x*(1.0f-alpha.x);
-            renderTarget[iy*xDim+ix].y=rgba.y+renderTarget[iy*xDim+ix].y*(1.0f-alpha.y);
-            renderTarget[iy*xDim+ix].z=rgba.z+renderTarget[iy*xDim+ix].z*(1.0f-alpha.z);
-            renderTarget[iy*xDim+ix].w=alphaCw;
+    if ((ix < xDim)&&(iy < yDim)) {
+        if(d_g_Flame.render_pass==1) {
+            float4 rgba = accumBuffer[iy*xDim+ix];
+                renderTarget[iy*xDim+ix].x=rgba.x;
+                renderTarget[iy*xDim+ix].y=rgba.y;
+                renderTarget[iy*xDim+ix].z=rgba.z;
+                renderTarget[iy*xDim+ix].w=1.0;
         }
         else {
-            renderTarget[iy*xDim+ix].w=0.f;
+            float k1   = (d_g_Flame.brightness*268.0f)/255.0f;
+            float area = fabsf(d_g_Flame.size[0]*d_g_Flame.size[1]);
+            float _k2  = ((float)(xDim*yDim))/
+                    (area*fuseCompensation*((float)(NUM_ITERATIONS))*d_g_Flame.numBatches*32.f*1024.0f*((float)blocksY/32.f));
+            float gammaThreshold = d_g_Flame.gammaThreshold;
+            float gamma          = d_g_Flame.gamma;
+            float alphaGamma     = d_g_Flame.alphaGamma;
+
+            float4 k2   = make_float4(_k2/adjust.x, _k2/adjust.y, _k2/adjust.z, _k2/adjust.w);
+            float4 rgba = accumBuffer[iy*xDim+ix];
+
+            float4 a = make_float4(k1 * logf(1.0f + k2.x*rgba.w),
+                                   k1 * logf(1.0f + k2.y*rgba.w),
+                                   k1 * logf(1.0f + k2.z*rgba.w),
+                                   k1 * logf(1.0f + k2.w*rgba.w));
+
+
+            float4 fraction = make_float4(a.x/gammaThreshold,
+                                          a.y/gammaThreshold,
+                                          a.z/gammaThreshold,
+                                          a.w/gammaThreshold);
+
+            float4 alpha = make_float4(powf(a.x, 1.0f/gamma-1.0f),
+                                        powf(a.y, 1.0f/gamma-1.0f),
+                                        powf(a.z, 1.0f/gamma-1.0f),
+                                        powf(a.w, 1.0f/gamma-1.0f));
+
+
+            float alphaTx =  (1.f - fraction.x) * a.x * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.x * alpha.x;
+            float alphaTy =  (1.f - fraction.y) * a.y * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.y * alpha.y;
+            float alphaTz =  (1.f - fraction.z) * a.z * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.z * alpha.z;
+            float alphaTw =  (1.f - fraction.w) * a.w * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.w * alpha.w;
+
+            float4 alphaT   = make_float4(alphaTx, alphaTy, alphaTz, alphaTw);
+
+            float4 ls = make_float4(
+                d_g_Flame.vibrancy * (a.x < gammaThreshold ? alphaT.x : alpha.x),
+                d_g_Flame.vibrancy * (a.y < gammaThreshold ? alphaT.y : alpha.y),
+                d_g_Flame.vibrancy * (a.z < gammaThreshold ? alphaT.z : alpha.z),
+                d_g_Flame.vibrancy * (a.w < gammaThreshold ? alphaT.w : alpha.w));
+
+            float4 sign = make_float4(
+                rgba.x >= 0.f ? 1.f : -1.f,
+                rgba.y >= 0.f ? 1.f : -1.f,
+                rgba.z >= 0.f ? 1.f : -1.f,
+                rgba.w >= 0.f ? 1.f : -1.f);
+
+            rgba.x        = ls.x*rgba.x + (1.0f-d_g_Flame.vibrancy)*sign.x*powf(fabsf(rgba.x), 1.0f/gamma);
+            rgba.y        = ls.y*rgba.y + (1.0f-d_g_Flame.vibrancy)*sign.y*powf(fabsf(rgba.y), 1.0f/gamma);
+            rgba.z        = ls.z*rgba.z + (1.0f-d_g_Flame.vibrancy)*sign.z*powf(fabsf(rgba.z), 1.0f/gamma);
+            rgba.w        = ls.w*rgba.w + (1.0f-d_g_Flame.vibrancy)*sign.w*powf(fabsf(rgba.w), 1.0f/gamma);
+
+            alpha.x       = powf(a.x, 1.0f/gamma);
+            alpha.y       = powf(a.y, 1.0f/gamma);
+            alpha.z       = powf(a.z, 1.0f/gamma);
+            alpha.w       = powf(a.w, 1.0f/gamma);
+
+            alphaT.x      = (1.f - fraction.x) * a.x * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.x * alpha.x;
+            alphaT.y      = (1.f - fraction.y) * a.y * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.y * alpha.y;
+            alphaT.z      = (1.f - fraction.z) * a.z * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.z * alpha.z;
+            alphaT.w      = (1.f - fraction.w) * a.w * (powf(gammaThreshold, gamma)/gammaThreshold) + fraction.w * alpha.w;
+
+            alpha.x      = fminf((a.x < gammaThreshold ? alphaT.x : alpha.x), 1.f);
+            alpha.y      = fminf((a.y < gammaThreshold ? alphaT.y : alpha.y), 1.f);
+            alpha.z      = fminf((a.z < gammaThreshold ? alphaT.z : alpha.z), 1.f);
+            alpha.w      = fminf((a.w < gammaThreshold ? alphaT.w : alpha.w), 1.f);
+
+
+            float alphaCw  = powf(a.w, 1.0f/alphaGamma);
+            float alphaTCw =  (1.f - fraction.w) * a.w * (powf(gammaThreshold, alphaGamma)/gammaThreshold) + fraction.w * alphaCw;
+            alphaCw        = fminf((a.w < gammaThreshold ? alphaTCw : alphaCw), 1.f);
+
+
+            if (d_g_Flame.highlightPower >= 0.f) {
+                rgba = RGBtoHSVHueAdjusted(rgba);
+                if (rgba.z > 1.0f)
+                {
+                    //rgba.y /= rgba.z;
+                    rgba.z = 1.0f;
+                }
+                rgba = HSVtoRGB(rgba);
+            }
+            if (isfinite(rgba.x + rgba.y + rgba.z + rgba.w))
+            {
+                renderTarget[iy*xDim+ix].x=rgba.x+renderTarget[iy*xDim+ix].x*(1.0f-alpha.x);
+                renderTarget[iy*xDim+ix].y=rgba.y+renderTarget[iy*xDim+ix].y*(1.0f-alpha.y);
+                renderTarget[iy*xDim+ix].z=rgba.z+renderTarget[iy*xDim+ix].z*(1.0f-alpha.z);
+                renderTarget[iy*xDim+ix].w=alphaCw;
+            }
+            else {
+                renderTarget[iy*xDim+ix].w=0.f;
+            }
         }
     }
 }

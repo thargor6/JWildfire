@@ -146,6 +146,8 @@ public class TinaControllerData {
   public JSlider tinaZBufferScaleSlider;
   public JWFNumberField tinaZBufferBiasREd;
   public JSlider tinaZBufferBiasSlider;
+  public JWFNumberField tinaZBufferShiftREd;
+  public JSlider tinaZBufferShiftSlider;
   public JRadioButton tinaZBufferFilename1;
   public JRadioButton tinaZBufferFilename2;
   public JTextField paletteRandomPointsREd;

@@ -113,9 +113,12 @@ public class JobRenderThread implements Runnable {
                 controller.getJobProgressUpdater().updateProgress(1);
               } else {
                 if (!job.isRenderAsAnimation()) {
-                  renderSingleFrame(job, width, height, info, flame, primaryFilename, true);
+                  renderSingleFrame(job, width, height, info, flame, primaryFilename, true, false);
+                  if(qualityProfile.isWithZBuffer()) {
+                    renderSingleFrame(job, width, height, info, flame, primaryFilename, false, true);
+                  }
                 } else {
-                  renderAnimation(job, width, height, info, flame, primaryFilename);
+                  renderAnimation(job, width, height, info, flame, primaryFilename, qualityProfile.isWithZBuffer());
                 }
               }
               if (!cancelSignalled) {
@@ -149,13 +152,13 @@ public class JobRenderThread implements Runnable {
     }
   }
 
-  private void renderSingleFrame(Job job, int width, int height, RenderInfo info, Flame flame, String primaryFilename, boolean updateProgress) throws Exception {
+  private void renderSingleFrame(Job job, int width, int height, RenderInfo info, Flame flame, String primaryFilename, boolean updateProgress, boolean zForPass) throws Exception {
     if (useGPU) {
-      String openClFlameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
+      String openClFlameFilename = (zForPass ? "zbuf_" : "") + Tools.trimFileExt(primaryFilename) + ".flam3";
       try {
         Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
         FileDialogTools.ensureFileAccess(parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), openClFlameFilename);
-        List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame);
+        List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame, zForPass);
         new FAFlameWriter().writeFlame(preparedFlames, openClFlameFilename);
         long t0 = Calendar.getInstance().getTimeInMillis();
         FARenderResult openClRenderRes = FARenderTools.invokeFARender(openClFlameFilename, width, height, qualityProfile.getQuality(), preparedFlames.size() > 1);
@@ -208,7 +211,7 @@ public class JobRenderThread implements Runnable {
     return job.getCustomQuality() > 0 ? job.getCustomQuality() : qualityProfile.getQuality();
   }
 
-  private void renderAnimation(Job job, int width, int height, RenderInfo info, Flame flame, String primaryFilename) throws Exception {
+  private void renderAnimation(Job job, int width, int height, RenderInfo info, Flame flame, String primaryFilename, boolean withZPass) throws Exception {
     long t0 = Calendar.getInstance().getTimeInMillis();
 
     controller.getJobProgressUpdater().initProgress(1);
@@ -225,7 +228,7 @@ public class JobRenderThread implements Runnable {
       if (!new File(fn).exists()) {
         Flame currFlame = flame.makeCopy();
         currFlame.setFrame(i);
-        renderSingleFrame(job, width, height, info, currFlame, fn, false);
+        renderSingleFrame(job, width, height, info, currFlame, fn, false, withZPass);
       }
       controller.getJobProgressUpdater().updateProgress(progress++);
     }

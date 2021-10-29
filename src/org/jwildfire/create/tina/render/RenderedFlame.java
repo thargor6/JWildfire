@@ -47,7 +47,7 @@ public class RenderedFlame {
     if (pRenderInfo.isRenderHDR()) {
       hdrImage = new SimpleHDRImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     }
-    if (pRenderInfo.isRenderZBuffer() && pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+    if (pRenderInfo.isRenderZBuffer()) {
       zBuffer = new SimpleGrayImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     }
   }

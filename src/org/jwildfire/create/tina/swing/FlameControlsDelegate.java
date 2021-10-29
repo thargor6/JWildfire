@@ -802,6 +802,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.postBlurFallOffSlider, data.postBlurFallOffREd, "postBlurFallOff", TinaController.SLIDER_SCALE_AMBIENT);
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaZBufferScaleSlider, data.tinaZBufferScaleREd, "zBufferScale", TinaController.SLIDER_SCALE_CENTRE);
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.tinaZBufferShiftSlider, data.tinaZBufferShiftREd, "zBufferShift", TinaController.SLIDER_SCALE_CENTRE);
       data.tinaZBufferFilename1.setSelected(getCurrFlame().getZBufferFilename() == ZBufferFilename.PRE_ZBUF);
       data.tinaZBufferFilename2.setSelected(getCurrFlame().getZBufferFilename() == ZBufferFilename.POST_DEPTH);
 
@@ -1404,6 +1405,14 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void zBufferBiasSlider_changed() {
     flameSliderChanged(data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void zBufferShiftREd_changed() {
+    flameTextFieldChanged(data.tinaZBufferShiftSlider, data.tinaZBufferShiftREd, "zBufferShift", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void zBufferShiftSlider_changed() {
+    flameSliderChanged(data.tinaZBufferShiftSlider, data.tinaZBufferShiftREd, "zBufferShift", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public ZBufferFilename getZBufferFilenameSetting() {
@@ -2611,6 +2620,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void zBufferBiasREd_reset() {
     flameTextFieldReset(data.tinaZBufferBiasSlider, data.tinaZBufferBiasREd, "zBufferBias", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void zBufferShiftREd_reset() {
+    flameTextFieldReset(data.tinaZBufferShiftSlider, data.tinaZBufferShiftREd, "zBufferShift", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
   public void aiDenoiserCmb_changed() {

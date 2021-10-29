@@ -251,6 +251,8 @@ public class TinaControllerParameter {
   public JSlider tinaZBufferScaleSlider;
   public JWFNumberField tinaZBufferBiasREd;
   public JSlider tinaZBufferBiasSlider;
+  public JSlider tinaZBufferShiftSlider;
+  public JWFNumberField tinaZBufferShiftREd;
   public JRadioButton tinaZBufferFilename1;
   public JRadioButton tinaZBufferFilename2;
   public JToggleButton pAffineScaleXButton;
@@ -796,7 +798,8 @@ public class TinaControllerParameter {
                          JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
                          JWFNumberField tinaZBufferScaleREd, JSlider tinaZBufferScaleSlider, JWFNumberField tinaZBufferBiasREd, JSlider tinaZBufferBiasSlider, JRadioButton tinaZBufferFilename1, JRadioButton tinaZBufferFilename2,
                          JComboBox tinaFilterTypeCmb, JLabel tinaFilterKernelCmbLbl, JLabel tinaFilterRadiusLbl, JCheckBox tinaFilterIndicatorCBx, JPopupMenu thumbnailSelectPopupMenu, JPopupMenu thumbnailRemovePopupMenu, JWFNumberField tinaFilterSharpnessREd, JSlider tinaFilterSharpnessSlider,
-                         JWFNumberField tinaFilterLowDensityREd, JSlider tinaFilterLowDensitySlider, JButton randomBatchButton, JProgressBar randomBatchProgressBar
+                         JWFNumberField tinaFilterLowDensityREd, JSlider tinaFilterLowDensitySlider, JButton randomBatchButton, JProgressBar randomBatchProgressBar,
+                         JWFNumberField tinaZBufferShiftREd, JSlider tinaZBufferShiftSlider
   ) {
 
     this.desktop = pDesktop;
@@ -982,6 +985,8 @@ public class TinaControllerParameter {
     this.tinaFilterLowDensitySlider = tinaFilterLowDensitySlider;
     this.randomBatchButton = randomBatchButton;
     this.randomBatchProgressBar = randomBatchProgressBar;
+    this.tinaZBufferShiftREd = tinaZBufferShiftREd;
+    this.tinaZBufferShiftSlider = tinaZBufferShiftSlider;
   }
 
   public void setFlameBrowserParams(JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,

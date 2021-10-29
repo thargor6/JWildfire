@@ -677,11 +677,13 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_ZBUFFER_SCALE)) != null) {
       pFlame.setZBufferScale(Double.parseDouble(hs));
     }
-
     if ((hs = atts.get(ATTR_ZBUFFER_BIAS)) != null) {
       pFlame.setZBufferBias(Double.parseDouble(hs));
     }
-    
+    if ((hs = atts.get(ATTR_ZBUFFER_SHIFT)) != null) {
+      pFlame.setZBufferShift(Double.parseDouble(hs));
+    }
+
     if ((hs = atts.get(ATTR_ZBUFFER_FILENAME)) != null) {
       try {
         pFlame.setZBufferFilename(ZBufferFilename.valueOf(hs));
@@ -947,6 +949,7 @@ public class AbstractFlameReader {
   public static final String ATTR_POSTBLUR_FALLOFF = "post_blur_falloff";
   public static final String ATTR_ZBUFFER_SCALE = "zbuffer_scale";
   public static final String ATTR_ZBUFFER_BIAS = "zbuffer_bias";
+  public static final String ATTR_ZBUFFER_SHIFT = "zbuffer_shift";
   public static final String ATTR_ZBUFFER_FILENAME = "zbuffer_filename";
 
   public static final String ATTR_WFIELD_TYPE = "wfield_type";

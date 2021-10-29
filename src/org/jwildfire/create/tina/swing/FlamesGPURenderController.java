@@ -346,7 +346,7 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
           try {
             statsTextArea.setText("");
             FAFlameWriter gpuFlameWriter = new FAFlameWriter(FlamesGPURenderController.this);
-            List<Flame> preparedFlames = FARenderTools.prepareFlame(getCurrFlame());
+            List<Flame> preparedFlames = FARenderTools.prepareFlame(getCurrFlame(), TinaControllerContextService.getContext().isZPass());
             String gpuFlameParams = gpuFlameWriter.getFlameXML(preparedFlames);
             gpuFlameParamsTextArea.setText(gpuFlameParams);
             gpuFlameWriter.writeFlame(gpuFlameParams, tmpFile.getAbsolutePath());

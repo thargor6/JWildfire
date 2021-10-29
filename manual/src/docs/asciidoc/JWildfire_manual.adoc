@@ -1294,8 +1294,15 @@ Intensity of the shadow cast by this light source.
 ===== _ZBuffer_ subtab
 [.thumb]
 image::images/3drendering_zbuffer_tab.jpg[scaledwidth=75%]
-When rendering in solid mode, you may also export an additional z-buffer-image.
+Both, when rendering in solid and "classic" mode, you may also export an additional z-buffer-image.
+With these images you may achieve the popular "3d-photo"-effect you may find for example at Facebook.
 The settings on this tab helps to customize the creation of this z-buffer.
+
+Important note: even when many fractal flames produce images which have some "pseudo-3d-look",
+many of these fractals are flat or have an actual different shape.
+Few of them may not even produce a valid z-buffer at all (they may be very noisy or may look totally different than
+one would suggest wehen looking at the regular render). This is due to the "ghostly" nature of fractal flames,
+and currently there are no tools in JWildfire to counteract these effect, but I'm working on it.
 
 Hint: To export a z-buffer, you must activate the option _with Z-Buffer_ in the _Quality_-profile you are using.
 See the sub-section about <<quality_profiles, _Quality Profiles_>> for more details.
@@ -1305,14 +1312,31 @@ Affects the amplitude of the z-shift/depth-effect caused by the z-buffer.
 The higher the value, the more dramatic the depth-effect caused by the z-buffer.
 If positive, close areas are light and far areas are dark. If negative, close areas are dark and far areas are light.
 
+====== _ZBuffer offset_
+Adjusts the center-position of the z-buffer in z-direction
+
 ====== _ZBuffer bias_
-Moves the minimal z-shift.
+Moves background area of the z-buffer into z-direction. With a higher value the saturation is reached more quickly.
 
 ====== _ZBuffer filename_
 There are two options to control how the filename of the z-buffer-image is determined:
 
  - *zbuf_name*: use image filename prefixed with "zbuf_"
  - *name_depth*: append "_depth" to the image filename
+
+===== _Suggest params_
+Renders an image using the currently selected render-settings to suggest settings for z-buffer which uses the available
+color-space in an optimal way.
+Does not work well for very noisy fractals.
+
+Note: This option currently does not work well for GPU-rendering. This is due to the difference in implementation of CPU- and GPU-rendering,
+which also leads to a different implementation of rendering of the z-buffer.
+For GPU-rendering, it is recommended to use the _Render preview_-button at the _ZBuffer_ subtab to adjust the z-buffer-settings.
+
+===== _Render preview_
+Renders a preview of the z-buffer using the currently selected z-buffer-parameters.
+Important notice:  It is recommended to use a real render to evaluate the z-buffer-settings before rendering a longer
+sequence of images (with z-buffer), because the creation of the z-buffer may also depend on resolution and render quality.
 
 ==== _Stereo3D_ tab
 At this tab you can change options for rendering Stereo3D images.

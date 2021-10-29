@@ -1,3 +1,11 @@
+V7.20 (xx.xx.2021)
+ - option to generate z-buffers for regular flames. While this option is limited and may not work well on many flames, it may help to generate awesome
+   effects for certain flames. Also available with GPU-rendering.
+ - motion-curve-editor: when using an mp3-file as input you may have an option to chose a list of of frequency-bands, rather then only one single frequency band.
+   When generating the motion curve, the average of all the selected bands is generated. This give a particular band more importance you may add it multiple times.
+ - minor change to the calculation of dof on GPU
+ - the default setting for "ZBuffer filename" is now "name_depth" (instead of "zbuf_name")
+
 V7.00 (07.08.2021)
  - Re-implementation of GPU-rendering (PLEASE NOTE: this works only on Windows and requires a modern NVIDIA graphics card)
    In Version 6.50 GPU rendering was VERY limited because it used only the internal pre-defined variation set for "classic" flam3-variations.
@@ -31,7 +39,7 @@ V7.00 (07.08.2021)
          - there will always be features which are not possible on GPU (for example, probably, sub-flames).
          - there will be platforms, where it will be never supported
          - all calculations on GPU are done using single precision, while CPU uses double precision.
-           And some mathematical functions on GPU are just approximations in cotrast to the more precise CPU-variants.
+           And some mathematical functions on GPU are just approximations in contrast to the more precise CPU-variants.
            So, likely, there will be differences, often very small, but they will there.
      - Please also note: the more features you use, the more code is created, compiled and executed. Especially,
        weighting-fields are very expensive in comparison to other features. At higher resolution the GPU render will always

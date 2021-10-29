@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -20,12 +20,14 @@ import java.io.Serializable;
 
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.edit.Assignable;
+import org.jwildfire.create.tina.render.image.ZBufferInfo;
 
 public class RenderInfo implements Assignable<RenderInfo>, Serializable {
   private static final long serialVersionUID = 1L;
   private boolean renderImage = true;
   private boolean renderHDR;
   private boolean renderZBuffer;
+  private boolean suggestZBufferParams;
   private boolean storeRaster;
   private transient AbstractRaster restoredRaster;
   private int imageWidth;
@@ -33,6 +35,7 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
   private RenderMode renderMode = RenderMode.PRODUCTION;
   private double segmentRenderingCamXModifier = 0.0;
   private double segmentRenderingCamYModifier = 0.0;
+  private ZBufferInfo zBufferInfo;
 
   protected RenderInfo() {
 
@@ -157,5 +160,21 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
 
   public void setSegmentRenderingCamYModifier(double segmentRenderingCamYModifier) {
     this.segmentRenderingCamYModifier = segmentRenderingCamYModifier;
+  }
+
+  public boolean isSuggestZBufferParams() {
+    return suggestZBufferParams;
+  }
+
+  public void setSuggestZBufferParams(boolean suggestZBufferParams) {
+    this.suggestZBufferParams = suggestZBufferParams;
+  }
+
+  public ZBufferInfo getzBufferInfo() {
+    return zBufferInfo;
+  }
+
+  public void setzBufferInfo(ZBufferInfo zBufferInfo) {
+    this.zBufferInfo = zBufferInfo;
   }
 }

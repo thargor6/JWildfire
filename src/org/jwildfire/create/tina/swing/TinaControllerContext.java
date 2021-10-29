@@ -18,7 +18,13 @@
 package org.jwildfire.create.tina.swing;
 
 public class TinaControllerContext {
+
+  public enum RenderPass {
+    DEFAULT, Z_BUFFER
+  }
+
   private boolean gpuMode;
+  private RenderPass renderPass = RenderPass.DEFAULT;
 
   public boolean isGpuMode() {
     return gpuMode;
@@ -27,4 +33,17 @@ public class TinaControllerContext {
   public void setGpuMode(boolean gpuMode) {
     this.gpuMode = gpuMode;
   }
+
+  public RenderPass getRenderPass() {
+    return renderPass;
+  }
+
+  public void setRenderPass(RenderPass renderPass) {
+    this.renderPass = renderPass;
+  }
+
+  public boolean isZPass() {
+    return RenderPass.Z_BUFFER == renderPass;
+  }
+
 }

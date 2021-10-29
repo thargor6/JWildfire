@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -224,6 +224,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected double lerp(double a, double b, double t) {
     return (1 - t) * a + t * b;
   }
+
   protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double dzIntensity, double lIntensity, XYZPoint origin) {
     plotRed = origin.redColor;
     plotGreen = origin.greenColor;

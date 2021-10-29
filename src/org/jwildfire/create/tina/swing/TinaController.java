@@ -70,6 +70,7 @@ import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
+import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.*;
 import org.jwildfire.transform.TextTransformer;
 import org.jwildfire.transform.TextTransformer.FontStyle;
@@ -644,6 +645,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaZBufferScaleSlider = parameterObject.tinaZBufferScaleSlider;
     data.tinaZBufferBiasREd = parameterObject.tinaZBufferBiasREd;
     data.tinaZBufferBiasSlider = parameterObject.tinaZBufferBiasSlider;
+    data.tinaZBufferShiftREd = parameterObject.tinaZBufferShiftREd;
+    data.tinaZBufferShiftSlider = parameterObject.tinaZBufferShiftSlider;
     data.tinaZBufferFilename1 = parameterObject.tinaZBufferFilename1;
     data.tinaZBufferFilename2 = parameterObject.tinaZBufferFilename2;
 
@@ -1481,6 +1484,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void cancelBackgroundRender() {
     flamePreviewHelper.cancelBackgroundRender();
+  }
+
+  public void renderZBufferPreviewButton_actionPerformed(ActionEvent e) {
+    TinaControllerContextService.getContext().setRenderPass(TinaControllerContext.RenderPass.Z_BUFFER);
+    try {
+      refreshFlameImage(false, false, 1, true, false);
+    }
+    finally {
+      TinaControllerContextService.getContext().setRenderPass(TinaControllerContext.RenderPass.DEFAULT);
+    }
   }
 
   public static class TransformationsTableCellRenderer extends DefaultTableCellRenderer {
@@ -6894,6 +6907,34 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void toggleGpuMode() {
     TinaControllerContextService.getContext().setGpuMode(data.gpuModeToggleButton.isSelected());
+  }
+
+  public void suggestZBufferParams(ActionEvent e) {
+    Flame currFlame = getCurrFlame() != null ? getCurrFlame().makeCopy() : null;
+    if(currFlame!=null && currFlame.isRenderable()) {
+      ResolutionProfile resProfile = getResolutionProfile();
+      int width = resProfile.getWidth();
+      int height = resProfile.getHeight();
+      RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
+      double wScl = (double) info.getImageWidth() / (double) currFlame.getWidth();
+      double hScl = (double) info.getImageHeight() / (double) currFlame.getHeight();
+      currFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * currFlame.getPixelsPerUnit());
+      currFlame.setWidth(info.getImageWidth());
+      currFlame.setHeight(info.getImageHeight());
+      info.setRenderHDR(false);
+      info.setRenderZBuffer(true);
+      info.setSuggestZBufferParams(true);
+//      QualityProfile qualProfile = getQualityProfile();
+//      currFlame.setSampleDensity(qualProfile.getQuality());
+      currFlame.setSampleDensity(50);
+      FlameRenderer renderer = new FlameRenderer(currFlame, prefs, false, false);
+      renderer.setProgressUpdater(mainProgressUpdater);
+      renderer.renderFlame(info);
+      getCurrFlame().setZBufferScale(info.getzBufferInfo().getSuggestedZScale());
+      getCurrFlame().setZBufferShift(info.getzBufferInfo().getSuggestedZShift());
+      getFlameControls().refreshFlameValues();
+      messageHelper.showStatusMessage(getCurrFlame(), "The parameters ZScale and ZShift have been updated according to the current render settings");
+    }
   }
 }
 

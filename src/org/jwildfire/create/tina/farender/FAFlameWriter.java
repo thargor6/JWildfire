@@ -80,8 +80,16 @@ public class FAFlameWriter extends AbstractFlameWriter {
       }
       attrList.add(new SimpleXMLBuilder.Attribute<String>("varset", variationSet.getUuid()));
       attrList.add(new SimpleXMLBuilder.Attribute<String>("highlight_power", "-1"));
-      // HACK: misusing the zBufferScale-field because it will never be used by FARender, can later easily changed if necessary, by introducing a dedicated field
-      attrList.add(new SimpleXMLBuilder.Attribute<Double>("intensity_adjust", transformedFlame.getZBufferScale()));
+      // HACK: misusing the stereo3dAngle-field because it will never be used by FARender, can later easily be changed if necessary, by introducing a dedicated field
+      attrList.add(new SimpleXMLBuilder.Attribute<Double>("intensity_adjust", transformedFlame.getStereo3dAngle()));
+      // HACK: misusing the spatialFilterIndicator-field because it will never be used by FARender, can later easily be changed if necessary, by introducing a dedicated field
+      if(transformedFlame.isSpatialFilterIndicator()) {
+        attrList.add(new SimpleXMLBuilder.Attribute<Integer>("render_pass", 1));
+        attrList.add(new SimpleXMLBuilder.Attribute<Double>("z_buffer_scale", transformedFlame.getZBufferScale()));
+        attrList.add(new SimpleXMLBuilder.Attribute<Double>("z_buffer_bias", transformedFlame.getZBufferBias()));
+        attrList.add(new SimpleXMLBuilder.Attribute<Double>("z_buffer_shift", transformedFlame.getZBufferShift()));
+      }
+
       xb.beginElement("flame", attrList);
       // XForm
       for (XForm xForm : layer.getXForms()) {
@@ -347,7 +355,7 @@ public class FAFlameWriter extends AbstractFlameWriter {
           "filter_sharpness", "filter_low_density", "ai_post_denoiser", "post_optix_denoiser_blend", "background_type",
           "background_ul", "background_ur", "background_ll", "background_lr", "background_cc", "fg_opacity",
           "post_blur_radius", "post_blur_fade", "post_blur_falloff", "mixer_mode", "frame", "frame_count",
-          "fps", "zbuffer_scale", "zbuffer_bias", "zbuffer_filename", "low_density_brightness"));
+          "fps", "zbuffer_scale", "zbuffer_bias", "zbuffer_shift", "zbuffer_filename", "low_density_brightness"));
   private List<Attribute<?>> filterFlameAttrList(List<Attribute<?>> pSrc) {
     return pSrc.stream().filter(a -> !a.getName().startsWith("grad_edit_") && !a.getName().contains("Curve_") && !a.getName().startsWith("post_symmetry_") && !FLAME_ATTR_BLACKLIST.contains(a.getName())).collect(Collectors.toList());
   }

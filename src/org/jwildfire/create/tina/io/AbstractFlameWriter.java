@@ -428,6 +428,7 @@ public class AbstractFlameWriter {
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZBUFFER_SCALE, pFlame.getZBufferScale()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZBUFFER_BIAS, pFlame.getZBufferBias()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZBUFFER_SHIFT, pFlame.getZBufferShift()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZBUFFER_FILENAME, pFlame.getZBufferFilename().name()));
 
     if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {

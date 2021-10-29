@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,12 +22,12 @@ public enum RasterCreator {
   FLOAT_INT_RASTER
   {
     @Override
-    public Class<? extends AbstractRaster> getRasterClass(Flame pFlame) {
-      return pFlame.getSolidRenderSettings().isSolidRenderingEnabled() ? RasterFloatIntWithPreciseZBuffer.class : RasterFloatInt.class;
+    public Class<? extends AbstractRaster> getRasterClass(Flame pFlame, boolean withZBuffer) {
+      return pFlame.getSolidRenderSettings().isSolidRenderingEnabled() ? RasterFloatIntForSolidRendering.class : withZBuffer ? RasterFloatIntWithZBuffer.class : RasterFloatInt.class;
     }
   };
 
-  public abstract Class<? extends AbstractRaster> getRasterClass(Flame pFlame);
+  public abstract Class<? extends AbstractRaster> getRasterClass(Flame pFlame, boolean withZBuffer);
 
   public static RasterCreator getDefaultValue() {
     return FLOAT_INT_RASTER;
