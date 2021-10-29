@@ -17,9 +17,8 @@
 package org.jwildfire.base;
 
 import java.awt.Color;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -102,10 +101,11 @@ public class PrefsReader {
   public void readPrefs(Prefs pPrefs) throws Exception {
     File file = new File(System.getProperty("user.home"), Prefs.PREFS_FILE);
     if (file.exists()) {
-      InputStream inputStream = new FileInputStream(file);
+      InputStream input = new FileInputStream(file);
       try {
+        Reader reader = new InputStreamReader(input, Charset.forName("UTF-8"));
         Properties props = new Properties();
-        props.load(inputStream);
+        props.load(reader);
         pPrefs.setDevelopmentMode(getBooleanProperty(props, Prefs.KEY_GENERAL_DEVELOPMENT_MODE, pPrefs.isDevelopmentMode()));
         {
           String lookAndFeel = getProperty(props, Prefs.KEY_GENERAL_LOOK_AND_FEEL, "");
@@ -374,7 +374,7 @@ public class PrefsReader {
 
       }
       finally {
-        inputStream.close();
+        input.close();
       }
     }
     else {

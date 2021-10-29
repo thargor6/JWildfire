@@ -6,6 +6,9 @@ V7.20 (xx.xx.2021)
  - minor change to the calculation of dof on GPU
  - the default setting for "ZBuffer filename" is now "name_depth" (instead of "zbuf_name")
  - fixed: crackle-variation did not work on GPU
+ - fixed: Unicode-characters are now handled correctly in loading/storing the settings. This fixes a very crazy bug which could lead to a huge growth
+   of the Preferences-file, which then would cause a major slowdown of te application. Due to encoding errors all unicode-characters where somewhat duplicated
+   at each start of the application. This started harmless, but would become very dramatic (like growth of water lilies on a pond)
 
 V7.00 (07.08.2021)
  - Re-implementation of GPU-rendering (PLEASE NOTE: this works only on Windows and requires a modern NVIDIA graphics card)
