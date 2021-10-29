@@ -5,6 +5,7 @@ V7.20 (xx.xx.2021)
    When generating the motion curve, the average of all the selected bands is generated. This give a particular band more importance you may add it multiple times.
  - minor change to the calculation of dof on GPU
  - the default setting for "ZBuffer filename" is now "name_depth" (instead of "zbuf_name")
+ - fixed: crackle-variation did not work on GPU
 
 V7.00 (07.08.2021)
  - Re-implementation of GPU-rendering (PLEASE NOTE: this works only on Windows and requires a modern NVIDIA graphics card)
