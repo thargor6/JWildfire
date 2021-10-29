@@ -31,11 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.RootPaneContainer;
+import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -46,7 +42,10 @@ import org.jwildfire.envelope.EnvelopePanel;
 import org.jwildfire.envelope.EnvelopeView;
 import org.jwildfire.swing.ErrorHandler;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+
 public class EnvelopeDlgController {
+
   private enum MouseClickWaitMode {
     ADD_POINT, REMOVE_POINT, NONE
   }
@@ -80,6 +79,8 @@ public class EnvelopeDlgController {
   private final JButton applyTransformReverseBtn;
   private final JButton mp3ImportBtn;
   private final JWFNumberField mp3ChannelREd;
+  private final JTextField mp3ChannelsREd;
+  private final JCheckBox mp3MultipleChannelsCBx;
   private final JWFNumberField mp3FPSREd;
   private final JWFNumberField mp3OffsetREd;
   private final JWFNumberField mp3DurationREd;
@@ -98,6 +99,8 @@ public class EnvelopeDlgController {
   private final JWFNumberField rawDataAmplitudeColumnField;
   private final JWFNumberField rawDataAmplitudeScaleField;
   private final JWFNumberField smoothCurveAmountField;
+  private final JWFNumberField envelopeYRangeMinREd;
+  private final JWFNumberField envelopeYRangeMaxREd;
 
   private final List<EnvelopeChangeListener> valueChangeListeners = new ArrayList<EnvelopeChangeListener>();
   private final List<EnvelopeChangeListener> selectionChangeListeners = new ArrayList<EnvelopeChangeListener>();
@@ -113,8 +116,8 @@ public class EnvelopeDlgController {
 
   public EnvelopeDlgController(EnvelopePanel pEnvelopePanel, ErrorHandler pErrorHandler) {
     this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, pEnvelopePanel,
-        null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler, null, null, null, null, null,
-        null, null, null, null, null, null, null, null, null);
+        null, null, null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null, null);
   }
 
   public EnvelopeDlgController(Envelope pEnvelope, JButton pAddPointButton, JButton pRemovePointButton, JButton pClearButton,
@@ -124,13 +127,14 @@ public class EnvelopeDlgController {
       JButton pViewDownButton, EnvelopePanel pEnvelopePanel, JComboBox pEnvelopeInterpolationCmb,
       JWFNumberField pXScaleREd, JWFNumberField pXOffsetREd, JWFNumberField pYScaleREd, JWFNumberField pYOffsetREd,
       JButton pApplyTransformBtn, JButton pApplyTransformReverseBtn, JButton pMp3ImportBtn,
-      JWFNumberField pMp3ChannelREd, JWFNumberField pMp3FPSREd, JWFNumberField pMp3OffsetREd,
+      JWFNumberField pMp3ChannelREd, JTextField pMp3ChannelsREd, JCheckBox pMp3MultipleChannelsCBx,
+      JWFNumberField pMp3FPSREd, JWFNumberField pMp3OffsetREd,
       JWFNumberField pMp3DurationREd, ErrorHandler pErrorHandler, JCheckBox pAutofitCBx,
       JWFNumberField pCurveFPSField, JComboBox pEditModeCmb, JButton pSmoothCurveBtn, JWFNumberField pTimeField,
       JButton pRawDataImportFromFileButton, JButton pRawDataImportFromClipboardButton,
       JButton pRawDataExportToFileButton, JButton pRawDataExportToClipboardButton, JWFNumberField pRawDataFrameColumnField,
       JWFNumberField pRawDataFrameScaleField, JWFNumberField pRawDataAmplitudeColumnField, JWFNumberField pRawDataAmplitudeScaleField,
-      JWFNumberField pSmoothCurveAmountField) {
+      JWFNumberField pSmoothCurveAmountField, JWFNumberField pEnvelopeYRangeMinREd, JWFNumberField pEnvelopeYRangeMaxREd) {
     envelope = pEnvelope;
     addPointButton = pAddPointButton;
     removePointButton = pRemovePointButton;
@@ -155,6 +159,8 @@ public class EnvelopeDlgController {
     applyTransformReverseBtn = pApplyTransformReverseBtn;
     mp3ImportBtn = pMp3ImportBtn;
     mp3ChannelREd = pMp3ChannelREd;
+    mp3ChannelsREd = pMp3ChannelsREd;
+    mp3MultipleChannelsCBx = pMp3MultipleChannelsCBx;
     mp3FPSREd = pMp3FPSREd;
     mp3OffsetREd = pMp3OffsetREd;
     mp3DurationREd = pMp3DurationREd;
@@ -173,6 +179,8 @@ public class EnvelopeDlgController {
     rawDataAmplitudeColumnField = pRawDataAmplitudeColumnField;
     rawDataAmplitudeScaleField = pRawDataAmplitudeScaleField;
     smoothCurveAmountField = pSmoothCurveAmountField;
+    envelopeYRangeMinREd = pEnvelopeYRangeMinREd;
+    envelopeYRangeMaxREd = pEnvelopeYRangeMaxREd;
 
     envelopePanel = pEnvelopePanel;
     envelopeInterpolationCmb = pEnvelopeInterpolationCmb;
@@ -996,7 +1004,7 @@ public class EnvelopeDlgController {
         double xoffset = xOffsetREd != null ? xOffsetREd.getDoubleValue() : 0.0;
         double yscale = yScaleREd != null ? yScaleREd.getDoubleValue() : 1.0;
         double yoffset = yOffsetREd != null ? yOffsetREd.getDoubleValue() : 0.0;
-        if (xscale < MathLib.EPSILON || yscale < MathLib.EPSILON) {
+        if (xscale < EPSILON || yscale < EPSILON) {
           throw new RuntimeException("Specified scale-value is too small");
         }
 
@@ -1046,18 +1054,6 @@ public class EnvelopeDlgController {
     }
     else {
       refreshEnvelope();
-    }
-  }
-
-  public void mp3SettingsChanged() {
-    try {
-      if (mp3Data != null) {
-        mp3Data.applyToEvelope(envelope, mp3FPSREd.getIntValue(), mp3ChannelREd.getIntValue() - 1, mp3OffsetREd.getIntValue(), mp3DurationREd.getIntValue());
-        refreshEnvelope();
-      }
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
     }
   }
 
@@ -1218,4 +1214,93 @@ public class EnvelopeDlgController {
     }
     return sb.toString();
   }
+
+  public void fitYRange() {
+    double destYMin = envelopeYRangeMinREd.getDoubleValue();
+    double destYMax = envelopeYRangeMaxREd.getDoubleValue();
+    if(destYMin + EPSILON < destYMax ) {
+      double y[] = envelope.getY();
+      if (y.length > 0) {
+        double srcYMin = y[0], srcYMax = y[0];
+        for (int i = 1; i < y.length; i++) {
+          if (y[i] < srcYMin) srcYMin = y[i];
+          else if (y[i] > srcYMax) srcYMax = y[i];
+        }
+        if(srcYMin + EPSILON < srcYMax ) {
+          for (int i = 0; i < y.length; i++) {
+            y[i] = (y[i]-srcYMin) / (srcYMax - srcYMin) * (destYMax - destYMin) + destYMin;
+          }
+          envelope.setValues(envelope.getX(), y);
+          envelope.setViewYMin(destYMin - (destYMax - destYMin) * 0.04);
+          envelope.setViewYMax(destYMax + (destYMax - destYMin) * 0.04);
+          refreshEnvelope();
+          refreshXField();
+          refreshYField();
+        }
+      }
+    }
+  }
+
+  public void mp3SettingsChanged() {
+    try {
+      if (mp3Data != null) {
+        if(mp3MultipleChannelsCBx.isSelected()) {
+          List<Integer> channels = new ArrayList<>();
+          {
+            String channelsPattern = mp3ChannelsREd.getText();
+            StringTokenizer tokenizer = new StringTokenizer(channelsPattern, ",");
+            while(tokenizer.hasMoreElements()) {
+              try {
+                int channel = Integer.parseInt(tokenizer.nextToken().trim());
+                if(channel>=1 && channel <= 64) {
+                  channels.add(channel);
+                }
+              }
+              catch(Exception ex) {
+                ex.printStackTrace();
+              }
+            }
+          }
+          if(channels.size()==1) {
+            mp3Data.applyToEvelope(envelope, mp3FPSREd.getIntValue(), channels.get(0) - 1, mp3OffsetREd.getIntValue(), mp3DurationREd.getIntValue());
+          }
+          else if(!channels.isEmpty()) {
+            List<Envelope> envelopes = new ArrayList<>();
+            for(int channel: channels) {
+              Envelope lEnvelope = envelope.clone();
+              envelopes.add(lEnvelope);
+              mp3Data.applyToEvelope(lEnvelope, mp3FPSREd.getIntValue(), channel-1, mp3OffsetREd.getIntValue(), mp3DurationREd.getIntValue());
+            }
+            Envelope first = envelopes.get(0);
+            int x[]=first.getX();
+            double y[]=new double[x.length];
+            for(int i=0;i<x.length;i++) {
+              double currY=0;
+              for(int j=0;j<envelopes.size();j++) {
+                currY+=envelopes.get(j).getY()[i];
+              }
+              y[i] = currY / (double) envelopes.size();
+            }
+            envelope.setValues(x, y);
+
+            envelope.setViewXMin(first.getViewXMin());
+            envelope.setViewXMax(first.getViewXMax());
+            envelope.setViewYMin(first.getViewYMin());
+            envelope.setViewYMax(first.getViewYMax());
+
+            refreshEnvelope();
+          }
+        }
+        else {
+          mp3Data.applyToEvelope(envelope, mp3FPSREd.getIntValue(), mp3ChannelREd.getIntValue() - 1, mp3OffsetREd.getIntValue(), mp3DurationREd.getIntValue());
+        }
+        refreshEnvelope();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+
 }

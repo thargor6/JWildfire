@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -47,10 +47,13 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
@@ -637,7 +640,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeApplyTransformBtn.setText("Apply");
     envelopeApplyTransformBtn.setPreferredSize(new Dimension(141, 26));
     envelopeApplyTransformBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-    envelopeApplyTransformBtn.setBounds(362, 6, 80, 26);
+    envelopeApplyTransformBtn.setBounds(274, 6, 105, 26);
     panel_6.add(envelopeApplyTransformBtn);
 
     envelopeApplyTransformReverseBtn = new JButton();
@@ -651,7 +654,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeApplyTransformReverseBtn.setText("Reverse");
     envelopeApplyTransformReverseBtn.setPreferredSize(new Dimension(141, 26));
     envelopeApplyTransformReverseBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-    envelopeApplyTransformReverseBtn.setBounds(454, 6, 80, 26);
+    envelopeApplyTransformReverseBtn.setBounds(274, 32, 105, 26);
     panel_6.add(envelopeApplyTransformReverseBtn);
 
     editModeCmb = new JComboBox();
@@ -713,17 +716,100 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     lblSmoothStrength.setBounds(408, 54, 74, 26);
     panel_5.add(lblSmoothStrength);
 
+    envelopeMP3ChannelsREd = new JTextField();
+    envelopeMP3ChannelsREd.setEnabled(false);
+    envelopeMP3ChannelsREd.setBounds(110, 109, 276, 28);
+    envelopeMP3ChannelsREd.getDocument().addDocumentListener(new DocumentListener() {
+      public void changedUpdate(DocumentEvent e) {
+        if (ctrl != null)
+          ctrl.mp3SettingsChanged();
+      }
+
+      public void removeUpdate(DocumentEvent e) {
+        if (ctrl != null)
+          ctrl.mp3SettingsChanged();
+      }
+
+      public void insertUpdate(DocumentEvent e) {
+        if (ctrl != null)
+          ctrl.mp3SettingsChanged();
+      }
+
+    });
+
+    panel_7.add(envelopeMP3ChannelsREd);
+    envelopeMP3ChannelsREd.setColumns(10);
+
+    JLabel lblFrequencyBandRange = new JLabel();
+    lblFrequencyBandRange.setToolTipText("Choose which frequency bands to use, as comma-separated list");
+    lblFrequencyBandRange.setText("Frequency bands");
+    lblFrequencyBandRange.setPreferredSize(new Dimension(38, 26));
+    lblFrequencyBandRange.setHorizontalAlignment(SwingConstants.RIGHT);
+    lblFrequencyBandRange.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblFrequencyBandRange.setBounds(16, 111, 93, 26);
+    panel_7.add(lblFrequencyBandRange);
+
+    envelopeMP3ChannelModeCBx = new JCheckBox("Multiple frequency bands");
+    envelopeMP3ChannelModeCBx.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        envelopeMP3ChannelREd.setEnabled(!envelopeMP3ChannelModeCBx.isSelected());
+        envelopeMP3ChannelsREd.setEnabled(envelopeMP3ChannelModeCBx.isSelected());
+        if (ctrl != null)
+          ctrl.mp3SettingsChanged();
+      }
+    });
+    envelopeMP3ChannelModeCBx.setBounds(110, 89, 235, 18);
+    panel_7.add(envelopeMP3ChannelModeCBx);
+
+    envelopeYRangeMinREd = new JWFNumberField();
+    envelopeYRangeMinREd.setPreferredSize(new Dimension(80, 26));
+    envelopeYRangeMinREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    envelopeYRangeMinREd.setBounds(101, 134, 80, 26);
+    panel_6.add(envelopeYRangeMinREd);
+
+    JLabel lblAmplitudeRange_1 = new JLabel();
+    lblAmplitudeRange_1.setText("Amplitude Range");
+    lblAmplitudeRange_1.setPreferredSize(new Dimension(38, 26));
+    lblAmplitudeRange_1.setHorizontalAlignment(SwingConstants.RIGHT);
+    lblAmplitudeRange_1.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblAmplitudeRange_1.setBounds(6, 134, 93, 26);
+    panel_6.add(lblAmplitudeRange_1);
+
+    envelopeYRangeMaxREd = new JWFNumberField();
+    envelopeYRangeMaxREd.setText("1");
+    envelopeYRangeMaxREd.setPreferredSize(new Dimension(80, 26));
+    envelopeYRangeMaxREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+    envelopeYRangeMaxREd.setBounds(182, 134, 80, 26);
+    panel_6.add(envelopeYRangeMaxREd);
+
+    btnFitAmplitude = new JButton();
+    btnFitAmplitude.setToolTipText("");
+    btnFitAmplitude.setText("Fit amplitude ");
+    btnFitAmplitude.setPreferredSize(new Dimension(141, 26));
+    btnFitAmplitude.setFont(new Font("Dialog", Font.BOLD, 10));
+    btnFitAmplitude.setBounds(274, 134, 105, 26);
+    btnFitAmplitude.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (ctrl != null)
+          ctrl.fitYRange();
+      }
+    });
+
+    panel_6.add(btnFitAmplitude);
+
     ctrl = new EnvelopeDlgController(pEnvelope, getEnvelopeAddPointButton(), getEnvelopeRemovePointButton(), getEnvelopeClearButton(),
-        getEnvelopeXMinREd(), getEnvelopeXMaxREd(), getEnvelopeYMinREd(), getEnvelopeYMaxREd(), getEnvelopeXREd(),
-        getEnvelopeYREd(), getEnvelopeInterpolationCmb(), getEnvelopeViewAllButton(), getEnvelopeViewLeftButton(),
-        getEnvelopeViewRightButton(), getEnvelopeViewUpButton(), getEnvelopeViewDownButton(), getEnvelopePanel(), getEnvelopeInterpolationCmb(),
-        getEnvelopeXScaleREd(), getEnvelopeXOffsetREd(), getEnvelopeYScaleREd(), getEnvelopeYOffsetREd(),
-        getEnvelopeApplyTransformBtn(), getEnvelopeApplyTransformReverseBtn(), getEnvelopeImportMP3Button(),
-        getEnvelopeMP3ChannelREd(), getEnvelopeMP3FPSREd(), getEnvelopeMP3OffsetREd(), getEnvelopeMP3DurationREd(),
-        errorHandler, getAutofitCBx(), getCurveFPSField(), getEditModeCmb(), getSmoothCurveBtn(), getTimeField(),
-        getRawDataImportFromFileButton(), getRawDataImportFromClipboardButton(), getRawDataExportToFileButton(),
-        getRawDataExportToClipboardButton(), getRawDataFrameColumnField(), getRawDataFrameScaleField(),
-        getRawDataAmplitudeColumnField(), getRawDataAmplitudeScaleField(), getSmoothCurveAmountField());
+            getEnvelopeXMinREd(), getEnvelopeXMaxREd(), getEnvelopeYMinREd(), getEnvelopeYMaxREd(), getEnvelopeXREd(),
+            getEnvelopeYREd(), getEnvelopeInterpolationCmb(), getEnvelopeViewAllButton(), getEnvelopeViewLeftButton(),
+            getEnvelopeViewRightButton(), getEnvelopeViewUpButton(), getEnvelopeViewDownButton(), getEnvelopePanel(), getEnvelopeInterpolationCmb(),
+            getEnvelopeXScaleREd(), getEnvelopeXOffsetREd(), getEnvelopeYScaleREd(), getEnvelopeYOffsetREd(),
+            getEnvelopeApplyTransformBtn(), getEnvelopeApplyTransformReverseBtn(), getEnvelopeImportMP3Button(),
+            getEnvelopeMP3ChannelREd(), getEnvelopeMP3ChannelsREd(), getEnvelopeMP3ChannelModeCBx(), getEnvelopeMP3FPSREd(),
+            getEnvelopeMP3OffsetREd(), getEnvelopeMP3DurationREd(),
+            errorHandler, getAutofitCBx(), getCurveFPSField(), getEditModeCmb(), getSmoothCurveBtn(), getTimeField(),
+            getRawDataImportFromFileButton(), getRawDataImportFromClipboardButton(), getRawDataExportToFileButton(),
+            getRawDataExportToClipboardButton(), getRawDataFrameColumnField(), getRawDataFrameScaleField(),
+            getRawDataAmplitudeColumnField(), getRawDataAmplitudeScaleField(), getSmoothCurveAmountField(),
+            getEnvelopeYRangeMinREd(), getEnvelopeYRangeMaxREd());
 
     ctrl.setNoRefresh(true);
 
@@ -1286,6 +1372,11 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
   private JWFNumberField rawDataAmplitudeColumnField;
   private JWFNumberField rawDataAmplitudeScaleField;
   private JWFNumberField smoothCurveAmountField;
+  private JWFNumberField envelopeYRangeMinREd;
+  private JWFNumberField envelopeYRangeMaxREd;
+  private JButton btnFitAmplitude;
+  private JTextField envelopeMP3ChannelsREd;
+  private JCheckBox envelopeMP3ChannelModeCBx;
 
   private String findProperty(Object pObject, Object pProperty, String pPath) {
     if (pObject == pProperty) {
@@ -1548,5 +1639,25 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
   public JWFNumberField getSmoothCurveAmountField() {
     return smoothCurveAmountField;
+  }
+
+  public JWFNumberField getEnvelopeYRangeMinREd() {
+    return envelopeYRangeMinREd;
+  }
+
+  public JWFNumberField getEnvelopeYRangeMaxREd() {
+    return envelopeYRangeMaxREd;
+  }
+
+  public JButton getBtnFitAmplitude() {
+    return btnFitAmplitude;
+  }
+
+  public JTextField getEnvelopeMP3ChannelsREd() {
+    return envelopeMP3ChannelsREd;
+  }
+
+  public JCheckBox getEnvelopeMP3ChannelModeCBx() {
+    return envelopeMP3ChannelModeCBx;
   }
 }
