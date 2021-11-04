@@ -1,4 +1,5 @@
 <configuration>
+
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>${user.home}/JWildfire.log</file>
         <append>false</append>
@@ -21,8 +22,8 @@
     </appender>
 
     <root level="debug">
-        <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
         <appender-ref ref="MESSAGE_LOG" />
+        <appender-ref ref="FILE" />
     </root>
 </configuration>

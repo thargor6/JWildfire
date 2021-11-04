@@ -125,8 +125,8 @@ public class MessageLogFrame extends JFrame implements MessageLogEventObserver {
       builder.append("        "+element.toString()+"\n");
     }
     builder.append("\n\n");
-    Document doc = logMessagesPane.getDocument();
     try {
+      Document doc = logMessagesPane.getDocument();
       doc.insertString(0, builder.toString(), null);
       logMessagesPane.setCaretPosition(0);
     } catch (BadLocationException e) {

@@ -96,7 +96,7 @@ public class TinaNonlinearControlsRow {
         VariationFuncFilter filter = tinaController.getCurrentVariationFuncFilter();
 
         List<String> nameList = VariationFuncList.getNameList().stream().filter( n -> filter.evaluate(n)).collect(Collectors.toList());
-        System.err.println("Filtered variations: "+nameList.size());
+        // System.err.println("Filtered variations: "+nameList.size());
         if(!"".equals(selectedItem) && !nameList.contains(selectedItem)) {
           nameList.add(selectedItem);
         }

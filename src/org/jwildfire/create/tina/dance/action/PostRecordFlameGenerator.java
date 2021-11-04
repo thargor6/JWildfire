@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2021 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.dance.action;
 
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,9 @@ import org.jwildfire.create.tina.dance.FlamePreparer;
 import org.jwildfire.create.tina.dance.RealtimeAnimRenderThread;
 import org.jwildfire.create.tina.dance.motion.DanceFlameTransformer;
 import org.jwildfire.create.tina.io.FlameWriter;
+import org.jwildfire.create.tina.swing.FileDialogTools;
+
+import javax.swing.*;
 
 public class PostRecordFlameGenerator {
   private final DancingFlameProject project;
@@ -121,7 +125,9 @@ public class PostRecordFlameGenerator {
           while (hs.length() < 5) {
             hs = "0" + hs;
           }
-          new FlameWriter().writeFlame(flame, new File(file.getParent(), fn + hs + ".flame").getAbsolutePath());
+          String filename = new File(file.getParent(), fn + hs + ".flame").getAbsolutePath();
+          FileDialogTools.ensureFileAccess(new Frame(), new JPanel(), filename);
+          new FlameWriter().writeFlame(flame, filename);
         }
       }
       else {
