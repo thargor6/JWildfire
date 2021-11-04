@@ -19,6 +19,7 @@ package org.jwildfire.base;
 import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,7 @@ public class PrefsWriter {
     }
     addValue(sb, Prefs.KEY_GENERAL_SHOW_TIPS_AT_STARTUP, pPrefs.isShowTipsAtStartup());
     addValue(sb, Prefs.KEY_GENERAL_SPECIAL_MAC_OS_FILE_HANDLING, pPrefs.isSpecialMacOsFileHandling());
+    addValue(sb, Prefs.KEY_GENERAL_MAC_OS_SEC_BOOKMARKS, pPrefs.isMacOsUseSecurityScopedBookmarks());
     addValue(sb, Prefs.KEY_GENERAL_LAST_TIP, pPrefs.getLastTip());
     addValue(sb, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_THUMBNAILS, pPrefs.getThumbnailPath());
@@ -190,7 +192,17 @@ public class PrefsWriter {
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_MACRO + "." + i, macroButton.getMacro());
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_INTERNAL + "." + i, macroButton.isInternal());
     }
-    //
+    // security scoped bookmarks (only on macOS)
+    {
+      List<String> keys = new ArrayList<>(pPrefs.getSecurityScopedBookmarks().keySet());
+      Collections.sort(keys);
+      addValue(sb, Prefs.KEY_SEC_BOOKMARK_COUNT, keys.size());
+      for(int i = 0;i < keys.size(); i++) {
+        String key = keys.get(i);
+        addValue(sb,  Prefs.KEY_SEC_BOOKMARK_KEY + "." + i, key);
+        addValue(sb,  Prefs.KEY_SEC_BOOKMARK_VALUE + "." + i, pPrefs.getSecurityScopedBookmarks().get(key));
+      }
+    }
     Tools.writeUTF8Textfile(System.getProperty("user.home") + File.separator + Prefs.PREFS_FILE, sb.toString());
   }
 

@@ -158,6 +158,9 @@
         <copy todir="${dist.dir}/lib/FARenderJWF">
             <fileset file="${src.dir}/../FARenderJWF/**"/>
         </copy>
+        <copy todir="${dist.dir}/lib/">
+            <fileset file="${src.dir}/../lib/libSecurityScopedBookmarkLibrary.dylib"/>
+        </copy>
         <copy todir="${dist.dir}/lib">
             <fileset file="${src.dir}/../manual/build/docs/asciidocPdf/JWildfire_manual.pdf"/>
         </copy>

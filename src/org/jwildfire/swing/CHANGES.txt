@@ -1,10 +1,16 @@
-V7.20 (xx.xx.2021)
+V7.20 (05.11.2021)
  - option to generate z-buffers for regular flames. While this option is limited and may not work well on many flames, it may help to generate awesome
    effects for certain flames. Also available with GPU-rendering.
  - motion-curve-editor: when using an mp3-file as input you may have an option to chose a list of of frequency-bands, rather then only one single frequency band.
    When generating the motion curve, the average of all the selected bands is generated. This give a particular band more importance you may add it multiple times.
+ - important change for macOS: security scoped bookmarks are used to remember already selected folder-locations
+   This reduces the amount of dialogs of the type "Please select the folder ... in order to access...",
+   which is a great improvement of user experience.
+ - added support for more variations on GPU. Thanks to Jesus Sosa for your help! We now
+   have about 660 variations which are supported on GPU!
  - minor change to the calculation of dof on GPU
  - the default setting for "ZBuffer filename" is now "name_depth" (instead of "zbuf_name")
+ - fixed: Dancing-Flames-module could not write flame-files (when running inside sandbox)
  - fixed: crackle-variation did not work on GPU
  - fixed: Unicode-characters are now handled correctly in loading/storing the settings. This fixes a very crazy bug which could lead to a huge growth
    of the Preferences-file, which then would cause a major slowdown of te application. Due to encoding errors all unicode-characters where somewhat duplicated

@@ -28,14 +28,20 @@ import org.jwildfire.create.tina.swing.FolderPropertyEditor;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.LookAndFeelType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.File;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Prefs extends ManagedObject {
+  private static final Logger logger = LoggerFactory.getLogger(Prefs.class);
+
   // DON'T forget to update the assign() method after adding new properties!!!
   static final String PREFS_FILE = "j-wildfire.properties";
 
@@ -44,6 +50,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
   static final String KEY_GENERAL_SPECIAL_MAC_OS_FILE_HANDLING = "general.special_mac_os_file_handling";
+  static final String KEY_GENERAL_MAC_OS_SEC_BOOKMARKS = "general.mac_os_sec_bookmarks";
   static final String KEY_GENERAL_SHOW_TIPS_AT_STARTUP = "general.show_tips_at_startup";
   static final String KEY_GENERAL_LAST_TIP = "general.last_tip";
 
@@ -178,6 +185,10 @@ public class Prefs extends ManagedObject {
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
   static final String KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP = "iflames.load_library_at_startup";
 
+  public static final String KEY_SEC_BOOKMARK_KEY = "macos.sec.bookmark.key";
+  public static final String KEY_SEC_BOOKMARK_VALUE = "macos.sec.bookmark.value";
+  public static final String KEY_SEC_BOOKMARK_COUNT = "macos.sec.bookmark.count";
+
   @Property(description = "Drawer for thumbnail-cache (restart of program after change required)", category = PropertyCategory.GENERAL, editorClass = FolderPropertyEditor.class)
   private String thumbnailPath = null;
 
@@ -214,6 +225,12 @@ public class Prefs extends ManagedObject {
           "Enable special file handling for newer versions of macOS. The default behavior on all platforms is to use the standard Java file dialogs. On macOS, these only allow access within the sandbox. This makes it difficult to share files between JWildfire and other apps. If you enable this option, JWildfire uses native file dialogs on macOS. However, this comes at the price of having to reconfirm each first access to a folder.",
       category = PropertyCategory.GENERAL)
   private boolean specialMacOsFileHandling = true;
+
+  @Property(
+      description =
+          "Use security scoped bookmarks to remember already selected file paths (on macOS). Requires the option \"specialMacOsFileHandling\" to be enabled. Uses JNI and a native library. If this causes problems on your system, you may deactivate the access to this library by disabling this option.",
+      category = PropertyCategory.GENERAL)
+  private boolean macOsUseSecurityScopedBookmarks = true;
 
   @Property(description = "Last tip shown at startup", category = PropertyCategory.GENERAL)
   private int lastTip = 0;
@@ -424,6 +441,7 @@ public class Prefs extends ManagedObject {
 
   private boolean createTinaDefaultMacroButtons = true;
   private final List<MacroButton> tinaMacroButtons = new ArrayList<MacroButton>();
+  private Map<String, String> securityScopedBookmarks = new HashMap<>();
 
   public static class RandomBatchRefreshTypeEditor extends ComboBoxPropertyEditor {
     public RandomBatchRefreshTypeEditor() {
@@ -718,6 +736,15 @@ public class Prefs extends ManagedObject {
     new PrefsWriter().writePrefs(this);
   }
 
+  public void saveToFileUnchecked() {
+    try {
+      saveToFile();
+    }
+    catch(Exception e) {
+      logger.error(e.getMessage(), e);
+    }
+  }
+
   public void setImagePath(String imagePath) {
     this.imagePath = imagePath;
   }
@@ -859,6 +886,7 @@ public class Prefs extends ManagedObject {
     tinaFontScale = pSrc.tinaFontScale;
     showTipsAtStartup = pSrc.showTipsAtStartup;
     specialMacOsFileHandling = pSrc.specialMacOsFileHandling;
+    macOsUseSecurityScopedBookmarks = pSrc.macOsUseSecurityScopedBookmarks;
     lastTip = pSrc.lastTip;
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
     tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
@@ -897,6 +925,9 @@ public class Prefs extends ManagedObject {
     iflamesFlameLibraryPath = pSrc.iflamesFlameLibraryPath;
     iflamesImageLibraryPath = pSrc.iflamesImageLibraryPath;
     iflamesLoadLibraryAtStartup = pSrc.iflamesLoadLibraryAtStartup;
+
+    securityScopedBookmarks.clear();
+    securityScopedBookmarks= new HashMap<>(pSrc.securityScopedBookmarks);
   }
 
   public int getTinaRenderThreads() {
@@ -1652,6 +1683,13 @@ public class Prefs extends ManagedObject {
     this.specialMacOsFileHandling = specialMacOsFileHandling;
   }
 
+  public boolean isMacOsUseSecurityScopedBookmarks() {
+    return macOsUseSecurityScopedBookmarks;
+  }
+
+  public void setMacOsUseSecurityScopedBookmarks(boolean macOsUseSecurityScopedBookmarks) {
+    this.macOsUseSecurityScopedBookmarks = macOsUseSecurityScopedBookmarks;
+  }
 
   public int getLastTip() {
     return lastTip;
@@ -1793,4 +1831,9 @@ public class Prefs extends ManagedObject {
   public void setTinaQuickMutationDefaultMutationType(String tinaQuickMutationDefaultMutationType) {
     this.tinaQuickMutationDefaultMutationType = tinaQuickMutationDefaultMutationType;
   }
+
+  public Map<String, String> getSecurityScopedBookmarks() {
+    return securityScopedBookmarks;
+  }
+
 }

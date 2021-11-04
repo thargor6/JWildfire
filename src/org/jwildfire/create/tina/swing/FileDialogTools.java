@@ -16,9 +16,12 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import com.plexteq.ssb.nativeimpl.SecurityScopedBookmarks;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.swing.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,6 +33,8 @@ import java.util.List;
 import java.util.Set;
 
 public class FileDialogTools {
+  private static final Logger logger = LoggerFactory.getLogger(FileDialogTools.class);
+
   private static final Set<String> visitedFolders = new HashSet<>();
 
   private static String getFolderPath(File file) {
@@ -49,9 +54,81 @@ public class FileDialogTools {
     return ensureFileAccess(frame, parent, new File(path));
   }
 
+  private static boolean libSecurityScopedBookmarkLibraryChecked = false;
+  private static boolean supportsSecurityScopedBookmarks = false;
+
+  private static boolean supportsSecurityScopedBookmarks() {
+    if (!libSecurityScopedBookmarkLibraryChecked) {
+      if (Tools.ensureSpecialMacOSFileAccessHandling() && Prefs.getPrefs().isMacOsUseSecurityScopedBookmarks()) {
+        try {
+          File library =
+              new File(
+                  Tools.getPathRelativeToCodeSource("lib"),
+                  "libSecurityScopedBookmarkLibrary.dylib");
+          System.load(library.getAbsolutePath());
+          // execute just some library call
+          /*String bookmark = */ SecurityScopedBookmarks.createBookmarkImpl("/Users/");
+          logger.info("libSecurityScopedBookmarkLibrary.dylib loaded: ");
+          //  if (bookmark != null) {
+          //    SecurityScopedBookmarks.startResourceAccessingImpl(bookmark);
+          //  }
+          supportsSecurityScopedBookmarks = true;
+        } catch (Throwable e) {
+          logger.error(e.getMessage(), e);
+          supportsSecurityScopedBookmarks = false;
+        }
+      }
+      else {
+        supportsSecurityScopedBookmarks = false;
+      }
+      libSecurityScopedBookmarkLibraryChecked = true;
+    }
+    return libSecurityScopedBookmarkLibraryChecked;
+  }
+
+  private static boolean bookmarkAccessAllowedForPath(String path) {
+    if(supportsSecurityScopedBookmarks()) {
+      String bookmark = Prefs.getPrefs().getSecurityScopedBookmarks().get(path);
+      if(bookmark!=null) {
+        try {
+          SecurityScopedBookmarks.startResourceAccessingImpl(bookmark);
+          return true;
+        }
+        catch(Throwable e) {
+          logger.error(e.getMessage(), e);
+          Prefs.getPrefs().getSecurityScopedBookmarks().remove(path);
+          Prefs.getPrefs().saveToFileUnchecked();
+        }
+      }
+    }
+    return false;
+  }
+
+  private static void registerBookmarkForPath(String path) {
+    if(supportsSecurityScopedBookmarks()) {
+      String newBookmark = SecurityScopedBookmarks.createBookmarkImpl(path);
+      String oldBookmark = Prefs.getPrefs().getSecurityScopedBookmarks().get(path);
+      if(oldBookmark!=null) {
+        if(!oldBookmark.equals(newBookmark)) {
+          Prefs.getPrefs().getSecurityScopedBookmarks().remove(path);
+          Prefs.getPrefs().getSecurityScopedBookmarks().put(path, newBookmark);
+          Prefs.getPrefs().saveToFileUnchecked();
+        }
+      }
+      else {
+        Prefs.getPrefs().getSecurityScopedBookmarks().put(path, newBookmark);
+        Prefs.getPrefs().saveToFileUnchecked();
+      }
+    }
+  }
+
   public static boolean ensureFileAccess(Frame frame, Component parent, File file) {
     if (Tools.ensureSpecialMacOSFileAccessHandling()) {
       String path = getFolderPath(file);
+      if(supportsSecurityScopedBookmarks() && bookmarkAccessAllowedForPath(path)) {
+        logger.info("Bookmark access for: "+path);
+        return true;
+      }
       if (!visitedFolders.contains(path)) {
         int i = 0;
         int maxTries = 3;
@@ -67,6 +144,9 @@ public class FileDialogTools {
             String selectedFolderPath = getFolderPath(new File(selectPath));
             visitedFolders.add(selectedFolderPath);
             if (selectedFolderPath.equals(path)) {
+              if(supportsSecurityScopedBookmarks()) {
+                registerBookmarkForPath(path);
+              }
               return true;
             } else {
               i++;

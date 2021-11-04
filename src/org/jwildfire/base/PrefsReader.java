@@ -125,6 +125,7 @@ public class PrefsReader {
         pPrefs.setSoundFilePath(getProperty(props, Prefs.KEY_GENERAL_PATH_SOUND_FILES, pPrefs.getSoundFilePath()));
         pPrefs.setShowTipsAtStartup(getBooleanProperty(props, Prefs.KEY_GENERAL_SHOW_TIPS_AT_STARTUP, pPrefs.isShowTipsAtStartup()));
         pPrefs.setSpecialMacOsFileHandling(getBooleanProperty(props, Prefs.KEY_GENERAL_SPECIAL_MAC_OS_FILE_HANDLING, pPrefs.isSpecialMacOsFileHandling()));
+        pPrefs.setMacOsUseSecurityScopedBookmarks(getBooleanProperty(props, Prefs.KEY_GENERAL_MAC_OS_SEC_BOOKMARKS, pPrefs.isMacOsUseSecurityScopedBookmarks()));
         pPrefs.setLastTip(getIntProperty(props, Prefs.KEY_GENERAL_LAST_TIP, pPrefs.getLastTip()));
         pPrefs.setTinaAssociateProfilesWithFlames(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES, pPrefs.isTinaAssociateProfilesWithFlames()));
         pPrefs.setTinaSaveFlamesWhenImageIsSaved(getBooleanProperty(props, Prefs.KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE, pPrefs.isTinaSaveFlamesWhenImageIsSaved()));
@@ -368,10 +369,21 @@ public class PrefsReader {
           pPrefs.getTinaMacroButtons().clear();
           setupDefaultTinaMacroButtons(pPrefs);
         }
+        // security scoped bookmarks (only on macOS)
+        {
+          int count = getIntProperty(props, Prefs.KEY_SEC_BOOKMARK_COUNT, 0);
+          pPrefs.getSecurityScopedBookmarks().clear();
+          for (int i = 0; i < count; i++) {
+            String key = getProperty(props, Prefs.KEY_SEC_BOOKMARK_KEY + "." + i, "");
+            String value = getProperty(props, Prefs.KEY_SEC_BOOKMARK_VALUE + "." + i, "");
+            if(key.length()>0 && value.length()>0) {
+              pPrefs.getSecurityScopedBookmarks().put(key, value);
+            }
+          }
+        }
         //
         pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath()));
         //
-
       }
       finally {
         input.close();
