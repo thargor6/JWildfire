@@ -84,7 +84,7 @@
             <zipfileset src="lib/JTattoo-1.6.10.jar"/>
             <zipfileset src="lib/jl1.0.1.jar"/>
             <zipfileset src="lib/jtransforms-2.4.jar"/>
-            <zipfileset src="lib/svgSalamander.jar"/>
+            <zipfileset src="lib/svgSalamander-tiny.jar"/>
             <zipfileset src="lib/colt-1.2.0.jar"/>
             <zipfileset src="lib/JOCL-0.1.9.jar"/>
             <zipfileset src="lib/vecmath-1.5.1.jar"/>
