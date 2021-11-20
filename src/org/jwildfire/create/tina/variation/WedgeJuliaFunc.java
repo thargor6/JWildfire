@@ -50,7 +50,7 @@ public class WedgeJuliaFunc extends VariationFunc implements SupportsGPU {
 
     a = a * wedgeJulia_cf + c * angle;
     double sa = sin(a);
-    double ca = cos(sa);
+    double ca = cos(a);
 
     pVarTP.x += r * ca;
     pVarTP.y += r * sa;
