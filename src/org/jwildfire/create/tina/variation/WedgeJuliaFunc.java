@@ -50,7 +50,7 @@ public class WedgeJuliaFunc extends VariationFunc implements SupportsGPU {
 
     a = a * wedgeJulia_cf + c * angle;
     double sa = sin(a);
-    double ca = cos(sa);
+    double ca = cos(a);
 
     pVarTP.x += r * ca;
     pVarTP.y += r * sa;
@@ -104,7 +104,7 @@ public class WedgeJuliaFunc extends VariationFunc implements SupportsGPU {
         + "float c = floorf((__wedge_julia_count*a+PI)*0.5f/PI);\n"
         + "a = a*wedgeJulia_cf+c*__wedge_julia_angle;\n"
         + "float sa = sinf(a);\n"
-        + "float ca = cosf(sa);\n"
+        + "float ca = cosf(a);\n"
         + "__px += r*ca;\n"
         + "__py += r*sa;\n"
         + (context.isPreserveZCoordinate() ? "__pz += __wedge_julia*__z;\n" : "");
