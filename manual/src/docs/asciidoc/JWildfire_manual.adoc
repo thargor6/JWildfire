@@ -79,6 +79,8 @@ The _Main_ menu contains the following items:
  ** *Supported AI-Post-Denoisers*: some compact documentation about <<ai_based_denoiser, _AI-based denoisers_>>
  ** *Tip of the day*: a small popup which shows small tips at the startup of JWildfire
 
+For executing functions of the software without the user-interface, there is also a <<jwildfire_cli, CLI>> (which currently is limited to rendering and to generating random-flames).
+
 [#fractal_flame_editor]
 == Fractal-Flame Editor
 [.thumb]
@@ -3253,14 +3255,14 @@ but actually works very good and reliable)
 - only this gives actual control over the behaviour of variations and allows us to implement features which are not supported naturally by FAEngine
 
 === Currently supported features:
-- support for about 550 variations (of a total of 850)
+- support for about 660 variations (of a total of 850)
 - motion blur
-- some of the additional color balancing options
+- some additional color balancing options
 - 3d-affine-transformations ("XY"-, "YZ"-, "ZX"-buttons)
 - weighting fields
 - custom variations
 
-=== Currently not supported:
+=== Currently not supported features:
 - layers
 - local gamma effects
 - solid rendering
@@ -3366,6 +3368,102 @@ image::images/preferences_choose_path.jpg[scaledwidth=75%]
 
 Some properties may be changed "on the fly", while others will need a restart of JWildfire in order
 to show an effect. This is usually mentioned in the description of the property.
+
+[#jwildfire_cli]
+== The JWildfire CLI (command-line-interface)
+Sometimes it is much more convenient to automate certain tasks and let them run in the background
+or overnight, rather than performing them manually.
+This is where the JWildfire CLI steps in.
+The CLI allows to execute certain tasks from a command line or script, without any user interaction.
+
+=== How to set up the CLI
+To use the CLI you need a valid JWildfire installation and a JDK (Java development kit) in version 8 or higher.
+
+Please note: The complete JWildfire-installation is required as soon as more advanced function like GPU-rendering are involved.
+When you only use basic features, it may be sufficient to place the j-wildfire.jar in the Java classpath.
+
+In any case, you should remember/locate the path where the j-wildfire.jar of your JWildfire installation
+is located. You will need this location when executing the CLI.
+
+==== Basic example: create a random flame
+Open a terminal and enter the folder of a typical JWildfire installation. In this example the folder is called "jwildfire-7.30".
+Execute the command:
+[source]
+----
+java -cp ./jwildfire-7.30/lib/j-wildfire.jar org.jwildfire.cli.RandomFlameGenerator
+----
+It should both generate a flame and a rendered preview of this flame in the current folder.
+
+==== Avalailable EndPoints
+In the example above you have called the EndPoint to generate random-flames. Currently, there
+are the following EndPoints:
+
+- FlameRenderer
+- RandomFlameGenerator
+
+==== EndPoint Options
+To get a list of options, you can call the End Point with the --help -Parameter
+[source]
+----
+java -cp ./jwildfire-7.30/lib/j-wildfire.jar org.jwildfire.cli.RandomFlameGenerator --help
+----
+
+=== FlameRenderer-EndPoint: Rendering flames using the CLI
+This EndPoint supports both CPU- and GPU-rendering.
+Example:
+[source]
+----
+java -cp ./jwildfire-7.30/lib/j-wildfire.jar org.jwildfire.cli.FlameRenderer -f ./aacae305-d08a-4515-abaa-ca5c668f452b.flame -w 800 -h 600 -q 50 -gpu -dn OPTIX
+----
+
+Parameters:
+[source]
+----
+usage: FlameRenderer
+ -dn,--denoiser <arg>       ai-based post-denoiser
+ -f,--flame <arg>           flame path
+ -fdn,--forceDenoiser       force ai-based post-denoiser
+ -gpu,--useGPU              render using GPU
+ -h,--renderHeight <arg>    render height
+ -q,--renderQuality <arg>   render quality
+ -w,--renderWidth <arg>     render width
+----
+
+=== RandomFlameGenerator-EndPoint: Creating random flames using the CLI
+EndPoint to generate batches of random flames.
+Creates both a random flame and a preview image. This preview could be used by AI for further processing,
+like measuring the uniquess or quality of the image.
+This EndPoint supports both CPU- and GPU-rendering.
+Example:
+[source]
+----
+java -cp ./jwildfire-7.30/lib/j-wildfire.jar org.jwildfire.cli.RandomFlameGenerator -w 800 -h 600 -q 40 -bc 3 -rgflame "Tile Ball" -rgwfield None -rgsymm None
+----
+
+Parameters:
+[source]
+----
+usage: RandomFlameGenerator
+ -bc,--batchCount <arg>           number of generated flames
+ -dn,--denoiser <arg>             ai-based post-denoiser
+ -fdn,--forceDenoiser             force ai-based post-denoiser
+ -gpu,--useGPU                    render using GPU
+ -h,--renderHeight <arg>          render height
+ -lrgflame,--listRndGenFlame      list the available
+                                  random-flame-generators
+ -lrggrad,--listRndGenGradient    list the available
+                                  random-gradient-generators
+ -lrgsymm,--listRndGenSymmetry    list the available
+                                  random-symmetry-generators
+ -lrgwfield,--listRndGenWField    list the available
+                                  random-weighting-field-generators
+ -q,--renderQuality <arg>         render quality
+ -rgflame,--rndGenFlame <arg>     random-flame-generator to use
+ -rggrad,--rndGenGradient <arg>   random-gradient-generator to use
+ -rgsymm,--rndGenSymmetry <arg>   random-symmetry-generator to use
+ -rgwfield,--rndGenWField <arg>   random-weighting-field-generator to use
+ -w,--renderWidth <arg>           render width
+----
 
 [#platform_specific_topics]
 == Platform-specific topics (Windows, Mac, Steam, ...)

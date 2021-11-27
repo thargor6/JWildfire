@@ -1,3 +1,8 @@
+V7.30 (27.11.2021)
+ -introducing the new CLI, which allows to execute functions of the software without the user-interface.
+  It is currently limited to rendering and to generating random flames. Please see the users manual for
+  more details.
+
 V7.20 (05.11.2021)
  - option to generate z-buffers for regular flames. While this option is limited and may not work well on many flames, it may help to generate awesome
    effects for certain flames. Also available with GPU-rendering.

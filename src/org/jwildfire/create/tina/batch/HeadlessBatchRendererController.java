@@ -35,6 +35,7 @@ import org.jwildfire.create.tina.render.ProgressUpdater;
  * This is a headless controller used for commandline or web server based rendering (Swing components not needed)
  * @author boleslaw
  */
+@Deprecated // use org.jwildfire.cli.FlameRenderer instead
 public class HeadlessBatchRendererController implements JobRenderThreadController
 {
   JProgressBar pro = new JProgressBar();
