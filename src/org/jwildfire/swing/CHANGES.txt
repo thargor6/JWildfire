@@ -1,3 +1,8 @@
+V7.40 (22.01.2021)
+ - created a reusable maven-artifact which contains the main functionality and the CLI: org.jwildfire:jwildfire-lib
+ - this library will be used first in JWildfireSwan
+ - lots of refactoring
+
 V7.30 (27.11.2021)
  -introducing the new CLI, which allows to execute functions of the software without the user-interface.
   It is currently limited to rendering and to generating random flames. Please see the users manual for

@@ -1063,8 +1063,9 @@ public class VariationFuncList {
         }
       }
       inputStream.close();
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
+      considerVariationCosts = false;
     }
   }
 

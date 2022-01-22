@@ -84,3 +84,7 @@ out/*
 /manual/gradle/wrapper/
 /manual/gradlew
 /manual/gradlew.bat
+
+
+/cli/*.png
+/cli/*.flame

@@ -1,0 +1,459 @@
+##01
+#     Hilbert Curve 3D
+recursion 2
+angle 90
+thickness 40
+min_thickness 1
+shape 0
+axiom X   
+rule X = ^<XF^<XFX-F^>>XFX&F+>>XFX-F>X->
+##END
+##02
+#          PaperTape
+recursion 2
+angle 90
+thickness 10
+axiom &-XS-XS-XS-XS
+rule X =  XS+XS-XS-XSXS+XS+XS-X
+rule S = F^F^F^F^F
+##END
+##03
+# polyhedra in l-systems
+recursion 3
+angle 90
+switch_yz 1
+no_wait 1
+axiom T cf H cf O cf(1.5) K
+# Kepler solid
+rule K = [a|b]'(0.41)f'(2.43)|<(60)[a|b]
+# Tetrahedron
+rule T = [a|b]
+rule a = [d<(120)d<(120)d]
+rule b = [^'(.2887)f'(3.4758)&&+z{.-(120)f-(120)f}]
+rule d = [^'(.2887)f'(3.4758)&(109.5111)+z{.-(120)f-(120)f}]
+# Hexahedron
+rule H = F			# duh ...
+# Octahedron
+rule O = [e|e]
+rule e = [h<h<h<h]
+rule h = [^z&&(35.24444)+z{.-(120)f-(120)f}]
+##END
+##04
+#Axis
+recursion 5
+angle 20
+thickness 5
+switch_yz 1
+axiom &(90)s
+rule s = aTs			#1 do axis, change orientation and recurse
+rule T = f			#2 go forward (REPLACE THIS RULE)
+rule a = [ABC]			#3 draw an axis
+rule A = [c(2)Z]		#4 forward = red
+rule B = [c(3)+(90)Z]		#5 left    = yellow
+rule C = [c(4)^(90)Z]		#6 up      = green
+##END
+##05
+# Spiral 0
+recursion 20
+angle 10
+thickness 80
+min_thickness 5
+shape 1
+switch_yz 1
+axiom [P]|[P]
+rule P = [A]>>>>>>>>>[cB]>>>>>>>>>[ccC]>>>>>>>>>[cccD]
+rule A = F+;'A
+rule B = F!+F+;'B
+rule C = F!^+F^+;'C
+rule D = F!>^+F>^+;'D
+##END
+##06
+#  Sierpinski
+recursion 5
+angle 30
+axiom C
+rule A = {[+f++++f++++f]}
+rule B = [[^(19.5)A^(70)A]>>&(19.5)A^(19.5)---&&&&f&&&&<(19.5)-A]["(.5)C]+++f---
+rule C = [BB+++^^^^f---B'(0.82)f'(1.22)---^'(0.574)f'(1.74)+++>>>>>B]+++ff---
+rule { = _
+rule } = _
+##END
+##07
+# Shell
+recursion 6
+angle 10
+thickness 10
+min_thickness 1
+shape 1
+axiom PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+rule P = S>(20)gg'
+rule S = [&(90)[A]+(20)^(90)gg'&(90)[B][cD]]
+rule D = ^FD                           # show stalks
+rule A = [^gA{.].                      # put polygons on them
+rule B = B^.g.}
+##END
+##08
+# Colors
+axiom c(1)Ffc(2)Ffc(3)Ffc(4)Ffc(5)Ffc(6)Ffc(7)Ffc(8)Ffc(9)Ffc(10)Ffc(11)Ffc(12)Ffc(13)Ffc(14)Ffc(15)Ff
+##END
+##09
+# hexahedron
+recursion 5
+angle 90
+thickness 100
+color  1 255   0   0
+color  2 255  64   0
+color  3 255 128   0
+color  4 255 191   0
+color 10   0 255 255
+color 11   0 191 255
+color 12   0 128 255
+color 13   0  64 255
+axiom c(1)R ffffff c(10)'(2)T
+rule R = [|z|F]'(.5)ca<a<a<a|['(.5)z]a>a>a>a
+rule a = [f&f-fR]
+rule T = [|z|F]'(.5)c[b][|b][&b][^b][+b][-b]  
+rule b = fzT  
+##END
+##10
+#    Octahedron
+recursion 4
+angle 90
+switch_yz 1
+axiom O
+rule O = [e|e]c'(.5)[[fO]|fO]<(45)[&f^<(45)O]<[&f^<(45)O]<[&f^<(45)O]<[&f^<(45)O]
+rule e = [h<h<h<h]
+rule h = [^z&&(35.2444)+z{.-(120)f-(120)f}]
+#rule { = _		# uncomment to show only last recursion
+#rule } = _
+##END
+##11
+#   Fern
+color 1     90 138 32
+color 2     90 164 33
+color 3     89 212 66
+color 4     87 229 57
+color 5     72 238 53
+color 6     58 247 49
+color 7     75 248 67
+color 8     92 249 86
+color 9     97 249 90
+color 10    101 249 95
+color 11    105 250 99
+color 12    110 250 104
+color 13    118 251 114
+color 14    127 252 124
+color 15    127 252 125
+color 16    128 253 126
+color 17    128 254 127
+color 18    128 254 127
+color 19    158 254 158
+color 20    158 254 158
+recursion 4
+angle 20                                   
+thickness 5
+min_thickness 5
+shape 1
+switch_yz 1
+no_wait 1
+axiom c(1)b>(60)b>(60)b>(60)b>(60)b>(60)b    
+rule b = [&(30)A]
+rule A = ~(7)$t(.1)F[+(40)C][-(40)C]!(.95)~(7)t(.1)FcA
+rule C = ~(10)$tF[+(60)L][-(60)L]C
+rule L = [~(15){-f+f+f-|-f+f+f}]
+rule F = '(1.3)F'(.77)
+rule f = '(1.3)f'(.77)
+#rule ~ = _             # uncomment to remove random efx
+##END
+##12
+#     Horn
+recursion 5
+angle 10
+thickness 10
+shape 1
+axiom PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+rule P = [oA]>[soB]s
+rule o = ^(90)ggg&(90)
+rule s = '(.95)
+rule A = [^gA{.].
+rule B = B^.g.}
+##END
+##13
+#   Passie
+recursion 3
+angle 20
+thickness 20
+min_thickness 1
+shape 1
+switch_yz 1
+
+# Axioms
+#axiom o                                # the flower
+#axiom L                                # a single leaf
+#axiom &(60)C                           # the middle stem of the plant
+#axiom k                                # middle flower branch
+#axiom b                                # the side branches of the plant, with flower
+
+axiom k"b>(55)"b>(60)'b>(65)b>(55)''b>(80)b   # the whole passieflora like plant
+
+rule b = ['Ao]
+rule k = [''''C^(90)o]
+rule A = $t(.2)F''[+(55)$L][-(55)$L]t(-.1)FA
+rule C = $F'[+(55)$L][-(55)$L]FC
+
+# Plant Leaf
+rule L = F&(30)&(10)cc[D][E]
+rule D = [+D{.].X.}
+rule E = [^(5)-E{.].X.}
+rule X = ^(5)ggggX
+
+# Flower leaf
+rule d = [+d{.].x.}
+rule h = [-h{.].x.}
+rule x = gggx
+
+# Whole flower
+rule o = [&!ce>(90)w>(90)w>(90)w>(90)w>vy>vy>vy>vy>vy>vy>vy>vy>vy>yv>vy>vy>vy>vy>vy>vy>vy>vy]
+
+# Flower stem
+rule e = Z
+
+# Spikes in the flower
+rule v = [ZZc"""""&(90){'''F!!''F!!''F!!''F}]
+
+# Flower female stem and male stems
+rule w = [[sc??c'!!Ft(-.1)F<<''''!!^^^s]&(100)'(0.5)ZZZ[d][h]]
+
+# Colored flower leafs
+rule y = [[ZZcccc&(80)'''{-ff+ff|-ff+ff}][ZZccccc&(60)'''{-f+f|-f+f}][ZZcccccc&(35)''''{-f+f|-f+f}]]
+
+# Singel male/female stem
+rule s = [c^(8)!Ft(-.2)Ft(-.2)Ft(-.2)Fu]
+
+# Pollen holder on male stem
+rule u = [???F]
+
+rule F = '(1.3)F'(.77)
+rule f = '(1.3)f'(.77)
+##END
+##14
+# Leaves
+ 
+recursion 5
+angle 10	
+thickness 15	
+switch_yz 1
+shape 1
+
+axiom [|FFFFFFFFFFF]P>(90)'P>(90)'P>(90)'P	
+
+rule P = [&(10)G[ccA][ccB][a][b]]
+rule G = tFtFtFtFtFtFtFtFtFtFtFtFtF
+
+rule A = [+A{.].C.}
+rule B = [-B{.].C.}
+rule C = tfC
+
+rule a = [+a]d
+rule b = [-b]d
+rule d = tFd
+##END
+##15
+# Menger Cube
+recursion 4
+angle 90
+thickness 100
+
+axiom F
+
+# rule F = ["(.333333)[-f+&f^B]]f
+
+rule F = [~(5)"(.333333)[-f+&f^B]]f
+rule B = [FFF|z|+zFF|z|+zFF|z|+zF]^f&[FfF|z|+zfF|z|+zfF]^f&[FFF|z|+zFF|z|+zFF|z|+zF]
+##END
+##16
+# Spiral 1
+recursion 6
+angle 10
+thickness 100
+min_thickness 5
+shape 1
+switch_yz 1
+
+axiom a
+
+rule a = Fs+;'a
+rule s = [::c!!!!&&[b]^^^^[b]]
+rule b = F!+F+;'b
+##END
+##17
+#  Boat
+recursion 5
+angle 10
+thickness 75
+min_thickness 7
+shape 1         
+
+axiom &(90)[c(2)s][%|[&(90)Be][^(90)Be]rs]
+
+rule s = F[[&(90)Ae][^(90)Ae]]+'!se
+rule A = +''!c(3)FpA
+
+rule b = F[[&(90)Be][^(90)Be]]
+rule B = +''!c(3)FpB
+
+rule e = [c(6)FF]
+rule r = bbbbb
+rule p = [c(4)[&(90)F][^(90)F]]
+##END
+##18
+#Spiral Plant
+recursion 3
+angle 30
+thickness 100
+min_thickness 5
+shape 1
+switch_yz 1
+
+axiom [|ffff|?FFFF]&&&^D
+
+rule D = AB!'DcZO
+rule B = [---'''!:D]
+rule A = &+^FLA
+
+rule O = [!iw>>w>>w>>w>>w>>w]
+rule w = [c(6)&{-f+f|-f+f}]
+rule i = ;i
+
+rule L = [--->c!!!!!!!1cl[a][b]]
+rule a = [+a{.].C.}
+rule b = [-b{.].C.}
+rule C = gC
+rule l = 'l
+rule 1 = 2
+rule 2 = 3
+rule 3 = F
+##END
+##19
+#Becker Plant
+recursion 2
+angle 17
+thickness 10
+min_thickness 2
+shape 1
+switch_yz 1
+
+axiom X>(45)X>(45)X>(45)X>(45)X>(45)X>(45)X>(45)X
+
+rule X = [FFFFFF&(30)FFAYZ] 
+rule Y = [h+B[+EEEEEE[h+CiDiD][h-CiDiD]][h-EEEEEE[h+CiDiD][h-CiDiD]]]
+rule Z = [h-B[+EEEEEE[h+CiDiD][h-CiDiD]][h-EEEEEE[h+CiDiD][h-CiDiD]]]
+rule A = aEA 
+rule B = EbEbB
+rule C = aGaGaGaGaGaGaGatGtGC
+rule D = bHD
+rule a = &(6)
+rule b = ^(9)
+rule F = ?(0.98)'(0.993)F
+rule h = ~(6)
+rule i = ?(0.94)i
+rule E = c(2)F[+(40)^(60)?(0.05)'(4)c(8)F][-(40)^(60)?(0.05)'(4)c(8)F]
+rule G = c(2)F[+(40)^(60)?(0.03)'(2)c(8)F][-(40)^(60)?(0.03)'(2)c(8)F]
+rule H = c(2)F[+(40)^(60)?(0.02)'(1)c(8)F][-(40)^(60)?(0.02)'(1)c(8)F]
+##END
+##20
+#  Cello Plant
+recursion 6
+angle 10
+thickness 80
+switch_yz 1
+shape 1
+
+color  1 255   0   0
+color  2 255  64   0
+color  3 255 128   0
+color  4 255 191   0
+color  5 191 255   0
+color  6 128 255   0
+color  7  64 255   0
+color  8   0 255   0
+color  9   0 255  64
+color 10   0 255 128
+color 11   0 255 191
+color 12   0 255 255
+color 13   0 191 255
+color 14   0 128 255
+color 15   0  64 255
+color 16   0   0 255
+color 17  64   0 255
+color 18 128   0 255
+color 19 191   0 255
+color 20 255   0 255
+
+axiom FS
+
+rule S = WZ'!cS
+rule W = R%R>>>>>>>>>R%R>>>>
+rule R = [da%a%g%g]
+rule a = [{nmmn}]
+rule g = [NMMNL]
+rule m = +zm
+rule n = -zn
+rule M = +ZM
+rule N = -ZoN
+rule d = ^d
+rule L = Z';+Z';+Z';+Z';+[&&&l]L
+rule l = [cc{--z++z++z--|--z++z++z}]
+rule o = [---------!!!'''ccZl]
+##END
+##21
+#  Spider
+recursion 6
+angle 10
+thickness 80
+min_thickness 5
+switch_yz 1
+
+axiom %C			
+
+# Creature
+rule C = %LABHT
+
+# Body
+rule B = [???????zZZZ]
+
+# Arms
+rule A = [zf&(90)"""[pj>(90)S]|[qj<(90)S]]
+rule p = Ft+:'p					# left
+rule q = Ft-:'q					# right
+rule j = ;"j
+
+# Scorpers
+rule S = ['''!!r%^^r]
+rule r = [Z?Z?Zu]				# jaw assembly
+rule u = Z[co]!'^::u				# jaw and tooth	
+
+# Legs
+rule L = [c">(40)[s]>(40)[s]>(40)[s]>(40)[s]>(40)[s]>(40)[s]>(40)[s]>(40)[s]]
+rule s = +++li+++dccc??""FF			# down legs
+rule l = Ft+:'l					# upper leg
+rule d = FFF'd					# lower leg
+rule i = ;i
+
+# Head
+rule H = ["">(90)&(60)??FFFF!![???h][???k]%^^[??k]]
+rule k = [Z?Z?Za]				# jaw assembly
+rule a = Z[co]!'a				# jaw	
+rule o = &(90)!!!!!F				# teeth
+rule h = [^^gcccc"Z][^^ecccc"Z]			# eyes
+rule g = z!+z!+z!+z				# left eye
+rule e = z!-z!-z!-z				# right eye
+
+# Tail
+rule T = [f---------??""""""mccccF]
+rule m = Ft+;'m					# curl
+rule t = ['::c!!!&&[f<<<n]^^^^f>>>n]		# spikes
+rule n = [c{--z++z++z--|--z++z++z}]		# leaf
+##END
+
+

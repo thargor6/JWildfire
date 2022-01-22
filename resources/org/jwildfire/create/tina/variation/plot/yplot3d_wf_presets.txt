@@ -1,0 +1,54 @@
+Formula presets for the yplot3d_wf-variation of JWildfire.
+
+
+
+Formulas provided by Andreas Maschke
+##0
+formula = sin(2*exp(-4*(x*x+z*z)))
+xmin = -3.0
+xmax = 2.0
+zmin = -2.0
+zmax = 2.0
+
+##1
+formula = cos(x*z*12)/6
+xmin = -3.0
+xmax = 2.0
+zmin = -2.0
+zmax = 2.0
+
+##2
+formula = cos(sqrt(x*x+z*z)*14)*exp(-2*(x*x+z*z))
+xmin = -3.0
+xmax = 2.0
+zmin = -2.0
+zmax = 2.0
+
+##3
+formula = cos(atan(x/z)*8)/4*sin(sqrt(x*x+z*z)*3)
+xmin = -3.0
+xmax = 2.0
+zmin = -2.0
+zmax = 2.0
+
+##4
+formula = (sin(x)*sin(x)+cos(z)*cos(z))/(5+x*x+z*z)
+xmin = -3.0
+xmax = 2.0
+zmin = -2.0
+zmax = 2.0
+
+##5
+formula = cos(2*pi*(x+z))*(1-sqrt(x*x+z*z))
+xmin = -3.0
+xmax = 2.0
+zmin = -2.0
+zmax = 2.0
+
+##6
+formula = sin(x*x+z*z)
+xmin = -3.0
+xmax = 2.0
+zmin = -2.0
+zmax = 2.0
+

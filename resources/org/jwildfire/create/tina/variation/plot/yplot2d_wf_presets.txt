@@ -1,0 +1,98 @@
+Formula presets for the yplot2d_wf-variation of JWildfire.
+
+
+
+Formulas provided by Andreas Maschke
+##0
+formula = (sin(x)+2*sin(2*x)+1*sin(4*x))
+xmin = -3.0
+xmax = 2.0
+
+##1
+formula = sin(x)*cos(x)
+xmin = -3.0
+xmax = 2.0
+
+##2
+formula = sin(2*x*x)
+xmin = -3.0
+xmax = 2.0
+
+Formulas by Rick Sidwell
+##3
+formula = sin(param_a*x)/cos(x*x)
+param_a = 3
+xmin = -3.315
+xmax = 3.315
+
+##4
+formula = sin(x+sin(x)/param_a)
+param_a = 1
+xmin = -5.0
+xmax = 5.0
+
+##5
+formula = log(fabs(x))
+xmin = -4.0
+xmax = 4.0
+
+##6
+formula = fabs(sin(x)*param_a) + fabs(cos(x)*param_b)
+param_a = 0.5
+param_b = 1.0
+xmin = -3.0
+xmax = 3.0
+
+##7
+formula = x>0?pow(x,param_a):-pow(-x,param_a)
+param_a = 2.5
+xmin = -5.0
+xmax = 5.0
+
+Some standard functions
+##8
+Line
+formula = param_a*x + param_b
+param_a = -1
+param_b = 0
+xmin = -3.0
+xmax = 3.0
+
+##9
+Power
+formula = pow(x, param_a)
+param_a = 3.0
+xmin = -1.5
+xmax = 1.5
+
+##10
+Sine wave
+formula = param_a*sin(param_b*x)
+param_a = 2.0
+param_b = 4.0
+xmin = -pi
+xmax = pi
+
+##11
+Square wave
+formula = param_a*pow(-1, floor(x*param_b))
+param_a = 1.0
+param_b = 1.0
+xmin = -3.0
+xmax = 3.0
+
+##12
+Triangle wave
+formula = 2*param_a/param_b*fabs(fabs(x)%param_b - param_b/2) - 2*param_a/4
+param_a = 2.0
+param_b = 1.0
+xmin = -3.0
+xmax = 3.0
+
+##13
+Floor
+formula = floor(param_a*x)/param_b
+param_a = 1.0
+param_b = 3.0
+xmin = -3
+xmax = 3

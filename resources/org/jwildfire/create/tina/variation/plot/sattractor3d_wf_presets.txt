@@ -1,0 +1,424 @@
+Formula presets for the sattractor3d_wf-variation of JWildfire. 
+
+
+
+Formulas provided by Jesus Sosa
+##0   
+The Aizawa Attractor
+xformula = (z-param_b)*x-param_d*y
+yformula =  param_d*x + (z-param_b)*y
+zformula =  param_c + param_a*z - z*z*z/3 - (x*x+y*y)*(1+param_e*z)+ param_f*z*x*x*x
+startx=0.1
+starty=0.0
+startz=0.0
+steps=5
+radius=0.05
+steptime=0.02
+param_a=0.95
+param_b=0.7
+param_c=0.6
+param_d=3.5
+param_e=0.25
+param_f=0.1
+param_g=0.0
+param_h=0.0
+
+##1   
+The Anishchenko- Astakhov Attractor
+xformula = param_a*x + y - x*z
+yformula = -x
+zformula = -param_b*z + param_b*((x>0)?1:0)*x*x
+startx=0.1
+starty=0.0
+startz=0.0
+steps=5
+radius=0.05
+steptime=0.1
+param_a=1.2
+param_b=0.5
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##2  
+The Arneodo Attractor
+xformula = y
+yformula = z
+zformula = -(param_a)*x - param_b*y -z + (param_c)* x*x*x
+startx=0.1
+starty=0.0
+startz=0.0
+steps=5
+radius=0.05
+steptime=0.02
+param_a=-5.5
+param_b=3.5
+param_c=-1.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##3 
+2nd Bouali Attractor
+xformula =  x*(4-y) + param_a*z
+yformula = -y*(1-x*x)
+zformula = -x*(1.5-param_b*z)-0.5*z
+startx=1.0
+starty=0.1
+startz=0.1
+steps=5
+radius=0.05
+steptime=0.02
+param_a=0.30
+param_b=1.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##4  
+the Bourke-Shaw Attractor
+xformula = -param_a *(x+y)
+yformula = -y - param_a*x*z
+zformula = param_a *x*y + param_b
+startx=1
+starty=0
+startz=0
+steps=5
+radius=0.01
+steptime=0.008
+param_a=10.0
+param_b=4.272
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##5 
+Chen Celikovsky Attractor
+xformula = param_a*(y-x)
+yformula = -x*z + param_c*y
+zformula = x*y-param_b*z
+startx=1.0
+starty=1.0
+startz=1.0
+steps=5
+radius=0.19
+steptime=0.002
+param_a=36.0
+param_b=3.0
+param_c=20.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##6  
+Chen Lee attractor
+xformula = param_a*x - y*z
+yformula = param_b*y+x*z
+zformula = param_c*z+x*y/3.0
+startx=1.0
+starty=0.0
+startz=4.5
+steps=5
+radius=0.45
+steptime=0.015
+param_a=5.0
+param_b=-10.0
+param_c=-0.38
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##7  
+Chua attractor
+xformula = param_a*(y - x - (param_e*x + (param_d + param_e)*(fabs(x + 1) - fabs(x-1))))
+yformula = param_b *(x  - y + z)
+zformula = -param_c* y
+startx=0.1
+starty=1.32
+startz=2.9994786
+steps=5
+radius=0.1
+steptime=.03
+param_a=15.6
+param_b=1.0
+param_c=25.58
+param_d=-1.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##8
+Chen Attractor
+xformula =param_a*(y-x)
+yformula =(param_c-param_a)*x -x*z + param_c*y
+zformula = x*y - param_b*z
+startx=-3.0
+starty=2.0
+startz=20.0
+steps=5
+radius=0.1
+steptime=0.001
+param_a=35
+param_b=2.666
+param_c=28.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##9
+Lotka Volterra
+xformula = x -x*y + param_c*x*x - param_a*z * x*x
+yformula = -y + x*y
+zformula = -param_b*z + param_a*z*x*x
+startx=1.0
+starty=1.0
+startz=1.0
+steps=5
+radius=0.01
+steptime=0.05
+param_a=2.9851
+param_b=3.0
+param_c=2.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##10
+Rikitake 
+xformula = -param_b*x + z*y
+yformula = -param_b *y + (z-param_a)*x
+zformula = 1.0 -x*y
+startx=1.0
+starty=1.0
+startz=1.0
+steps=5
+radius=0.08
+steptime=0.05
+param_a=5.0
+param_b=2.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##11
+TSUCS 1 
+xformula = param_a*(y-x) + param_d*x*z
+yformula = param_f* y -x*z
+zformula = param_c*z +x*y -param_e*x*x
+startx=0.1
+starty=1.0
+startz=-0.1
+steps=5
+radius=0.01
+steptime=0.01
+param_a=40.0
+param_b=0.0
+param_c=0.833
+param_d=0.5
+param_e=0.65
+param_f=20.0
+param_g=0.0
+param_h=0.0
+
+##12
+Dequan Li
+xformula =  param_a*(y-x) + param_d*x*z
+yformula =  param_b*x + param_f*y -x*z
+zformula =  param_c*z + x*y - param_e*x*x
+startx=0.349
+starty=0.0
+startz=-0.16
+steps=5
+radius=0.1
+steptime=0.01
+param_a=40.0
+param_b=55.0
+param_c=1.833
+param_d=0.16
+param_e=0.65
+param_f=20.0
+param_g=0.0
+param_h=0.0
+
+##13
+Halvorsen Attractor
+xformula= -param_a*x - 4*y - 4*z -y*y
+yformula= -param_a*y - 4*z - 4*x -z*z
+zformula= -param_a*z - 4*x - 4*y -x*x
+startx=1.
+starty=0.
+startz=0.
+steps=5
+radius=0.01
+steptime=0.005
+param_a=1.4
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=1.0
+
+##14
+Finnance Attractor
+xformula=(1/param_b - param_a)*x +z + x*y
+yformula=-param_b*y -x*x
+zformula=-x -param_c*z
+startx=0.1
+starty=0.0
+startz=0.0
+steps=5
+radius=0.1
+steptime=0.03
+param_a=0.001
+param_b=0.2
+param_c=1.1
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##15
+Newton Leipnik
+xformula=-param_a*x + y + 10*y*z
+yformula=-x - 0.4*y + 5*x*z 
+zformula= param_b* z - 5*x*y
+startx=0.349
+starty=0.0
+startz=-0.16
+steps=5
+radius=.03
+steptime=0.05
+param_a=0.4
+param_b=0.175
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##16
+Nose-Hoover Attractor
+xformula=y
+yformula=-x + y*z
+zformula= param_a - y*y
+startx=1.0
+starty=0.0
+startz=0.0
+steps=5
+radius=0.1
+steptime=0.06
+param_a=1.5
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##17
+Sprott-Linz Attractor
+xformula=y
+yformula=-x + y*z
+zformula=1.0 - y*y
+startx=0.1
+starty=0.1
+startz=0.1
+steps=5
+radius=0.1
+steptime=0.01
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##18
+Thomas Attractor
+xformula=-param_b*x + sin(y)
+yformula=-param_b*y + sin(z)
+zformula=-param_b*z + sin(x)
+startx=0.1
+starty=0.0
+startz=0.0
+steps=5
+radius=0.1
+steptime=0.05
+param_a=0.0
+param_b=0.19
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##19
+TSUC2 Attractor
+xformula=param_a*(y-x)+ param_d*x*z
+yformula=param_b*x - x*z + param_f*y
+zformula=param_c*z + x*y - param_e*x*x
+startx=0.1
+starty=1.0
+startz=-0.1
+steps=5
+radius=0.3
+steptime=0.005
+param_a=40.0
+param_b=55.0
+param_c=1.833
+param_d=0.16
+param_e=0.65
+param_f=20.0
+param_g=0.0
+param_h=0.0
+
+##20
+Dadras Attractor
+xformula=y - param_a*x + param_b*y*z
+yformula= param_c*y -x *z + z
+zformula= param_d*x*y - param_e*z
+startx=0.1
+starty=0.1
+startz=0.1
+steps=5
+radius=0.1
+steptime=0.01
+param_a=3.0
+param_b=2.7
+param_c=1.7
+param_d=2.0
+param_e=9.0
+param_f=0.0
+param_g=0.0
+param_h=0.0

@@ -1,0 +1,109 @@
+Formula presets for the polarplot3d_wf-variation of JWildfire.
+
+Formulas use t and u, and can also use param_a through param_f.
+For spherical coordinates, t is theta and u is phi; add "cylindrical = 0".
+For cylindrical coordinates, t is theta and u is z; add "cylindrical = 1".
+
+
+Formulas provided by Rick Sidwell
+##0
+formula = sin(param_a*u) + param_b
+cylindrical = 0
+param_a = 5
+param_b = 2
+tmin = -pi
+tmax = pi
+umin = -pi
+umax = pi
+
+##1
+formula = sin(param_a*u) + param_b
+cylindrical = 1
+param_a = 5
+param_b = 2
+tmin = -pi
+tmax = pi
+umin = -pi
+umax = pi
+
+##2
+formula = u
+cylindrical = 0
+tmin = -pi
+tmax = pi
+umin = 0
+umax = 4.7
+
+##3
+formula = (sin(param_a*t) + cos(param_b*u)) + param_c
+cylindrical = 0
+param_a = 5
+param_b = 6
+param_c = 0.25
+tmin = -pi
+tmax = pi
+umin = -1.570796
+umax = 1.570796
+
+##4
+formula = (sin(param_a*t + param_b*u)) + param_c
+cylindrical = 0
+param_a = 5
+param_b = 7
+param_c = 0
+tmin = -pi
+tmax = pi
+umin = -1.570796
+umax = 1.570796
+
+##5
+formula = (sin(param_a*t + param_b*u)) + param_c
+cylindrical = 1
+param_a = 4
+param_b = 4
+param_c = 1
+tmin = -pi
+tmax = pi
+umin = -3
+umax = 3
+
+##6
+formula = sin(param_a*t)+param_b*u
+cylindrical = 1
+param_a = 4
+param_b = 1.25
+tmin = -pi
+tmax = pi
+umin = -2
+umax = 2
+
+##7
+formula = t / (param_a + u) + param_b
+cylindrical = 1
+param_a = 1
+param_b = 0
+tmin = -4.712389
+tmax = 4.712389
+umin = 0.0
+umax = 2.5
+
+
+##8
+formula = sqr(u) + param_a
+cylindrical = 1
+param_a = -1.0
+tmin = -pi
+tmax = pi
+umin = -1.5
+umax = 1.5
+
+##9
+formula = cos(param_a*t + sin(param_b*u)) + param_c
+cylindrical = 0
+param_a = 2
+param_b = 3
+param_c = 0
+tmin = -pi
+tmax = pi
+umin = -pi
+umax = pi
