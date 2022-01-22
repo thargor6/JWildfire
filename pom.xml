@@ -76,12 +76,7 @@
     </build>
 
     <repositories>
-<!--
-        <repository>
-            <id>jwildfire-repo</id>
-            <url>https://jwildfire.overwhale.com/jwildfire-lib/.m2/repository</url>
-        </repository>
--->
+
         <repository>
             <id>local-maven-repo</id>
             <url>file:///${project.basedir}/.local-maven-repo/.m2/repository</url>
@@ -138,21 +133,7 @@
             <artifactId>oobj-loader</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-<!--
-        <dependency>
-            <groupId>local</groupId>
-            <artifactId>janino</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
--->
-        <!-- regular dependencies -->
-        <!--
-                <dependency>
-                    <groupId>org.jwildfire</groupId>
-                    <artifactId>jwildfire-lib</artifactId>
-                    <version>7.40-SNAPSHOT</version>
-                </dependency>
--->
+
                 <dependency>
                     <groupId>javax.vecmath</groupId>
                     <artifactId>vecmath</artifactId>
@@ -244,7 +225,4 @@
                 </dependency>
 
             </dependencies>
-
-
-
         </project>
