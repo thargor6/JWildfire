@@ -124,7 +124,7 @@ public class EDiscRandomFlameGenerator extends RandomFlameGenerator {
         }
 
         // variation 1
-        String variations[] = {"juliascope3Db", "juliascope", "julian", "julian2", "julian3Dx" };
+        String variations[] = VariationFuncList.filterVariations(new String[] {"juliascope3Db", "juliascope", "julian", "julian2", "julian3Dx" });
         {
           int varIdx = Math.max((int)(Math.random() * variations.length), 0);
           VariationFunc varFunc=VariationFuncList.getVariationFuncInstance(variations[varIdx], true);

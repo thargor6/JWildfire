@@ -26,13 +26,13 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class SplitsRandomFlameGenerator extends RandomFlameGenerator {
 
-  protected static final String FNCLST_TX1[] = { "bipolar", "boarders", "boarders2", "bubble", "butterfly", "bwraps7",
+  protected static final String FNCLST_TX1[] = VariationFuncList.filterVariations(new String[] { "bipolar", "boarders", "boarders2", "bubble", "butterfly", "bwraps7",
       "cannabiscurve_wf", "circlize", "cloverleaf_wf", "collideoscope", "cos", "cosh", "cot", "coth", "csc", "csch",
       "cubic3D", "cubicLattice_3D", "dc_perlin", "diamond", "disc2", "eJulia", "edisc", "elliptic", "epispiral", "epispiral_wf",
       "ex", "exp", "exponential", "eyefish", "flower", "foci", "xtrb", "glynnSim1", "glynnia", "heart", "hexnix3D", "julia",
       "julian", "julia3D", "julia3Dz", "juliascope", "layered_spiral", "mobius", "ngon", "phoenix_julia", "pie", "popcorn2_3D",
       "radial_blur", "rays", "ripple", "spherical", "sphericalN", "spiral", "tan", "tanh", "waves2_3D", "wedge_sph",
-      "whorl", "xheart" };
+      "whorl", "xheart" });
 
   @Override
   public Flame prepareFlame(RandomFlameGeneratorState pState) {

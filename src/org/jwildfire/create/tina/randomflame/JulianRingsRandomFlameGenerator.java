@@ -76,7 +76,7 @@ public class JulianRingsRandomFlameGenerator extends RandomFlameGenerator {
 
         // variation 1
         {
-          String variations[] = {"julia3D", "jubiQ", "julia3Dq", "julia3Dz", "julian", "julian2", "julian3Dx", "juliaq", "juliascope"};
+          String variations[] = VariationFuncList.filterVariations(new String[] {"julia3D", "jubiQ", "julia3Dq", "julia3Dz", "julian", "julian2", "julian3Dx", "juliaq", "juliascope"});
           int variationIdx = Math.min((int)(Math.random()*variations.length), variations.length-1);
           VariationFunc varFunc=VariationFuncList.getVariationFuncInstance(variations[variationIdx], true);
           varFunc.setParameter("power",  Math.random()>0.5 ? 10+ Math.random()* 5000.0 : -2.0 - Math.random()* 100.0);
