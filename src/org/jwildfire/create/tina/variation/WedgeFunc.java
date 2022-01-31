@@ -34,7 +34,7 @@ public class WedgeFunc extends VariationFunc implements SupportsGPU {
   private double angle = M_PI_2;
   private double hole = 0.0;
   private int count = 1;
-  private double swirl = 0.0;
+  private double swirl = 0.1;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
