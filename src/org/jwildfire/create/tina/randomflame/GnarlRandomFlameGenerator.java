@@ -92,7 +92,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       VariationFunc w2 = Math.random() > 0.333 ? (Math.random() > 0.666 ? createWaves2Variation(scaleX, scaleY, freqX, freqY) : createCrazyWavesVariation(scaleX, scaleY, freqX, freqY) ) : createWaves2BVariation(scaleX, scaleY, freqX, freqY);
       xForm.addVariation(1 + Math.random() * 0.001, w2);
 
-      String varLst[] = { "blur", "cos", "exp", "exponential", "lazysusan", "ngon", "sech", "sinh", "epispiral_wf", "tanh", "twintrian", "epispiral" };
+      String varLst[] = VariationFuncList.filterVariations(new String[] { "blur", "cos", "exp", "exponential", "lazysusan", "ngon", "sech", "sinh", "epispiral_wf", "tanh", "twintrian", "epispiral" });
       String varName = Math.random() > 0.25 ? varLst[(int) (Math.random() * varLst.length)] : VariationFuncList.getRandomVariationname();
       xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance(varName, true));
       xForm.setColorSymmetry(symmetry);

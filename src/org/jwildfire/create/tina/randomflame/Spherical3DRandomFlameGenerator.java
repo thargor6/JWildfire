@@ -82,9 +82,9 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     String cylinderVar = Math.random() < 0.5 ? "cylinder" : "cylinder_apo";
 
     // 3rd xForm
-    String fncList[] = { "bipolar", "blade", "blur", "blur3D", "cannabiscurve_wf", "crackle", "cylinder", "cylinder_apo", "edisc", "flower", "glynnSim2",
+    String fncList[] = VariationFuncList.filterVariations(new String[] { "bipolar", "blade", "blur", "blur3D", "cannabiscurve_wf", "crackle", "cylinder", "cylinder_apo", "edisc", "flower", "glynnSim2",
         "julia3D", "mandelbrot", "modulus", "noise", "parabola", "pie", "pie3D", "checks", "pre_subflame_wf", "radial_blur", "rays",
-        "rings", "rose_wf", "secant2", "sinusoidal", "spiral", "spirograph", "splits", "square", "twintrian", "wedge_julia" };
+        "rings", "rose_wf", "secant2", "sinusoidal", "spiral", "spirograph", "splits", "square", "twintrian", "wedge_julia" });
     {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);

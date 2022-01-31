@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -42,6 +42,7 @@ public class VariationFuncList {
   private static Map<Class<? extends VariationFunc>, String> aliasMap = new HashMap<Class<? extends VariationFunc>, String>();
   private static final Map<String, String> resolvedAliasMap;
   public static boolean considerVariationCosts = true;
+  private static final Set<String> supportedVariations = new HashSet<>();
 
   static {
     initializeCostsMaps();
@@ -1190,7 +1191,8 @@ public class VariationFuncList {
   public static boolean isValidRandomVariation(String name) {
     return ((!considerVariationCosts || getVariationEvalCost(name) < VARIATION_COST_THRESHOLD) || Math.random()<0.1) &&
            !(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0 && Math.random()<0.42) && !(name.indexOf("pre_") == 0 && Math.random()<0.44)
-           && !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf") && !name.equals("flatten");
+           && !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf") && !name.equals("flatten")
+           && (VariationFuncList.supportedVariations.isEmpty() || VariationFuncList.supportedVariations.contains(name));
   }
 
   public static boolean isValidVariationForWeightingFields(String name) {
@@ -1228,6 +1230,26 @@ public class VariationFuncList {
       refreshNameList();
     }
     return variationTypes.get(variationName);
+  }
+
+  public static String[] filterVariations(String source[]) {
+    List<String> variations = new ArrayList<>();
+    Arrays.stream(source).forEach(name -> {if(isValidRandomVariation(name)) {
+        variations.add(name);
+      }
+    });
+    if(source.length>0 && variations.isEmpty()) {
+      variations.add(new Linear3DFunc().getName());
+    }
+    return variations.toArray(new String[variations.size()]);
+  }
+
+  public static void setSupportedVariations(List<String> supportedVariations) {
+    VariationFuncList.supportedVariations.clear();
+    if (supportedVariations != null && supportedVariations.isEmpty()) {
+      VariationFuncList.supportedVariations.addAll(supportedVariations);
+    }
+    VariationFuncList.refreshNameList();
   }
 }
 

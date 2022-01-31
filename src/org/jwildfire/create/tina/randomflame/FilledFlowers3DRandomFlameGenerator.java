@@ -69,17 +69,17 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
         xForm.addVariation(0.1 + Math.random() * 0.1, VariationFuncList.getVariationFuncInstance("ztranslate", true));
         xForm.addVariation(0.00001 - Math.random() * 0.00002, VariationFuncList.getVariationFuncInstance("zcone", true));
         {
-          String fncLst[] = { "bubble", "log" };
+          String fncLst[] = VariationFuncList.filterVariations(new String[] { "bubble", "log" });
           xForm.addVariation(0.001 + Math.random() * 0.099, VariationFuncList.getVariationFuncInstance(fncLst[Tools.randomInt(fncLst.length)], true));
         }
         {
-          String fncLst[] = { "arch", "bipolar", "hyperbolic", "butterfly", "cannabiscurve_wf", "cell", "checks", "circlize", "conic",
+          String fncLst[] = VariationFuncList.filterVariations(new String[] { "arch", "bipolar", "hyperbolic", "butterfly", "cannabiscurve_wf", "cell", "checks", "circlize", "conic",
               "coth", "cpow", "ex", "falloff2", "fan", "flux", "foci", "heart", "kaleidoscope", "log", "mobius", "ngon", "pdj",
-              "oscilloscope", "spherical", "spiral" };
+              "oscilloscope", "spherical", "spiral" });
           xForm.addVariation(0.001 + Math.random() * 0.099, VariationFuncList.getVariationFuncInstance(fncLst[Tools.randomInt(fncLst.length)], true));
         }
         {
-          String fncLst[] = { "waves2", "waves2_wf", "waves3_wf", "waves4_wf" };
+          String fncLst[] = VariationFuncList.filterVariations(new String[] { "waves2", "waves2_wf", "waves3_wf", "waves4_wf" });
 
           varFunc = VariationFuncList.getVariationFuncInstance(fncLst[Tools.randomInt(fncLst.length)], true);
           varFunc.setParameter("scalex", 0.5 + Math.random());
@@ -89,7 +89,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
           xForm.addVariation(0.05 - Math.random() * 0.1, varFunc);
         }
         {
-          String fncLst[] = { "cross", "checks", "conic", "kaleidoscope", "lazysusan", "log" };
+          String fncLst[] = VariationFuncList.filterVariations(new String[] { "cross", "checks", "conic", "kaleidoscope", "lazysusan", "log" });
           xForm.addVariation(0.001 + Math.random() * 0.015, VariationFuncList.getVariationFuncInstance(fncLst[Tools.randomInt(fncLst.length)], true));
         }
       }
@@ -114,10 +114,10 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
     }
     // satellite xForm
     {
-      String fncLst[] = { "blade", "blur", "blur3D", "bubble_wf", "cannabiscurve_wf", "circlecrop", "cloverleaf_wf", "conic", "crop", "cross",
+      String fncLst[] = VariationFuncList.filterVariations(new String[] { "blade", "blur", "blur3D", "bubble_wf", "cannabiscurve_wf", "circlecrop", "cloverleaf_wf", "conic", "crop", "cross",
           "flower", "flux", "hemisphere", "hyperbolic", "julia3D", "julia3Dz", "lazysusan", "lissajous", "log", "mandelbrot", "mobius", "npolar",
           "pdj", "perspective", "pie", "pie3D", "polar", "polar2", "power", "pre_subflame_wf", "radial_blur", "scry", "separation", "spiral",
-          "spirograph", "split", "tangent", "tangent3D", "twintrian", "unpolar", "wedge_sph", "zblur" };
+          "spirograph", "split", "tangent", "tangent3D", "twintrian", "unpolar", "wedge_sph", "zblur" });
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(0.1 + Math.random() * 1.4);
