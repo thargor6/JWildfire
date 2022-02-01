@@ -32,8 +32,8 @@ public class LinearT3DFunc extends VariationFunc implements SupportsGPU {
   private static final String[] paramNames = {PARAM_POWX, PARAM_POWY, PARAM_POWZ};
 
   private double powX = 1.2;
-  private double powY = 1.2;
-  private double powZ = 1.2;
+  private double powY = 0.9;
+  private double powZ = 1.35;
 
   private double sgn(double arg) {
     if (arg > 0)
