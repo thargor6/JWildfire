@@ -29,8 +29,8 @@ public class JuliaCFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_DIST = "dist";
   private static final String[] paramNames = {PARAM_RE, PARAM_IM, PARAM_DIST};
 
-  private double re = genRandomPower();
-  private double im = 0.0;
+  private double re = genRandomPower()+0.5;
+  private double im = 0.5;
   private double dist = 1.0;
 
   @Override
