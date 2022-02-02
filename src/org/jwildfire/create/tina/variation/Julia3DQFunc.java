@@ -46,9 +46,6 @@ public class Julia3DQFunc extends VariationFunc implements SupportsGPU {
     r *= sqrt(r2d);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
   }
 
   @Override
