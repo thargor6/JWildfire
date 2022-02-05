@@ -28,7 +28,7 @@ public class RectanglesFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_Y = "y";
   private static final String[] paramNames = {PARAM_X, PARAM_Y};
 
-  private double x, y;
+  private double x=0.3, y = 0.2;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
