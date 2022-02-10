@@ -28,7 +28,7 @@ public class Rings2Func extends VariationFunc implements SupportsGPU {
   private static final String PARAM_VAL = "val";
   private static final String[] paramNames = {PARAM_VAL};
 
-  private double val;
+  private double val = 0.01;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
