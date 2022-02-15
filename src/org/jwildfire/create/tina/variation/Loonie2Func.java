@@ -32,8 +32,8 @@ public class Loonie2Func extends VariationFunc implements SupportsGPU {
   private static final String[] paramNames = {PARAM_SIDES, PARAM_STAR, PARAM_CIRCLE};
 
   private int sides = 4;
-  private double star = 0.0;
-  private double circle = 0.0;
+  private double star = 0.15;
+  private double circle = 0.25;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
