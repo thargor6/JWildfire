@@ -31,9 +31,9 @@ public class MCarpetFunc extends VariationFunc implements SupportsGPU {
   private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_TWIST, PARAM_TILT};
 
   private double x = 1.0;
-  private double y = 1.0;
-  private double twist = 0.0;
-  private double tilt = 0.0;
+  private double y = 0.75;
+  private double twist = 0.50;
+  private double tilt = -0.25;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
