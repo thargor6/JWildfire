@@ -28,9 +28,9 @@ public class ShiftFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_SHIFT_Y = "shift_y";
   private static final String PARAM_ANGLE = "angle";
   private static final String[] paramNames = {PARAM_SHIFT_X, PARAM_SHIFT_Y, PARAM_ANGLE};
-  private double shift_x = 0.0;
-  private double shift_y = 0.0;
-  private double angle = 0.0;
+  private double shift_x = 0.10;
+  private double shift_y = 0.06;
+  private double angle = 12.25;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
