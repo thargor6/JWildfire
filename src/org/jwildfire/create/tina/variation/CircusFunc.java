@@ -28,7 +28,7 @@ public class CircusFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_SCALE = "scale";
   private static final String[] paramNames = {PARAM_SCALE};
 
-  private double scale = 1.0;
+  private double scale = 0.92;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
