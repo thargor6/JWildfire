@@ -41,7 +41,7 @@ public class PreWave3DWFFunc extends VariationFunc {
   private static final int AXIS_ZX = 2;
   private static final int AXIS_RADIAL = 3;
 
-  private int axis = AXIS_XY;
+  private int axis = AXIS_ZX;
   private double wavelen = 0.5;
   private double phase = 0.0;
   private double damping = 0.01;

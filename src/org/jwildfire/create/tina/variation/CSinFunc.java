@@ -30,7 +30,7 @@ public class CSinFunc extends VariationFunc implements SupportsGPU {
 
   private static final String[] paramNames = {PARAM_STRETCH};
 
-  private double stretch= 1.0;
+  private double stretch= 1.5;
 
   private final Complex _c = new Complex();
 

@@ -34,7 +34,7 @@ public class ExBlurFunc extends VariationFunc implements SupportsGPU {
   private static final String[] paramNames = {PARAM_DIST, PARAM_R, PARAM_XORIGIN, PARAM_YORIGIN, PARAM_ZORIGIN};
 
   private double dist = 0.50;
-  private double r = 0.00;
+  private double r = 0.25;
   private double x_origin = 0.00;
   private double y_origin = 0.00;
   private double z_origin = 0.00;

@@ -38,14 +38,14 @@ public class Waves2BFunc extends VariationFunc implements SupportsGPU {
 
   private static final String[] paramNames = {PARAM_FREQX, PARAM_FREQY, PARAM_PWX, PARAM_PWY, PARAM_SCALEX, PARAM_SCALEINFX, PARAM_SCALEY, PARAM_SCALEINFY, PARAM_UNITY, PARAM_JACOK};
 
-  private double freqx = 2.0;
-  private double freqy = 2.0;
+  private double freqx = 1.5;
+  private double freqy = 2.5;
   private double pwx = 1.0;
-  private double pwy = 1.0;
-  private double scalex = 1.0;
+  private double pwy = 1.5;
+  private double scalex = 2.0;
   private double scaleinfx = 1.0;
-  private double scaley = 1.0;
-  private double scaleinfy = 1.0;
+  private double scaley = 0.75;
+  private double scaleinfy = 1.5;
   private double unity = 1.0;
   private double jacok = 0.25;
 

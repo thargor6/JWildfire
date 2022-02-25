@@ -51,13 +51,13 @@ public class CombimirrorFunc extends VariationFunc implements SupportsGPU {
     PARAM_PCOLORSHIFT
   };
   private double vmirror = 1.0;
-  private double vmove = 0.0;
-  private double hmirror = 0.0;
-  private double hmove = 0.0;
+  private double vmove = 0.05;
+  private double hmirror = 0.5;
+  private double hmove = 0.35;
   private double zmirror = 0.0;
   private double zmove = 0.0;
   private double pmirror = 0.0;
-  private double pmovex = 0.0;
+  private double pmovex = 0.05;
   private double pmovey = 0.0;
   private double vcolorshift = 0.0;
   private double hcolorshift = 0.0;
@@ -145,7 +145,7 @@ public class CombimirrorFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[] {VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[] {VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
   @Override
