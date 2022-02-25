@@ -32,10 +32,10 @@ public class ChecksFunc extends VariationFunc implements SupportsGPU {
 
   private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_SIZE, PARAM_RND};
 
-  private double x = 5.0;
-  private double y = 5.0;
-  private double size = 5.0;
-  private double rnd = 0.0;
+  private double x = 3.0;
+  private double y = 3.0;
+  private double size = 1.0;
+  private double rnd = 0.5;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
