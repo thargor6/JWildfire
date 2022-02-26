@@ -217,6 +217,14 @@ public class VariationProfileRepository {
     return res;
   }
 
+  private static VariationProfile createSwanProfile() {
+    VariationProfile res = new VariationProfile();
+    res.setName("Supported by Swan");
+    res.setVariationProfileType(VariationProfileType.INCLUDE_TYPES);
+    res.getVariationTypes().add(VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN);
+    return res;
+  }
+
   private static VariationProfile createDefaultProfile() {
     VariationProfile res = new VariationProfile();
     res.setName("Default");

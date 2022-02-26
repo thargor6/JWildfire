@@ -111,7 +111,13 @@ public enum VariationFuncType {
     public String getCaption() {
       return "Supports GPU";
     }
-  };
+  },
+  VARTYPE_SUPPORTED_BY_SWAN {
+    @Override
+    public String getCaption() {
+      return "Supported by JWildfire Swan";
+    }
+  };;
 
   public abstract String getCaption();
 }

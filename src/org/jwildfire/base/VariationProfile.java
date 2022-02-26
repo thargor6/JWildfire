@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class VariationProfile implements VariationProfileFilter, Assignable<VariationProfile> {
-  public static final String KEY_COUNT = "varProfiles.count.1";
+  public static final String KEY_COUNT = "varProfiles.count.2";
   public static final String KEY_NAME = "varProfiles.name";
   public static final String KEY_DEFAULT = "varProfiles.default";
   public static final String KEY_PROFILE_TYPE = "varProfiles.profileType";
