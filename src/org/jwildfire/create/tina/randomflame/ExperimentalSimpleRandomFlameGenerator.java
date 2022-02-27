@@ -56,7 +56,7 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "parabola", "rings2", "spherical3D", "spiral", "rectangles", "foci_3D", "sintrange", "waves2b",
       "elliptic", "waves", "swirl", "glynnSim1", "eclipse", "bwraps7", "layered_spiral",
       "heart_wf", "colorscale_wf", "boarders", "secant2", "waffle", "lissajous", "hypertile",
-      "circus", "lazyTravis", "ovoid3d", "circleblur", "sineblur", "starblur" };
+      "circus", "lazyTravis", "ovoid3d", "circleblur", "sineblur", "starblur", "lace_js", "japanese_maple_leaf", "fdisc"};
 
   static {
     List<String> validVariations = new ArrayList<>();
