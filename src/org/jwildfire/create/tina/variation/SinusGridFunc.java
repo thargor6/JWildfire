@@ -32,8 +32,8 @@ public class SinusGridFunc extends VariationFunc implements SupportsGPU {
   private static final String[] paramNames = {PARAM_AMPX, PARAM_AMPY, PARAM_FREQX, PARAM_FREQY};
 
   private double ampx = 0.5;
-  private double ampy = 0.5;
-  private double freqx = 1.0;
+  private double ampy = 0.6;
+  private double freqx = 1.2;
   private double freqy = 1.0;
 
   double lerp(double a, double b, double p) {
@@ -93,7 +93,7 @@ public class SinusGridFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override

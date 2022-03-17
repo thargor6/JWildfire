@@ -32,7 +32,7 @@ public class SVFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* svn (single value function) by gossamer light */
+    /* svf (single value function) by gossamer light */
     double cn = cos(n * pAffineTP.y);
     double sx = sin(pAffineTP.x);
     double cx = cos(pAffineTP.x);
@@ -68,7 +68,7 @@ public class SVFFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
 }

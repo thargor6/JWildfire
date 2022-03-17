@@ -49,7 +49,7 @@ public class RippleFunc extends VariationFunc implements SupportsGPU {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // Ripple by Xyrus02, http://xyrus02.deviantart.com/art/Ripple-Plugin-for-Apophysis-154713493   
-    //align input x, y to given center and multiply with scale
+    // align input x, y to given center and multiply with scale
     double x = (pAffineTP.x * _s) - centerx, y = (pAffineTP.y * _s) + centery;
 
     // calculate distance from center but constrain it to EPS
@@ -148,7 +148,7 @@ public class RippleFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override
