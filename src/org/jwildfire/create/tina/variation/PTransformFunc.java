@@ -33,9 +33,9 @@ public class PTransformFunc extends VariationFunc implements SupportsGPU {
 
   private static final String[] paramNames = {PARAM_ROTATE, PARAM_POWER, PARAM_MOVE, PARAM_SPLIT, PARAM_LOG};
 
-  private double rotate = 0.0;
-  private int power = 1;
-  private double move = 0.0;
+  private double rotate = 0.30;
+  private int power = 2;
+  private double move = 0.40;
   private double split = 0.0;
   private int use_log = 1;
 
@@ -94,7 +94,7 @@ public class PTransformFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override

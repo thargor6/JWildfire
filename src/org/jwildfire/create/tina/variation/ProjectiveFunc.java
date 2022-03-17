@@ -34,13 +34,13 @@ public class ProjectiveFunc extends VariationFunc implements SupportsGPU {
   private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_A1, PARAM_B1, PARAM_C1, PARAM_A2,
           PARAM_B2, PARAM_C2};
   private double A = 0.0;
-  private double B = 0.0;
+  private double B = -0.4;
   private double C = 1.0;
   private double A1 = 1.0;
-  private double B1 = 0.0;
+  private double B1 = 0.1;
   private double C1 = 0.0;
   private double A2 = 0.0;
-  private double B2 = 1.0;
+  private double B2 = 1.2;
   private double C2 = 0.0;
 
   @Override
@@ -109,7 +109,7 @@ public class ProjectiveFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override

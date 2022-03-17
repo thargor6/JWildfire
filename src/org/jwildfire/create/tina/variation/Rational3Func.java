@@ -47,10 +47,10 @@ public class Rational3Func extends VariationFunc implements SupportsGPU {
   private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, PARAM_G, PARAM_H};
   private double a = 0.5;
   private double b = 0.0;
-  private double c = 0.0;
+  private double c = 0.25;
   private double d = 1.0;
   private double e = 0.0;
-  private double f = 1.0;
+  private double f = 0.9;
   private double g = 0.0;
   private double h = 1.0;
 
@@ -129,7 +129,7 @@ public class Rational3Func extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override
