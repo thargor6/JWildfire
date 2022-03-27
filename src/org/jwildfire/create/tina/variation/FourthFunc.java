@@ -33,10 +33,10 @@ public class FourthFunc extends VariationFunc implements SupportsGPU {
   private static final String[] paramNames = {PARAM_SPIN, PARAM_SPACE, PARAM_TWIST, PARAM_X, PARAM_Y};
 
   private double spin = M_PI;
-  private double space = 0.0;
-  private double twist = 0.0;
-  private double x = 0.0;
-  private double y = 0.0;
+  private double space = 0.10;
+  private double twist = 0.20;
+  private double x = 0.30;
+  private double y = 0.12;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -135,7 +135,7 @@ public class FourthFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
   @Override
   public String getGPUCode(FlameTransformationContext context) {
