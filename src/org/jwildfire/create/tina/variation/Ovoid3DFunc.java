@@ -29,9 +29,9 @@ public class Ovoid3DFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_Z = "z";
   private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z};
 
-  private double x = 1.0;
-  private double y = 1.0;
-  private double z = 1.0;
+  private double x = 0.92;
+  private double y = 0.92;
+  private double z = 0.92;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -72,7 +72,7 @@ public class Ovoid3DFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override
