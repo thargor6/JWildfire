@@ -28,7 +28,7 @@ public class Cubic_3DFunc extends VariationFunc implements SupportsGPU {
   private static final String[] paramNames = {PARAM_XPAND, PARAM_STYLE};
 
   private double xpand = 0.25;
-  private double style = 0.0;
+  private double style = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -140,7 +140,7 @@ public class Cubic_3DFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D,VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
   @Override
   public String getGPUCode(FlameTransformationContext context) {

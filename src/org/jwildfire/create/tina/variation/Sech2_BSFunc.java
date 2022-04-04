@@ -29,10 +29,10 @@ public class Sech2_BSFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_Y1 = "y1";
   private static final String PARAM_Y2 = "y2";
   private static final String[] paramNames = {PARAM_X1, PARAM_X2, PARAM_Y1, PARAM_Y2};
-  private double x1 = 1.0;
-  private double x2 = 1.0;
-  private double y1 = 1.0;
-  private double y2 = 1.0;
+  private double x1 = 1.25;
+  private double x2 = 0.75;
+  private double y1 = 1.5;
+  private double y2 = 0.75;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -87,7 +87,7 @@ public class Sech2_BSFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
   @Override
   public String getGPUCode(FlameTransformationContext context) {
