@@ -4,6 +4,8 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
 public class DustPointFunc extends SimpleVariationFunc {
 
 
@@ -27,7 +29,7 @@ public class DustPointFunc extends SimpleVariationFunc {
     double x, y, p, r;
 
     p = (pContext.random() < 0.5) ? 1 : -1;
-    r = Math.sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
 
     double w = pContext.random();
     if (w < 0.50) {
@@ -56,7 +58,7 @@ public class DustPointFunc extends SimpleVariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
 }
