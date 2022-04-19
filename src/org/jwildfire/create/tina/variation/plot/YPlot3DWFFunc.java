@@ -509,7 +509,8 @@ public class YPlot3DWFFunc extends VariationFunc implements SupportsGPU {
       VariationFuncType.VARTYPE_BASE_SHAPE,
       VariationFuncType.VARTYPE_DC,
       VariationFuncType.VARTYPE_EDIT_FORMULA,
-      VariationFuncType.VARTYPE_SUPPORTS_GPU  
+      VariationFuncType.VARTYPE_SUPPORTS_GPU,
+      VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN
     };
   }
 
