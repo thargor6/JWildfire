@@ -25,12 +25,12 @@ tmin = 0
 tmax = 3*pi
 
 ##3
-Limaçon
+Limacon
 formula = param_b + param_a*cos(t)
 param_a = 1
 param_b = 0.5
-tmin = -pi
-tmax = pi
+tmin = 0
+tmax = pi / 2
 
 ##4
 Lemniscate

@@ -5,6 +5,8 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
 public class InvSquircularFunc extends SimpleVariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
@@ -15,8 +17,8 @@ public class InvSquircularFunc extends SimpleVariationFunc implements SupportsGP
       double v = pAffineTP.y;
       double r = u * u + v * v;
       //  r = Math.sqrt((r-u*u*v*v)/r);
-      double r2 = Math.sqrt(r * (pAmount * pAmount * r - 4 * u * u * v * v) / pAmount);
-      r = Math.sqrt(r - r2) / MathLib.M_SQRT2;
+      double r2 = sqrt(r * (pAmount * pAmount * r - 4 * u * u * v * v) / pAmount);
+      r = sqrt(r - r2) / MathLib.M_SQRT2;
       pVarTP.x += r / u;
       pVarTP.y += r / v;
     }
@@ -32,7 +34,7 @@ public class InvSquircularFunc extends SimpleVariationFunc implements SupportsGP
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D,VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
   @Override
   public String getGPUCode(FlameTransformationContext context) {
