@@ -19,6 +19,9 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
+
 public class Swirl3DWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
@@ -26,7 +29,7 @@ public class Swirl3DWFFunc extends VariationFunc implements SupportsGPU {
 
   private static final String[] paramNames = {PARAM_N};
 
-  private double N = 0;
+  private double n = 0;
 
 
   @Override
@@ -34,10 +37,10 @@ public class Swirl3DWFFunc extends VariationFunc implements SupportsGPU {
     double rad = pAffineTP.getPrecalcSqrt();
     double ang = pAffineTP.getPrecalcAtanYX();   // + log(rad)*shift;
 
-    pVarTP.x += pAmount * (rad * Math.cos(ang));
-    pVarTP.y += pAmount * (rad * Math.sin(ang));
-    pVarTP.z += pAmount * (Math.sin(6.0 * Math.cos(rad) - N * ang));
-    pVarTP.color = Math.abs(Math.sin(6.0 * Math.cos(rad) - N * ang));
+    pVarTP.x += pAmount * (rad * cos(ang));
+    pVarTP.y += pAmount * (rad * sin(ang));
+    pVarTP.z += pAmount * (sin(6.0 * cos(rad) - n * ang));
+    pVarTP.color = Math.abs(sin(6.0 * cos(rad) - n * ang));
   }
 
   @Override
@@ -47,13 +50,13 @@ public class Swirl3DWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{N};
+    return new Object[]{n};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_N.equalsIgnoreCase(pName))
-      N = (int) pValue;
+      n = (int) pValue;
     else
       throw new IllegalArgumentException(pName);
   }

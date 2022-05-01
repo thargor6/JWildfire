@@ -6,6 +6,9 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
 public class WallPaperFunc extends VariationFunc {
 
   /**
@@ -27,16 +30,11 @@ public class WallPaperFunc extends VariationFunc {
 
   double a = 1.156, b = -0.28, c = 21.288;
 
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    Flame flame = pContext.getFlameRenderer().getFlame();
-    flame.setBrightness(300.0);
-  }
-
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // WallPaper  Reference:
     //	http://paulbourke.net/fractals/wallpaper/
     if (pContext.random() < 0.5) {
-      pVarTP.x += pAffineTP.y - Integer.signum((int) pAffineTP.x) * MathLib.sqrt(Math.abs(b * pAffineTP.x - c));
+      pVarTP.x += pAffineTP.y - Integer.signum((int) pAffineTP.x) * sqrt(fabs(b * pAffineTP.x - c));
       pVarTP.y += a - pAffineTP.x;
     } else {
       pVarTP.x = pAffineTP.x;
@@ -75,6 +73,6 @@ public class WallPaperFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 }
