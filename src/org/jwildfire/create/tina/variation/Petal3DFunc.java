@@ -91,7 +91,7 @@ public class Petal3DFunc extends VariationFunc implements SupportsGPU {
 				* (sin(pAffineTP.x + z5) * cos(pAffineTP.z + z6));
 		pVarTP.x += pAmount * ax * bx;
 		pVarTP.y += pAmount * ax * by;
-		if (mode == 0) {
+		if (mode <= 0) {
 			pVarTP.z += pAmount * pAffineTP.z;
 		} else if (mode == 1) {
 			pVarTP.z += pAmount * ax * zx;
@@ -99,7 +99,7 @@ public class Petal3DFunc extends VariationFunc implements SupportsGPU {
 			pVarTP.z += pAmount * ax * zy;
 		} else if (mode == 3) {
 			pVarTP.z += pAmount * ax * yz;
-		} else if (mode == 4) {
+		} else if (mode >= 4) {
 			pVarTP.z += pAmount * ax * xz;
 		}
 	}
@@ -169,7 +169,7 @@ public class Petal3DFunc extends VariationFunc implements SupportsGPU {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
 	}
 
 	@Override
@@ -190,7 +190,7 @@ public class Petal3DFunc extends VariationFunc implements SupportsGPU {
         + "  __px += __petal3D * ax * bx;\n"
         + "  __py += __petal3D * ax * by;\n"
 				+ "  int mode = lroundf(__petal3D_mode);\n"
-        + "  if (mode == 0) {\n"
+        + "  if (mode <= 0) {\n"
         + "   __pz += __petal3D * __z;\n"
         + "  } else if (mode == 1) {\n"
         + "   __pz += __petal3D * ax * zx;\n"
@@ -198,7 +198,7 @@ public class Petal3DFunc extends VariationFunc implements SupportsGPU {
         + "   __pz += __petal3D * ax * zy;\n"
         + "  } else if (mode == 3) {\n"
         + "   __pz += __petal3D * ax * yz;\n"
-        + "  } else if (mode == 4) {\n"
+        + "  } else if (mode >= 4) {\n"
         + "   __pz += __petal3D * ax * xz;\n"
         + "  }\n";
 	}

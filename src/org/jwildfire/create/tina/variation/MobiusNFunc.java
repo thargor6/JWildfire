@@ -43,7 +43,7 @@ public class MobiusNFunc extends VariationFunc implements SupportsGPU {
 
   private static final String[] params = {PARAM_RE_A, PARAM_RE_B, PARAM_RE_C, PARAM_RE_D, PARAM_IM_A, PARAM_IM_B, PARAM_IM_C, PARAM_IM_D, PARAM_POWER, PARAM_DIST};
 
-  private double re_a = 1.0, re_b = 0.0, re_c = 0.0, re_d = 1.0, im_a = 0.0, im_b = 0.0, im_c = 0.0, im_d = 0.0, power = 1.0, dist = 1.0;
+  private double re_a = 1.1, re_b = 0.0, re_c = 0.20, re_d = 0.9, im_a = 0.10, im_b = -0.22, im_c = -0.05, im_d = 0.10, power = 1.8, dist = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -142,7 +142,7 @@ public class MobiusNFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override

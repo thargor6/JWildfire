@@ -50,8 +50,8 @@ public class R_CircleblurFunc extends VariationFunc implements SupportsGPU {
     //make circles
     by = round(by * rad);
     bx = round(bx * rad);
-    double rad2 = sqrt(Math.random()) * 0.5;
-    double angle2 = Math.random() * M_2PI;
+    double rad2 = sqrt(pContext.random()) * 0.5;
+    double angle2 = pContext.random() * M_2PI;
     double a1 = sin(bx * 127.1 + by * 311.7 + seed) * 43758.5453;
     a1 = a1 - trunc(a1);
     double a2 = sin(bx * 269.5 + by * 183.3 + seed) * 43758.5453;
@@ -109,7 +109,7 @@ public class R_CircleblurFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_BLUR, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_BLUR, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
   @Override
   public String getGPUCode(FlameTransformationContext context) {

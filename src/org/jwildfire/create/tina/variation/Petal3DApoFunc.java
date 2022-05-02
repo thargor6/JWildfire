@@ -34,10 +34,10 @@ public class Petal3DApoFunc extends VariationFunc implements SupportsGPU {
     private static final String PARAM_STYLE = "style";
 
     private double width = 1.0;
-    private double zshape = 0.25;
+    private double Zshape = 0.25;
     private double scale1 = 0.25;
     private double scale2 = 0.25;
-    private double smoothStyle = 0.0;
+    private double style = 0.0;
     private static final double M_SQRT1_2 = sqrt(0.5);
     private static final String[] paramNames = { PARAM_WIDTH, PARAM_ZSHAPE, PARAM_SCALE1, PARAM_SCALE2, PARAM_STYLE };
 
@@ -54,7 +54,7 @@ public class Petal3DApoFunc extends VariationFunc implements SupportsGPU {
       {
           posNeg = -1;
       }
-      double styleSign = smoothStyle >= 0 ? 1.0 : -1.0; //copysign(1.0,VAR(petal3D_style));
+      double styleSign = style >= 0 ? 1.0 : -1.0; //copysign(1.0,VAR(petal3D_style));
       double a = cos(pAffineTP.x);
       double bx = (cos(pAffineTP.x)*cos(pAffineTP.y))*(cos(pAffineTP.x)*cos(pAffineTP.y))*(cos(pAffineTP.x)*cos(pAffineTP.y)); 
       double by = (sin(pAffineTP.x)*cos(pAffineTP.y))*(sin(pAffineTP.x)*cos(pAffineTP.y))*(sin(pAffineTP.x)*cos(pAffineTP.y)); 
@@ -81,22 +81,22 @@ public class Petal3DApoFunc extends VariationFunc implements SupportsGPU {
       //  smoothStyle uses shaper at 0.0 and blends to shaper2 when fabs(smoothStyle>=sqrt(0.5))
       //  use of negative values will reverse the sign of Z for shaper2
       
-      tmpSmth=0.5-sqr(smoothStyle);
+      tmpSmth=0.5-sqr(style);
           tmpPZ = shaper;
-      if(fabs(smoothStyle)>M_SQRT1_2)
+      if(fabs(style)>M_SQRT1_2)
           {
               tmpPZ = shaper2*styleSign;
           }
-          else if(smoothStyle<0.0)
+          else if(style <0.0)
               {
                   tmpPZ = tmpSmth*2.0*shaper - (1.0-tmpSmth*2.0)*shaper2;
               }
-              else if(smoothStyle>0.0)
+              else if(style >0.0)
                   {
                       tmpPZ = tmpSmth*2.0*shaper + (1.0-tmpSmth*2.0)*shaper2;
                   }
       
-      pVarTP.z += pAmount*tmpPZ*zshape;
+      pVarTP.z += pAmount*tmpPZ* Zshape;
       
     }
 
@@ -107,7 +107,7 @@ public class Petal3DApoFunc extends VariationFunc implements SupportsGPU {
 
     @Override
     public Object[] getParameterValues() {
-        return new Object[] { width, zshape, scale1, scale2, smoothStyle };
+        return new Object[] { width, Zshape, scale1, scale2, style};
     }
 
     @Override
@@ -115,13 +115,13 @@ public class Petal3DApoFunc extends VariationFunc implements SupportsGPU {
         if (PARAM_WIDTH.equalsIgnoreCase(pName)) {
             width = pValue;
         } else if (PARAM_ZSHAPE.equalsIgnoreCase(pName)) {
-            zshape = pValue;
+            Zshape = pValue;
         } else if (PARAM_SCALE1.equalsIgnoreCase(pName)) {
             scale1 = pValue;
         } else if (PARAM_SCALE2.equalsIgnoreCase(pName)) {
             scale2 = pValue;
         } else if (PARAM_STYLE.equalsIgnoreCase(pName)) {
-            smoothStyle = pValue;
+            style = pValue;
         } else {
             System.out.println("pName not recognized: " + pName);
             throw new IllegalArgumentException(pName);
@@ -135,7 +135,7 @@ public class Petal3DApoFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override
