@@ -37,7 +37,7 @@ public class BlurLinearFunc extends VariationFunc implements SupportsGPU {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // made in 2009 by Joel Faber - transcribed by DarkBeam 2017
 
-    double r = length * Math.random();
+    double r = length * pContext.random();
 
     pVarTP.x += pAmount * (pAffineTP.x + r * c);
     pVarTP.y += pAmount * (pAffineTP.y + r * s);
@@ -80,7 +80,7 @@ public class BlurLinearFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override
