@@ -35,7 +35,7 @@ public class ChrysanthemumFunc extends SimpleVariationFunc implements SupportsGP
     double p4 = sin(17.0 * u / 3.0);
     double p8 = sin(2.0 * cos(3.0 * u) - 28.0 * u);
     double r = 5.0 * (1 + sin(11.0 * u / 5.0)) - 4.0 * p4 * p4 * p4 * p4 * p8 * p8 * p8 * p8 * p8 * p8 * p8 * p8;
-    r *= pAmount;
+    r *= pAmount * 0.1;
     pVarTP.x += r * cos(u);
     pVarTP.y += r * sin(u);
 
@@ -51,7 +51,7 @@ public class ChrysanthemumFunc extends SimpleVariationFunc implements SupportsGP
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override
