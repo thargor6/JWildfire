@@ -28,7 +28,6 @@ public class CschqFunc extends SimpleVariationFunc implements SupportsGPU {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Cschq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
-
     double abs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z);
     double s = sin(abs_v);
     double c = cos(abs_v);
@@ -39,8 +38,6 @@ public class CschqFunc extends SimpleVariationFunc implements SupportsGPU {
     pVarTP.x += sh * c * ni;
     pVarTP.y -= C * pAffineTP.y;
     pVarTP.z -= C * pAffineTP.z;
-
-
   }
 
   @Override
@@ -50,7 +47,7 @@ public class CschqFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
   @Override
   public String getGPUCode(FlameTransformationContext context) {
