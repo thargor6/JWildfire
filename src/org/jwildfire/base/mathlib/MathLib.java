@@ -175,7 +175,7 @@ public final class MathLib {
     double t = 1.0 / (1.0 + 0.5 * Math.abs(z));
 
     // use Horner's method
-    double ans = 1 - t * Math.exp(-z * z - 1.26551223 +
+    double ans = 1 - t * MathLib.exp(-z * z - 1.26551223 +
         t * (1.00002368 +
         t * (0.37409196 +
             t * (0.09678418 +
