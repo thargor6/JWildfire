@@ -37,7 +37,7 @@ public class CscSquaredFunc extends VariationFunc implements SupportsGPU {
   private double csc_pow = 0.5;
   private double pi_mult = 0.5;
   private double csc_add = 0.25;
-  private double scaley = 1;
+  private double scale_y = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -54,7 +54,7 @@ public class CscSquaredFunc extends VariationFunc implements SupportsGPU {
     double fx = pow(csc * csc + (M_PI * pi_mult), csc_pow) + csc_add;
 
     pVarTP.x += pAmount * x * fx;
-    pVarTP.y += pAmount * y * fx * scaley;
+    pVarTP.y += pAmount * y * fx * scale_y;
 
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -68,7 +68,7 @@ public class CscSquaredFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{csc_div, cos_div, tan_div, csc_pow, pi_mult, csc_add, scaley};
+    return new Object[]{csc_div, cos_div, tan_div, csc_pow, pi_mult, csc_add, scale_y};
   }
 
   @Override
@@ -86,7 +86,7 @@ public class CscSquaredFunc extends VariationFunc implements SupportsGPU {
     else if (PARAM_CSC_ADD.equalsIgnoreCase(pName))
       csc_add = pValue;
     else if (PARAM_SCALEY.equalsIgnoreCase(pName))
-      scaley = pValue;
+      scale_y = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -99,7 +99,7 @@ public class CscSquaredFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
   @Override
   public String getGPUCode(FlameTransformationContext context) {
