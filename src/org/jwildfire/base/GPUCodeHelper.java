@@ -16,6 +16,13 @@
 */
 package org.jwildfire.base;
 
+import org.jwildfire.create.tina.variation.*;
+import org.jwildfire.create.tina.variation.plot.ParPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.PolarPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.PolarPlot3DWFFunc;
+import org.jwildfire.create.tina.variation.plot.YPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.YPlot3DWFFunc;
+
 public class GPUCodeHelper {
 
   public static void main(String args[]) {
@@ -24,170 +31,12 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        "double xx = 0.0, yy = 0.0;\n"
-            + "  double xr = pAffineTP.x, yr = pAffineTP.y;\n"
-            + "\n"
-            + "  if (reciprocalpow != 0) {\n"
-            + "   Complex z = new Complex(pAffineTP.x * zx_mult + zx_add, pAffineTP.y * zy_mult + zy_add);\n"
-            + "\n"
-            + "   z.Recip();\n"
-            + "\n"
-            + "   z.Scale(pAmount);\n"
-            + "\n"
-            + "   xr = reciprocalpow * z.re;\n"
-            + "   yr = reciprocalpow * z.im;\n"
-            + "  }\n"
-            + "\n"
-            + "  if (dividepow != 0) {\n"
-            + "   Complex z = new Complex(xr * zx_mult + zx_add, yr * zy_mult + zy_add);\n"
-            + "   Complex z2 = new Complex(xr, yr);\n"
-            + "\n"
-            + "   z2.Dec();\n"
-            + "   z.Inc();\n"
-            + "   z.Div(z2);\n"
-            + "\n"
-            + "   z.Scale(pAmount * M_2_PI);\n"
-            + "\n"
-            + "   xr = dividepow * z.re;\n"
-            + "   yr = dividepow * z.im;\n"
-            + "  }\n"
-            + "\n"
-            + "  if (sqrtpow != 0) {\n"
-            + "   Complex z = new Complex(xr * zx_mult + zx_add, yr * zy_mult + zy_add);\n"
-            + "\n"
-            + "   z.Sqrt();\n"
-            + "\n"
-            + "   z.Scale(pAmount);\n"
-            + "\n"
-            + "   if (pContext.random() < 0.5) {\n"
-            + "    xr = sqrtpow * z.re;\n"
-            + "    yr = sqrtpow * z.im;\n"
-            + "   } else {\n"
-            + "    xr = sqrtpow * -z.re;\n"
-            + "    yr = sqrtpow * -z.im;\n"
-            + "   }\n"
-            + "  }\n"
-            + "\n"
-            + "  if (asinhpow != 0) {\n"
-            + "   Complex z = new Complex(xr * zx_mult + zx_add, yr * zy_mult + zy_add);\n"
-            + "\n"
-            + "   z.AsinH();\n"
-            + "\n"
-            + "   z.Scale(pAmount * M_2_PI);\n"
-            + "\n"
-            + "   xx += asinhpow * z.re;\n"
-            + "   yy += asinhpow * z.im;\n"
-            + "\n"
-            + "  }\n"
-            + "\n"
-            + "  if (acoshpow != 0) {\n"
-            + "   Complex z = new Complex(xr * zx_mult + zx_add, yr * zy_mult + zy_add);\n"
-            + "\n"
-            + "   z.AcosH();\n"
-            + "\n"
-            + "   z.Scale(pAmount * M_2_PI);\n"
-            + "\n"
-            + "   if (pContext.random() < 0.5) {\n"
-            + "    xx += acoshpow * z.re;\n"
-            + "    yy += acoshpow * z.im;\n"
-            + "   } else {\n"
-            + "    xx += acoshpow * -z.re;\n"
-            + "    yy += acoshpow * -z.im;\n"
-            + "   }\n"
-            + "  }\n"
-            + "\n"
-            + "  if (atanhpow != 0) {\n"
-            + "   Complex z = new Complex(xr * zx_mult + zx_add, yr * zy_mult + zy_add);\n"
-            + "\n"
-            + "   z.AtanH();\n"
-            + "\n"
-            + "   z.Scale(pAmount * M_2_PI);\n"
-            + "\n"
-            + "   xx += atanhpow * z.re;\n"
-            + "   yy += atanhpow * z.im;\n"
-            + "\n"
-            + "  }\n"
-            + "\n"
-            + "  if (asechpow != 0) {\n"
-            + "   Complex z = new Complex(xr * zx_mult + zx_add, yr * zy_mult + zy_add);\n"
-            + "\n"
-            + "   z.AsecH();\n"
-            + "\n"
-            + "   z.Scale(pAmount * M_2_PI);\n"
-            + "\n"
-            + "   xx += asechpow * z.re;\n"
-            + "   yy += asechpow * z.im;\n"
-            + "\n"
-            + "  }\n"
-            + "\n"
-            + "  if (acosechpow != 0) {\n"
-            + "   Complex z = new Complex(xr * zx_mult + zx_add, yr * zy_mult + zy_add);\n"
-            + "\n"
-            + "   z.AcosecH();\n"
-            + "\n"
-            + "   z.Scale(pAmount * M_2_PI);\n"
-            + "\n"
-            + "   if (pContext.random() < 0.5) {\n"
-            + "    xx += acosechpow * z.re;\n"
-            + "    yy += acosechpow * z.im;\n"
-            + "   } else {\n"
-            + "    xx += acosechpow * -z.re;\n"
-            + "    yy += acosechpow * -z.im;\n"
-            + "   }\n"
-            + "  }\n"
-            + "\n"
-            + "  if (acothpow != 0) {\n"
-            + "   Complex z = new Complex(xr * zx_mult + zx_add, yr * zy_mult + zy_add);\n"
-            + "\n"
-            + "   z.AcotH();\n"
-            + "\n"
-            + "   z.Scale(pAmount * M_2_PI);\n"
-            + "\n"
-            + "   xx += acothpow * z.re;\n"
-            + "   yy += acothpow * z.im;\n"
-            + "\n"
-            + "  }\n"
-            + "\n"
-            + "  if (logpow != 0) {\n"
-            + "   Complex z = new Complex(xr * zx_mult + zx_add, yr * zy_mult + zy_add);\n"
-            + "\n"
-            + "   z.Log();\n"
-            + "\n"
-            + "   z.Scale(pAmount * M_2_PI);\n"
-            + "\n"
-            + "   xx += logpow * z.re;\n"
-            + "   yy += logpow * z.im;\n"
-            + "\n"
-            + "  }\n"
-            + "\n"
-            + "  if (exppow != 0) {\n"
-            + "   Complex z = new Complex(xr * zx_mult + zx_add, yr * zy_mult + zy_add);\n"
-            + "\n"
-            + "   z.Exp();\n"
-            + "\n"
-            + "   z.Scale(pAmount * M_2_PI);\n"
-            + "\n"
-            + "   xx += exppow * z.re;\n"
-            + "   yy += exppow * z.im;\n"
-            + "\n"
-            + "  }\n"
-            + "\n"
-            + "  if (asinhpow + acoshpow + atanhpow + asechpow + acosechpow + acothpow + logpow + exppow == 0) {\n"
-            + "   pAffineTP.x = xr;\n"
-            + "   pAffineTP.y = yr;\n"
-            + "  }\n"
-            + "\n"
-            + "  else {\n"
-            + "   pAffineTP.x = xx;\n"
-            + "   pAffineTP.y = yy;\n"
-            + "  }\n"
-            + "\n"
-            + "  if (pContext.isPreserveZCoordinate()) {\n"
-            + "   pVarTP.z += pAmount * pAffineTP.z;\n"
-            + "  }\n";
+        "    pVarTP.x += pAmount * tanh(pAffineTP.x) * (1.0 / cos(pAffineTP.x) + effect * M_PI);\n"
+            + "    pVarTP.y += pAmount * tanh(pAffineTP.y) * (1.0 / cos(pAffineTP.y) + effect * M_PI);\n";
 
-    System.err.println(convertCode(code, "pre_recip", new String[]{"reciprocalpow", "dividepow", "sqrtpow", "asinhpow", "acoshpow", "atanhpow", "asechpow", "acosechpow",
-            "acothpow", "logpow", "exppow", "zx_mult", "zy_mult", "zx_add, zy_add"}));
+     System.err.println(convertCodeSwan(code, "polar", new String[]{}));
+    //FlameTransformationContext ctx = new FlameTransformationContext(null, null, 1, 1);
+    //System.err.println(new ParPlot2DWFFunc().getGPUCode(ctx));
   }
 
   private String convertCode(String code, String varName, String paramNames[]) {
@@ -255,4 +104,67 @@ public class GPUCodeHelper {
     }
     return newCode;
   }
+
+  private String convertCodeSwan(String code, String varName, String paramNames[]) {
+    // functions
+    String newCode =
+            // pAffineTP.getPrecalcSumsq()
+            code.replaceAll("pAffineTP\\.getPrecalcSumsq\\(\\)", "_r2")
+            // pAffineTP.getPrecalcAtan()
+            .replaceAll("pAffineTP\\.getPrecalcAtan\\(\\)", "_phi")
+            // pAffineTP.getPrecalcAtanYX()
+            .replaceAll("pAffineTP\\.getPrecalcAtanYX\\(\\)", "_theta")
+            // pAffineTP.getPrecalcSqrt()
+            .replaceAll("pAffineTP\\.getPrecalcSqrt\\(\\)", "_r")
+            // pVarTP.color
+            .replaceAll("pVarTP\\.color", "_pal")
+            // pAffineTP.color
+            .replaceAll("pAffineTP\\.color", "_pal")
+            // pVarTP.doHide
+            .replaceAll("pVarTP\\.doHide", "_doHide")
+            // pAffineTP
+            .replaceAll("pAffineTP\\.", "_t")
+            // pVarTP
+            .replaceAll("pVarTP\\.", "_v")
+            // (double)
+            .replaceAll("\\(double\\)", "(float)")
+            // double
+            .replaceAll("(\\s*)double(\\s+)", "$1float$2")
+            // return
+            .replaceAll("(\\s+)return([\\s;]+)", "$1!!!RETURN!!!$2")
+            // pAmount
+            .replaceAll("pAmount", "amount")
+            // SMALL_EPSILON
+            .replaceAll("SMALL_EPSILON", "EPSILON")
+            // M_1_2PI
+            .replaceAll("M_1_2PI", "(1.0f / (M_PI + M_PI))")
+            // M_2_PI
+            .replaceAll("M_2_PI", "(2.0f / M_PI)")
+            // M_1_PI
+            .replaceAll("M_1_PI", "(1.0f / M_PI)")
+            // M_PI_2
+            .replaceAll("M_PI_2", "(M_PI*0.5f)")
+            // M_PI_4
+            .replaceAll("M_PI_4", "(0.25f*M_PI)")
+            // M_2PI
+            .replaceAll("M_2PI", "(2.0f*M_PI)")
+            // resolve sqr()
+            .replaceAll("([\\s\\(]+)sqrf\\((\\w*)\\)", "$1$2*$2")
+            // resolve sgn()
+            .replaceAll("([\\s\\(]+)sgnf\\((\\w*)\\)", "$1($2<0.f ? -1 : $2>0.f ? 1 : 0)")
+            // pContext.random()
+            .replaceAll("pContext\\.random\\(\\)", "rand8(tex, rngState)")
+            // boolean -> short
+            .replaceAll("boolean", "short")
+            // comments
+            .replaceAll("(//.*)", "")
+            // this.
+            .replaceAll("this\\.", "");
+
+    for(String paramName: paramNames) {
+      newCode = newCode.replaceAll("([\\s\\(\\-\\+\\*]+)("+paramName+")([\\s\\+\\-\\*\\);]+)", "$1__"+varName+"_"+paramName+"$3");
+    }
+    return newCode;
+  }
+
 }
