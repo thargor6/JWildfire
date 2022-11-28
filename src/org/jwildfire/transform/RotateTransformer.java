@@ -67,6 +67,10 @@ public class RotateTransformer extends Mesh2DTransformer {
 
     double w1 = (double) width - 1.0;
     double h1 = (double) height - 1.0;
+    readSrcPixels(1, 1);
+    int bgR = srcP.r;
+    int bgG = srcP.g;
+    int bgB = srcP.b;
     for (int i = 0; i < height; i++) {
       double dyq = (double) i - cy;
       double y0 = dyq * zoom;
@@ -85,7 +89,9 @@ public class RotateTransformer extends Mesh2DTransformer {
           double xi = Tools.fmod33(x);
           double yi = Tools.fmod33(y);
           if ((x < 0.0) || (x > w1) || (y < 0.0) || (y > h1)) {
-            pPixel.r = pPixel.g = pPixel.b = 0;
+            pPixel.r = bgR;
+            pPixel.g = bgG;
+            pPixel.b = bgB;
           }
           else {
             readSrcPixels(x, y);
