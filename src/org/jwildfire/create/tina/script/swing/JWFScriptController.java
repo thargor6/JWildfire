@@ -567,13 +567,13 @@ public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
       pSB.append("      xForm.setWeightingFieldColorIntensity(" + Tools.doubleToString(pXForm.getWeightingFieldColorIntensity()) + ");\n");
       pSB.append("      xForm.setWeightingFieldVarAmountIntensity(" + Tools.doubleToString(pXForm.getWeightingFieldVarAmountIntensity()) + ");\n");
       pSB.append("      xForm.setWeightingFieldVarParam1Intensity(" + Tools.doubleToString(pXForm.getWeightingFieldVarParam1Intensity()) + ");\n");
-      pSB.append("      xForm.setWeightingFieldVarParam1VarName(\"" + (pXForm.getWeightingFieldVarParam1ParamName() != null ? pXForm.getWeightingFieldVarParam1ParamName() : "") + "\");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam1VarName(\"" + (pXForm.getWeightingFieldVarParam1VarName() != null ? pXForm.getWeightingFieldVarParam1VarName() : "") + "\");\n");
       pSB.append("      xForm.setWeightingFieldVarParam1ParamName(\"" + (pXForm.getWeightingFieldVarParam1ParamName() != null ? pXForm.getWeightingFieldVarParam1ParamName() : "") + "\");\n");
       pSB.append("      xForm.setWeightingFieldVarParam2Intensity(" + Tools.doubleToString(pXForm.getWeightingFieldVarParam2Intensity()) + ");\n");
-      pSB.append("      xForm.setWeightingFieldVarParam2VarName(\"" + (pXForm.getWeightingFieldVarParam2ParamName() != null ? pXForm.getWeightingFieldVarParam2ParamName() : "") + "\");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam2VarName(\"" + (pXForm.getWeightingFieldVarParam2VarName() != null ? pXForm.getWeightingFieldVarParam2VarName() : "") + "\");\n");
       pSB.append("      xForm.setWeightingFieldVarParam2ParamName(\"" + (pXForm.getWeightingFieldVarParam2ParamName() != null ? pXForm.getWeightingFieldVarParam2ParamName() : "") + "\");\n");
       pSB.append("      xForm.setWeightingFieldVarParam3Intensity(" + Tools.doubleToString(pXForm.getWeightingFieldVarParam3Intensity()) + ");\n");
-      pSB.append("      xForm.setWeightingFieldVarParam3VarName(\"" + (pXForm.getWeightingFieldVarParam3ParamName() != null ? pXForm.getWeightingFieldVarParam3ParamName() : "") + "\");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam3VarName(\"" + (pXForm.getWeightingFieldVarParam3VarName() != null ? pXForm.getWeightingFieldVarParam3VarName() : "") + "\");\n");
       pSB.append("      xForm.setWeightingFieldVarParam3ParamName(\"" + (pXForm.getWeightingFieldVarParam3ParamName() != null ? pXForm.getWeightingFieldVarParam3ParamName() : "") + "\");\n");
       pSB.append("      xForm.setWeightingFieldJitterIntensity(" + Tools.doubleToString(pXForm.getWeightingFieldJitterIntensity()) + ");\n");
       switch (pXForm.getWeightingFieldType()) {
