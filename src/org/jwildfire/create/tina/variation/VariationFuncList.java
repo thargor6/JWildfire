@@ -23,7 +23,6 @@ import org.jwildfire.create.tina.variation.mesh.*;
 import org.jwildfire.create.tina.variation.plot.*;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -1019,6 +1018,7 @@ public class VariationFuncList {
     registerVariationFunc(OakLeafFunc.class);
     registerVariationFunc(JapaneseMapleLeafFunc.class);
     registerVariationFunc(Mobius3DWithInverseFunc.class);
+    registerVariationFunc(BrushStrokeWFFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

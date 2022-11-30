@@ -20,6 +20,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 public class Linear3DFunc extends SimpleVariationFunc implements SupportsGPU {
+  public static final String NAME = "linear3D";
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -31,7 +32,7 @@ public class Linear3DFunc extends SimpleVariationFunc implements SupportsGPU {
 
   @Override
   public String getName() {
-    return "linear3D";
+    return NAME;
   }
 
   @Override
