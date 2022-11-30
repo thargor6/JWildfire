@@ -2998,7 +2998,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       JCheckBox checkbox = addSelectCheckbox(imgPanel, idx);
       randomBatch.get(i).setSelectCheckbox(checkbox);
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent e) {
+        public void mousePressed(java.awt.event.MouseEvent e) {
           if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
             SwingUtilities.invokeLater(new Runnable() {
 
@@ -3009,7 +3009,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             });
           }
           else {
-            super.mouseClicked(e);
+            super.mousePressed(e);
           }
         }
       });
