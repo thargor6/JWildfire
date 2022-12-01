@@ -1,16 +1,16 @@
 /*
-  JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2022 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
@@ -89,6 +89,12 @@ public enum MutationType {
       return BokehMutation.class;
     }
   },
+  PAINTERLY_STYLE {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return PainterlyStyleMutation.class;
+    }
+  },
   RANDOM_FLAME {
     @Override
     protected Class<? extends Mutation> getMutationClass() {
@@ -132,19 +138,15 @@ public enum MutationType {
     }
   };
 
-
   protected abstract Class<? extends Mutation> getMutationClass();
 
   public Mutation createMutationInstance() {
     try {
       return getMutationClass().newInstance();
-    }
-    catch (InstantiationException e) {
+    } catch (InstantiationException e) {
       throw new RuntimeException(e);
-    }
-    catch (IllegalAccessException e) {
+    } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }
-
 }

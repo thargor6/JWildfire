@@ -18,10 +18,8 @@ package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.*;
-import org.jwildfire.create.tina.palette.RGBColor;
-import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.mutagen.PainterlyStyleMutation;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
-import org.jwildfire.create.tina.variation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +80,7 @@ public class PainterlyRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new TileBallRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
     generators.add(new XenomorphRandomFlameGenerator());
+    generators.add(new BlackAndWhiteRandomFlameGenerator());
   }
 
   private static final String PAINTERLY_RANDGEN = "PAINTERLY_RANDGEN";
@@ -121,36 +120,7 @@ public class PainterlyRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     for (Layer layer : pFlame.getLayers()) {
-      boolean hasPainterlyVariation = false;
-      for(XForm xform: layer.getFinalXForms()) {
-        for(int i=0;i<xform.getVariationCount();i++) {
-          if(xform.getVariation(i).getFunc().getName().equals(BrushStrokeWFFunc.NAME)) {
-            hasPainterlyVariation = true;
-            break;
-          }
-        }
-      }
-      if(!hasPainterlyVariation) {
-        XForm xform;
-        if(layer.getFinalXForms().isEmpty()) {
-          xform = new XForm();
-          layer.getFinalXForms().add(xform);
-
-          xform.setWeight(1.0);
-          xform.setColor(Math.random());
-          xform.setColorSymmetry(Math.random());
-          xform.setColorType(ColorType.DIFFUSION);
-          xform.addVariation(1.0, VariationFuncList.getVariationFuncInstance(Linear3DFunc.NAME, true));
-        }
-        else {
-          xform = layer.getFinalXForms().get(layer.getFinalXForms().size()-1);
-        }
-        VariationFunc brushVar = VariationFuncList.getVariationFuncInstance(BrushStrokeWFFunc.NAME, true);
-        brushVar.setParameter(BrushStrokeWFFunc.PARAM_BLEND, 0.1+0.2*Math.random());
-        brushVar.setParameter(BrushStrokeWFFunc.PARAM_GRID_SIZE, 0.015+0.02*Math.random());
-        brushVar.setParameter(BrushStrokeWFFunc.PARAM_GRID_DEFORM, 0.05+0.1*Math.random());
-        xform.addVariation(0.25+Math.random() * 0.5, brushVar);
-      }
+      new PainterlyStyleMutation().execute(layer, 1.0);
     }
     return pFlame;
   }

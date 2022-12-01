@@ -185,6 +185,7 @@ public class MutaGenController {
     if (pIncludeRandomFlameMutation) {
       pCmb.addItem(MutationType.RANDOM_FLAME);
     }
+    pCmb.addItem(MutationType.PAINTERLY_STYLE);
     pCmb.addItem(MutationType.RANDOM_GRADIENT);
     pCmb.addItem(MutationType.RANDOM_PARAMETER);
     pCmb.addItem(MutationType.RANDOM_ZTRANSFORM);

@@ -32,6 +32,7 @@ public class AllMutation implements Mutation {
     types.add(MutationType.AFFINE);
     types.add(MutationType.CHANGE_WEIGHT);
     types.add(MutationType.RANDOM_GRADIENT);
+    types.add(MutationType.PAINTERLY_STYLE);
     types.add(MutationType.AFFINE_3D);
     types.add(MutationType.LOCAL_GAMMA);
     types.add(MutationType.COLOR_TYPE);
@@ -49,6 +50,7 @@ public class AllMutation implements Mutation {
     types.add(MutationType.WEIGHTING_FIELD);
     types.add(MutationType.ADD_TRANSFORM);
     types.add(MutationType.LOCAL_GAMMA);
+    types.add(MutationType.PAINTERLY_STYLE);
     types.add(MutationType.COLOR_TYPE);
     types.add(MutationType.AFFINE);
     types.add(MutationType.RANDOM_PARAMETER);
@@ -60,6 +62,7 @@ public class AllMutation implements Mutation {
     types.add(MutationType.LOCAL_GAMMA);
     types.add(MutationType.ADD_TRANSFORM);
     types.add(MutationType.AFFINE);
+    types.add(MutationType.PAINTERLY_STYLE);
     types.add(MutationType.CHANGE_WEIGHT);
     types.add(MutationType.AFFINE);
     types.add(MutationType.WEIGHTING_FIELD);
