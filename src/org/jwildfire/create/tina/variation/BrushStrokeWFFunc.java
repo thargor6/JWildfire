@@ -22,6 +22,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
+import org.jwildfire.create.tina.variation.brush.BrushPreset;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
@@ -30,17 +31,14 @@ import org.jwildfire.transform.RotateTransformer;
 import org.jwildfire.transform.ScaleAspect;
 import org.jwildfire.transform.ScaleTransformer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class BrushStrokeWFFunc extends VariationFunc {
   public static final String NAME = "brush_stroke_wf";
   public static final String PARAM_BLEND = "blend";
-  public static final String PARAM_GRID_SIZE = "grid_Size";
+  public static final String PARAM_GRID_SIZE = "grid_size";
   public static final String PARAM_GRID_DEFORM = "grid_deform";
   private static final String PARAM_OFFSETY = "offset_y";
   private static final String PARAM_COLOR_CHANNEL = "color_channel";
@@ -57,12 +55,14 @@ public class BrushStrokeWFFunc extends VariationFunc {
   private static final String PARAM_IMAGE_MAX_SIZE = "image_max_size";
 
   private static final String PARAM_ANTIALIAS_RADIUS = "antialias_radius";
-  private static final String RESSOURCE_IMAGE_FILENAME1 = "image_filename1";
-  private static final String RESSOURCE_IMAGE_FILENAME2 = "image_filename2";
-  private static final String RESSOURCE_IMAGE_FILENAME3 = "image_filename3";
-  private static final String RESSOURCE_IMAGE_FILENAME4 = "image_filename4";
-  private static final String RESSOURCE_IMAGE_FILENAME5 = "image_filename5";
-  private static final String RESSOURCE_IMAGE_FILENAME6 = "image_filename6";
+
+  public static final String RESSOURCE_BRUSH_PRESETS = "brush_presets";
+  private static final String RESSOURCE_BRUSH_FILENAME1 = "image_filename1";
+  private static final String RESSOURCE_BRUSH_FILENAME2 = "image_filename2";
+  private static final String RESSOURCE_BRUSH_FILENAME3 = "image_filename3";
+  private static final String RESSOURCE_BRUSH_FILENAME4 = "image_filename4";
+  private static final String RESSOURCE_BRUSH_FILENAME5 = "image_filename5";
+  private static final String RESSOURCE_BRUSH_FILENAME6 = "image_filename6";
   private static final String[] paramNames = {
     PARAM_BLEND,
     PARAM_GRID_SIZE,
@@ -81,12 +81,13 @@ public class BrushStrokeWFFunc extends VariationFunc {
     PARAM_ANTIALIAS_RADIUS
   };
   private static final String[] ressourceNames = {
-    RESSOURCE_IMAGE_FILENAME1,
-    RESSOURCE_IMAGE_FILENAME2,
-    RESSOURCE_IMAGE_FILENAME3,
-    RESSOURCE_IMAGE_FILENAME4,
-    RESSOURCE_IMAGE_FILENAME5,
-    RESSOURCE_IMAGE_FILENAME6
+    RESSOURCE_BRUSH_PRESETS,
+    RESSOURCE_BRUSH_FILENAME1,
+    RESSOURCE_BRUSH_FILENAME2,
+    RESSOURCE_BRUSH_FILENAME3,
+    RESSOURCE_BRUSH_FILENAME4,
+    RESSOURCE_BRUSH_FILENAME5,
+    RESSOURCE_BRUSH_FILENAME6
   };
   private static final int IM = 2147483647;
   private static final double AM = (1. / IM);
@@ -102,12 +103,13 @@ public class BrushStrokeWFFunc extends VariationFunc {
 
   private int image_max_size = 320;
 
-  private String imageFilename1 = null;
-  private String imageFilename2 = null;
-  private String imageFilename3 = null;
-  private String imageFilename4 = null;
-  private String imageFilename5 = null;
-  private String imageFilename6 = null;
+  private String brush_presets = "001, 005, 012";
+  private String brush_filename1 = null;
+  private String brush_filename2 = null;
+  private String brush_filename3 = null;
+  private String brush_filename4 = null;
+  private String brush_filename5 = null;
+  private String brush_filename6 = null;
   private double blend = 0.25;
   private double grid_size = 0.025;
   private double grid_deform = 0.05;
@@ -167,8 +169,10 @@ public class BrushStrokeWFFunc extends VariationFunc {
         pVarTP.x += pAmount * rawX;
         pVarTP.y += pAmount * rawY;
       } else {
-        gridPosX += (0.5 - discretNoise(Tools.FTOI(noiseSclX * (gridPosX)))) * grid_deform;
-        gridPosY += (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY)))) * grid_deform;
+        double dx = (0.5 - discretNoise(Tools.FTOI(noiseSclX * (gridPosX-17.236612*gridPosY)))) * grid_deform;
+        double dy = (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY + 76.32561 * gridPosX)))) * grid_deform;
+        gridPosX += dx;
+        gridPosY += dy;
         pVarTP.x = gridPosX + pAmount * rawX;
         pVarTP.y = gridPosY + pAmount * rawY;
       }
@@ -214,44 +218,64 @@ public class BrushStrokeWFFunc extends VariationFunc {
       FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.initOnce(pContext, pLayer, pXForm, pAmount);
     _colorMaps = new ArrayList<>();
-    if (imageFilename1 != null && imageFilename1.length() > 0) {
+    if (brush_presets != null && brush_presets.length() > 0) {
+      StringTokenizer tokenizer = new StringTokenizer(brush_presets, ",");
+      while (tokenizer.hasMoreTokens()) {
+        String brushId = tokenizer.nextToken().trim();
+        String brushFilename = String.format("brush%s.png", brushId);
+        try {
+          if (!RessourceManager.hasImage(brushFilename)) {
+            SimpleImage img = Tools.getRessourceAsImage(BrushPreset.class, brushFilename);
+            RessourceManager.addImage(brushFilename, img);
+          }
+          SimpleImage brush = (SimpleImage) RessourceManager.getImage(brushFilename);
+          if (brush != null && brush.getImageWidth() >= 16 && brush.getImageWidth() >= 16) {
+            _colorMaps.add(brush);
+          }
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    }
+
+    if (brush_filename1 != null && brush_filename1.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(imageFilename1));
+        _colorMaps.add(RessourceManager.getImage(brush_filename1));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
-    if (imageFilename2 != null && imageFilename2.length() > 0) {
+    if (brush_filename2 != null && brush_filename2.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(imageFilename2));
+        _colorMaps.add(RessourceManager.getImage(brush_filename2));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
-    if (imageFilename3 != null && imageFilename3.length() > 0) {
+    if (brush_filename3 != null && brush_filename3.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(imageFilename3));
+        _colorMaps.add(RessourceManager.getImage(brush_filename3));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
-    if (imageFilename4 != null && imageFilename4.length() > 0) {
+    if (brush_filename4 != null && brush_filename4.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(imageFilename4));
+        _colorMaps.add(RessourceManager.getImage(brush_filename4));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
-    if (imageFilename5 != null && imageFilename5.length() > 0) {
+    if (brush_filename5 != null && brush_filename5.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(imageFilename5));
+        _colorMaps.add(RessourceManager.getImage(brush_filename5));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
-    if (imageFilename6 != null && imageFilename6.length() > 0) {
+    if (brush_filename6 != null && brush_filename6.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(imageFilename5));
+        _colorMaps.add(RessourceManager.getImage(brush_filename5));
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -260,6 +284,12 @@ public class BrushStrokeWFFunc extends VariationFunc {
       _colorMaps.add(getDfltImage());
     }
     getPointsMap(pContext);
+  }
+
+  @Override
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    super.init(pContext, pLayer, pXForm, pAmount);
+    _pointsMap = getPointsMap(pContext);
   }
 
   @Override
@@ -299,45 +329,50 @@ public class BrushStrokeWFFunc extends VariationFunc {
   @Override
   public byte[][] getRessourceValues() {
     return new byte[][] {
-      (imageFilename1 != null ? imageFilename1.getBytes() : null),
-      (imageFilename2 != null ? imageFilename2.getBytes() : null),
-      (imageFilename3 != null ? imageFilename3.getBytes() : null),
-      (imageFilename4 != null ? imageFilename4.getBytes() : null),
-      (imageFilename5 != null ? imageFilename5.getBytes() : null),
-      (imageFilename6 != null ? imageFilename6.getBytes() : null)
+      (brush_presets != null ? brush_presets.getBytes() : null),
+      (brush_filename1 != null ? brush_filename1.getBytes() : null),
+      (brush_filename2 != null ? brush_filename2.getBytes() : null),
+      (brush_filename3 != null ? brush_filename3.getBytes() : null),
+      (brush_filename4 != null ? brush_filename4.getBytes() : null),
+      (brush_filename5 != null ? brush_filename5.getBytes() : null),
+      (brush_filename6 != null ? brush_filename6.getBytes() : null)
     };
   }
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
-    if (RESSOURCE_IMAGE_FILENAME1.equalsIgnoreCase(pName)) {
-      imageFilename1 = pValue != null ? new String(pValue) : "";
-    } else if (RESSOURCE_IMAGE_FILENAME2.equalsIgnoreCase(pName)) {
-      imageFilename2 = pValue != null ? new String(pValue) : "";
-    } else if (RESSOURCE_IMAGE_FILENAME3.equalsIgnoreCase(pName)) {
-      imageFilename3 = pValue != null ? new String(pValue) : "";
-    } else if (RESSOURCE_IMAGE_FILENAME4.equalsIgnoreCase(pName)) {
-      imageFilename4 = pValue != null ? new String(pValue) : "";
-    } else if (RESSOURCE_IMAGE_FILENAME5.equalsIgnoreCase(pName)) {
-      imageFilename5 = pValue != null ? new String(pValue) : "";
-    } else if (RESSOURCE_IMAGE_FILENAME6.equalsIgnoreCase(pName)) {
-      imageFilename6 = pValue != null ? new String(pValue) : "";
+    if (RESSOURCE_BRUSH_PRESETS.equalsIgnoreCase(pName)) {
+      brush_presets = pValue != null ? new String(pValue) : "";
+    } else if (RESSOURCE_BRUSH_FILENAME1.equalsIgnoreCase(pName)) {
+      brush_filename1 = pValue != null ? new String(pValue) : "";
+    } else if (RESSOURCE_BRUSH_FILENAME2.equalsIgnoreCase(pName)) {
+      brush_filename2 = pValue != null ? new String(pValue) : "";
+    } else if (RESSOURCE_BRUSH_FILENAME3.equalsIgnoreCase(pName)) {
+      brush_filename3 = pValue != null ? new String(pValue) : "";
+    } else if (RESSOURCE_BRUSH_FILENAME4.equalsIgnoreCase(pName)) {
+      brush_filename4 = pValue != null ? new String(pValue) : "";
+    } else if (RESSOURCE_BRUSH_FILENAME5.equalsIgnoreCase(pName)) {
+      brush_filename5 = pValue != null ? new String(pValue) : "";
+    } else if (RESSOURCE_BRUSH_FILENAME6.equalsIgnoreCase(pName)) {
+      brush_filename6 = pValue != null ? new String(pValue) : "";
     } else throw new IllegalArgumentException(pName);
   }
 
   @Override
   public RessourceType getRessourceType(String pName) {
-    if (RESSOURCE_IMAGE_FILENAME1.equalsIgnoreCase(pName)) {
+    if (RESSOURCE_BRUSH_PRESETS.equalsIgnoreCase(pName)) {
+      return RessourceType.BYTEARRAY;
+    } else if (RESSOURCE_BRUSH_FILENAME1.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    } else if (RESSOURCE_IMAGE_FILENAME2.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_BRUSH_FILENAME2.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    } else if (RESSOURCE_IMAGE_FILENAME3.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_BRUSH_FILENAME3.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    } else if (RESSOURCE_IMAGE_FILENAME4.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_BRUSH_FILENAME4.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    } else if (RESSOURCE_IMAGE_FILENAME5.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_BRUSH_FILENAME5.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    } else if (RESSOURCE_IMAGE_FILENAME6.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_BRUSH_FILENAME6.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
     } else throw new IllegalArgumentException(pName);
   }
@@ -359,17 +394,19 @@ public class BrushStrokeWFFunc extends VariationFunc {
   private String makeRessourceKey() {
     return getName()
         + "#"
-        + imageFilename1
+        + brush_presets
         + "#"
-        + imageFilename2
+        + brush_filename1
         + "#"
-        + imageFilename3
+        + brush_filename2
         + "#"
-        + imageFilename4
+        + brush_filename3
         + "#"
-        + imageFilename5
+        + brush_filename4
         + "#"
-        + imageFilename6
+        + brush_filename5
+        + "#"
+        + brush_filename6
         + "#"
         + invert
         + "#"
@@ -397,7 +434,7 @@ public class BrushStrokeWFFunc extends VariationFunc {
       String key = makeRessourceKey();
       _pointsMap = (Map<Integer, List<Point>>) RessourceManager.getRessource(key);
       if (_pointsMap == null) {
-        _pointsMap = new HashMap<>();
+        Map<Integer, List<Point>> pmap = new HashMap<>();
         MarsagliaRandomGenerator randomGenerator = new MarsagliaRandomGenerator();
         randomGenerator.randomize(variation_seed);
         int generationId = 0;
@@ -447,16 +484,6 @@ public class BrushStrokeWFFunc extends VariationFunc {
                           * variation_position
                           * (double) colorMap.getImageHeight());
               currErosion = variation_erosion * randomGenerator.random();
-              System.err.println(
-                  "ZOOM"
-                      + currZoom
-                      + " ANGLE "
-                      + currAngle
-                      + " DELTA"
-                      + currDeltaX
-                      + " "
-                      + currDeltaY);
-
               imgMap = ((SimpleImage) colorMap).clone();
               RotateTransformer rT = new RotateTransformer();
               rT.setZoom(currZoom);
@@ -501,9 +528,10 @@ public class BrushStrokeWFFunc extends VariationFunc {
             }
 
             List<Point> finalPoints = distributePoints(pointsWithIntensity);
-            _pointsMap.put(generationId++, finalPoints);
+            pmap.put(generationId++, finalPoints);
           }
-          RessourceManager.putRessource(key, _pointsMap);
+          RessourceManager.putRessource(key, pmap);
+          _pointsMap = pmap;
         }
       }
     }
@@ -532,8 +560,6 @@ public class BrushStrokeWFFunc extends VariationFunc {
         res.add(p);
       }
     }
-    System.err.println("RES: " + res.size() + " " + pointsWithIntensity.size());
-
     return res;
   }
 

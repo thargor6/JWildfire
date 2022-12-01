@@ -56,10 +56,14 @@ import org.jwildfire.create.tina.base.ZBufferFilename;
 
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
 
-public class Tools {
+public class
+
+Tools {
   public static final String APP_TITLE = "JWildfire";
-  private static final String APP_VERSION = "V7.30 (27.11.2021)";
+  private static final String APP_VERSION = "V7.40 BETA (30.11.2022)";
 
   public static final boolean STEAM_EDITION = false;
   public static final boolean SPECIAL_VERSION = false;
@@ -613,6 +617,23 @@ public class Tools {
       }
       in.close();
       return content.toString();
+    }
+  }
+
+  public static SimpleImage getRessourceAsImage(Class<?> parent, String ressource) throws Exception {
+    try (InputStream is = parent.getResourceAsStream(ressource)) {
+      byte[] buffer = new byte[1024];
+      ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+      int line = 0;
+      // read bytes from stream, and store them in buffer
+      while ((line = is.read(buffer)) != -1) {
+        // Writes bytes from byte array (buffer) into output stream.
+        os.write(buffer, 0, line);
+      }
+      os.flush();
+      os.close();
+      return new ImageReader().loadImage(os.toByteArray());
     }
   }
 

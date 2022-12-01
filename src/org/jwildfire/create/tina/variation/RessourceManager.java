@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
 
@@ -34,6 +35,13 @@ public class RessourceManager {
     imageMapByName.clear();
     imageMapByHash.clear();
     ressourceMap.clear();
+  }
+
+  public static boolean hasImage(String pFilename) throws Exception {
+    if (pFilename == null || pFilename.length() == 0) {
+      throw new IllegalStateException();
+    }
+    return imageMapByName.get(pFilename)!=null;
   }
 
   public static WFImage getImage(String pFilename) throws Exception {
@@ -60,6 +68,10 @@ public class RessourceManager {
       imageMapByName.put(pFilename, res);
     }
     return res;
+  }
+
+  public static void addImage(String imageFilename, WFImage img) {
+    imageMapByName.put(imageFilename, img);
   }
 
   public static void clearImage(String pFilename) {
@@ -139,4 +151,5 @@ public class RessourceManager {
   public static void removeRessource(String pKey) {
     ressourceMap.remove(pKey);
   }
+
 }
