@@ -53,9 +53,9 @@ import java.util.List;
 public class FlamePreviewHelper implements IterationObserver {
   private static final Logger logger = LoggerFactory.getLogger(FlamePreviewHelper.class);
 
-  private static final int INITIAL_IMAGE_UPDATE_INTERVAL = 5;
-  private static final int IMAGE_UPDATE_INC_INTERVAL = 8;
-  private static final int MAX_UPDATE_INC_INTERVAL = 200;
+  private static final int INITIAL_IMAGE_UPDATE_INTERVAL = 5 - 3;
+  private static final int IMAGE_UPDATE_INC_INTERVAL = 8 + 4;
+  private static final int MAX_UPDATE_INC_INTERVAL = 200 + 800;
   private final Prefs prefs;
   private final JPanel centerPanel;
   private final JToggleButton toggleTransparencyButton;
