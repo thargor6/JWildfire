@@ -1,7 +1,13 @@
-V7.40 (22.01.2021)
+V7.40 (xx.xx.2022)
+ - new powerful "brush_stokes_wf"-variation which helps to apply a painterly look to your fractals
+   - includes a lot of logic and 70 brush-presets, which may be combined freely
+     - due to its complexity it is not available on GPU yet
+   - new "Painterly"-random-generator which utilizes this variation
+   - new "Painterly Style"-mutation, which is available both in the "Quick Mutations"-tab and the MutaGen-window as well
+ - some optimizations to the realtime-render-preview in the main editor
  - created a reusable maven-artifact which contains the main functionality and the CLI: org.jwildfire:jwildfire-lib
  - this library will be used first in JWildfireSwan
- - lots of refactoring
+ - lots of refactoring and restandardisation
 
 V7.30 (27.11.2021)
  -introducing the new CLI, which allows to execute functions of the software without the user-interface.

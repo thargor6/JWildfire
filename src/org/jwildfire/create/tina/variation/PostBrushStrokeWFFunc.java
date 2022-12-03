@@ -16,11 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-public class BrushStrokeWFFunc extends AbstractBrushStrokeWFFunc {
-  public static final String NAME = "brush_stroke_wf";
+public class PostBrushStrokeWFFunc extends AbstractBrushStrokeWFFunc {
+  public static final String NAME = "post_brush_stroke_wf";
 
   @Override
   public String getName() {
     return NAME;
+  }
+
+  @Override
+  public int getPriority() {
+    return 1;
   }
 }
