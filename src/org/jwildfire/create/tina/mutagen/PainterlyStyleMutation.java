@@ -20,10 +20,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.ColorType;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.variation.BrushStrokeWFFunc;
-import org.jwildfire.create.tina.variation.Linear3DFunc;
-import org.jwildfire.create.tina.variation.VariationFunc;
-import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.variation.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -36,7 +33,8 @@ public class PainterlyStyleMutation extends AbstractMutation {
     VariationFunc brushVar = null;
     for (XForm xform : layer.getFinalXForms()) {
       for (int i = 0; i < xform.getVariationCount(); i++) {
-        if (xform.getVariation(i).getFunc().getName().equals(BrushStrokeWFFunc.NAME)) {
+        String varName = xform.getVariation(i).getFunc().getName();
+        if (varName.equals(BrushStrokeWFFunc.NAME) || varName.equals(PostBrushStrokeWFFunc.NAME)) {
           brushVar = xform.getVariation(i).getFunc();
           break;
         }
@@ -57,12 +55,12 @@ public class PainterlyStyleMutation extends AbstractMutation {
       } else {
         xform = layer.getFinalXForms().get(layer.getFinalXForms().size() - 1);
       }
-      brushVar = VariationFuncList.getVariationFuncInstance(BrushStrokeWFFunc.NAME, true);
+      brushVar = VariationFuncList.getVariationFuncInstance(Math.random() > 0.35 ? PostBrushStrokeWFFunc.NAME : BrushStrokeWFFunc.NAME, true);
       xform.addVariation(0.25 + Math.random() * 0.5, brushVar);
     }
-    brushVar.setParameter(BrushStrokeWFFunc.PARAM_BLEND, 0.1 + 0.2 * Math.random());
-    brushVar.setParameter(BrushStrokeWFFunc.PARAM_GRID_SIZE, 0.015 + 0.02 * Math.random());
-    brushVar.setParameter(BrushStrokeWFFunc.PARAM_GRID_DEFORM, 0.05 + 0.1 * Math.random());
+    brushVar.setParameter(AbstractBrushStrokeWFFunc.PARAM_BLEND, 0.1 + 0.2 * Math.random());
+    brushVar.setParameter(AbstractBrushStrokeWFFunc.PARAM_GRID_SIZE, 0.015 + 0.02 * Math.random());
+    brushVar.setParameter(AbstractBrushStrokeWFFunc.PARAM_GRID_DEFORM, 0.05 + 0.1 * Math.random());
     int maxBrush = 70;
     int brushCount = 1 + Tools.FTOI(Math.random() * 5.0);
     List<String> brushIds = new ArrayList<>();
@@ -76,7 +74,7 @@ public class PainterlyStyleMutation extends AbstractMutation {
       }
     }
     brushVar.setRessource(
-        BrushStrokeWFFunc.RESSOURCE_BRUSH_PRESETS,
+        AbstractBrushStrokeWFFunc.RESSOURCE_BRUSH_PRESETS,
         String.join(", ", brushIds).getBytes(StandardCharsets.UTF_8));
   }
 }
