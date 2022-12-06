@@ -1,0 +1,217 @@
+/* ScriptInfo
+author="Mick Hogan" category="Randomizer"
+info="From an idea by Mario Olive, Apr. 18, 2014. Adds or Changes Final Transform on an existing flame."
+*/
+
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+
+public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  Flame currFlame = pEnv.getCurrFlame();
+  if(currFlame==null) {
+    throw new Exception("Please select a flame at first");
+  }
+    // create final transform
+{
+      XForm xForm = new XForm();
+  currFlame.getFinalXForms().clear();
+  currFlame.getFinalXForms().add(xForm);
+      xForm.setWeight(0.2);
+      xForm.setColor(0.5);
+      xForm.setColorSymmetry(0);
+      // variation 1
+   {
+    String desirables[] = {"auger", 
+"barycentoid", 
+"bent", 
+"bent2", 
+"bipolar", 
+"blob", 
+"blob3D", 
+"boarders", 
+"boarders2", 
+"bubble", 
+"bubble2", 
+"bubble3D", 
+"butterfly", 
+"butterfly_3D", 
+"bwraps7", 
+"cell", 
+"circlecrop", 
+"circlize", 
+"circus", 
+"collideoscope", 
+"cos", 
+"cosine", 
+"cot", 
+"coth", 
+"cpow", 
+"cross", 
+"cross2", 
+"csc", 
+"csch", 
+"cubic3d", 
+"cubicLattice_3d", 
+"curl", 
+"curl3d", 
+"curve", 
+"cylinder", 
+"cylinder_apo", 
+"diamond", 
+"disc", 
+"disc2", 
+"eclipse", 
+"epispiral", 
+"epispiral_wf", 
+"ex", 
+"exp", 
+"exponential", 
+"eyefish", 
+"fan", 
+"fan2", 
+"fibonacci2", 
+"fisheye", 
+"flux", 
+"foci", 
+"foci_3D", 
+"fourth", 
+"gdoffs", 
+"glynnia", 
+"glynnSim1", 
+"glynnSim2", 
+"glynnSim3", 
+"grid3d_wf", 
+"handkerchief", 
+"heart", 
+"heart_wf", 
+"hemisphere", 
+"hexaplay3D", 
+"hexes", 
+"hexnix3D", 
+"ho", 
+"horseshoe", 
+"hyperbolic", 
+"hypertile", 
+"hypertile3D", 
+"hypertile1", 
+"hypertile3D1", 
+"hypertile2", 
+"hypertile3D2", 
+"julia", 
+"julia3D", 
+"Julia3Dz", 
+"julian", 
+"julian2", 
+"juliascope", 
+"juliac", 
+"juliaq", 
+"julia3Dq", 
+"kaleidoscope", 
+"layered_spiral", 
+"lazysusan", 
+"lazyTravis", 
+"LinearT", 
+"LinearT3D", 
+"log", 
+"log_apo", 
+"loonie", 
+"loonie_3D", 
+"mcarpet", 
+"mobius", 
+"modulus", 
+"ngon", 
+"npolar", 
+"octagon", 
+"ovoid3d", 
+"parabola", 
+"pdj", 
+"perspective", 
+"phoenix_julia", 
+"poincare3D", 
+"polar", 
+"polar2", 
+"popcorn", 
+"popcorn2", 
+"popcorn2_3D", 
+"power", 
+"radial_blur", 
+"rectangles", 
+"rings", 
+"rings2", 
+"ripple", 
+"roundspher3D", 
+"scry", 
+"scry_3D", 
+"sec", 
+"secant2", 
+"sech", 
+"separation", 
+"sin", 
+"sinh", 
+"sintrange", 
+"sinusoidal", 
+"sinusoidal3d", 
+"spherical", 
+"spherical3D", 
+"spherical_wf", 
+"sphericalN", 
+"spiral", 
+"splits", 
+"splitbrdrd", 
+"stripes", 
+"svf", 
+"swirl", 
+"tan", 
+"tangent", 
+"tangent3D", 
+"tanh", 
+"target", 
+"taurus", 
+"truchet", 
+"twoface", 
+"unpolar", 
+"waves", 
+"waves2", 
+"waves2_3D", 
+"waves2_wf", 
+"waves3_wf", 
+"waves4_wf", 
+"wedge", 
+"wedge_julia", 
+"wedge_sph", 
+"whorl", 
+"xheart", 
+"xtrb",  };
+    {
+    int varNumber = 1;
+    int index = 1;
+    String varName = "test";
+  // This 'do' loop picks a random variation from all the existing variations.  Then it checks to see if the variation is in the 'desirables' list.
+  
+  // Once it finds a match in the 'desirables' list, it applies the variation to the Final Transform.
+ do
+    {
+    varNumber = (int)MathLib.trunc(Math.random() * (VariationFuncList.getNameList().size()));
+    // create variation
+    varName = (String)VariationFuncList.getNameList().get(varNumber);
+    index = java.util.Arrays.asList(desirables).indexOf(varName);
+    } while (index == -1);               // if varName is NOT in the String desirables, then index will = -1
+   
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance(varName, true);
+    xForm.addVariation(1.0, varFunc);
+    }
+   }
+}
+
+    pEnv.refreshUI();
+
+  
+}
+
+ 
+
+

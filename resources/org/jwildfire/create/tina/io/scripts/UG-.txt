@@ -1,0 +1,10 @@
+UmmaGumma - Michael Bourne 2018
+
+Based on Luc Helie's technique of creating 3D fields that look like cities, I set about this.
+
+I looked at the existing script and saw where it could be modified. 
+
+I didn't use the existing script or any code from it, all my own and (Luc's) work.
+
+Please credit Michael Bourne and https://jwfsanctuary.club
+

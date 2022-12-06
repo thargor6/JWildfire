@@ -1,0 +1,17 @@
+Hubble - M Bourne 2018
+
+Series of scripts to recreate deep space, sometimes with planets or moons. 
+
+===========================================================================
+PLEASE SET YOUR RESOLUTION TO WIDESCREEN (1920x1080 or 1200x630 or similar)
+===========================================================================
+
+ALSO please experiment with the Gamma setting and the Low Brightness settings on the Colouring Tab, in fact, experiment with a bunch of stuff, but mainly those.
+
+If you see the layer preview window, running the script again should turn it off, if not just click the layers tab and click the preview window button to make it disappear.
+
+A HUGE thanks to Rick Sidwell for working out the maths behind masking the planets, and to Whittaker Courtney for suggesting how to do that. Also a HUGE thanks To Jesus Sosa for helping me with a way to apply the same gradient across multiple layers.
+For more information and resources for JWildfire, please visit:
+
+https://jwfsanctuary.club
+

@@ -1,0 +1,183 @@
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.ColorType;
+import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.mutagen.RandomGradientMutation;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.base.EditPlane;
+import org.jwildfire.create.tina.base.BGColorType;
+
+//Add a random number procedure (thanks Jesus Sosa)
+public int range(int min, int max) {
+    return min + (int)(Math.random() * (max - min + 1));
+}
+public double range(double min, double max) {
+    return min + Math.random() * (max - min);
+
+}
+
+public void run(ScriptRunnerEnvironment pEnv)throws Exception {
+    // create a new flame
+    Flame flame = new Flame();
+    flame.getLayers().clear(); // get rid of the default layer because we create all layers by ourselves
+    // set the flame main attributes
+    flame.setCamRoll(-58.44);
+    flame.setCentreX(0.2089725);
+    flame.setCentreY(1.2410656);
+    flame.setCamPitch(0.86917397);
+    flame.setCamYaw(-5.25344105);
+    flame.setCamPerspective(0.2);
+    flame.setWidth(800);
+    flame.setHeight(600);
+    flame.setPixelsPerUnit(132.80057507);
+    flame.setCamZoom(2.136);
+    flame.setBGTransparency(false);
+    flame.setName("Yugen Scripts by Michael Bourne");
+
+    // Uncomment setBrightness or setGamma if essential for the flame
+    // flame.setBrightness(4.0);
+    flame.setGamma(2);
+    flame.setContrast(0.2);
+
+    flame.setPreserveZ(false);
+    flame.setBgColorType(BGColorType.SINGLE_COLOR);
+    flame.setBgColorRed(255);
+    flame.setBgColorGreen(255);
+    flame.setBgColorBlue(255);
+    // create layer 1
+    {
+        Layer layer = new Layer();
+        flame.getLayers().add(layer);
+        layer.setWeight(1);
+        layer.setVisible(true);
+        // create a random gradient
+        new RandomGradientMutation().execute(layer);
+        // create transform 1
+        {
+            XForm xForm = new XForm();
+            layer.getXForms().add(xForm);
+            xForm.setWeight(0.7);
+            xForm.setColor(0.60376746);
+            xForm.setColorSymmetry(0);
+            xForm.setDrawMode(DrawMode.NORMAL);
+            xForm.setMaterial(0);
+            xForm.setMaterialSpeed(0);
+
+            xForm.setCoeff00(-0.02342597); // a
+            xForm.setCoeff10(0.00185536); // b
+            xForm.setCoeff20(0.3559171); // e
+            xForm.setCoeff01(0.00583386); // c
+            xForm.setCoeff11(-0.01208582); // d
+            xForm.setCoeff21(-1.20119111); // f
+
+            xForm.setPostCoeff00(1);
+            xForm.setPostCoeff10(0.00009758);
+            xForm.setPostCoeff01(-0.00009758);
+            xForm.setPostCoeff11(1);
+            xForm.setPostCoeff20(0);
+            xForm.setPostCoeff21(0);
+
+     	  // Mick Hogans code
+     	  String desirables[] = {
+     	      "blur",
+     	      "blur3D",
+     	      "blur_circle",
+     	      "exblur",
+     	      "farblur",
+     	      "gaussian_blur",
+     	      "nBlur",
+     	      "r_circleblur",
+     	      "radial_blur",
+     	      "sineblur",
+     	  };
+
+     	  int listLength = desirables.length;
+
+     	  // variation 1
+     	  {
+     	      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(desirables[range(1, listLength - 1)], true);
+
+     	      xForm.addVariation(-0.1, varFunc);
+     	  }
+            // variation 2
+            xForm.addVariation(0.2, VariationFuncList.getVariationFuncInstance("noise", true));
+            // set default edit plane
+            flame.setEditPlane(EditPlane.XY);
+            // random affine transforms (uncomment to play around)
+            //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);
+            //   XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
+            //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), false);
+            // random affine post transforms (uncomment to play around)
+            //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);
+            //   XFormTransformService.rotate(xForm, 360.0*Math.random(), true);
+            //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);
+        }
+        // create transform 2
+        {
+            XForm xForm = new XForm();
+            layer.getXForms().add(xForm);
+            xForm.setWeight(range(40.0, 100.0));
+
+            xForm.setColor(0.81434141);
+            xForm.setColorSymmetry(Math.random());
+            xForm.setDrawMode(DrawMode.NORMAL);
+            xForm.setMaterial(0);
+            xForm.setMaterialSpeed(0);
+
+            xForm.setCoeff00(-0.58757674); // a
+            xForm.setCoeff10(1.26595656); // b
+            xForm.setCoeff20(-0.3402979); // e
+            xForm.setCoeff01(-1.23134028); // c
+            xForm.setCoeff11(-0.62793954); // d
+            xForm.setCoeff21(-2.13790669); // f
+
+            xForm.setPostCoeff00(1);
+            xForm.setPostCoeff10(0);
+            xForm.setPostCoeff01(0);
+            xForm.setPostCoeff11(1);
+            xForm.setPostCoeff20(0);
+            xForm.setPostCoeff21(0);
+
+            // variation 1
+            xForm.addVariation(range(-8.0, -4.0), VariationFuncList.getVariationFuncInstance("spherical", true));
+            // variation 2
+            {
+                VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("epispiral", true);
+                varFunc.setParameter("n", range(1.0, 1.8));
+                varFunc.setParameter("thickness", 0);
+                varFunc.setParameter("holes", range(5.0, 9.0));
+                xForm.addVariation(0.0055, varFunc);
+            }
+            // variation 3
+            xForm.addVariation(range(-0.06, 0.08), VariationFuncList.getVariationFuncInstance("foci", true));
+            // set default edit plane
+            flame.setEditPlane(EditPlane.XY);
+            // random affine transforms (uncomment to play around)
+            //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);
+            //   XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
+            //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), false);
+            // random affine post transforms (uncomment to play around)
+            //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);
+            //   XFormTransformService.rotate(xForm, 360.0*Math.random(), true);
+            //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);
+        }
+    }
+    // Either update the currently selected flame (to not need to create a new thumbnail
+    // in the thumbnail ribbon after each run of the script...
+    Flame selFlame = pEnv.getCurrFlame();
+    if (selFlame != null) {
+        selFlame.assign(flame);
+        pEnv.refreshUI();
+    }
+    // ...or load the flame in the editor and refresh the UI
+    else {
+        pEnv.setCurrFlame(flame);
+    }
+}

@@ -1,0 +1,207 @@
+/*  SphericalCross Script for Jwildfire by MickHogan, 2013. Rev2.
+    Based on SphericalCross Script for Apophysis 7X by FractalDesire/EMK 2010.
+    Suggested by Don Town.  Thanks Don!
+
+   Dedicated to the folks @ J-Wildfire Users Group,
+   https://www.facebook.com/groups/jwildfire/517981271556185/?notif_t=like   .
+
+   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+   General Public License as published by the Free Software Foundation; either version 2.1 of the
+   License, or (at your option) any later version.
+
+   This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+   even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public License along with this software;
+   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+   02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+    ENJOY !! */
+
+import org.jwildfire.script.ActionList;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.base.mathlib.MathLib;
+// import org.jwildfire.create.tina.random.RandomNumberGenerator;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+
+
+import org.jwildfire.create.tina.variation.CrossFunc;
+import org.jwildfire.create.tina.variation.JuliaNFunc;
+// import org.jwildfire.create.tina.variation.Rings2Func;
+import org.jwildfire.create.tina.variation.Linear3DFunc;
+import org.jwildfire.create.tina.variation.NoiseFunc;
+import org.jwildfire.create.tina.variation.PreBlurFunc;
+// import org.jwildfire.create.tina.variation.BubbleFunc;
+import org.jwildfire.create.tina.variation.BlurFunc;
+import org.jwildfire.create.tina.variation.SphericalFunc;
+// import org.jwildfire.create.tina.variation.JuliaScopeFunc;
+
+  public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  XForm xForm1;
+  VariationFunc varFunc;
+  Flame currFlame = pEnv.getCurrFlame();
+  if(currFlame==null) {
+    throw new Exception("Please select a flame at first");
+  }
+  
+//  drawMode = DrawMode.NORMAL;
+  double rot_coinc_fac = 60;
+  double lin_coinc_fac = 4;
+  // Additional option values
+  double blur_transform = 0;
+  double vis_transform1 = 0;
+
+
+  // Determines the mutual weight of Transform 1 and 2.
+  double var_weight = 1 - 0.2 * Math.random();
+/*
+  // Higher value: increase deformation - Lower value: decrease deformation
+  do 
+  {
+    String str = javax.swing.JOptionPane.showInputDialog(null, "Rotational coincidence factor [0,...,180]:", "SphericalCross", 1);
+    rot_coinc_fac = Double.parseDouble(str);   // Converts above str value into a number
+   
+  } while ((rot_coinc_fac < 0) || (rot_coinc_fac > 180));
+*/
+  rot_coinc_fac = Math.random() * 180.0;
+
+// Higher value: increase deformation - Lower value: decrease deformation
+/*
+  do 
+  {
+    String str = javax.swing.JOptionPane.showInputDialog(null, "Linear coincidence factor [0,...,10]:", "SphericalCross", 1);
+    lin_coinc_fac = Double.parseDouble(str);   // Converts above str value into a number
+   
+  } while ((lin_coinc_fac < 0) || (lin_coinc_fac > 10));
+  */
+  lin_coinc_fac = Math.random() * 10.0;
+
+  // Asks Visibility of Transform 1
+  /*
+  do 
+  {
+    String str = javax.swing.JOptionPane.showInputDialog(null, "Transform 1 visible (no = 1  -  yes = 2)?", "SphericalCross", 1);
+    if (str.equals("1") || str.equals("2")) vis_transform1 = Double.parseDouble(str);   // Converts above str value into a number
+    else vis_transform1 = 3;                                                            // and makes sure str is not an alphabetic 
+                                                                                        // character (which would cause an error)
+  } while ((vis_transform1 != 1) && (vis_transform1 != 2));
+  */
+  vis_transform1 = Math.random() > 0.5 ? 1 : 2;
+
+  if (vis_transform1 == 1) vis_transform1 = 0;
+  if (vis_transform1 == 2) vis_transform1 = 1;
+
+
+  // Asks Blur-Transform
+  /*
+  do 
+  {
+    String str = javax.swing.JOptionPane.showInputDialog(null, "Optional blur-transform (Creates additional blur effect: no = 1  -  yes = 2)?", "SphericalCross", 1);
+    if (str.equals("1") || str.equals("2")) blur_transform = Double.parseDouble(str);   // Converts above str value into a number
+    else blur_transform = 3;                                                            // and makes sure str is not an alphabetic 
+                                                                                        // character (which would cause an error)
+  } while ((blur_transform != 1) && (blur_transform != 2));
+  */
+  blur_transform = Math.random() > 0.5 ? 1 : 2;
+
+  if (blur_transform == 1) blur_transform = 0;
+  if (blur_transform == 2) blur_transform = 1;
+    
+  currFlame.getXForms().clear();      // Clears any old flames
+  currFlame.getFinalXForms().clear(); // Clears any old flames
+
+  // Transform 1 (blur)
+
+  {
+    XForm xForm = new XForm();
+    xForm.addVariation(0.5, new BlurFunc());
+    xForm.setWeight(1 - var_weight);
+    xForm.setColor(0.85);
+    xForm.setColorSymmetry(0.78);
+
+    if (vis_transform1 == 0) xForm.setDrawMode(org.jwildfire.create.tina.base.DrawMode.HIDDEN);
+
+    currFlame.getXForms().add(xForm);  
+  }
+
+  // Transform 2 (shape)
+
+  {
+    XForm xForm = new XForm();
+    xForm.addVariation(1 + 0.1 * (0.5 - Math.random()), new Linear3DFunc());
+    xForm.addVariation(0.1 + 0.1 * (0.5 - Math.random()), new CrossFunc());
+    xForm.setCoeff20(-0.15 * Math.random());  // e (O1)
+    xForm.setCoeff21(-0.15 * Math.random()); // f (O2)
+    xForm.setWeight(var_weight);
+
+    currFlame.getXForms().add(xForm);  
+  }
+
+  // Possible Transform 3 (additional blur)
+
+  {
+  if (blur_transform == 1) {
+      XForm xForm = new XForm();
+      xForm.addVariation(0.0001, new NoiseFunc());
+      xForm.addVariation(0.05, new BlurFunc());
+      xForm.addVariation(1.0, new PreBlurFunc());
+      VariationFunc varFunc = new JuliaNFunc();
+      varFunc.setParameter("power", 4.0);
+      varFunc.setParameter("dist", 1.0);
+      xForm.addVariation(1.0, varFunc); 
+
+      xForm.setCoeff00(0.07439);   // a (X1)
+      xForm.setCoeff10(-0.04295); // b (Y1)
+      xForm.setCoeff20(2.4 + 0.5 * (0.5 - Math.random()));  // e (O1)
+      xForm.setCoeff01(0.04295);  // c (X2)
+      xForm.setCoeff11(0.07439);  // d (Y2)
+      xForm.setCoeff21(0 + 0.1 * (0.5 - Math.random())); // f (O2)
+
+      xForm.setWeight(0.1);
+
+      currFlame.getXForms().add(xForm);
+     } 
+   }
+
+  // Final Transform
+
+  {
+    XForm xForm = new XForm();
+    org.jwildfire.create.tina.transform.XFormTransformService.rotate(xForm, rot_coinc_fac *(0.5 - Math.random()), false);
+    xForm.addVariation(1 + 0.2 * (0.5 - Math.random()), new SphericalFunc());
+    xForm.addVariation(0.008 + 0.2 * (0.5 - Math.random()), new CrossFunc());
+
+    xForm.setCoeff20(lin_coinc_fac  * (0.5 - Math.random()));  // e (O1)
+    xForm.setCoeff21((lin_coinc_fac - 6) * (0.5 - Math.random())); // f (O2)
+
+    xForm.setColorSymmetry(1.0);
+
+    currFlame.getFinalXForms().add(xForm);
+  }
+
+  // Final settings   
+
+  currFlame.setCentreX(0.0);
+  currFlame.setCentreY(0.0);
+  currFlame.setCamRoll(0.0);
+  currFlame.setCamPitch(0.0);
+  currFlame.setCamYaw(0.0);
+  currFlame.setCamPerspective(0.0);
+  currFlame.setPixelsPerUnit(150);
+  // Refresh the UI
+  pEnv.refreshUI();
+
+}    // END CODE
+
+
+
+
+
+
+
+

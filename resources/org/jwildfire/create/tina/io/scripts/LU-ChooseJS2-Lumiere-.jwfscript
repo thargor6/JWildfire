@@ -1,0 +1,696 @@
+import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.mutagen.RandomGradientMutation;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.base.EditPlane;
+import org.jwildfire.create.tina.base.BGColorType;
+import org.jwildfire.create.tina.palette.RGBColor;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import javax.swing.JFrame;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.EditPlane;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.mutagen.RandomGradientMutation;
+import org.jwildfire.create.tina.swing.TinaController;
+
+// In here define all that's needed for static flame and random integers thanks Jesus Sosa and Mick Hogan
+import java.util.List;
+
+import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.io.UniversalPaletteReader;
+
+//Add a random number procedure (thanks Jesus Sosa)
+public int range(int min, int max) {
+    return min + (int)(Math.random() * (max - min + 1));
+}
+// Rick Sidwell Random range for non integers
+
+public double range(double min, double max) {
+    return min + Math.random() * (max - min);
+}
+
+public void run(ScriptRunnerEnvironment pEnv)throws Exception {
+    // create a new flame
+    Flame flame = new Flame();
+    flame.getLayers().clear(); // get rid of the default layer because we create all layers by ourselves
+    // set the flame main attributes
+    flame.setCamRoll(574.28);
+    //  flame.setCentreY(-1.1068602);
+    //  flame.setCentreX(-2.3580913);
+    flame.setCamPitch(0);
+    flame.setCamYaw(0);
+    flame.setCamPerspective(0);
+    flame.setWidth(864);
+    flame.setHeight(648);
+    flame.setPixelsPerUnit(110.637576);
+    flame.setCamZoom(1.812);
+    flame.setBGTransparency(false);
+    flame.setName("Lumiere Scripts by Michael Bourne");
+    flame.setBgColorType(BGColorType.SINGLE_COLOR);
+    flame.setBgColorRed(0);
+    flame.setBgColorGreen(0);
+    flame.setBgColorBlue(0);
+    flame.setBrightness(6);
+    flame.setBalanceRed(Math.random());
+    flame.setBalanceBlue(Math.random());
+    flame.setBalanceGreen(Math.random());
+    flame.setGamma(1.29);
+    flame.setPostSymmetryType(org.jwildfire.create.tina.base.PostSymmetryType.POINT);
+    flame.setPostSymmetryOrder(3);
+    flame.setPostSymmetryCentreX(0);
+    flame.setPostSymmetryCentreY(0);
+    // create layer 1
+    {
+        Layer layer = new Layer();
+        flame.getLayers().add(layer);
+        layer.setWeight(1);
+        layer.setVisible(true);
+        // create a random gradient
+        new RandomGradientMutation().execute(layer);
+        // create transform 1
+        {
+            XForm xForm = new XForm();
+            layer.getXForms().add(xForm);
+            xForm.setWeight(0.5);
+            xForm.setColor(0.43280516);
+            xForm.setColorSymmetry(-0.5625);
+            xForm.setMaterial(0);
+            xForm.setMaterialSpeed(0);
+
+            xForm.setCoeff00(0.21185777); // a
+            xForm.setCoeff10(-0.07270128); // b
+            xForm.setCoeff20(7.248685); // e
+            xForm.setCoeff01(-0.53214732); // c
+            xForm.setCoeff11(-0.41975633); // d
+            xForm.setCoeff21(1.986872); // f
+
+            xForm.setPostCoeff00(1);
+            xForm.setPostCoeff10(0);
+            xForm.setPostCoeff01(-0);
+            xForm.setPostCoeff11(-1);
+            xForm.setPostCoeff20(-0.4955612);
+            xForm.setPostCoeff21(-0.6180718);
+
+            // variation 1
+            xForm.addVariation(0.1672758, VariationFuncList.getVariationFuncInstance("polar", true));
+            // variation 2
+            xForm.addVariation(0.16875, VariationFuncList.getVariationFuncInstance("noise", true));
+            // variation 3
+            xForm.addVariation(0.16875, VariationFuncList.getVariationFuncInstance("blur", true));
+            // variation 4
+            xForm.addVariation(0.16875, VariationFuncList.getVariationFuncInstance("gaussian_blur", true));
+            // set default edit plane
+            flame.setEditPlane(EditPlane.XY);
+            // random affine transforms (uncomment to play around)
+            //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);
+            //   XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
+            //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), false);
+            // random affine post transforms (uncomment to play around)
+            //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);
+            //   XFormTransformService.rotate(xForm, 360.0*Math.random(), true);
+            //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);
+        }
+        // create transform 2
+        {
+            XForm xForm = new XForm();
+            layer.getXForms().add(xForm);
+            xForm.setWeight(range(1.0, 6.0));
+            xForm.setColor(0.48754831);
+            xForm.setColorSymmetry(0.50625);
+            xForm.setMaterial(0);
+            xForm.setMaterialSpeed(0);
+
+            xForm.setCoeff00(0.550019); // a
+            xForm.setCoeff10(-0.4790239); // b
+            xForm.setCoeff20(-0.74389853); // e
+            xForm.setCoeff01(0.37961123); // c
+            xForm.setCoeff11(0.470572); // d
+            xForm.setCoeff21(0.29067791); // f
+
+            xForm.setPostCoeff00(1);
+            xForm.setPostCoeff10(0.03312698);
+            xForm.setPostCoeff01(0.00168138);
+            xForm.setPostCoeff11(1.03116944);
+            xForm.setPostCoeff20(-0.01602183);
+            xForm.setPostCoeff21(0);
+
+            // variation 1
+            {
+                VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("cross", true);
+
+                xForm.addVariation(range(-0.06, 0.5), varFunc);
+            }
+            // variation 2
+            xForm.addVariation(range(5.04, 5.9), VariationFuncList.getVariationFuncInstance("spherical3D", true));
+            // variation 3
+            xForm.addVariation(range(0.2835, 0.4355), VariationFuncList.getVariationFuncInstance("polar", true));
+            // set default edit plane
+            flame.setEditPlane(EditPlane.XY);
+            // random affine transforms (uncomment to play around)
+            //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);
+            //   XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
+            XFormTransformService.localTranslate(xForm, 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random(), false);
+            // random affine post transforms (uncomment to play around)
+            //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);
+            //   XFormTransformService.rotate(xForm, 360.0*Math.random(), true);
+            //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);
+        }
+        // create transform 3
+        {
+            XForm xForm = new XForm();
+            layer.getXForms().add(xForm);
+            xForm.setWeight(0.5);
+            xForm.setColor(0);
+            xForm.setColorSymmetry(0);
+            xForm.setMaterial(0);
+            xForm.setMaterialSpeed(0);
+
+            xForm.setCoeff00(1); // a
+            xForm.setCoeff10(0); // b
+            xForm.setCoeff20(0); // e
+            xForm.setCoeff01(0); // c
+            xForm.setCoeff11(1); // d
+            xForm.setCoeff21(0); // f
+
+            xForm.setPostCoeff00(1);
+            xForm.setPostCoeff10(0);
+            xForm.setPostCoeff01(0);
+            xForm.setPostCoeff11(1);
+            xForm.setPostCoeff20(0);
+            xForm.setPostCoeff21(0);
+
+            // variation 1
+            xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("rays", true));
+            // variation 2
+            {
+                VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("post_axis_symmetry_wf", true);
+                varFunc.setParameter("axis", 0);
+                varFunc.setParameter("centre_x", 0.25);
+                varFunc.setParameter("centre_y", 0.5);
+                varFunc.setParameter("centre_z", 0.5);
+                varFunc.setParameter("rotation", range(1, 30));
+                varFunc.setParameter("x1colorshift", 0);
+                varFunc.setParameter("y1colorshift", 0);
+                varFunc.setParameter("z1colorshift", 0);
+                varFunc.setParameter("x2colorshift", 0);
+                varFunc.setParameter("y2colorshift", 0);
+                varFunc.setParameter("z2colorshift", 0);
+                xForm.addVariation(1, varFunc);
+            }
+            // set default edit plane
+            flame.setEditPlane(EditPlane.XY);
+            // random affine transforms (uncomment to play around)
+            //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);
+            //   XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
+            //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), false);
+            // random affine post transforms (uncomment to play around)
+            //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);
+            //   XFormTransformService.rotate(xForm, 360.0*Math.random(), true);
+            //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);
+        }
+        // create final transform *****START HERE FOR CUT TO USE FOLLOWING IN ANOTHER SCRIPT MH  (always paste before "create final transform 1" MB )*****
+        Flame selFlame = pEnv.getCurrFlame();
+        if (selFlame != null) {
+            selFlame.assign(flame);
+            pEnv.refreshUI();
+        }
+        // ...or load the flame in the editor and refresh the UI
+        else {
+            pEnv.setCurrFlame(flame);
+        }{
+            Layer currLayer = pEnv.getCurrLayer();
+            //    XForm xForm = new XForm();
+            //    currLayer.getFinalXForms().clear();
+            //    currLayer.getFinalXForms().add(xForm);
+
+            // variation 1
+            {
+                String desirables[] = {
+                    "arch",
+                    "asteria",
+                    "auger",
+                    "barycentroid",
+                    "bCollide",
+                    "bent",
+                    "bent2",
+                    "bi_linear",
+                    "bipolar",
+                    "blade",
+                    "blade3D",
+                    "blob",
+                    "blob3D",
+                    "blocky",
+                    "blur",
+                    "blur_circle",
+                    "blur_pixelize",
+                    "blur_zoom",
+                    "blur3D",
+                    "bMod",
+                    "boarders",
+                    "boarders2",
+                    "bsplit",
+                    "bSwirl",
+                    "bTransform",
+                    "bubble",
+                    "bubble_wf",
+                    "bubble2",
+                    "bubbleT3D",
+                    "butterfly",
+                    "butterfly_fay",
+                    "butterfly3D",
+                    "bwrands",
+                    "bwraps7",
+                    "cannabiscurve_wf",
+                    "cell",
+                    "checkerboard_wf",
+                    "checks",
+                    "circleblur",
+                    "circlecrop",
+                    "circleLinear",
+                    "circleRand",
+                    "circlize",
+                    "circlize2",
+                    "circus",
+                    "cloverleaf_wf",
+                    "colliideoscope",
+                    "colormap_wf",
+                    "colorscale_wf",
+                    "conic",
+                    "cos",
+                    "cosh",
+                    "cosine",
+                    "cot",
+                    "coth",
+                    "cpow",
+                    "cpow3",
+                    "crackle",
+                    "crop",
+                    "cross",
+                    "csc",
+                    "csch",
+                    "cubic3D",
+                    "cubicLattice_3D",
+                    "curl",
+                    "curl_sp",
+                    "curl3D",
+                    "curve",
+                    "custom_wf_full",
+                    "custom_wf",
+                    "cylinder",
+                    "cylinder_apo",
+                    "dc_bubble",
+                    "dc_carpet",
+                    "dc_crackle_wf",
+                    "dc_cube",
+                    "dc_hexes_wf",
+                    "dc_linear",
+                    "dc_perlin",
+                    "dc_triangle",
+                    "dc_ztransl",
+                    "deltaA",
+                    "devil_warp",
+                    "diamond",
+                    "disc",
+                    "disc2",
+                    "disc3d",
+                    "displacemap_wf",
+                    "eclipse",
+                    "eCollide",
+                    "eJulia",
+                    "elliptic",
+                    "eMod",
+                    "eMotion",
+                    "ennepers",
+                    "ennepers2",
+                    "epispiral",
+                    "epitrochoid",
+                    "epispiral_wf",
+                    "ePush",
+                    "eRotate",
+                    "eScale",
+                    "eSwirl",
+                    "ex",
+                    "exblur",
+                    "exp",
+                    "exponential",
+                    "extrude",
+                    "eyefish",
+                    "falloff2",
+                    "falloff3",
+                    "fan",
+                    "fan2",
+                    "farblur",
+                    "fdisc",
+                    "fibonacci2",
+                    "fisheye",
+                    "flatten",
+                    "flipcircle",
+                    "flipy",
+                    "flower",
+                    "flower_db",
+                    "flux",
+                    "foci",
+                    "foci_3D",
+                    "fourth",
+                    "funnel",
+                    "gaussian_blur",
+                    "gdoffs",
+                    "glynnia",
+                    "glynnia3",
+                    "glynnSim1",
+                    "glynnSim2",
+                    "glynnSim3",
+                    "grid3d_wf",
+                    "handkerchief",
+                    "heart",
+                    "heart_wf",
+                    "hemisphere",
+                    "hexaplay3D",
+                    "hexes",
+                    "hexnix3D",
+                    "ho",
+                    "horseshoe",
+                    "hyperbolic",
+                    "hypertile",
+                    "hypertile1",
+                    "hypertile2",
+                    "hypertile3D",
+                    "hypertile3D1",
+                    "hypertile3D2",
+                    "idisc",
+                    "inflateZ_1",
+                    "inflateZ_2",
+                    "inflateZ_3",
+                    "inflateZ_4",
+                    "inflateZ_5",
+                    "inflateZ_6",
+                    "jac_cn",
+                    "jac_dn",
+                    "jac_sn",
+                    "julia",
+                    "julia3D",
+                    "julia3Dq",
+                    "julia3Dz",
+                    "juliac",
+                    "julian",
+                    "julian2",
+                    "julian3Dx",
+                    "juliaq",
+                    "juliascope",
+                    "kaleidoscope",
+                    "layered_spiral",
+                    "lazyjess",
+                    "lazysusan",
+                    "lazyTravis",
+                    "line",
+                    "linear",
+                    "linear3D",
+                    "linearT",
+                    "linearT3D",
+                    "lissajous",
+                    "log",
+                    "log_apo",
+                    "log_db",
+                    "loonie",
+                    "loonie_3D",
+                    "loonie2",
+                    "loonie3",
+                    "mandelbrot",
+                    "mask",
+                    "mcarpet",
+                    "mobius",
+                    "mobius_strip",
+                    "mobiusN",
+                    "modulus",
+                    "murl",
+                    "murl2",
+                    "nBlur",
+                    "ngon",
+                    "noise",
+                    "npolar",
+                    "obj_mesh_primitives",
+                    "obj_mesh_wf",
+                    "octagon",
+                    "onion",
+                    "onion2",
+                    "ortho",
+                    "oscilloscope",
+                    "oscilloscope2",
+                    "ovoid3d",
+                    "parabola",
+                    "parplot2d_wf",
+                    "pdj",
+                    "perspective",
+                    "petal",
+                    "phoenix_julia",
+                    "pie",
+                    "plane_wf",
+                    "poincare3D",
+                    "polar",
+                    "polar2",
+                    "polylogarithm",
+                    "popcorn",
+                    "popcorn2",
+                    "popcorn2_3D",
+                    "pow_block",
+                    "power",
+                    "primitives_wf",
+                    "pRose3D",
+                    "radial_blur",
+                    "rational3",
+                    "rays",
+                    "rays1",
+                    "rays2",
+                    "rays3",
+                    "rectangles",
+                    "rhodonea",
+                    "rings",
+                    "rings2",
+                    "ripple",
+                    "rippled",
+                    "rose_wf",
+                    "rosoni",
+                    "roundspher",
+                    "roundspher3D",
+                    "scrambly",
+                    "scry",
+                    "scry_3D",
+                    "scry2",
+                    "sec",
+                    "secant2",
+                    "sech",
+                    "separation",
+                    "shredlin",
+                    "sin",
+                    "sineblur",
+                    "sinh",
+                    "sintrange",
+                    "sinusoidal",
+                    "sinusoidal3D",
+                    "sph3D",
+                    "sphere_nja",
+                    "spherical",
+                    "spherical3D",
+                    "spherical3D_wf",
+                    "sphericalN",
+                    "spiral",
+                    "spiralwing",
+                    "spirograph",
+                    "split",
+                    "splitbrdr",
+                    "splits",
+                    "splits3D",
+                    "square",
+                    "square3D",
+                    "squarize",
+                    "squirrel",
+                    "squish",
+                    "starblur",
+                    "stripes",
+                    "stwin",
+                    "subflame_wf",
+                    "super_shape",
+                    "superShape3d",
+                    "svf",
+                    "svg_wf",
+                    "swirl",
+                    "synth",
+                    "tan",
+                    "tancos",
+                    "tangent",
+                    "tangent3D",
+                    "tanh",
+                    "target",
+                    "target_sp",
+                    "taurus",
+                    "text_wf",
+                    "trade",
+                    "truchet",
+                    "twintrian",
+                    "twoface",
+                    "unpolar",
+                    "vogel",
+                    "voron",
+                    "w",
+                    "waffle",
+                    "waveblur_wf",
+                    "waves",
+                    "waves2",
+                    "waves2_3D",
+                    "waves2_wf",
+                    "waves2b",
+                    "waves3_wf",
+                    "waves4_wf",
+                    "wdisc",
+                    "wedge",
+                    "wedge_julia",
+                    "wedge_sph",
+                    "whitney_umbrella",
+                    "whorl",
+                    "x",
+                    "xheart",
+                    "xheart_blur_wf",
+                    "xtrb",
+                    "y",
+                    "yin_yang",
+                    "yplot2d_wf",
+                    "yplot3d_wf",
+                    "z",
+                    "zblur",
+                    "zcone",
+                    "zscale",
+                    "ztranslate",
+                };
+
+                int idx = 0;
+                int listLength = desirables.length;
+                String searchString = "";
+                JFrame frame = new JFrame("InputDialog");
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                //    frame.setSize(100, 100);
+                frame.pack();
+                //    frame.setVisible(true);
+                frame.setAlwaysOnTop(true);
+                //  UIManager.put("OptionPane.minimumSize",new Dimension(500,50));
+
+                int frameWidth = 10;
+                int frameHeight = 100;
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                frame.setBounds((int)screenSize.getWidth() - frameWidth - 350, (int)screenSize.getHeight() - frameHeight - 200, frameWidth, frameHeight);
+                frame.setVisible(true);
+
+                do {
+
+                    //    frame.setLocation(5000, 5000);
+
+                    String finalXform = (String)javax.swing.JOptionPane.showInputDialog(frame,
+                        "Choose a Final Transform",
+                        "Final Transforms in Your List",
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        desirables,
+                        desirables[idx++]);
+
+                    searchString = finalXform;
+                    boolean found = false;
+
+                    int foundIndex;
+                    for (int i = 0; i < desirables.length; i++) {
+                        if (finalXform != null) {
+                            if (searchString.equals(desirables[i])) {
+                                found = true;
+                                idx = i + 1;
+                                if (idx >= desirables.length) {
+                                    idx = 0;
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    if (finalXform != null) {
+
+                        XForm xForm = new XForm();
+                        //currLayer.getFinalXForms().clear();
+                        currLayer.getFinalXForms().add(xForm);
+
+                        //Jiggle the final Transform around a bit and also scale it down for better effect MB
+                        //
+                        XFormTransformService.scale(xForm, 0.08 - Math.random() * 0.5, true, true, false);
+                        XFormTransformService.localTranslate(xForm, 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random(), false);
+                        //
+                        // COMMENT OUT THE FOLLOWING LINE, AND SAVE SCRIPT,
+                        // IF YOU WANT TO KEEP ADDING finalXforms INSTEAD OF
+                        // REPLACING finalXforms.
+
+
+                        VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(finalXform, true);
+                        xForm.addVariation(1.0, varFunc);
+                        //      idx++;
+                        pEnv.refreshUI();
+                    } else
+                        idx = listLength + 1;
+                } while (idx <= listLength);
+                frame.dispose();
+
+            }
+            // create final transform 1
+            {
+                XForm xForm = new XForm();
+                layer.getFinalXForms().add(xForm);
+                xForm.setWeight(0);
+                xForm.setColor(0);
+                xForm.setColorSymmetry(1);
+                xForm.setMaterial(0);
+                xForm.setMaterialSpeed(0);
+
+                xForm.setCoeff00(0.26545742); // a
+                xForm.setCoeff10(-0.5936902); // b
+                xForm.setCoeff20(0.37878788); // e
+                xForm.setCoeff01(0.5936902); // c
+                xForm.setCoeff11(0.26545742); // d
+                xForm.setCoeff21(0.44077135); // f
+
+                xForm.setPostCoeff00(1);
+                xForm.setPostCoeff10(0);
+                xForm.setPostCoeff01(0);
+                xForm.setPostCoeff11(1);
+                xForm.setPostCoeff20(0);
+                xForm.setPostCoeff21(0);
+
+                // variation 1
+                {
+                    VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("hypertile3D2", true);
+                    varFunc.setParameter("p", range(3, 5));
+                    varFunc.setParameter("q", range(4, 12));
+                    xForm.addVariation(1, varFunc);
+                }
+                // set default edit plane
+                flame.setEditPlane(EditPlane.XY);
+                // random affine transforms (uncomment to play around)
+                //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);
+                XFormTransformService.rotate(xForm, 60.0 * Math.random(), false);
+                XFormTransformService.localTranslate(xForm, 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random(), false);
+                // random affine post transforms (uncomment to play around)
+                //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);
+                //   XFormTransformService.rotate(xForm, 360.0*Math.random(), true);
+                //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);
+            }
+            // ********** END OF CUT ****************
+        }
+    }
+
+    // ****COPY PASTE THIS SECTION OVERWRITING END SECTION OF OTHER SCRIPTS ***** (replace from "either update" right to end of script MB
+    // Either update the currently selected flame (to not need to create a new thumbnail
+    // in the thumbnail ribbon after each run of the script...
+
+    pEnv.refreshUI();
+}

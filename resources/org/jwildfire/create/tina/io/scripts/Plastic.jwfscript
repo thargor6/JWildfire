@@ -1,0 +1,122 @@
+/* Plastic_by_MickHogan.jwfscript
+   Written by MickHogan, 03/29/2013  Rev.2
+
+   Based on "Creating Plastic Tutorial" by Droz928
+   http://droz928.deviantart.com/    
+
+   
+   Dedicated to the folks @ J-Wildfire Users Group,
+   https://www.facebook.com/groups/jwildfire/517981271556185/?notif_t=like   .
+
+   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+   General Public License as published by the Free Software Foundation; either version 2.1 of the
+   License, or (at your option) any later version.
+
+   This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+   even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public License along with this software;
+   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+   02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+    ENJOY !! */
+
+import org.jwildfire.script.ActionList;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.random.RandomNumberGenerator;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+
+
+import org.jwildfire.create.tina.variation.NoiseFunc;
+import org.jwildfire.create.tina.variation.JuliaNFunc;
+import org.jwildfire.create.tina.variation.LazySusanFunc;
+import org.jwildfire.create.tina.variation.LinearFunc;
+import org.jwildfire.create.tina.variation.BipolarFunc;
+import org.jwildfire.create.tina.variation.SphericalFunc;
+import org.jwildfire.create.tina.variation.BlurFunc;
+import org.jwildfire.create.tina.variation.CPowFunc;
+import org.jwildfire.create.tina.variation.JuliaFunc;
+import org.jwildfire.create.tina.variation.JuliaScopeFunc;
+
+  double param = 1;
+    
+  public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  XForm xForm1;
+  VariationFunc varFunc;
+  Flame currFlame = pEnv.getCurrFlame();
+  if(currFlame==null) {
+    throw new Exception("Please select a flame at first");
+  }
+/*
+  do 
+  {
+       String str = javax.swing.JOptionPane.showInputDialog(null, "Please Enter 0 for Overwrite, 1 for New Flame", "Enter Value", 1);
+       if (str.equals("0") || str.equals("1")) param = Double.parseDouble(str);   // Converts above str value into a number
+       else param = 3;                                                            // and makes sure str is not an alphabetic 
+                                                                                  // character (which would cause an error)
+  } while ((param != 0) && (param != 1));
+*/
+  if (param == 1) {
+  currFlame.getXForms().clear();
+  currFlame.getFinalXForms().clear();
+  }
+
+  // First transform (T1)
+  {
+     XForm xForm = new XForm();
+     VariationFunc varFunc0 = new BlurFunc();
+     xForm.addVariation(0.4, varFunc0);
+     
+     VariationFunc varFunc3 = new NoiseFunc();
+     xForm.addVariation(0.095, varFunc3);     
+
+//     org.jwildfire.create.tina.transform.XFormTransformService.localTranslate(xForm, Math.random() - 0.5, Math.random() - 0.5, true);
+
+     xForm.setWeight(0.05);
+     xForm.setColor(0.0);     
+     xForm.setColorSymmetry(-0.8);     
+
+     currFlame.getXForms().add(xForm);  
+  }
+
+  // Second transform (T2)
+  {
+     XForm xForm = new XForm();
+     VariationFunc varFunc1 = new SphericalFunc();
+     xForm.addVariation(1.2, varFunc1);
+
+     VariationFunc varFunc2 = new LinearFunc();
+     xForm.addVariation(0.075, varFunc2);
+    
+     org.jwildfire.create.tina.transform.XFormTransformService.localTranslate(xForm, Math.random() - 0.5, Math.random() - 1.0, false);
+
+     org.jwildfire.create.tina.transform.XFormTransformService.scale(xForm, Math.random() * 0.25, true, true, false);
+     org.jwildfire.create.tina.transform.XFormTransformService.rotate(xForm, 135, false);
+
+     xForm.setWeight(5);
+     xForm.setColor(1.0);
+     xForm.setColorSymmetry(0.8); 
+
+    currFlame.getXForms().add(xForm);  
+  }
+
+  // Final settings   
+
+  currFlame.setCentreX(0.0);
+  currFlame.setCentreY(0.0);
+  currFlame.setCamRoll(0.0);
+  currFlame.setCamPitch(0.0);
+  currFlame.setCamYaw(0.0);
+  currFlame.setCamPerspective(0.0);
+  currFlame.setPixelsPerUnit(50);
+
+  // Refresh the UI
+  pEnv.refreshUI();
+
+}    // END CODE

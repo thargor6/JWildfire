@@ -1,0 +1,3 @@
+Simple script to wrap a flame into a bubble by adding a final transform
+
+Created by Andreas Maschke

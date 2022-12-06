@@ -1,0 +1,285 @@
+/*ScriptInfo
+author=”Mick Hogan” category=”Randomizer”
+info=”Adds Texture to Cylinder”
+*/
+
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.mutagen.RandomGradientMutation;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+
+public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  // create a new flame
+  Flame flame=new Flame();  // set the flame main attributes
+  flame.setCamRoll(0);
+  flame.setCamPitch(0);
+  flame.setCamYaw(0);
+  flame.setCamPerspective(0);
+  flame.setWidth(1036);
+  flame.setHeight(583);
+  flame.setPixelsPerUnit(104.36);
+  flame.setCamZoom(1);
+
+
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(100);
+    xForm.setColor(Math.random());
+    xForm.setColorSymmetry(0.9 + (Math.random() * 0.1));
+
+    double code = 1;
+/*
+  do
+  {
+  String str = javax.swing.JOptionPane.showInputDialog(null, "Symmetrical:" + + "\r\n" + "1 = Yes, 2 = No,", "Please Enter Code", 1);
+    if (str.equals("1") || str.equals("2")) code = Double.parseDouble(str);   // Converts above str value into a number
+       else code = 0;                                                            // and makes sure str is not an alphabetic 
+                                                                                  // character (which would cause an error)
+  } while ((code != 1) && (code != 2));
+*/
+   code = Math.random() > 0.5 ? 1 : 2;
+
+    double x = 0.9 + (Math.random() * 0.1);
+
+    xForm.setCoeff00(x); // a
+    xForm.setCoeff10(0); // b
+    xForm.setCoeff01(0); // c
+
+    if (code == 1)
+     {
+      xForm.setCoeff20(0); // e
+      xForm.setCoeff11(x); // d
+      xForm.setCoeff21(0); // f
+     }
+
+    if (code == 2)
+     {
+      xForm.setCoeff20(Math.random()*0.25); // e
+      xForm.setCoeff11((x+(Math.random()*0.2))); // d
+      xForm.setCoeff21(-(Math.random()*0.7)); // f
+     }
+
+    xForm.setPostCoeff00(1);
+    xForm.setPostCoeff10(0);
+    xForm.setPostCoeff01(0);
+    xForm.setPostCoeff11(1);
+    xForm.setPostCoeff20(0);
+    xForm.setPostCoeff21(0);
+
+    // variation 1
+    {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("splits", true);
+      varFunc.setParameter("x", 0);
+      varFunc.setParameter("y", (14 + 5 * Math.random()) * 0.01 + (Math.random() * 0.1));
+      xForm.addVariation(0.985, varFunc);
+    }
+    // variation 2
+    {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("waves2", true);
+      varFunc.setParameter("scalex", 0);
+      varFunc.setParameter("scaley", 0);
+      varFunc.setParameter("freqx", 0);
+      varFunc.setParameter("freqy", 0);
+      xForm.addVariation(-0.029, varFunc);
+    }
+    XFormTransformService.rotate(xForm, 360 *Math.random(), false);
+  }
+
+
+  // create transform 2
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(5);
+    xForm.setColor(Math.random());
+    xForm.setColorSymmetry(0);
+
+    xForm.setCoeff00(0); // a
+    xForm.setCoeff10(-1); // b
+    xForm.setCoeff20(0); // e
+    xForm.setCoeff01(1); // c
+    xForm.setCoeff11(0); // d
+    xForm.setCoeff21(0); // f
+
+    xForm.setPostCoeff00(0);
+    xForm.setPostCoeff10(-50);
+    xForm.setPostCoeff01(-1 - Math.random() * 4);
+    xForm.setPostCoeff11(0);
+    xForm.setPostCoeff20(0);
+    xForm.setPostCoeff21(0);
+
+    // change relative weights
+    xForm.getModifiedWeights()[0] = 0;
+    xForm.getModifiedWeights()[1] = 0;
+
+    // variation 1
+    xForm.addVariation(0.02 + (Math.random() * 0.025), VariationFuncList.getVariationFuncInstance("cylinder", true));
+    // variation 2
+    xForm.addVariation(0.5 + (Math.random() * 0.25), VariationFuncList.getVariationFuncInstance("pre_blur", true));
+
+  }
+
+
+  // create transform 3
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setColor(Math.random());
+    xForm.setColorSymmetry(-(0.8+(Math.random()*0.1)));
+
+    xForm.setCoeff00(0.75+(Math.random()*0.25)); // a
+    xForm.setCoeff10(0); // b
+    xForm.setCoeff20(0); // e
+    xForm.setCoeff01(0); // c
+    xForm.setCoeff11(1+(Math.random()*0.5)); // d
+    xForm.setCoeff21(0); // f
+
+    xForm.setPostCoeff00(2);
+    xForm.setPostCoeff10(0);
+    xForm.setPostCoeff01(0);
+    xForm.setPostCoeff11(0.75+(Math.random()*0.25));
+    xForm.setPostCoeff20(0);
+    xForm.setPostCoeff21(0);
+
+    // change relative weights
+    xForm.getModifiedWeights()[2] = 0;
+
+    // variation 1
+    xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("pre_blur", true));
+
+    // variation 2
+    double r = MathLib.trunc(Math.random()*10);
+
+    if (r > 5)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("bubble2", true);
+      varFunc.setParameter("x", 1.75);
+      varFunc.setParameter("y", 0.25);
+      varFunc.setParameter("z", 0);     
+      xForm.addVariation(0.8, varFunc);
+     } 
+
+    if (r == 0)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("rings2", true);
+      varFunc.setParameter("val", 0.5+(Math.random()*0.1));
+      xForm.addVariation(0.5+(Math.random()*0.1), varFunc);
+     } 
+
+    if (r == 1)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("julian", true);
+      varFunc.setParameter("power", -6 - 4 * Math.random());
+      varFunc.setParameter("dist", 8 + 10 * Math.random());
+      xForm.addVariation(0.34+(Math.random()*0.1), varFunc);
+     } 
+
+    if (r == 2)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("hexes", true);
+      varFunc.setParameter("cellsize", (15 + 60 * Math.random()) * 0.01);
+      varFunc.setParameter("power", 1.5);
+      varFunc.setParameter("rotate", 0);
+      varFunc.setParameter("scale", 0.75);
+      xForm.addVariation(0.3+(Math.random()*0.1), varFunc);
+     } 
+
+    if (r == 3)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("bwraps7", true);
+      varFunc.setParameter("cellsize", 0.1 + (Math.random() * 0.5));
+      varFunc.setParameter("space", 0);
+      varFunc.setParameter("gain", 2 + 7 * Math.random());
+      varFunc.setParameter("inner_twist", 0.025);
+      varFunc.setParameter("outer_twist", 2 + 7 * Math.random());
+      xForm.addVariation(0.4+(Math.random()*0.1), varFunc);
+     } 
+
+    if (r == 4)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("checks", true);
+      varFunc.setParameter("x", 0.125);
+      varFunc.setParameter("y", 0.125);
+      varFunc.setParameter("size", (5 + 10 * Math.random()) * 0.01);
+      xForm.addVariation(0.5, varFunc);
+     } 
+
+    if (r == 5)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("waves2", true);
+      varFunc.setParameter("freqx", 10 + 20 * Math.random());
+      varFunc.setParameter("freqy", 10 + 20 * Math.random());
+      varFunc.setParameter("scalex", 0.04);
+      varFunc.setParameter("scaley", 0.04);
+      xForm.addVariation(0.5, varFunc);
+     } 
+
+
+
+    if (r == 6)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("cell", true);
+      varFunc.setParameter("size", (125 + 125 * Math.random()) * 0.001);
+      xForm.addVariation(0.05, varFunc);
+     } 
+
+    if (r == 7)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("checks", true);
+      varFunc.setParameter("x", (125 + 125 * Math.random()) * 0.001);
+      varFunc.setParameter("y", (125 + 134 * Math.random()) * 0.001);
+      varFunc.setParameter("size", (125 + 134 * Math.random()) * 0.001);     
+      xForm.addVariation(0.05, varFunc);
+     } 
+
+    if (r == 8)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("oscilloscope", true);
+      varFunc.setParameter("separation", (27 + 48 * Math.random()) * 0.01);
+      varFunc.setParameter("frequency", 10 + 20 * Math.random());
+      varFunc.setParameter("amplitude", 1 + 9 * Math.random());
+      varFunc.setParameter("damping", 0);
+      xForm.addVariation(0.05, varFunc);
+     } 
+
+    if (r == 9)
+     {
+      VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("stripes", true);
+      varFunc.setParameter("space", (15 + 60 * Math.random()) * 0.01);
+      varFunc.setParameter("warp", (5 + 10 * Math.random()) + Math.random());
+      xForm.addVariation(0.05, varFunc);
+     }
+           
+          
+         
+        
+       
+      
+     
+    
+   
+
+  }
+  // create a random gradient
+  new RandomGradientMutation().execute(flame);
+  // Either update the currently selected flame (to not need to create a new thumbnail
+  // in the thumbnail ribbon after each run of the script...
+  Flame selFlame = pEnv.getCurrFlame();
+  if(selFlame!=null) {
+    selFlame.assign(flame);
+    pEnv.refreshUI();
+  }
+  // ...or load the flame in the editor and refresh the UI
+  else {
+    pEnv.setCurrFlame(flame);
+  }
+}

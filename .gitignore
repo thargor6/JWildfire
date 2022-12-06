@@ -88,3 +88,5 @@ out/*
 
 /cli/*.png
 /cli/*.flame
+/target/classes/
+/.local-maven-repo/.m2/repository/local/

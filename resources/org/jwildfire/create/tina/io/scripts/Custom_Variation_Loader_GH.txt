@@ -1,0 +1,51 @@
+Custom_Variation_Loader JWildfire script, version 6
+     script written by CozyG, October 2015
+     initial custom variations in subfolder written
+           by Brad Stefanov, devilant1, chronologicaldot, and CozyG
+     support for user-defined script-folder by thargor6
+
+You may download a collection of example variations in the official forum: http://jwildfire.org/forum/viewtopic.php?f=23&t=1957&p=4917#p4917 
+
+creates a "custom_full_wf" variation
+   and populates it with custom variation code 
+   selected by user from a list of possible custom variations
+   in the "custom_variations" subfolder
+
+   to add additional custom variations to the list,
+         copy them to subfolder "custom_variations"
+         in same folder as this script
+
+   uses CustomFullVariationWrapperFunc ("custom_wf_full")
+         for dynamic loading of custom variation code
+   uses script user interface API
+         to show options
+   uses script persistence API
+         to remember previously selected options
+
+   options:
+       custom code: which custom variation to load
+             (from those found in "custom_variations" subfolder)
+       final: use a normal transform or a final transform
+       undo on repeat runs: if repeatedly running from the same
+                dialog, revert any previous changes made from
+                the dialog before running again
+       transform: whether to add new variation to a new transform
+                or add to existing transform
+                possible values: 
+                     "new": create new transform to add variation to
+                     "random": randomly select existing transform to use
+                     number N: add to transform N (or add to new 
+                           transform if transform N doesn't exist)
+       vindex: position in transform's variation list
+                at which to insert new variation
+                Possible values: 
+                     "first":  insert variation at beginning of variation list
+                     "last":   insert variation at end of variation list
+                     "random": insert variation at random position
+                     number N: insert variation at position N, 
+                            or at end of list if N > size of list
+       randomize params:
+              randomizes all params for the variation,
+              in the range -2 to +2
+
+

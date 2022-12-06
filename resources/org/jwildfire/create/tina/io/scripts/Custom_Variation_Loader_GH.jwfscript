@@ -1,0 +1,304 @@
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+
+import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+// import org.jwildfire.create.tina.base.Variation;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.script.ui.FormBuilder;
+
+/*
+ * custom_variation_loader JWildfire script, version 5
+ * script to create a "custom_full_wf" variation and populate it with custom variation code 
+ *     from a list of possible custom variations in a specified folder
+ *     written by CozyG, October 2015
+ *
+ *   uses CustomFullVariationWrapperFunc ("custom_wf_full") for dynamic loading of custom variation code
+ *   uses script user interface API to show options
+ *   uses script persistence API to remember previously selected options
+ *   
+ *   options:
+ *       "custom code": which custom variation to load from those found in "custom_variations" subfolder
+ *       "final": whether to add/modify a normal transform or a final transform
+ *       "undo on repeat runs": if repeatedly running from the same
+ *               dialog, revert any previous changes made from
+ *               the dialog before running again
+ *       "transform": whether to add new varition to an new transform or add to existing transform
+ *                "new": create new transform to add variation to
+ *                "random": then randomly select existing transform and add variation to it
+ *                number N: then add to transform N (or add to new transform if transform N doesn't exist)
+ *       "vindex": position in transform's variation list at which to insert new variation
+ *                "first":  insert variation at beginning of variation list
+ *                "last":   insert variation at end of variation list
+ *                "random": insert variation at radnom position in variation list
+ *                number N: insert variation at position N in variation list, or at end of list if N > size of list
+ *       "randomize params":
+ *             randomizes all params for the variation,
+ *             in the range -2 to +2
+ *
+ *
+ * You may download a collection of example variations in the official forum: http://jwildfire.org/forum/viewtopic.php?f=23&t=1957&p=4917#p4917
+ *
+ */ 
+
+// directory for custom code file, relative to location of this script
+protected String code_dir = "custom_variations";
+protected String file_separator = System.getProperty("file.separator");
+protected TinaController tcontrol = null;
+protected String[] xform_names_array = { "new", "random", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" };
+protected String default_xform = "new";
+
+protected String[] position_array = { "first", "last", "random", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" };
+protected String default_position = "last";
+protected int run_count = 0;
+protected Flame initial_flame_copy;
+protected String[] variation_choices;
+
+/**
+ *  For createScriptForm() call, ScriptRunnerEnvironment will be the TinaController
+ */ 
+public FormBuilder createScriptForm(ScriptRunnerEnvironment pEnv)  {
+  // keeping track of how many times script is run from same dialog instance
+  //    so reset every time new dialog is created
+  if (run_count > 0) {
+    run_count = 0;
+  }
+  Flame initial_flame = pEnv.getCurrFlame();
+  if (initial_flame == null) {  // if no flame selected, then don't bother building the form
+    return null;
+  }
+  // stash flame state as of when dialog created
+  initial_flame_copy = initial_flame.makeCopy();
+
+  // hack to get access to TinaController, 
+  //    since the only place createScriptForm() is called is within TinaController tcontrol, with pattern createScriptForm(tcontrol)
+  if (pEnv instanceof TinaController) {
+    tcontrol = (TinaController)pEnv;
+  }
+  else { // shouldn't get here
+    System.out.println("pEnv is not a TinaController: " + pEnv);
+  }
+
+  File custom_code_dir = new File(this.getCustomCodeDir());
+  File[] custom_code_files =  custom_code_dir.listFiles();
+  // build list of code files --
+  //   had to do this the old-fashioned way since Janino dynamic compiler doesn't support paramterized types
+  //   List<String> file_names = new ArrayList<String>();
+  List file_names = new ArrayList();
+  for (int i=0; i < custom_code_files.length; i++) {
+    if (custom_code_files[i].isFile()) {
+      String file_name = custom_code_files[i].getName();
+      file_names.add(file_name);
+    }
+  }
+  variation_choices = new String[file_names.size()+1];
+  variation_choices[0] = "random";
+  for (int i=0; i < file_names.size(); i++) {
+    variation_choices[i+1] = (String)file_names.get(i);
+  }
+
+  // initialize script params with previous settings, or defaults if no previous settings
+  String default_choice = variation_choices[1];
+  String prev_choice = pEnv.getScriptProperty(this, "variation_file", default_choice);
+  boolean found = false;
+  for (int i=0; i < variation_choices.length; i++) {
+    if (prev_choice.equals(variation_choices[i])) {
+      found = true;
+      break;
+    }
+  }
+  if (! found) { prev_choice = default_choice; }
+  Boolean prev_final = Boolean.FALSE;
+  if (pEnv.getScriptProperty(this, "is_final", "false").equalsIgnoreCase("true")) { 
+    prev_final = Boolean.TRUE;
+  }
+  Boolean prev_undo = Boolean.FALSE;
+  if (pEnv.getScriptProperty(this, "undo_on_rerun", "true").equalsIgnoreCase("true")) { 
+    prev_undo = Boolean.TRUE;
+  }
+  Boolean prev_randomize = Boolean.FALSE;
+    if (pEnv.getScriptProperty(this, "randomize_params", "false").equalsIgnoreCase("true")) { 
+    prev_randomize = Boolean.TRUE;
+  }
+  String prev_xform = pEnv.getScriptProperty(this, "xform_index", default_xform);
+  String prev_position = pEnv.getScriptProperty(this, "var_position", default_position);
+  
+  // building script params dialog box using script UI API
+  //   ("foo" is a stub UI element to prevent "final" checkbox from bumping into "variation_file" combobox)
+  return new FormBuilder().openContainer("Choose custom variation code to apply")
+    .withComboBox("variation_file", "custom code", variation_choices, prev_choice)
+    .withCheckBox("foo", "", Boolean.FALSE)
+    .withCheckBox("is_final", "final", prev_final)
+    .withCheckBox("undo_on_rerun", "undo on repeat runs", prev_undo)
+    .withComboBox("xform_index", "transform", xform_names_array, prev_xform)
+    .withComboBox("var_position", "var    vindex", position_array, prev_position)
+    .withCheckBox("randomize_params", "randomize params", prev_randomize)
+    .closeContainer();
+}
+  
+
+/**
+ *   For run() call, since using a script dialog, ScripRunnerEnvironment will be the ScriptParamsForm that sets up the dialog
+ */
+public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  Flame cflame = pEnv.getCurrFlame();
+  if (cflame == null) {
+    JOptionPane.showMessageDialog(null, 
+                                  "Script canceled, must select a flame first", 
+                                  "JWildfire Script: Example custom code auto-loader", 
+                                  JOptionPane.ERROR_MESSAGE);  
+    return;
+  }
+
+  // retrieve script params from script UI
+  String code_file_choice = pEnv.getParamByName("variation_file").asString();
+  boolean is_final = pEnv.getParamByName("is_final").asBoolean().booleanValue();
+  boolean undo_on_rerun = pEnv.getParamByName("undo_on_rerun").asBoolean().booleanValue();
+  String xform_name = pEnv.getParamByName("xform_index").asString();
+  String var_position = pEnv.getParamByName("var_position").asString();
+  boolean randomize_params = pEnv.getParamByName("randomize_params").asBoolean().booleanValue();
+  
+  // If "undo_on_rerun" checked, then want to replace changes from previous run on each subsequent run
+  // Note that this should ideally be done through the normal JWildfire Undo API
+  //    But I couldn't fiure out (yet) how to get that to work consistently
+  // So for now, using a different approach:
+  //     keep copy of flame from when script dialog is constructed
+  //     then every time run() is called via that dialog:
+  //         if first run, then do standard run
+  //         if subsequent run, then first revert to initial_flame_copy, then do same as standard run
+  if (tcontrol != null) {
+    if  (undo_on_rerun) {
+      // if not first run, then revert to inital_flame_copy before doing run
+      if (run_count != 0) {  
+        cflame.assign(initial_flame_copy);
+        tcontrol.registerToEditor(cflame, tcontrol.getCurrLayer());
+        // tcontrol.refreshUI(); // don't need to refresh here, since do a UI refresh at end of run
+      }
+    }
+    else {  // no undo on rerun, so just keep saving undo points using normal JWildfire undo API
+      tcontrol.saveUndoPoint();
+    }
+  }
+
+  // cflame = pEnv.getCurrFlame();
+  Layer clayer = pEnv.getCurrLayer();
+
+  // create custom_wf_full variation
+  VariationFunc custom_full_func = VariationFuncList.getVariationFuncInstance("custom_wf_full", true);
+
+  // figure out full path to custom code
+  String code_file;
+  if (code_file_choice.equals("random")) {
+    int cindex = (int)(Math.random() * (variation_choices.length-1)) + 1;
+    code_file = variation_choices[cindex];
+  }
+  else {
+    code_file = code_file_choice;
+  }
+  String custom_code_path = this.getCustomCodeDir() + file_separator + code_file;
+
+  // load custom code as "code_full_variation" resource for the custom_wf_full variation
+  byte[] custom_code = Tools.readFile(custom_code_path);
+  custom_full_func.setRessource("code_full_variation", custom_code);
+
+  // randomize all parameters between -2 and 2
+  if (randomize_params) {
+    String[] params = custom_full_func.getParameterNames();
+    for (int i=0; i<params.length; i++) {
+      String param = params[i];
+      custom_full_func.setParameter(param, (Math.random() * 4.0) - 2.0);
+    }
+  }
+  
+  List xforms;
+  XForm xform;
+  if (is_final) {
+    xforms = clayer.getFinalXForms();
+  }
+  else {
+    xforms = clayer.getXForms();
+  }
+
+  // figuring out which xform to add variation to, or if should create new xform to hold variation
+  if (xform_name.equals("random")) {
+    int xindex = (int)(Math.random() * xforms.size());
+    if (xindex < 0) { xindex = 0; }
+    xform = (XForm)xforms.get(xindex);
+  }
+  // if xform_index is "new"
+  // OR
+  // if xform index is too big, ignore xform_index and add a new xform
+  else if (xform_name.equals("new") || (Integer.parseInt(xform_name) >= xforms.size()) )   {
+    // create new transform and add custom_full_func variation to it
+    xform = new XForm();
+    xform.setWeight(1.0f);
+    xforms.add(xform);
+  }
+  else {
+    int xform_index = Integer.parseInt(xform_name) - 1;
+    xform = (XForm)xforms.get(xform_index);
+  }
+
+  // figuring out where in the xform's variations list to insert the new custom_wf_full variation
+  List varlist = xform.getVariations();
+  int var_index;
+  if (varlist.size() == 0) {
+    var_index = 0;
+  }
+  else if (var_position.equals("random")) {
+    var_index = (int)(Math.random() * varlist.size()+0.001f);
+  }
+  else if (var_position.equals("first")) {
+    var_index = 0;
+  }
+  else if (var_position.equals("last")) {
+    var_index = varlist.size();
+  }
+  else {
+    var_index = Integer.parseInt(var_position);
+    if (var_index > varlist.size()) {
+      var_index = varlist.size();
+    }
+  }
+
+  // directly creating variation and adding to varlist --
+  //    doing it this way instead of using xform.addVariation(1.0f, custom_full_func) 
+  //    in order to allow insertion of variation anywhere in the xforms list of variations
+  //    (currently xform.addVariation() can only add variation at end of list)
+  Variation var = new Variation();
+  var.setAmount(1.0f);
+  var.setFunc(custom_full_func);
+  varlist.add(var_index, var);
+
+  // save current script params
+  pEnv.setScriptProperty(this, "variation_file", code_file_choice);
+  pEnv.setScriptProperty(this, "is_final", (is_final ? "true" : "false"));
+  pEnv.setScriptProperty(this, "undo_on_rerun", (undo_on_rerun ? "true" : "false"));
+  pEnv.setScriptProperty(this, "xform_index", xform_name);
+  pEnv.setScriptProperty(this, "var_position", var_position);
+  pEnv.setScriptProperty(this, "randomize_params", (randomize_params ? "true" : "false"));
+  
+  run_count++;
+  // make sure GUI is updated
+  pEnv.refreshUI();
+
+}
+ 
+public String getCustomCodeDir()  {
+  String prefsDir = Prefs.getPrefs().getTinaCustomVariationsPath();
+  if(prefsDir!=null && prefsDir.length()>0) {
+    return prefsDir;
+  }
+  else {
+    throw new RuntimeException("Please set the path for your custom-variations in the Preferences first (property \"tinaCustomVariationsPath\"). Please note that the directory should be OUTSIDE of the JWildfire-folder, so you can access your scripts with any JWildfire-version because all use the same path.");
+  }  
+}

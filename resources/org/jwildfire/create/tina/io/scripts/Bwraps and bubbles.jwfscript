@@ -1,0 +1,177 @@
+
+
+
+/* Written by Geoffrey Barnes 04/08/2013 based on a script by MickHogan from, 01/05/2013  Rev.3
+   Based on the Apophysis script "BD's Crackled JuliaN-Rings-2", Written by Bart Doetsch 1/7/09
+   
+   Dedicated to the folks @ J-Wildfire Users Group,
+   https://www.facebook.com/groups/jwildfire/517981271556185/?notif_t=like   .
+
+   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+   General Public License as published by the Free Software Foundation; either version 2.1 of the
+   License, or (at your option) any later version.
+
+   This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+   even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public License along with this software;
+   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+   02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+    */
+   
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+
+import org.jwildfire.create.tina.variation.BWraps7Func;
+import org.jwildfire.create.tina.variation.JuliaFunc;
+import org.jwildfire.create.tina.variation.BubbleFunc;
+
+
+    double s = (Math.random()*(0.4-0.1)+0.1);
+    double s2 = (Math.random()*(0.4-0.1)+0.1);
+    double s3 = (Math.random()*(0.5-0.01)+0.01);
+
+  public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  XForm xForm1;
+  VariationFunc varFunc;
+  Flame currFlame = pEnv.getCurrFlame();
+  if(currFlame==null) {
+    throw new Exception("Please select a flame at first");
+  }
+  currFlame.getXForms().clear();
+
+  // First transform (T1)
+  {
+    XForm xForm = new XForm();
+    VariationFunc varFunc=new BWraps7Func();
+    xForm.addVariation((1+(Math.random()*1.5)), varFunc);
+    xForm.setWeight(0.65);
+    xForm.setColor(Math.random());
+    xForm.setColorSymmetry(-1.0);
+    xForm.getModifiedWeights()[0] = 1;
+    xForm.getModifiedWeights()[1] = 0;
+    xForm.getModifiedWeights()[2] = (10+(Math.random()*10));
+    xForm.getModifiedWeights()[3] = 0;
+    currFlame.getXForms().add(xForm);  
+  }
+
+  // Second transform (T2)
+  {
+    XForm xForm = new XForm();
+    xForm.setCoeff00(0.4+s); // a
+    xForm.setCoeff10(0.0); // b
+    xForm.setCoeff20(0.0);  // e
+    xForm.setCoeff01(0.0); // c 
+    xForm.setCoeff11(0.4+s); // d 
+    xForm.setCoeff21(0.0); // f 
+
+    VariationFunc varFunc = new JuliaFunc();
+    varFunc.setParameter("power", MathLib.trunc((4+(Math.random()*4.5))));
+    varFunc.setParameter("dist", -(1+(Math.random()*0.8)));
+    xForm.addVariation((1.8+(Math.random()*3)), varFunc);
+    xForm.setCoeff20((0.1+(Math.random()*0.8)));  // e
+    xForm.setCoeff21(0.0); // f
+    xForm.setWeight(2.0);
+    xForm.setColor(0.0);
+    xForm.setColorSymmetry(0.0);
+    xForm.getModifiedWeights()[0] = 5;
+    xForm.getModifiedWeights()[1] = 1;
+    xForm.getModifiedWeights()[2] = 1;
+    xForm.getModifiedWeights()[3] = 1;
+    currFlame.getXForms().add(xForm);  
+  }
+
+
+  // Third transform (T3)
+  {
+    XForm xForm = new XForm();
+    xForm.setCoeff00((0.7+s3)); // a
+    xForm.setCoeff10(0.0); // b
+    xForm.setCoeff20(0.0);  // e
+    xForm.setCoeff01(0.0); // c 
+    xForm.setCoeff11((0.7+s3)); // d 
+    xForm.setCoeff21(0.0); // f 
+
+    VariationFunc varFunc = new BubbleFunc();
+    varFunc.setParameter("val", 1.9);
+    xForm.addVariation(0.4, varFunc);
+
+    xForm.setWeight(0.5);
+    xForm.setColor(0.93);
+    xForm.setColorSymmetry(0.0);
+    currFlame.getXForms().add(xForm);  
+  }
+
+  // Fourth transform (T4)
+
+  {
+    XForm xForm = new XForm();
+    xForm.setCoeff00(0.4+s2); // a
+    xForm.setCoeff10(0.0); // b
+    xForm.setCoeff20(0.0);  // e
+    xForm.setCoeff01(0.0); // c 
+    xForm.setCoeff11(0.4+s2); // d 
+    xForm.setCoeff21(0.0); // f 
+
+    VariationFunc varFunc = new JuliaFunc();
+    varFunc.setParameter("power", MathLib.trunc((4+(Math.random()*4.5))));
+    varFunc.setParameter("dist", -(1+(Math.random()*0.8)));
+    xForm.addVariation(1.8+(Math.random()*3), varFunc);
+    xForm.setCoeff20((0.1+(Math.random()*0.8)));  // e
+    xForm.setCoeff21(0.0); // f
+    xForm.setWeight(2.0);
+    xForm.setColor(0.0);
+    xForm.setColorSymmetry(0.0);
+    xForm.getModifiedWeights()[0] = 5;
+    xForm.getModifiedWeights()[1] = 1;
+    xForm.getModifiedWeights()[2] = 1;
+    xForm.getModifiedWeights()[3] = 1;
+    currFlame.getXForms().add(xForm);  
+  }
+
+/* TODO
+    SetActiveTransform(0);    // To set Xaos for T1
+     Transform.chaos[0]:= 1;
+     Transform.chaos[1]:= 0;
+     Transform.chaos[2]:= (10+(random*10));
+     Transform.chaos[3]:= 0;
+
+    SetActiveTransform(1);        // To set Xaos for T2
+     Transform.chaos[0]:= 5;
+     Transform.chaos[2]:= 1;
+     Transform.chaos[3]:= 1;
+
+    SetActiveTransform(3);       // To set Xaos for T4
+     Transform.chaos[0]:= 5;
+     Transform.chaos[1]:= 1;
+     Transform.chaos[2]:= 1;
+
+        // This section replaces the "CalculateColors" command
+    For ccClr:= 0 to (Transforms-1) do
+    Begin
+    SetActiveTransform(ccClr);
+    Transform.Color:= (ccClr/(Transforms-1));
+    End;
+*/
+
+  // Final settings   
+  currFlame.getFinalXForms().clear();
+
+  currFlame.setCentreX(0.0);
+  currFlame.setCentreY(0.0);
+  currFlame.setCamRoll(0.0);
+  currFlame.setCamPitch(0.0);
+  currFlame.setCamYaw(0.0);
+  currFlame.setCamPerspective(0.0);
+  currFlame.setPixelsPerUnit(50);
+  // Refresh the UI
+  pEnv.refreshUI();
+
+}    // END CODE

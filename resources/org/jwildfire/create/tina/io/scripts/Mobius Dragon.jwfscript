@@ -1,0 +1,127 @@
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+
+// Based on the Apophysis script "Mobius Dragon" by penny5775
+//   http://penny5775.deviantart.com/art/Mobius-Dragon-Script-104021373
+public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  XForm xForm1;
+  VariationFunc varFunc;
+  Flame currFlame = pEnv.getCurrFlame(true);
+pEnv.refreshUI();
+
+  currFlame.getXForms().clear();
+  double ranx = (Math.random() / 10.0)*1.2;   
+  double rany = (Math.random() / 10.0)*1.2;
+
+  //T1 mobius
+  {
+    XForm xForm = new XForm();
+    xForm.setWeight(0.5+Math.random()*4.0);
+    xForm.setColor(Math.random());
+    xForm.setColorSymmetry(0.8);
+
+    varFunc = VariationFuncList.getVariationFuncInstance("mobius", true);
+    varFunc.setParameter("re_a", 1.0);
+    varFunc.setParameter("im_a", 0.0);
+    varFunc.setParameter("re_b", 0.0);
+    varFunc.setParameter("im_b", 0.0);
+    varFunc.setParameter("re_c", 0.0);
+    varFunc.setParameter("im_c", -1.0);
+    varFunc.setParameter("re_d", 1.0);
+    varFunc.setParameter("im_d", 0.0);
+    xForm.setCoeff20(ranx);
+    xForm.setCoeff21(-rany);
+    xForm.addVariation(1.0, varFunc);
+    currFlame.getXForms().add(xForm);
+  }
+  // T2 linear
+  {
+    XForm xForm = new XForm();
+    xForm.setWeight(0.5+Math.random()*0.8);
+    xForm.setColor(Math.random());
+    xForm.setColorSymmetry(0.8);
+
+    xForm.setPostCoeff00(-1.0);
+    xForm.setPostCoeff01(0.0);
+    xForm.setPostCoeff10(0.0);
+    xForm.setPostCoeff11(-1.0);
+    xForm.setCoeff20(ranx);
+    xForm.setCoeff21(-rany);
+    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+    currFlame.getXForms().add(xForm);
+  }
+  // T3 linear
+  {
+    XForm xForm = new XForm();
+    xForm.setWeight(0.4+Math.random()*0.3);
+    xForm.setColor(Math.random());
+    xForm.setColorSymmetry(1.0);
+
+    xForm.setCoeff20(-1.0);
+    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+    currFlame.getXForms().add(xForm);
+  }
+  // T4 linear
+  {
+    XForm xForm = new XForm();
+    xForm.setWeight(0.15+Math.random()*0.25);
+    xForm.setColor(Math.random());
+    xForm.setColorSymmetry(1.0);
+
+    xForm.setCoeff20(1.0);
+    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+    currFlame.getXForms().add(xForm);
+  }
+  // T5 linear moved away on y axis
+  {
+    XForm xForm = new XForm();
+    xForm.setWeight(0.0625);
+    xForm.setColor(Math.random());
+
+    xForm.setCoeff21(-3.0);
+    xForm.setPostCoeff20(-ranx);
+    xForm.setPostCoeff21(-rany);
+    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+    currFlame.getXForms().add(xForm);
+  }
+  // T6 linear line at edge of design
+  {
+    XForm xForm = new XForm();
+    xForm.setWeight(0.0625);
+    xForm.setColor(Math.random());
+
+    xForm.setPostCoeff11(0.001);
+    xForm.setPostCoeff20(-ranx);
+    xForm.setPostCoeff21(1.0-rany);
+    xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+    currFlame.getXForms().add(xForm);
+  }
+  // T7 a detail in center of void
+  {
+    XForm xForm = new XForm();
+    xForm.setWeight(0.0625);
+    xForm.setColor(Math.random());
+
+    xForm.setPostCoeff20(0.5-(ranx/2.0));
+    xForm.setPostCoeff21(-(rany/2.0));
+    xForm.addVariation(Math.random()/10.0+0.1, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
+    currFlame.getXForms().add(xForm);
+  }
+
+  // final
+  currFlame.getFinalXForms().clear();
+
+  currFlame.setCentreX(0.0);
+  currFlame.setCentreY(0.0);
+  currFlame.setCamRoll(0.0);
+  currFlame.setCamPitch(0.0);
+  currFlame.setCamYaw(0.0);
+  currFlame.setCamPerspective(0.0);
+  currFlame.setPixelsPerUnit(120);
+  // Refresh the UI
+  pEnv.refreshUI();
+}

@@ -1,0 +1,146 @@
+/* Written by MickHogan, 01/09/2013  Rev.3
+   Based on Tom Allen's "Spiral Spiral" flame!
+   
+   Dedicated to the folks @ J-Wildfire Users Group,
+   https://www.facebook.com/groups/jwildfire/517981271556185/?notif_t=like   .
+
+   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+   General Public License as published by the Free Software Foundation; either version 2.1 of the
+   License, or (at your option) any later version.
+
+   This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+   even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public License along with this software;
+   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+   02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+    ENJOY !! */
+
+import org.jwildfire.script.ActionList;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+
+import org.jwildfire.create.tina.variation.LinearFunc;
+import org.jwildfire.create.tina.variation.Curl3DFunc;
+import org.jwildfire.create.tina.variation.DiamondFunc;
+
+
+    double s = (Math.random()*(0.4-0.1)+0.1);
+    double s2 = (Math.random()*(0.4-0.1)+0.1);
+    double s3 = (Math.random()*(0.5-0.01)+0.01);
+    double param = 1;
+
+  public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  XForm xForm1;
+  VariationFunc varFunc;
+  Flame currFlame = pEnv.getCurrFlame();
+  if(currFlame==null) {
+    throw new Exception("Please select a flame at first");
+  }
+/*
+  do 
+  {
+       String str = javax.swing.JOptionPane.showInputDialog(null, "Please Enter 0 for Overwrite, 1 for New Flame", "Enter Value", 1);
+       if (str.equals("0") || str.equals("1")) param = Double.parseDouble(str);   // Converts above str value into a number
+       else param = 3;                                                            // and makes sure str is not an alphabetic 
+                                                                                  // character (which would cause an error)
+  } while ((param != 0) && (param != 1));
+  */
+
+  if (param == 1) currFlame.getXForms().clear();
+
+  // First transform (T1)
+  {
+    XForm xForm = new XForm();
+
+    xForm.setCoeff00(0.73);   // a (X1)
+    xForm.setCoeff10(-0.555); // b (Y1)
+    xForm.setCoeff20(Math.random() * 2);  // e (O1)
+    xForm.setCoeff01(0.529);  // c (X2)
+    xForm.setCoeff11(0.984);  // d (Y2)
+    xForm.setCoeff21(Math.random() * -2); // f (O2)
+
+    xForm.setPostCoeff00(-0.911);  // a (X1)
+    xForm.setPostCoeff10(-0.412);  // b (Y1)
+    xForm.setPostCoeff20(0.0);     // e (O1)
+    xForm.setPostCoeff01(0.412);   // c (X2)
+    xForm.setPostCoeff11(-0.911);  // d (Y2)
+    xForm.setPostCoeff21(0.0);     // f (O2)
+
+    xForm.addVariation(0.817, new LinearFunc());
+
+    VariationFunc varFunc=new Curl3DFunc();
+    varFunc.setParameter("cx", 0.3 * Math.random());
+    varFunc.setParameter("cy", 0.0);
+    varFunc.setParameter("cz", 0.15);
+
+    xForm.addVariation((0.198), varFunc);
+    xForm.setWeight(2.0);
+    xForm.setColor(0.71);
+    xForm.setColorSymmetry(0.76);
+
+//    xForm.getModifiedWeights()[0] = 1;
+//    xForm.getModifiedWeights()[1] = 0;
+//    xForm.getModifiedWeights()[2] = (10+(Math.random()*10));
+//    xForm.getModifiedWeights()[3] = 0;
+    currFlame.getXForms().add(xForm);  
+  }
+
+  // Second transform (T2)
+  {
+    XForm xForm = new XForm();
+
+    xForm.setCoeff00(-0.308); // a (X1)
+    xForm.setCoeff10(-0.469); // b (Y1)
+    xForm.setCoeff20(Math.random() * 2);  // e (O1)
+    xForm.setCoeff01(-0.664); // c (X2)
+    xForm.setCoeff11(0.171);  // d (Y2)
+    xForm.setCoeff21(Math.random() * -2); // f (O2)
+
+    xForm.setPostCoeff00(1.0);  // a (X1)
+    xForm.setPostCoeff10(0.0);  // b (Y1)
+    xForm.setPostCoeff20(0.0);  // e (O1)
+    xForm.setPostCoeff01(0.0);  // c (X2)
+    xForm.setPostCoeff11(1.0);  // d (Y2)
+    xForm.setPostCoeff21(0.0);  // f (O2)
+
+    xForm.addVariation(0.211, new DiamondFunc());
+
+    VariationFunc varFunc=new Curl3DFunc();
+    varFunc.setParameter("cx", 0.0);
+    varFunc.setParameter("cy", 0.0);
+    varFunc.setParameter("cz", 0.45);
+
+    xForm.addVariation(1.0, varFunc);
+    xForm.setWeight(0.3);
+    xForm.setColor(0.29);
+    xForm.setColorSymmetry(0.3);
+
+//    xForm.getModifiedWeights()[0] = 5;
+//    xForm.getModifiedWeights()[1] = 1;
+//    xForm.getModifiedWeights()[2] = 1;
+//    xForm.getModifiedWeights()[3] = 1;
+    currFlame.getXForms().add(xForm);  
+  }
+
+  // Final settings   
+  currFlame.getFinalXForms().clear();
+
+  currFlame.setCentreX(0.421);
+  currFlame.setCentreY(-0.538);
+  currFlame.setCamRoll(-180 * Math.random());
+  currFlame.setCamPitch(-180 * Math.random());
+  currFlame.setCamYaw(-60);
+  currFlame.setCamPerspective(0.0);
+  currFlame.setPixelsPerUnit(117);
+  // Refresh the UI
+  pEnv.refreshUI();
+
+}    // END CODE
