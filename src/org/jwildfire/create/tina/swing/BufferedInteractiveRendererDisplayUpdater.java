@@ -16,19 +16,19 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import javax.swing.*;
-
 import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
-import org.jwildfire.io.ImageWriter;
+
+import javax.swing.*;
+import java.util.Arrays;
 
 public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRendererDisplayUpdater {
-  private long sampleCount;
   private final JPanel imageRootPanel;
   private final SimpleImage image;
   private final int imageWidth;
   private final int imageHeight;
+  private long sampleCount;
   private int[] buffer;
   private long[] iterationCount;
 
@@ -114,6 +114,10 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
     if (repaint) {
       buffer = getBufferFromImage();
     }
+  }
+
+  public void clearBuffer() {
+    Arrays.fill(buffer, (255 << 24));
   }
 
   private long calculateSampleCount() {

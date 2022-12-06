@@ -53,8 +53,8 @@ import java.util.List;
 public class FlamePreviewHelper implements IterationObserver {
   private static final Logger logger = LoggerFactory.getLogger(FlamePreviewHelper.class);
 
-  private static final int INITIAL_IMAGE_UPDATE_INTERVAL = 5 - 3;
-  private static final int IMAGE_UPDATE_INC_INTERVAL = 8 + 4;
+  private static final int INITIAL_IMAGE_UPDATE_INTERVAL = 5 - 1;
+  private static final int IMAGE_UPDATE_INC_INTERVAL = 8 + 1;
   private static final int MAX_UPDATE_INC_INTERVAL = 200 + 800;
   private final Prefs prefs;
   private final JPanel centerPanel;
@@ -78,6 +78,9 @@ public class FlamePreviewHelper implements IterationObserver {
   private Thread updateDisplayExecuteThread;
   private RenderThreads threads;
   private RenderThumbnailThread renderThumbnailThread = null;
+  private GpuProgressUpdater gpuProgressUpdater = null;
+  private int optimizeRendererCounter = 0;
+
 
   public FlamePreviewHelper(
       ErrorHandler pErrorHandler,
@@ -228,31 +231,36 @@ public class FlamePreviewHelper implements IterationObserver {
               FileDialogTools.ensureFileAccess(
                   new Frame(), new JPanel(), tmpFile.getAbsolutePath());
               mainProgressUpdater.initProgress(PROGRESS_STEPS);
-              if(gpuProgressUpdater!=null) {
+              if (gpuProgressUpdater != null) {
                 gpuProgressUpdater.signalCancel();
               }
-              if(gpuProgressUpdater!=null && gpuProgressUpdater.isFinished()) {
+              if (gpuProgressUpdater != null && gpuProgressUpdater.isFinished()) {
                 gpuProgressUpdater = null;
               }
-              if(gpuProgressUpdater==null) {
+              if (gpuProgressUpdater == null) {
                 gpuProgressUpdater = new GpuProgressUpdater(mainProgressUpdater, PROGRESS_STEPS);
                 new Thread(gpuProgressUpdater).start();
               }
               FARenderResult openClRenderRes;
               long t0 = System.currentTimeMillis();
               try {
-                List<Flame> preparedFlames = FARenderTools.prepareFlame(flame, TinaControllerContextService.getContext().isZPass());
+                List<Flame> preparedFlames =
+                    FARenderTools.prepareFlame(
+                        flame, TinaControllerContextService.getContext().isZPass());
                 new FAFlameWriter().writeFlame(preparedFlames, tmpFile.getAbsolutePath());
-                openClRenderRes = FARenderTools.invokeFARender(tmpFile.getAbsolutePath(), width, height, prefs.getTinaRenderPreviewQuality(),
+                openClRenderRes =
+                    FARenderTools.invokeFARender(
+                        tmpFile.getAbsolutePath(),
+                        width,
+                        height,
+                        prefs.getTinaRenderPreviewQuality(),
                         preparedFlames.size() > 1);
-              }
-              finally {
+              } finally {
                 try {
-                  if(gpuProgressUpdater!=null) {
+                  if (gpuProgressUpdater != null) {
                     gpuProgressUpdater.signalCancel();
                   }
-                }
-                catch(Exception ex) {
+                } catch (Exception ex) {
                   // EMPTY
                 }
               }
@@ -264,7 +272,7 @@ public class FlamePreviewHelper implements IterationObserver {
                 if (!cfg.isNoControls() && messageHelper != null) {
                   long t1 = System.currentTimeMillis();
                   messageHelper.showStatusMessage(
-                          flame, "render time (GPU): " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+                      flame, "render time (GPU): " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
                   logger.info(openClRenderRes.getMessage());
                 }
                 return img;
@@ -273,7 +281,7 @@ public class FlamePreviewHelper implements IterationObserver {
               if (!tmpFile.delete()) {
                 tmpFile.deleteOnExit();
               }
-              if(gpuProgressUpdater!=null) {
+              if (gpuProgressUpdater != null) {
                 gpuProgressUpdater.signalCancel();
               }
             }
@@ -337,7 +345,7 @@ public class FlamePreviewHelper implements IterationObserver {
                 flame.setSampleDensity(prevRaster.getSampleDensity());
                 res = renderer.renderFlame(info);
               } else {
-                if(zpass) {
+                if (zpass) {
                   info.setStoreRaster(false);
                   res = renderer.renderFlame(info);
                   prevRaster = null;
@@ -349,9 +357,14 @@ public class FlamePreviewHelper implements IterationObserver {
               }
 
               SimpleImage img;
-              if(zpass) {
-                img = new SimpleImage(res.getZBuffer().getImageWidth(), res.getZBuffer().getImageHeight());
-                img.setBufferedImage(res.getZBuffer().getBufferedImg(), res.getZBuffer().getImageWidth(), res.getZBuffer().getImageHeight());
+              if (zpass) {
+                img =
+                    new SimpleImage(
+                        res.getZBuffer().getImageWidth(), res.getZBuffer().getImageHeight());
+                img.setBufferedImage(
+                    res.getZBuffer().getBufferedImg(),
+                    res.getZBuffer().getImageWidth(),
+                    res.getZBuffer().getImageHeight());
               } else {
                 img = res.getImage();
               }
@@ -397,8 +410,6 @@ public class FlamePreviewHelper implements IterationObserver {
     }
     return null;
   }
-
-  private GpuProgressUpdater gpuProgressUpdater=null;
 
   public SimpleImage renderAnimFrame(double imageScale, double quality) {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
@@ -702,6 +713,8 @@ public class FlamePreviewHelper implements IterationObserver {
       return;
     }
     Flame flame = flameHolder.getFlame().makeCopy();
+
+
     flame.applyFastOversamplingSettings();
     Rectangle panelBounds = pImgPanel.getParentImageBounds();
 
@@ -715,7 +728,8 @@ public class FlamePreviewHelper implements IterationObserver {
     }
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
-    flame.setSampleDensity(10.0);
+    flame.setSampleDensity(1.0);
+
     info.setRenderHDR(false);
     info.setRenderZBuffer(TinaControllerContextService.getContext().isZPass());
     renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
@@ -725,12 +739,11 @@ public class FlamePreviewHelper implements IterationObserver {
         new SimpleImage(
             pImgPanel.getImage().getImageWidth(), pImgPanel.getImage().getImageHeight());
     initImage(image, flame);
-
     displayUpdater = new BufferedInteractiveRendererDisplayUpdater(pImgPanel, image, true);
     displayUpdater.initRender(prefs.getTinaRenderThreads());
     threads = renderer.startRenderFlame(info);
-
     updateDisplayThread = new UpdateDisplayThread(flame, image);
+
     updateDisplayExecuteThread = new Thread(updateDisplayThread);
     updateDisplayExecuteThread.setPriority(Thread.NORM_PRIORITY);
     updateDisplayExecuteThread.start();
@@ -816,14 +829,14 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   private class UpdateDisplayThread implements Runnable, InteractiveRendererImagePostProcessor {
+    private final SimpleImage image;
+    private final int maxPreviewTimeInMilliseconds;
+    private final double maxPreviewQuality;
     private int nextImageUpdate;
     private int lastImageUpdateInterval;
     private boolean cancelSignalled;
     private boolean replaceImageFlag;
     private boolean finished;
-    private SimpleImage image;
-    private int maxPreviewTimeInMilliseconds;
-    private double maxPreviewQuality;
     private SimpleImage layerImg;
 
     public UpdateDisplayThread(Flame flame, SimpleImage pImage) {
@@ -884,7 +897,9 @@ public class FlamePreviewHelper implements IterationObserver {
               }
               if (!replaceImageFlag) {
                 FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
-                imgPanel.replaceImage(image);
+
+                SwingUtilities.invokeLater(() -> imgPanel.replaceImage(image));
+                //imgPanel.replaceImage(image);
                 replaceImageFlag = true;
               }
               currQuality =

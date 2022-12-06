@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-    <property name="release" value="7.30"/>
+    <property name="release" value="7.40 ALPHA1"/>
     <property name="dist.dir" location="build/dist"/>
     <property name="installer.dir" location="build/installer"/>
     <property name="build.dir" location="build/classes"/>
     <property name="lib.dir" location="lib"/>
     <property name="src.dir" location="src/"/>
+    <property name="res.dir" location="resources/"/>
     <property name="jwildfire.jar.name" value="build/j-wildfire.jar"/>
     <property name="launcher.jar.name" value="build/j-wildfire-launcher.jar"/>
     <property name="dist.name" value="build/j-wildfire-${release}.zip"/>
@@ -45,30 +46,31 @@
     <target name="packageJWildfireJar" depends="compile" description="Package the JWildfire jar file">
         <jar destfile="${jwildfire.jar.name}">
             <fileset dir="${build.dir}" includes="org/jwildfire/"/>
-            <fileset dir="${src.dir}" includes="logback.xml"/>
-            <fileset dir="${src.dir}" includes="com/**/*.properties"/>
-            <fileset dir="${src.dir}" includes="com/**/*.gif"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/**/*.xml"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/**/*.html"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/swing/CHANGES.txt"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/swing/OptiX_Denoiser.txt"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/swing/OIDN_Denoiser.txt"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/icons/**/*.gif"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.png"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.gif"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.png"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/swing/backgrounds/*.png"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.jpg"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.jwfscript"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.ugr"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.txt"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/*.obj"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/plot/*.txt"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/lsystems.txt"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/lsystems3D.txt"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/variation_costs.txt"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/base/weightingfield/mb3dhm.jpg"/>
+            <fileset dir="${res.dir}" includes="logback.xml"/>
+            <fileset dir="${res.dir}" includes="com/**/*.properties"/>
+            <fileset dir="${res.dir}" includes="com/**/*.gif"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/**/*.xml"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/**/*.html"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/swing/CHANGES.txt"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/swing/OptiX_Denoiser.txt"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/swing/OIDN_Denoiser.txt"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/icons/**/*.gif"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/swing/icons/new/*.png"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/swing/icons/new/*.gif"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/swing/welcomescreen/*.png"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/swing/backgrounds/*.png"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/swing/welcomescreen/*.jpg"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/io/scripts/*.jwfscript"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/io/scripts/*.ugr"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/io/scripts/*.txt"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/mesh/*.obj"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/plot/*.txt"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/brush/*.png"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/lsystems.txt"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/mesh/lsystems3D.txt"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/variation_costs.txt"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/base/weightingfield/mb3dhm.jpg"/>
             <fileset dir="${build.dir}" includes="csk/"/>
             <fileset dir="${build.dir}" includes="com/"/>
             <fileset dir="${build.dir}" includes="odk/"/>
@@ -109,8 +111,8 @@
             <fileset dir="${build.dir}" includes="org/jwildfire/base/Tools.*"/>
             <fileset dir="${build.dir}" includes="org/jwildfire/image/*"/>
             <fileset dir="${build.dir}" includes="org/jwildfire/swing/ImagePanel.*"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/launcher/images/*.png"/>
-            <fileset dir="${src.dir}" includes="org/jwildfire/launcher/images/*.jpg"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/launcher/images/*.png"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/launcher/images/*.jpg"/>
             <manifest>
                 <attribute name="Main-Class" value="org.jwildfire.launcher.Launcher"/>
             </manifest>
@@ -137,9 +139,9 @@
             <fileset dir="build/launcher" includes="start_linux.sh"/>
         </copy>
         <copy todir="${dist.dir}/">
-            <fileset file="src/org/jwildfire/swing/CHANGES.txt"/>
-            <fileset file="src/org/jwildfire/swing/OptiX_Denoiser.txt"/>
-            <fileset file="src/org/jwildfire/swing/OIDN_Denoiser.txt"/>
+            <fileset file="resources/org/jwildfire/swing/CHANGES.txt"/>
+            <fileset file="resources/org/jwildfire/swing/OptiX_Denoiser.txt"/>
+            <fileset file="resources/org/jwildfire/swing/OIDN_Denoiser.txt"/>
             <fileset file="README_LAUNCHING_JWILDFIRE.txt"/>
             <fileset file="README!!!.txt"/>
             <fileset file="README_LINUX.txt"/>

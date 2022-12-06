@@ -1,37 +1,38 @@
 /*
-  JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2022 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.swing;
 
-import javax.swing.JPanel;
-
 import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 
+import javax.swing.*;
+
 public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRendererDisplayUpdater {
-  private long sampleCount;
   private final JPanel imageRootPanel;
   private final SimpleImage image;
   private final int imageWidth;
   private final int imageHeight;
+  private long sampleCount;
   private boolean showPreview;
   private long[] iterationCount;
 
-  public DefaultInteractiveRendererDisplayUpdater(JPanel pImageRootPanel, SimpleImage pImage, boolean pShowPreview) {
+  public DefaultInteractiveRendererDisplayUpdater(
+      JPanel pImageRootPanel, SimpleImage pImage, boolean pShowPreview) {
     imageRootPanel = pImageRootPanel;
     image = pImage;
     imageWidth = image.getImageWidth();
@@ -45,7 +46,11 @@ public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRend
     int y = pY / pEventSource.getOversample();
     iterationCount[pEventSource.getThreadId()] = pEventSource.getCurrSample();
     sampleCount = calculateSampleCount();
-    if (showPreview && x >= 0 && x < image.getImageWidth() && y >= 0 && y < image.getImageHeight()) {
+    if (showPreview
+        && x >= 0
+        && x < image.getImageWidth()
+        && y >= 0
+        && y < image.getImageHeight()) {
       image.setARGB(x, y, pEventSource.getTonemapper().tonemapSample(x, y));
     }
   }
@@ -81,12 +86,12 @@ public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRend
         SimpleImage img = new SimpleImage(image.getBufferedImg(), imageWidth, imageHeight);
         SimpleImage bgImg = (SimpleImage) RessourceManager.getImage(pBGImagefile);
         img.fillBackground(bgImg);
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
     }
   }
+
 
   private long calculateSampleCount() {
     long res = 0;
