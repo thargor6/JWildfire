@@ -23,7 +23,8 @@ import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 
-public class GammaCorrectionFilter {
+public class
+GammaCorrectionFilter {
   private final Flame flame;
   private int vibInt;
   private int inverseVibInt;

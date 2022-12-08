@@ -61,7 +61,6 @@ public class FlameBGColorHandler {
         return;
       }
     }
-
     LogDensityFilter logDensityFilter = new LogDensityFilter(flame, new MarsagliaRandomGenerator());
     logDensityFilter.setRaster(null, 0, 0, image.getImageWidth(), image.getImageHeight());
     LogDensityPoint logDensityPoint = new LogDensityPoint(1);
@@ -71,7 +70,6 @@ public class FlameBGColorHandler {
         image.setRGB(x, y, Tools.roundColor(logDensityPoint.bgRed), Tools.roundColor(logDensityPoint.bgGreen), Tools.roundColor(logDensityPoint.bgBlue));
       }
     }
-
   }
 
 }

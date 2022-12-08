@@ -116,7 +116,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   private double grid_deform = 0.05;
   private double grid_brush_rotate = 2.0 * M_PI;
   private double grid_brush_scale = 0.35;
-  private double grid_brush_blend = 0.25;
+  private double grid_brush_blend = 0.15;
   private double offset_y = 0.0;
   private int color_channel = 0;
   private double threshold = 0.1;
@@ -159,7 +159,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
     List<Point> points = pointsMap.get(generation);
 
 
-    double totalBlend = blend + (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY + 17.85263 * gridPosX)))) * grid_brush_blend;
+    double totalBlend = blend * (1.0 + (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY + 17.85263 * gridPosX)))) * grid_brush_blend);
 
     if (points.size() > 1 && (blend < EPSILON || pContext.random() > totalBlend)) {
       int pSize = points.size();
@@ -188,8 +188,8 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
         rawY += dr * sin(da);
       }
       if (grid_size <= EPSILON) {
-        pVarTP.x += pAmount * rawX;
-        pVarTP.y += pAmount * rawY;
+        pVarTP.x = pAmount * rawX;
+        pVarTP.y = pAmount * rawY;
       } else {
         double dx = (0.5 - discretNoise(Tools.FTOI(noiseSclX * (gridPosX-17.236612*gridPosY)))) * grid_deform;
         double dy = (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY + 76.32561 * gridPosX)))) * grid_deform;

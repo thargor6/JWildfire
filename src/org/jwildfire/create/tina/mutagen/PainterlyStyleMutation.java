@@ -61,7 +61,7 @@ public class PainterlyStyleMutation extends AbstractMutation {
     brushVar.setParameter(AbstractBrushStrokeWFFunc.PARAM_BLEND, 0.1 + 0.2 * Math.random());
     brushVar.setParameter(AbstractBrushStrokeWFFunc.PARAM_GRID_SIZE, 0.015 + 0.02 * Math.random());
     brushVar.setParameter(AbstractBrushStrokeWFFunc.PARAM_GRID_DEFORM, 0.05 + 0.1 * Math.random());
-    int maxBrush = 70;
+    int maxBrush = 245;
     int brushCount = 1 + Tools.FTOI(Math.random() * 5.0);
     List<String> brushIds = new ArrayList<>();
     for (int i = 0; i < brushCount; i++) {
