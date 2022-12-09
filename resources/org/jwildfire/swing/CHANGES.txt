@@ -4,6 +4,7 @@ V7.40 (xx.xx.2022)
      - due to its complexity it is not available on GPU yet
    - new "Painterly"-random-generator which utilizes this variation
    - new "Painterly Style"-mutation, which is available both in the "Quick Mutations"-tab and the MutaGen-window as well
+   - new "BRUSH_STROKE"-Bokeh-style
  - some optimizations to the realtime-render-preview in the main editor
  - created a reusable library (maven-artifact) which contains the main functionality and the CLI: org.jwildfire:jwildfire-lib
  - this library will be used first in JWildfireSwan

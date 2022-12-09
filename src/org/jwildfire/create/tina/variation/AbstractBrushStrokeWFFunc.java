@@ -48,9 +48,9 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   private static final String PARAM_THRESHOLD = "threshold";
   private static final String PARAM_INVERT = "invert";
   private static final String PARAM_VARIATION_BATCH_SIZE = "variation_batch_size";
-  private static final String PARAM_VARIATION_ZOOM = "variation_zoom";
-  private static final String PARAM_VARIATION_POSITION = "variation_position";
-  private static final String PARAM_VARIATION_ROTATION = "variation_rotation";
+  public static final String PARAM_VARIATION_ZOOM = "variation_zoom";
+  public static final String PARAM_VARIATION_POSITION = "variation_position";
+  public static final String PARAM_VARIATION_ROTATION = "variation_rotation";
   private static final String PARAM_VARIATION_EROSION = "variation_erosion";
   private static final String PARAM_VARIATION_SEED = "variation_seed";
   private static final String PARAM_IMAGE_MAX_SIZE = "image_max_size";
@@ -253,6 +253,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
             _colorMaps.add(brush);
           }
         } catch (Exception ex) {
+          System.err.println(String.format("Error loading brush with %s", brushId));
           ex.printStackTrace();
         }
       }

@@ -7701,6 +7701,7 @@ public class MainEditorFrame extends JFrame {
   private void initDOFBlurShapeCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
     pCmb.addItem(DOFBlurShapeType.BUBBLE);
+    pCmb.addItem(DOFBlurShapeType.BRUSH_STROKE);
     pCmb.addItem(DOFBlurShapeType.CANNABISCURVE);
     pCmb.addItem(DOFBlurShapeType.CLOVERLEAF);
     pCmb.addItem(DOFBlurShapeType.FLOWER);

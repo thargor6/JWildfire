@@ -28,6 +28,8 @@ import java.util.List;
 
 public class PainterlyStyleMutation extends AbstractMutation {
 
+  public static final int MAX_BRUSH = 245;
+
   @Override
   public void execute(Layer layer, double mutationStrength) {
     VariationFunc brushVar = null;
@@ -61,12 +63,11 @@ public class PainterlyStyleMutation extends AbstractMutation {
     brushVar.setParameter(AbstractBrushStrokeWFFunc.PARAM_BLEND, 0.1 + 0.2 * Math.random());
     brushVar.setParameter(AbstractBrushStrokeWFFunc.PARAM_GRID_SIZE, 0.015 + 0.02 * Math.random());
     brushVar.setParameter(AbstractBrushStrokeWFFunc.PARAM_GRID_DEFORM, 0.05 + 0.1 * Math.random());
-    int maxBrush = 245;
     int brushCount = 1 + Tools.FTOI(Math.random() * 5.0);
     List<String> brushIds = new ArrayList<>();
     for (int i = 0; i < brushCount; i++) {
       while (true) {
-        String brushId = String.format("%03d", 1 + Tools.FTOI(Math.random() * (maxBrush - 1)));
+        String brushId = formatBrushId(1 + Tools.FTOI(Math.random() * (MAX_BRUSH - 1)));
         if (!brushIds.contains(brushId)) {
           brushIds.add(brushId);
           break;
@@ -76,5 +77,9 @@ public class PainterlyStyleMutation extends AbstractMutation {
     brushVar.setRessource(
         AbstractBrushStrokeWFFunc.RESSOURCE_BRUSH_PRESETS,
         String.join(", ", brushIds).getBytes(StandardCharsets.UTF_8));
+  }
+
+  public static String formatBrushId(int id) {
+    return String.format("%03d", id);
   }
 }

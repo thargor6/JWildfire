@@ -23,6 +23,12 @@ public enum DOFBlurShapeType {
       return BubbleDOFBlurShape.class;
     }
   },
+  BRUSH_STROKE {
+    @Override
+    protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
+      return BrushStrokeDOFBlurShape.class;
+    }
+  },
   CANNABISCURVE {
     @Override
     protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
