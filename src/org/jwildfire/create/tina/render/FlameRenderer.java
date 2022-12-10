@@ -44,6 +44,7 @@ import org.jwildfire.create.tina.base.raster.RasterPointCloud;
 import org.jwildfire.create.tina.base.raster.RasterPointCloud.PCPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
+import org.jwildfire.create.tina.render.backdrop.FlameBackdropHandler;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
@@ -469,7 +470,7 @@ public class FlameRenderer {
           }
         }
         else {
-          new FlameBGColorHandler(flame).fillBackground(res.getImage());
+          new FlameBackdropHandler(flame).fillBackground(res.getImage());
         }
       }
       if (renderHDR) {

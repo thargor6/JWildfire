@@ -26,6 +26,7 @@ import org.jwildfire.create.tina.farender.FAFlameWriter;
 import org.jwildfire.create.tina.farender.FARenderResult;
 import org.jwildfire.create.tina.farender.FARenderTools;
 import org.jwildfire.create.tina.render.*;
+import org.jwildfire.create.tina.render.backdrop.FlameBackdropHandler;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
@@ -758,7 +759,7 @@ public class FlamePreviewHelper implements IterationObserver {
         ex.printStackTrace();
       }
     } else {
-      new FlameBGColorHandler(flame).fillBackground(pImage);
+      new FlameBackdropHandler(flame).fillBackground(pImage);
     }
   }
 
@@ -897,9 +898,7 @@ public class FlamePreviewHelper implements IterationObserver {
               }
               if (!replaceImageFlag) {
                 FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
-
-                SwingUtilities.invokeLater(() -> imgPanel.replaceImage(image));
-                //imgPanel.replaceImage(image);
+                imgPanel.replaceImage(image);
                 replaceImageFlag = true;
               }
               currQuality =

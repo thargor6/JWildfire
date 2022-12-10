@@ -16,6 +16,9 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
+
 public class BrushStrokeWFFunc extends AbstractBrushStrokeWFFunc {
   public static final String NAME = "brush_stroke_wf";
 
@@ -23,4 +26,15 @@ public class BrushStrokeWFFunc extends AbstractBrushStrokeWFFunc {
   public String getName() {
     return NAME;
   }
+
+  @Override
+  public void transform(
+          FlameTransformationContext pContext,
+          XForm pXForm,
+          XYZPoint pAffineTP,
+          XYZPoint pVarTP,
+          double pAmount) {
+    super.transform(pContext, pXForm, pAffineTP, pVarTP, pAffineTP.x, pAffineTP.y, pAmount);
+  }
+
 }

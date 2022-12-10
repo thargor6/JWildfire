@@ -41,7 +41,7 @@ public class ImagePanel extends JPanel {
     g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
         RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
-        RenderingHints.VALUE_RENDER_QUALITY);
+        RenderingHints.VALUE_RENDER_SPEED);
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
     g.drawImage(derivedImage!=null ? derivedImage.getBufferedImg() : simpleImage.getBufferedImg(), x, y, width, height, this);
