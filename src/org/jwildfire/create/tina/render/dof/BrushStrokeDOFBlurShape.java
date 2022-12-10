@@ -55,7 +55,7 @@ public class BrushStrokeDOFBlurShape extends AbstractDOFBlurShape {
     s = new XYZPoint();
     d = new XYZPoint();
     xform = new XForm();
-    fnc = new BrushStrokeWFFunc();
+    fnc = new PostBrushStrokeWFFunc();
     fnc.setParameter(AbstractBrushStrokeWFFunc.PARAM_BLEND, 0.0);
     List<String> brushes = new ArrayList<>();
     addBrush(brushes, params.get(PARAM_BRUSH1));
@@ -102,14 +102,19 @@ public class BrushStrokeDOFBlurShape extends AbstractDOFBlurShape {
   @Override
   public void setDefaultParams(Flame pFlame) {
     pFlame.setCamDOFFade(0.0);
-    pFlame.setCamDOFScale(10.0);
+    pFlame.setCamDOFScale(1.0);
     pFlame.setCamDOFAngle(0.0);
-    pFlame.setCamDOFParam1(123.0);// brush1
-    pFlame.setCamDOFParam2(45.0);// brush2
-    pFlame.setCamDOFParam3(0.0);// brush3
+    pFlame.setCamDOFParam1(PainterlyStyleMutation.getRandomBrushId());// brush1
+    pFlame.setCamDOFParam2(Math.random()>0.25 ? PainterlyStyleMutation.getRandomBrushId() : 0);// brush2
+    pFlame.setCamDOFParam3(Math.random()>0.75 ? PainterlyStyleMutation.getRandomBrushId() : 0);// brush3
     pFlame.setCamDOFParam4(2.0 * M_PI);// variation_rotation
     pFlame.setCamDOFParam5(0.8);// variation_zoom
     pFlame.setCamDOFParam6(0.5);// variation_position
+  }
+
+  @Override
+  public double getScaleModifier() {
+    return 10.0;
   }
 
   @Override

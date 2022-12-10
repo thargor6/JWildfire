@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.mutagen;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.ColorType;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -82,4 +83,9 @@ public class PainterlyStyleMutation extends AbstractMutation {
   public static String formatBrushId(int id) {
     return String.format("%03d", id);
   }
+
+  public static int getRandomBrushId() {
+    return MathLib.iMin(MAX_BRUSH, Tools.FTOI(1.0+Math.random()*MAX_BRUSH));
+  }
+
 }

@@ -76,6 +76,10 @@ public abstract class AbstractDOFBlurShape implements DOFBlurShape {
     return fade;
   }
 
+  public double getScaleModifier() {
+    return 1.0;
+  }
+
   public void setFade(double pFade) {
     fade = pFade;
     if (fade < 0.0) {
@@ -88,7 +92,7 @@ public abstract class AbstractDOFBlurShape implements DOFBlurShape {
 
   @Override
   public void assignParams(Flame pFlame) {
-    setScale(pFlame.getCamDOFScale());
+    setScale(pFlame.getCamDOFScale()*getScaleModifier());
     setRotate(pFlame.getCamDOFAngle());
     setFade(pFlame.getCamDOFFade());
     List<String> paramNames = getParamNames();

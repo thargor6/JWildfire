@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -102,7 +103,7 @@ public class BokehMutation extends AbstractMutation {
           flame.setCamDOFFade(0.0);
         }
       }
-      else if (rnd < 0.24) {
+      else if (rnd < 0.20) {
         flame.setCamDOFShape(DOFBlurShapeType.CANNABISCURVE);
         if (Math.random() < 0.25) {
           flame.setCamDOFFade(0.2 + Math.random() * 0.8);
@@ -111,7 +112,7 @@ public class BokehMutation extends AbstractMutation {
           flame.setCamDOFFade(0.0);
         }
       }
-      else if (rnd < 0.32) {
+      else if (rnd < 0.28) {
         flame.setCamDOFShape(DOFBlurShapeType.NBLUR);
         flame.setCamDOFFade(0.0);
         flame.setCamDOFParam1(3 + Math.random() * 5); // num edges
@@ -122,13 +123,13 @@ public class BokehMutation extends AbstractMutation {
           flame.setCamDOFParam5(Math.random() < 0.33 ? 1 : 0);// circum circle
         }
       }
-      else if (rnd < 0.40) {
+      else if (rnd < 0.36) {
         flame.setCamDOFShape(DOFBlurShapeType.FLOWER);
         flame.setCamDOFFade(0.0);
         flame.setCamDOFParam1(0.3 + Math.random() * 0.2); // holes
         flame.setCamDOFParam2(5 + Math.random() * 5); // petals
       }
-      else if (rnd < 0.48) {
+      else if (rnd < 0.44) {
         flame.setCamDOFShape(DOFBlurShapeType.CLOVERLEAF);
         if (Math.random() < 0.25) {
           flame.setCamDOFFade(0.2 + Math.random() * 0.8);
@@ -137,25 +138,25 @@ public class BokehMutation extends AbstractMutation {
           flame.setCamDOFFade(0.0);
         }
       }
-      else if (rnd < 0.56) {
+      else if (rnd < 0.52) {
         flame.setCamDOFShape(DOFBlurShapeType.SINEBLUR);
         flame.setCamDOFFade(0.0);
         flame.setCamDOFParam1(1.2 + Math.random());
       }
-      else if (rnd < 0.64) {
+      else if (rnd < 0.60) {
         flame.setCamDOFShape(DOFBlurShapeType.PERLIN_NOISE);
         flame.setCamDOFFade(0.0);
         flame.setCamDOFParam1(Math.random());// shape
         flame.setCamDOFParam2(1.2 + Math.random() * 1.8);// freqs
         flame.setCamDOFParam3(0.1 + Math.random() * 0.4);// amp
       }
-      else if (rnd < 0.72) {
+      else if (rnd < 0.64) {
         flame.setCamDOFFade(0.2 + Math.random() * 0.8);
         flame.setCamDOFShape(DOFBlurShapeType.STARBLUR);
         flame.setCamDOFParam1(4 + Math.random() * 6);// power
         flame.setCamDOFParam2(0.40162283177245455973959534526548);// range
       }
-      else if (rnd < 0.80) {
+      else if (rnd < 0.72) {
         flame.setCamDOFAngle(0.0);
         flame.setCamDOFFade(0.);
         flame.setCamDOFShape(DOFBlurShapeType.TAURUS);
@@ -164,7 +165,15 @@ public class BokehMutation extends AbstractMutation {
         flame.setCamDOFParam3(1.25 * Math.random() * 0.5);// inv
         flame.setCamDOFParam4(0.9 + Math.random() * 0.2);// sor
       }
-      else if (rnd < 0.9) {
+      else if (rnd < 0.80) {
+        flame.setCamDOFAngle(0.0);
+        flame.setCamDOFFade(0.0);
+        flame.setCamDOFShape(DOFBlurShapeType.BRUSH_STROKE);
+        flame.setCamDOFParam1(PainterlyStyleMutation.getRandomBrushId());// brush1
+        flame.setCamDOFParam2(Math.random()>0.25 ? PainterlyStyleMutation.getRandomBrushId() : 0);// brush2
+        flame.setCamDOFParam3(Math.random()>0.75 ? PainterlyStyleMutation.getRandomBrushId() : 0);// brush3
+      }
+      else if (rnd < 0.92) {
         flame.setCamDOFShape(DOFBlurShapeType.RECT);
         flame.setCamDOFFade(0.0);
         flame.setCamDOFParam1(0.4 + Math.random() * 0.4);
