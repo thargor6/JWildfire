@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -126,12 +127,12 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   private List<WFImage> _colorMaps;
   private Map<Integer, List<Point>> _pointsMap;
 
-  @Override
   public void transform(
       FlameTransformationContext pContext,
       XForm pXForm,
       XYZPoint pAffineTP,
       XYZPoint pVarTP,
+      double inX, double inY,
       double pAmount) {
     Map<Integer, List<Point>> pointsMap = getPointsMap(pContext);
     /*
@@ -143,8 +144,8 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
     double noiseSclX = 32768.0;
     double noiseSclY = noiseSclX * 0.42 + M_PI;
 
-    double gridPosX = pVarTP.x - fmod(pVarTP.x, grid_size);
-    double gridPosY = pVarTP.y - fmod(pVarTP.y, grid_size);
+    double gridPosX = inX - fmod(inX, grid_size);
+    double gridPosY = inY - fmod(inY, grid_size);
 
     int generation =
         Math.max(
@@ -179,8 +180,6 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
         rawY = ty;
       }
 
-
-
       if (antialias_radius > 0.01) {
         double dr = (exp(antialias_radius * sqrt(-log(pContext.random()))) - 1.0) * 0.001;
         double da = pContext.random() * 2.0 * M_PI;
@@ -199,6 +198,15 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
         pVarTP.y = gridPosY + pAmount * rawY;
       }
     }
+
+    // remove "point of death"
+    if(fabs(pVarTP.x)<EPSILON && fabs(pVarTP.y)<EPSILON) {
+      pVarTP.doHide = true;
+    }
+    else {
+      pVarTP.doHide = false;
+    }
+
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
