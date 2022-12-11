@@ -32,7 +32,7 @@ public class VariationFuncFilter {
     this.filter3 = TinaControllerContextService.getContext().isGpuMode() ? VariationProfileRepository.getGpuFilter() : VariationProfileRepository.getEmptyFilter();
   }
 
-  public boolean evaluate(String variationName) {
-    return filter1.evaluate(variationName) && (filter2.isNegative() ^ filter2.evaluate(variationName)) && (filter3.isNegative() ^ filter3.evaluate(variationName));
+  public boolean evaluate(String variationName, boolean onlyFavourites) {
+    return filter1.evaluate(variationName, onlyFavourites) && (filter2.isNegative() ^ filter2.evaluate(variationName, onlyFavourites)) && (filter3.isNegative() ^ filter3.evaluate(variationName, onlyFavourites));
   }
 }

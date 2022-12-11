@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -16,6 +16,7 @@
  */
 package org.jwildfire.base;
 
+import org.jwildfire.create.tina.swing.VariationFavouriteService;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.create.tina.variation.VariationFuncType;
 
@@ -23,9 +24,9 @@ import java.util.Set;
 
 public class GpuSupportingVariationsProfile implements VariationProfileFilter {
   @Override
-  public boolean evaluate(String variationName) {
+  public boolean evaluate(String variationName, boolean onlyFavourites) {
     Set<VariationFuncType> varTypes = VariationFuncList.getVariationTypes(variationName);
-    return varTypes.contains(VariationFuncType.VARTYPE_SUPPORTS_GPU);
+    return varTypes.contains(VariationFuncType.VARTYPE_SUPPORTS_GPU) && (!onlyFavourites || VariationFavouriteService.isFavourite(variationName));
   }
 
   @Override

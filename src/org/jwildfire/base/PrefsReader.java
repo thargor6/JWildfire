@@ -34,6 +34,7 @@ import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.EditorDoubleClickActionType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
+import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.create.tina.variation.VariationFuncType;
 import org.jwildfire.swing.LookAndFeelType;
 
@@ -368,6 +369,16 @@ public class PrefsReader {
         if (pPrefs.isCreateTinaDefaultMacroButtons()) {
           pPrefs.getTinaMacroButtons().clear();
           setupDefaultTinaMacroButtons(pPrefs);
+        }
+        // Variation favourites
+        {
+          int count = getIntProperty(props, Prefs.KEY_VARIATION_FAVOURITE_COUNT, 0);
+          for (int i = 0; i < count; i++) {
+            String fav = getProperty(props, Prefs.KEY_VARIATION_FAVOURITE_VALUE + "." + i, "");
+            if(VariationFuncList.hasVariation(fav)) {
+              pPrefs.getVariationFavourites().add(fav);
+            }
+          }
         }
         // security scoped bookmarks (only on macOS)
         {

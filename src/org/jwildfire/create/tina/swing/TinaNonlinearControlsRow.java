@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -46,6 +46,9 @@ public class TinaNonlinearControlsRow {
   private final JToggleButton nonlinearParamsPostButton;
   private final JButton nonlinearParamsUpButton;
   private final JToggleButton toggleParamsPnlButton;
+
+  private final JToggleButton toggleFavouriteButton;
+
   private final List<JComponent> paramsPnlComponents = new ArrayList<>();
   private final Map<String, JWFNumberField> paramsPnlNumberFields = new HashMap<>();
   private final Map<String, JSlider> paramsPnlSliders = new HashMap<>();
@@ -55,7 +58,7 @@ public class TinaNonlinearControlsRow {
 
   public TinaNonlinearControlsRow(int pIndex, JPanel pRootPanel, JLabel pNonlinearVarLbl, JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JWFNumberField pNonlinearVarREd, JWFNumberField pNonlinearParamsREd,
                                   JButton pNonlinearParamsLeftButton, JToggleButton pNonlinearParamsPreButton, JToggleButton pNonlinearParamsPostButton, JButton pNonlinearParamsUpButton,
-                                  JToggleButton pToggleParamsPnlButton) {
+                                  JToggleButton pToggleParamsPnlButton, JToggleButton pToggleFavouriteButton) {
     index = pIndex;
     rootPanel = pRootPanel;
     rootPnlBaseWidth = rootPanel.getPreferredSize().width;
@@ -70,6 +73,7 @@ public class TinaNonlinearControlsRow {
     nonlinearParamsPostButton = pNonlinearParamsPostButton;
     nonlinearParamsUpButton = pNonlinearParamsUpButton;
     toggleParamsPnlButton = pToggleParamsPnlButton;
+    toggleFavouriteButton = pToggleFavouriteButton;
   }
 
   public void initControls() {
@@ -92,10 +96,9 @@ public class TinaNonlinearControlsRow {
         tinaController.cmbRefreshing = true;
         String selectedItem = (withSelectedVarFunc!=null && !withSelectedVarFunc.isEmpty()) ? withSelectedVarFunc : nonlinearVarCmb.getSelectedIndex() >= 0 ? (String) nonlinearVarCmb.getSelectedItem() : "";
         nonlinearVarCmb.removeAllItems();
-
         VariationFuncFilter filter = tinaController.getCurrentVariationFuncFilter();
-
-        List<String> nameList = VariationFuncList.getNameList().stream().filter( n -> filter.evaluate(n)).collect(Collectors.toList());
+        boolean onlyFavourites = tinaController.data.displayFavouriteVariationsToggleBtn.isSelected();
+        List<String> nameList = VariationFuncList.getNameList().stream().filter( n -> filter.evaluate(n, onlyFavourites)).collect(Collectors.toList());
         // System.err.println("Filtered variations: "+nameList.size());
         if(!"".equals(selectedItem) && !nameList.contains(selectedItem)) {
           nameList.add(selectedItem);
@@ -151,6 +154,10 @@ public class TinaNonlinearControlsRow {
 
   public JToggleButton getToggleParamsPnlButton() {
     return toggleParamsPnlButton;
+  }
+
+  public JToggleButton getToggleFavouriteButton() {
+    return toggleFavouriteButton;
   }
 
   private void removeParamsPnlComponents() {

@@ -1220,6 +1220,9 @@ public class VariationFuncList {
     }
     return null;
   }
+  public static boolean hasVariation(String pName) {
+    return getUnfilteredNameList().indexOf(pName)  >= 0;
+  }
 
   public static List<Class<? extends VariationFunc>> getVariationClasses() {
     return items;

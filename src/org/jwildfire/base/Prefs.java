@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -34,10 +34,8 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.io.File;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class Prefs extends ManagedObject {
   private static final Logger logger = LoggerFactory.getLogger(Prefs.class);
@@ -188,6 +186,9 @@ public class Prefs extends ManagedObject {
   public static final String KEY_SEC_BOOKMARK_KEY = "macos.sec.bookmark.key";
   public static final String KEY_SEC_BOOKMARK_VALUE = "macos.sec.bookmark.value";
   public static final String KEY_SEC_BOOKMARK_COUNT = "macos.sec.bookmark.count";
+
+  public static final String KEY_VARIATION_FAVOURITE_COUNT = "tina.editor.variation.favourite.count";
+  public static final String KEY_VARIATION_FAVOURITE_VALUE = "tina.editor.variation.favourite.value";
 
   @Property(description = "Drawer for thumbnail-cache (restart of program after change required)", category = PropertyCategory.GENERAL, editorClass = FolderPropertyEditor.class)
   private String thumbnailPath = null;
@@ -436,6 +437,8 @@ public class Prefs extends ManagedObject {
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
   private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
   private final List<VariationProfile> variationProfiles = new ArrayList<>();
+
+  private final Set<String> variationFavourites = new HashSet<>();
   @Property(description = "Maximum size of the generated string for the L-System variation", category = PropertyCategory.TINA)
   private int tinaLSystemMaxLength = 25000;
 
@@ -913,6 +916,9 @@ public class Prefs extends ManagedObject {
     for (VariationProfile profile : pSrc.getVariationProfiles()) {
       variationProfiles.add(profile.makeCopy());
     }
+    variationFavourites.clear();
+    variationFavourites.addAll(pSrc.getVariationFavourites());
+
     tinaLSystemMaxLength = pSrc.tinaLSystemMaxLength;
 
     createTinaDefaultMacroButtons = pSrc.createTinaDefaultMacroButtons;
@@ -1750,6 +1756,15 @@ public class Prefs extends ManagedObject {
 
   public List<VariationProfile> getVariationProfiles() {
     return variationProfiles;
+  }
+
+  public Set<String> getVariationFavourites() {
+    return variationFavourites;
+  }
+
+  public void setVariationFavourites(Set<String> pVariationFavourites) {
+    variationFavourites.clear();
+    variationFavourites.addAll(pVariationFavourites);
   }
 
   public int getTinaLSystemMaxLength() {

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -191,6 +191,14 @@ public class PrefsWriter {
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_IMAGE + "." + i, macroButton.getImage());
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_MACRO + "." + i, macroButton.getMacro());
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_INTERNAL + "." + i, macroButton.isInternal());
+    }
+    // Variation favourites
+    {
+      addValue(sb, Prefs.KEY_VARIATION_FAVOURITE_COUNT, pPrefs.getVariationFavourites().size());
+      int idx =0;
+      for(String fav: pPrefs.getVariationFavourites()) {
+        addValue(sb,  Prefs.KEY_VARIATION_FAVOURITE_VALUE + "." + idx++, fav);
+      }
     }
     // security scoped bookmarks (only on macOS)
     {

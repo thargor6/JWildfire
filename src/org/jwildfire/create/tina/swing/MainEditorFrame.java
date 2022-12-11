@@ -641,7 +641,7 @@ public class MainEditorFrame extends JFrame {
     if (tinaEastPanel == null) {
       tinaEastPanel = new JPanel();
       tinaEastPanel.setLayout(new BorderLayout());
-      tinaEastPanel.setPreferredSize(new Dimension(328, 0));
+      tinaEastPanel.setPreferredSize(new Dimension(342, 0));
       if (Tools.OSType.MAC.equals(Tools.getOSType())) {
         tinaEastPanel.setPreferredSize(new Dimension(tinaEastPanel.getPreferredSize().width + 32, tinaEastPanel.getPreferredSize().height));
       }
@@ -4793,7 +4793,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams1Lbl.setText("Params");
       nonlinearParams1Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams1Lbl.setLocation(new Point(4, 26));
+      nonlinearParams1Lbl.setLocation(new Point(28, 26));
       nonlinearParams1Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar1Lbl = new JLabel();
       nonlinearVar1Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -4808,7 +4808,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar1Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar1Lbl.setText("Var 1");
       nonlinearVar1Lbl.setSize(new Dimension(38, 22));
-      nonlinearVar1Lbl.setLocation(new Point(4, 2));
+      nonlinearVar1Lbl.setLocation(new Point(28, 2));
       nonlinearVar1Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaVariationPanel = new JPanel();
       tinaVariationPanel.setLayout(new BorderLayout());
@@ -7179,40 +7179,40 @@ public class MainEditorFrame extends JFrame {
     nonlinearControlsRows = new TinaNonlinearControlsRow[12];
     nonlinearControlsRows[0] = new TinaNonlinearControlsRow(0, getNonlinearVar1Panel(), nonlinearVar1Lbl, getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
         getNonlinearParams1REd(), getNonlinearParams1LeftButton(), getNonlinearParams1PreButton(), getNonlinearParams1PostButton(), null,
-        getNonlinearParams1ToggleParamsPnlButton());
+        getNonlinearParams1ToggleParamsPnlButton(), getNonlinearParams1ToggleFavButton());
     nonlinearControlsRows[1] = new TinaNonlinearControlsRow(1, getNonlinearVar2Panel(), nonlinearVar2Lbl, getNonlinearVar2Cmb(), getNonlinearParams2Cmb(), getNonlinearVar2REd(),
         getNonlinearParams2REd(), getNonlinearParams2LeftButton(), getNonlinearParams2PreButton(), getNonlinearParams2PostButton(), getNonlinearParams2UpButton(),
-        getNonlinearParams2ToggleParamsPnlButton());
+        getNonlinearParams2ToggleParamsPnlButton(), getNonlinearParams2ToggleFavButton());
     nonlinearControlsRows[2] = new TinaNonlinearControlsRow(2, getNonlinearVar3Panel(), nonlinearVar3Lbl, getNonlinearVar3Cmb(), getNonlinearParams3Cmb(), getNonlinearVar3REd(),
         getNonlinearParams3REd(), getNonlinearParams3LeftButton(), getNonlinearParams3PreButton(), getNonlinearParams3PostButton(), getNonlinearParams3UpButton(),
-        getNonlinearParams3ToggleParamsPnlButton());
+        getNonlinearParams3ToggleParamsPnlButton(), getNonlinearParams3ToggleFavButton());
     nonlinearControlsRows[3] = new TinaNonlinearControlsRow(3, getNonlinearVar4Panel(), nonlinearVar4Lbl, getNonlinearVar4Cmb(), getNonlinearParams4Cmb(), getNonlinearVar4REd(),
         getNonlinearParams4REd(), getNonlinearParams4LeftButton(), getNonlinearParams4PreButton(), getNonlinearParams4PostButton(), getNonlinearParams4UpButton(),
-        getNonlinearParams4ToggleParamsPnlButton());
+        getNonlinearParams4ToggleParamsPnlButton(), getNonlinearParams4ToggleFavButton());
     nonlinearControlsRows[4] = new TinaNonlinearControlsRow(4, getNonlinearVar5Panel(), nonlinearVar5Lbl, getNonlinearVar5Cmb(), getNonlinearParams5Cmb(), getNonlinearVar5REd(),
         getNonlinearParams5REd(), getNonlinearParams5LeftButton(), getNonlinearParams5PreButton(), getNonlinearParams5PostButton(), getNonlinearParams5UpButton(),
-        getNonlinearParams5ToggleParamsPnlButton());
+        getNonlinearParams5ToggleParamsPnlButton(), getNonlinearParams5ToggleFavButton());
     nonlinearControlsRows[5] = new TinaNonlinearControlsRow(5, getNonlinearVar6Panel(), nonlinearVar6Lbl, getNonlinearVar6Cmb(), getNonlinearParams6Cmb(), getNonlinearVar6REd(),
         getNonlinearParams6REd(), getNonlinearParams6LeftButton(), getNonlinearParams6PreButton(), getNonlinearParams6PostButton(), getNonlinearParams6UpButton(),
-        getNonlinearParams6ToggleParamsPnlButton());
+        getNonlinearParams6ToggleParamsPnlButton(), getNonlinearParams6ToggleFavButton());
     nonlinearControlsRows[6] = new TinaNonlinearControlsRow(6, getNonlinearVar7Panel(), nonlinearVar7Lbl, getNonlinearVar7Cmb(), getNonlinearParams7Cmb(), getNonlinearVar7REd(),
         getNonlinearParams7REd(), getNonlinearParams7LeftButton(), getNonlinearParams7PreButton(), getNonlinearParams7PostButton(), getNonlinearParams7UpButton(),
-        getNonlinearParams7ToggleParamsPnlButton());
+        getNonlinearParams7ToggleParamsPnlButton(), getNonlinearParams7ToggleFavButton());
     nonlinearControlsRows[7] = new TinaNonlinearControlsRow(7, getNonlinearVar8Panel(), nonlinearVar8Lbl, getNonlinearVar8Cmb(), getNonlinearParams8Cmb(), getNonlinearVar8REd(),
         getNonlinearParams8REd(), getNonlinearParams8LeftButton(), getNonlinearParams8PreButton(), getNonlinearParams8PostButton(), getNonlinearParams8UpButton(),
-        getNonlinearParams8ToggleParamsPnlButton());
+        getNonlinearParams8ToggleParamsPnlButton(), getNonlinearParams8ToggleFavButton());
     nonlinearControlsRows[8] = new TinaNonlinearControlsRow(8, getNonlinearVar9Panel(), nonlinearVar9Lbl, getNonlinearVar9Cmb(), getNonlinearParams9Cmb(), getNonlinearVar9REd(),
         getNonlinearParams9REd(), getNonlinearParams9LeftButton(), getNonlinearParams9PreButton(), getNonlinearParams9PostButton(), getNonlinearParams9UpButton(),
-        getNonlinearParams9ToggleParamsPnlButton());
+        getNonlinearParams9ToggleParamsPnlButton(), getNonlinearParams9ToggleFavButton());
     nonlinearControlsRows[9] = new TinaNonlinearControlsRow(9, getNonlinearVar10Panel(), nonlinearVar10Lbl, getNonlinearVar10Cmb(), getNonlinearParams10Cmb(), getNonlinearVar10REd(),
         getNonlinearParams10REd(), getNonlinearParams10LeftButton(), getNonlinearParams10PreButton(), getNonlinearParams10PostButton(), getNonlinearParams10UpButton(),
-        getNonlinearParams10ToggleParamsPnlButton());
+        getNonlinearParams10ToggleParamsPnlButton(), getNonlinearParams10ToggleFavButton());
     nonlinearControlsRows[10] = new TinaNonlinearControlsRow(10, getNonlinearVar11Panel(), nonlinearVar11Lbl, getNonlinearVar11Cmb(), getNonlinearParams11Cmb(), getNonlinearVar11REd(),
         getNonlinearParams11REd(), getNonlinearParams11LeftButton(), getNonlinearParams11PreButton(), getNonlinearParams11PostButton(), getNonlinearParams11UpButton(),
-        getNonlinearParams11ToggleParamsPnlButton());
+        getNonlinearParams11ToggleParamsPnlButton(), getNonlinearParams11ToggleFavButton());
     nonlinearControlsRows[11] = new TinaNonlinearControlsRow(11, getNonlinearVar12Panel(), nonlinearVar12Lbl, getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
         getNonlinearParams12REd(), getNonlinearParams12LeftButton(), getNonlinearParams12PreButton(), getNonlinearParams12PostButton(), getNonlinearParams12UpButton(),
-        getNonlinearParams12ToggleParamsPnlButton());
+        getNonlinearParams12ToggleParamsPnlButton(), getNonlinearParams12ToggleFavButton());
 
     ComboboxTools.initVariationProfileCmb(getTinaVariationProfile1Cmb(), true, false);
     ComboboxTools.initVariationProfileCmb(getTinaVariationProfile2Cmb(), false, true);
@@ -7460,7 +7460,8 @@ public class MainEditorFrame extends JFrame {
         getWeightingFieldParam04Cmb(), getWeightingFieldParam04Lbl(), getWeightingFieldParam05REd(), getWeightingFieldParam05Lbl(), getWeightingFieldParam06REd(), getWeightingFieldParam06Lbl(),
         getWeightingFieldParam07REd(), getWeightingFieldParam07Lbl(), getWeightingFieldParam08Cmb(), getWeightingFieldParam08Lbl(), getWeightingFieldPreviewImgRootPanel(),
         getTinaAIDenoiserCmb(), getTinaAIDenoiserOnlyForCPUCBx(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider(), getTinaOptixDenoiseButton(),
-        getTinaAIPostDenoiseExternalImageBtn(), getQuickMutationTypeCmb(), getQuickMutationBatchSizeEdit(), getQuickMutationStrengthEdit(), getQuickMutationButton(), getQuickMutationProgressBar(), getQuickMutationPanel());
+        getTinaAIPostDenoiseExternalImageBtn(), getQuickMutationTypeCmb(), getQuickMutationBatchSizeEdit(), getQuickMutationStrengthEdit(), getQuickMutationButton(), getQuickMutationProgressBar(),
+            getQuickMutationPanel(), getDisplayFavouriteVariationsToggleBtn());
 
     tinaController = new TinaController(params);
 
@@ -8592,7 +8593,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar1Cmb = new JComboBox();
       nonlinearVar1Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar1Cmb.setSize(new Dimension(108, 24));
-      nonlinearVar1Cmb.setLocation(new Point(62, 2));
+      nonlinearVar1Cmb.setLocation(new Point(86, 2));
       nonlinearVar1Cmb.setMaximumRowCount(22);
       nonlinearVar1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar1Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -8634,7 +8635,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar1REd.setPreferredSize(new Dimension(56, 24));
       nonlinearVar1REd.setText("");
       nonlinearVar1REd.setSize(new Dimension(81, 24));
-      nonlinearVar1REd.setLocation(new Point(188, 2));
+      nonlinearVar1REd.setLocation(new Point(212, 2));
       nonlinearVar1REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return nonlinearVar1REd;
@@ -8650,7 +8651,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1Cmb = new JComboBox();
       nonlinearParams1Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams1Cmb.setSize(new Dimension(128, 24));
-      nonlinearParams1Cmb.setLocation(new Point(62, 26));
+      nonlinearParams1Cmb.setLocation(new Point(86, 26));
       nonlinearParams1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -8690,7 +8691,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams1REd.setText("");
       nonlinearParams1REd.setSize(new Dimension(81, 24));
-      nonlinearParams1REd.setLocation(new Point(188, 26));
+      nonlinearParams1REd.setLocation(new Point(212, 26));
       nonlinearParams1REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return nonlinearParams1REd;
@@ -8706,7 +8707,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar1Panel = new JPanel();
       nonlinearVar1Panel.setLayout(null);
       nonlinearVar1Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-      nonlinearVar1Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar1Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar1Panel.add(nonlinearVar1Lbl, null);
       nonlinearVar1Panel.add(getNonlinearVar1Cmb(), null);
       nonlinearVar1Panel.add(getNonlinearVar1REd(), null);
@@ -8732,11 +8733,11 @@ public class MainEditorFrame extends JFrame {
       button.setText("");
       button.setSize(new Dimension(22, 22));
       button.setPreferredSize(new Dimension(22, 22));
-      button.setLocation(new Point(269, 26));
+      button.setLocation(new Point(293, 26));
       button.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-4-modified.png")));
       button.setText("");
       button.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      button.setBounds(269, 2, 22, 24);
+      button.setBounds(293, 2, 22, 24);
       nonlinearVar1Panel.add(button);
 
       nonlinearParams1PreButton = new JToggleButton();
@@ -8744,9 +8745,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1PreButton.setText("");
       nonlinearParams1PreButton.setSize(new Dimension(22, 22));
       nonlinearParams1PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams1PreButton.setLocation(new Point(269, 26));
+      nonlinearParams1PreButton.setLocation(new Point(293, 26));
       nonlinearParams1PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams1PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams1PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams1PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams1PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8760,9 +8761,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1PostButton.setText("");
       nonlinearParams1PostButton.setSize(new Dimension(22, 22));
       nonlinearParams1PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams1PostButton.setLocation(new Point(168, 2));
+      nonlinearParams1PostButton.setLocation(new Point(192, 2));
       nonlinearParams1PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams1PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams1PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams1PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams1PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8776,9 +8777,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1ToggleParamsPnlButton.setText("");
       nonlinearParams1ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams1ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams1ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams1ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams1ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams1ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams1ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams1ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams1ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8786,6 +8787,22 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar1Panel.add(nonlinearParams1ToggleParamsPnlButton);
+
+      nonlinearParams1ToggleFavButton = new JToggleButton();
+      nonlinearParams1ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams1ToggleFavButton.setText("");
+      nonlinearParams1ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams1ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams1ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams1ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams1ToggleFavButton.setFont(null);
+      nonlinearParams1ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams1ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(0);
+        }
+      });
+      nonlinearVar1Panel.add(nonlinearParams1ToggleFavButton);
     }
     return nonlinearVar1Panel;
   }
@@ -8802,7 +8819,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams1LeftButton.setText("");
       nonlinearParams1LeftButton.setSize(new Dimension(22, 24));
-      nonlinearParams1LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams1LeftButton.setLocation(new Point(293, 26));
       nonlinearParams1LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams1LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8825,7 +8842,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams2Lbl.setText("Params");
       nonlinearParams2Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams2Lbl.setLocation(new Point(4, 26));
+      nonlinearParams2Lbl.setLocation(new Point(28, 26));
       nonlinearVar2Lbl = new JLabel();
       nonlinearVar2Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar2Lbl.addMouseListener(new MouseAdapter() {
@@ -8836,7 +8853,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar2Lbl.setLocation(new Point(4, 2));
+      nonlinearVar2Lbl.setLocation(new Point(28, 2));
       nonlinearVar2Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar2Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar2Lbl.setText("Var 2");
@@ -8844,7 +8861,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar2Panel = new JPanel();
       nonlinearVar2Panel.setLayout(null);
       nonlinearVar2Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-      nonlinearVar2Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar2Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar2Panel.add(nonlinearVar2Lbl, null);
       nonlinearVar2Panel.add(getNonlinearVar2Cmb(), null);
       nonlinearVar2Panel.add(getNonlinearVar2REd(), null);
@@ -8858,9 +8875,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2PreButton.setText("");
       nonlinearParams2PreButton.setSize(new Dimension(22, 22));
       nonlinearParams2PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams2PreButton.setLocation(new Point(269, 26));
+      nonlinearParams2PreButton.setLocation(new Point(293, 26));
       nonlinearParams2PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams2PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams2PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams2PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams2PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8874,9 +8891,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2PostButton.setText("");
       nonlinearParams2PostButton.setSize(new Dimension(22, 22));
       nonlinearParams2PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams2PostButton.setLocation(new Point(168, 2));
+      nonlinearParams2PostButton.setLocation(new Point(192, 2));
       nonlinearParams2PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams2PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams2PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams2PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams2PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8890,9 +8907,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2UpButton.setText("");
       nonlinearParams2UpButton.setSize(new Dimension(22, 22));
       nonlinearParams2UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams2UpButton.setLocation(new Point(269, 26));
+      nonlinearParams2UpButton.setLocation(new Point(293, 26));
       nonlinearParams2UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams2UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams2UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams2UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams2UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8906,9 +8923,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2ToggleParamsPnlButton.setText("");
       nonlinearParams2ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams2ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams2ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams2ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams2ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams2ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams2ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams2ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams2ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -8916,6 +8933,22 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar2Panel.add(nonlinearParams2ToggleParamsPnlButton);
+
+      nonlinearParams2ToggleFavButton = new JToggleButton();
+      nonlinearParams2ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams2ToggleFavButton.setText("");
+      nonlinearParams2ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams2ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams2ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams2ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams2ToggleFavButton.setFont(null);
+      nonlinearParams2ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams2ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(1);
+        }
+      });
+      nonlinearVar2Panel.add(nonlinearParams2ToggleFavButton);
     }
     return nonlinearVar2Panel;
   }
@@ -8928,7 +8961,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar2Cmb() {
     if (nonlinearVar2Cmb == null) {
       nonlinearVar2Cmb = new JComboBox();
-      nonlinearVar2Cmb.setLocation(new Point(62, 2));
+      nonlinearVar2Cmb.setLocation(new Point(86, 2));
       nonlinearVar2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar2Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar2Cmb.setMaximumRowCount(22);
@@ -8969,7 +9002,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar2REd.setValueStep(0.01);
-      nonlinearVar2REd.setLocation(new Point(188, 2));
+      nonlinearVar2REd.setLocation(new Point(212, 2));
       nonlinearVar2REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar2REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar2REd.setText("");
@@ -8986,7 +9019,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams2Cmb() {
     if (nonlinearParams2Cmb == null) {
       nonlinearParams2Cmb = new JComboBox();
-      nonlinearParams2Cmb.setLocation(new Point(62, 26));
+      nonlinearParams2Cmb.setLocation(new Point(86, 26));
       nonlinearParams2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams2Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams2Cmb.setSize(new Dimension(128, 24));
@@ -9025,7 +9058,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearParams2REd.setValueStep(0.05);
-      nonlinearParams2REd.setLocation(new Point(188, 26));
+      nonlinearParams2REd.setLocation(new Point(212, 26));
       nonlinearParams2REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams2REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams2REd.setText("");
@@ -9042,7 +9075,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams2LeftButton() {
     if (nonlinearParams2LeftButton == null) {
       nonlinearParams2LeftButton = new JButton();
-      nonlinearParams2LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams2LeftButton.setLocation(new Point(293, 26));
       nonlinearParams2LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams2LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams2LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -9069,7 +9102,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams3Lbl.setText("Params");
       nonlinearParams3Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams3Lbl.setLocation(new Point(4, 26));
+      nonlinearParams3Lbl.setLocation(new Point(28, 26));
       nonlinearVar3Lbl = new JLabel();
       nonlinearVar3Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar3Lbl.addMouseListener(new MouseAdapter() {
@@ -9080,7 +9113,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar3Lbl.setLocation(new Point(4, 2));
+      nonlinearVar3Lbl.setLocation(new Point(28, 2));
       nonlinearVar3Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar3Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar3Lbl.setText("Var 3");
@@ -9089,7 +9122,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar3Panel.setLayout(null);
       nonlinearVar3Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
       nonlinearVar3Panel.setName("");
-      nonlinearVar3Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar3Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar3Panel.add(nonlinearVar3Lbl, null);
       nonlinearVar3Panel.add(getNonlinearVar3Cmb(), null);
       nonlinearVar3Panel.add(getNonlinearVar3REd(), null);
@@ -9103,9 +9136,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3PreButton.setText("");
       nonlinearParams3PreButton.setSize(new Dimension(22, 22));
       nonlinearParams3PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams3PreButton.setLocation(new Point(269, 26));
+      nonlinearParams3PreButton.setLocation(new Point(293, 26));
       nonlinearParams3PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams3PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams3PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams3PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams3PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9119,9 +9152,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3PostButton.setText("");
       nonlinearParams3PostButton.setSize(new Dimension(22, 22));
       nonlinearParams3PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams3PostButton.setLocation(new Point(168, 2));
+      nonlinearParams3PostButton.setLocation(new Point(192, 2));
       nonlinearParams3PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams3PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams3PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams3PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams3PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9135,9 +9168,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3UpButton.setText("");
       nonlinearParams3UpButton.setSize(new Dimension(22, 22));
       nonlinearParams3UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams3UpButton.setLocation(new Point(269, 26));
+      nonlinearParams3UpButton.setLocation(new Point(293, 26));
       nonlinearParams3UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams3UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams3UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams3UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams3UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9151,9 +9184,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3ToggleParamsPnlButton.setText("");
       nonlinearParams3ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams3ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams3ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams3ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams3ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams3ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams3ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams3ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams3ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -9161,6 +9194,22 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar3Panel.add(nonlinearParams3ToggleParamsPnlButton);
+
+      nonlinearParams3ToggleFavButton = new JToggleButton();
+      nonlinearParams3ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams3ToggleFavButton.setText("");
+      nonlinearParams3ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams3ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams3ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams3ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams3ToggleFavButton.setFont(null);
+      nonlinearParams3ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams3ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(2);
+        }
+      });
+      nonlinearVar3Panel.add(nonlinearParams3ToggleFavButton);
     }
     return nonlinearVar3Panel;
   }
@@ -9173,7 +9222,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar3Cmb() {
     if (nonlinearVar3Cmb == null) {
       nonlinearVar3Cmb = new JComboBox();
-      nonlinearVar3Cmb.setLocation(new Point(62, 2));
+      nonlinearVar3Cmb.setLocation(new Point(86, 2));
       nonlinearVar3Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar3Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar3Cmb.setMaximumRowCount(22);
@@ -9214,7 +9263,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar3REd.setValueStep(0.01);
-      nonlinearVar3REd.setLocation(new Point(188, 2));
+      nonlinearVar3REd.setLocation(new Point(212, 2));
       nonlinearVar3REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar3REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar3REd.setText("");
@@ -9231,7 +9280,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams3Cmb() {
     if (nonlinearParams3Cmb == null) {
       nonlinearParams3Cmb = new JComboBox();
-      nonlinearParams3Cmb.setLocation(new Point(62, 26));
+      nonlinearParams3Cmb.setLocation(new Point(86, 26));
       nonlinearParams3Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams3Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams3Cmb.setSize(new Dimension(128, 24));
@@ -9270,7 +9319,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearParams3REd.setLocation(new Point(188, 26));
+      nonlinearParams3REd.setLocation(new Point(212, 26));
       nonlinearParams3REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams3REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams3REd.setText("");
@@ -9287,7 +9336,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams3LeftButton() {
     if (nonlinearParams3LeftButton == null) {
       nonlinearParams3LeftButton = new JButton();
-      nonlinearParams3LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams3LeftButton.setLocation(new Point(293, 26));
       nonlinearParams3LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams3LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams3LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -10245,7 +10294,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams4Lbl.setText("Params");
       nonlinearParams4Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams4Lbl.setLocation(new Point(4, 26));
+      nonlinearParams4Lbl.setLocation(new Point(28, 26));
       nonlinearVar4Lbl = new JLabel();
       nonlinearVar4Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar4Lbl.addMouseListener(new MouseAdapter() {
@@ -10256,7 +10305,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar4Lbl.setLocation(new Point(4, 2));
+      nonlinearVar4Lbl.setLocation(new Point(28, 2));
       nonlinearVar4Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar4Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar4Lbl.setText("Var 4");
@@ -10264,7 +10313,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar4Panel = new JPanel();
       nonlinearVar4Panel.setLayout(null);
       nonlinearVar4Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-      nonlinearVar4Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar4Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar4Panel.add(nonlinearVar4Lbl, null);
       nonlinearVar4Panel.add(getNonlinearVar4Cmb(), null);
       nonlinearVar4Panel.add(getNonlinearVar4REd(), null);
@@ -10278,9 +10327,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4PreButton.setText("");
       nonlinearParams4PreButton.setSize(new Dimension(22, 22));
       nonlinearParams4PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams4PreButton.setLocation(new Point(269, 26));
+      nonlinearParams4PreButton.setLocation(new Point(293, 26));
       nonlinearParams4PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams4PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams4PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams4PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams4PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10294,9 +10343,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4PostButton.setText("");
       nonlinearParams4PostButton.setSize(new Dimension(22, 22));
       nonlinearParams4PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams4PostButton.setLocation(new Point(168, 2));
+      nonlinearParams4PostButton.setLocation(new Point(192, 2));
       nonlinearParams4PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams4PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams4PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams4PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams4PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10310,9 +10359,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4UpButton.setText("");
       nonlinearParams4UpButton.setSize(new Dimension(22, 22));
       nonlinearParams4UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams4UpButton.setLocation(new Point(269, 26));
+      nonlinearParams4UpButton.setLocation(new Point(293, 26));
       nonlinearParams4UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams4UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams4UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams4UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams4UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10326,9 +10375,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4ToggleParamsPnlButton.setText("");
       nonlinearParams4ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams4ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams4ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams4ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams4ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams4ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams4ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams4ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams4ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10337,6 +10386,21 @@ public class MainEditorFrame extends JFrame {
       });
       nonlinearVar4Panel.add(nonlinearParams4ToggleParamsPnlButton);
 
+      nonlinearParams4ToggleFavButton = new JToggleButton();
+      nonlinearParams4ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams4ToggleFavButton.setText("");
+      nonlinearParams4ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams4ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams4ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams4ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams4ToggleFavButton.setFont(null);
+      nonlinearParams4ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams4ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(3);
+        }
+      });
+      nonlinearVar4Panel.add(nonlinearParams4ToggleFavButton);
     }
     return nonlinearVar4Panel;
   }
@@ -10349,7 +10413,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar4Cmb() {
     if (nonlinearVar4Cmb == null) {
       nonlinearVar4Cmb = new JComboBox();
-      nonlinearVar4Cmb.setLocation(new Point(62, 2));
+      nonlinearVar4Cmb.setLocation(new Point(86, 2));
       nonlinearVar4Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar4Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar4Cmb.setMaximumRowCount(22);
@@ -10390,7 +10454,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar4REd.setValueStep(0.01);
-      nonlinearVar4REd.setLocation(new Point(188, 2));
+      nonlinearVar4REd.setLocation(new Point(212, 2));
       nonlinearVar4REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar4REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar4REd.setText("");
@@ -10407,7 +10471,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams4Cmb() {
     if (nonlinearParams4Cmb == null) {
       nonlinearParams4Cmb = new JComboBox();
-      nonlinearParams4Cmb.setLocation(new Point(62, 26));
+      nonlinearParams4Cmb.setLocation(new Point(86, 26));
       nonlinearParams4Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams4Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams4Cmb.setSize(new Dimension(128, 24));
@@ -10446,7 +10510,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearParams4REd.setLocation(new Point(188, 26));
+      nonlinearParams4REd.setLocation(new Point(212, 26));
       nonlinearParams4REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams4REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams4REd.setText("");
@@ -10463,7 +10527,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams4LeftButton() {
     if (nonlinearParams4LeftButton == null) {
       nonlinearParams4LeftButton = new JButton();
-      nonlinearParams4LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams4LeftButton.setLocation(new Point(293, 26));
       nonlinearParams4LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams4LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams4LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -10566,7 +10630,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams5Lbl.setText("Params");
       nonlinearParams5Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams5Lbl.setLocation(new Point(4, 26));
+      nonlinearParams5Lbl.setLocation(new Point(28, 26));
       nonlinearVar5Lbl = new JLabel();
       nonlinearVar5Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar5Lbl.addMouseListener(new MouseAdapter() {
@@ -10577,14 +10641,14 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar5Lbl.setLocation(new Point(4, 2));
+      nonlinearVar5Lbl.setLocation(new Point(28, 2));
       nonlinearVar5Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar5Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar5Lbl.setText("Var 5");
       nonlinearVar5Lbl.setSize(new Dimension(38, 22));
       nonlinearVar5Panel = new JPanel();
       nonlinearVar5Panel.setLayout(null);
-      nonlinearVar5Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar5Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar5Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
       nonlinearVar5Panel.add(nonlinearVar5Lbl, null);
       nonlinearVar5Panel.add(getNonlinearVar5Cmb(), null);
@@ -10599,9 +10663,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5PreButton.setText("");
       nonlinearParams5PreButton.setSize(new Dimension(22, 22));
       nonlinearParams5PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams5PreButton.setLocation(new Point(269, 26));
+      nonlinearParams5PreButton.setLocation(new Point(293, 26));
       nonlinearParams5PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams5PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams5PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams5PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams5PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10615,9 +10679,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5PostButton.setText("");
       nonlinearParams5PostButton.setSize(new Dimension(22, 22));
       nonlinearParams5PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams5PostButton.setLocation(new Point(168, 2));
+      nonlinearParams5PostButton.setLocation(new Point(192, 2));
       nonlinearParams5PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams5PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams5PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams5PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams5PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10631,9 +10695,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5UpButton.setText("");
       nonlinearParams5UpButton.setSize(new Dimension(22, 22));
       nonlinearParams5UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams5UpButton.setLocation(new Point(269, 26));
+      nonlinearParams5UpButton.setLocation(new Point(293, 26));
       nonlinearParams5UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams5UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams5UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams5UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams5UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10647,9 +10711,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5ToggleParamsPnlButton.setText("");
       nonlinearParams5ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams5ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams5ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams5ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams5ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams5ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams5ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams5ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams5ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10657,6 +10721,22 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar5Panel.add(nonlinearParams5ToggleParamsPnlButton);
+
+      nonlinearParams5ToggleFavButton = new JToggleButton();
+      nonlinearParams5ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams5ToggleFavButton.setText("");
+      nonlinearParams5ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams5ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams5ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams5ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams5ToggleFavButton.setFont(null);
+      nonlinearParams5ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams5ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(4);
+        }
+      });
+      nonlinearVar5Panel.add(nonlinearParams5ToggleFavButton);
     }
     return nonlinearVar5Panel;
   }
@@ -10669,7 +10749,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar5Cmb() {
     if (nonlinearVar5Cmb == null) {
       nonlinearVar5Cmb = new JComboBox();
-      nonlinearVar5Cmb.setLocation(new Point(62, 2));
+      nonlinearVar5Cmb.setLocation(new Point(86, 2));
       nonlinearVar5Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar5Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar5Cmb.setMaximumRowCount(22);
@@ -10710,7 +10790,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar5REd.setValueStep(0.01);
-      nonlinearVar5REd.setLocation(new Point(188, 2));
+      nonlinearVar5REd.setLocation(new Point(212, 2));
       nonlinearVar5REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar5REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar5REd.setText("");
@@ -10727,7 +10807,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams5Cmb() {
     if (nonlinearParams5Cmb == null) {
       nonlinearParams5Cmb = new JComboBox();
-      nonlinearParams5Cmb.setLocation(new Point(62, 26));
+      nonlinearParams5Cmb.setLocation(new Point(86, 26));
       nonlinearParams5Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams5Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams5Cmb.setSize(new Dimension(128, 24));
@@ -10766,7 +10846,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearParams5REd.setLocation(new Point(188, 26));
+      nonlinearParams5REd.setLocation(new Point(212, 26));
       nonlinearParams5REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams5REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams5REd.setText("");
@@ -10783,7 +10863,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams5LeftButton() {
     if (nonlinearParams5LeftButton == null) {
       nonlinearParams5LeftButton = new JButton();
-      nonlinearParams5LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams5LeftButton.setLocation(new Point(293, 26));
       nonlinearParams5LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams5LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams5LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -10810,7 +10890,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams6Lbl.setText("Params");
       nonlinearParams6Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams6Lbl.setLocation(new Point(4, 26));
+      nonlinearParams6Lbl.setLocation(new Point(28, 26));
       nonlinearVar6Lbl = new JLabel();
       nonlinearVar6Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar6Lbl.addMouseListener(new MouseAdapter() {
@@ -10821,14 +10901,14 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar6Lbl.setLocation(new Point(4, 2));
+      nonlinearVar6Lbl.setLocation(new Point(28, 2));
       nonlinearVar6Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar6Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar6Lbl.setText("Var 6");
       nonlinearVar6Lbl.setSize(new Dimension(38, 22));
       nonlinearVar6Panel = new JPanel();
       nonlinearVar6Panel.setLayout(null);
-      nonlinearVar6Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar6Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar6Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
       nonlinearVar6Panel.add(nonlinearVar6Lbl, null);
       nonlinearVar6Panel.add(getNonlinearVar6Cmb(), null);
@@ -10843,9 +10923,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6PreButton.setText("");
       nonlinearParams6PreButton.setSize(new Dimension(22, 22));
       nonlinearParams6PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams6PreButton.setLocation(new Point(269, 26));
+      nonlinearParams6PreButton.setLocation(new Point(293, 26));
       nonlinearParams6PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams6PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams6PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams6PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams6PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10859,9 +10939,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6PostButton.setText("");
       nonlinearParams6PostButton.setSize(new Dimension(22, 22));
       nonlinearParams6PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams6PostButton.setLocation(new Point(168, 2));
+      nonlinearParams6PostButton.setLocation(new Point(192, 2));
       nonlinearParams6PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams6PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams6PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams6PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams6PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10875,9 +10955,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6UpButton.setText("");
       nonlinearParams6UpButton.setSize(new Dimension(22, 22));
       nonlinearParams6UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams6UpButton.setLocation(new Point(269, 26));
+      nonlinearParams6UpButton.setLocation(new Point(293, 26));
       nonlinearParams6UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams6UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams6UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams6UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams6UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10891,9 +10971,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6ToggleParamsPnlButton.setText("");
       nonlinearParams6ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams6ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams6ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams6ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams6ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams6ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams6ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams6ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams6ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10901,6 +10981,22 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar6Panel.add(nonlinearParams6ToggleParamsPnlButton);
+
+      nonlinearParams6ToggleFavButton = new JToggleButton();
+      nonlinearParams6ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams6ToggleFavButton.setText("");
+      nonlinearParams6ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams6ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams6ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams6ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams6ToggleFavButton.setFont(null);
+      nonlinearParams6ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams6ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(5);
+        }
+      });
+      nonlinearVar6Panel.add(nonlinearParams6ToggleFavButton);
     }
     return nonlinearVar6Panel;
   }
@@ -10913,7 +11009,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar6Cmb() {
     if (nonlinearVar6Cmb == null) {
       nonlinearVar6Cmb = new JComboBox();
-      nonlinearVar6Cmb.setLocation(new Point(62, 2));
+      nonlinearVar6Cmb.setLocation(new Point(86, 2));
       nonlinearVar6Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar6Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar6Cmb.setMaximumRowCount(22);
@@ -10954,7 +11050,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar6REd.setValueStep(0.01);
-      nonlinearVar6REd.setLocation(new Point(188, 2));
+      nonlinearVar6REd.setLocation(new Point(212, 2));
       nonlinearVar6REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar6REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar6REd.setText("");
@@ -10971,7 +11067,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams6Cmb() {
     if (nonlinearParams6Cmb == null) {
       nonlinearParams6Cmb = new JComboBox();
-      nonlinearParams6Cmb.setLocation(new Point(62, 26));
+      nonlinearParams6Cmb.setLocation(new Point(86, 26));
       nonlinearParams6Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams6Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams6Cmb.setSize(new Dimension(128, 24));
@@ -11010,7 +11106,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearParams6REd.setLocation(new Point(188, 26));
+      nonlinearParams6REd.setLocation(new Point(212, 26));
       nonlinearParams6REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams6REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams6REd.setText("");
@@ -11027,7 +11123,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams6LeftButton() {
     if (nonlinearParams6LeftButton == null) {
       nonlinearParams6LeftButton = new JButton();
-      nonlinearParams6LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams6LeftButton.setLocation(new Point(293, 26));
       nonlinearParams6LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams6LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams6LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -11054,7 +11150,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams7Lbl.setText("Params");
       nonlinearParams7Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams7Lbl.setLocation(new Point(4, 26));
+      nonlinearParams7Lbl.setLocation(new Point(28, 26));
       nonlinearVar7Lbl = new JLabel();
       nonlinearVar7Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar7Lbl.addMouseListener(new MouseAdapter() {
@@ -11065,14 +11161,14 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar7Lbl.setLocation(new Point(4, 2));
+      nonlinearVar7Lbl.setLocation(new Point(28, 2));
       nonlinearVar7Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar7Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar7Lbl.setText("Var 7");
       nonlinearVar7Lbl.setSize(new Dimension(38, 22));
       nonlinearVar7Panel = new JPanel();
       nonlinearVar7Panel.setLayout(null);
-      nonlinearVar7Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar7Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar7Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
       nonlinearVar7Panel.add(nonlinearVar7Lbl, null);
       nonlinearVar7Panel.add(getNonlinearVar7Cmb(), null);
@@ -11087,9 +11183,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7PreButton.setText("");
       nonlinearParams7PreButton.setSize(new Dimension(22, 22));
       nonlinearParams7PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams7PreButton.setLocation(new Point(269, 26));
+      nonlinearParams7PreButton.setLocation(new Point(293, 26));
       nonlinearParams7PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams7PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams7PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams7PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams7PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11103,9 +11199,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7PostButton.setText("");
       nonlinearParams7PostButton.setSize(new Dimension(22, 22));
       nonlinearParams7PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams7PostButton.setLocation(new Point(168, 2));
+      nonlinearParams7PostButton.setLocation(new Point(192, 2));
       nonlinearParams7PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams7PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams7PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams7PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams7PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11119,9 +11215,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7UpButton.setText("");
       nonlinearParams7UpButton.setSize(new Dimension(22, 22));
       nonlinearParams7UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams7UpButton.setLocation(new Point(269, 26));
+      nonlinearParams7UpButton.setLocation(new Point(293, 26));
       nonlinearParams7UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams7UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams7UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams7UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams7UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11135,9 +11231,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7ToggleParamsPnlButton.setText("");
       nonlinearParams7ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams7ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams7ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams7ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams7ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams7ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams7ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams7ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams7ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11146,6 +11242,21 @@ public class MainEditorFrame extends JFrame {
       });
       nonlinearVar7Panel.add(nonlinearParams7ToggleParamsPnlButton);
 
+      nonlinearParams7ToggleFavButton = new JToggleButton();
+      nonlinearParams7ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams7ToggleFavButton.setText("");
+      nonlinearParams7ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams7ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams7ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams7ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams7ToggleFavButton.setFont(null);
+      nonlinearParams7ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams7ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(6);
+        }
+      });
+      nonlinearVar7Panel.add(nonlinearParams7ToggleFavButton);
     }
     return nonlinearVar7Panel;
   }
@@ -11158,7 +11269,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar7Cmb() {
     if (nonlinearVar7Cmb == null) {
       nonlinearVar7Cmb = new JComboBox();
-      nonlinearVar7Cmb.setLocation(new Point(62, 2));
+      nonlinearVar7Cmb.setLocation(new Point(86, 2));
       nonlinearVar7Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar7Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar7Cmb.setMaximumRowCount(22);
@@ -11199,7 +11310,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar7REd.setValueStep(0.01);
-      nonlinearVar7REd.setLocation(new Point(188, 2));
+      nonlinearVar7REd.setLocation(new Point(212, 2));
       nonlinearVar7REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar7REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar7REd.setText("");
@@ -11216,7 +11327,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams7Cmb() {
     if (nonlinearParams7Cmb == null) {
       nonlinearParams7Cmb = new JComboBox();
-      nonlinearParams7Cmb.setLocation(new Point(62, 26));
+      nonlinearParams7Cmb.setLocation(new Point(86, 26));
       nonlinearParams7Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams7Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams7Cmb.setSize(new Dimension(128, 24));
@@ -11255,7 +11366,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearParams7REd.setLocation(new Point(188, 26));
+      nonlinearParams7REd.setLocation(new Point(212, 26));
       nonlinearParams7REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams7REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams7REd.setText("");
@@ -11272,7 +11383,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams7LeftButton() {
     if (nonlinearParams7LeftButton == null) {
       nonlinearParams7LeftButton = new JButton();
-      nonlinearParams7LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams7LeftButton.setLocation(new Point(293, 26));
       nonlinearParams7LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams7LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams7LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -11299,7 +11410,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams8Lbl.setText("Params");
       nonlinearParams8Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams8Lbl.setLocation(new Point(4, 26));
+      nonlinearParams8Lbl.setLocation(new Point(28, 26));
       nonlinearVar8Lbl = new JLabel();
       nonlinearVar8Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar8Lbl.addMouseListener(new MouseAdapter() {
@@ -11310,14 +11421,14 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar8Lbl.setLocation(new Point(4, 2));
+      nonlinearVar8Lbl.setLocation(new Point(28, 2));
       nonlinearVar8Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar8Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar8Lbl.setText("Var 8");
       nonlinearVar8Lbl.setSize(new Dimension(38, 22));
       nonlinearVar8Panel = new JPanel();
       nonlinearVar8Panel.setLayout(null);
-      nonlinearVar8Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar8Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar8Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
       nonlinearVar8Panel.add(nonlinearVar8Lbl, null);
       nonlinearVar8Panel.add(getNonlinearVar8Cmb(), null);
@@ -11332,9 +11443,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8PreButton.setText("");
       nonlinearParams8PreButton.setSize(new Dimension(22, 22));
       nonlinearParams8PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams8PreButton.setLocation(new Point(269, 26));
+      nonlinearParams8PreButton.setLocation(new Point(293, 26));
       nonlinearParams8PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams8PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams8PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams8PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams8PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11348,9 +11459,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8PostButton.setText("");
       nonlinearParams8PostButton.setSize(new Dimension(22, 22));
       nonlinearParams8PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams8PostButton.setLocation(new Point(168, 2));
+      nonlinearParams8PostButton.setLocation(new Point(192, 2));
       nonlinearParams8PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams8PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams8PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams8PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams8PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11364,9 +11475,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8UpButton.setText("");
       nonlinearParams8UpButton.setSize(new Dimension(22, 22));
       nonlinearParams8UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams8UpButton.setLocation(new Point(269, 26));
+      nonlinearParams8UpButton.setLocation(new Point(293, 26));
       nonlinearParams8UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams8UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams8UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams8UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams8UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11380,9 +11491,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8ToggleParamsPnlButton.setText("");
       nonlinearParams8ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams8ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams8ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams8ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams8ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams8ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams8ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams8ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams8ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11391,6 +11502,21 @@ public class MainEditorFrame extends JFrame {
       });
       nonlinearVar8Panel.add(nonlinearParams8ToggleParamsPnlButton);
 
+      nonlinearParams8ToggleFavButton = new JToggleButton();
+      nonlinearParams8ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams8ToggleFavButton.setText("");
+      nonlinearParams8ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams8ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams8ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams8ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams8ToggleFavButton.setFont(null);
+      nonlinearParams8ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams8ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(7);
+        }
+      });
+      nonlinearVar8Panel.add(nonlinearParams8ToggleFavButton);
     }
     return nonlinearVar8Panel;
   }
@@ -11403,7 +11529,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar8Cmb() {
     if (nonlinearVar8Cmb == null) {
       nonlinearVar8Cmb = new JComboBox();
-      nonlinearVar8Cmb.setLocation(new Point(62, 2));
+      nonlinearVar8Cmb.setLocation(new Point(86, 2));
       nonlinearVar8Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar8Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar8Cmb.setMaximumRowCount(22);
@@ -11444,7 +11570,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar8REd.setValueStep(0.01);
-      nonlinearVar8REd.setLocation(new Point(188, 2));
+      nonlinearVar8REd.setLocation(new Point(212, 2));
       nonlinearVar8REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar8REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar8REd.setText("");
@@ -11461,7 +11587,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams8Cmb() {
     if (nonlinearParams8Cmb == null) {
       nonlinearParams8Cmb = new JComboBox();
-      nonlinearParams8Cmb.setLocation(new Point(62, 26));
+      nonlinearParams8Cmb.setLocation(new Point(86, 26));
       nonlinearParams8Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams8Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams8Cmb.setSize(new Dimension(128, 24));
@@ -11500,7 +11626,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearParams8REd.setLocation(new Point(188, 26));
+      nonlinearParams8REd.setLocation(new Point(212, 26));
       nonlinearParams8REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams8REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams8REd.setText("");
@@ -11517,7 +11643,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams8LeftButton() {
     if (nonlinearParams8LeftButton == null) {
       nonlinearParams8LeftButton = new JButton();
-      nonlinearParams8LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams8LeftButton.setLocation(new Point(293, 26));
       nonlinearParams8LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams8LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams8LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -11544,7 +11670,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams9Lbl.setText("Params");
       nonlinearParams9Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams9Lbl.setLocation(new Point(4, 26));
+      nonlinearParams9Lbl.setLocation(new Point(28, 26));
       nonlinearVar9Lbl = new JLabel();
       nonlinearVar9Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar9Lbl.addMouseListener(new MouseAdapter() {
@@ -11555,14 +11681,14 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar9Lbl.setLocation(new Point(4, 2));
+      nonlinearVar9Lbl.setLocation(new Point(28, 2));
       nonlinearVar9Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar9Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar9Lbl.setText("Var 9");
       nonlinearVar9Lbl.setSize(new Dimension(38, 22));
       nonlinearVar9Panel = new JPanel();
       nonlinearVar9Panel.setLayout(null);
-      nonlinearVar9Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar9Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar9Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
       nonlinearVar9Panel.add(nonlinearVar9Lbl, null);
       nonlinearVar9Panel.add(getNonlinearVar9Cmb(), null);
@@ -11577,9 +11703,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9PreButton.setText("");
       nonlinearParams9PreButton.setSize(new Dimension(22, 22));
       nonlinearParams9PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams9PreButton.setLocation(new Point(269, 26));
+      nonlinearParams9PreButton.setLocation(new Point(293, 26));
       nonlinearParams9PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams9PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams9PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams9PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams9PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11593,9 +11719,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9PostButton.setText("");
       nonlinearParams9PostButton.setSize(new Dimension(22, 22));
       nonlinearParams9PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams9PostButton.setLocation(new Point(168, 2));
+      nonlinearParams9PostButton.setLocation(new Point(192, 2));
       nonlinearParams9PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams9PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams9PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams9PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams9PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11609,9 +11735,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9UpButton.setText("");
       nonlinearParams9UpButton.setSize(new Dimension(22, 22));
       nonlinearParams9UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams9UpButton.setLocation(new Point(269, 26));
+      nonlinearParams9UpButton.setLocation(new Point(293, 26));
       nonlinearParams9UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams9UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams9UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams9UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams9UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11625,9 +11751,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9ToggleParamsPnlButton.setText("");
       nonlinearParams9ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams9ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams9ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams9ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams9ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams9ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams9ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams9ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams9ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11636,6 +11762,21 @@ public class MainEditorFrame extends JFrame {
       });
       nonlinearVar9Panel.add(nonlinearParams9ToggleParamsPnlButton);
 
+      nonlinearParams9ToggleFavButton = new JToggleButton();
+      nonlinearParams9ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams9ToggleFavButton.setText("");
+      nonlinearParams9ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams9ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams9ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams9ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams9ToggleFavButton.setFont(null);
+      nonlinearParams9ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams9ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(8);
+        }
+      });
+      nonlinearVar9Panel.add(nonlinearParams9ToggleFavButton);
     }
     return nonlinearVar9Panel;
   }
@@ -11648,7 +11789,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar9Cmb() {
     if (nonlinearVar9Cmb == null) {
       nonlinearVar9Cmb = new JComboBox();
-      nonlinearVar9Cmb.setLocation(new Point(62, 2));
+      nonlinearVar9Cmb.setLocation(new Point(86, 2));
       nonlinearVar9Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar9Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar9Cmb.setMaximumRowCount(22);
@@ -11689,7 +11830,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar9REd.setValueStep(0.01);
-      nonlinearVar9REd.setLocation(new Point(188, 2));
+      nonlinearVar9REd.setLocation(new Point(212, 2));
       nonlinearVar9REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar9REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar9REd.setText("");
@@ -11706,7 +11847,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams9Cmb() {
     if (nonlinearParams9Cmb == null) {
       nonlinearParams9Cmb = new JComboBox();
-      nonlinearParams9Cmb.setLocation(new Point(62, 26));
+      nonlinearParams9Cmb.setLocation(new Point(86, 26));
       nonlinearParams9Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams9Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams9Cmb.setSize(new Dimension(129, 24));
@@ -11745,7 +11886,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearParams9REd.setLocation(new Point(188, 26));
+      nonlinearParams9REd.setLocation(new Point(212, 26));
       nonlinearParams9REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams9REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams9REd.setText("");
@@ -11762,7 +11903,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams9LeftButton() {
     if (nonlinearParams9LeftButton == null) {
       nonlinearParams9LeftButton = new JButton();
-      nonlinearParams9LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams9LeftButton.setLocation(new Point(293, 26));
       nonlinearParams9LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams9LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams9LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -11789,7 +11930,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams10Lbl.setText("Params");
       nonlinearParams10Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams10Lbl.setLocation(new Point(4, 26));
+      nonlinearParams10Lbl.setLocation(new Point(28, 26));
       nonlinearVar10Lbl = new JLabel();
       nonlinearVar10Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar10Lbl.addMouseListener(new MouseAdapter() {
@@ -11800,14 +11941,14 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar10Lbl.setLocation(new Point(4, 2));
+      nonlinearVar10Lbl.setLocation(new Point(28, 2));
       nonlinearVar10Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar10Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar10Lbl.setText("Var 10");
       nonlinearVar10Lbl.setSize(new Dimension(38, 22));
       nonlinearVar10Panel = new JPanel();
       nonlinearVar10Panel.setLayout(null);
-      nonlinearVar10Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar10Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar10Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
       nonlinearVar10Panel.add(nonlinearVar10Lbl, null);
       nonlinearVar10Panel.add(getNonlinearVar10Cmb(), null);
@@ -11822,9 +11963,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10PreButton.setText("");
       nonlinearParams10PreButton.setSize(new Dimension(22, 22));
       nonlinearParams10PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams10PreButton.setLocation(new Point(269, 26));
+      nonlinearParams10PreButton.setLocation(new Point(293, 26));
       nonlinearParams10PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams10PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams10PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams10PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams10PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11838,9 +11979,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10PostButton.setText("");
       nonlinearParams10PostButton.setSize(new Dimension(22, 22));
       nonlinearParams10PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams10PostButton.setLocation(new Point(168, 2));
+      nonlinearParams10PostButton.setLocation(new Point(192, 2));
       nonlinearParams10PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams10PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams10PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams10PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams10PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11854,9 +11995,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10UpButton.setText("");
       nonlinearParams10UpButton.setSize(new Dimension(22, 22));
       nonlinearParams10UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams10UpButton.setLocation(new Point(269, 26));
+      nonlinearParams10UpButton.setLocation(new Point(293, 26));
       nonlinearParams10UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams10UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams10UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams10UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams10UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11870,9 +12011,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10ToggleParamsPnlButton.setText("");
       nonlinearParams10ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams10ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams10ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams10ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams10ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams10ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams10ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams10ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams10ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11880,6 +12021,22 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar10Panel.add(nonlinearParams10ToggleParamsPnlButton);
+
+      nonlinearParams10ToggleFavButton = new JToggleButton();
+      nonlinearParams10ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams10ToggleFavButton.setText("");
+      nonlinearParams10ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams10ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams10ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams10ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams10ToggleFavButton.setFont(null);
+      nonlinearParams10ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams10ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(9);
+        }
+      });
+      nonlinearVar10Panel.add(nonlinearParams10ToggleFavButton);
     }
     return nonlinearVar10Panel;
   }
@@ -11892,7 +12049,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar10Cmb() {
     if (nonlinearVar10Cmb == null) {
       nonlinearVar10Cmb = new JComboBox();
-      nonlinearVar10Cmb.setLocation(new Point(62, 2));
+      nonlinearVar10Cmb.setLocation(new Point(86, 2));
       nonlinearVar10Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar10Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar10Cmb.setMaximumRowCount(22);
@@ -11933,7 +12090,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar10REd.setValueStep(0.01);
-      nonlinearVar10REd.setLocation(new Point(188, 2));
+      nonlinearVar10REd.setLocation(new Point(212, 2));
       nonlinearVar10REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar10REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar10REd.setText("");
@@ -11950,7 +12107,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams10Cmb() {
     if (nonlinearParams10Cmb == null) {
       nonlinearParams10Cmb = new JComboBox();
-      nonlinearParams10Cmb.setLocation(new Point(62, 26));
+      nonlinearParams10Cmb.setLocation(new Point(86, 26));
       nonlinearParams10Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams10Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams10Cmb.setSize(new Dimension(128, 24));
@@ -11989,7 +12146,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearParams10REd.setLocation(new Point(188, 26));
+      nonlinearParams10REd.setLocation(new Point(212, 26));
       nonlinearParams10REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams10REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams10REd.setText("");
@@ -12006,7 +12163,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams10LeftButton() {
     if (nonlinearParams10LeftButton == null) {
       nonlinearParams10LeftButton = new JButton();
-      nonlinearParams10LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams10LeftButton.setLocation(new Point(293, 26));
       nonlinearParams10LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams10LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams10LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -12033,7 +12190,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams11Lbl.setText("Params");
       nonlinearParams11Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams11Lbl.setLocation(new Point(4, 26));
+      nonlinearParams11Lbl.setLocation(new Point(28, 26));
       nonlinearVar11Lbl = new JLabel();
       nonlinearVar11Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar11Lbl.addMouseListener(new MouseAdapter() {
@@ -12044,14 +12201,14 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar11Lbl.setLocation(new Point(4, 2));
+      nonlinearVar11Lbl.setLocation(new Point(28, 2));
       nonlinearVar11Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar11Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar11Lbl.setText("Var 11");
       nonlinearVar11Lbl.setSize(new Dimension(38, 22));
       nonlinearVar11Panel = new JPanel();
       nonlinearVar11Panel.setLayout(null);
-      nonlinearVar11Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar11Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar11Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
       nonlinearVar11Panel.add(nonlinearVar11Lbl, null);
       nonlinearVar11Panel.add(getNonlinearVar11Cmb(), null);
@@ -12066,9 +12223,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11PreButton.setText("");
       nonlinearParams11PreButton.setSize(new Dimension(22, 22));
       nonlinearParams11PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams11PreButton.setLocation(new Point(269, 26));
+      nonlinearParams11PreButton.setLocation(new Point(293, 26));
       nonlinearParams11PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams11PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams11PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams11PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams11PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -12082,9 +12239,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11PostButton.setText("");
       nonlinearParams11PostButton.setSize(new Dimension(22, 22));
       nonlinearParams11PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams11PostButton.setLocation(new Point(168, 2));
+      nonlinearParams11PostButton.setLocation(new Point(192, 2));
       nonlinearParams11PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams11PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams11PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams11PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams11PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -12098,9 +12255,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11UpButton.setText("");
       nonlinearParams11UpButton.setSize(new Dimension(22, 22));
       nonlinearParams11UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams11UpButton.setLocation(new Point(269, 26));
+      nonlinearParams11UpButton.setLocation(new Point(293, 26));
       nonlinearParams11UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams11UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams11UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams11UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams11UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -12114,9 +12271,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11ToggleParamsPnlButton.setText("");
       nonlinearParams11ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams11ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams11ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams11ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams11ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams11ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams11ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams11ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams11ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -12125,6 +12282,21 @@ public class MainEditorFrame extends JFrame {
       });
       nonlinearVar11Panel.add(nonlinearParams11ToggleParamsPnlButton);
 
+      nonlinearParams11ToggleFavButton = new JToggleButton();
+      nonlinearParams11ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams11ToggleFavButton.setText("");
+      nonlinearParams11ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams11ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams11ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams11ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams11ToggleFavButton.setFont(null);
+      nonlinearParams11ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams11ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(10);
+        }
+      });
+      nonlinearVar11Panel.add(nonlinearParams11ToggleFavButton);
     }
     return nonlinearVar11Panel;
   }
@@ -12137,7 +12309,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar11Cmb() {
     if (nonlinearVar11Cmb == null) {
       nonlinearVar11Cmb = new JComboBox();
-      nonlinearVar11Cmb.setLocation(new Point(62, 2));
+      nonlinearVar11Cmb.setLocation(new Point(86, 2));
       nonlinearVar11Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar11Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar11Cmb.setMaximumRowCount(22);
@@ -12178,7 +12350,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar11REd.setValueStep(0.01);
-      nonlinearVar11REd.setLocation(new Point(188, 2));
+      nonlinearVar11REd.setLocation(new Point(212, 2));
       nonlinearVar11REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar11REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar11REd.setText("");
@@ -12195,7 +12367,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams11Cmb() {
     if (nonlinearParams11Cmb == null) {
       nonlinearParams11Cmb = new JComboBox();
-      nonlinearParams11Cmb.setLocation(new Point(62, 26));
+      nonlinearParams11Cmb.setLocation(new Point(86, 26));
       nonlinearParams11Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams11Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams11Cmb.setSize(new Dimension(128, 24));
@@ -12234,7 +12406,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearParams11REd.setLocation(new Point(188, 26));
+      nonlinearParams11REd.setLocation(new Point(212, 26));
       nonlinearParams11REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams11REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams11REd.setText("");
@@ -12251,7 +12423,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams11LeftButton() {
     if (nonlinearParams11LeftButton == null) {
       nonlinearParams11LeftButton = new JButton();
-      nonlinearParams11LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams11LeftButton.setLocation(new Point(293, 26));
       nonlinearParams11LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams11LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams11LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -12278,7 +12450,7 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams12Lbl.setText("Params");
       nonlinearParams12Lbl.setSize(new Dimension(38, 22));
-      nonlinearParams12Lbl.setLocation(new Point(4, 26));
+      nonlinearParams12Lbl.setLocation(new Point(28, 26));
       nonlinearVar12Lbl = new JLabel();
       nonlinearVar12Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       nonlinearVar12Lbl.addMouseListener(new MouseAdapter() {
@@ -12289,14 +12461,14 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearVar12Lbl.setLocation(new Point(4, 2));
+      nonlinearVar12Lbl.setLocation(new Point(28, 2));
       nonlinearVar12Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar12Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar12Lbl.setText("Var 12");
       nonlinearVar12Lbl.setSize(new Dimension(38, 22));
       nonlinearVar12Panel = new JPanel();
       nonlinearVar12Panel.setLayout(null);
-      nonlinearVar12Panel.setPreferredSize(new Dimension(292, 52));
+      nonlinearVar12Panel.setPreferredSize(new Dimension(316, 52));
       nonlinearVar12Panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
       nonlinearVar12Panel.add(nonlinearVar12Lbl, null);
       nonlinearVar12Panel.add(getNonlinearVar12Cmb(), null);
@@ -12311,9 +12483,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12PreButton.setText("");
       nonlinearParams12PreButton.setSize(new Dimension(22, 22));
       nonlinearParams12PreButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams12PreButton.setLocation(new Point(269, 26));
+      nonlinearParams12PreButton.setLocation(new Point(293, 26));
       nonlinearParams12PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams12PreButton.setBounds(42, 2, 22, 24);
+      nonlinearParams12PreButton.setBounds(66, 2, 22, 24);
       nonlinearParams12PreButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams12PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -12327,9 +12499,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12PostButton.setText("");
       nonlinearParams12PostButton.setSize(new Dimension(22, 22));
       nonlinearParams12PostButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams12PostButton.setLocation(new Point(168, 2));
+      nonlinearParams12PostButton.setLocation(new Point(192, 2));
       nonlinearParams12PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams12PostButton.setBounds(168, 2, 22, 24);
+      nonlinearParams12PostButton.setBounds(192, 2, 22, 24);
       nonlinearParams12PostButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_post.png")));
       nonlinearParams12PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -12343,9 +12515,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12UpButton.setText("");
       nonlinearParams12UpButton.setSize(new Dimension(22, 22));
       nonlinearParams12UpButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams12UpButton.setLocation(new Point(269, 26));
+      nonlinearParams12UpButton.setLocation(new Point(293, 26));
       nonlinearParams12UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams12UpButton.setBounds(269, 2, 22, 24);
+      nonlinearParams12UpButton.setBounds(293, 2, 22, 24);
       nonlinearParams12UpButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams12UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -12359,9 +12531,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12ToggleParamsPnlButton.setText("");
       nonlinearParams12ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams12ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
-      nonlinearParams12ToggleParamsPnlButton.setLocation(new Point(269, 26));
+      nonlinearParams12ToggleParamsPnlButton.setLocation(new Point(293, 26));
       nonlinearParams12ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      nonlinearParams12ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
+      nonlinearParams12ToggleParamsPnlButton.setBounds(66, 26, 22, 24);
       nonlinearParams12ToggleParamsPnlButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams12ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -12369,6 +12541,22 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar12Panel.add(nonlinearParams12ToggleParamsPnlButton);
+
+      nonlinearParams12ToggleFavButton = new JToggleButton();
+      nonlinearParams12ToggleFavButton.setToolTipText("Mark/unmark the current variation as favourite");
+      nonlinearParams12ToggleFavButton.setText("");
+      nonlinearParams12ToggleFavButton.setSize(new Dimension(22, 22));
+      nonlinearParams12ToggleFavButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams12ToggleFavButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      nonlinearParams12ToggleFavButton.setLocation(new Point(293, 26));
+      nonlinearParams12ToggleFavButton.setFont(null);
+      nonlinearParams12ToggleFavButton.setBounds(0, 2, 22, 24);
+      nonlinearParams12ToggleFavButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getNonlinearControls().nonlinearParamsToggleFavouriteClicked(11);
+        }
+      });
+      nonlinearVar12Panel.add(nonlinearParams12ToggleFavButton);
     }
     return nonlinearVar12Panel;
   }
@@ -12381,7 +12569,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearVar12Cmb() {
     if (nonlinearVar12Cmb == null) {
       nonlinearVar12Cmb = new JComboBox();
-      nonlinearVar12Cmb.setLocation(new Point(62, 2));
+      nonlinearVar12Cmb.setLocation(new Point(86, 2));
       nonlinearVar12Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar12Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar12Cmb.setMaximumRowCount(22);
@@ -12422,7 +12610,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar12REd.setValueStep(0.01);
-      nonlinearVar12REd.setLocation(new Point(188, 2));
+      nonlinearVar12REd.setLocation(new Point(212, 2));
       nonlinearVar12REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar12REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar12REd.setText("");
@@ -12439,7 +12627,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getNonlinearParams12Cmb() {
     if (nonlinearParams12Cmb == null) {
       nonlinearParams12Cmb = new JComboBox();
-      nonlinearParams12Cmb.setLocation(new Point(62, 26));
+      nonlinearParams12Cmb.setLocation(new Point(86, 26));
       nonlinearParams12Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams12Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams12Cmb.setSize(new Dimension(128, 24));
@@ -12478,7 +12666,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      nonlinearParams12REd.setLocation(new Point(188, 26));
+      nonlinearParams12REd.setLocation(new Point(212, 26));
       nonlinearParams12REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams12REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams12REd.setText("");
@@ -12495,7 +12683,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getNonlinearParams12LeftButton() {
     if (nonlinearParams12LeftButton == null) {
       nonlinearParams12LeftButton = new JButton();
-      nonlinearParams12LeftButton.setLocation(new Point(269, 26));
+      nonlinearParams12LeftButton.setLocation(new Point(293, 26));
       nonlinearParams12LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams12LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams12LeftButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
@@ -13137,6 +13325,18 @@ public class MainEditorFrame extends JFrame {
   private JToggleButton nonlinearParams10ToggleParamsPnlButton;
   private JToggleButton nonlinearParams11ToggleParamsPnlButton;
   private JToggleButton nonlinearParams12ToggleParamsPnlButton;
+  private JToggleButton nonlinearParams1ToggleFavButton;
+  private JToggleButton nonlinearParams2ToggleFavButton;
+  private JToggleButton nonlinearParams3ToggleFavButton;
+  private JToggleButton nonlinearParams4ToggleFavButton;
+  private JToggleButton nonlinearParams5ToggleFavButton;
+  private JToggleButton nonlinearParams6ToggleFavButton;
+  private JToggleButton nonlinearParams7ToggleFavButton;
+  private JToggleButton nonlinearParams8ToggleFavButton;
+  private JToggleButton nonlinearParams9ToggleFavButton;
+  private JToggleButton nonlinearParams10ToggleFavButton;
+  private JToggleButton nonlinearParams11ToggleFavButton;
+  private JToggleButton nonlinearParams12ToggleFavButton;
   private JWFNumberField lowDensityBrightnessREd;
   private JSlider lowDensityBrightnessSlider;
   private JSlider balanceRedSlider;
@@ -13228,6 +13428,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField tinaZBufferShiftREd;
   private JSlider tinaZBufferShiftSlider;
   private JButton tinaZBufferPreviewButton;
+  private JToggleButton displayFavouriteVariationsToggleBtn;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -23961,6 +24162,54 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams12ToggleParamsPnlButton;
   }
 
+  public JToggleButton getNonlinearParams1ToggleFavButton() {
+    return nonlinearParams1ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams2ToggleFavButton() {
+    return nonlinearParams2ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams3ToggleFavButton() {
+    return nonlinearParams3ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams4ToggleFavButton() {
+    return nonlinearParams4ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams5ToggleFavButton() {
+    return nonlinearParams5ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams6ToggleFavButton() {
+    return nonlinearParams6ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams7ToggleFavButton() {
+    return nonlinearParams7ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams8ToggleFavButton() {
+    return nonlinearParams8ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams9ToggleFavButton() {
+    return nonlinearParams9ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams10ToggleFavButton() {
+    return nonlinearParams10ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams11ToggleFavButton() {
+    return nonlinearParams11ToggleFavButton;
+  }
+
+  public JToggleButton getNonlinearParams12ToggleFavButton() {
+    return nonlinearParams12ToggleFavButton;
+  }
+
   public JWFNumberField getLowDensityBrightnessREd() {
     return lowDensityBrightnessREd;
   }
@@ -24560,6 +24809,10 @@ public class MainEditorFrame extends JFrame {
     return quickMutationPanel;
   }
 
+  public JToggleButton getDisplayFavouriteVariationsToggleBtn() {
+    return displayFavouriteVariationsToggleBtn;
+  }
+
   private JPanel getPanel_16() {
     if (panel_16 == null) {
       panel_16 = new JPanel();
@@ -24572,7 +24825,7 @@ public class MainEditorFrame extends JFrame {
       tinaVariationProfile1Cmb.setMaximumRowCount(22);
       tinaVariationProfile1Cmb.setLocation(new Point(62, 2));
       tinaVariationProfile1Cmb.setFont(null);
-      tinaVariationProfile1Cmb.setBounds(45, 2, 120, 24);
+      tinaVariationProfile1Cmb.setBounds(69, 2, 108, 24);
       tinaVariationProfile1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
@@ -24586,18 +24839,18 @@ public class MainEditorFrame extends JFrame {
       lblProfile.setText("Filter");
       lblProfile.setSize(new Dimension(36, 22));
       lblProfile.setPreferredSize(new Dimension(60, 22));
-      lblProfile.setLocation(new Point(4, 2));
+      lblProfile.setLocation(new Point(30, 2));
       lblProfile.setFont(null);
-      lblProfile.setBounds(6, 2, 40, 22);
+      lblProfile.setBounds(30, 2, 38, 22);
       panel_16.add(lblProfile);
 
       tinaVariationProfile2Cmb = new JComboBox();
-      tinaVariationProfile2Cmb.setSize(new Dimension(108, 24));
+      tinaVariationProfile2Cmb.setSize(new Dimension(98, 24));
       tinaVariationProfile2Cmb.setPreferredSize(new Dimension(120, 22));
       tinaVariationProfile2Cmb.setMaximumRowCount(22);
       tinaVariationProfile2Cmb.setLocation(new Point(62, 2));
       tinaVariationProfile2Cmb.setFont(null);
-      tinaVariationProfile2Cmb.setBounds(168, 2, 120, 24);
+      tinaVariationProfile2Cmb.setBounds(180, 2, 108, 24);
       tinaVariationProfile2Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
@@ -24622,6 +24875,7 @@ public class MainEditorFrame extends JFrame {
         }
       });
       panel_16.add(tinaVariationProfileEditBtn);
+      panel_16.add(getToggleButton_4());
     }
     return panel_16;
   }
@@ -24678,4 +24932,24 @@ public class MainEditorFrame extends JFrame {
     return tinaZBufferShiftSlider;
   }
 
+  private JToggleButton getToggleButton_4() {
+    if (displayFavouriteVariationsToggleBtn == null) {
+      displayFavouriteVariationsToggleBtn = new JToggleButton();
+      displayFavouriteVariationsToggleBtn.setToolTipText("Toggle display of your favourite variations");
+      displayFavouriteVariationsToggleBtn.setText("");
+      displayFavouriteVariationsToggleBtn.setSize(new Dimension(22, 22));
+      displayFavouriteVariationsToggleBtn.setPreferredSize(new Dimension(22, 22));
+      displayFavouriteVariationsToggleBtn.setLocation(new Point(293, 26));
+      displayFavouriteVariationsToggleBtn.setFont(null);
+      displayFavouriteVariationsToggleBtn.setBounds(4, 2, 22, 24);
+      displayFavouriteVariationsToggleBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-favorite-gray.png")));
+      displayFavouriteVariationsToggleBtn.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.displayFavouriteVariationsToggleBtn_clicked();
+        }
+      });
+
+    }
+    return displayFavouriteVariationsToggleBtn;
+  }
 } //  @jve:decl-index=0:visual-constraint="10,10"

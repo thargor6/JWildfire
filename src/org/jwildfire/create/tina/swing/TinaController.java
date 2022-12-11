@@ -483,6 +483,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.affineScaleXButton = parameterObject.pAffineScaleXButton;
     data.affineScaleYButton = parameterObject.pAffineScaleYButton;
 
+    data.displayFavouriteVariationsToggleBtn = parameterObject.displayFavouriteVariationsToggleBtn;
+
     data.randomBatchPanel = parameterObject.pRandomBatchPanel;
     data.TinaNonlinearControlsRows = parameterObject.pTinaNonlinearControlsRows;
     data.variationControlsDelegates = parameterObject.variationControlsDelegates;
@@ -6936,5 +6938,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       messageHelper.showStatusMessage(getCurrFlame(), "The parameters ZScale and ZShift have been updated according to the current render settings");
     }
   }
+
+  public void updateToggleFavIcon(JToggleButton toggleFavouriteButton) {
+    String iconName = toggleFavouriteButton.isSelected() ? "emblem-favorite.png" : "emblem-favorite-gray.png";
+    toggleFavouriteButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource(String.format("/org/jwildfire/swing/icons/new/%s", iconName))));
+  }
+  public void displayFavouriteVariationsToggleBtn_clicked() {
+    if (!isNoRefresh()) {
+      initNonlinearVariationCmb();
+    }
+    updateToggleFavIcon(data.displayFavouriteVariationsToggleBtn);
+  }
+
 }
 

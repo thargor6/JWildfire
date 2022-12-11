@@ -1,4 +1,9 @@
 V7.40 (xx.xx.2022)
+ - mark/unmark variations as favourites:
+   - you may now mark any variaton as favourite by just clicking a small button next to it
+   - there is an additional favourite-filter-button which then only dispalys variations which are markes as favourites
+   - this works together with variation-profiles and the variation-profiles-filter, but can be used in a more dynamic fashion,
+     e.g., you must not enter a popup window to edit favourites
  - new powerful "brush_stokes_wf"-variation which helps to apply a painterly look to your fractals
    - includes a lot of logic and 70 brush-presets, which may be combined freely
      - due to its complexity it is not available on GPU yet
