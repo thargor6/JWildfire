@@ -40,10 +40,14 @@ public class TinaControllerParameter {
   public JSlider pCameraBankSlider;
   public JWFNumberField pCameraPerspectiveREd;
   public JSlider pCameraPerspectiveSlider;
+  public JLabel pCameraCentreXLbl;
   public JWFNumberField pCameraCentreXREd;
   public JSlider pCameraCentreXSlider;
+  public JLabel pCameraCentreYLbl;
   public JWFNumberField pCameraCentreYREd;
   public JSlider pCameraCentreYSlider;
+
+  public JLabel pCameraZoomLbl;
   public JWFNumberField pCameraZoomREd;
   public JSlider pCameraZoomSlider;
   public JCheckBox pNewDOFCBx;
@@ -786,10 +790,13 @@ public class TinaControllerParameter {
       JSlider pCameraBankSlider,
       JWFNumberField pCameraPerspectiveREd,
       JSlider pCameraPerspectiveSlider,
+      JLabel pCameraCentreXLbl,
       JWFNumberField pCameraCentreXREd,
       JSlider pCameraCentreXSlider,
+      JLabel pCameraCentreYLbl,
       JWFNumberField pCameraCentreYREd,
       JSlider pCameraCentreYSlider,
+      JLabel pCameraZoomLbl,
       JWFNumberField pCameraZoomREd,
       JSlider pCameraZoomSlider,
       JCheckBox pNewDOFCBx,
@@ -972,10 +979,13 @@ public class TinaControllerParameter {
     this.pCameraBankSlider = pCameraBankSlider;
     this.pCameraPerspectiveREd = pCameraPerspectiveREd;
     this.pCameraPerspectiveSlider = pCameraPerspectiveSlider;
+    this.pCameraCentreXLbl = pCameraCentreXLbl;
     this.pCameraCentreXREd = pCameraCentreXREd;
     this.pCameraCentreXSlider = pCameraCentreXSlider;
+    this.pCameraCentreYLbl = pCameraCentreYLbl;
     this.pCameraCentreYREd = pCameraCentreYREd;
     this.pCameraCentreYSlider = pCameraCentreYSlider;
+    this.pCameraZoomLbl = pCameraZoomLbl;
     this.pCameraZoomREd = pCameraZoomREd;
     this.pCameraZoomSlider = pCameraZoomSlider;
     this.pNewDOFCBx = pNewDOFCBx;
