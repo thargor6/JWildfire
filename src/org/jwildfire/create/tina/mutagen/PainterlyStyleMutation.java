@@ -76,7 +76,7 @@ public class PainterlyStyleMutation extends AbstractMutation {
       }
     }
     brushVar.setRessource(
-        AbstractBrushStrokeWFFunc.RESSOURCE_BRUSH_PRESETS,
+        AbstractBrushStrokeWFFunc.RESSOURCE_BRUSH_LIST,
         String.join(", ", brushIds).getBytes(StandardCharsets.UTF_8));
   }
 

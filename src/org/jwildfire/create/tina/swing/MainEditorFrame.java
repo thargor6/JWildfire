@@ -1533,16 +1533,6 @@ public class MainEditorFrame extends JFrame {
     if (tinaCameraPanel == null) {
       tinaPixelsPerUnitLbl = new JLabel();
       tinaPixelsPerUnitLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      tinaPixelsPerUnitLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().pixelsPerUnitREd_reset();
-          }
-        }
-      });
-      tinaPixelsPerUnitLbl.setName("tinaPixelsPerUnitLbl");
       tinaPixelsPerUnitLbl.setText("Pixs per unit");
       tinaPixelsPerUnitLbl.setToolTipText("Pixels per unit; increase to make image larger");
       tinaPixelsPerUnitLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1649,45 +1639,17 @@ public class MainEditorFrame extends JFrame {
       tinaCameraCamPosXREd.setText("");
       tinaCameraCamPosXREd.setSize(new Dimension(100, 24));
       tinaCameraCamPosXREd.setPreferredSize(new Dimension(100, 24));
-      tinaCameraCamPosXREd.setMotionPropertyName("camPosX");
       tinaCameraCamPosXREd.setLocation(new Point(456, 4));
-      tinaCameraCamPosXREd.setLinkedMotionControlName("tinaCameraCamPosXSlider");
-      tinaCameraCamPosXREd.setLinkedLabelControlName("tinaCameraCamPosXLbl");
       tinaCameraCamPosXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaCameraCamPosXREd.setBounds(840, 4, 100, 24);
-      tinaCameraCamPosXREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaCameraCamPosXREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (!tinaCameraCamPosXREd.isMouseAdjusting() || tinaCameraCamPosXREd.getMouseChangeCount() == 0) {
-            if (!tinaCameraCamPosXSlider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-            }
-          }
-          tinaController.getFlameControls().camPosXREd_changed();
-        }
-      });
       tinaCameraPanel.add(tinaCameraCamPosXREd);
 
-      JLabel tinaCameraCamPosXLbl = new JLabel();
+      tinaCameraCamPosXLbl = new JLabel();
       tinaCameraCamPosXLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      tinaCameraCamPosXLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().camPosXREd_reset();
-          }
-        }
-      });
       tinaCameraCamPosXLbl.setText("CamPosX");
       tinaCameraCamPosXLbl.setToolTipText("Camera X (horizontal) position");
       tinaCameraCamPosXLbl.setSize(new Dimension(68, 22));
       tinaCameraCamPosXLbl.setPreferredSize(new Dimension(94, 22));
-      tinaCameraCamPosXLbl.setName("tinaCameraCamPosXLbl");
       tinaCameraCamPosXLbl.setLocation(new Point(390, 6));
       tinaCameraCamPosXLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraCamPosXLbl.setBounds(774, 4, 68, 22);
@@ -1697,41 +1659,18 @@ public class MainEditorFrame extends JFrame {
       tinaCameraCamPosXSlider.setValue(0);
       tinaCameraCamPosXSlider.setSize(new Dimension(205, 19));
       tinaCameraCamPosXSlider.setPreferredSize(new Dimension(220, 19));
-      tinaCameraCamPosXSlider.setName("tinaCameraCamPosXSlider");
       tinaCameraCamPosXSlider.setMinimum(-25000);
       tinaCameraCamPosXSlider.setMaximum(25000);
       tinaCameraCamPosXSlider.setLocation(new Point(558, 4));
       tinaCameraCamPosXSlider.setBounds(942, 4, 205, 19);
-      tinaCameraCamPosXSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaCameraCamPosXSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().camPosXSlider_stateChanged(e);
-        }
-      });
-
       tinaCameraPanel.add(tinaCameraCamPosXSlider);
 
-      JLabel tinaCameraCamPosYLbl = new JLabel();
+      tinaCameraCamPosYLbl = new JLabel();
       tinaCameraCamPosYLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      tinaCameraCamPosYLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().camPosYREd_reset();
-          }
-        }
-      });
       tinaCameraCamPosYLbl.setText("CamPosY");
       tinaCameraCamPosYLbl.setToolTipText("Camera Y (vertical) position");
       tinaCameraCamPosYLbl.setSize(new Dimension(68, 22));
       tinaCameraCamPosYLbl.setPreferredSize(new Dimension(94, 22));
-      tinaCameraCamPosYLbl.setName("tinaCameraCamPosYLbl");
       tinaCameraCamPosYLbl.setLocation(new Point(390, 6));
       tinaCameraCamPosYLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraCamPosYLbl.setBounds(774, 28, 68, 22);
@@ -1744,65 +1683,26 @@ public class MainEditorFrame extends JFrame {
       tinaCameraCamPosYREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraCamPosYREd.setMotionPropertyName("camPosY");
       tinaCameraCamPosYREd.setLocation(new Point(456, 4));
-      tinaCameraCamPosYREd.setLinkedMotionControlName("tinaCameraCamPosYSlider");
-      tinaCameraCamPosYREd.setLinkedLabelControlName("tinaCameraCamPosYLbl");
       tinaCameraCamPosYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaCameraCamPosYREd.setBounds(840, 28, 100, 24);
-      tinaCameraCamPosYREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaCameraCamPosYREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (!tinaCameraCamPosYREd.isMouseAdjusting() || tinaCameraCamPosYREd.getMouseChangeCount() == 0) {
-            if (!tinaCameraCamPosYSlider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-            }
-          }
-          tinaController.getFlameControls().camPosYREd_changed();
-        }
-      });
       tinaCameraPanel.add(tinaCameraCamPosYREd);
 
       tinaCameraCamPosYSlider = new JSlider();
       tinaCameraCamPosYSlider.setValue(0);
       tinaCameraCamPosYSlider.setSize(new Dimension(205, 19));
       tinaCameraCamPosYSlider.setPreferredSize(new Dimension(220, 19));
-      tinaCameraCamPosYSlider.setName("tinaCameraCamPosYSlider");
       tinaCameraCamPosYSlider.setMinimum(-25000);
       tinaCameraCamPosYSlider.setMaximum(25000);
       tinaCameraCamPosYSlider.setLocation(new Point(558, 4));
       tinaCameraCamPosYSlider.setBounds(942, 28, 205, 19);
-      tinaCameraCamPosYSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaCameraCamPosYSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().camPosYSlider_stateChanged(e);
-        }
-      });
       tinaCameraPanel.add(tinaCameraCamPosYSlider);
 
-      JLabel tinaCameraCamPosZLbl = new JLabel();
+      tinaCameraCamPosZLbl = new JLabel();
       tinaCameraCamPosZLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      tinaCameraCamPosZLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().camPosZREd_reset();
-          }
-        }
-      });
       tinaCameraCamPosZLbl.setText("CamPosZ");
       tinaCameraCamPosZLbl.setToolTipText("Camera Z position; changes image size");
       tinaCameraCamPosZLbl.setSize(new Dimension(68, 22));
       tinaCameraCamPosZLbl.setPreferredSize(new Dimension(94, 22));
-      tinaCameraCamPosZLbl.setName("tinaCameraCamPosZLbl");
       tinaCameraCamPosZLbl.setLocation(new Point(390, 6));
       tinaCameraCamPosZLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraCamPosZLbl.setBounds(775, 52, 68, 22);
@@ -1813,49 +1713,19 @@ public class MainEditorFrame extends JFrame {
       tinaCameraCamPosZREd.setText("");
       tinaCameraCamPosZREd.setSize(new Dimension(100, 24));
       tinaCameraCamPosZREd.setPreferredSize(new Dimension(100, 24));
-      tinaCameraCamPosZREd.setMotionPropertyName("camPosZ");
       tinaCameraCamPosZREd.setLocation(new Point(456, 4));
-      tinaCameraCamPosZREd.setLinkedMotionControlName("tinaCameraCamPosZSlider");
-      tinaCameraCamPosZREd.setLinkedLabelControlName("tinaCameraCamPosZLbl");
       tinaCameraCamPosZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaCameraCamPosZREd.setBounds(841, 52, 100, 24);
-      tinaCameraCamPosZREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaCameraCamPosZREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (!tinaCameraCamPosZREd.isMouseAdjusting() || tinaCameraCamPosZREd.getMouseChangeCount() == 0) {
-            if (!tinaCameraCamPosZSlider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-            }
-          }
-          tinaController.getFlameControls().camPosZREd_changed();
-        }
-      });
       tinaCameraPanel.add(tinaCameraCamPosZREd);
 
       tinaCameraCamPosZSlider = new JSlider();
       tinaCameraCamPosZSlider.setValue(0);
       tinaCameraCamPosZSlider.setSize(new Dimension(205, 19));
       tinaCameraCamPosZSlider.setPreferredSize(new Dimension(220, 19));
-      tinaCameraCamPosZSlider.setName("tinaCameraCamPosZSlider");
       tinaCameraCamPosZSlider.setMinimum(-25000);
       tinaCameraCamPosZSlider.setMaximum(25000);
       tinaCameraCamPosZSlider.setLocation(new Point(558, 4));
       tinaCameraCamPosZSlider.setBounds(943, 52, 205, 19);
-      tinaCameraCamPosZSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaCameraCamPosZSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().camPosZSlider_stateChanged(e);
-        }
-      });
       tinaCameraPanel.add(tinaCameraCamPosZSlider);
       tinaCameraPanel.add(getResetCameraSettingsBtn());
     }
@@ -3071,25 +2941,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getTinaPixelsPerUnitREd() {
     if (tinaPixelsPerUnitREd == null) {
       tinaPixelsPerUnitREd = new JWFNumberField();
-      tinaPixelsPerUnitREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaPixelsPerUnitREd.setMotionPropertyName("pixelsPerUnit");
-      tinaPixelsPerUnitREd.setLinkedLabelControlName("tinaPixelsPerUnitLbl");
-      tinaPixelsPerUnitREd.setLinkedMotionControlName("tinaPixelsPerUnitSlider");
       tinaPixelsPerUnitREd.setValueStep(1.0);
-      tinaPixelsPerUnitREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (!tinaPixelsPerUnitREd.isMouseAdjusting() || tinaPixelsPerUnitREd.getMouseChangeCount() == 0) {
-            if (!tinaPixelsPerUnitSlider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-            }
-          }
-          tinaController.getFlameControls().pixelsPerUnitREd_changed();
-        }
-      });
       tinaPixelsPerUnitREd.setPreferredSize(new Dimension(100, 24));
       tinaPixelsPerUnitREd.setText("");
       tinaPixelsPerUnitREd.setLocation(new Point(456, 76));
@@ -3103,24 +2955,12 @@ public class MainEditorFrame extends JFrame {
   private JSlider getTinaPixelsPerUnitSlider() {
     if (tinaPixelsPerUnitSlider == null) {
       tinaPixelsPerUnitSlider = new JSlider();
-      tinaPixelsPerUnitSlider.setName("tinaPixelsPerUnitSlider");
-      tinaPixelsPerUnitSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
       tinaPixelsPerUnitSlider.setMaximum(1000);
       tinaPixelsPerUnitSlider.setMinimum(0);
       tinaPixelsPerUnitSlider.setValue(0);
       tinaPixelsPerUnitSlider.setSize(new Dimension(205, 19));
       tinaPixelsPerUnitSlider.setLocation(new Point(558, 76));
       tinaPixelsPerUnitSlider.setPreferredSize(new Dimension(220, 19));
-      tinaPixelsPerUnitSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().pixelsPerUnitSlider_stateChanged(e);
-        }
-      });
     }
     return tinaPixelsPerUnitSlider;
   }
@@ -6671,7 +6511,10 @@ public class MainEditorFrame extends JFrame {
         getDofFocusXREd(), getDofFocusXSlider(), getDofFocusYREd(), getDofFocusYSlider(), getDofFocusZREd(), getDofFocusZSlider(),
         getCamDimishZREd(), getCamDimishZSlider(), getDimishZColorButton(), getDimZDistanceREd(), getDimZDistanceSlider(),
         getDofDOFREd(), getDofDOFSlider(), getDofDOFAreaREd(), getDofDOFAreaSlider(), getDofDOFExponentREd(), getDofDOFExponentSlider(),
-        getDofCamZREd(), getDofCamZSlider(), getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
+        getDofCamZREd(), getDofCamZSlider(),
+
+            tinaPixelsPerUnitLbl, getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
+
         getTinaBrightnessREd(), getTinaBrightnessSlider(), getTinaContrastREd(), getTinaContrastSlider(), getTinaGammaREd(), getTinaGammaSlider(),
         getTinaVibrancyREd(), getTinaVibrancySlider(), getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaFilterKernelCmb(),
         getTinaGammaThresholdREd(), getTinaGammaThresholdSlider(), getBgTransparencyCBx(), getTinaPaletteRandomPointsREd(), getTinaPaletteImgPanel(), getTinaCholorChooserPaletteImgPanel(), getTinaPaletteShiftREd(), getTinaPaletteShiftSlider(),
@@ -6724,8 +6567,13 @@ public class MainEditorFrame extends JFrame {
         getPostSymmetryCentreYSlider(), getStereo3dModeCmb(), getStereo3dAngleREd(), getStereo3dAngleSlider(), getStereo3dEyeDistREd(),
         getStereo3dEyeDistSlider(), getStereo3dLeftEyeColorCmb(), getStereo3dRightEyeColorCmb(), getStereo3dInterpolatedImageCountREd(),
         getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb(), getStereo3dFocalOffsetREd(), getStereo3dFocalOffsetSlider(),
-        getStereo3dSwapSidesCBx(), getTinaCameraCamPosXREd(), getTinaCameraCamPosXSlider(), getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
-        getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(), getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
+        getStereo3dSwapSidesCBx(),
+
+            tinaCameraCamPosXLbl, getTinaCameraCamPosXREd(), getTinaCameraCamPosXSlider(),
+            tinaCameraCamPosYLbl, getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
+            tinaCameraCamPosZLbl, getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(),
+
+            getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
         getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton(),
         getAffineRotateEditMotionCurveBtn(), getAffineScaleEditMotionCurveBtn(),
         getTriangleStyleCmb(), getXFormModGammaREd(), getXFormModGammaSlider(), getXFormModGammaSpeedREd(), getXFormModGammaSpeedSlider(),
@@ -11840,8 +11688,14 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField stereo3dFocalOffsetREd;
   private JSlider stereo3dFocalOffsetSlider;
   private JCheckBox stereo3dSwapSidesCBx;
+
+  private JLabel tinaCameraCamPosXLbl;
   private JWFNumberField tinaCameraCamPosXREd;
+
+  private JLabel tinaCameraCamPosYLbl;
   private JWFNumberField tinaCameraCamPosYREd;
+
+  private JLabel tinaCameraCamPosZLbl;
   private JWFNumberField tinaCameraCamPosZREd;
   private JSlider tinaCameraCamPosXSlider;
   private JSlider tinaCameraCamPosYSlider;

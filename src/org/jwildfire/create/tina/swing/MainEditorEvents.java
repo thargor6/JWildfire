@@ -95,6 +95,9 @@ public class MainEditorEvents {
   }
 
   public void setupEvents() {
+    setupCameraTabEvents();
+  }
+  private void setupCameraTabEvents() {
     setupSlider(
             fields.cameraRollLbl,
             () -> tinaController.getFlameControls().cameraRollREd_reset(),
@@ -160,6 +163,38 @@ public class MainEditorEvents {
             fields.pCameraZoomSlider,
             (ChangeEvent e) -> tinaController.getFlameControls().cameraZoomSlider_stateChanged(e),
             "camZoom");
+    setupSlider(
+            fields.pixelsPerUnitLbl,
+            () -> tinaController.getFlameControls().pixelsPerUnitREd_reset(),
+            fields.pPixelsPerUnitREd,
+            (ChangeEvent e) -> tinaController.getFlameControls().pixelsPerUnitREd_changed(),
+            fields.pPixelsPerUnitSlider,
+            (ChangeEvent e) -> tinaController.getFlameControls().pixelsPerUnitSlider_stateChanged(e),
+            "pixelsPerUnit");
+    setupSlider(
+            fields.camPosXLbl,
+            () -> tinaController.getFlameControls().camPosXREd_reset(),
+            fields.camPosXREd,
+            (ChangeEvent e) -> tinaController.getFlameControls().camPosXREd_changed(),
+            fields.camPosXSlider,
+            (ChangeEvent e) -> tinaController.getFlameControls().camPosXSlider_stateChanged(e),
+            "camPosX");
+    setupSlider(
+            fields.camPosYLbl,
+            () -> tinaController.getFlameControls().camPosYREd_reset(),
+            fields.camPosYREd,
+            (ChangeEvent e) -> tinaController.getFlameControls().camPosYREd_changed(),
+            fields.camPosYSlider,
+            (ChangeEvent e) -> tinaController.getFlameControls().camPosYSlider_stateChanged(e),
+            "camPosY");
+    setupSlider(
+            fields.camPosZLbl,
+            () -> tinaController.getFlameControls().camPosZREd_reset(),
+            fields.camPosZREd,
+            (ChangeEvent e) -> tinaController.getFlameControls().camPosZREd_changed(),
+            fields.camPosZSlider,
+            (ChangeEvent e) -> tinaController.getFlameControls().camPosZSlider_stateChanged(e),
+            "camPosZ");
 
 
   }
