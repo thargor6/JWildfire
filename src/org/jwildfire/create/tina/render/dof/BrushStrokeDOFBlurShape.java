@@ -63,7 +63,7 @@ public class BrushStrokeDOFBlurShape extends AbstractDOFBlurShape {
     addBrush(brushes, params.get(PARAM_BRUSH3));
     if(!brushes.isEmpty()) {
       fnc.setRessource(
-         AbstractBrushStrokeWFFunc.RESSOURCE_BRUSH_PRESETS,
+         AbstractBrushStrokeWFFunc.RESSOURCE_BRUSH_LIST,
          String.join(", ", brushes).getBytes(StandardCharsets.UTF_8));
     }
     for (String paramName : getParamNames()) {

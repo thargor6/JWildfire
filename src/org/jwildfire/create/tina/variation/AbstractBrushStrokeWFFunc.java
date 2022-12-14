@@ -17,7 +17,6 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.Tools;
-import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -43,7 +42,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   public static final String PARAM_GRID_BRUSH_ROTATE = "grid_brush_rotate";
   public static final String PARAM_GRID_BRUSH_SCALE = "grid_brush_scale";
   public static final String PARAM_GRID_BRUSH_BLEND = "grid_brush_blend";
-  public static final String RESSOURCE_BRUSH_PRESETS = "brush_presets";
+  public static final String RESSOURCE_BRUSH_LIST = "brush_list";
   private static final String PARAM_OFFSETY = "offset_y";
   private static final String PARAM_COLOR_CHANNEL = "color_channel";
   private static final String PARAM_THRESHOLD = "threshold";
@@ -83,7 +82,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
     PARAM_ANTIALIAS_RADIUS
   };
   private static final String[] ressourceNames = {
-    RESSOURCE_BRUSH_PRESETS,
+          RESSOURCE_BRUSH_LIST,
     RESSOURCE_BRUSH_FILENAME1,
     RESSOURCE_BRUSH_FILENAME2,
     RESSOURCE_BRUSH_FILENAME3,
@@ -105,7 +104,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
 
   private int image_max_size = 320;
 
-  private String brush_presets = "001, 005, 012";
+  private String brush_list = "001, 005, 012";
   private String brush_filename1 = null;
   private String brush_filename2 = null;
   private String brush_filename3 = null;
@@ -151,9 +150,9 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
         Math.max(
             Math.min(
                 Tools.FTOI(
-                    (variation_batch_size + 1)
-                        * discretNoise(
-                            Tools.FTOI(noiseSclGeneration * (gridPosX + 1235.767 * gridPosY)))),
+                    (variation_batch_size + 1) * 0.5
+                        * (pAffineTP.color + discretNoise(
+                            Tools.FTOI(noiseSclGeneration * (gridPosX + 1235.767 * gridPosY))))),
                 variation_batch_size),
             0);
 
@@ -246,8 +245,8 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
       FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.initOnce(pContext, pLayer, pXForm, pAmount);
     _colorMaps = new ArrayList<>();
-    if (brush_presets != null && brush_presets.length() > 0) {
-      StringTokenizer tokenizer = new StringTokenizer(brush_presets, ",");
+    if (brush_list != null && brush_list.length() > 0) {
+      StringTokenizer tokenizer = new StringTokenizer(brush_list, ",");
       while (tokenizer.hasMoreTokens()) {
         String brushId = tokenizer.nextToken().trim();
         String brushFilename = String.format("brush%s.png", brushId);
@@ -361,7 +360,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   @Override
   public byte[][] getRessourceValues() {
     return new byte[][] {
-      (brush_presets != null ? brush_presets.getBytes() : null),
+      (brush_list != null ? brush_list.getBytes() : null),
       (brush_filename1 != null ? brush_filename1.getBytes() : null),
       (brush_filename2 != null ? brush_filename2.getBytes() : null),
       (brush_filename3 != null ? brush_filename3.getBytes() : null),
@@ -373,8 +372,8 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
-    if (RESSOURCE_BRUSH_PRESETS.equalsIgnoreCase(pName)) {
-      brush_presets = pValue != null ? new String(pValue) : "";
+    if (RESSOURCE_BRUSH_LIST.equalsIgnoreCase(pName)) {
+      brush_list = pValue != null ? new String(pValue) : "";
     } else if (RESSOURCE_BRUSH_FILENAME1.equalsIgnoreCase(pName)) {
       brush_filename1 = pValue != null ? new String(pValue) : "";
     } else if (RESSOURCE_BRUSH_FILENAME2.equalsIgnoreCase(pName)) {
@@ -392,7 +391,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
 
   @Override
   public RessourceType getRessourceType(String pName) {
-    if (RESSOURCE_BRUSH_PRESETS.equalsIgnoreCase(pName)) {
+    if (RESSOURCE_BRUSH_LIST.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
     } else if (RESSOURCE_BRUSH_FILENAME1.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
@@ -421,7 +420,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   private String makeRessourceKey() {
     return getName()
         + "#"
-        + brush_presets
+        + brush_list
         + "#"
         + brush_filename1
         + "#"
