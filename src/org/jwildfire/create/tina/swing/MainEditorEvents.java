@@ -96,6 +96,47 @@ public class MainEditorEvents {
 
   public void setupEvents() {
     setupSlider(
+            fields.cameraRollLbl,
+            () -> tinaController.getFlameControls().cameraRollREd_reset(),
+            fields.pCameraRollREd,
+            (ChangeEvent e) -> tinaController.getFlameControls().cameraRollREd_changed(),
+            fields.pCameraRollSlider,
+            (ChangeEvent e) -> tinaController.getFlameControls().cameraRollSlider_stateChanged(e),
+            "camRoll");
+    setupSlider(
+            fields.cameraPitchLbl,
+            () -> tinaController.getFlameControls().cameraPitchREd_reset(),
+            fields.pCameraPitchREd,
+            (ChangeEvent e) -> tinaController.getFlameControls().cameraPitchREd_changed(),
+            fields.pCameraPitchSlider,
+            (ChangeEvent e) -> tinaController.getFlameControls().cameraPitchSlider_stateChanged(e),
+            "camPitch");
+    setupSlider(
+            fields.cameraYawLbl,
+            () -> tinaController.getFlameControls().cameraYawREd_reset(),
+            fields.pCameraYawREd,
+            (ChangeEvent e) -> tinaController.getFlameControls().cameraYawREd_changed(),
+            fields.pCameraYawSlider,
+            (ChangeEvent e) -> tinaController.getFlameControls().cameraYawSlider_stateChanged(e),
+            "camYaw");
+    setupSlider(
+            fields.cameraBankLbl,
+            () -> tinaController.getFlameControls().cameraBankREd_reset(),
+            fields.pCameraBankREd,
+            (ChangeEvent e) -> tinaController.getFlameControls().cameraBankREd_changed(),
+            fields.pCameraBankSlider,
+            (ChangeEvent e) -> tinaController.getFlameControls().cameraBankSlider_stateChanged(e),
+            "camBank");
+    setupSlider(
+            fields.cameraPerspectiveLbl,
+            () -> tinaController.getFlameControls().cameraPerspectiveREd_reset(),
+            fields.pCameraPerspectiveREd,
+            (ChangeEvent e) -> tinaController.getFlameControls().cameraPerspectiveREd_changed(),
+            fields.pCameraPerspectiveSlider,
+            (ChangeEvent e) -> tinaController.getFlameControls().cameraPerspectiveSlider_stateChanged(e),
+            "camPerspective");
+
+    setupSlider(
         fields.pCameraCentreXLbl,
         () -> tinaController.getFlameControls().cameraCentreXREd_reset(),
         fields.pCameraCentreXREd,
@@ -119,6 +160,7 @@ public class MainEditorEvents {
             fields.pCameraZoomSlider,
             (ChangeEvent e) -> tinaController.getFlameControls().cameraZoomSlider_stateChanged(e),
             "camZoom");
+
 
   }
 }

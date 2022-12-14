@@ -30,14 +30,23 @@ public class TinaControllerParameter {
   public ErrorHandler pErrorHandler;
   public Prefs pPrefs;
   public JPanel pCenterPanel;
+
+  public JLabel cameraRollLbl;
   public JWFNumberField pCameraRollREd;
   public JSlider pCameraRollSlider;
+
+  public JLabel cameraPitchLbl;
   public JWFNumberField pCameraPitchREd;
   public JSlider pCameraPitchSlider;
+
+  public JLabel cameraYawLbl;
   public JWFNumberField pCameraYawREd;
   public JSlider pCameraYawSlider;
+  public JLabel cameraBankLbl;
   public JWFNumberField pCameraBankREd;
   public JSlider pCameraBankSlider;
+
+  public JLabel cameraPerspectiveLbl;
   public JWFNumberField pCameraPerspectiveREd;
   public JSlider pCameraPerspectiveSlider;
   public JLabel pCameraCentreXLbl;
@@ -780,14 +789,19 @@ public class TinaControllerParameter {
       ErrorHandler pErrorHandler,
       Prefs pPrefs,
       JPanel pCenterPanel,
+      JLabel cameraRollLbl,
       JWFNumberField pCameraRollREd,
       JSlider pCameraRollSlider,
+      JLabel cameraPitchLbl,
       JWFNumberField pCameraPitchREd,
       JSlider pCameraPitchSlider,
+      JLabel cameraYawLbl,
       JWFNumberField pCameraYawREd,
       JSlider pCameraYawSlider,
+      JLabel tinaCameraBankLbl,
       JWFNumberField pCameraBankREd,
       JSlider pCameraBankSlider,
+      JLabel cameraPerspectiveLbl,
       JWFNumberField pCameraPerspectiveREd,
       JSlider pCameraPerspectiveSlider,
       JLabel pCameraCentreXLbl,
@@ -969,14 +983,19 @@ public class TinaControllerParameter {
     this.pErrorHandler = pErrorHandler;
     this.pPrefs = pPrefs;
     this.pCenterPanel = pCenterPanel;
+    this.cameraRollLbl = cameraRollLbl;
     this.pCameraRollREd = pCameraRollREd;
     this.pCameraRollSlider = pCameraRollSlider;
+    this.cameraPitchLbl = cameraPitchLbl;
     this.pCameraPitchREd = pCameraPitchREd;
     this.pCameraPitchSlider = pCameraPitchSlider;
+    this.cameraYawLbl = cameraYawLbl;
     this.pCameraYawREd = pCameraYawREd;
     this.pCameraYawSlider = pCameraYawSlider;
+    this.cameraBankLbl = tinaCameraBankLbl;
     this.pCameraBankREd = pCameraBankREd;
     this.pCameraBankSlider = pCameraBankSlider;
+    this.cameraPerspectiveLbl = cameraPerspectiveLbl;
     this.pCameraPerspectiveREd = pCameraPerspectiveREd;
     this.pCameraPerspectiveSlider = pCameraPerspectiveSlider;
     this.pCameraCentreXLbl = pCameraCentreXLbl;
