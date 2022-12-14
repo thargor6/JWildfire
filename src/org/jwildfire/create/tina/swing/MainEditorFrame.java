@@ -1,19 +1,20 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2022 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
+
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
@@ -538,11 +539,7 @@ public class MainEditorFrame extends JFrame {
     initialize();
   }
 
-  /**
-   * This method initializes this
-   * 
-   * @return void
-   */
+  
   private void initialize() {
     this.setSize(1188, 908);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -557,11 +554,7 @@ public class MainEditorFrame extends JFrame {
     getRootPane().registerKeyboardAction(getRedoButton().getActionListeners()[0], KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
   }
 
-  /**
-   * This method initializes jContentPane
-   * 
-   * @return javax.swing.JPanel
-   */
+  
   private JPanel getJContentPane() {
     if (jContentPane == null) {
       jContentPane = new JPanel();
@@ -573,11 +566,7 @@ public class MainEditorFrame extends JFrame {
     return jContentPane;
   }
 
-  /**
-   * This method initializes jContentPane
-   * 
-   * @return javax.swing.JPanel
-   */
+  
   private JPanel getRootPanel() {
     if (rootPanel == null) {
       rootPanel = new JPanel();
@@ -592,11 +581,7 @@ public class MainEditorFrame extends JFrame {
     return rootPanel;
   }
 
-  /**
-   * This method initializes tinaNorthPanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaNorthPanel() {
     if (tinaNorthPanel == null) {
       tinaNorthPanel = new JPanel();
@@ -615,11 +600,7 @@ public class MainEditorFrame extends JFrame {
     return tinaNorthPanel;
   }
 
-  /**
-   * This method initializes tinaWestPanel  
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getRandomBatchPanel() {
     if (randomBatchPanel == null) {
       randomBatchPanel = new JPanel();
@@ -632,11 +613,7 @@ public class MainEditorFrame extends JFrame {
     return randomBatchPanel;
   }
 
-  /**
-   * This method initializes tinaEastPanel  
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaEastPanel() {
     if (tinaEastPanel == null) {
       tinaEastPanel = new JPanel();
@@ -651,11 +628,7 @@ public class MainEditorFrame extends JFrame {
     return tinaEastPanel;
   }
 
-  /**
-   * This method initializes tinaSouthPanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaSouthPanel() {
     if (tinaSouthPanel == null) {
       tinaSouthPanel = new JPanel();
@@ -667,11 +640,7 @@ public class MainEditorFrame extends JFrame {
     return tinaSouthPanel;
   }
 
-  /**
-   * This method initializes tinaCenterPanel  
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaCenterPanel() {
     if (tinaCenterPanel == null) {
       tinaCenterPanel = new JPanel();
@@ -687,11 +656,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCenterPanel;
   }
 
-  /**
-   * This method initializes tinaSouthTabbedPane  
-   *  
-   * @return javax.swing.JTabbedPane  
-   */
+  
   private JTabbedPane getTinaSouthTabbedPane() {
     if (tinaSouthTabbedPane == null) {
       tinaSouthTabbedPane = new JTabbedPane();
@@ -1563,11 +1528,7 @@ public class MainEditorFrame extends JFrame {
     return tinaSouthTabbedPane;
   }
 
-  /**
-   * This method initializes tinaCameraPanel  
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaCameraPanel() {
     if (tinaCameraPanel == null) {
       tinaPixelsPerUnitLbl = new JLabel();
@@ -1901,11 +1862,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCameraPanel;
   }
 
-  /**
-   * This method initializes tinaColoringPanel  
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaColoringPanel() {
     if (tinaColoringPanel == null) {
       tinaGammaThresholdLbl = new JLabel();
@@ -2735,11 +2692,7 @@ public class MainEditorFrame extends JFrame {
     return tinaColoringPanel;
   }
 
-  /**
-   * This method initializes tinaCameraRollREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaCameraRollREd() {
     if (tinaCameraRollREd == null) {
       tinaCameraRollREd = new JWFNumberField();
@@ -2752,11 +2705,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCameraRollREd;
   }
 
-  /**
-   * This method initializes tinaCameraPitchREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaCameraPitchREd() {
     if (tinaCameraPitchREd == null) {
       tinaCameraPitchREd = new JWFNumberField();
@@ -2811,11 +2760,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCameraPerspectiveREd;
   }
 
-  /**
-   * This method initializes tinaCameraRollSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaCameraRollSlider() {
     if (tinaCameraRollSlider == null) {
       tinaCameraRollSlider = new JSlider();
@@ -2829,11 +2774,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCameraRollSlider;
   }
 
-  /**
-   * This method initializes tinaCameraPitchSlider  
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaCameraPitchSlider() {
     if (tinaCameraPitchSlider == null) {
       tinaCameraPitchSlider = new JSlider();
@@ -2903,11 +2844,7 @@ public class MainEditorFrame extends JFrame {
     return tinaLoadFlameButton;
   }
 
-  /**
-   * This method initializes tinaSaveFlameButton  
-   *  
-   * @return javax.swing.JButton  
-   */
+  
   private JButton getTinaSaveFlameButton() {
     if (tinaSaveFlameButton == null) {
       tinaSaveFlameButton = new JButton();
@@ -2928,11 +2865,7 @@ public class MainEditorFrame extends JFrame {
     return tinaSaveFlameButton;
   }
 
-  /**
-   * This method initializes tinaRenderFlameButton  
-   *  
-   * @return javax.swing.JButton  
-   */
+  
   private JButton getTinaRenderFlameButton() {
     if (tinaRenderFlameButton == null) {
       tinaRenderFlameButton = new JButton();
@@ -2968,11 +2901,7 @@ public class MainEditorFrame extends JFrame {
     return tinaOptixDenoiseButton;
   }
 
-  /**
-   * This method initializes renderImageNormalButton  
-   *  
-   * @return javax.swing.JButton  
-   */
+  
   private JButton getRenderMainButton() {
     if (renderMainButton == null) {
       renderMainButton = new JButton();
@@ -2992,11 +2921,7 @@ public class MainEditorFrame extends JFrame {
     return renderMainButton;
   }
 
-  /**
-   * This method initializes tinaCameraCentreXREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaCameraCentreXREd() {
     if (tinaCameraCentreXREd == null) {
       tinaCameraCentreXREd = new JWFNumberField();
@@ -3011,11 +2936,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCameraCentreXREd;
   }
 
-  /**
-   * This method initializes tinaCameraCentreYREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaCameraCentreYREd() {
     if (tinaCameraCentreYREd == null) {
       tinaCameraCentreYREd = new JWFNumberField();
@@ -3029,11 +2950,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCameraCentreYREd;
   }
 
-  /**
-   * This method initializes tinaCameraCentreXSlider  
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaCameraCentreXSlider() {
     if (tinaCameraCentreXSlider == null) {
       tinaCameraCentreXSlider = new JSlider();
@@ -3047,11 +2964,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCameraCentreXSlider;
   }
 
-  /**
-   * This method initializes tinaCameraCentreYSlider  
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaCameraCentreYSlider() {
     if (tinaCameraCentreYSlider == null) {
       tinaCameraCentreYSlider = new JSlider();
@@ -3065,11 +2978,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCameraCentreYSlider;
   }
 
-  /**
-   * This method initializes tinaCameraZoomREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaCameraZoomREd() {
     if (tinaCameraZoomREd == null) {
       tinaCameraZoomREd = new JWFNumberField();
@@ -3083,11 +2992,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCameraZoomREd;
   }
 
-  /**
-   * This method initializes tinaCameraZoomSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaCameraZoomSlider() {
     if (tinaCameraZoomSlider == null) {
       tinaCameraZoomSlider = new JSlider();
@@ -3101,11 +3006,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCameraZoomSlider;
   }
 
-  /**
-   * This method initializes tinaBrightnessREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaBrightnessREd() {
     if (tinaBrightnessREd == null) {
       tinaBrightnessREd = new JWFNumberField();
@@ -3139,11 +3040,7 @@ public class MainEditorFrame extends JFrame {
     return tinaBrightnessREd;
   }
 
-  /**
-   * This method initializes tinaBrightnessSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaBrightnessSlider() {
     if (tinaBrightnessSlider == null) {
       tinaBrightnessSlider = new JSlider();
@@ -3170,11 +3067,7 @@ public class MainEditorFrame extends JFrame {
     return tinaBrightnessSlider;
   }
 
-  /**
-   * This method initializes tinaPixelsPerUnitREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaPixelsPerUnitREd() {
     if (tinaPixelsPerUnitREd == null) {
       tinaPixelsPerUnitREd = new JWFNumberField();
@@ -3206,11 +3099,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPixelsPerUnitREd;
   }
 
-  /**
-   * This method initializes tinaPixelsPerUnitSlider  
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaPixelsPerUnitSlider() {
     if (tinaPixelsPerUnitSlider == null) {
       tinaPixelsPerUnitSlider = new JSlider();
@@ -3236,11 +3125,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPixelsPerUnitSlider;
   }
 
-  /**
-   * This method initializes tinaContrastREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaContrastREd() {
     if (tinaContrastREd == null) {
       tinaContrastREd = new JWFNumberField();
@@ -3276,11 +3161,7 @@ public class MainEditorFrame extends JFrame {
     return tinaContrastREd;
   }
 
-  /**
-   * This method initializes tinaGammaREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaGammaREd() {
     if (tinaGammaREd == null) {
       tinaGammaREd = new JWFNumberField();
@@ -3316,11 +3197,7 @@ public class MainEditorFrame extends JFrame {
     return tinaGammaREd;
   }
 
-  /**
-   * This method initializes tinaVibrancyREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaVibrancyREd() {
     if (tinaVibrancyREd == null) {
       tinaVibrancyREd = new JWFNumberField();
@@ -3357,11 +3234,7 @@ public class MainEditorFrame extends JFrame {
     return tinaVibrancyREd;
   }
 
-  /**
-   * This method initializes tinaOversampleREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaGammaThresholdREd() {
     if (tinaGammaThresholdREd == null) {
       tinaGammaThresholdREd = new JWFNumberField();
@@ -3397,11 +3270,7 @@ public class MainEditorFrame extends JFrame {
     return tinaGammaThresholdREd;
   }
 
-  /**
-   * This method initializes tinaContrastSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaContrastSlider() {
     if (tinaContrastSlider == null) {
       tinaContrastSlider = new JSlider();
@@ -3427,11 +3296,7 @@ public class MainEditorFrame extends JFrame {
     return tinaContrastSlider;
   }
 
-  /**
-   * This method initializes tinaGammaSlider  
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaGammaSlider() {
     if (tinaGammaSlider == null) {
       tinaGammaSlider = new JSlider();
@@ -3458,11 +3323,7 @@ public class MainEditorFrame extends JFrame {
     return tinaGammaSlider;
   }
 
-  /**
-   * This method initializes tinaVibrancySlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaVibrancySlider() {
     if (tinaVibrancySlider == null) {
       tinaVibrancySlider = new JSlider();
@@ -3489,11 +3350,7 @@ public class MainEditorFrame extends JFrame {
     return tinaVibrancySlider;
   }
 
-  /**
-   * This method initializes tinaOversampleSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaGammaThresholdSlider() {
     if (tinaGammaThresholdSlider == null) {
       tinaGammaThresholdSlider = new JSlider();
@@ -3521,11 +3378,7 @@ public class MainEditorFrame extends JFrame {
     return tinaGammaThresholdSlider;
   }
 
-  /**
-   * This method initializes tinaAddTransformationButton  
-   *  
-   * @return javax.swing.JButton  
-   */
+  
   private JButton getTinaAddTransformationButton() {
     if (tinaAddTransformationButton == null) {
       tinaAddTransformationButton = new JButton();
@@ -3542,11 +3395,7 @@ public class MainEditorFrame extends JFrame {
     return tinaAddTransformationButton;
   }
 
-  /**
-   * This method initializes tinaEastTabbedPane 
-   *  
-   * @return javax.swing.JTabbedPane  
-   */
+  
   private JTabbedPane getTinaEastTabbedPane() {
     if (tinaEastTabbedPane == null) {
       tinaEastTabbedPane = new JTabbedPane();
@@ -3572,11 +3421,7 @@ public class MainEditorFrame extends JFrame {
     return tinaEastTabbedPane;
   }
 
-  /**
-   * This method initializes tinaTransformationsPanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaTransformationsPanel() {
     if (tinaTransformationsPanel == null) {
       tinaTransformationsPanel = new JPanel();
@@ -3588,11 +3433,7 @@ public class MainEditorFrame extends JFrame {
     return tinaTransformationsPanel;
   }
 
-  /**
-   * This method initializes tinaPalettePanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaPalettePanel() {
     if (tinaPalettePanel == null) {
       tinaPalettePanel = new JPanel();
@@ -3603,11 +3444,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPalettePanel;
   }
 
-  /**
-   * This method initializes tinaDeleteTransformationButton 
-   *  
-   * @return javax.swing.JButton  
-   */
+  
   private JButton getTinaDeleteTransformationButton() {
     if (tinaDeleteTransformationButton == null) {
       tinaDeleteTransformationButton = new JButton();
@@ -3624,11 +3461,7 @@ public class MainEditorFrame extends JFrame {
     return tinaDeleteTransformationButton;
   }
 
-  /**
-   * This method initializes tinaDuplicateTransformationButton  
-   *  
-   * @return javax.swing.JButton  
-   */
+  
   private JButton getTinaDuplicateTransformationButton() {
     if (tinaDuplicateTransformationButton == null) {
       tinaDuplicateTransformationButton = new JButton();
@@ -3645,11 +3478,7 @@ public class MainEditorFrame extends JFrame {
     return tinaDuplicateTransformationButton;
   }
 
-  /**
-   * This method initializes tinaTransformationsScrollPane  
-   *  
-   * @return javax.swing.JScrollPane  
-   */
+  
   private JScrollPane getTinaTransformationsScrollPane() {
     if (tinaTransformationsScrollPane == null) {
       tinaTransformationsScrollPane = new JScrollPane();
@@ -3659,11 +3488,7 @@ public class MainEditorFrame extends JFrame {
     return tinaTransformationsScrollPane;
   }
 
-  /**
-   * This method initializes tinaTransformationsTable 
-   *  
-   * @return javax.swing.JTable 
-   */
+  
   private JTable getTinaTransformationsTable() {
     if (tinaTransformationsTable == null) {
       tinaTransformationsTable = new JTable();
@@ -3684,11 +3509,7 @@ public class MainEditorFrame extends JFrame {
     return tinaTransformationsTable;
   }
 
-  /**
-   * This method initializes tinaTransformationsTabbedPane  
-   *  
-   * @return javax.swing.JTabbedPane  
-   */
+  
   private JTabbedPane getTinaTransformationsTabbedPane() {
     if (tinaTransformationsTabbedPane == null) {
       tinaTransformationsTabbedPane = new JTabbedPane();
@@ -4356,11 +4177,7 @@ public class MainEditorFrame extends JFrame {
     return tinaTransformationsTabbedPane;
   }
 
-  /**
-   * This method initializes tinaAffineTransformationPanel  
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaAffineTransformationPanel() {
     if (tinaAffineTransformationPanel == null) {
       tinaAffineTransformationPanel = new JPanel();
@@ -4430,11 +4247,7 @@ public class MainEditorFrame extends JFrame {
     return tinaAffineTransformationPanel;
   }
 
-  /**
-   * This method initializes tinaVariationPanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaVariationPanel() {
     if (tinaVariationPanel == null) {
       nonlinearParams1Lbl = new JLabel();
@@ -4466,11 +4279,7 @@ public class MainEditorFrame extends JFrame {
     return tinaVariationPanel;
   }
 
-  /**
-   * This method initializes tinaModifiedWeightsPanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaModifiedWeightsPanel() {
     if (tinaModifiedWeightsPanel == null) {
       tinaModifiedWeightsPanel = new JPanel();
@@ -4508,11 +4317,7 @@ public class MainEditorFrame extends JFrame {
     return tinaModifiedWeightsPanel;
   }
 
-  /**
-   * This method initializes tinaTransformationColorPanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaTransformationColorPanel() {
     if (tinaTransformationColorPanel == null) {
       xFormDrawModeLbl = new JLabel();
@@ -5721,11 +5526,7 @@ public class MainEditorFrame extends JFrame {
     return tinaWeightMapPanel;
   }
 
-  /**
-   * This method initializes tinaPaletteRandomPointsREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JTextField getTinaPaletteRandomPointsREd() {
     if (tinaPaletteRandomPointsREd == null) {
       tinaPaletteRandomPointsREd = new JTextField();
@@ -5737,11 +5538,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteRandomPointsREd;
   }
 
-  /**
-   * This method initializes tinaRandomPaletteButton  
-   *  
-   * @return javax.swing.JButton  
-   */
+  
   private JButton getTinaRandomPaletteButton() {
     if (tinaRandomPaletteButton == null) {
       tinaRandomPaletteButton = new JButton();
@@ -5760,11 +5557,7 @@ public class MainEditorFrame extends JFrame {
     return tinaRandomPaletteButton;
   }
 
-  /**
-   * This method initializes distributeColorsButton 
-   *  
-   * @return javax.swing.JButton  
-   */
+  
   private JButton getDistributeColorsButton() {
     if (distributeColorsButton == null) {
       distributeColorsButton = new JButton();
@@ -5782,11 +5575,7 @@ public class MainEditorFrame extends JFrame {
     return distributeColorsButton;
   }
 
-  /**
-   * This method initializes tinaPaletteImgPanel  
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaPaletteImgPanel() {
     if (tinaPaletteImgPanel == null) {
       tinaPaletteImgPanel = new JPanel();
@@ -5797,11 +5586,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteImgPanel;
   }
 
-  /**
-   * This method initializes tinaPaletteSubNorthPanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaPaletteSubNorthPanel() {
     if (tinaPaletteSubNorthPanel == null) {
       tinaPaletteSubNorthPanel = new JPanel();
@@ -5813,11 +5598,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteSubNorthPanel;
   }
 
-  /**
-   * This method initializes tinaPaletteSubSouthPanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaPaletteSubSouthPanel() {
     if (tinaPaletteSubSouthPanel == null) {
       tinaPaletteSubSouthPanel = new JPanel();
@@ -5891,11 +5672,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteSubSouthPanel;
   }
 
-  /**
-   * This method initializes tinaPaletteSubCenterPanel  
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaPaletteSubCenterPanel() {
     if (tinaPaletteSubCenterPanel == null) {
       tinaPaletteSubCenterPanel = new JPanel();
@@ -5905,11 +5682,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteSubCenterPanel;
   }
 
-  /**
-   * This method initializes tinaPaletteSubTabbedPane 
-   *  
-   * @return javax.swing.JTabbedPane  
-   */
+  
   private JTabbedPane getTinaPaletteSubTabbedPane() {
     if (tinaPaletteSubTabbedPane == null) {
       tinaPaletteSubTabbedPane = new JTabbedPane();
@@ -5927,11 +5700,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteSubTabbedPane;
   }
 
-  /**
-   * This method initializes tinaPaletteCreatePanel 
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaPaletteCreatePanel() {
     if (tinaPaletteCreatePanel == null) {
       tinaPaletteCreatePanel = new JPanel();
@@ -6000,13 +5769,7 @@ public class MainEditorFrame extends JFrame {
     if (gradientCurveEditorPanel == null) {
       gradientCurveEditorPanel = new JPanel();
       gradientCurveEditorPanel.setLayout(new BorderLayout(0, 0));
-      /*
-      JPanel panel_1 = new JPanel();
-      panel_1.setPreferredSize(new Dimension(80, 10));
-      gradientCurveEditorPanel.add(panel_1, BorderLayout.WEST);
-      panel_1.setLayout(null);
-      panel_1.add();
-      */
+      
 
       JPanel panel_2 = new JPanel();
       gradientCurveEditorPanel.add(panel_2, BorderLayout.CENTER);
@@ -6072,11 +5835,7 @@ public class MainEditorFrame extends JFrame {
     return gradientCurveEditorNewRndBtn;
   }
 
-  /**
-   * This method initializes tinaPaletteBalancingPanel  
-   *  
-   * @return javax.swing.JPanel 
-   */
+  
   private JPanel getTinaPaletteBalancingPanel() {
     if (tinaPaletteBalancingPanel == null) {
       tinaPaletteBrightnessLbl = new JLabel();
@@ -6254,11 +6013,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteBalancingPanel;
   }
 
-  /**
-   * This method initializes tinaPaletteShiftREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaPaletteShiftREd() {
     if (tinaPaletteShiftREd == null) {
       tinaPaletteShiftREd = new JWFNumberField();
@@ -6294,11 +6049,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteShiftREd;
   }
 
-  /**
-   * This method initializes tinaPaletteRedREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaPaletteRedREd() {
     if (tinaPaletteRedREd == null) {
       tinaPaletteRedREd = new JWFNumberField();
@@ -6326,11 +6077,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteRedREd;
   }
 
-  /**
-   * This method initializes tinaPaletteGreenREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaPaletteGreenREd() {
     if (tinaPaletteGreenREd == null) {
       tinaPaletteGreenREd = new JWFNumberField();
@@ -6358,11 +6105,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteGreenREd;
   }
 
-  /**
-   * This method initializes tinaPaletteBlueREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaPaletteBlueREd() {
     if (tinaPaletteBlueREd == null) {
       tinaPaletteBlueREd = new JWFNumberField();
@@ -6390,11 +6133,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteBlueREd;
   }
 
-  /**
-   * This method initializes tinaPaletteHueREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaPaletteHueREd() {
     if (tinaPaletteHueREd == null) {
       tinaPaletteHueREd = new JWFNumberField();
@@ -6422,11 +6161,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteHueREd;
   }
 
-  /**
-   * This method initializes tinaPaletteSaturationREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaPaletteSaturationREd() {
     if (tinaPaletteSaturationREd == null) {
       tinaPaletteSaturationREd = new JWFNumberField();
@@ -6454,11 +6189,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteSaturationREd;
   }
 
-  /**
-   * This method initializes tinaPaletteContrastREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaPaletteContrastREd() {
     if (tinaPaletteContrastREd == null) {
       tinaPaletteContrastREd = new JWFNumberField();
@@ -6486,11 +6217,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteContrastREd;
   }
 
-  /**
-   * This method initializes tinaPaletteGammaREd  
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaPaletteGammaREd() {
     if (tinaPaletteGammaREd == null) {
       tinaPaletteGammaREd = new JWFNumberField();
@@ -6518,11 +6245,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteGammaREd;
   }
 
-  /**
-   * This method initializes tinaPaletteBrightnessREd 
-   *  
-   * @return javax.swing.JTextField 
-   */
+  
   private JWFNumberField getTinaPaletteBrightnessREd() {
     if (tinaPaletteBrightnessREd == null) {
       tinaPaletteBrightnessREd = new JWFNumberField();
@@ -6550,11 +6273,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteBrightnessREd;
   }
 
-  /**
-   * This method initializes tinaPaletteShiftSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaPaletteShiftSlider() {
     if (tinaPaletteShiftSlider == null) {
       tinaPaletteShiftSlider = new JSlider();
@@ -6580,11 +6299,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteShiftSlider;
   }
 
-  /**
-   * This method initializes tinaPaletteRedSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaPaletteRedSlider() {
     if (tinaPaletteRedSlider == null) {
       tinaPaletteRedSlider = new JSlider();
@@ -6610,11 +6325,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteRedSlider;
   }
 
-  /**
-   * This method initializes tinaPaletteGreenSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaPaletteGreenSlider() {
     if (tinaPaletteGreenSlider == null) {
       tinaPaletteGreenSlider = new JSlider();
@@ -6640,11 +6351,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteGreenSlider;
   }
 
-  /**
-   * This method initializes tinaPaletteBlueSlider  
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaPaletteBlueSlider() {
     if (tinaPaletteBlueSlider == null) {
       tinaPaletteBlueSlider = new JSlider();
@@ -6670,11 +6377,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteBlueSlider;
   }
 
-  /**
-   * This method initializes tinaPaletteHueSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaPaletteHueSlider() {
     if (tinaPaletteHueSlider == null) {
       tinaPaletteHueSlider = new JSlider();
@@ -6700,11 +6403,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteHueSlider;
   }
 
-  /**
-   * This method initializes tinaPaletteSaturationSlider  
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaPaletteSaturationSlider() {
     if (tinaPaletteSaturationSlider == null) {
       tinaPaletteSaturationSlider = new JSlider();
@@ -6730,11 +6429,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteSaturationSlider;
   }
 
-  /**
-   * This method initializes tinaPaletteContrastSlider  
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaPaletteContrastSlider() {
     if (tinaPaletteContrastSlider == null) {
       tinaPaletteContrastSlider = new JSlider();
@@ -6760,11 +6455,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteContrastSlider;
   }
 
-  /**
-   * This method initializes tinaPaletteGammaSlider 
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaPaletteGammaSlider() {
     if (tinaPaletteGammaSlider == null) {
       tinaPaletteGammaSlider = new JSlider();
@@ -6790,11 +6481,7 @@ public class MainEditorFrame extends JFrame {
     return tinaPaletteGammaSlider;
   }
 
-  /**
-   * This method initializes tinaPaletteBrightnessSlider  
-   *  
-   * @return javax.swing.JSlider  
-   */
+  
   private JSlider getTinaPaletteBrightnessSlider() {
     if (tinaPaletteBrightnessSlider == null) {
       tinaPaletteBrightnessSlider = new JSlider();
@@ -7532,11 +7219,7 @@ public class MainEditorFrame extends JFrame {
     pCmb.setSelectedItem(FilterKernelType.GAUSSIAN);
   }
 
-  /**
-   * This method initializes tinaAddFinalTransformationButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getTinaAddFinalTransformationButton() {
     if (tinaAddFinalTransformationButton == null) {
       tinaAddFinalTransformationButton = new JButton();
@@ -7704,11 +7387,7 @@ public class MainEditorFrame extends JFrame {
     return affineC21Lbl;
   }
 
-  /**
-   * This method initializes affineC00REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getAffineC00REd() {
     if (affineC00REd == null) {
       affineC00REd = new JWFNumberField();
@@ -7734,11 +7413,7 @@ public class MainEditorFrame extends JFrame {
     return affineC00REd;
   }
 
-  /**
-   * This method initializes affineC01REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getAffineC01REd() {
     if (affineC01REd == null) {
       affineC01REd = new JWFNumberField();
@@ -7764,11 +7439,7 @@ public class MainEditorFrame extends JFrame {
     return affineC01REd;
   }
 
-  /**
-   * This method initializes affineC10REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getAffineC10REd() {
     if (affineC10REd == null) {
       affineC10REd = new JWFNumberField();
@@ -7795,11 +7466,7 @@ public class MainEditorFrame extends JFrame {
     return affineC10REd;
   }
 
-  /**
-   * This method initializes affineC11REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getAffineC11REd() {
     if (affineC11REd == null) {
       affineC11REd = new JWFNumberField();
@@ -7825,11 +7492,7 @@ public class MainEditorFrame extends JFrame {
     return affineC11REd;
   }
 
-  /**
-   * This method initializes affineC20REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getAffineC20REd() {
     if (affineC20REd == null) {
       affineC20REd = new JWFNumberField();
@@ -7855,11 +7518,7 @@ public class MainEditorFrame extends JFrame {
     return affineC20REd;
   }
 
-  /**
-   * This method initializes affineC21REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getAffineC21REd() {
     if (affineC21REd == null) {
       affineC21REd = new JWFNumberField();
@@ -7885,11 +7544,7 @@ public class MainEditorFrame extends JFrame {
     return affineC21REd;
   }
 
-  /**
-   * This method initializes affineRotateLeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineRotateLeftButton() {
     if (affineRotateLeftButton == null) {
       affineRotateLeftButton = new JButton();
@@ -7909,11 +7564,7 @@ public class MainEditorFrame extends JFrame {
     return affineRotateLeftButton;
   }
 
-  /**
-   * This method initializes affineRotateRightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineRotateRightButton() {
     if (affineRotateRightButton == null) {
       affineRotateRightButton = new JButton();
@@ -7934,11 +7585,7 @@ public class MainEditorFrame extends JFrame {
     return affineRotateRightButton;
   }
 
-  /**
-   * This method initializes affineEnlargeButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineEnlargeButton() {
     if (affineEnlargeButton == null) {
       affineEnlargeButton = new JButton();
@@ -7958,11 +7605,7 @@ public class MainEditorFrame extends JFrame {
     return affineEnlargeButton;
   }
 
-  /**
-   * This method initializes affineShrinkButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineShrinkButton() {
     if (affineShrinkButton == null) {
       affineShrinkButton = new JButton();
@@ -7983,11 +7626,7 @@ public class MainEditorFrame extends JFrame {
     return affineShrinkButton;
   }
 
-  /**
-   * This method initializes affineRotateAmountREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getAffineRotateAmountREd() {
     if (affineRotateAmountREd == null) {
       affineRotateAmountREd = new JWFNumberField();
@@ -8001,11 +7640,7 @@ public class MainEditorFrame extends JFrame {
     return affineRotateAmountREd;
   }
 
-  /**
-   * This method initializes transformationsNorthPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getTransformationsNorthPanel() {
     if (transformationsNorthPanel == null) {
       transformationsNorthPanel = new JPanel();
@@ -8017,11 +7652,7 @@ public class MainEditorFrame extends JFrame {
     return transformationsNorthPanel;
   }
 
-  /**
-   * This method initializes trnsformationsEastPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getTrnsformationsEastPanel() {
     if (trnsformationsEastPanel == null) {
       FlowLayout flowLayout = new FlowLayout();
@@ -8058,11 +7689,7 @@ public class MainEditorFrame extends JFrame {
     return trnsformationsEastPanel;
   }
 
-  /**
-   * This method initializes transformationsSplitPane	
-   * 	
-   * @return javax.swing.JSplitPane	
-   */
+  
   private JSplitPane getTransformationsSplitPane() {
     if (transformationsSplitPane == null) {
       transformationsSplitPane = new JSplitPane();
@@ -8075,11 +7702,7 @@ public class MainEditorFrame extends JFrame {
     return transformationsSplitPane;
   }
 
-  /**
-   * This method initializes affineScaleAmountREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getAffineScaleAmountREd() {
     if (affineScaleAmountREd == null) {
       affineScaleAmountREd = new JWFNumberField();
@@ -8093,11 +7716,7 @@ public class MainEditorFrame extends JFrame {
     return affineScaleAmountREd;
   }
 
-  /**
-   * This method initializes affineMoveUpButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineMoveUpButton() {
     if (affineMoveUpButton == null) {
       affineMoveUpButton = new JButton();
@@ -8118,11 +7737,7 @@ public class MainEditorFrame extends JFrame {
     return affineMoveUpButton;
   }
 
-  /**
-   * This method initializes affineMoveDownButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineMoveDownButton() {
     if (affineMoveDownButton == null) {
       affineMoveDownButton = new JButton();
@@ -8143,11 +7758,7 @@ public class MainEditorFrame extends JFrame {
     return affineMoveDownButton;
   }
 
-  /**
-   * This method initializes affineMoveLeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineMoveLeftButton() {
     if (affineMoveLeftButton == null) {
       affineMoveLeftButton = new JButton();
@@ -8168,11 +7779,7 @@ public class MainEditorFrame extends JFrame {
     return affineMoveLeftButton;
   }
 
-  /**
-   * This method initializes affineMoveRightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineMoveRightButton() {
     if (affineMoveRightButton == null) {
       affineMoveRightButton = new JButton();
@@ -8193,11 +7800,7 @@ public class MainEditorFrame extends JFrame {
     return affineMoveRightButton;
   }
 
-  /**
-   * This method initializes affineMoveAmountREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getAffineMoveVertAmountREd() {
     if (affineMoveVertAmountREd == null) {
       affineMoveVertAmountREd = new JWFNumberField();
@@ -8211,11 +7814,7 @@ public class MainEditorFrame extends JFrame {
     return affineMoveVertAmountREd;
   }
 
-  /**
-   * This method initializes randomBatchButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getRandomBatchButton() {
     if (randomBatchButton == null) {
       randomBatchButton = new JButton();
@@ -8239,11 +7838,7 @@ public class MainEditorFrame extends JFrame {
     return randomBatchButton;
   }
 
-  /**
-   * This method initializes nonlinearVar1Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar1Cmb() {
     if (nonlinearVar1Cmb == null) {
       nonlinearVar1Cmb = new JComboBox();
@@ -8263,11 +7858,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar1Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar1REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar1REd() {
     if (nonlinearVar1REd == null) {
       nonlinearVar1REd = new JWFNumberField();
@@ -8297,11 +7888,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar1REd;
   }
 
-  /**
-   * This method initializes nonlinearParams1Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams1Cmb() {
     if (nonlinearParams1Cmb == null) {
       nonlinearParams1Cmb = new JComboBox();
@@ -8320,11 +7907,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams1Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams1REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams1REd() {
     if (nonlinearParams1REd == null) {
       nonlinearParams1REd = new JWFNumberField();
@@ -8353,11 +7936,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams1REd;
   }
 
-  /**
-   * This method initializes nonlinearVar1Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar1Panel() {
     if (nonlinearVar1Panel == null) {
       nonlinearVar1Panel = new JPanel();
@@ -8463,11 +8042,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar1Panel;
   }
 
-  /**
-   * This method initializes nonlinearParams1LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams1LeftButton() {
     if (nonlinearParams1LeftButton == null) {
       nonlinearParams1LeftButton = new JButton();
@@ -8486,11 +8061,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams1LeftButton;
   }
 
-  /**
-   * This method initializes nonlinearVar2Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar2Panel() {
     if (nonlinearVar2Panel == null) {
       nonlinearParams2Lbl = new JLabel();
@@ -8609,11 +8180,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar2Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar2Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar2Cmb() {
     if (nonlinearVar2Cmb == null) {
       nonlinearVar2Cmb = new JComboBox();
@@ -8633,11 +8200,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar2Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar2REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar2REd() {
     if (nonlinearVar2REd == null) {
       nonlinearVar2REd = new JWFNumberField();
@@ -8667,11 +8230,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar2REd;
   }
 
-  /**
-   * This method initializes nonlinearParams2Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams2Cmb() {
     if (nonlinearParams2Cmb == null) {
       nonlinearParams2Cmb = new JComboBox();
@@ -8690,11 +8249,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams2Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams2REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams2REd() {
     if (nonlinearParams2REd == null) {
       nonlinearParams2REd = new JWFNumberField();
@@ -8723,11 +8278,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams2REd;
   }
 
-  /**
-   * This method initializes nonlinearParams2LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams2LeftButton() {
     if (nonlinearParams2LeftButton == null) {
       nonlinearParams2LeftButton = new JButton();
@@ -8746,11 +8297,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams2LeftButton;
   }
 
-  /**
-   * This method initializes nonlinearVar3Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar3Panel() {
     if (nonlinearVar3Panel == null) {
       nonlinearParams3Lbl = new JLabel();
@@ -8870,11 +8417,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar3Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar3Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar3Cmb() {
     if (nonlinearVar3Cmb == null) {
       nonlinearVar3Cmb = new JComboBox();
@@ -8894,11 +8437,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar3Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar3REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar3REd() {
     if (nonlinearVar3REd == null) {
       nonlinearVar3REd = new JWFNumberField();
@@ -8928,11 +8467,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar3REd;
   }
 
-  /**
-   * This method initializes nonlinearParams3Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams3Cmb() {
     if (nonlinearParams3Cmb == null) {
       nonlinearParams3Cmb = new JComboBox();
@@ -8951,11 +8486,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams3Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams3REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams3REd() {
     if (nonlinearParams3REd == null) {
       nonlinearParams3REd = new JWFNumberField();
@@ -8984,11 +8515,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams3REd;
   }
 
-  /**
-   * This method initializes nonlinearParams3LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams3LeftButton() {
     if (nonlinearParams3LeftButton == null) {
       nonlinearParams3LeftButton = new JButton();
@@ -9007,11 +8534,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams3LeftButton;
   }
 
-  /**
-   * This method initializes xFormColorREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getXFormColorREd() {
     if (xFormColorREd == null) {
       xFormColorREd = new JWFNumberField();
@@ -9049,11 +8572,7 @@ public class MainEditorFrame extends JFrame {
     return xFormColorREd;
   }
 
-  /**
-   * This method initializes xFormColorSlider	
-   * 	
-   * @return javax.swing.JSlider	
-   */
+  
   private JSlider getXFormColorSlider() {
     if (xFormColorSlider == null) {
       xFormColorSlider = new JSlider();
@@ -9080,11 +8599,7 @@ public class MainEditorFrame extends JFrame {
     return xFormColorSlider;
   }
 
-  /**
-   * This method initializes xFormSymmetryREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getXFormSymmetryREd() {
     if (xFormSymmetryREd == null) {
       xFormSymmetryREd = new JWFNumberField();
@@ -9123,11 +8638,7 @@ public class MainEditorFrame extends JFrame {
     return xFormSymmetryREd;
   }
 
-  /**
-   * This method initializes xFormSymmetrySlider	
-   * 	
-   * @return javax.swing.JSlider	
-   */
+  
   private JSlider getXFormSymmetrySlider() {
     if (xFormSymmetrySlider == null) {
       xFormSymmetrySlider = new JSlider();
@@ -9154,11 +8665,7 @@ public class MainEditorFrame extends JFrame {
     return xFormSymmetrySlider;
   }
 
-  /**
-   * This method initializes xFormOpacityREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getXFormOpacityREd() {
     if (xFormOpacityREd == null) {
       xFormOpacityREd = new JWFNumberField();
@@ -9196,11 +8703,7 @@ public class MainEditorFrame extends JFrame {
     return xFormOpacityREd;
   }
 
-  /**
-   * This method initializes xFormOpacitySlider	
-   * 	
-   * @return javax.swing.JSlider	
-   */
+  
   private JSlider getXFormOpacitySlider() {
     if (xFormOpacitySlider == null) {
       xFormOpacitySlider = new JSlider();
@@ -9227,11 +8730,7 @@ public class MainEditorFrame extends JFrame {
     return xFormOpacitySlider;
   }
 
-  /**
-   * This method initializes xFormDrawModeCmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getXFormDrawModeCmb() {
     if (xFormDrawModeCmb == null) {
       xFormDrawModeCmb = new JComboBox();
@@ -9252,11 +8751,7 @@ public class MainEditorFrame extends JFrame {
     return xFormDrawModeCmb;
   }
 
-  /**
-   * This method initializes xFormColorTypeCmb   
-   *    
-   * @return javax.swing.JComboBox  
-   */
+  
   private JComboBox getXFormColorTypeCmb() {
     if (xFormColorTypeCmb == null) {
       xFormColorTypeCmb = new JComboBox();
@@ -9298,11 +8793,7 @@ public class MainEditorFrame extends JFrame {
     return xFormTargetColorBtn;
   }
 
-  /**
-   * This method initializes relWeightsEastPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getRelWeightsEastPanel() {
     if (relWeightsEastPanel == null) {
       relWeightsEastPanel = new JPanel();
@@ -9363,11 +8854,7 @@ public class MainEditorFrame extends JFrame {
     return relWeightsEastPanel;
   }
 
-  /**
-   * This method initializes relWeightsLeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getRelWeightsZeroButton() {
     if (relWeightsZeroButton == null) {
       relWeightsZeroButton = new JButton();
@@ -9388,11 +8875,7 @@ public class MainEditorFrame extends JFrame {
     return relWeightsZeroButton;
   }
 
-  /**
-   * This method initializes relWeightsRightButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getRelWeightsOneButton() {
     if (relWeightsOneButton == null) {
       relWeightsOneButton = new JButton();
@@ -9413,11 +8896,7 @@ public class MainEditorFrame extends JFrame {
     return relWeightsOneButton;
   }
 
-  /**
-   * This method initializes relWeightsScrollPane	
-   * 	
-   * @return javax.swing.JScrollPane	
-   */
+  
   private JScrollPane getRelWeightsScrollPane() {
     if (relWeightsScrollPane == null) {
       relWeightsScrollPane = new JScrollPane();
@@ -9426,11 +8905,7 @@ public class MainEditorFrame extends JFrame {
     return relWeightsScrollPane;
   }
 
-  /**
-   * This method initializes relWeightsTable	
-   * 	
-   * @return javax.swing.JTable	
-   */
+  
   private JTable getRelWeightsTable() {
     if (relWeightsTable == null) {
       relWeightsTable = new JTable();
@@ -9450,11 +8925,7 @@ public class MainEditorFrame extends JFrame {
     return relWeightsTable;
   }
 
-  /**
-   * This method initializes newFlameButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNewFlameButton() {
     if (newFlameButton == null) {
       newFlameButton = new JButton();
@@ -9573,11 +9044,7 @@ public class MainEditorFrame extends JFrame {
     }
   }
 
-  /**
-   * This method initializes mouseTransformMoveButton	
-   * 	
-   * @return javax.swing.JToggleButton	
-   */
+  
   private JToggleButton getMouseTransformMoveTrianglesButton() {
     if (mouseTransformMoveTrianglesButton == null) {
       mouseTransformMoveTrianglesButton = new JToggleButton();
@@ -9595,11 +9062,7 @@ public class MainEditorFrame extends JFrame {
     return mouseTransformMoveTrianglesButton;
   }
 
-  /**
-   * This method initializes mouseTransformScaleButton	
-   * 	
-   * @return javax.swing.JToggleButton	
-   */
+  
   private JToggleButton getMouseTransformEditFocusPointButton() {
     if (mouseTransformEditFocusPointButton == null) {
       mouseTransformEditFocusPointButton = new JToggleButton();
@@ -9616,11 +9079,7 @@ public class MainEditorFrame extends JFrame {
     return mouseTransformEditFocusPointButton;
   }
 
-  /**
-   * This method initializes centerNorthPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getCenterNorthPanel() {
     if (centerNorthPanel == null) {
       centerNorthPanel = new JPanel();
@@ -9748,11 +9207,7 @@ public class MainEditorFrame extends JFrame {
     return toggleVariationsButton;
   }
 
-  /**
-   * This method initializes centerWestPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getCenterWestPanel() {
     if (centerWestPanel == null) {
       centerWestPanel = new JPanel();
@@ -9819,11 +9274,7 @@ public class MainEditorFrame extends JFrame {
     return centerWestPanel;
   }
 
-  /**
-   * This method initializes centerCenterPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getCenterCenterPanel() {
     if (centerCenterPanel == null) {
       centerCenterPanel = new JPanel();
@@ -9835,11 +9286,7 @@ public class MainEditorFrame extends JFrame {
     return centerCenterPanel;
   }
 
-  /**
-   * This method initializes randomStyleCmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getRandomStyleCmb() {
     if (randomStyleCmb == null) {
       randomStyleCmb = new JComboBox();
@@ -9853,11 +9300,7 @@ public class MainEditorFrame extends JFrame {
     return randomStyleCmb;
   }
 
-  /**
-   * This method initializes affineEditPostTransformButton	
-   * 	
-   * @return javax.swing.JToggleButton	
-   */
+  
   private JToggleButton getAffineEditPostTransformButton() {
     if (affineEditPostTransformButton == null) {
       affineEditPostTransformButton = new JToggleButton();
@@ -9877,11 +9320,7 @@ public class MainEditorFrame extends JFrame {
     return affineEditPostTransformButton;
   }
 
-  /**
-   * This method initializes affineEditPostTransformSmallButton	
-   * 	
-   * @return javax.swing.JToggleButton	
-   */
+  
   private JToggleButton getAffineEditPostTransformSmallButton() {
     if (affineEditPostTransformSmallButton == null) {
       affineEditPostTransformSmallButton = new JToggleButton();
@@ -9914,11 +9353,7 @@ public class MainEditorFrame extends JFrame {
     return renderProgressBar;
   }
 
-  /**
-   * This method initializes affineResetTransformButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineResetTransformButton() {
     if (affineResetTransformButton == null) {
       affineResetTransformButton = new JButton();
@@ -9938,11 +9373,7 @@ public class MainEditorFrame extends JFrame {
     return affineResetTransformButton;
   }
 
-  /**
-   * This method initializes nonlinearVar4Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar4Panel() {
     if (nonlinearVar4Panel == null) {
       nonlinearParams4Lbl = new JLabel();
@@ -10061,11 +9492,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar4Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar4Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar4Cmb() {
     if (nonlinearVar4Cmb == null) {
       nonlinearVar4Cmb = new JComboBox();
@@ -10085,11 +9512,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar4Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar4REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar4REd() {
     if (nonlinearVar4REd == null) {
       nonlinearVar4REd = new JWFNumberField();
@@ -10119,11 +9542,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar4REd;
   }
 
-  /**
-   * This method initializes nonlinearParams4Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams4Cmb() {
     if (nonlinearParams4Cmb == null) {
       nonlinearParams4Cmb = new JComboBox();
@@ -10142,11 +9561,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams4Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams4REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams4REd() {
     if (nonlinearParams4REd == null) {
       nonlinearParams4REd = new JWFNumberField();
@@ -10175,11 +9590,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams4REd;
   }
 
-  /**
-   * This method initializes nonlinearParams4LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams4LeftButton() {
     if (nonlinearParams4LeftButton == null) {
       nonlinearParams4LeftButton = new JButton();
@@ -10198,11 +9609,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams4LeftButton;
   }
 
-  /**
-   * This method initializes createPaletteScrollPane	
-   * 	
-   * @return javax.swing.JScrollPane	
-   */
+  
   private JScrollPane getCreatePaletteScrollPane() {
     if (createPaletteScrollPane == null) {
       createPaletteScrollPane = new JScrollPane();
@@ -10213,11 +9620,7 @@ public class MainEditorFrame extends JFrame {
     return createPaletteScrollPane;
   }
 
-  /**
-   * This method initializes createPaletteColorsTable	
-   * 	
-   * @return javax.swing.JTable	
-   */
+  
   private JTable getCreatePaletteColorsTable() {
     if (createPaletteColorsTable == null) {
       createPaletteColorsTable = new JTable();
@@ -10227,11 +9630,7 @@ public class MainEditorFrame extends JFrame {
     return createPaletteColorsTable;
   }
 
-  /**
-   * This method initializes nonlinearScrollPane	
-   * 	
-   * @return javax.swing.JScrollPane	
-   */
+  
   private JScrollPane getNonlinearScrollPane() {
     if (nonlinearScrollPane == null) {
       nonlinearScrollPane = new JScrollPane();
@@ -10244,11 +9643,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearScrollPane;
   }
 
-  /**
-   * This method initializes nonlinearControlsPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearControlsPanel() {
     if (nonlinearControlsPanel == null) {
       FlowLayout flowLayout3 = new FlowLayout();
@@ -10274,11 +9669,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearControlsPanel;
   }
 
-  /**
-   * This method initializes nonlinearVar5Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar5Panel() {
     if (nonlinearVar5Panel == null) {
       nonlinearParams5Lbl = new JLabel();
@@ -10397,11 +9788,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar5Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar5Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar5Cmb() {
     if (nonlinearVar5Cmb == null) {
       nonlinearVar5Cmb = new JComboBox();
@@ -10421,11 +9808,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar5Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar5REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar5REd() {
     if (nonlinearVar5REd == null) {
       nonlinearVar5REd = new JWFNumberField();
@@ -10455,11 +9838,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar5REd;
   }
 
-  /**
-   * This method initializes nonlinearParams5Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams5Cmb() {
     if (nonlinearParams5Cmb == null) {
       nonlinearParams5Cmb = new JComboBox();
@@ -10478,11 +9857,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams5Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams5REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams5REd() {
     if (nonlinearParams5REd == null) {
       nonlinearParams5REd = new JWFNumberField();
@@ -10511,11 +9886,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams5REd;
   }
 
-  /**
-   * This method initializes nonlinearParams5LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams5LeftButton() {
     if (nonlinearParams5LeftButton == null) {
       nonlinearParams5LeftButton = new JButton();
@@ -10534,11 +9905,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams5LeftButton;
   }
 
-  /**
-   * This method initializes nonlinearVar6Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar6Panel() {
     if (nonlinearVar6Panel == null) {
       nonlinearParams6Lbl = new JLabel();
@@ -10657,11 +10024,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar6Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar6Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar6Cmb() {
     if (nonlinearVar6Cmb == null) {
       nonlinearVar6Cmb = new JComboBox();
@@ -10681,11 +10044,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar6Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar6REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar6REd() {
     if (nonlinearVar6REd == null) {
       nonlinearVar6REd = new JWFNumberField();
@@ -10715,11 +10074,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar6REd;
   }
 
-  /**
-   * This method initializes nonlinearParams6Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams6Cmb() {
     if (nonlinearParams6Cmb == null) {
       nonlinearParams6Cmb = new JComboBox();
@@ -10738,11 +10093,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams6Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams6REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams6REd() {
     if (nonlinearParams6REd == null) {
       nonlinearParams6REd = new JWFNumberField();
@@ -10771,11 +10122,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams6REd;
   }
 
-  /**
-   * This method initializes nonlinearParams6LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams6LeftButton() {
     if (nonlinearParams6LeftButton == null) {
       nonlinearParams6LeftButton = new JButton();
@@ -10794,11 +10141,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams6LeftButton;
   }
 
-  /**
-   * This method initializes nonlinearVar7Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar7Panel() {
     if (nonlinearVar7Panel == null) {
       nonlinearParams7Lbl = new JLabel();
@@ -10917,11 +10260,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar7Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar7Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar7Cmb() {
     if (nonlinearVar7Cmb == null) {
       nonlinearVar7Cmb = new JComboBox();
@@ -10941,11 +10280,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar7Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar7REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar7REd() {
     if (nonlinearVar7REd == null) {
       nonlinearVar7REd = new JWFNumberField();
@@ -10975,11 +10310,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar7REd;
   }
 
-  /**
-   * This method initializes nonlinearParams7Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams7Cmb() {
     if (nonlinearParams7Cmb == null) {
       nonlinearParams7Cmb = new JComboBox();
@@ -10998,11 +10329,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams7Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams7REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams7REd() {
     if (nonlinearParams7REd == null) {
       nonlinearParams7REd = new JWFNumberField();
@@ -11031,11 +10358,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams7REd;
   }
 
-  /**
-   * This method initializes nonlinearParams7LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams7LeftButton() {
     if (nonlinearParams7LeftButton == null) {
       nonlinearParams7LeftButton = new JButton();
@@ -11054,11 +10377,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams7LeftButton;
   }
 
-  /**
-   * This method initializes nonlinearVar8Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar8Panel() {
     if (nonlinearVar8Panel == null) {
       nonlinearParams8Lbl = new JLabel();
@@ -11177,11 +10496,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar8Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar8Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar8Cmb() {
     if (nonlinearVar8Cmb == null) {
       nonlinearVar8Cmb = new JComboBox();
@@ -11201,11 +10516,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar8Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar8REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar8REd() {
     if (nonlinearVar8REd == null) {
       nonlinearVar8REd = new JWFNumberField();
@@ -11235,11 +10546,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar8REd;
   }
 
-  /**
-   * This method initializes nonlinearParams8Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams8Cmb() {
     if (nonlinearParams8Cmb == null) {
       nonlinearParams8Cmb = new JComboBox();
@@ -11258,11 +10565,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams8Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams8REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams8REd() {
     if (nonlinearParams8REd == null) {
       nonlinearParams8REd = new JWFNumberField();
@@ -11291,11 +10594,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams8REd;
   }
 
-  /**
-   * This method initializes nonlinearParams8LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams8LeftButton() {
     if (nonlinearParams8LeftButton == null) {
       nonlinearParams8LeftButton = new JButton();
@@ -11314,11 +10613,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams8LeftButton;
   }
 
-  /**
-   * This method initializes nonlinearVar9Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar9Panel() {
     if (nonlinearVar9Panel == null) {
       nonlinearParams9Lbl = new JLabel();
@@ -11437,11 +10732,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar9Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar9Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar9Cmb() {
     if (nonlinearVar9Cmb == null) {
       nonlinearVar9Cmb = new JComboBox();
@@ -11461,11 +10752,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar9Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar9REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar9REd() {
     if (nonlinearVar9REd == null) {
       nonlinearVar9REd = new JWFNumberField();
@@ -11495,11 +10782,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar9REd;
   }
 
-  /**
-   * This method initializes nonlinearParams9Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams9Cmb() {
     if (nonlinearParams9Cmb == null) {
       nonlinearParams9Cmb = new JComboBox();
@@ -11518,11 +10801,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams9Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams9REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams9REd() {
     if (nonlinearParams9REd == null) {
       nonlinearParams9REd = new JWFNumberField();
@@ -11551,11 +10830,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams9REd;
   }
 
-  /**
-   * This method initializes nonlinearParams9LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams9LeftButton() {
     if (nonlinearParams9LeftButton == null) {
       nonlinearParams9LeftButton = new JButton();
@@ -11574,11 +10849,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams9LeftButton;
   }
 
-  /**
-   * This method initializes nonlinearVar10Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar10Panel() {
     if (nonlinearVar10Panel == null) {
       nonlinearParams10Lbl = new JLabel();
@@ -11697,11 +10968,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar10Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar10Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar10Cmb() {
     if (nonlinearVar10Cmb == null) {
       nonlinearVar10Cmb = new JComboBox();
@@ -11721,11 +10988,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar10Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar10REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar10REd() {
     if (nonlinearVar10REd == null) {
       nonlinearVar10REd = new JWFNumberField();
@@ -11755,11 +11018,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar10REd;
   }
 
-  /**
-   * This method initializes nonlinearParams10Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams10Cmb() {
     if (nonlinearParams10Cmb == null) {
       nonlinearParams10Cmb = new JComboBox();
@@ -11778,11 +11037,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams10Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams10REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams10REd() {
     if (nonlinearParams10REd == null) {
       nonlinearParams10REd = new JWFNumberField();
@@ -11811,11 +11066,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams10REd;
   }
 
-  /**
-   * This method initializes nonlinearParams10LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams10LeftButton() {
     if (nonlinearParams10LeftButton == null) {
       nonlinearParams10LeftButton = new JButton();
@@ -11834,11 +11085,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams10LeftButton;
   }
 
-  /**
-   * This method initializes nonlinearVar11Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar11Panel() {
     if (nonlinearVar11Panel == null) {
       nonlinearParams11Lbl = new JLabel();
@@ -11957,11 +11204,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar11Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar11Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar11Cmb() {
     if (nonlinearVar11Cmb == null) {
       nonlinearVar11Cmb = new JComboBox();
@@ -11981,11 +11224,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar11Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar11REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar11REd() {
     if (nonlinearVar11REd == null) {
       nonlinearVar11REd = new JWFNumberField();
@@ -12015,11 +11254,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar11REd;
   }
 
-  /**
-   * This method initializes nonlinearParams11Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams11Cmb() {
     if (nonlinearParams11Cmb == null) {
       nonlinearParams11Cmb = new JComboBox();
@@ -12038,11 +11273,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams11Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams11REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams11REd() {
     if (nonlinearParams11REd == null) {
       nonlinearParams11REd = new JWFNumberField();
@@ -12071,11 +11302,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams11REd;
   }
 
-  /**
-   * This method initializes nonlinearParams11LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams11LeftButton() {
     if (nonlinearParams11LeftButton == null) {
       nonlinearParams11LeftButton = new JButton();
@@ -12094,11 +11321,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams11LeftButton;
   }
 
-  /**
-   * This method initializes nonlinearVar12Panel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getNonlinearVar12Panel() {
     if (nonlinearVar12Panel == null) {
       nonlinearParams12Lbl = new JLabel();
@@ -12217,11 +11440,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar12Panel;
   }
 
-  /**
-   * This method initializes nonlinearVar12Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearVar12Cmb() {
     if (nonlinearVar12Cmb == null) {
       nonlinearVar12Cmb = new JComboBox();
@@ -12241,11 +11460,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar12Cmb;
   }
 
-  /**
-   * This method initializes nonlinearVar12REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearVar12REd() {
     if (nonlinearVar12REd == null) {
       nonlinearVar12REd = new JWFNumberField();
@@ -12275,11 +11490,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearVar12REd;
   }
 
-  /**
-   * This method initializes nonlinearParams12Cmb	
-   * 	
-   * @return javax.swing.JComboBox	
-   */
+  
   private JComboBox getNonlinearParams12Cmb() {
     if (nonlinearParams12Cmb == null) {
       nonlinearParams12Cmb = new JComboBox();
@@ -12298,11 +11509,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams12Cmb;
   }
 
-  /**
-   * This method initializes nonlinearParams12REd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getNonlinearParams12REd() {
     if (nonlinearParams12REd == null) {
       nonlinearParams12REd = new JWFNumberField();
@@ -12331,11 +11538,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams12REd;
   }
 
-  /**
-   * This method initializes nonlinearParams12LeftButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getNonlinearParams12LeftButton() {
     if (nonlinearParams12LeftButton == null) {
       nonlinearParams12LeftButton = new JButton();
@@ -12354,11 +11557,7 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams12LeftButton;
   }
 
-  /**
-   * This method initializes tinaGrabPaletteFromFlameButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getTinaGrabPaletteFromFlameButton() {
     if (tinaGrabPaletteFromFlameButton == null) {
       tinaGrabPaletteFromFlameButton = new JButton();
@@ -12393,11 +11592,7 @@ public class MainEditorFrame extends JFrame {
     return tinaCreateSimilarPaletteButton;
   }
 
-  /**
-   * This method initializes loadFromClipboardFlameButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getLoadFromClipboardFlameButton() {
     if (loadFromClipboardFlameButton == null) {
       loadFromClipboardFlameButton = new JButton();
@@ -12416,11 +11611,7 @@ public class MainEditorFrame extends JFrame {
     return loadFromClipboardFlameButton;
   }
 
-  /**
-   * This method initializes saveFlameToClipboardButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getSaveFlameToClipboardButton() {
     if (saveFlameToClipboardButton == null) {
       saveFlameToClipboardButton = new JButton();
@@ -12440,11 +11631,7 @@ public class MainEditorFrame extends JFrame {
     return saveFlameToClipboardButton;
   }
 
-  /**
-   * This method initializes mouseTransformSlowButton	
-   * 	
-   * @return javax.swing.JToggleButton	
-   */
+  
   private JToggleButton getMouseTransformSlowButton() {
     if (mouseTransformSlowButton == null) {
       mouseTransformSlowButton = new JToggleButton();
@@ -13086,11 +12273,7 @@ public class MainEditorFrame extends JFrame {
   private JButton tinaZBufferPreviewButton;
   private JToggleButton displayFavouriteVariationsToggleBtn;
 
-  /**
-   * This method initializes affineFlipHorizontalButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineFlipHorizontalButton() {
     if (affineFlipHorizontalButton == null) {
       affineFlipHorizontalButton = new JButton();
@@ -13111,11 +12294,7 @@ public class MainEditorFrame extends JFrame {
     return affineFlipHorizontalButton;
   }
 
-  /**
-   * This method initializes affineFlipVerticalButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getAffineFlipVerticalButton() {
     if (affineFlipVerticalButton == null) {
       affineFlipVerticalButton = new JButton();
@@ -13136,11 +12315,7 @@ public class MainEditorFrame extends JFrame {
     return affineFlipVerticalButton;
   }
 
-  /**
-   * This method initializes blurShadingPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getBlurShadingPanel() {
     if (blurShadingPanel == null) {
       blurShadingPanel = new JPanel();
@@ -13149,11 +12324,7 @@ public class MainEditorFrame extends JFrame {
     return blurShadingPanel;
   }
 
-  /**
-   * This method initializes shadingBlurRadiusREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getPostBlurRadiusREd() {
     if (postBlurRadiusREd == null) {
       postBlurRadiusREd = new JWFNumberField();
@@ -13181,11 +12352,7 @@ public class MainEditorFrame extends JFrame {
     return postBlurRadiusREd;
   }
 
-  /**
-   * This method initializes shadingBlurRadiusSlider	
-   * 	
-   * @return javax.swing.JSlider	
-   */
+  
   private JSlider getPostBlurRadiusSlider() {
     if (postBlurRadiusSlider == null) {
       postBlurRadiusSlider = new JSlider();
@@ -13210,11 +12377,7 @@ public class MainEditorFrame extends JFrame {
     return postBlurRadiusSlider;
   }
 
-  /**
-   * This method initializes shadingBlurFadeREd	
-   * 	
-   * @return javax.swing.JTextField	
-   */
+  
   private JWFNumberField getPostBlurFadeREd() {
     if (postBlurFadeREd == null) {
       postBlurFadeREd = new JWFNumberField();
@@ -13241,11 +12404,7 @@ public class MainEditorFrame extends JFrame {
     return postBlurFadeREd;
   }
 
-  /**
-   * This method initializes shadingBlurFadeSlider	
-   * 	
-   * @return javax.swing.JSlider	
-   */
+  
   private JSlider getPostBlurFadeSlider() {
     if (postBlurFadeSlider == null) {
       postBlurFadeSlider = new JSlider();
@@ -13270,11 +12429,7 @@ public class MainEditorFrame extends JFrame {
     return postBlurFadeSlider;
   }
 
-  /**
-   * This method initializes scriptPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getScriptPanel() {
     if (scriptPanel == null) {
       scriptPanel = new JPanel();
@@ -13410,11 +12565,7 @@ public class MainEditorFrame extends JFrame {
     return scriptPanel;
   }
 
-  /**
-   * This method initializes scriptScrollPane	
-   * 	
-   * @return javax.swing.JScrollPane	
-   */
+  
   private JScrollPane getScriptScrollPane() {
     if (scriptScrollPane == null) {
       scriptScrollPane = new JScrollPane();
@@ -13423,11 +12574,7 @@ public class MainEditorFrame extends JFrame {
     return scriptScrollPane;
   }
 
-  /**
-   * This method initializes scriptTextArea	
-   * 	
-   * @return javax.swing.JTextArea	
-   */
+  
   private JTextArea getScriptTextArea() {
     if (scriptTextArea == null) {
       scriptTextArea = new JTextArea();
@@ -13437,11 +12584,7 @@ public class MainEditorFrame extends JFrame {
     return scriptTextArea;
   }
 
-  /**
-   * This method initializes affineScaleXButton	
-   * 	
-   * @return javax.swing.JToggleButton	
-   */
+  
   private JToggleButton getAffineScaleXButton() {
     if (affineScaleXButton == null) {
       affineScaleXButton = new JToggleButton();
@@ -13464,11 +12607,7 @@ public class MainEditorFrame extends JFrame {
     return affineScaleXButton;
   }
 
-  /**
-   * This method initializes affineScaleYButton	
-   * 	
-   * @return javax.swing.JToggleButton	
-   */
+  
   private JToggleButton getAffineScaleYButton() {
     if (affineScaleYButton == null) {
       affineScaleYButton = new JToggleButton();
@@ -13491,11 +12630,7 @@ public class MainEditorFrame extends JFrame {
     return affineScaleYButton;
   }
 
-  /**
-   * This method initializes randomizeColorsButton	
-   * 	
-   * @return javax.swing.JButton	
-   */
+  
   private JButton getRandomizeColorsButton() {
     if (randomizeColorsButton == null) {
       randomizeColorsButton = new JButton();
@@ -13530,11 +12665,7 @@ public class MainEditorFrame extends JFrame {
     return resetColorsButton;
   }
 
-  /**
-   * This method initializes gradientLibraryPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getGradientLibraryPanel() {
     if (gradientLibraryPanel == null) {
       gradientLibraryPanel = new JPanel();
@@ -13544,11 +12675,7 @@ public class MainEditorFrame extends JFrame {
     return gradientLibraryPanel;
   }
 
-  /**
-   * This method initializes gradientLibraryCenterPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
+  
   private JPanel getGradientLibraryCenterPanel() {
     if (gradientLibraryCenterPanel == null) {
       gradientLibraryCenterPanel = new JPanel();
