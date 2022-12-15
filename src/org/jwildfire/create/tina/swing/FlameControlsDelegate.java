@@ -341,16 +341,29 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
-  public void cameraYawSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0, false);
+  private void flameSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache, boolean pMouseDown) {
+    if (isNoRefresh() || getCurrFlame() == null)
+      return;
+    setNoRefresh(true);
+    try {
+      owner.getFrameControlsUtil().valueChangedBySlider(getCurrFlame(), pSlider, pTextField, pProperty, pSliderScale);
+      owner.refreshFlameImage(true, pMouseDown, 1, true, pAllowUseCache);
+    }
+    finally {
+      setNoRefresh(false);
+    }
   }
 
-  public void cameraPerspectiveSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE, false);
+  public void cameraYawSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0, false, pMouseDown);
   }
 
-  public void cameraPitchSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0, false);
+  public void cameraPerspectiveSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE, false, pMouseDown);
+  }
+
+  public void cameraPitchSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0, false, pMouseDown);
   }
 
   public void xFormAntialiasAmountSlider_changed() {
@@ -405,52 +418,52 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.cameraDOFExponentSlider, data.cameraDOFExponentREd, "camDOFExponent", TinaController.SLIDER_SCALE_DOF_EXPONENT, false);
   }
 
-  public void cameraRollSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0, false);
+  public void cameraRollSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0, false, pMouseDown);
   }
 
-  public void cameraBankSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraBankSlider, data.cameraBankREd, "camBank", 1.0, false);
+  public void cameraBankSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.cameraBankSlider, data.cameraBankREd, "camBank", 1.0, false, pMouseDown);
   }
 
-  public void cameraCentreYSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", TinaController.SLIDER_SCALE_CENTRE, false);
+  public void cameraCentreYSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", TinaController.SLIDER_SCALE_CENTRE, false, pMouseDown);
   }
 
-  public void cameraCentreXSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", TinaController.SLIDER_SCALE_CENTRE, false);
+  public void cameraCentreXSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", TinaController.SLIDER_SCALE_CENTRE, false, pMouseDown);
   }
 
-  public void cameraZoomSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", TinaController.SLIDER_SCALE_ZOOM, false);
+  public void cameraZoomSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", TinaController.SLIDER_SCALE_ZOOM, false, pMouseDown);
   }
 
-  public void brightnessSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void brightnessSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void vibrancySlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void vibrancySlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void lowDensityBrightnessSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void lowDensityBrightnessSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void balanceRedSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void balanceRedSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void balanceGreenSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void balanceGreenSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void balanceBlueSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void balanceBlueSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void saturationSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void saturationSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
   public void filterRadiusSlider_stateChanged(ChangeEvent e) {
@@ -466,36 +479,36 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.tinaFilterLowDensitySlider, data.tinaFilterLowDensityREd, "spatialFilterLowDensity", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
   }
 
-  public void gammaThresholdSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, true);
+  public void gammaThresholdSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, true, pMouseDown);
   }
 
-  public void vibrancyREd_changed() {
-    flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void vibrancyREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void lowDensityBrightnessREd_changed() {
-    flameTextFieldChanged(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void lowDensityBrightnessREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void balanceRedREd_changed() {
+  public void balanceRedREd_changed(boolean pMouseDown) {
     flameTextFieldChanged(data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
-  public void balanceGreenREd_changed() {
-    flameTextFieldChanged(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void balanceGreenREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void balanceBlueREd_changed() {
-    flameTextFieldChanged(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void balanceBlueREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void saturationREd_changed() {
-    flameTextFieldChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void saturationREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void pixelsPerUnitSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0, false);
+  public void pixelsPerUnitSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0, false, pMouseDown);
   }
 
   private void flameTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
@@ -515,16 +528,33 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
-  public void cameraCentreYREd_changed() {
-    flameTextFieldChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", TinaController.SLIDER_SCALE_CENTRE, false);
+  private void flameTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache, boolean pMouseDown) {
+    if (isNoRefresh()) {
+      return;
+    }
+    if (getCurrFlame() == null) {
+      return;
+    }
+    setNoRefresh(true);
+    try {
+      owner.getFrameControlsUtil().valueChangedByTextField(getCurrFlame(), pSlider, pTextField, pProperty, pSliderScale, 0.0);
+      owner.refreshFlameImage(true, pMouseDown, 1, true, pAllowUseCache);
+    }
+    finally {
+      setNoRefresh(false);
+    }
   }
 
-  public void cameraCentreXREd_changed() {
-    flameTextFieldChanged(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", TinaController.SLIDER_SCALE_CENTRE, false);
+  public void cameraCentreYREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", TinaController.SLIDER_SCALE_CENTRE, false, pMouseDown);
   }
 
-  public void cameraZoomREd_changed() {
-    flameTextFieldChanged(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", TinaController.SLIDER_SCALE_ZOOM, false);
+  public void cameraCentreXREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", TinaController.SLIDER_SCALE_CENTRE, false, pMouseDown);
+  }
+
+  public void cameraZoomREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", TinaController.SLIDER_SCALE_ZOOM, false, pMouseDown);
   }
 
   public void filterRadiusREd_changed() {
@@ -540,60 +570,60 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameTextFieldChanged(data.tinaFilterLowDensitySlider, data.tinaFilterLowDensityREd, "spatialFilterLowDensity", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
   }
 
-  public void gammaREd_changed() {
-    flameTextFieldChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true);
+  public void gammaREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true, pMouseDown);
   }
 
-  public void gammaThresholdREd_changed() {
-    flameTextFieldChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, true);
+  public void gammaThresholdREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, true, pMouseDown);
   }
 
-  public void contrastREd_changed() {
-    flameTextFieldChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void contrastREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void whiteLevelREd_changed() {
-    flameTextFieldChanged(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0, true);
+  public void whiteLevelREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0, true, pMouseDown);
   }
 
-  public void gammaSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true);
+  public void gammaSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true, pMouseDown);
   }
 
-  public void pixelsPerUnitREd_changed() {
-    flameTextFieldChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0, false);
+  public void pixelsPerUnitREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0, false, pMouseDown);
   }
 
-  public void brightnessREd_changed() {
-    flameTextFieldChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void brightnessREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void contrastSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+  public void contrastSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true, pMouseDown);
   }
 
-  public void whiteLevelSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0, true);
+  public void whiteLevelSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0, true, pMouseDown);
   }
 
-  public void cameraRollREd_changed() {
-    flameTextFieldChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0, false);
+  public void cameraRollREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0, false, pMouseDown);
   }
 
-  public void cameraPitchREd_changed() {
-    flameTextFieldChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0, false);
+  public void cameraPitchREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0, false, pMouseDown);
   }
 
-  public void cameraYawREd_changed() {
-    flameTextFieldChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0, false);
+  public void cameraYawREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0, false, pMouseDown);
   }
 
-  public void cameraBankREd_changed() {
-    flameTextFieldChanged(data.cameraBankSlider, data.cameraBankREd, "camBank", 1.0, false);
+  public void cameraBankREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.cameraBankSlider, data.cameraBankREd, "camBank", 1.0, false, pMouseDown);
   }
 
-  public void cameraPerspectiveREd_changed() {
-    flameTextFieldChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE, false);
+  public void cameraPerspectiveREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE, false, pMouseDown);
   }
 
   public void focusXREd_changed() {
@@ -1224,28 +1254,28 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
-  public void camPosXSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE, false);
+  public void camPosXSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE, false, pMouseDown);
   }
 
-  public void camPosYSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE, false);
+  public void camPosYSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE, false, pMouseDown);
   }
 
-  public void camPosZSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE, false);
+  public void camPosZSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE, false, pMouseDown);
   }
 
-  public void camPosXREd_changed() {
-    flameTextFieldChanged(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE, false);
+  public void camPosXREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE, false, pMouseDown);
   }
 
-  public void camPosYREd_changed() {
-    flameTextFieldChanged(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE, false);
+  public void camPosYREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE, false, pMouseDown);
   }
 
-  public void camPosZREd_changed() {
-    flameTextFieldChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE, false);
+  public void camPosZREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE, false, pMouseDown);
   }
 
   public void dofDOFShapeCmb_changed() {
@@ -1375,12 +1405,12 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameTextFieldChanged(data.tinaOptiXDenoiserBlendSlider, data.tinaOptiXDenoiserBlendField, "postOptiXDenoiserBlend", TinaController.SLIDER_SCALE_POST_OPTIX_DENOISER_BLEND, true);
   }
 
-  public void foregroundOpacitySlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, true);
+  public void foregroundOpacitySlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    flameSliderChanged(data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, true, pMouseDown);
   }
 
-  public void foregroundOpacityREd_changed() {
-    flameTextFieldChanged(data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, true);
+  public void foregroundOpacityREd_changed(boolean pMouseDown) {
+    flameTextFieldChanged(data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, true, pMouseDown);
   }
 
   public void postBlurRadiusREd_changed() {

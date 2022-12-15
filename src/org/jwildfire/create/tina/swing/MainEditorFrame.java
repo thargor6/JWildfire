@@ -1736,18 +1736,7 @@ public class MainEditorFrame extends JFrame {
   private JPanel getTinaColoringPanel() {
     if (tinaColoringPanel == null) {
       tinaGammaThresholdLbl = new JLabel();
-      tinaGammaThresholdLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().gammaThresholdREd_reset();
-          }
-        }
-      });
-
       tinaGammaThresholdLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      tinaGammaThresholdLbl.setName("tinaGammaThresholdLbl");
       tinaGammaThresholdLbl.setText("Gamma threshold*");
       tinaGammaThresholdLbl.setToolTipText("Threshold for low density areas; can help remove noise");
       tinaGammaThresholdLbl.setLocation(new Point(4, 73));
@@ -1755,18 +1744,7 @@ public class MainEditorFrame extends JFrame {
       tinaGammaThresholdLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaGammaThresholdLbl.setPreferredSize(new Dimension(94, 22));
       tinaVibrancyLbl = new JLabel();
-      tinaVibrancyLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().vibrancyREd_reset();
-          }
-        }
-      });
-
       tinaVibrancyLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      tinaVibrancyLbl.setName("tinaVibrancyLbl");
       tinaVibrancyLbl.setText("Vibrancy*");
       tinaVibrancyLbl.setToolTipText("Vibrancy of the colors of points as they are rendered");
       tinaVibrancyLbl.setLocation(new Point(409, 96));
@@ -1774,18 +1752,7 @@ public class MainEditorFrame extends JFrame {
       tinaVibrancyLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaVibrancyLbl.setPreferredSize(new Dimension(94, 22));
       tinaGammaLbl = new JLabel();
-      tinaGammaLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().gammaREd_reset();
-          }
-        }
-      });
-
       tinaGammaLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      tinaGammaLbl.setName("tinaGammaLbl");
       tinaGammaLbl.setText("Gamma*");
       tinaGammaLbl.setToolTipText("Controls mapping of density to brightness; lower values produce higher contrast");
       tinaGammaLbl.setLocation(new Point(4, 50));
@@ -1793,18 +1760,7 @@ public class MainEditorFrame extends JFrame {
       tinaGammaLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaGammaLbl.setPreferredSize(new Dimension(94, 22));
       tinaContrastLbl = new JLabel();
-      tinaContrastLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().contrastREd_reset();
-          }
-        }
-      });
-
       tinaContrastLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      tinaContrastLbl.setName("tinaContrastLbl");
       tinaContrastLbl.setText("Contrast*");
       tinaContrastLbl.setToolTipText("Overall image contrast");
       tinaContrastLbl.setLocation(new Point(4, 96));
@@ -1813,16 +1769,6 @@ public class MainEditorFrame extends JFrame {
       tinaContrastLbl.setPreferredSize(new Dimension(94, 22));
       tinaBrightnessLbl = new JLabel();
       tinaBrightnessLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      tinaBrightnessLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().brightnessREd_reset();
-          }
-        }
-      });
-      tinaBrightnessLbl.setName("tinaBrightnessLbl");
       tinaBrightnessLbl.setText("Brightness*");
       tinaBrightnessLbl.setToolTipText("Overall image brightness");
       tinaBrightnessLbl.setLocation(new Point(4, 4));
@@ -1882,23 +1828,12 @@ public class MainEditorFrame extends JFrame {
       lblBackgroundColor.setBounds(806, 4, 65, 22);
       tinaColoringPanel.add(lblBackgroundColor);
 
-      JLabel tinaSaturationLbl = new JLabel();
-      tinaSaturationLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().saturationREd_reset();
-          }
-        }
-      });
-
+      tinaSaturationLbl = new JLabel();
       tinaSaturationLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       tinaSaturationLbl.setText("Saturation*");
       tinaSaturationLbl.setToolTipText("Overall image color saturation");
       tinaSaturationLbl.setSize(new Dimension(94, 22));
       tinaSaturationLbl.setPreferredSize(new Dimension(94, 22));
-      tinaSaturationLbl.setName("tinaSaturationLbl");
       tinaSaturationLbl.setLocation(new Point(4, 100));
       tinaSaturationLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSaturationLbl.setBounds(409, 118, 94, 22);
@@ -1910,75 +1845,31 @@ public class MainEditorFrame extends JFrame {
       tinaSaturationREd.setText("");
       tinaSaturationREd.setSize(new Dimension(100, 24));
       tinaSaturationREd.setPreferredSize(new Dimension(100, 24));
-      tinaSaturationREd.setMotionPropertyName("saturation");
       tinaSaturationREd.setMaxValue(2.0);
       tinaSaturationREd.setLocation(new Point(100, 100));
-      tinaSaturationREd.setLinkedMotionControlName("tinaSaturationSlider");
-      tinaSaturationREd.setLinkedLabelControlName("tinaSaturationLbl");
       tinaSaturationREd.setHasMinValue(true);
       tinaSaturationREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSaturationREd.setBounds(505, 118, 100, 24);
-      tinaSaturationREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaSaturationREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!tinaSaturationREd.isMouseAdjusting() || tinaSaturationREd.getMouseChangeCount() == 0) {
-              if (!tinaSaturationSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().saturationREd_changed();
-          }
-        }
-      });
       tinaColoringPanel.add(tinaSaturationREd);
 
       tinaSaturationSlider = new JSlider();
       tinaSaturationSlider.setValue(0);
       tinaSaturationSlider.setSize(new Dimension(220, 19));
       tinaSaturationSlider.setPreferredSize(new Dimension(220, 19));
-      tinaSaturationSlider.setName("tinaSaturationSlider");
       tinaSaturationSlider.setMinimum(0);
       tinaSaturationSlider.setMaximum(200);
       tinaSaturationSlider.setLocation(new Point(202, 100));
       tinaSaturationSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSaturationSlider.setBounds(607, 118, 195, 19);
-      tinaSaturationSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaSaturationSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().saturationSlider_stateChanged(e);
-        }
-      });
-
       tinaColoringPanel.add(tinaSaturationSlider);
       tinaColoringPanel.add(getResetColoringOptionsButton());
 
-      JLabel lblFadeToWhite = new JLabel();
-      lblFadeToWhite.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().whiteLevelREd_reset();
-          }
-        }
-      });
-
+      lblFadeToWhite = new JLabel();
       lblFadeToWhite.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblFadeToWhite.setToolTipText("Color Level at which colors are faded to white");
       lblFadeToWhite.setText("Fade to White*");
       lblFadeToWhite.setSize(new Dimension(94, 22));
       lblFadeToWhite.setPreferredSize(new Dimension(94, 22));
-      lblFadeToWhite.setName("tinaWhiteLevelLbl");
       lblFadeToWhite.setLocation(new Point(4, 100));
       lblFadeToWhite.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblFadeToWhite.setBounds(409, 73, 94, 22);
@@ -1989,57 +1880,24 @@ public class MainEditorFrame extends JFrame {
       tinaWhiteLevelREd.setText("");
       tinaWhiteLevelREd.setSize(new Dimension(100, 24));
       tinaWhiteLevelREd.setPreferredSize(new Dimension(100, 24));
-      tinaWhiteLevelREd.setMotionPropertyName("whiteLevel");
       tinaWhiteLevelREd.setMinValue(20);
       tinaWhiteLevelREd.setMaxValue(500.0);
       tinaWhiteLevelREd.setLocation(new Point(100, 100));
-      tinaWhiteLevelREd.setLinkedMotionControlName("tinaWhiteLevelSlider");
-      tinaWhiteLevelREd.setLinkedLabelControlName("tinaWhiteLevelLbl");
       tinaWhiteLevelREd.setHasMinValue(true);
       tinaWhiteLevelREd.setHasMaxValue(true);
       tinaWhiteLevelREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaWhiteLevelREd.setBounds(505, 73, 100, 24);
-      tinaWhiteLevelREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaWhiteLevelREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!tinaWhiteLevelREd.isMouseAdjusting() || tinaWhiteLevelREd.getMouseChangeCount() == 0) {
-              if (!tinaWhiteLevelSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().whiteLevelREd_changed();
-          }
-        }
-      });
-
       tinaColoringPanel.add(tinaWhiteLevelREd);
 
       tinaWhiteLevelSlider = new JSlider();
       tinaWhiteLevelSlider.setValue(0);
       tinaWhiteLevelSlider.setSize(new Dimension(220, 19));
       tinaWhiteLevelSlider.setPreferredSize(new Dimension(220, 19));
-      tinaWhiteLevelSlider.setName("tinaWhiteLevelSlider");
       tinaWhiteLevelSlider.setMinimum(20);
       tinaWhiteLevelSlider.setMaximum(500);
       tinaWhiteLevelSlider.setLocation(new Point(202, 100));
       tinaWhiteLevelSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaWhiteLevelSlider.setBounds(607, 73, 195, 19);
-      tinaWhiteLevelSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaWhiteLevelSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().whiteLevelSlider_stateChanged(e);
-        }
-      });
       tinaColoringPanel.add(tinaWhiteLevelSlider);
 
       backgroundSelectImageBtn = new JButton();
@@ -2069,48 +1927,21 @@ public class MainEditorFrame extends JFrame {
       tinaColoringPanel.add(backgroundRemoveImageBtn);
 
       foregroundOpacityField = new JWFNumberField();
-      foregroundOpacityField.setMotionPropertyName("foregroundOpacity");
-      foregroundOpacityField.setLinkedLabelControlName("foregroundOpacityLbl");
       foregroundOpacityField.setValueStep(0.05);
       foregroundOpacityField.setText("");
       foregroundOpacityField.setSize(new Dimension(100, 24));
       foregroundOpacityField.setPreferredSize(new Dimension(100, 24));
       foregroundOpacityField.setMaxValue(2.0);
       foregroundOpacityField.setLocation(new Point(584, 2));
-      foregroundOpacityField.setLinkedMotionControlName("foregroundOpacitySlider");
       foregroundOpacityField.setHasMinValue(true);
       foregroundOpacityField.setHasMaxValue(true);
       foregroundOpacityField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       foregroundOpacityField.setEditable(true);
       foregroundOpacityField.setBounds(873, 94, 100, 24);
-      foregroundOpacityField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            if (!foregroundOpacityField.isMouseAdjusting() || foregroundOpacityField.getMouseChangeCount() == 0) {
-              if (!foregroundOpacitySlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().foregroundOpacityREd_changed();
-          }
-        }
-      });
-
       tinaColoringPanel.add(foregroundOpacityField);
 
-      JLabel lblOpacity = new JLabel();
-      lblOpacity.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().foregroundOpacityREd_reset();
-          }
-        }
-      });
-
+      lblOpacity = new JLabel();
       lblOpacity.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      lblOpacity.setName("foregroundOpacityLbl");
       lblOpacity.setToolTipText("Foreground opacity; 0 for completely opaque");
       lblOpacity.setText("Fg opacity*");
       lblOpacity.setSize(new Dimension(94, 22));
@@ -2124,29 +1955,13 @@ public class MainEditorFrame extends JFrame {
       foregroundOpacitySlider.setValue(0);
       foregroundOpacitySlider.setSize(new Dimension(220, 19));
       foregroundOpacitySlider.setPreferredSize(new Dimension(220, 19));
-      foregroundOpacitySlider.setName("foregroundOpacitySlider");
       foregroundOpacitySlider.setMaximum(2000);
       foregroundOpacitySlider.setLocation(new Point(686, 2));
       foregroundOpacitySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       foregroundOpacitySlider.setBounds(975, 94, 195, 24);
-      foregroundOpacitySlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().foregroundOpacitySlider_stateChanged(e);
-          }
-        }
-      });
-      foregroundOpacitySlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-
       tinaColoringPanel.add(foregroundOpacitySlider);
 
       lowDensityBrightnessREd = new JWFNumberField();
-      lowDensityBrightnessREd.setMotionPropertyName("lowDensityBrightness");
       lowDensityBrightnessREd.setValueStep(0.01);
       lowDensityBrightnessREd.setText("");
       lowDensityBrightnessREd.setSize(new Dimension(100, 24));
@@ -2155,78 +1970,33 @@ public class MainEditorFrame extends JFrame {
       lowDensityBrightnessREd.setMinValue(-20.0);
       lowDensityBrightnessREd.setMaxValue(20.0);
       lowDensityBrightnessREd.setLocation(new Point(100, 100));
-      lowDensityBrightnessREd.setLinkedMotionControlName("lowDensityBrightnessSlider");
-      lowDensityBrightnessREd.setLinkedLabelControlName("lowDensityBrightnessLbl");
       lowDensityBrightnessREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       lowDensityBrightnessREd.setBounds(100, 27, 100, 24);
-      lowDensityBrightnessREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      lowDensityBrightnessREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!lowDensityBrightnessREd.isMouseAdjusting() || lowDensityBrightnessREd.getMouseChangeCount() == 0) {
-              if (!lowDensityBrightnessSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().lowDensityBrightnessREd_changed();
-          }
-        }
-      });
-
       tinaColoringPanel.add(lowDensityBrightnessREd);
 
       lowDensityBrightnessSlider = new JSlider();
       lowDensityBrightnessSlider.setValue(0);
       lowDensityBrightnessSlider.setSize(new Dimension(220, 19));
       lowDensityBrightnessSlider.setPreferredSize(new Dimension(220, 19));
-      lowDensityBrightnessSlider.setName("lowDensityBrightnessSlider");
       lowDensityBrightnessSlider.setMinimum(-1000);
       lowDensityBrightnessSlider.setMaximum(1000);
       lowDensityBrightnessSlider.setLocation(new Point(202, 100));
       lowDensityBrightnessSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lowDensityBrightnessSlider.setBounds(202, 27, 195, 19);
-      lowDensityBrightnessSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      lowDensityBrightnessSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().lowDensityBrightnessSlider_stateChanged(e);
-        }
-      });
-
       tinaColoringPanel.add(lowDensityBrightnessSlider);
 
-      JLabel lblBgBrightness = new JLabel();
-      lblBgBrightness.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().lowDensityBrightnessREd_reset();
-          }
-        }
-      });
-
+      lblBgBrightness = new JLabel();
       lblBgBrightness.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblBgBrightness.setToolTipText("Increase the brightness of areas with low density");
       lblBgBrightness.setText("Low brightness*");
       lblBgBrightness.setSize(new Dimension(94, 22));
       lblBgBrightness.setPreferredSize(new Dimension(94, 22));
-      lblBgBrightness.setName("lowDensityBrightnessLbl");
       lblBgBrightness.setLocation(new Point(4, 100));
       lblBgBrightness.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBgBrightness.setBounds(4, 27, 94, 22);
       tinaColoringPanel.add(lblBgBrightness);
 
       balanceRedREd = new JWFNumberField();
-      balanceRedREd.setMotionPropertyName("balanceRed");
       balanceRedREd.setMouseSpeed(0.1);
       balanceRedREd.setForeground(Color.BLACK);
       balanceRedREd.setValueStep(0.01);
@@ -2236,50 +2006,19 @@ public class MainEditorFrame extends JFrame {
       balanceRedREd.setMinValue(0.0);
       balanceRedREd.setMaxValue(2.0);
       balanceRedREd.setLocation(new Point(100, 100));
-      balanceRedREd.setLinkedMotionControlName("balanceRedSlider");
-      balanceRedREd.setLinkedLabelControlName("balanceRedLbl");
       balanceRedREd.setHasMinValue(true);
       balanceRedREd.setHasMaxValue(true);
       balanceRedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       balanceRedREd.setBounds(505, 4, 100, 24);
-      balanceRedREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      balanceRedREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!balanceRedREd.isMouseAdjusting() || balanceRedREd.getMouseChangeCount() == 0) {
-              if (!balanceRedSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().balanceRedREd_changed();
-          }
-        }
-      });
-
       tinaColoringPanel.add(balanceRedREd);
 
-      JLabel lblRedBalance = new JLabel();
-      lblRedBalance.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().balanceRedREd_reset();
-          }
-        }
-      });
-
+      lblRedBalance = new JLabel();
       lblRedBalance.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblRedBalance.setForeground(new Color(165, 42, 42));
       lblRedBalance.setToolTipText("Increase/decrease the amount of red (1 is neutral)");
       lblRedBalance.setText("Red balance*");
       lblRedBalance.setSize(new Dimension(94, 22));
       lblRedBalance.setPreferredSize(new Dimension(94, 22));
-      lblRedBalance.setName("balanceRedLbl");
       lblRedBalance.setLocation(new Point(4, 100));
       lblRedBalance.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRedBalance.setBounds(409, 4, 94, 22);
@@ -2289,27 +2028,13 @@ public class MainEditorFrame extends JFrame {
       balanceRedSlider.setValue(0);
       balanceRedSlider.setSize(new Dimension(220, 19));
       balanceRedSlider.setPreferredSize(new Dimension(220, 19));
-      balanceRedSlider.setName("balanceRedSlider");
       balanceRedSlider.setMaximum(300);
       balanceRedSlider.setLocation(new Point(202, 100));
       balanceRedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       balanceRedSlider.setBounds(607, 4, 195, 19);
-      balanceRedSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      balanceRedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().balanceRedSlider_stateChanged(e);
-        }
-      });
-
       tinaColoringPanel.add(balanceRedSlider);
 
       balanceGreenREd = new JWFNumberField();
-      balanceGreenREd.setMotionPropertyName("balanceGreen");
       balanceGreenREd.setMouseSpeed(0.1);
       balanceGreenREd.setValueStep(0.01);
       balanceGreenREd.setText("");
@@ -2318,49 +2043,19 @@ public class MainEditorFrame extends JFrame {
       balanceGreenREd.setMinValue(0.0);
       balanceGreenREd.setMaxValue(2.0);
       balanceGreenREd.setLocation(new Point(100, 100));
-      balanceGreenREd.setLinkedMotionControlName("balanceGreenSlider");
-      balanceGreenREd.setLinkedLabelControlName("balanceGreenLbl");
       balanceGreenREd.setHasMinValue(true);
       balanceGreenREd.setHasMaxValue(true);
       balanceGreenREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       balanceGreenREd.setBounds(505, 27, 100, 24);
-      balanceGreenREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      balanceGreenREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!balanceGreenREd.isMouseAdjusting() || balanceGreenREd.getMouseChangeCount() == 0) {
-              if (!balanceGreenSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().balanceGreenREd_changed();
-          }
-        }
-      });
       tinaColoringPanel.add(balanceGreenREd);
 
-      JLabel lblGreenBalance = new JLabel();
-      lblGreenBalance.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().balanceGreenREd_reset();
-          }
-        }
-      });
-
+      lblGreenBalance = new JLabel();
       lblGreenBalance.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblGreenBalance.setForeground(new Color(34, 139, 34));
       lblGreenBalance.setToolTipText("Increase/decrease the amount of green (1 is neutral)");
       lblGreenBalance.setText("Green balance*");
       lblGreenBalance.setSize(new Dimension(94, 22));
       lblGreenBalance.setPreferredSize(new Dimension(94, 22));
-      lblGreenBalance.setName("balanceGreenLbl");
       lblGreenBalance.setLocation(new Point(4, 100));
       lblGreenBalance.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGreenBalance.setBounds(409, 27, 94, 22);
@@ -2370,27 +2065,13 @@ public class MainEditorFrame extends JFrame {
       balanceGreenSlider.setValue(0);
       balanceGreenSlider.setSize(new Dimension(220, 19));
       balanceGreenSlider.setPreferredSize(new Dimension(220, 19));
-      balanceGreenSlider.setName("balanceGreenSlider");
       balanceGreenSlider.setMaximum(300);
       balanceGreenSlider.setLocation(new Point(202, 100));
       balanceGreenSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       balanceGreenSlider.setBounds(607, 27, 195, 19);
-      balanceGreenSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      balanceGreenSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().balanceGreenSlider_stateChanged(e);
-        }
-      });
-
       tinaColoringPanel.add(balanceGreenSlider);
 
       balanceBlueREd = new JWFNumberField();
-      balanceBlueREd.setMotionPropertyName("balanceBlue");
       balanceBlueREd.setMouseSpeed(0.1);
       balanceBlueREd.setValueStep(0.01);
       balanceBlueREd.setText("");
@@ -2399,50 +2080,19 @@ public class MainEditorFrame extends JFrame {
       balanceBlueREd.setMinValue(0.0);
       balanceBlueREd.setMaxValue(2.0);
       balanceBlueREd.setLocation(new Point(100, 100));
-      balanceBlueREd.setLinkedMotionControlName("balanceBlueSlider");
-      balanceBlueREd.setLinkedLabelControlName("balanceBlueLbl");
       balanceBlueREd.setHasMinValue(true);
       balanceBlueREd.setHasMaxValue(true);
       balanceBlueREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       balanceBlueREd.setBounds(505, 50, 100, 24);
-      balanceBlueREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      balanceBlueREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!balanceBlueREd.isMouseAdjusting() || balanceBlueREd.getMouseChangeCount() == 0) {
-              if (!balanceBlueSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().balanceBlueREd_changed();
-          }
-        }
-      });
-
       tinaColoringPanel.add(balanceBlueREd);
 
-      JLabel lblRedBalancing = new JLabel();
-      lblRedBalancing.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.getFlameControls().balanceBlueREd_reset();
-          }
-        }
-      });
-
+      lblRedBalancing = new JLabel();
       lblRedBalancing.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
       lblRedBalancing.setForeground(new Color(0, 0, 205));
       lblRedBalancing.setToolTipText("Increase/decrease the amount of blue (1 is neutral)");
       lblRedBalancing.setText("Blue balance*");
       lblRedBalancing.setSize(new Dimension(94, 22));
       lblRedBalancing.setPreferredSize(new Dimension(94, 22));
-      lblRedBalancing.setName("balanceBlueLbl");
       lblRedBalancing.setLocation(new Point(4, 100));
       lblRedBalancing.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRedBalancing.setBounds(409, 50, 94, 22);
@@ -2452,23 +2102,10 @@ public class MainEditorFrame extends JFrame {
       balanceBlueSlider.setValue(0);
       balanceBlueSlider.setSize(new Dimension(220, 19));
       balanceBlueSlider.setPreferredSize(new Dimension(220, 19));
-      balanceBlueSlider.setName("balanceBlueSlider");
       balanceBlueSlider.setMaximum(300);
       balanceBlueSlider.setLocation(new Point(202, 100));
       balanceBlueSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       balanceBlueSlider.setBounds(607, 50, 195, 19);
-      balanceBlueSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      balanceBlueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().balanceBlueSlider_stateChanged(e);
-        }
-      });
-
       tinaColoringPanel.add(balanceBlueSlider);
 
       JLabel lblBgImage = new JLabel();
@@ -2880,27 +2517,9 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getTinaBrightnessREd() {
     if (tinaBrightnessREd == null) {
       tinaBrightnessREd = new JWFNumberField();
-      tinaBrightnessREd.setMotionPropertyName("brightness");
-      tinaBrightnessREd.setLinkedMotionControlName("tinaBrightnessSlider");
-      tinaBrightnessREd.setLinkedLabelControlName("tinaBrightnessLbl");
       tinaBrightnessREd.setValueStep(0.05);
       tinaBrightnessREd.setMaxValue(25.0);
       tinaBrightnessREd.setHasMinValue(true);
-      tinaBrightnessREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaBrightnessREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (!tinaBrightnessREd.isMouseAdjusting() || tinaBrightnessREd.getMouseChangeCount() == 0) {
-            if (!tinaBrightnessSlider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-            }
-          }
-          tinaController.getFlameControls().brightnessREd_changed();
-        }
-      });
       tinaBrightnessREd.setPreferredSize(new Dimension(100, 24));
       tinaBrightnessREd.setText("");
       tinaBrightnessREd.setSize(new Dimension(100, 24));
@@ -2914,13 +2533,6 @@ public class MainEditorFrame extends JFrame {
   private JSlider getTinaBrightnessSlider() {
     if (tinaBrightnessSlider == null) {
       tinaBrightnessSlider = new JSlider();
-      tinaBrightnessSlider.setName("tinaBrightnessSlider");
-      tinaBrightnessSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
       tinaBrightnessSlider.setMinimum(0);
       tinaBrightnessSlider.setLocation(new Point(202, 4));
       tinaBrightnessSlider.setSize(new Dimension(195, 19));
@@ -2928,11 +2540,6 @@ public class MainEditorFrame extends JFrame {
       tinaBrightnessSlider.setValue(0);
       tinaBrightnessSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaBrightnessSlider.setMaximum(2500);
-      tinaBrightnessSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().brightnessSlider_stateChanged(e);
-        }
-      });
     }
     return tinaBrightnessSlider;
   }
@@ -2969,29 +2576,9 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getTinaContrastREd() {
     if (tinaContrastREd == null) {
       tinaContrastREd = new JWFNumberField();
-      tinaContrastREd.setMotionPropertyName("contrast");
-      tinaContrastREd.setLinkedMotionControlName("tinaContrastSlider");
-      tinaContrastREd.setLinkedLabelControlName("tinaContrastLbl");
       tinaContrastREd.setValueStep(0.05);
       tinaContrastREd.setHasMinValue(true);
       tinaContrastREd.setMaxValue(5.0);
-      tinaContrastREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaContrastREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!tinaContrastREd.isMouseAdjusting() || tinaContrastREd.getMouseChangeCount() == 0) {
-              if (!tinaContrastSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().contrastREd_changed();
-          }
-        }
-      });
       tinaContrastREd.setPreferredSize(new Dimension(100, 24));
       tinaContrastREd.setText("");
       tinaContrastREd.setLocation(new Point(100, 96));
@@ -3005,29 +2592,9 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getTinaGammaREd() {
     if (tinaGammaREd == null) {
       tinaGammaREd = new JWFNumberField();
-      tinaGammaREd.setMotionPropertyName("gamma");
-      tinaGammaREd.setLinkedMotionControlName("tinaGammaSlider");
-      tinaGammaREd.setLinkedLabelControlName("tinaGammaLbl");
       tinaGammaREd.setHasMinValue(true);
       tinaGammaREd.setMaxValue(10.0);
       tinaGammaREd.setValueStep(0.05);
-      tinaGammaREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaGammaREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!tinaGammaREd.isMouseAdjusting() || tinaGammaREd.getMouseChangeCount() == 0) {
-              if (!tinaGammaSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().gammaREd_changed();
-          }
-        }
-      });
       tinaGammaREd.setPreferredSize(new Dimension(100, 24));
       tinaGammaREd.setText("");
       tinaGammaREd.setLocation(new Point(100, 50));
@@ -3041,30 +2608,10 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getTinaVibrancyREd() {
     if (tinaVibrancyREd == null) {
       tinaVibrancyREd = new JWFNumberField();
-      tinaVibrancyREd.setMotionPropertyName("vibrancy");
-      tinaVibrancyREd.setLinkedMotionControlName("tinaVibrancySlider");
-      tinaVibrancyREd.setLinkedLabelControlName("tinaVibrancyLbl");
       tinaVibrancyREd.setValueStep(0.05);
       tinaVibrancyREd.setHasMinValue(true);
       tinaVibrancyREd.setHasMaxValue(true);
       tinaVibrancyREd.setMaxValue(1.0);
-      tinaVibrancyREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaVibrancyREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!tinaVibrancyREd.isMouseAdjusting() || tinaVibrancyREd.getMouseChangeCount() == 0) {
-              if (!tinaVibrancySlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().vibrancyREd_changed();
-          }
-        }
-      });
       tinaVibrancyREd.setPreferredSize(new Dimension(100, 24));
       tinaVibrancyREd.setText("");
       tinaVibrancyREd.setLocation(new Point(505, 96));
@@ -3078,29 +2625,9 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getTinaGammaThresholdREd() {
     if (tinaGammaThresholdREd == null) {
       tinaGammaThresholdREd = new JWFNumberField();
-      tinaGammaThresholdREd.setMotionPropertyName("gammaThreshold");
-      tinaGammaThresholdREd.setLinkedMotionControlName("tinaGammaThresholdSlider");
-      tinaGammaThresholdREd.setLinkedLabelControlName("tinaGammaThresholdLbl");
       tinaGammaThresholdREd.setValueStep(0.005);
       tinaGammaThresholdREd.setMaxValue(1.0);
       tinaGammaThresholdREd.setHasMinValue(true);
-      tinaGammaThresholdREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaGammaThresholdREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!tinaGammaThresholdREd.isMouseAdjusting() || tinaGammaThresholdREd.getMouseChangeCount() == 0) {
-              if (!tinaGammaThresholdSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().gammaThresholdREd_changed();
-          }
-        }
-      });
       tinaGammaThresholdREd.setPreferredSize(new Dimension(100, 24));
       tinaGammaThresholdREd.setText("");
       tinaGammaThresholdREd.setLocation(new Point(100, 73));
@@ -3114,24 +2641,12 @@ public class MainEditorFrame extends JFrame {
   private JSlider getTinaContrastSlider() {
     if (tinaContrastSlider == null) {
       tinaContrastSlider = new JSlider();
-      tinaContrastSlider.setName("tinaContrastSlider");
-      tinaContrastSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
       tinaContrastSlider.setMinimum(0);
       tinaContrastSlider.setValue(0);
       tinaContrastSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaContrastSlider.setSize(new Dimension(195, 19));
       tinaContrastSlider.setLocation(new Point(202, 96));
       tinaContrastSlider.setPreferredSize(new Dimension(220, 19));
-      tinaContrastSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().contrastSlider_stateChanged(e);
-        }
-      });
     }
     return tinaContrastSlider;
   }
@@ -3140,13 +2655,6 @@ public class MainEditorFrame extends JFrame {
   private JSlider getTinaGammaSlider() {
     if (tinaGammaSlider == null) {
       tinaGammaSlider = new JSlider();
-      tinaGammaSlider.setName("tinaGammaSlider");
-      tinaGammaSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
       tinaGammaSlider.setMaximum(1000);
       tinaGammaSlider.setMinimum(0);
       tinaGammaSlider.setValue(0);
@@ -3154,11 +2662,6 @@ public class MainEditorFrame extends JFrame {
       tinaGammaSlider.setSize(new Dimension(195, 19));
       tinaGammaSlider.setLocation(new Point(202, 50));
       tinaGammaSlider.setPreferredSize(new Dimension(220, 19));
-      tinaGammaSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().gammaSlider_stateChanged(e);
-        }
-      });
     }
     return tinaGammaSlider;
   }
@@ -3167,13 +2670,6 @@ public class MainEditorFrame extends JFrame {
   private JSlider getTinaVibrancySlider() {
     if (tinaVibrancySlider == null) {
       tinaVibrancySlider = new JSlider();
-      tinaVibrancySlider.setName("tinaVibrancySlider");
-      tinaVibrancySlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
       tinaVibrancySlider.setMaximum(100);
       tinaVibrancySlider.setMinimum(0);
       tinaVibrancySlider.setValue(0);
@@ -3181,11 +2677,6 @@ public class MainEditorFrame extends JFrame {
       tinaVibrancySlider.setSize(new Dimension(195, 19));
       tinaVibrancySlider.setLocation(new Point(607, 96));
       tinaVibrancySlider.setPreferredSize(new Dimension(220, 19));
-      tinaVibrancySlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().vibrancySlider_stateChanged(e);
-        }
-      });
     }
     return tinaVibrancySlider;
   }
@@ -3194,13 +2685,6 @@ public class MainEditorFrame extends JFrame {
   private JSlider getTinaGammaThresholdSlider() {
     if (tinaGammaThresholdSlider == null) {
       tinaGammaThresholdSlider = new JSlider();
-      tinaGammaThresholdSlider.setName("tinaGammaThresholdSlider");
-      tinaGammaThresholdSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
       tinaGammaThresholdSlider.setMaximum(1000);
       tinaGammaThresholdSlider.setMinimum(1);
       tinaGammaThresholdSlider.setValue(0);
@@ -3209,11 +2693,6 @@ public class MainEditorFrame extends JFrame {
       tinaGammaThresholdSlider.setSize(new Dimension(195, 19));
       tinaGammaThresholdSlider.setLocation(new Point(202, 73));
       tinaGammaThresholdSlider.setPreferredSize(new Dimension(220, 19));
-      tinaGammaThresholdSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().gammaThresholdSlider_stateChanged(e);
-        }
-      });
     }
     return tinaGammaThresholdSlider;
   }
@@ -6514,10 +5993,14 @@ public class MainEditorFrame extends JFrame {
         getDofCamZREd(), getDofCamZSlider(),
 
             tinaPixelsPerUnitLbl, getTinaPixelsPerUnitREd(), getTinaPixelsPerUnitSlider(),
+            tinaBrightnessLbl, getTinaBrightnessREd(), getTinaBrightnessSlider(),
+            tinaContrastLbl, getTinaContrastREd(), getTinaContrastSlider(),
+            tinaGammaLbl, getTinaGammaREd(), getTinaGammaSlider(),
+            tinaVibrancyLbl, getTinaVibrancyREd(), getTinaVibrancySlider(),
+            getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaFilterKernelCmb(),
+            tinaGammaThresholdLbl, getTinaGammaThresholdREd(), getTinaGammaThresholdSlider(),
 
-        getTinaBrightnessREd(), getTinaBrightnessSlider(), getTinaContrastREd(), getTinaContrastSlider(), getTinaGammaREd(), getTinaGammaSlider(),
-        getTinaVibrancyREd(), getTinaVibrancySlider(), getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaFilterKernelCmb(),
-        getTinaGammaThresholdREd(), getTinaGammaThresholdSlider(), getBgTransparencyCBx(), getTinaPaletteRandomPointsREd(), getTinaPaletteImgPanel(), getTinaCholorChooserPaletteImgPanel(), getTinaPaletteShiftREd(), getTinaPaletteShiftSlider(),
+            getBgTransparencyCBx(), getTinaPaletteRandomPointsREd(), getTinaPaletteImgPanel(), getTinaCholorChooserPaletteImgPanel(), getTinaPaletteShiftREd(), getTinaPaletteShiftSlider(),
         getTinaPaletteRedREd(), getTinaPaletteRedSlider(), getTinaPaletteGreenREd(), getTinaPaletteGreenSlider(), getTinaPaletteBlueREd(),
         getTinaPaletteBlueSlider(), getTinaPaletteHueREd(), getTinaPaletteHueSlider(), getTinaPaletteSaturationREd(), getTinaPaletteSaturationSlider(),
         getTinaPaletteContrastREd(), getTinaPaletteContrastSlider(), getTinaPaletteGammaREd(), getTinaPaletteGammaSlider(), getTinaPaletteBrightnessREd(),
@@ -6573,7 +6056,8 @@ public class MainEditorFrame extends JFrame {
             tinaCameraCamPosYLbl, getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
             tinaCameraCamPosZLbl, getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(),
 
-            getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
+            tinaSaturationLbl, getTinaSaturationREd(), getTinaSaturationSlider(), 
+			getToggleDrawGridButton(),
         getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton(),
         getAffineRotateEditMotionCurveBtn(), getAffineScaleEditMotionCurveBtn(),
         getTriangleStyleCmb(), getXFormModGammaREd(), getXFormModGammaSlider(), getXFormModGammaSpeedREd(), getXFormModGammaSpeedSlider(),
@@ -6592,7 +6076,8 @@ public class MainEditorFrame extends JFrame {
         getResetAntialiasOptionsButton(), getResetPostBlurSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
         getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
         getMacroButtonPanel(), getScriptAddButtonBtn(), getMacroButtonsTable(), getMacroButtonMoveUpBtn(), getMacroButtonMoveDownBtn(),
-        getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton(), getGradientResetBtn(), getTinaWhiteLevelREd(), getTinaWhiteLevelSlider(),
+        getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton(), getGradientResetBtn(), 
+		lblFadeToWhite, getTinaWhiteLevelREd(), getTinaWhiteLevelSlider(),
         getMacroButtonHorizPanel(), getMacroButtonHorizRootPanel(), getAffineXYEditPlaneToggleBtn(), getAffineYZEditPlaneToggleBtn(), getAffineZXEditPlaneToggleBtn(),
         getGradientColorMapHorizOffsetREd(), getGradientColorMapHorizOffsetSlider(), getGradientColorMapHorizScaleREd(),
         getGradientColorMapHorizScaleSlider(), getGradientColorMapVertOffsetREd(), getGradientColorMapVertOffsetSlider(),
@@ -6605,7 +6090,8 @@ public class MainEditorFrame extends JFrame {
         getLeapMotionDeleteButton(), getLeapMotionClearButton(), getLeapMotionResetConfigButton(),
         getFilterKernelPreviewRootPnl(), getTinaSpatialOversamplingREd(), getTinaSpatialOversamplingSlider(),
         getFilterKernelFlatPreviewBtn(),
-        getForegroundOpacityField(), getForegroundOpacitySlider(), getScriptEditBtn(), getRealtimePreviewToggleButton(),
+        lblOpacity, getForegroundOpacityField(), getForegroundOpacitySlider(), 
+		getScriptEditBtn(), getRealtimePreviewToggleButton(),
         getSolidRenderingToggleBtn(), getGpuModeToggleButton(), getTinaSendToGPURenderButton(), getTinaSolidRenderingEnableAOCBx(), getTinaSolidRenderingAOIntensityREd(),
         getTinaSolidRenderingAOIntensitySlider(), getTinaSolidRenderingAOSearchRadiusREd(), getTinaSolidRenderingAOSearchRadiusSlider(),
         getTinaSolidRenderingAOBlurRadiusREd(), getTinaSolidRenderingAOBlurRadiusSlider(), getTinaSolidRenderingAOFalloffREd(),
@@ -6636,8 +6122,10 @@ public class MainEditorFrame extends JFrame {
         getPostBokehBrightnessREd(), getPostBokehBrightnessSlider(), getPostBokehSizeREd(), getPostBokehSizeSlider(), getPostBokehActivationREd(),
         getPostBokehActivationSlider(), getPostBokehFilterKernelCmb(), gpuRendererFrame.getInteractiveResolutionProfileCmb(),
         gpuRendererFrame.getInteractiveQualityProfileCmb(),
-        getLowDensityBrightnessREd(), getLowDensityBrightnessSlider(), getBalanceRedREd(), getBalanceRedSlider(),
-        getBalanceGreenREd(), getBalanceGreenSlider(), getBalanceBlueREd(), getBalanceBlueSlider(),
+        lblBgBrightness, getLowDensityBrightnessREd(), getLowDensityBrightnessSlider(), 
+		    lblRedBalance,  getBalanceRedREd(), getBalanceRedSlider(),
+        lblGreenBalance, getBalanceGreenREd(), getBalanceGreenSlider(), 
+		    lblRedBalancing, getBalanceBlueREd(), getBalanceBlueSlider(),
         getBackgroundColorURIndicatorBtn(), getBackgroundColorLLIndicatorBtn(), getBackgroundColorLRIndicatorBtn(), getBackgroundColorTypeCmb(),
         getBackgroundColorCCIndicatorBtn(), getTinaVariationProfile1Cmb(), getTinaVariationProfile2Cmb());
 
@@ -11700,6 +11188,7 @@ public class MainEditorFrame extends JFrame {
   private JSlider tinaCameraCamPosXSlider;
   private JSlider tinaCameraCamPosYSlider;
   private JSlider tinaCameraCamPosZSlider;
+  private JLabel tinaSaturationLbl;
   private JSlider tinaSaturationSlider;
   private JWFNumberField tinaSaturationREd;
   private JToggleButton toggleDrawGridButton;
@@ -11802,6 +11291,7 @@ public class MainEditorFrame extends JFrame {
   private JPanel macroButtonPanel;
   private JToggleButton toggleDetachedPreviewButton;
   private JButton gradientResetBtn;
+  private JLabel lblFadeToWhite;
   private JWFNumberField tinaWhiteLevelREd;
   private JSlider tinaWhiteLevelSlider;
   private JPanel macroButtonHorizRootPanel;
@@ -11862,6 +11352,7 @@ public class MainEditorFrame extends JFrame {
   private JSlider tinaOptiXDenoiserBlendSlider;
   private JLabel lblOptiXBlend;
   private JWFNumberField foregroundOpacityField;
+  private JLabel lblOpacity;
   private JSlider foregroundOpacitySlider;
   private JButton scriptEditBtn;
   private JPanel panel_113;
@@ -12035,11 +11526,15 @@ public class MainEditorFrame extends JFrame {
   private JToggleButton nonlinearParams11ToggleFavButton;
   private JToggleButton nonlinearParams12ToggleFavButton;
   private JWFNumberField lowDensityBrightnessREd;
+  private JLabel lblBgBrightness;
   private JSlider lowDensityBrightnessSlider;
+  private JLabel lblRedBalance;
   private JSlider balanceRedSlider;
   private JWFNumberField balanceRedREd;
+  private JLabel lblGreenBalance;
   private JSlider balanceGreenSlider;
   private JWFNumberField balanceGreenREd;
+  private JLabel lblRedBalancing;
   private JSlider balanceBlueSlider;
   private JWFNumberField balanceBlueREd;
   private JComboBox backgroundColorTypeCmb;
