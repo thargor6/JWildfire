@@ -28,6 +28,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -397,12 +398,47 @@ public class TinaNonlinearControlsRow {
       public void stateChanged(javax.swing.event.ChangeEvent e) {
         if (!isNoRefresh()) {
           double sliderVal = (double) slider.getValue() / (double) SLIDER_SCALE;
-          tinaController.getNonlinearControls().propertyPnlValueChanged(index, pParamName, sliderVal, slider.getValueIsAdjusting());
+          tinaController.getNonlinearControls().propertyPnlValueChanged(index, pParamName, sliderVal, true);
           refreshNumberFieldWithoutRefresh(pParamName, sliderVal);
           refreshNonlinearParamsCmbWithoutRefresh(pParamName, sliderVal);
         }
       }
     });
+
+    slider.addMouseListener(new MouseListener() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+
+      }
+
+      @Override
+      public void mousePressed(MouseEvent e) {
+
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent e) {
+        if (!isNoRefresh()) {
+          double sliderVal = (double) slider.getValue() / (double) SLIDER_SCALE;
+          tinaController.getNonlinearControls().propertyPnlValueChanged(index, pParamName, sliderVal, false);
+          refreshNumberFieldWithoutRefresh(pParamName, sliderVal);
+          refreshNonlinearParamsCmbWithoutRefresh(pParamName, sliderVal);
+        }
+
+      }
+
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+      }
+    });
+
+
     rootPanel.add(slider, null);
     paramsPnlComponents.add(slider);
     paramsPnlSliders.put(pParamName, slider);

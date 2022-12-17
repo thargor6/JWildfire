@@ -496,8 +496,8 @@ public class NonlinearControlsDelegate {
     }
   }
 
-  public void nonlinearVarREdChanged(int pIdx) {
-    nonlinearVarREdChanged(pIdx, 0.0);
+  public void nonlinearVarREdChanged(int pIdx, boolean pMouseDown) {
+    nonlinearVarREdChanged(pIdx, 0.0, pMouseDown);
   }
 
   public void propertyPnlValueChanged(
@@ -544,7 +544,7 @@ public class NonlinearControlsDelegate {
             //    then refresh parameter UI
             this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], pIdx, xForm, var, true);
           }
-          owner.refreshFlameImage(true, false, 1, true, false);
+          owner.refreshFlameImage(true, pIsAdjusting, 1, true, false);
         }
       }
     }
@@ -553,7 +553,7 @@ public class NonlinearControlsDelegate {
     }
   }
 
-  public void nonlinearVarREdChanged(int pIdx, double pDelta) {
+  public void nonlinearVarREdChanged(int pIdx, double pDelta, boolean pMouseDown) {
     if (owner.cmbRefreshing) {
       return;
     }
@@ -563,14 +563,6 @@ public class NonlinearControlsDelegate {
       if (xForm != null) {
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
-          /*
-          String varStr = data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd().getText();
-          if (varStr == null || varStr.length() == 0) {
-            varStr = "0";
-          }
-          var.setAmount(Tools.stringToDouble(varStr) + pDelta);
-          data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd().setText(Tools.doubleToString(var.getAmount()));
-          */
           owner
               .getFrameControlsUtil()
               .valueChangedByTextField(
@@ -580,7 +572,7 @@ public class NonlinearControlsDelegate {
                   "amount",
                   1.0,
                   pDelta);
-          owner.refreshFlameImage(true, false, 1, true, false);
+          owner.refreshFlameImage(true, pMouseDown, 1, true, false);
         }
       }
     }
@@ -589,11 +581,11 @@ public class NonlinearControlsDelegate {
     }
   }
 
-  public void nonlinearParamsREdChanged(int pIdx) {
-    nonlinearParamsREdChanged(pIdx, 0.0);
+  public void nonlinearParamsREdChanged(int pIdx, boolean pMouseDown) {
+    nonlinearParamsREdChanged(pIdx, 0.0, pMouseDown);
   }
 
-  public void nonlinearParamsREdChanged(int pIdx, double pDelta) {
+  public void nonlinearParamsREdChanged(int pIdx, double pDelta, boolean pMouseDown) {
     if (owner.cmbRefreshing) {
       return;
     }
@@ -814,7 +806,7 @@ public class NonlinearControlsDelegate {
               }
             }
           }
-          owner.refreshFlameImage(true, false, 1, true, false);
+          owner.refreshFlameImage(true, pMouseDown, 1, true, false);
         }
       }
       resizeNonlinearParamsPanel();
@@ -827,11 +819,11 @@ public class NonlinearControlsDelegate {
   private static final double DELTA_PARAM = 0.1;
 
   public void nonlinearParamsLeftButtonClicked(int pIdx) {
-    nonlinearParamsREdChanged(pIdx, -DELTA_PARAM);
+    nonlinearParamsREdChanged(pIdx, -DELTA_PARAM, false);
   }
 
   public void nonlinearParamsRightButtonClicked(int pIdx) {
-    nonlinearParamsREdChanged(pIdx, DELTA_PARAM);
+    nonlinearParamsREdChanged(pIdx, DELTA_PARAM, false);
   }
 
   public void nonlinearParamsPreButtonClicked(int pIdx) {

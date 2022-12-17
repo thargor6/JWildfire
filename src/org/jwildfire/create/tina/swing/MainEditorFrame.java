@@ -7211,7 +7211,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar1REd.isMouseAdjusting() || nonlinearVar1REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(0);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(0, nonlinearVar1REd.isMouseAdjusting());
           }
         }
       });
@@ -7259,7 +7259,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams1REd.isMouseAdjusting() || nonlinearParams1REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(0);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(0, nonlinearParams1REd.isMouseAdjusting());
           }
         }
       });
@@ -7552,7 +7552,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar2REd.isMouseAdjusting() || nonlinearVar2REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(1);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(1, nonlinearVar2REd.isMouseAdjusting());
           }
         }
       });
@@ -7600,7 +7600,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams2REd.isMouseAdjusting() || nonlinearParams2REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(1);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(1, nonlinearParams2REd.isMouseAdjusting());
           }
         }
       });
@@ -7789,7 +7789,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar3REd.isMouseAdjusting() || nonlinearVar3REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(2);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(2, nonlinearVar3REd.isMouseAdjusting());
           }
         }
       });
@@ -7838,7 +7838,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams3REd.isMouseAdjusting() || nonlinearParams3REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(2);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(2, nonlinearParams3REd.isMouseAdjusting());
           }
         }
       });
@@ -8864,7 +8864,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar4REd.isMouseAdjusting() || nonlinearVar4REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(3);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(3, nonlinearVar4REd.isMouseAdjusting());
           }
         }
       });
@@ -8913,7 +8913,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams4REd.isMouseAdjusting() || nonlinearParams4REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(3);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(3, nonlinearParams4REd.isMouseAdjusting());
           }
         }
       });
@@ -9160,7 +9160,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar5REd.isMouseAdjusting() || nonlinearVar5REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(4);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(4, nonlinearVar5REd.isMouseAdjusting());
           }
         }
       });
@@ -9209,7 +9209,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams5REd.isMouseAdjusting() || nonlinearParams5REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(4);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(4, nonlinearParams5REd.isMouseAdjusting());
           }
         }
       });
@@ -9396,7 +9396,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar6REd.isMouseAdjusting() || nonlinearVar6REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(5);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(5, nonlinearVar6REd.isMouseAdjusting());
           }
         }
       });
@@ -9445,7 +9445,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams6REd.isMouseAdjusting() || nonlinearParams6REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(5);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(5, nonlinearParams6REd.isMouseAdjusting());
           }
         }
       });
@@ -9632,7 +9632,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar7REd.isMouseAdjusting() || nonlinearVar7REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(6);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(6, nonlinearVar7REd.isMouseAdjusting());
           }
         }
       });
@@ -9681,7 +9681,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams7REd.isMouseAdjusting() || nonlinearParams7REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(6);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(6, nonlinearParams7REd.isMouseAdjusting());
           }
         }
       });
@@ -9868,7 +9868,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar8REd.isMouseAdjusting() || nonlinearVar8REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(7);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(7, nonlinearVar8REd.isMouseAdjusting());
           }
         }
       });
@@ -9917,7 +9917,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams8REd.isMouseAdjusting() || nonlinearParams8REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(7);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(7, nonlinearParams8REd.isMouseAdjusting());
           }
         }
       });
@@ -10104,7 +10104,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar9REd.isMouseAdjusting() || nonlinearVar9REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(8);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(8, nonlinearVar9REd.isMouseAdjusting());
           }
         }
       });
@@ -10153,7 +10153,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams9REd.isMouseAdjusting() || nonlinearParams9REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(8);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(8, nonlinearParams9REd.isMouseAdjusting());
           }
         }
       });
@@ -10340,7 +10340,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar10REd.isMouseAdjusting() || nonlinearVar10REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(9);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(9, nonlinearVar10REd.isMouseAdjusting());
           }
         }
       });
@@ -10389,7 +10389,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams10REd.isMouseAdjusting() || nonlinearParams10REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(9);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(9, nonlinearParams10REd.isMouseAdjusting());
           }
         }
       });
@@ -10576,7 +10576,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar11REd.isMouseAdjusting() || nonlinearVar11REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(10);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(10, nonlinearVar11REd.isMouseAdjusting());
           }
         }
       });
@@ -10625,7 +10625,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams11REd.isMouseAdjusting() || nonlinearParams11REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(10);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(10, nonlinearParams11REd.isMouseAdjusting());
           }
         }
       });
@@ -10812,7 +10812,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearVar12REd.isMouseAdjusting() || nonlinearVar12REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearVarREdChanged(11);
+            tinaController.getNonlinearControls().nonlinearVarREdChanged(11, nonlinearVar12REd.isMouseAdjusting());
           }
         }
       });
@@ -10861,7 +10861,7 @@ public class MainEditorFrame extends JFrame {
             if (!nonlinearParams12REd.isMouseAdjusting() || nonlinearParams12REd.getMouseChangeCount() == 0) {
               tinaController.saveUndoPoint();
             }
-            tinaController.getNonlinearControls().nonlinearParamsREdChanged(11);
+            tinaController.getNonlinearControls().nonlinearParamsREdChanged(11, nonlinearParams12REd.isMouseAdjusting());
           }
         }
       });
@@ -10874,7 +10874,6 @@ public class MainEditorFrame extends JFrame {
     return nonlinearParams12REd;
   }
 
-  
   private JButton getNonlinearParams12LeftButton() {
     if (nonlinearParams12LeftButton == null) {
       nonlinearParams12LeftButton = new JButton();

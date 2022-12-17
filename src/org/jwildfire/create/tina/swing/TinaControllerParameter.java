@@ -79,26 +79,41 @@ public class TinaControllerParameter {
   public JSlider pCameraDOFExponentSlider;
   public JWFNumberField pCamZREd;
   public JSlider pCamZSlider;
+
+  public JLabel pixelsPerUnitLbl;
   public JWFNumberField pPixelsPerUnitREd;
   public JSlider pPixelsPerUnitSlider;
+
+  public JLabel brightnessLbl;
   public JWFNumberField pBrightnessREd;
   public JSlider pBrightnessSlider;
+
+  public JLabel contrastLbl;
   public JWFNumberField pContrastREd;
   public JSlider pContrastSlider;
+  public JLabel whiteLevelLbl;
   public JWFNumberField whiteLevelREd;
   public JSlider whiteLevelSlider;
+
+  public JLabel gammaLbl;
   public JWFNumberField pGammaREd;
   public JSlider pGammaSlider;
+  public JLabel vibrancyLbl;
   public JWFNumberField pVibrancyREd;
   public JSlider pVibrancySlider;
+  public JLabel lowDensityBrightnessLbl;
   public JWFNumberField lowDensityBrightnessREd;
   public JSlider lowDensityBrightnessSlider;
+  public JLabel balanceRedLbl;
   public JWFNumberField balanceRedREd;
   public JSlider balanceRedSlider;
+  public JLabel balanceGreenLbl;
   public JWFNumberField balanceGreenREd;
   public JSlider balanceGreenSlider;
+  public JLabel balanceBlueLbl;
   public JWFNumberField balanceBlueREd;
   public JSlider balanceBlueSlider;
+  public JLabel saturationLbl;
   public JWFNumberField saturationREd;
   public JSlider saturationSlider;
   public JWFNumberField pFilterRadiusREd;
@@ -113,6 +128,8 @@ public class TinaControllerParameter {
   public JLabel tinaFilterKernelCmbLbl;
   public JLabel tinaFilterRadiusLbl;
   public JCheckBox tinaFilterIndicatorCBx;
+
+  public JLabel gammaThresholdLbl;
   public JWFNumberField pGammaThresholdREd;
   public JSlider pGammaThresholdSlider;
   public JCheckBox pBGTransparencyCBx;
@@ -453,10 +470,13 @@ public class TinaControllerParameter {
   public JWFNumberField stereo3dFocalOffsetREd;
   public JSlider stereo3dFocalOffsetSlider;
   public JCheckBox stereo3dSwapSidesCBx;
+  public JLabel camPosXLbl;
   public JWFNumberField camPosXREd;
   public JSlider camPosXSlider;
+  public JLabel camPosYLbl;
   public JWFNumberField camPosYREd;
   public JSlider camPosYSlider;
+  public JLabel camPosZLbl;
   public JWFNumberField camPosZREd;
   public JSlider camPosZSlider;
   public JToggleButton toggleDrawGridButton;
@@ -663,6 +683,7 @@ public class TinaControllerParameter {
   public JSlider tinaOptiXDenoiserBlendSlider;
   public JButton tinaOptixDenoiseButton;
   public JButton tinaAIPostDenoiseExternalImageBtn;
+  public JLabel foregroundOpacityLbl;
   public JWFNumberField foregroundOpacityField;
   public JSlider foregroundOpacitySlider;
   public JComboBox meshGenOutputTypeCmb;
@@ -833,19 +854,25 @@ public class TinaControllerParameter {
       JSlider pCameraDOFExponentSlider,
       JWFNumberField pCamZREd,
       JSlider pCamZSlider,
+      JLabel pixelsPerUnitLbl,
       JWFNumberField pPixelsPerUnitREd,
       JSlider pPixelsPerUnitSlider,
+      JLabel brightnessLbl,
       JWFNumberField pBrightnessREd,
       JSlider pBrightnessSlider,
+      JLabel contrastLbl,
       JWFNumberField pContrastREd,
       JSlider pContrastSlider,
+      JLabel gammaLbl,
       JWFNumberField pGammaREd,
       JSlider pGammaSlider,
+      JLabel vibrancyLbl,
       JWFNumberField pVibrancyREd,
       JSlider pVibrancySlider,
       JWFNumberField pFilterRadiusREd,
       JSlider pFilterRadiusSlider,
       JComboBox pFilterKernelCmb,
+      JLabel gammaThresholdLbl,
       JWFNumberField pGammaThresholdREd,
       JSlider pGammaThresholdSlider,
       JCheckBox pBGTransparencyCBx,
@@ -1027,19 +1054,25 @@ public class TinaControllerParameter {
     this.pCameraDOFExponentSlider = pCameraDOFExponentSlider;
     this.pCamZREd = pCamZREd;
     this.pCamZSlider = pCamZSlider;
+    this.pixelsPerUnitLbl = pixelsPerUnitLbl;
     this.pPixelsPerUnitREd = pPixelsPerUnitREd;
     this.pPixelsPerUnitSlider = pPixelsPerUnitSlider;
+    this.brightnessLbl = brightnessLbl;
     this.pBrightnessREd = pBrightnessREd;
     this.pBrightnessSlider = pBrightnessSlider;
+    this.contrastLbl = contrastLbl;
     this.pContrastREd = pContrastREd;
     this.pContrastSlider = pContrastSlider;
+    this.gammaLbl = gammaLbl;
     this.pGammaREd = pGammaREd;
     this.pGammaSlider = pGammaSlider;
+    this.vibrancyLbl = vibrancyLbl;
     this.pVibrancyREd = pVibrancyREd;
     this.pVibrancySlider = pVibrancySlider;
     this.pFilterRadiusREd = pFilterRadiusREd;
     this.pFilterRadiusSlider = pFilterRadiusSlider;
     this.pFilterKernelCmb = pFilterKernelCmb;
+    this.gammaThresholdLbl = gammaThresholdLbl;
     this.pGammaThresholdREd = pGammaThresholdREd;
     this.pGammaThresholdSlider = pGammaThresholdSlider;
     this.pBGTransparencyCBx = pBGTransparencyCBx;
@@ -1359,12 +1392,16 @@ public class TinaControllerParameter {
       JWFNumberField pStereo3dFocalOffsetREd,
       JSlider pStereo3dFocalOffsetSlider,
       JCheckBox pStereo3dSwapSidesCBx,
+      JLabel camPosXLbl,
       JWFNumberField pCamPosXREd,
       JSlider pCamPosXSlider,
+      JLabel camPosYLbl,
       JWFNumberField pCamPosYREd,
       JSlider pCamPosYSlider,
+      JLabel camPosZLbl,
       JWFNumberField pCamPosZREd,
       JSlider pCamPosZSlider,
+      JLabel saturationLbl,
       JWFNumberField pSaturationREd,
       JSlider pSaturationSlider,
       JToggleButton pToggleDrawGridButton,
@@ -1469,12 +1506,16 @@ public class TinaControllerParameter {
     this.stereo3dFocalOffsetREd = pStereo3dFocalOffsetREd;
     this.stereo3dFocalOffsetSlider = pStereo3dFocalOffsetSlider;
     this.stereo3dSwapSidesCBx = pStereo3dSwapSidesCBx;
+    this.camPosXLbl = camPosXLbl;
     this.camPosXREd = pCamPosXREd;
     this.camPosXSlider = pCamPosXSlider;
+    this.camPosYLbl = camPosYLbl;
     this.camPosYREd = pCamPosYREd;
     this.camPosYSlider = pCamPosYSlider;
+    this.camPosZLbl = camPosZLbl;
     this.camPosZREd = pCamPosZREd;
     this.camPosZSlider = pCamPosZSlider;
+    this.saturationLbl = saturationLbl;
     this.saturationREd = pSaturationREd;
     this.saturationSlider = pSaturationSlider;
     this.toggleDrawGridButton = pToggleDrawGridButton;
@@ -1557,6 +1598,7 @@ public class TinaControllerParameter {
       JButton pMacroButtonDeleteBtn,
       JToggleButton pToggleDetachedPreviewButton,
       JButton pGradientResetBtn,
+      JLabel whiteLevelLbl,
       JWFNumberField pWhiteLevelREd,
       JSlider pWhiteLevelSlider,
       JPanel pMacroButtonHorizPanel,
@@ -1596,6 +1638,7 @@ public class TinaControllerParameter {
       JWFNumberField pTinaSpatialOversamplingREd,
       JSlider pTinaSpatialOversamplingSlider,
       JToggleButton pFilterKernelFlatPreviewBtn,
+      JLabel foregroundOpacityLbl,
       JWFNumberField pForegroundOpacityField,
       JSlider pForegroundOpacitySlider,
       JButton pScriptEditBtn,
@@ -1682,12 +1725,16 @@ public class TinaControllerParameter {
       JComboBox postBokehFilterKernelCmb,
       JComboBox gpuResolutionProfileCmb,
       JComboBox gpuQualityProfileCmb,
+      JLabel lowDensityBrightnessLbl,
       JWFNumberField lowDensityBrightnessREd,
       JSlider lowDensityBrightnessSlider,
+      JLabel balanceRedLbl,
       JWFNumberField balanceRedREd,
       JSlider balanceRedSlider,
+      JLabel balanceGreenLbl,
       JWFNumberField balanceGreenREd,
       JSlider balanceGreenSlider,
+      JLabel balanceBlueLbl,
       JWFNumberField balanceBlueREd,
       JSlider balanceBlueSlider,
       JButton backgroundColorURIndicatorBtn,
@@ -1755,6 +1802,7 @@ public class TinaControllerParameter {
     macroButtonDeleteBtn = pMacroButtonDeleteBtn;
     toggleDetachedPreviewButton = pToggleDetachedPreviewButton;
     gradientResetBtn = pGradientResetBtn;
+    this.whiteLevelLbl = whiteLevelLbl;
     whiteLevelREd = pWhiteLevelREd;
     whiteLevelSlider = pWhiteLevelSlider;
     macroButtonHorizPanel = pMacroButtonHorizPanel;
@@ -1794,6 +1842,7 @@ public class TinaControllerParameter {
     tinaSpatialOversamplingREd = pTinaSpatialOversamplingREd;
     tinaSpatialOversamplingSlider = pTinaSpatialOversamplingSlider;
     filterKernelFlatPreviewBtn = pFilterKernelFlatPreviewBtn;
+    this.foregroundOpacityLbl = foregroundOpacityLbl;
     foregroundOpacityField = pForegroundOpacityField;
     foregroundOpacitySlider = pForegroundOpacitySlider;
     scriptEditBtn = pScriptEditBtn;
@@ -1887,12 +1936,16 @@ public class TinaControllerParameter {
     this.postBokehFilterKernelCmb = postBokehFilterKernelCmb;
     this.gpuQualityProfileCmb = gpuQualityProfileCmb;
     this.gpuResolutionProfileCmb = gpuResolutionProfileCmb;
+    this.lowDensityBrightnessLbl = lowDensityBrightnessLbl;
     this.lowDensityBrightnessREd = lowDensityBrightnessREd;
     this.lowDensityBrightnessSlider = lowDensityBrightnessSlider;
+    this.balanceRedLbl = balanceRedLbl;
     this.balanceRedREd = balanceRedREd;
     this.balanceRedSlider = balanceRedSlider;
+    this.balanceGreenLbl = balanceGreenLbl;
     this.balanceGreenREd = balanceGreenREd;
     this.balanceGreenSlider = balanceGreenSlider;
+    this.balanceBlueLbl = balanceBlueLbl;
     this.balanceBlueREd = balanceBlueREd;
     this.balanceBlueSlider = balanceBlueSlider;
     this.backgroundColorURIndicatorBtn = backgroundColorURIndicatorBtn;

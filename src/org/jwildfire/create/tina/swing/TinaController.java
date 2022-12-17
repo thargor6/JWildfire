@@ -3423,11 +3423,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   private void flamePanel_mouseWheelEvent(MouseWheelEvent e) {
-    if (flamePanel != null) {
+    if (flamePanel != null && !e.isControlDown()) {
       if (flamePanel.mouseWheelMoved(e.getWheelRotation())) {
         refreshXFormUI(getCurrXForm());
-        refreshFlameImage(true, true, 1, true, false);
         flameControls.refreshVisualCamValues();
+        if(prefs.isTinaLegacyRealtimePreview()) {
+          refreshFlameImage(true, true, 1, true, false);
+        }
+        else {
+          refreshFlameImage(true, true, 1, false, false);
+          refreshProgressiveDisplay();
+        }
       }
     }
   }
@@ -6948,6 +6954,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       initNonlinearVariationCmb();
     }
     updateToggleFavIcon(data.displayFavouriteVariationsToggleBtn);
+  }
+
+
+  public void refreshProgressiveDisplay() {
+    if (flamePreviewHelper.isProgressivePreviewEnabled()) {
+      refreshFlameImage(true, false, 1, true, false);
+    }
   }
 
 }
