@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -54,8 +54,10 @@ import java.util.List;
 public class FlamePreviewHelper implements IterationObserver {
   private static final Logger logger = LoggerFactory.getLogger(FlamePreviewHelper.class);
 
-  private static final int INITIAL_IMAGE_UPDATE_INTERVAL = 5 - 1;
-  private static final int IMAGE_UPDATE_INC_INTERVAL = 8 + 1;
+
+  // TODO dependent of prefs for new option!
+  private static final int INITIAL_IMAGE_UPDATE_INTERVAL = 5 - 1 - 2; // + 46;
+  private static final int IMAGE_UPDATE_INC_INTERVAL = 8 - 2 - 2; // + 4;
   private static final int MAX_UPDATE_INC_INTERVAL = 200 + 800;
   private final Prefs prefs;
   private final JPanel centerPanel;
@@ -80,8 +82,6 @@ public class FlamePreviewHelper implements IterationObserver {
   private RenderThreads threads;
   private RenderThumbnailThread renderThumbnailThread = null;
   private GpuProgressUpdater gpuProgressUpdater = null;
-  private int optimizeRendererCounter = 0;
-
 
   public FlamePreviewHelper(
       ErrorHandler pErrorHandler,
@@ -122,9 +122,15 @@ public class FlamePreviewHelper implements IterationObserver {
     imgPanel.repaint();
   }
 
+  public boolean isProgressivePreviewEnabled() {
+    return isProgressivePreviewEnabled(flamePanelProvider.getFlamePanelConfig());
+  }
+
   private boolean isProgressivePreviewEnabled(FlamePanelConfig cfg) {
     return !isTransparencyEnabled() && !isDrawFocusPointEnabled(cfg) && cfg.isProgressivePreview();
   }
+
+  private boolean noRenderingWhileMouseMove = !Prefs.getPrefs().isTinaLegacyRealtimePreview();
 
   public void refreshFlameImage(
       boolean pQuickRender,
@@ -144,8 +150,8 @@ public class FlamePreviewHelper implements IterationObserver {
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
     if (pReRender) {
-      if (!pQuickRender || !isProgressivePreviewEnabled(cfg)) {
-        SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale, pAllowUseCache);
+      if (!pQuickRender || !isProgressivePreviewEnabled(cfg) || (noRenderingWhileMouseMove && pMouseDown)) {
+        SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, noRenderingWhileMouseMove ? pDownScale : 2, pAllowUseCache);
         if (img != null) {
           imgPanel.setImage(img);
         }
@@ -158,7 +164,7 @@ public class FlamePreviewHelper implements IterationObserver {
       centerPanel.repaint();
     }
 
-    if (pReRender && isProgressivePreviewEnabled(cfg) && pQuickRender) {
+    if (pReRender && isProgressivePreviewEnabled(cfg) && pQuickRender && (!noRenderingWhileMouseMove || (noRenderingWhileMouseMove && !pMouseDown))) {
       if (pAllowUseCache) {
         SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale, pAllowUseCache);
         if (img != null) {

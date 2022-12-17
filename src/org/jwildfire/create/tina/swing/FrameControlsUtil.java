@@ -257,4 +257,8 @@ public class FrameControlsUtil {
       curve.autoFitRange();
     }
   }
+
+  public void refreshProgressiveDisplay() {
+    ctrl.refreshProgressiveDisplay();
+  }
 }

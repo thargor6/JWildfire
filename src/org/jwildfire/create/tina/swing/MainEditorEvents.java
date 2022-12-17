@@ -19,10 +19,7 @@ package org.jwildfire.create.tina.swing;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -93,6 +90,34 @@ public class MainEditorEvents {
             onSliderChange.accept(e, true);
           }
         });
+
+    slider.addMouseListener(new MouseListener() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+
+      }
+
+      @Override
+      public void mousePressed(MouseEvent e) {
+
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent e) {
+        onSliderChange.accept(null, false);
+      }
+
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+      }
+    });
+
   }
 
   public void setupEvents() {

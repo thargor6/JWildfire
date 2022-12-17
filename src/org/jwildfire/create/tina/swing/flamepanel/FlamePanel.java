@@ -978,7 +978,7 @@ public class FlamePanel extends ImagePanel {
     if (pRotateAmount != 0) {
       if (config.getMouseDragOperation() == MouseDragOperation.VIEW && flameHolder != null && flameHolder.getFlame() != null) {
         Flame flame = flameHolder.getFlame();
-        double dx = pRotateAmount * 3.0;
+        double dx = pRotateAmount * 6.0;
         if (fineMovement) {
           dx *= 0.05;
         }

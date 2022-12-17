@@ -33,6 +33,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 
 public class JWFNumberField extends JPanel implements MotionCurveEditor {
   private static final double DFLT_STEP = 0.5;
@@ -142,34 +143,36 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
   }
 
   private void addEvents() {
-    ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().addMouseListener(
-        new java.awt.event.MouseAdapter() {
+    ((JSpinner.DefaultEditor) spinnerField.getEditor())
+        .getTextField()
+        .addMouseListener(
+            new java.awt.event.MouseAdapter() {
 
-          @Override
-          public void mousePressed(MouseEvent e) {
-            if (!isEnabled())
-              return;
-            xMouseOrigin = e.getX();
-            Object value = getValue();
-            if (value != null && value instanceof Double) {
-              originValue = (Double) value;
-            }
-            else if (value != null && value instanceof Integer) {
-              originValue = (Integer) value;
-            }
-            else {
-              originValue = 0;
-            }
-            mouseAdjusting = true;
-            mouseChangeCount = 0;
-          }
+              @Override
+              public void mousePressed(MouseEvent e) {
+                if (!isEnabled()) return;
+                xMouseOrigin = e.getX();
+                Object value = getValue();
+                if (value != null && value instanceof Double) {
+                  originValue = (Double) value;
+                } else if (value != null && value instanceof Integer) {
+                  originValue = (Integer) value;
+                } else {
+                  originValue = 0;
+                }
+                mouseAdjusting = true;
+                mouseChangeCount = 0;
+              }
 
-          @Override
-          public void mouseReleased(MouseEvent e) {
-            mouseAdjusting = false;
-          }
-
-        });
+              @Override
+              public void mouseReleased(MouseEvent e) {
+                mouseAdjusting = false;
+                Object val = getValue();
+                if (val != null && val instanceof Double) {
+                  spinnerField.setValue(new Double(((Double) val).doubleValue()+MathLib.EPSILON));
+                }
+              }
+            });
 
     ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().addMouseMotionListener(
         new java.awt.event.MouseMotionAdapter() {
