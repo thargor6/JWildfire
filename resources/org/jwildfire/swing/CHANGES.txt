@@ -6,6 +6,7 @@ V7.50 (18.12.2022)
    - in case, it does not work well for you or you just prefer the old behaviour, you can turn on the previous behaviour
      by enabling the property tinaLegacyRealtimePreview in the Prefs
  - added more variations to the pool of candidates which are using in random-flames
+ - adjusted the initial value-ranges in he curve-editor to be more convenient
 
 V7.40 (10.12.2022)
  - mark/unmark variations as favourites:

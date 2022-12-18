@@ -63,6 +63,20 @@ public abstract class AbstractControlsDelegate {
 
   protected void editMotionCurve(MotionCurve pCurve, double pInitialValue, String pPropName, String pLabel) {
     Envelope envelope = pCurve.toEnvelope();
+    {
+      Flame flame = owner.getCurrFlame();
+      if (envelope.getViewXMin() >= 0) {
+        envelope.setViewXMin(0);
+      }
+      if (envelope.getViewXMax() < flame.getFrameCount()) {
+        envelope.setViewXMax(flame.getFrameCount());
+      }
+      if(envelope.getViewYMax() - envelope.getViewYMin() < 0.5) {
+        envelope.setViewYMin(envelope.getViewYMin()-0.25);
+        envelope.setViewYMax(envelope.getViewYMax()+0.25);
+      }
+    }
+
     if (envelope.getX().length == 0) {
       int[] x = new int[] { 0 };
       if (pInitialValue <= envelope.getViewYMin() + 1) {
