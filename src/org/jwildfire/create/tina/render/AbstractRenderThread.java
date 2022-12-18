@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -44,8 +44,9 @@ public abstract class AbstractRenderThread implements Runnable {
   protected AbstractRandomGenerator randGen;
   protected final int bgRed, bgGreen, bgBlue;
   protected final String bgImagefile;
+  protected int sleepAmount;
 
-  public AbstractRenderThread(Prefs pPrefs, int pThreadId, int pThreadGroupSize, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
+  public AbstractRenderThread(Prefs pPrefs, int pThreadId, int pThreadGroupSize, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, int pSleepAmount) {
     threadId = pThreadId;
     threadGroupSize = pThreadGroupSize;
     renderer = pRenderer;
@@ -63,6 +64,7 @@ public abstract class AbstractRenderThread implements Runnable {
     ctx = new FlameTransformationContext(pRenderer, randGen, pThreadId, flame.getFrame());
     ctx.setPreserveZCoordinate(pRenderPackets.get(0).getFlame().isPreserveZ());
     ctx.setPreview(renderer.isPreview());
+    sleepAmount = pSleepAmount;
   }
 
   protected boolean isValidLayer(Layer pLayer) {

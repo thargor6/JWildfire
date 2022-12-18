@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -92,6 +92,8 @@ public class FlameRenderer {
   protected final Flame flame;
   private final Prefs prefs;
   private boolean preview;
+
+  private int sleepAmount = 0;
 
   private List<IterationObserver> iterationObservers;
   private List<AbstractRenderThread> runningThreads;
@@ -721,7 +723,7 @@ public class FlameRenderer {
   }
 
   private AbstractRenderThread createFlameRenderThread(int pThreadId, int pThreadGroupSize, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
-    return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices);
+    return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, sleepAmount);
   }
 
   private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices) {
@@ -1174,4 +1176,11 @@ public class FlameRenderer {
     return raster;
   }
 
+  public int getSleepAmount() {
+    return sleepAmount;
+  }
+
+  public void setSleepAmount(int sleepAmount) {
+    this.sleepAmount = sleepAmount;
+  }
 }

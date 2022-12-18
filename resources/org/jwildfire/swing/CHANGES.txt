@@ -1,4 +1,12 @@
-V7.40 (xx.xx.2022)
+V7.50 (18.12.2022)
+ - re-implemented the the realtime-refresh of the flame-previw for editing.
+   It should work more smooth with less flickering and should require less CPU-time.
+   - you can adjust the amount of idle CPU-time in the Preferences-window by changing the property tinaRealtimePreviewIdleAmount
+     (you can also find more information about this property into the Preferences-window by clicking at this property)
+   - in case, it does not work well for you or you just prefer the old behaviour, you can turn on the previous behaviour
+     by enabling the property tinaLegacyRealtimePreview in the Prefs
+
+V7.40 (10.12.2022)
  - mark/unmark variations as favourites:
    - you may now mark any variaton as favourite by just clicking a small button next to it
    - there is an additional favourite-filter-button which then only dispalys variations which are markes as favourites
@@ -10,6 +18,7 @@ V7.40 (xx.xx.2022)
    - new "Painterly"-random-generator which utilizes this variation
    - new "Painterly Style"-mutation, which is available both in the "Quick Mutations"-tab and the MutaGen-window as well
    - new "BRUSH_STROKE"-Bokeh-style
+ - fixed a bug in the internal scripts "Bwraps and bubbles" and "Bwraps-bubble-Julian2", which prevented the scripts to run
  - some optimizations to the realtime-render-preview in the main editor
  - created a reusable library (maven-artifact) which contains the main functionality and the CLI: org.jwildfire:jwildfire-lib
  - this library will be used first in JWildfireSwan

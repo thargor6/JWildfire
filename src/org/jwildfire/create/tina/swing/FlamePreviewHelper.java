@@ -55,10 +55,9 @@ public class FlamePreviewHelper implements IterationObserver {
   private static final Logger logger = LoggerFactory.getLogger(FlamePreviewHelper.class);
 
 
-  // TODO dependent of prefs for new option!
-  private static final int INITIAL_IMAGE_UPDATE_INTERVAL = 5 - 1 - 2; // + 46;
-  private static final int IMAGE_UPDATE_INC_INTERVAL = 8 - 2 - 2; // + 4;
-  private static final int MAX_UPDATE_INC_INTERVAL = 200 + 800;
+  private final int initialImageUpdateInterval;
+  private final int imageUpdateInterval;
+  private final int maxImageUpdateIncInterval;
   private final Prefs prefs;
   private final JPanel centerPanel;
   private final JToggleButton toggleTransparencyButton;
@@ -111,6 +110,17 @@ public class FlamePreviewHelper implements IterationObserver {
     flamePanelProvider = pFlamePanelProvider;
     messageHelper = pMessageHelper;
     randomBatchHolder = pRandomBatchHolder;
+
+    if(prefs.isTinaLegacyRealtimePreview()) {
+      initialImageUpdateInterval = 5 - 1;
+      imageUpdateInterval = 8 - 2;
+      maxImageUpdateIncInterval = 200 + 300;
+    }
+    else {
+      initialImageUpdateInterval = 20;
+      imageUpdateInterval = 10;
+      maxImageUpdateIncInterval = 500;
+    }
   }
 
   public void fastRefreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
@@ -740,6 +750,9 @@ public class FlamePreviewHelper implements IterationObserver {
     info.setRenderHDR(false);
     info.setRenderZBuffer(TinaControllerContextService.getContext().isZPass());
     renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
+    if (!prefs.isTinaLegacyRealtimePreview()) {
+      renderer.setSleepAmount(prefs.getTinaRealtimePreviewIdleAmount());
+    }
     renderer.registerIterationObserver(this);
 
     SimpleImage image =
@@ -855,8 +868,8 @@ public class FlamePreviewHelper implements IterationObserver {
               * (flame.getSolidRenderSettings().isSolidRenderingEnabled() ? 1.5 : 1.0);
       maxPreviewQuality =
           Tools.FTOI(prefs.getTinaEditorProgressivePreviewMaxRenderQuality() * renderQualityScale);
-      nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
-      lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
+      nextImageUpdate = initialImageUpdateInterval;
+      lastImageUpdateInterval = initialImageUpdateInterval;
       image = pImage;
     }
 
@@ -898,9 +911,9 @@ public class FlamePreviewHelper implements IterationObserver {
 
           try {
             if (--nextImageUpdate <= 0) {
-              lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
-              if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
-                lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
+              lastImageUpdateInterval += imageUpdateInterval;
+              if (lastImageUpdateInterval > maxImageUpdateIncInterval) {
+                lastImageUpdateInterval = maxImageUpdateIncInterval;
               }
               if (!replaceImageFlag) {
                 FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
