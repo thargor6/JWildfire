@@ -1986,7 +1986,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  private void paletteSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+  private void paletteSliderChanged(
+      JSlider pSlider,
+      JWFNumberField pTextField,
+      String pProperty,
+      double pSliderScale) {
+    paletteSliderChanged(pSlider, pTextField, pProperty, pSliderScale, false);
+  }
+
+    private void paletteSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pMouseDown) {
     if (noRefresh || getCurrFlame() == null)
       return;
     noRefresh = true;
@@ -2002,7 +2010,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         ex.printStackTrace();
       }
       refreshPaletteImg();
-      refreshFlameImage(true, false, 1, true, false);
+      refreshFlameImage(true, pMouseDown, 1, true, false);
     }
     finally {
       noRefresh = false;
@@ -2044,6 +2052,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   private void paletteTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    paletteTextFieldChanged(pSlider, pTextField, pProperty, pSliderScale, false);
+  }
+
+  private void paletteTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pMouseDown) {
     if (noRefresh || getCurrFlame() == null)
       return;
     noRefresh = true;
@@ -2059,7 +2071,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         ex.printStackTrace();
       }
       refreshPaletteImg();
-      refreshFlameImage(true, false, 1, true, false);
+      refreshFlameImage(true, pMouseDown, 1, true, false);
     }
     finally {
       noRefresh = false;
@@ -2301,16 +2313,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     paletteSliderChanged(data.paletteSaturationSlider, data.paletteSaturationREd, "modSaturation", 1.0);
   }
 
-  public void paletteShiftREd_changed() {
-    paletteTextFieldChanged(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 100.0);
+  public void paletteShiftREd_changed(boolean pMouseDown) {
+    paletteTextFieldChanged(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 100.0, pMouseDown);
   }
 
   public void paletteHueSlider_stateChanged(ChangeEvent e) {
     paletteSliderChanged(data.paletteHueSlider, data.paletteHueREd, "modHue", 1.0);
   }
 
-  public void paletteShiftSlider_stateChanged(ChangeEvent e) {
-    paletteSliderChanged(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 100.0);
+  public void paletteShiftSlider_stateChanged(ChangeEvent e, boolean pMouseDown) {
+    paletteSliderChanged(data.paletteShiftSlider, data.paletteShiftREd, "modShift", 100.0, pMouseDown);
   }
 
 

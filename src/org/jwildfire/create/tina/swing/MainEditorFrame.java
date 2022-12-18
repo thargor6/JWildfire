@@ -4930,18 +4930,7 @@ public class MainEditorFrame extends JFrame {
       tinaPaletteSubSouthPanel.add(getTinaPaletteShiftSlider());
       tinaPaletteSubSouthPanel.add(getTinaPaletteShiftREd());
       tinaPaletteShiftLbl = new JLabel();
-      tinaPaletteShiftLbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.paletteShiftREd_reset();
-          }
-        }
-      });
-
       tinaPaletteShiftLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      tinaPaletteShiftLbl.setName("tinaPaletteShiftLbl");
       tinaPaletteShiftLbl.setBounds(116, 7, 29, 22);
       tinaPaletteSubSouthPanel.add(tinaPaletteShiftLbl);
       tinaPaletteShiftLbl.setText("Shift");
@@ -5336,30 +5325,12 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getTinaPaletteShiftREd() {
     if (tinaPaletteShiftREd == null) {
       tinaPaletteShiftREd = new JWFNumberField();
-      tinaPaletteShiftREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getGradientControls().editMotionCurve(e);
-        }
-      });
-      tinaPaletteShiftREd.setMotionPropertyName("modShift");
-      tinaPaletteShiftREd.setLinkedMotionControlName("tinaPaletteShiftSlider");
-      tinaPaletteShiftREd.setLinkedLabelControlName("tinaPaletteShiftLbl");
       tinaPaletteShiftREd.setMinValue(-255.0);
       tinaPaletteShiftREd.setEditable(true);
       tinaPaletteShiftREd.setOnlyIntegers(true);
       tinaPaletteShiftREd.setMaxValue(255.0);
       tinaPaletteShiftREd.setHasMinValue(true);
       tinaPaletteShiftREd.setHasMaxValue(true);
-      tinaPaletteShiftREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (!tinaPaletteShiftREd.isMouseAdjusting() || tinaPaletteShiftREd.getMouseChangeCount() == 0) {
-            if (!tinaPaletteShiftSlider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-            }
-          }
-          tinaController.paletteShiftREd_changed();
-        }
-      });
       tinaPaletteShiftREd.setBounds(145, 6, 71, 24);
       tinaPaletteShiftREd.setPreferredSize(new Dimension(56, 24));
       tinaPaletteShiftREd.setText("0");
@@ -5597,23 +5568,12 @@ public class MainEditorFrame extends JFrame {
     if (tinaPaletteShiftSlider == null) {
       tinaPaletteShiftSlider = new JSlider();
       tinaPaletteShiftSlider.setName("tinaPaletteShiftSlider");
-      tinaPaletteShiftSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
       tinaPaletteShiftSlider.setBounds(6, 32, 316, 22);
       tinaPaletteShiftSlider.setMaximum(25500);
       tinaPaletteShiftSlider.setMinimum(-25500);
       tinaPaletteShiftSlider.setValue(0);
       tinaPaletteShiftSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteShiftSlider.setPreferredSize(new Dimension(86, 22));
-      tinaPaletteShiftSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.paletteShiftSlider_stateChanged(e);
-        }
-      });
     }
     return tinaPaletteShiftSlider;
   }
@@ -6000,7 +5960,8 @@ public class MainEditorFrame extends JFrame {
             getTinaFilterRadiusREd(), getTinaFilterRadiusSlider(), getTinaFilterKernelCmb(),
             tinaGammaThresholdLbl, getTinaGammaThresholdREd(), getTinaGammaThresholdSlider(),
 
-            getBgTransparencyCBx(), getTinaPaletteRandomPointsREd(), getTinaPaletteImgPanel(), getTinaCholorChooserPaletteImgPanel(), getTinaPaletteShiftREd(), getTinaPaletteShiftSlider(),
+            getBgTransparencyCBx(), getTinaPaletteRandomPointsREd(), getTinaPaletteImgPanel(), getTinaCholorChooserPaletteImgPanel(),
+            tinaPaletteShiftLbl, getTinaPaletteShiftREd(), getTinaPaletteShiftSlider(),
         getTinaPaletteRedREd(), getTinaPaletteRedSlider(), getTinaPaletteGreenREd(), getTinaPaletteGreenSlider(), getTinaPaletteBlueREd(),
         getTinaPaletteBlueSlider(), getTinaPaletteHueREd(), getTinaPaletteHueSlider(), getTinaPaletteSaturationREd(), getTinaPaletteSaturationSlider(),
         getTinaPaletteContrastREd(), getTinaPaletteContrastSlider(), getTinaPaletteGammaREd(), getTinaPaletteGammaSlider(), getTinaPaletteBrightnessREd(),

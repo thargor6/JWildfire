@@ -139,6 +139,7 @@ public class TinaControllerParameter {
   public JCheckBox paletteUniformWidthCBx;
   public JPanel pPaletteImgPanel;
   public JPanel pColorChooserPaletteImgPanel;
+  public JLabel paletteShiftLbl;
   public JWFNumberField pPaletteShiftREd;
   public JSlider pPaletteShiftSlider;
   public JWFNumberField pPaletteRedREd;
@@ -881,6 +882,7 @@ public class TinaControllerParameter {
       JTextField pPaletteRandomPointsREd,
       JPanel pPaletteImgPanel,
       JPanel pColorChooserPaletteImgPanel,
+      JLabel paletteShiftLbl,
       JWFNumberField pPaletteShiftREd,
       JSlider pPaletteShiftSlider,
       JWFNumberField pPaletteRedREd,
@@ -1081,6 +1083,7 @@ public class TinaControllerParameter {
     this.pPaletteRandomPointsREd = pPaletteRandomPointsREd;
     this.pPaletteImgPanel = pPaletteImgPanel;
     this.pColorChooserPaletteImgPanel = pColorChooserPaletteImgPanel;
+    this.paletteShiftLbl = paletteShiftLbl;
     this.pPaletteShiftREd = pPaletteShiftREd;
     this.pPaletteShiftSlider = pPaletteShiftSlider;
     this.pPaletteRedREd = pPaletteRedREd;

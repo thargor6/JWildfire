@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 
 
 enum FieldScope {
-  FLAME, LAYER, XFORM
+  FLAME, LAYER, GRADIENT, XFORM
 }
 
 public class MainEditorEvents {
@@ -68,6 +68,7 @@ public class MainEditorEvents {
             switch (scope) {
               case FLAME: tinaController.getFlameControls().editMotionCurve(e); break;
               case LAYER: tinaController.getLayerControls().editMotionCurve(e); break;
+              case GRADIENT: tinaController.getGradientControls().editMotionCurve(e); break;
               case XFORM: tinaController.getXFormControls().editMotionCurve(e); break;
             }
           }
@@ -156,6 +157,7 @@ public class MainEditorEvents {
                 switch (scope) {
                   case FLAME: tinaController.getFlameControls().editMotionCurve(e); break;
                   case LAYER: tinaController.getLayerControls().editMotionCurve(e); break;
+                  case GRADIENT: tinaController.getGradientControls().editMotionCurve(e); break;
                   case XFORM: tinaController.getXFormControls().editMotionCurve(e); break;
                 }
               }
@@ -176,6 +178,7 @@ public class MainEditorEvents {
     setupCameraTabEvents();
     setupColoringTabEvents();
     setupLayersTabEvents();
+    setupGradientTabEvents();
   }
 
   private void setupCameraTabEvents() {
@@ -422,4 +425,14 @@ public class MainEditorEvents {
             FieldScope.LAYER);
   }
 
+  private void setupGradientTabEvents() {
+    setupSlider(
+            fields.paletteShiftLbl,
+            () -> tinaController.paletteShiftREd_reset(),
+            fields.pPaletteShiftREd,
+            (ChangeEvent e, Boolean mouseDown) -> tinaController.paletteShiftREd_changed(mouseDown),
+            fields.pPaletteShiftSlider,
+            (ChangeEvent e, Boolean mouseDown) -> tinaController.paletteShiftSlider_stateChanged(e, mouseDown),
+            "modShift", FieldScope.GRADIENT);
+  }
 }
