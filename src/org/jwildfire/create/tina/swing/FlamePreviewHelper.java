@@ -227,7 +227,7 @@ public class FlamePreviewHelper implements IterationObserver {
       bounds = panelBounds;
     }
 
-    int renderScale = pQuickRender && pMouseDown ? 2 : 1;
+    int renderScale = pQuickRender && pMouseDown && !pAllowUseCache ? 2 : 1;
 
     int width = bounds.width / renderScale;
     int height = bounds.height / renderScale;

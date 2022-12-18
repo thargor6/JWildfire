@@ -5,6 +5,7 @@ V7.50 (18.12.2022)
      (you can also find more information about this property into the Preferences-window by clicking at this property)
    - in case, it does not work well for you or you just prefer the old behaviour, you can turn on the previous behaviour
      by enabling the property tinaLegacyRealtimePreview in the Prefs
+ - added more variations to the pool of candidates which are using in random-flames
 
 V7.40 (10.12.2022)
  - mark/unmark variations as favourites:
