@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.EventObject;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,6 +31,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jwildfire.base.Tools;
@@ -167,9 +169,10 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
               @Override
               public void mouseReleased(MouseEvent e) {
                 mouseAdjusting = false;
-                Object val = getValue();
-                if (val != null && val instanceof Double) {
-                  spinnerField.setValue(new Double(((Double) val).doubleValue()+MathLib.EPSILON));
+
+                ChangeListener[] changeListeners = spinnerField.getChangeListeners();
+                if(changeListeners!=null && changeListeners.length>0) {
+                  changeListeners[0].stateChanged(new ChangeEvent(spinnerField));
                 }
               }
             });
