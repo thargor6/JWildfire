@@ -5968,8 +5968,8 @@ public class MainEditorFrame extends JFrame {
         getTinaPaletteBrightnessSlider(), getTinaPaletteSwapRGBREd(), getTinaPaletteSwapRGBSlider(),
         getTinaPaletteFrequencyREd(), getTinaPaletteFrequencySlider(), getTinaPaletteBlurREd(), getTinaPaletteBlurSlider(), getTinaPaletteInvertBtn(), getTinaPaletteReverseBtn(),
         getTinaTransformationsTable(),
-        getAffineC00Lbl(), getAffineC01Lbl(), getAffineC10Lbl(), getAffineC11Lbl(), getAffineC00REd(),
-        getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(),
+        getAffineC00Lbl(), getAffineC01Lbl(), getAffineC10Lbl(), getAffineC11Lbl(), getAffineC20Lbl(), getAffineC21Lbl(),
+            getAffineC00REd(), getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(),
         getAffineRotateAmountREd(), getAffineScaleAmountREd(),
         getAffineMoveHorizAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
@@ -6539,18 +6539,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC00Lbl() {
     if (affineC00Lbl == null) {
       affineC00Lbl = new JLabel();
-      affineC00Lbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.affineC00REd_reset();
-          }
-        }
-      });
-
       affineC00Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      affineC00Lbl.setName("affineC00Lbl");
       affineC00Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC00Lbl.setText("X1");
       affineC00Lbl.setLocation(new Point(0, 4));
@@ -6564,18 +6553,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC01Lbl() {
     if (affineC01Lbl == null) {
       affineC01Lbl = new JLabel();
-      affineC01Lbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.affineC01REd_reset();
-          }
-        }
-      });
-
       affineC01Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      affineC01Lbl.setName("affineC01Lbl");
       affineC01Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC01Lbl.setText("X2");
       affineC01Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -6589,18 +6567,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC10Lbl() {
     if (affineC10Lbl == null) {
       affineC10Lbl = new JLabel();
-      affineC10Lbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.affineC10REd_reset();
-          }
-        }
-      });
-
       affineC10Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      affineC10Lbl.setName("affineC10Lbl");
       affineC10Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC10Lbl.setText("Y1");
       affineC10Lbl.setLocation(new Point(108, 4));
@@ -6614,18 +6581,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC11Lbl() {
     if (affineC11Lbl == null) {
       affineC11Lbl = new JLabel();
-      affineC11Lbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.affineC11REd_reset();
-          }
-        }
-      });
-
       affineC11Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      affineC11Lbl.setName("affineC11Lbl");
       affineC11Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC11Lbl.setText("Y2");
       affineC11Lbl.setLocation(new Point(108, 26));
@@ -6639,18 +6595,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC20Lbl() {
     if (affineC20Lbl == null) {
       affineC20Lbl = new JLabel();
-      affineC20Lbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.affineC20REd_reset();
-          }
-        }
-      });
-
       affineC20Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      affineC20Lbl.setName("affineC20Lbl");
       affineC20Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC20Lbl.setText("O1");
       affineC20Lbl.setLocation(new Point(216, 4));
@@ -6664,18 +6609,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel getAffineC21Lbl() {
     if (affineC21Lbl == null) {
       affineC21Lbl = new JLabel();
-      affineC21Lbl.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.affineC21REd_reset();
-          }
-        }
-      });
-
       affineC21Lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      affineC21Lbl.setName("affineC21Lbl");
       affineC21Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC21Lbl.setText("O2");
       affineC21Lbl.setLocation(new Point(216, 26));
@@ -6690,18 +6624,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getAffineC00REd() {
     if (affineC00REd == null) {
       affineC00REd = new JWFNumberField();
-      affineC00REd.setLinkedLabelControlName("affineC00Lbl");
       affineC00REd.setValueStep(0.01);
-      affineC00REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e);
-        }
-      });
-      affineC00REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          tinaController.affineC00REd_changed();
-        }
-      });
       affineC00REd.setPreferredSize(new Dimension(76, 24));
       affineC00REd.setText("");
       affineC00REd.setToolTipText("Set affine coefficients directly");
@@ -6716,18 +6639,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getAffineC01REd() {
     if (affineC01REd == null) {
       affineC01REd = new JWFNumberField();
-      affineC01REd.setLinkedLabelControlName("affineC01Lbl");
       affineC01REd.setValueStep(0.01);
-      affineC01REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e);
-        }
-      });
-      affineC01REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          tinaController.affineC01REd_changed();
-        }
-      });
       affineC01REd.setPreferredSize(new Dimension(76, 24));
       affineC01REd.setText("");
       affineC01REd.setToolTipText("Set affine coefficients directly");
@@ -6742,19 +6654,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getAffineC10REd() {
     if (affineC10REd == null) {
       affineC10REd = new JWFNumberField();
-      affineC10REd.setLinkedLabelControlName("affineC10Lbl");
-      affineC10REd.setName("affineC10Lbl");
       affineC10REd.setValueStep(0.01);
-      affineC10REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e);
-        }
-      });
-      affineC10REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          tinaController.affineC10REd_changed();
-        }
-      });
       affineC10REd.setPreferredSize(new Dimension(76, 24));
       affineC10REd.setText("");
       affineC10REd.setToolTipText("Set affine coefficients directly");
@@ -6769,18 +6669,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getAffineC11REd() {
     if (affineC11REd == null) {
       affineC11REd = new JWFNumberField();
-      affineC11REd.setLinkedLabelControlName("affineC11Lbl");
       affineC11REd.setValueStep(0.01);
-      affineC11REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e);
-        }
-      });
-      affineC11REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          tinaController.affineC11REd_changed();
-        }
-      });
       affineC11REd.setPreferredSize(new Dimension(76, 24));
       affineC11REd.setText("");
       affineC11REd.setToolTipText("Set affine coefficients directly");
@@ -6795,18 +6684,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getAffineC20REd() {
     if (affineC20REd == null) {
       affineC20REd = new JWFNumberField();
-      affineC20REd.setLinkedLabelControlName("affineC20Lbl");
       affineC20REd.setValueStep(0.01);
-      affineC20REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e);
-        }
-      });
-      affineC20REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          tinaController.affineC20REd_changed();
-        }
-      });
       affineC20REd.setPreferredSize(new Dimension(76, 24));
       affineC20REd.setText("");
       affineC20REd.setToolTipText("Set affine coefficients directly");
@@ -6821,18 +6699,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getAffineC21REd() {
     if (affineC21REd == null) {
       affineC21REd = new JWFNumberField();
-      affineC21REd.setLinkedLabelControlName("affineC21Lbl");
       affineC21REd.setValueStep(0.01);
-      affineC21REd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e);
-        }
-      });
-      affineC21REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          tinaController.affineC21REd_changed();
-        }
-      });
       affineC21REd.setPreferredSize(new Dimension(76, 24));
       affineC21REd.setText("");
       affineC21REd.setToolTipText("Set affine coefficients directly");

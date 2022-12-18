@@ -179,6 +179,7 @@ public class MainEditorEvents {
     setupColoringTabEvents();
     setupLayersTabEvents();
     setupGradientTabEvents();
+    setupAffineTabEvents();
   }
 
   private void setupCameraTabEvents() {
@@ -435,4 +436,56 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.paletteShiftSlider_stateChanged(e, mouseDown),
             "modShift", FieldScope.GRADIENT);
   }
+
+  private void setupAffineTabEvents() {
+    setupField(
+            fields.pAffineC00Lbl,
+            () -> tinaController.affineC00REd_reset(),
+            fields.pAffineC00REd,
+            (ChangeEvent e, Boolean mouseDown) ->
+                    tinaController.affineC00REd_changed(mouseDown),
+            "xyCoeff00",
+            FieldScope.XFORM);
+    setupField(
+            fields.pAffineC10Lbl,
+            () -> tinaController.affineC10REd_reset(),
+            fields.pAffineC10REd,
+            (ChangeEvent e, Boolean mouseDown) ->
+                    tinaController.affineC10REd_changed(mouseDown),
+            "xyCoeff10",
+            FieldScope.XFORM);
+    setupField(
+            fields.pAffineC20Lbl,
+            () -> tinaController.affineC20REd_reset(),
+            fields.pAffineC20REd,
+            (ChangeEvent e, Boolean mouseDown) ->
+                    tinaController.affineC20REd_changed(mouseDown),
+            "xyCoeff20",
+            FieldScope.XFORM);
+    setupField(
+            fields.pAffineC01Lbl,
+            () -> tinaController.affineC01REd_reset(),
+            fields.pAffineC01REd,
+            (ChangeEvent e, Boolean mouseDown) ->
+                    tinaController.affineC01REd_changed(mouseDown),
+            "xyCoeff01",
+            FieldScope.XFORM);
+    setupField(
+            fields.pAffineC11Lbl,
+            () -> tinaController.affineC11REd_reset(),
+            fields.pAffineC11REd,
+            (ChangeEvent e, Boolean mouseDown) ->
+                    tinaController.affineC11REd_changed(mouseDown),
+            "xyCoeff11",
+            FieldScope.XFORM);
+    setupField(
+            fields.pAffineC21Lbl,
+            () -> tinaController.affineC21REd_reset(),
+            fields.pAffineC21REd,
+            (ChangeEvent e, Boolean mouseDown) ->
+                    tinaController.affineC21REd_changed(mouseDown),
+            "xyCoeff21",
+            FieldScope.XFORM);
+  }
+
 }

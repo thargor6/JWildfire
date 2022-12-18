@@ -914,6 +914,8 @@ public class TinaControllerParameter {
       JLabel pAffineC01Lbl,
       JLabel pAffineC10Lbl,
       JLabel pAffineC11Lbl,
+      JLabel pAffineC20Lbl,
+      JLabel pAffineC21Lbl,
       JWFNumberField pAffineC00REd,
       JWFNumberField pAffineC01REd,
       JWFNumberField pAffineC10REd,
@@ -1115,6 +1117,8 @@ public class TinaControllerParameter {
     this.pAffineC01Lbl = pAffineC01Lbl;
     this.pAffineC10Lbl = pAffineC10Lbl;
     this.pAffineC11Lbl = pAffineC11Lbl;
+    this.pAffineC20Lbl = pAffineC20Lbl;
+    this.pAffineC21Lbl = pAffineC21Lbl;
     this.pAffineC00REd = pAffineC00REd;
     this.pAffineC01REd = pAffineC01REd;
     this.pAffineC10REd = pAffineC10REd;

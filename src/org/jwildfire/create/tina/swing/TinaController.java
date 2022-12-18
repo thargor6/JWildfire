@@ -2372,6 +2372,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void transformationChanged(boolean pReRender) {
+    transformationChanged(pReRender, false);
+  }
+
+  public void transformationChanged(boolean pReRender, boolean pMouseDown) {
     if (!gridRefreshing) {
       boolean oldGridRefreshing = gridRefreshing;
       boolean oldCmbRefreshing = cmbRefreshing;
@@ -2387,7 +2391,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         refreshXFormUI(xForm);
         xFormControls.enableControls(xForm);
         nonlinearControls.resizeNonlinearParamsPanel();
-        refreshFlameImage(true, false, 1, pReRender, false);
+        refreshFlameImage(true, pMouseDown, 1, pReRender, false);
       }
       finally {
         cmbRefreshing = oldCmbRefreshing;
@@ -3621,25 +3625,25 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     affineEditPostTransformButton_clicked();
   }
 
-  public void affineC21REd_changed() {
+  public void affineC21REd_changed(boolean pMouseDown) {
     if (gridRefreshing || cmbRefreshing) {
       return;
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC21REd, frameControlsUtil.getAffinePropertyName(xForm, "21", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
-      transformationChanged(true);
+      transformationChanged(true, pMouseDown);
     }
   }
 
-  public void affineC20REd_changed() {
+  public void affineC20REd_changed(boolean pMouseDown) {
     if (gridRefreshing || cmbRefreshing) {
       return;
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC20REd, frameControlsUtil.getAffinePropertyName(xForm, "20", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
-      transformationChanged(true);
+      transformationChanged(true, pMouseDown);
     }
   }
 
@@ -3925,47 +3929,47 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     paletteSliderChanged(data.paletteBlurSlider, data.paletteBlurREd, "modBlur", 1.0);
   }
 
-  public void affineC01REd_changed() {
+  public void affineC01REd_changed(boolean pMouseDown) {
     if (gridRefreshing || cmbRefreshing) {
       return;
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC01REd, frameControlsUtil.getAffinePropertyName(xForm, "01", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
-      transformationChanged(true);
+      transformationChanged(true, pMouseDown);
     }
   }
 
-  public void affineC11REd_changed() {
+  public void affineC11REd_changed(boolean pMouseDown) {
     if (gridRefreshing || cmbRefreshing) {
       return;
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC11REd, frameControlsUtil.getAffinePropertyName(xForm, "11", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
-      transformationChanged(true);
+      transformationChanged(true, pMouseDown);
     }
   }
 
-  public void affineC00REd_changed() {
+  public void affineC00REd_changed(boolean pMouseDown) {
     if (gridRefreshing || cmbRefreshing) {
       return;
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC00REd, frameControlsUtil.getAffinePropertyName(xForm, "00", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
-      transformationChanged(true);
+      transformationChanged(true, pMouseDown);
     }
   }
 
-  public void affineC10REd_changed() {
+  public void affineC10REd_changed(boolean pMouseDown) {
     if (gridRefreshing || cmbRefreshing) {
       return;
     }
     XForm xForm = getCurrXForm();
     if (xForm != null) {
       frameControlsUtil.valueChangedByTextField(xForm, null, data.affineC10REd, frameControlsUtil.getAffinePropertyName(xForm, "10", data.affineEditPostTransformButton.isSelected()), 1.0, 0.0);
-      transformationChanged(true);
+      transformationChanged(true, pMouseDown);
     }
   }
 
