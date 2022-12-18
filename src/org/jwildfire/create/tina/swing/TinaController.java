@@ -5048,7 +5048,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     layersTableClicked();
   }
 
-  public void layerDensityREd_changed() {
+  public void layerDensityREd_changed(boolean pMouseDown) {
     if (!gridRefreshing && getCurrLayer() != null) {
       saveUndoPoint();
       frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerDensityREd, "density", 1.0, 0.0);
@@ -5062,7 +5062,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       finally {
         gridRefreshing = oldGridRefreshing;
       }
-      refreshFlameImage(true, false, 1, true, false);
+      refreshFlameImage(true, pMouseDown, 1, true, false);
     }
   }
 
@@ -5085,7 +5085,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void layerWeightREd_changed() {
+  public void layerWeightREd_changed(boolean pMouseDown) {
     if (!gridRefreshing && getCurrLayer() != null) {
       saveUndoPoint();
       frameControlsUtil.valueChangedByTextField(getCurrLayer(), null, data.layerWeightEd, "weight", 1.0, 0.0);
@@ -5099,7 +5099,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       finally {
         gridRefreshing = oldGridRefreshing;
       }
-      refreshFlameImage(true, false, 1, true, false);
+      refreshFlameImage(true, pMouseDown, 1, true, false);
     }
   }
 

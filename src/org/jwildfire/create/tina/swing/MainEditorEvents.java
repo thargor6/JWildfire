@@ -23,6 +23,11 @@ import java.awt.event.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+
+enum FieldScope {
+  FLAME, LAYER, XFORM
+}
+
 public class MainEditorEvents {
   private final TinaController tinaController;
   private final TinaControllerParameter fields;
@@ -39,7 +44,7 @@ public class MainEditorEvents {
       BiConsumer<ChangeEvent, Boolean> onEditFieldChange,
       JSlider slider,
       BiConsumer<ChangeEvent, Boolean> onSliderChange,
-      String motionPropertyName) {
+      String motionPropertyName, FieldScope scope) {
     final String labelName = motionPropertyName + "Lbl";
     final String sliderName = motionPropertyName + "Slider";
 
@@ -60,7 +65,11 @@ public class MainEditorEvents {
     editField.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
-            tinaController.getFlameControls().editMotionCurve(e);
+            switch (scope) {
+              case FLAME: tinaController.getFlameControls().editMotionCurve(e); break;
+              case LAYER: tinaController.getLayerControls().editMotionCurve(e); break;
+              case XFORM: tinaController.getXFormControls().editMotionCurve(e); break;
+            }
           }
         });
     editField.setMotionPropertyName(motionPropertyName);
@@ -120,10 +129,55 @@ public class MainEditorEvents {
 
   }
 
+  private void setupField(
+          JLabel label,
+          Runnable onReset,
+          JWFNumberField editField,
+          BiConsumer<ChangeEvent, Boolean> onEditFieldChange,
+          String motionPropertyName, FieldScope scope) {
+    final String labelName = motionPropertyName + "Lbl";
+
+    label.addMouseListener(
+            new MouseAdapter() {
+              @Override
+              public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                  tinaController.saveUndoPoint();
+                  onReset.run();
+                }
+              }
+            });
+    label.setName(labelName);
+
+    editField.setLinkedLabelControlName(labelName);
+    editField.addActionListener(
+            new ActionListener() {
+              public void actionPerformed(ActionEvent e) {
+                switch (scope) {
+                  case FLAME: tinaController.getFlameControls().editMotionCurve(e); break;
+                  case LAYER: tinaController.getLayerControls().editMotionCurve(e); break;
+                  case XFORM: tinaController.getXFormControls().editMotionCurve(e); break;
+                }
+              }
+            });
+    editField.setMotionPropertyName(motionPropertyName);
+    editField.addChangeListener(
+            new ChangeListener() {
+              public void stateChanged(ChangeEvent e) {
+                if (!editField.isMouseAdjusting() || editField.getMouseChangeCount() == 0) {
+                  tinaController.saveUndoPoint();
+                }
+                onEditFieldChange.accept(e, editField.isMouseAdjusting());
+              }
+            });
+  }
+
   public void setupEvents() {
     setupCameraTabEvents();
     setupColoringTabEvents();
+    setupLayersTabEvents();
   }
+
   private void setupCameraTabEvents() {
     setupSlider(
             fields.cameraRollLbl,
@@ -132,7 +186,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraRollREd_changed(mouseDown),
             fields.pCameraRollSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraRollSlider_stateChanged(e, mouseDown),
-            "camRoll");
+            "camRoll", FieldScope.FLAME);
     setupSlider(
             fields.cameraPitchLbl,
             () -> tinaController.getFlameControls().cameraPitchREd_reset(),
@@ -140,7 +194,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraPitchREd_changed(mouseDown),
             fields.pCameraPitchSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraPitchSlider_stateChanged(e, mouseDown),
-            "camPitch");
+            "camPitch", FieldScope.FLAME);
     setupSlider(
             fields.cameraYawLbl,
             () -> tinaController.getFlameControls().cameraYawREd_reset(),
@@ -148,7 +202,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraYawREd_changed(mouseDown),
             fields.pCameraYawSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraYawSlider_stateChanged(e, mouseDown),
-            "camYaw");
+            "camYaw", FieldScope.FLAME);
     setupSlider(
             fields.cameraBankLbl,
             () -> tinaController.getFlameControls().cameraBankREd_reset(),
@@ -156,7 +210,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraBankREd_changed(mouseDown),
             fields.pCameraBankSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraBankSlider_stateChanged(e, mouseDown),
-            "camBank");
+            "camBank", FieldScope.FLAME);
     setupSlider(
             fields.cameraPerspectiveLbl,
             () -> tinaController.getFlameControls().cameraPerspectiveREd_reset(),
@@ -164,7 +218,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraPerspectiveREd_changed(mouseDown),
             fields.pCameraPerspectiveSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraPerspectiveSlider_stateChanged(e, mouseDown),
-            "camPerspective");
+            "camPerspective", FieldScope.FLAME);
 
     setupSlider(
         fields.pCameraCentreXLbl,
@@ -173,7 +227,7 @@ public class MainEditorEvents {
         (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraCentreXREd_changed(mouseDown),
         fields.pCameraCentreXSlider,
         (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraCentreXSlider_stateChanged(e, mouseDown),
-        "centreX");
+        "centreX", FieldScope.FLAME);
     setupSlider(
             fields.pCameraCentreYLbl,
             () -> tinaController.getFlameControls().cameraCentreYREd_reset(),
@@ -181,7 +235,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraCentreYREd_changed(mouseDown),
             fields.pCameraCentreYSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraCentreYSlider_stateChanged(e, mouseDown),
-            "centreY");
+            "centreY", FieldScope.FLAME);
     setupSlider(
             fields.pCameraZoomLbl,
             () -> tinaController.getFlameControls().cameraCentreXREd_reset(),
@@ -189,7 +243,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraZoomREd_changed(mouseDown),
             fields.pCameraZoomSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().cameraZoomSlider_stateChanged(e, mouseDown),
-            "camZoom");
+            "camZoom", FieldScope.FLAME);
     setupSlider(
             fields.pixelsPerUnitLbl,
             () -> tinaController.getFlameControls().pixelsPerUnitREd_reset(),
@@ -197,7 +251,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().pixelsPerUnitREd_changed(mouseDown),
             fields.pPixelsPerUnitSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().pixelsPerUnitSlider_stateChanged(e, mouseDown),
-            "pixelsPerUnit");
+            "pixelsPerUnit", FieldScope.FLAME);
     setupSlider(
             fields.camPosXLbl,
             () -> tinaController.getFlameControls().camPosXREd_reset(),
@@ -205,7 +259,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().camPosXREd_changed(mouseDown),
             fields.camPosXSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().camPosXSlider_stateChanged(e, mouseDown),
-            "camPosX");
+            "camPosX", FieldScope.FLAME);
     setupSlider(
             fields.camPosYLbl,
             () -> tinaController.getFlameControls().camPosYREd_reset(),
@@ -213,7 +267,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().camPosYREd_changed(mouseDown),
             fields.camPosYSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().camPosYSlider_stateChanged(e, mouseDown),
-            "camPosY");
+            "camPosY", FieldScope.FLAME);
     setupSlider(
             fields.camPosZLbl,
             () -> tinaController.getFlameControls().camPosZREd_reset(),
@@ -221,7 +275,7 @@ public class MainEditorEvents {
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().camPosZREd_changed(mouseDown),
             fields.camPosZSlider,
             (ChangeEvent e, Boolean mouseDown) -> tinaController.getFlameControls().camPosZSlider_stateChanged(e, mouseDown),
-            "camPosZ");
+            "camPosZ", FieldScope.FLAME);
 
 
   }
@@ -236,7 +290,7 @@ public class MainEditorEvents {
         fields.pBrightnessSlider,
         (ChangeEvent e, Boolean mouseDown) ->
             tinaController.getFlameControls().brightnessSlider_stateChanged(e, mouseDown),
-            "brightness");
+            "brightness", FieldScope.FLAME);
     setupSlider(
             fields.lowDensityBrightnessLbl,
             () -> tinaController.getFlameControls().lowDensityBrightnessREd_reset(),
@@ -246,7 +300,7 @@ public class MainEditorEvents {
             fields.lowDensityBrightnessSlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().lowDensityBrightnessSlider_stateChanged(e, mouseDown),
-            "lowDensityBrightness");
+            "lowDensityBrightness", FieldScope.FLAME);
     setupSlider(
             fields.gammaLbl,
             () -> tinaController.getFlameControls().gammaREd_reset(),
@@ -256,7 +310,7 @@ public class MainEditorEvents {
             fields.pGammaSlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().gammaSlider_stateChanged(e, mouseDown),
-            "gamma");
+            "gamma", FieldScope.FLAME);
     setupSlider(
             fields.gammaThresholdLbl,
             () -> tinaController.getFlameControls().gammaThresholdREd_reset(),
@@ -266,7 +320,7 @@ public class MainEditorEvents {
             fields.pGammaThresholdSlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().gammaThresholdSlider_stateChanged(e, mouseDown),
-            "gammaThreshold");
+            "gammaThreshold", FieldScope.FLAME);
     setupSlider(
             fields.contrastLbl,
             () -> tinaController.getFlameControls().contrastREd_reset(),
@@ -276,7 +330,7 @@ public class MainEditorEvents {
             fields.pContrastSlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().contrastSlider_stateChanged(e, mouseDown),
-            "contrast");
+            "contrast", FieldScope.FLAME);
     setupSlider(
             fields.balanceRedLbl,
             () -> tinaController.getFlameControls().balanceRedREd_reset(),
@@ -286,7 +340,7 @@ public class MainEditorEvents {
             fields.balanceRedSlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().balanceRedSlider_stateChanged(e, mouseDown),
-            "balanceRed");
+            "balanceRed", FieldScope.FLAME);
     setupSlider(
             fields.balanceGreenLbl,
             () -> tinaController.getFlameControls().balanceGreenREd_reset(),
@@ -296,7 +350,7 @@ public class MainEditorEvents {
             fields.balanceGreenSlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().balanceGreenSlider_stateChanged(e, mouseDown),
-            "balanceGreen");
+            "balanceGreen", FieldScope.FLAME);
     setupSlider(
             fields.balanceBlueLbl,
             () -> tinaController.getFlameControls().balanceBlueREd_reset(),
@@ -306,7 +360,7 @@ public class MainEditorEvents {
             fields.balanceBlueSlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().balanceBlueSlider_stateChanged(e, mouseDown),
-            "balanceBlue");
+            "balanceBlue", FieldScope.FLAME);
     setupSlider(
             fields.whiteLevelLbl,
             () -> tinaController.getFlameControls().whiteLevelREd_reset(),
@@ -316,7 +370,7 @@ public class MainEditorEvents {
             fields.whiteLevelSlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().whiteLevelSlider_stateChanged(e, mouseDown),
-            "whiteLevel");
+            "whiteLevel", FieldScope.FLAME);
     setupSlider(
             fields.vibrancyLbl,
             () -> tinaController.getFlameControls().vibrancyREd_reset(),
@@ -326,7 +380,7 @@ public class MainEditorEvents {
             fields.pVibrancySlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().vibrancySlider_stateChanged(e, mouseDown),
-            "vibrancy");
+            "vibrancy", FieldScope.FLAME);
     setupSlider(
             fields.saturationLbl,
             () -> tinaController.getFlameControls().saturationREd_reset(),
@@ -336,7 +390,7 @@ public class MainEditorEvents {
             fields.saturationSlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().saturationSlider_stateChanged(e, mouseDown),
-            "saturation");
+            "saturation", FieldScope.FLAME);
     setupSlider(
             fields.foregroundOpacityLbl,
             () -> tinaController.getFlameControls().foregroundOpacityREd_reset(),
@@ -346,7 +400,26 @@ public class MainEditorEvents {
             fields.foregroundOpacitySlider,
             (ChangeEvent e, Boolean mouseDown) ->
                     tinaController.getFlameControls().foregroundOpacitySlider_stateChanged(e, mouseDown),
-            "foregroundOpacity");
+            "foregroundOpacity", FieldScope.FLAME);
+  }
+
+  private void setupLayersTabEvents() {
+    setupField(
+        fields.layerDensityLbl,
+        () -> tinaController.layerDensityREd_reset(),
+        fields.layerDensityREd,
+        (ChangeEvent e, Boolean mouseDown) ->
+            tinaController.layerDensityREd_changed(mouseDown),
+            "density",
+        FieldScope.LAYER);
+    setupField(
+            fields.layerWeightLbl,
+            () -> tinaController.layerWeightREd_reset(),
+            fields.layerWeightEd,
+            (ChangeEvent e, Boolean mouseDown) ->
+                    tinaController.layerWeightREd_changed(mouseDown),
+            "weight",
+            FieldScope.LAYER);
   }
 
 }

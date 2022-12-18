@@ -6039,7 +6039,9 @@ public class MainEditorFrame extends JFrame {
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
         getGradientsList(), getBackgroundColorIndicatorBtn(),
-        getTinaPaletteFadeColorsCBx(), getTinaPaletteUniformWidthCBx(), getLayerWeightEd(), getLayerDensityREd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(), getLayerExtractBtn(),
+        getTinaPaletteFadeColorsCBx(), getTinaPaletteUniformWidthCBx(),
+            lblLayerWeight, getLayerWeightEd(), lblLayerDensity, getLayerDensityREd(),
+            getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(), getLayerExtractBtn(),
         getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
         getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getMotionBlurLengthField(), getMotionBlurLengthSlider(),
         getMotionBlurTimeStepField(), getMotionBlurTimeStepSlider(), getMotionBlurDecayField(), getMotionBlurDecaySlider(),
@@ -11116,7 +11118,9 @@ public class MainEditorFrame extends JFrame {
   private JPanel panel_77;
   private JScrollPane scrollPane_8;
   private JTable layersTable;
+  private JLabel lblLayerWeight;
   private JWFNumberField layerWeightEd;
+  private JLabel lblLayerDensity;
   private JWFNumberField layerDensityREd;
   private JButton layerDeleteBtn;
   private JToggleButton layerVisibleBtn;
@@ -14150,38 +14154,20 @@ public class MainEditorFrame extends JFrame {
       layerAddBtn.setBounds(6, 100, 90, 24);
       panel_75.add(layerAddBtn);
 
-      JLabel lblDensity = new JLabel();
-      lblDensity.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.layerDensityREd_reset();
-          }
-        }
-      });
-
-      lblDensity.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      lblDensity.setText("Density");
-      lblDensity.setName("lblDensity");
-      lblDensity.setToolTipText("Layer density from 0 (invisible) to 1 (full density); at least one layer should have density 1");
-      lblDensity.setSize(new Dimension(20, 22));
-      lblDensity.setPreferredSize(new Dimension(24, 22));
-      lblDensity.setLocation(new Point(212, 6));
-      lblDensity.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblDensity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblDensity.setBounds(107, 7, 58, 22);
-      panel_75.add(lblDensity);
+      lblLayerDensity = new JLabel();
+      lblLayerDensity.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      lblLayerDensity.setText("Density");
+      lblLayerDensity.setToolTipText("Layer density from 0 (invisible) to 1 (full density); at least one layer should have density 1");
+      lblLayerDensity.setSize(new Dimension(20, 22));
+      lblLayerDensity.setPreferredSize(new Dimension(24, 22));
+      lblLayerDensity.setLocation(new Point(212, 6));
+      lblLayerDensity.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblLayerDensity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblLayerDensity.setBounds(107, 7, 58, 22);
+      panel_75.add(lblLayerDensity);
 
       layerDensityREd = new JWFNumberField();
-      layerDensityREd.setLinkedLabelControlName("lblDensity");
-      layerDensityREd.setMotionPropertyName("density");
-      layerDensityREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getLayerControls().editMotionCurve(e);
-        }
-      });
-      layerDensityREd.setValueStep(0.05);
+      layerDensityREd.setValueStep(0.01);
       layerDensityREd.setText("");
       layerDensityREd.setSize(new Dimension(81, 24));
       layerDensityREd.setPreferredSize(new Dimension(56, 24));
@@ -14191,51 +14177,23 @@ public class MainEditorFrame extends JFrame {
       layerDensityREd.setMaxValue(1.0);
       layerDensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       layerDensityREd.setBounds(172, 6, 90, 24);
-      layerDensityREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!layerDensityREd.isMouseAdjusting() || layerDensityREd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
-            }
-            tinaController.layerDensityREd_changed();
-          }
-        }
-      });
-
       panel_75.add(layerDensityREd);
 
-      JLabel lblWeight = new JLabel();
-      lblWeight.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-            tinaController.saveUndoPoint();
-            tinaController.layerWeightREd_reset();
-          }
-        }
-      });
-
-      lblWeight.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      lblWeight.setText("Weight");
-      lblWeight.setName("lblWeight");
-      lblWeight.setToolTipText("Brightness of layer: 1 is normal, lower is darker, higher is lighter");
-      lblWeight.setSize(new Dimension(20, 22));
-      lblWeight.setPreferredSize(new Dimension(24, 22));
-      lblWeight.setLocation(new Point(212, 6));
-      lblWeight.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblWeight.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblWeight.setBounds(107, 34, 58, 22);
-      panel_75.add(lblWeight);
+      lblLayerWeight = new JLabel();
+      lblLayerWeight.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      lblLayerWeight.setText("Weight");
+      lblLayerWeight.setToolTipText("Brightness of layer: 1 is normal, lower is darker, higher is lighter");
+      lblLayerWeight.setSize(new Dimension(20, 22));
+      lblLayerWeight.setPreferredSize(new Dimension(24, 22));
+      lblLayerWeight.setLocation(new Point(212, 6));
+      lblLayerWeight.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblLayerWeight.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblLayerWeight.setBounds(107, 34, 58, 22);
+      panel_75.add(lblLayerWeight);
 
       layerWeightEd = new JWFNumberField();
       layerWeightEd.setLinkedLabelControlName("lblWeight");
-      layerWeightEd.setMotionPropertyName("weight");
-      layerWeightEd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getLayerControls().editMotionCurve(e);
-        }
-      });
-      layerWeightEd.setValueStep(0.05);
+      layerWeightEd.setValueStep(0.01);
       layerWeightEd.setText("");
       layerWeightEd.setSize(new Dimension(81, 24));
       layerWeightEd.setPreferredSize(new Dimension(56, 24));
@@ -14243,17 +14201,6 @@ public class MainEditorFrame extends JFrame {
       layerWeightEd.setHasMinValue(true);
       layerWeightEd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       layerWeightEd.setBounds(172, 34, 90, 24);
-      layerWeightEd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!layerWeightEd.isMouseAdjusting() || layerWeightEd.getMouseChangeCount() == 0) {
-              tinaController.saveUndoPoint();
-            }
-            tinaController.layerWeightREd_changed();
-          }
-        }
-      });
-
       panel_75.add(layerWeightEd);
 
       layerDuplicateBtn = new JButton();

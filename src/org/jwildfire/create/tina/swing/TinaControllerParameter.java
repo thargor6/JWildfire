@@ -420,7 +420,9 @@ public class TinaControllerParameter {
   public JButton dancingFlamesRenameFlameBtn;
   public JButton dancingFlamesRenameMotionBtn;
   public JCheckBox dancingFlamesMutedCBx;
+  public JLabel layerWeightLbl;
   public JWFNumberField layerWeightEd;
+  public JLabel layerDensityLbl;
   public JWFNumberField layerDensityREd;
   public JButton layerAddBtn;
   public JButton layerDuplicateBtn;
@@ -1341,7 +1343,9 @@ public class TinaControllerParameter {
       JButton pBackgroundColorIndicatorBtn,
       JCheckBox pPaletteFadeColorsCBx,
       JCheckBox pPaletteUniformWidthCBx,
+      JLabel layerWeightLbl,
       JWFNumberField pLayerWeightEd,
+      JLabel layerDensityLbl,
       JWFNumberField pLayerDensityREd,
       JButton pLayerAddBtn,
       JButton pLayerDuplicateBtn,
@@ -1455,7 +1459,9 @@ public class TinaControllerParameter {
     this.backgroundColorIndicatorBtn = pBackgroundColorIndicatorBtn;
     this.paletteFadeColorsCBx = pPaletteFadeColorsCBx;
     this.paletteUniformWidthCBx = pPaletteUniformWidthCBx;
+    this.layerWeightLbl = layerWeightLbl;
     this.layerWeightEd = pLayerWeightEd;
+    this.layerDensityLbl = layerDensityLbl;
     this.layerDensityREd = pLayerDensityREd;
     this.layerAddBtn = pLayerAddBtn;
     this.layerDuplicateBtn = pLayerDuplicateBtn;
