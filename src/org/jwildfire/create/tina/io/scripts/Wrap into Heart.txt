@@ -1,3 +1,0 @@
-Simple script to wrap a flame into a heart by adding a final transform
-
-Created by Andreas Maschke

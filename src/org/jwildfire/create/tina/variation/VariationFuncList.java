@@ -30,8 +30,8 @@ import java.util.Map.Entry;
 
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
-  private static final double VARIATION_COST_THRESHOLD = 0.05;
-  private static final double MEMORY_THRESHOLD = 10.0;
+  private static final double VARIATION_COST_THRESHOLD = 0.15;
+  private static final double MEMORY_THRESHOLD = 20.0;
   private static final Map<String, String> resolvedAliasMap;
   private static final Set<String> supportedVariations = new HashSet<>();
   public static boolean considerVariationCosts = true;

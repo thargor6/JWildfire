@@ -1,6 +1,0 @@
-/* ScriptInfo
-name = Yummy Gnarls BS
-author = Brad Stefanov" 
-category = Randomizer"
-info="3D gnarl using polarplot 3D and vibration"
-*/

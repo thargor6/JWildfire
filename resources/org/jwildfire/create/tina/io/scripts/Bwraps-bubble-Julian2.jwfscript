@@ -40,7 +40,6 @@ import org.jwildfire.create.tina.variation.BubbleFunc;
 
   public void run(ScriptRunnerEnvironment pEnv) throws Exception {
   XForm xForm1;
-  VariationFunc varFunc;
   Flame currFlame = pEnv.getCurrFlame();
   if(currFlame==null) {
     throw new Exception("Please select a flame at first");

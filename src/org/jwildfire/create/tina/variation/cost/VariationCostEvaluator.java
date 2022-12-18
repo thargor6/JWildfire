@@ -22,11 +22,11 @@ import org.jwildfire.create.tina.variation.mesh.Strange3DFunc;
 import java.util.*;
 
 public class VariationCostEvaluator {
-  private final long EVAL_ROUNDS = 200000;
-  private final long INIT_ROUNDS = 3000;
+  private final long EVAL_ROUNDS = 10000;
+  private final long INIT_ROUNDS = 100;
 
-  private final long MAX_INIT_TIME = 10000000000L;
-  private final long MAX_EVAL_TIME = 5000000000L;
+  private final long MAX_INIT_TIME = 50000000000L;
+  private final long MAX_EVAL_TIME = 6000000000L;
 
   public static void main(String[] args) {
     new VariationCostEvaluator().evaluate();
@@ -154,8 +154,6 @@ public class VariationCostEvaluator {
     BLACKLIST.add(new CurliecueFunc().getName());
     BLACKLIST.add(new CustomWFFunc().getName());
     BLACKLIST.add(new CustomWFFunc().getName());
-    BLACKLIST.add(new DLAWFFunc().getName());
-    BLACKLIST.add(new SnowflakeWFFunc().getName());
     BLACKLIST.add(new GPatternFunc().getName());
     BLACKLIST.add(new IFlamesFunc().getName());
     BLACKLIST.add(new Knots3DFunc().getName());
@@ -171,7 +169,6 @@ public class VariationCostEvaluator {
     BLACKLIST.add(new SunflowerVoroniFunc().getName());
     BLACKLIST.add(new Strange3DFunc().getName());
     BLACKLIST.add(new SZubietaFunc().getName());
-    BLACKLIST.add(new TapratsFunc().getName());
     BLACKLIST.add(new TrianTruchetFunc().getName());
   }
 
@@ -342,7 +339,7 @@ public class VariationCostEvaluator {
     System.err.println(sb);
     try {
       Tools.writeUTF8Textfile(
-          "src/org/jwildfire/create/tina/variation/variation_costs.txt", sb.toString());
+          "resources/org/jwildfire/create/tina/variation/variation_costs.txt", sb.toString());
     } catch (Exception e) {
       e.printStackTrace();
     }
