@@ -28,13 +28,7 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.net.URI;
 
 import javax.swing.BorderFactory;
@@ -13764,10 +13758,41 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getAnimationController() != null) {
-            tinaController.getAnimationController().keyFrameSliderChanged();
+            tinaController.getAnimationController().keyFrameSliderChanged(true);
           }
         }
       });
+
+      keyframesFrameSlider.addMouseListener(new MouseListener() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            tinaController.getAnimationController().keyFrameSliderChanged(false);
+          }
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+      });
+
+
       keyframesFrameSlider.setValue(0);
       keyframesFrameSlider.setPreferredSize(new Dimension(220, 19));
       keyframesFrameSlider.setMinorTickSpacing(5);

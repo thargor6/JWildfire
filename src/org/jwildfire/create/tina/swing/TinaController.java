@@ -1386,6 +1386,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   @Override
   public void refreshUI() {
+    refreshUI(false);
+  }
+
+  public void refreshUI(boolean pMouseDown) {
     gridRefreshing = true;
     try {
       int row = data.layersTable.getSelectedRow();
@@ -1403,7 +1407,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       gridRefreshing = false;
     }
     refreshFilterKernelPreviewImg();
-    refreshLayerUI();
+    refreshLayerUI(pMouseDown);
     refreshLayerControls(getCurrLayer());
     refreshKeyFramesUI();
   }
@@ -1422,7 +1426,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return animationController != null ? animationController.getCurrFrame() : 1;
   }
 
-  public void refreshLayerUI() {
+  public void refreshLayerUI(boolean pMouseDown) {
     noRefresh = true;
     try {
       flameControls.refreshFlameValues();
@@ -1447,7 +1451,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       finally {
         gridRefreshing = false;
       }
-      transformationChanged(true);
+      transformationChanged(true, pMouseDown);
 
       enableControls();
       layerControls.enableControls();
@@ -4995,7 +4999,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       try {
         setLastGradient(null);
         Layer layer = getCurrLayer();
-        refreshLayerUI();
+        refreshLayerUI(false);
         refreshLayerControls(layer);
         layerControls.enableControls();
         //refreshFlameImage(false);

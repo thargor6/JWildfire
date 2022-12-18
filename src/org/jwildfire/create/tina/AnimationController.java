@@ -155,7 +155,7 @@ public class AnimationController {
     }
   }
 
-  public void keyFrameSliderChanged() {
+  public void keyFrameSliderChanged(boolean pMouseDown) {
     if (!tinaController.isNoRefresh()) {
       boolean oldNoRefresh = tinaController.isNoRefresh();
       try {
@@ -167,26 +167,13 @@ public class AnimationController {
         if (tinaController.getCurrFlame() != null) {
           tinaController.getCurrFlame().setFrame(frame);
         }
-        /*
-        if (playPreviewThread != null) {
-          FlamePanelConfig cfg = tinaController.getFlamePanelConfig();
-          boolean oldNoControls = cfg.isNoControls();
-          try {
-            cfg.setNoControls(true);
-            tinaController.refreshFlameImage(true, true, 1, true, false);
-          }
-          finally {
-            cfg.setNoControls(oldNoControls);
-          }
-        }
-         */
       }
       finally {
         tinaController.setNoRefresh(oldNoRefresh);
       }
 
       if (playPreviewThread == null) {
-        tinaController.refreshUI();
+        tinaController.refreshUI(pMouseDown);
       }
     }
   }
