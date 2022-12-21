@@ -1,4 +1,4 @@
-V7.50 (18.12.2022)
+V7.50 (21.12.2022)
  - re-implemented the the realtime-refresh of the flame-previw for editing.
    It should work more smooth with less flickering and should require less CPU-time.
    - you can adjust the amount of idle CPU-time in the Preferences-window by changing the property tinaRealtimePreviewIdleAmount
@@ -7,6 +7,11 @@ V7.50 (18.12.2022)
      by enabling the property tinaLegacyRealtimePreview in the Prefs
  - added more variations to the pool of candidates which are using in random-flames
  - adjusted the initial value-ranges in he curve-editor to be more convenient
+ - fixed a problem with the undo manager which allowed to go too much backward in undo-history
+ - made the internal handling of the property "pixelsPerUnit" more consistent (even if this sounds like a minor feature
+   it caused a lot of internal changes, but also simplifications)
+    - it allows animation of this property, finally
+    - it also affects and improves results of random-flame-generators
 
 V7.40 (10.12.2022)
  - mark/unmark variations as favourites:

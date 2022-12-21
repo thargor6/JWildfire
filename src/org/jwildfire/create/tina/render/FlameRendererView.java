@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -128,7 +128,7 @@ public class FlameRendererView {
   }
 
   public void initView() {
-    double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
+    double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom() * flame.getPixelsPerUnitScale();
     double corner_x = flame.getCentreX() - (double) imageWidth / pixelsPerUnit / 2.0;
     double corner_y = flame.getCentreY() - (double) imageHeight / pixelsPerUnit / 2.0;
     int oversample = flame.getSpatialOversampling();

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -286,9 +286,7 @@ public class SWFAnimationRenderThread implements Runnable {
     RenderInfo info = new RenderInfo(flameMovie.getFrameWidth(), flameMovie.getFrameHeight(), RenderMode.PRODUCTION);
     double wScl = (double) info.getImageWidth() / (double) pFlame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) pFlame.getHeight();
-    pFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * pFlame.getPixelsPerUnit());
-    pFlame.setWidth(info.getImageWidth());
-    pFlame.setHeight(info.getImageHeight());
+    pFlame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
 
     FlameRenderer renderer = new FlameRenderer(pFlame, Prefs.getPrefs(), pFlame.isBGTransparency(), false);
     renderer.setProgressUpdater(null);

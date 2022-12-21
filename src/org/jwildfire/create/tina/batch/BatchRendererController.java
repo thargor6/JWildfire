@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -505,9 +505,7 @@ public class BatchRendererController implements JobRenderThreadController {
       if (flame != null) {
         double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
         double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-        flame.setWidth(info.getImageWidth());
-        flame.setHeight(info.getImageHeight());
+        flame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
 
         FlameRenderer renderer =
             new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);

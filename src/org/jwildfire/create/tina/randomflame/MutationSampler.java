@@ -89,9 +89,6 @@ public class MutationSampler {
         flame = new Flame();
         ex.printStackTrace();
       }
-      flame.setWidth(imageWidth);
-      flame.setHeight(imageHeight);
-      flame.setPixelsPerUnit(10);
       // render it
       flame.setSampleDensity(25);
       RenderedFlame renderedFlame;
@@ -102,12 +99,12 @@ public class MutationSampler {
         renderedFlame = renderer.renderFlame(info);
         if (j == quality.getMaxSamples() - 1) {
           renderedFlame = new FlameRenderer(bestFlame, prefs, false, true).renderFlame(info);
-          return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());
+          return new RandomFlameGeneratorSample(bestFlame);
         }
         else {
           double fCoverage = RandomFlameGeneratorSampler.calculateCoverage(renderedFlame.getImage(), bgRed, bgGreen, bgBlue, false);
           if (fCoverage >= quality.getCoverage() && fCoverage < 1.0) {
-            return new RandomFlameGeneratorSample(flame, renderedFlame.getImage());
+            return new RandomFlameGeneratorSample(flame);
           }
           else {
             if (bestFlame == null || fCoverage > bestCoverage) {

@@ -34,7 +34,7 @@ public class SynthRandomFlameGenerator extends RandomFlameGenerator {
     Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
-    flame.setPixelsPerUnit(200);
+    flame.setPixelsPerUnit(300+Math.random()*300.0);
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
     // init

@@ -30,7 +30,7 @@ public class TentacleRandomFlameGenerator extends RandomFlameGenerator {
     Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
-    flame.setPixelsPerUnit(200);
+    flame.setPixelsPerUnit(200+Math.random()*100.0);
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
     int maxXFormsX = (int) (2.0 + Math.random() * 3.0);

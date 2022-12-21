@@ -1,3 +1,20 @@
+/*
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2022 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
+  License, or (at your option) any later version.
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software;
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
+
 package org.jwildfire.create.tina.browser;
 
 import java.util.List;
@@ -72,9 +89,7 @@ public class CacheRendererThread implements Runnable {
       RenderInfo info = new RenderInfo(pImgWidth, pImgHeight, RenderMode.PREVIEW);
       double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
       double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
-      renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());
-      renderFlame.setWidth(pImgWidth);
-      renderFlame.setHeight(pImgHeight);
+      renderFlame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
       renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality() / 3.0);
       FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, true);
       RenderedFlame renderRes = renderer.renderFlame(info);

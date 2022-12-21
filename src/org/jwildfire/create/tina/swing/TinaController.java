@@ -3172,9 +3172,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         Rectangle bounds = imgPanel.getImageBounds();
         double wScl = (double) bounds.width / (double) newFlame.getWidth();
         double hScl = (double) bounds.height / (double) newFlame.getHeight();
-        newFlame.setWidth(bounds.width);
-        newFlame.setHeight(bounds.height);
-        newFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * newFlame.getPixelsPerUnit());
+        newFlame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
       }
       setCurrFlame(newFlame, false);
       undoManager.initUndoStack(getCurrFlame());
@@ -3813,9 +3811,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     double wScl = (double) resProfile.getWidth() / (double) res.getWidth();
     double hScl = (double) resProfile.getHeight() / (double) res.getHeight();
-    res.setPixelsPerUnit((wScl + hScl) * 0.5 * res.getPixelsPerUnit());
-    res.setWidth(resProfile.getWidth());
-    res.setHeight(resProfile.getHeight());
+    res.setPixelsPerUnitScale((wScl + hScl) * 0.5);
     return res;
   }
 
@@ -4976,21 +4972,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     data.backgroundColorCCIndicatorBtn.setBackground(color);
   }
-
-  private SimpleImage renderRandomizedFlame(Flame pFlame, Dimension pImgSize) {
-    int imageWidth = pImgSize.width, imageHeight = pImgSize.height;
-    RenderInfo info = new RenderInfo(imageWidth, imageHeight, RenderMode.PREVIEW);
-    double wScl = (double) info.getImageWidth() / (double) pFlame.getWidth();
-    double hScl = (double) info.getImageHeight() / (double) pFlame.getHeight();
-    pFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * pFlame.getPixelsPerUnit());
-    pFlame.setWidth(imageWidth);
-    pFlame.setHeight(imageHeight);
-    pFlame.setSampleDensity(40.0);
-    FlameRenderer renderer = new FlameRenderer(pFlame, prefs, false, false);
-    RenderedFlame res = renderer.renderFlame(info);
-    return res.getImage();
-  }
-
   public void layersTableClicked() {
     if (!gridRefreshing) {
       boolean oldGridRefreshing = gridRefreshing;
@@ -6876,9 +6857,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         Rectangle bounds = imgPanel.getImageBounds();
         double wScl = (double) bounds.width / (double) newFlame.getWidth();
         double hScl = (double) bounds.height / (double) newFlame.getHeight();
-        newFlame.setWidth(bounds.width);
-        newFlame.setHeight(bounds.height);
-        newFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * newFlame.getPixelsPerUnit());
+        newFlame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
       }
       setCurrFlame(newFlame);
       undoManager.initUndoStack(getCurrFlame());
@@ -6946,9 +6925,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
       double wScl = (double) info.getImageWidth() / (double) currFlame.getWidth();
       double hScl = (double) info.getImageHeight() / (double) currFlame.getHeight();
-      currFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * currFlame.getPixelsPerUnit());
-      currFlame.setWidth(info.getImageWidth());
-      currFlame.setHeight(info.getImageHeight());
+      currFlame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
       info.setRenderHDR(false);
       info.setRenderZBuffer(true);
       info.setSuggestZBufferParams(true);

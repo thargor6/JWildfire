@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -53,9 +53,7 @@ public class CliUtils {
     Flame renderFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
     double wScl = (double) renderOptions.getRenderWidth() / (double) renderFlame.getWidth();
     double hScl = (double) renderOptions.getRenderHeight() / (double) renderFlame.getHeight();
-    renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());
-    renderFlame.setWidth(renderOptions.getRenderWidth());
-    renderFlame.setHeight(renderOptions.getRenderHeight());
+    renderFlame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
     renderFlame.setSampleDensity(renderOptions.getRenderQuality());
     renderFlame.setSpatialOversampling(renderOptions.getSpatialOversampling());
     renderFlame.setSpatialFilteringType(FilteringType.valueOf(renderOptions.getSpatialFilteringType()));

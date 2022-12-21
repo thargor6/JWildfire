@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,18 +21,13 @@ import org.jwildfire.image.SimpleImage;
 
 public class RandomFlameGeneratorSample {
   private final Flame flame;
-  private final SimpleImage image;
 
-  public RandomFlameGeneratorSample(Flame pFlame, SimpleImage pImage) {
+  public RandomFlameGeneratorSample(Flame pFlame) {
     flame = pFlame;
-    image = pImage;
   }
 
   public Flame getFlame() {
     return flame;
   }
 
-  public SimpleImage getImage() {
-    return image;
-  }
 }

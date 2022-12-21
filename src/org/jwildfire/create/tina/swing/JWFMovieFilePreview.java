@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -74,9 +74,7 @@ public class JWFMovieFilePreview extends JComponent implements PropertyChangeLis
 
           double wScl = (double) imgWidth / (double) flame.getWidth();
           double hScl = (double) imgHeight / (double) flame.getHeight();
-          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-          flame.setWidth(imgWidth);
-          flame.setHeight(imgHeight);
+          flame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
 
           FlameRenderer renderer = new FlameRenderer(flame, prefs, false, true);
           renderer.setProgressUpdater(null);

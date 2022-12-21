@@ -97,7 +97,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   private double variation_zoom = 0.8;
   private double variation_position = 0.5;
   private double variation_rotation = 2.0 * M_PI;
-  private double variation_erosion = 0.5;
+  private double variation_erosion = 0.1;
   private int variation_seed = 12345;
 
   private int image_max_size = 320;

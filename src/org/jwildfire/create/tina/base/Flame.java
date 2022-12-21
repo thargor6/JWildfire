@@ -180,6 +180,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double gammaThreshold;
   private final MotionCurve gammaThresholdCurve = new MotionCurve();
   private double pixelsPerUnit;
+  private double pixelsPerUnitScale;
   private final MotionCurve pixelsPerUnitCurve = new MotionCurve();
   private double whiteLevel;
   private final MotionCurve whiteLevelCurve = new MotionCurve();
@@ -285,6 +286,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     width = 800;
     height = 600;
     pixelsPerUnit = 50;
+    pixelsPerUnitScale = 1.0;
     name = "";
     bgImageFilename = "";
     editPlane = EditPlane.XY;
@@ -512,6 +514,14 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setPixelsPerUnit(double pixelsPerUnit) {
     this.pixelsPerUnit = pixelsPerUnit;
+  }
+
+  public double getPixelsPerUnitScale() {
+    return pixelsPerUnitScale;
+  }
+
+  public void setPixelsPerUnitScale(double pixelsPerUnitScale) {
+    this.pixelsPerUnitScale = pixelsPerUnitScale;
   }
 
   public double getWhiteLevel() {
@@ -814,6 +824,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     gammaThreshold = pFlame.gammaThreshold;
     gammaThresholdCurve.assign(pFlame.gammaThresholdCurve);
     pixelsPerUnit = pFlame.pixelsPerUnit;
+    pixelsPerUnitScale = pFlame.pixelsPerUnitScale;
     pixelsPerUnitCurve.assign(pFlame.pixelsPerUnitCurve);
     whiteLevel = pFlame.whiteLevel;
     whiteLevelCurve.assign(pFlame.whiteLevelCurve);

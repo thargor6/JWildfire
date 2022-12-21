@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -128,9 +128,6 @@ public class RandomFlameGeneratorSampler {
         flame = new Flame();
         ex.printStackTrace();
       }
-      flame.setWidth(imageWidth);
-      flame.setHeight(imageHeight);
-      flame.setPixelsPerUnit(10);
       for (Layer layer : flame.getLayers()) {
         RGBPalette palette = randGradientGen.generatePalette(paletteSize, fadePaletteColors, uniformWidth);
         layer.setPalette(palette);
@@ -147,12 +144,12 @@ public class RandomFlameGeneratorSampler {
         flame = randGen.postProcessFlameAfterRendering(randGenState, flame);
         if (j == quality.getMaxSamples() - 1) {
           renderedFlame = new FlameRenderer(bestFlame, prefs, false, true).renderFlame(info);
-          return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());
+          return new RandomFlameGeneratorSample(bestFlame);
         }
         else {
           double fCoverage = calculateCoverage(renderedFlame.getImage(), bgRed, bgGreen, bgBlue, randGen.isUseFilter(randGenState));
           if (fCoverage >= quality.getCoverage() && fCoverage < randGen.getMaxCoverage()) {
-            return new RandomFlameGeneratorSample(flame, renderedFlame.getImage());
+            return new RandomFlameGeneratorSample(flame);
           }
           else {
             if (bestFlame == null || fCoverage > bestCoverage) {

@@ -35,7 +35,7 @@ public class JulianRingsRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamPerspective(0);
     flame.setWidth(962);
     flame.setHeight(541);
-    flame.setPixelsPerUnit(1228.6875);
+    flame.setPixelsPerUnit(100+Math.random()*200.0);
     flame.setCamZoom(3.0+Math.random()*2.0);
     flame.setBGTransparency(false);
 

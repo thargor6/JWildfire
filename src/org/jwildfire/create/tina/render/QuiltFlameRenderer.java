@@ -1,3 +1,20 @@
+/*
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2022 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
+  License, or (at your option) any later version.
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software;
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
+
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.base.Prefs;
@@ -48,8 +65,8 @@ public class QuiltFlameRenderer {
             if (!new File(segmentFilename).exists()) {
               RenderInfo info = new RenderInfo(currWidth, currHeight, RenderMode.PRODUCTION);
 
-              info.setSegmentRenderingCamXModifier(-(-xSegmentationLevel / 2 + x + (xSegmentationLevel%2==0 ? 0.5 : 0)) * getSegmentWidth(destWidth, xSegmentationLevel) / renderClone.getPixelsPerUnit() / renderClone.getCamZoom());
-              info.setSegmentRenderingCamYModifier(-(-ySegmentationLevel / 2 + y + (ySegmentationLevel%2==0 ? 0.5 : 0)) * getSegmentHeight(destHeight, ySegmentationLevel) / renderClone.getPixelsPerUnit() / renderClone.getCamZoom());
+              info.setSegmentRenderingCamXModifier(-(-xSegmentationLevel / 2 + x + (xSegmentationLevel%2==0 ? 0.5 : 0)) * getSegmentWidth(destWidth, xSegmentationLevel) / renderClone.getPixelsPerUnit() / renderClone.getCamZoom() / renderClone.getPixelsPerUnitScale());
+              info.setSegmentRenderingCamYModifier(-(-ySegmentationLevel / 2 + y + (ySegmentationLevel%2==0 ? 0.5 : 0)) * getSegmentHeight(destHeight, ySegmentationLevel) / renderClone.getPixelsPerUnit() / renderClone.getCamZoom() / renderClone.getPixelsPerUnitScale());
               currRenderer = new FlameRenderer(renderClone, Prefs.getPrefs(), flame.isBGTransparency(), false);
               currRenderer.setProgressUpdater(detailProgressUpdater);
               RenderedFlame res = currRenderer.renderFlame(info);
@@ -160,9 +177,7 @@ public class QuiltFlameRenderer {
     Flame clone = flame.makeCopy();
     double wScl = (double) destWidth / (double) clone.getWidth();
     double hScl = (double) destHeight / (double) clone.getHeight();
-    clone.setPixelsPerUnit((wScl + hScl) * 0.5 * clone.getPixelsPerUnit());
-    clone.setWidth(destWidth);
-    clone.setHeight(destHeight);
+    clone.setPixelsPerUnitScale((wScl + hScl) * 0.5);
     clone.setAiPostDenoiser(AIPostDenoiserType.NONE);
     return clone;
   }
