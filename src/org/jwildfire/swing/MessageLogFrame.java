@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -18,7 +18,6 @@ package org.jwildfire.swing;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import org.jwildfire.base.Prefs;
-import org.nfunk.jep.function.Str;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -84,7 +83,6 @@ public class MessageLogFrame extends JFrame implements MessageLogEventObserver {
   JTextPane getLogMessagesPane() {
     if (logMessagesPane == null) {
       logMessagesPane = new JTextPane();
-      logMessagesPane.setBackground(SystemColor.menu);
       logMessagesPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
       logMessagesPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {

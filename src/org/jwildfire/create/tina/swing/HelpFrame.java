@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -123,7 +123,6 @@ public class HelpFrame extends JFrame {
   JTextPane getHelpPane() {
     if (helpPane == null) {
       helpPane = new JTextPane();
-      helpPane.setBackground(SystemColor.menu);
       helpPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
       helpPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {
@@ -153,7 +152,6 @@ public class HelpFrame extends JFrame {
   JTextPane getMeshGenHintPane() {
     if (meshGenHintPane == null) {
       meshGenHintPane = new JTextPane();
-      meshGenHintPane.setBackground(SystemColor.menu);
       meshGenHintPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
       meshGenHintPane.setEditable(false);
     }
@@ -206,7 +204,6 @@ public class HelpFrame extends JFrame {
   JTextPane getApophysisHintsPane() {
     if (apophysisHintsPane == null) {
       apophysisHintsPane = new JTextPane();
-      apophysisHintsPane.setBackground(SystemColor.menu);
       apophysisHintsPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
       apophysisHintsPane.setEditable(false);
     }
@@ -216,7 +213,6 @@ public class HelpFrame extends JFrame {
   JTextPane getColorTypesPane() {
     if (colorTypesPane == null) {
       colorTypesPane = new JTextPane();
-      colorTypesPane.setBackground(SystemColor.menu);
       colorTypesPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
       colorTypesPane.setEditable(false);
     }

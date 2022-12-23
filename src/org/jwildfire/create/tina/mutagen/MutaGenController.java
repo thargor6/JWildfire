@@ -777,19 +777,7 @@ public class MutaGenController {
     try {
       Font f = new Font(Font.SANS_SERIF, 3, 10);
       hintPane.setFont(f);
-
-      InputStream is = this.getClass().getResourceAsStream("hints.html");
-      StringBuffer content = new StringBuffer();
-      String lineFeed = System.getProperty("line.separator");
-      String line;
-      Reader r = new InputStreamReader(is, "utf-8");
-      BufferedReader in = new BufferedReader(r);
-      while ((line = in.readLine()) != null) {
-        content.append(line).append(lineFeed);
-      }
-      in.close();
-
-      hintPane.setText(content.toString());
+      hintPane.setText(Tools.getRessourceAsString(MutaGenController.class, "hints.html"));
       hintPane.setSelectionStart(0);
       hintPane.setSelectionEnd(0);
     } catch (Exception ex) {
