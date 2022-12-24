@@ -1,4 +1,4 @@
-V7.50 (21.12.2022)
+V7.50 (24.12.2022)
  - re-implemented the the realtime-refresh of the flame-previw for editing.
    It should work more smooth with less flickering and should require less CPU-time.
    - you can adjust the amount of idle CPU-time in the Preferences-window by changing the property tinaRealtimePreviewIdleAmount
@@ -10,10 +10,13 @@ V7.50 (21.12.2022)
  - fixed a problem with the undo manager which allowed to go too much backward in undo-history
  - made the internal handling of the property "pixelsPerUnit" more consistent (even if this sounds like a minor feature
    it caused a lot of internal changes, but also simplifications)
-    - it allows animation of this property, finally
+    - it allows proper animation of this property, finally
     - it also affects and improves results of random-flame-generators
+ - improved the results of the "Phoenix"-random-flame-generator
+ - minor improvements to other random-flame-generators as well, due to the change of internal resolution
+ - upgraded (internally) to Java 19
 
-V7.40 (10.12.2022)
+V7.40 (10.12.2022, no release)
  - mark/unmark variations as favourites:
    - you may now mark any variaton as favourite by just clicking a small button next to it
    - there is an additional favourite-filter-button which then only dispalys variations which are markes as favourites

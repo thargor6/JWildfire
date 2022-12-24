@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -41,7 +41,7 @@ public class SolidExperimentalRandomFlameGenerator extends SolidRandomFlameGener
     flame.setCamPerspective(Math.random() * 0.2);
     flame.setWidth(601);
     flame.setHeight(338);
-    flame.setPixelsPerUnit(92.48366013);
+    flame.setPixelsPerUnit(100.0+Math.random()*100.0);
     flame.setCamZoom(0.2 + Math.random() * 0.4);
 
     randomizeSolidRenderingSettings(flame);

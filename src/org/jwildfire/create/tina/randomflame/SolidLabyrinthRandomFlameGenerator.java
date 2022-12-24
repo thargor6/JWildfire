@@ -75,7 +75,7 @@ public class SolidLabyrinthRandomFlameGenerator extends SolidRandomFlameGenerato
     flame.setCamPerspective(Math.random() * 0.2);
     flame.setWidth(601);
     flame.setHeight(338);
-    flame.setPixelsPerUnit(92.48366013);
+    flame.setPixelsPerUnit(100.0+Math.random()*100.0);
     flame.setCamZoom(0.75 + Math.random() * 0.5);
 
     randomizeSolidRenderingSettings(flame);

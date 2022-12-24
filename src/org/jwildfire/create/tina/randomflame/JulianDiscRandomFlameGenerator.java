@@ -47,7 +47,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamBank(0.0);
     flame.setCamZoom(1.0);
     flame.setCamPerspective(0.0);
-    flame.setPixelsPerUnit(100);
+    flame.setPixelsPerUnit(200.0+Math.random()*60.0);
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
     // 1st xForm

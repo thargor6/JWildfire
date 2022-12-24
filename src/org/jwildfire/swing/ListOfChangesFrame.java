@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -88,7 +88,6 @@ public class ListOfChangesFrame extends JFrame {
   JTextPane getHelpPane() {
     if (changesPane == null) {
       changesPane = new JTextPane();
-      changesPane.setBackground(SystemColor.menu);
       changesPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 16));
       changesPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {

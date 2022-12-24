@@ -37,9 +37,9 @@ public class PhoenixRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamPerspective(0);
     flame.setWidth(1920);
     flame.setHeight(1080);
-    flame.setCamZoom(0.4 + Math.random()*0.5);
+    flame.setCamZoom(0.6 + Math.random());
     flame.setBGTransparency(false);
-    flame.setPixelsPerUnit(200);
+    flame.setPixelsPerUnit(200.0);
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
 
@@ -119,6 +119,12 @@ public class PhoenixRandomFlameGenerator extends RandomFlameGenerator {
       }
       flame.setEditPlane(EditPlane.XY);
       XFormTransformService.localTranslate(xForm, 0.5-1.0*Math.random(), 0.5-1.0*Math.random(), false);
+      if(Math.random()>0.5) {
+        XFormTransformService.localTranslate(xForm, 0.5-1.0*Math.random(), 0.5-1.0*Math.random(), false);
+      }
+      if(Math.random()>0.666) {
+        XFormTransformService.rotate(xForm, -12.0 + 24.0*Math.random(), false);
+      }
     }
 
 
