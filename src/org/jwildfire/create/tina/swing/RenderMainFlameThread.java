@@ -173,7 +173,7 @@ public class RenderMainFlameThread implements Runnable {
             resProfile.getWidth(),
             resProfile.getHeight());
     if(useGPU) {
-      renderFlameOnGPU(currFlame, outputFilename, currFlame.getWidth(), currFlame.getHeight(), qualProfile.getQuality(), zForPass);
+      renderFlameOnGPU(currFlame, outputFilename, width, height, qualProfile.getQuality(), zForPass);
     } else {
       info.setRenderZBuffer(zForPass);
       renderer = new FlameRenderer(currFlame, prefs, false, false);
@@ -239,9 +239,9 @@ public class RenderMainFlameThread implements Runnable {
       }
       try {
         t0 = Calendar.getInstance().getTimeInMillis();
-        renderFlameOnGPU(flame, outFile.getAbsolutePath(), flame.getWidth(), flame.getHeight(), qualProfile.getQuality(), false);
+        renderFlameOnGPU(flame, outFile.getAbsolutePath(), width, height, qualProfile.getQuality(), false);
         if(qualProfile.isWithZBuffer()) {
-          renderFlameOnGPU(flame, outFile.getAbsolutePath(), flame.getWidth(), flame.getHeight(), qualProfile.getQuality(), true);
+          renderFlameOnGPU(flame, outFile.getAbsolutePath(), width, height, qualProfile.getQuality(), true);
         }
         t1 = Calendar.getInstance().getTimeInMillis();
       }

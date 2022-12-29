@@ -1,3 +1,6 @@
+V7.53 (29.12.2022)
+ - fixed a bug in GPU render which did miscalulate the size of the final images
+
 V7.52 (29.12.2022)
  - added the parameters "rnd_brush_seed", "rnd_brush_min_count" and "rnd_brush_max_count" to the "brush_stokes_wf"-variation
    in order to simplify the usage of this variation inside scripts
