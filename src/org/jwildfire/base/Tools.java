@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2022 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -63,7 +63,7 @@ public class
 
 Tools {
   public static final String APP_TITLE = "JWildfire";
-  private static final String APP_VERSION = "V7.50 (24.12.2022)";
+  private static final String APP_VERSION = "V7.52 (29.12.2022)";
 
   public static final boolean STEAM_EDITION = false;
   public static final boolean SPECIAL_VERSION = false;
@@ -634,6 +634,23 @@ Tools {
       os.flush();
       os.close();
       return new ImageReader().loadImage(os.toByteArray());
+    }
+  }
+
+  public static byte[] getRessourceAsByteArray(Class<?> parent, String ressource) throws Exception {
+    try (InputStream is = parent.getResourceAsStream(ressource)) {
+      byte[] buffer = new byte[1024];
+      ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+      int line = 0;
+      // read bytes from stream, and store them in buffer
+      while ((line = is.read(buffer)) != -1) {
+        // Writes bytes from byte array (buffer) into output stream.
+        os.write(buffer, 0, line);
+      }
+      os.flush();
+      os.close();
+      return os.toByteArray();
     }
   }
 

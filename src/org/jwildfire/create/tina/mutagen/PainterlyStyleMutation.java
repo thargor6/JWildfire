@@ -21,6 +21,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.ColorType;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.*;
 
 import java.nio.charset.StandardCharsets;
@@ -30,6 +31,24 @@ import java.util.List;
 public class PainterlyStyleMutation extends AbstractMutation {
 
   public static final int MAX_BRUSH = 245;
+
+  public static String formatBrushId(int id) {
+    return String.format("%03d", id);
+  }
+
+  public static int getRandomBrushId() {
+    return MathLib.iMin(MAX_BRUSH, Tools.FTOI(1.0 + Math.random() * MAX_BRUSH));
+  }
+
+  public static int getRandomBrushId(AbstractRandomGenerator randGen) {
+    return MathLib.iMin(MAX_BRUSH, Tools.FTOI(1.0 + randGen.random() * MAX_BRUSH));
+  }
+
+  public static void setBrushList(VariationFunc brushVar, List<String> brushIds) {
+    brushVar.setRessource(
+            AbstractBrushStrokeWFFunc.RESSOURCE_BRUSH_LIST,
+            String.join(", ", brushIds).getBytes(StandardCharsets.UTF_8));
+  }
 
   @Override
   public void execute(Layer layer, double mutationStrength) {
@@ -58,7 +77,9 @@ public class PainterlyStyleMutation extends AbstractMutation {
       } else {
         xform = layer.getFinalXForms().get(layer.getFinalXForms().size() - 1);
       }
-      brushVar = VariationFuncList.getVariationFuncInstance(Math.random() > 0.35 ? PostBrushStrokeWFFunc.NAME : BrushStrokeWFFunc.NAME, true);
+      brushVar =
+          VariationFuncList.getVariationFuncInstance(
+              Math.random() > 0.35 ? PostBrushStrokeWFFunc.NAME : BrushStrokeWFFunc.NAME, true);
       xform.addVariation(0.25 + Math.random() * 0.5, brushVar);
     }
     brushVar.setParameter(AbstractBrushStrokeWFFunc.PARAM_BLEND, 0.1 + 0.2 * Math.random());
@@ -75,17 +96,6 @@ public class PainterlyStyleMutation extends AbstractMutation {
         }
       }
     }
-    brushVar.setRessource(
-        AbstractBrushStrokeWFFunc.RESSOURCE_BRUSH_LIST,
-        String.join(", ", brushIds).getBytes(StandardCharsets.UTF_8));
+    setBrushList(brushVar, brushIds);
   }
-
-  public static String formatBrushId(int id) {
-    return String.format("%03d", id);
-  }
-
-  public static int getRandomBrushId() {
-    return MathLib.iMin(MAX_BRUSH, Tools.FTOI(1.0+Math.random()*MAX_BRUSH));
-  }
-
 }

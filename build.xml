@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-    <property name="release" value="7.50"/>
+    <property name="release" value="7.52"/>
     <property name="dist.dir" location="build/dist"/>
     <property name="installer.dir" location="build/installer"/>
     <property name="build.dir" location="build/classes"/>
@@ -67,6 +67,7 @@
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/mesh/*.obj"/>
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/plot/*.txt"/>
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/brush/*.png"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/brush/*.pdf"/>
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/lsystems.txt"/>
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/mesh/lsystems3D.txt"/>
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/variation_costs.txt"/>

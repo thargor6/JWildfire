@@ -21,6 +21,7 @@ import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.mutagen.PainterlyStyleMutation;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.variation.brush.BrushPreset;
 import org.jwildfire.image.Pixel;
@@ -43,23 +44,30 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   public static final String PARAM_GRID_BRUSH_SCALE = "grid_brush_scale";
   public static final String PARAM_GRID_BRUSH_BLEND = "grid_brush_blend";
   public static final String RESSOURCE_BRUSH_LIST = "brush_list";
+  public static final String PARAM_VARIATION_ZOOM = "variation_zoom";
+  public static final String PARAM_VARIATION_POSITION = "variation_position";
+  public static final String PARAM_VARIATION_ROTATION = "variation_rotation";
   private static final String PARAM_COLOR_CHANNEL = "color_channel";
   private static final String PARAM_THRESHOLD = "threshold";
   private static final String PARAM_INVERT = "invert";
   private static final String PARAM_VARIATION_BATCH_SIZE = "variation_batch_size";
-  public static final String PARAM_VARIATION_ZOOM = "variation_zoom";
-  public static final String PARAM_VARIATION_POSITION = "variation_position";
-  public static final String PARAM_VARIATION_ROTATION = "variation_rotation";
   private static final String PARAM_VARIATION_EROSION = "variation_erosion";
   private static final String PARAM_VARIATION_SEED = "variation_seed";
   private static final String PARAM_IMAGE_MAX_SIZE = "image_max_size";
   private static final String PARAM_ANTIALIAS_RADIUS = "antialias_radius";
+
+  private static final String PARAM_RND_BRUSH_SEED = "rnd_brush_seed";
+  private static final String PARAM_RND_BRUSH_MIN_COUNT = "rnd_brush_min_count";
+  private static final String PARAM_RND_BRUSH_MAX_COUNT = "rnd_brush_max_count";
+
   private static final String RESSOURCE_BRUSH_FILENAME1 = "image_filename1";
   private static final String RESSOURCE_BRUSH_FILENAME2 = "image_filename2";
   private static final String RESSOURCE_BRUSH_FILENAME3 = "image_filename3";
   private static final String RESSOURCE_BRUSH_FILENAME4 = "image_filename4";
   private static final String RESSOURCE_BRUSH_FILENAME5 = "image_filename5";
   private static final String RESSOURCE_BRUSH_FILENAME6 = "image_filename6";
+
+  private static final String RESSOURCE_BRUSHES_REFERENCE = "brushes_reference";
   private static final String[] paramNames = {
     PARAM_BLEND,
     PARAM_GRID_SIZE,
@@ -77,20 +85,26 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
     PARAM_VARIATION_EROSION,
     PARAM_VARIATION_SEED,
     PARAM_IMAGE_MAX_SIZE,
-    PARAM_ANTIALIAS_RADIUS
+    PARAM_ANTIALIAS_RADIUS,
+    PARAM_RND_BRUSH_SEED,
+    PARAM_RND_BRUSH_MIN_COUNT,
+    PARAM_RND_BRUSH_MAX_COUNT
   };
   private static final String[] ressourceNames = {
-          RESSOURCE_BRUSH_LIST,
+    RESSOURCE_BRUSH_LIST,
     RESSOURCE_BRUSH_FILENAME1,
     RESSOURCE_BRUSH_FILENAME2,
     RESSOURCE_BRUSH_FILENAME3,
     RESSOURCE_BRUSH_FILENAME4,
     RESSOURCE_BRUSH_FILENAME5,
-    RESSOURCE_BRUSH_FILENAME6
+    RESSOURCE_BRUSH_FILENAME6,
+          RESSOURCE_BRUSHES_REFERENCE
   };
   private static final int IM = 2147483647;
   private static final double AM = (1. / IM);
   private static SimpleImage dfltImage = null;
+  // derived params
+  private static String _resourceKey;
   private final Pixel toolPixel = new Pixel();
   private final float[] rgbArray = new float[3];
   private int variation_batch_size = 12;
@@ -99,9 +113,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   private double variation_rotation = 2.0 * M_PI;
   private double variation_erosion = 0.1;
   private int variation_seed = 12345;
-
   private int image_max_size = 320;
-
   private String brush_list = "001, 005, 012";
   private String brush_filename1 = null;
   private String brush_filename2 = null;
@@ -119,18 +131,31 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   private double threshold = 0.1;
   private int invert = 1;
   private double antialias_radius = 0.75;
-  // derived params
-  private List<WFImage> _colorMaps;
+  private int rnd_brush_seed = 0;
+  private int rnd_brush_min_count = 1;
+  private int rnd_brush_max_count = 5;
   private Map<Integer, List<Point>> _pointsMap;
+
+  private String brushes_reference = "org.jwildfire.create.tina.variation.brush.BrushPreset brush_strokes_jwf_brushes.pdf";
+
+
+  public static HashMap<Integer, List<Point>> copy(Map<Integer, List<Point>> original) {
+    HashMap<Integer, List<Point>> copy = new HashMap<>();
+    for (Map.Entry<Integer, List<Point>> entry : original.entrySet()) {
+      copy.put(entry.getKey(), new ArrayList<Point>(entry.getValue()));
+    }
+    return copy;
+  }
 
   public void transform(
       FlameTransformationContext pContext,
       XForm pXForm,
       XYZPoint pAffineTP,
       XYZPoint pVarTP,
-      double inX, double inY,
+      double inX,
+      double inY,
       double pAmount) {
-    Map<Integer, List<Point>> pointsMap = getPointsMap(pContext);
+    Map<Integer, List<Point>> pointsMap = this._pointsMap;
     /*
         int generation =
             Math.max(
@@ -147,16 +172,22 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
         Math.max(
             Math.min(
                 Tools.FTOI(
-                    (variation_batch_size + 1) * 0.5
-                        * (pAffineTP.color + discretNoise(
-                            Tools.FTOI(noiseSclGeneration * (gridPosX + 1235.767 * gridPosY))))),
+                    (variation_batch_size + 1)
+                        * 0.5
+                        * (pAffineTP.color
+                            + discretNoise(
+                                Tools.FTOI(
+                                    noiseSclGeneration * (gridPosX + 1235.767 * gridPosY))))),
                 variation_batch_size),
             0);
 
     List<Point> points = pointsMap.get(generation);
 
-
-    double totalBlend = blend * (1.0 + (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY + 17.85263 * gridPosX)))) * grid_brush_blend);
+    double totalBlend =
+        blend
+            * (1.0
+                + (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY + 17.85263 * gridPosX))))
+                    * grid_brush_blend);
 
     if (points.size() > 1 && (blend < EPSILON || pContext.random() > totalBlend)) {
       int pSize = points.size();
@@ -166,12 +197,17 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
       double rawY = point.y;
 
       {
-        double alpha = discretNoise(Tools.FTOI(noiseSclX * (gridPosX - 73.547321*gridPosY))) * grid_brush_rotate;
-        double scl = 1.0 + (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY + 31.67891 * gridPosX)))) * grid_brush_scale;
+        double alpha =
+            discretNoise(Tools.FTOI(noiseSclX * (gridPosX - 73.547321 * gridPosY)))
+                * grid_brush_rotate;
+        double scl =
+            1.0
+                + (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY + 31.67891 * gridPosX))))
+                    * grid_brush_scale;
         double sina = sin(alpha);
         double cosa = cos(alpha);
         double tx = (cosa * rawX - sina * rawY) * scl;
-        double ty = (sina * rawX + cosa * rawY)* scl;
+        double ty = (sina * rawX + cosa * rawY) * scl;
         rawX = tx;
         rawY = ty;
       }
@@ -186,8 +222,12 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
         pVarTP.x = pAmount * rawX;
         pVarTP.y = pAmount * rawY;
       } else {
-        double dx = (0.5 - discretNoise(Tools.FTOI(noiseSclX * (gridPosX-17.236612*gridPosY)))) * grid_deform;
-        double dy = (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY + 76.32561 * gridPosX)))) * grid_deform;
+        double dx =
+            (0.5 - discretNoise(Tools.FTOI(noiseSclX * (gridPosX - 17.236612 * gridPosY))))
+                * grid_deform;
+        double dy =
+            (0.5 - discretNoise(Tools.FTOI(noiseSclY * (gridPosY + 76.32561 * gridPosX))))
+                * grid_deform;
         gridPosX += dx;
         gridPosY += dy;
         pVarTP.x = gridPosX + pAmount * rawX;
@@ -196,12 +236,7 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
     }
 
     // remove "point of death"
-    if(fabs(pVarTP.x)<EPSILON && fabs(pVarTP.y)<EPSILON) {
-      pVarTP.doHide = true;
-    }
-    else {
-      pVarTP.doHide = false;
-    }
+    pVarTP.doHide = fabs(pVarTP.x) < EPSILON && fabs(pVarTP.y) < EPSILON;
 
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -232,7 +267,10 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
       variation_erosion,
       variation_seed,
       image_max_size,
-      antialias_radius
+      antialias_radius,
+      rnd_brush_seed,
+      rnd_brush_min_count,
+      rnd_brush_max_count
     };
   }
 
@@ -240,80 +278,113 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
   public void initOnce(
       FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.initOnce(pContext, pLayer, pXForm, pAmount);
-    _colorMaps = new ArrayList<>();
-    if (brush_list != null && brush_list.length() > 0) {
+    _resourceKey = makeRessourceKey();
+    Map<Integer, List<Point>> globalPointsMap =
+            (Map<Integer, List<Point>>) RessourceManager.getRessource(_resourceKey);
+    if (globalPointsMap == null) {
+      List<WFImage> colorMaps = loadColorMaps();
+      globalPointsMap = createPointsMap(colorMaps);
+      RessourceManager.putRessource(_resourceKey, globalPointsMap);
+    }
+  }
+
+  @Override
+  public void init(
+      FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    super.init(pContext, pLayer, pXForm, pAmount);
+    Map<Integer, List<Point>> globalPointsMap =
+        (Map<Integer, List<Point>>) RessourceManager.getRessource(_resourceKey);
+    this._pointsMap = /*copy*/(globalPointsMap); // copy seems not to improve performance -> disabled for now
+  }
+
+  private List<WFImage> loadColorMaps() {
+    List<WFImage> colorMaps = new ArrayList<>();
+    if (rnd_brush_seed > 0) {
+      MarsagliaRandomGenerator randomGenerator = new MarsagliaRandomGenerator();
+      randomGenerator.randomize(rnd_brush_seed);
+      int brushCount =
+          Tools.FTOI(
+              rnd_brush_min_count
+                  + randomGenerator.random() * (rnd_brush_max_count - rnd_brush_min_count));
+      List<String> formattedBrushIds = new ArrayList<>();
+      for (int i = 0; i < brushCount; i++) {
+        int brushId = PainterlyStyleMutation.getRandomBrushId(randomGenerator);
+        String formattedBrushId = PainterlyStyleMutation.formatBrushId(brushId);
+        loadBrushById(formattedBrushId, colorMaps);
+        formattedBrushIds.add(formattedBrushId);
+      }
+      PainterlyStyleMutation.setBrushList(this, formattedBrushIds);
+    } else if (brush_list != null && brush_list.length() > 0) {
       StringTokenizer tokenizer = new StringTokenizer(brush_list, ",");
       while (tokenizer.hasMoreTokens()) {
-        String brushId = tokenizer.nextToken().trim();
-        String brushFilename = String.format("brush%s.png", brushId);
-        try {
-          if (!RessourceManager.hasImage(brushFilename)) {
-            SimpleImage img = Tools.getRessourceAsImage(BrushPreset.class, brushFilename);
-            RessourceManager.addImage(brushFilename, img);
-          }
-          SimpleImage brush = (SimpleImage) RessourceManager.getImage(brushFilename);
-          if (brush != null && brush.getImageWidth() >= 16 && brush.getImageWidth() >= 16) {
-            _colorMaps.add(brush);
-          }
-        } catch (Exception ex) {
-          System.err.println(String.format("Error loading brush with %s", brushId));
-          ex.printStackTrace();
-        }
+        String formattedBrushId = tokenizer.nextToken().trim();
+        loadBrushById(formattedBrushId, colorMaps);
       }
     }
 
     if (brush_filename1 != null && brush_filename1.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(brush_filename1));
+        colorMaps.add(RessourceManager.getImage(brush_filename1));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
     if (brush_filename2 != null && brush_filename2.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(brush_filename2));
+        colorMaps.add(RessourceManager.getImage(brush_filename2));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
     if (brush_filename3 != null && brush_filename3.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(brush_filename3));
+        colorMaps.add(RessourceManager.getImage(brush_filename3));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
     if (brush_filename4 != null && brush_filename4.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(brush_filename4));
+        colorMaps.add(RessourceManager.getImage(brush_filename4));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
     if (brush_filename5 != null && brush_filename5.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(brush_filename5));
+        colorMaps.add(RessourceManager.getImage(brush_filename5));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
     if (brush_filename6 != null && brush_filename6.length() > 0) {
       try {
-        _colorMaps.add(RessourceManager.getImage(brush_filename5));
+        colorMaps.add(RessourceManager.getImage(brush_filename5));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
-    if (_colorMaps.isEmpty()) {
-      _colorMaps.add(getDfltImage());
+    if (colorMaps.isEmpty()) {
+      colorMaps.add(getDfltImage());
     }
-    getPointsMap(pContext);
+    return colorMaps;
   }
 
-  @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    super.init(pContext, pLayer, pXForm, pAmount);
-    _pointsMap = getPointsMap(pContext);
+  private void loadBrushById(String formattedBrushId, List<WFImage> destinationMap) {
+    String brushFilename = String.format("brush%s.png", formattedBrushId);
+    try {
+      if (!RessourceManager.hasImage(brushFilename)) {
+        SimpleImage img = Tools.getRessourceAsImage(BrushPreset.class, brushFilename);
+        RessourceManager.addImage(brushFilename, img);
+      }
+      SimpleImage brush = (SimpleImage) RessourceManager.getImage(brushFilename);
+      if (brush != null && brush.getImageWidth() >= 16 && brush.getImageWidth() >= 16) {
+        destinationMap.add(brush);
+      }
+    } catch (Exception ex) {
+      System.err.printf("Error loading brush with %s%n", formattedBrushId);
+      ex.printStackTrace();
+    }
   }
 
   @Override
@@ -336,6 +407,11 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
     else if (PARAM_VARIATION_SEED.equalsIgnoreCase(pName)) variation_seed = Tools.FTOI(pValue);
     else if (PARAM_IMAGE_MAX_SIZE.equalsIgnoreCase(pName)) image_max_size = Tools.FTOI(pValue);
     else if (PARAM_ANTIALIAS_RADIUS.equalsIgnoreCase(pName)) antialias_radius = pValue;
+    else if (PARAM_RND_BRUSH_SEED.equalsIgnoreCase(pName)) rnd_brush_seed = Tools.FTOI(pValue);
+    else if (PARAM_RND_BRUSH_MIN_COUNT.equalsIgnoreCase(pName))
+      rnd_brush_min_count = Tools.FTOI(pValue);
+    else if (PARAM_RND_BRUSH_MAX_COUNT.equalsIgnoreCase(pName))
+      rnd_brush_max_count = Tools.FTOI(pValue);
     else throw new IllegalArgumentException(pName);
   }
 
@@ -361,7 +437,8 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
       (brush_filename3 != null ? brush_filename3.getBytes() : null),
       (brush_filename4 != null ? brush_filename4.getBytes() : null),
       (brush_filename5 != null ? brush_filename5.getBytes() : null),
-      (brush_filename6 != null ? brush_filename6.getBytes() : null)
+      (brush_filename6 != null ? brush_filename6.getBytes() : null),
+            brushes_reference.getBytes()
     };
   }
 
@@ -381,6 +458,8 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
       brush_filename5 = pValue != null ? new String(pValue) : "";
     } else if (RESSOURCE_BRUSH_FILENAME6.equalsIgnoreCase(pName)) {
       brush_filename6 = pValue != null ? new String(pValue) : "";
+    } else if(RESSOURCE_BRUSHES_REFERENCE.equalsIgnoreCase(pName)) {
+      // read only -> no set
     } else throw new IllegalArgumentException(pName);
   }
 
@@ -400,7 +479,10 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
       return RessourceType.IMAGE_FILENAME;
     } else if (RESSOURCE_BRUSH_FILENAME6.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    } else throw new IllegalArgumentException(pName);
+    } else if(RESSOURCE_BRUSHES_REFERENCE.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -447,116 +529,113 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
         + "#"
         + image_max_size
         + "#"
-        + variation_seed;
+        + variation_seed
+        + "#"
+        + rnd_brush_seed
+        + "#"
+        + rnd_brush_min_count
+        + "#"
+        + rnd_brush_max_count;
   }
 
-  private Map<Integer, List<Point>> getPointsMap(FlameTransformationContext pContext) {
-    if (_pointsMap == null) {
-      String key = makeRessourceKey();
-      _pointsMap = (Map<Integer, List<Point>>) RessourceManager.getRessource(key);
-      if (_pointsMap == null) {
-        Map<Integer, List<Point>> pmap = new HashMap<>();
-        MarsagliaRandomGenerator randomGenerator = new MarsagliaRandomGenerator();
-        randomGenerator.randomize(variation_seed);
-        int generationId = 0;
-        for (int imgId = 0; imgId < _colorMaps.size(); imgId++) {
-          WFImage colorMap = _colorMaps.get(imgId);
-          if (image_max_size > 64
-              && (colorMap instanceof SimpleImage)
-              && ((colorMap.getImageWidth() > image_max_size)
-                  || (colorMap.getImageHeight() > image_max_size))) {
-            ScaleTransformer scaleT = new ScaleTransformer();
-            if (colorMap.getImageWidth() > image_max_size) {
-              scaleT.setAspect(ScaleAspect.KEEP_WIDTH);
-              scaleT.setScaleWidth(image_max_size);
-            } else {
-              scaleT.setAspect(ScaleAspect.KEEP_HEIGHT);
-              scaleT.setScaleHeight(image_max_size);
-            }
-            scaleT.transformImage(colorMap);
-          }
-          int batch_size = Math.max(1, variation_batch_size / _colorMaps.size());
-          if (imgId == 0) {
-            batch_size = variation_batch_size - batch_size * (_colorMaps.size() - 1);
-          }
+  private Map<Integer, List<Point>> createPointsMap(List<WFImage> colorMaps) {
+    Map<Integer, List<Point>> pmap = new HashMap<>();
+    MarsagliaRandomGenerator randomGenerator = new MarsagliaRandomGenerator();
+    randomGenerator.randomize(variation_seed);
+    int generationId = 0;
+    for (int imgId = 0; imgId < colorMaps.size(); imgId++) {
+      WFImage colorMap = colorMaps.get(imgId);
+      if (image_max_size > 64
+          && (colorMap instanceof SimpleImage)
+          && ((colorMap.getImageWidth() > image_max_size)
+              || (colorMap.getImageHeight() > image_max_size))) {
+        ScaleTransformer scaleT = new ScaleTransformer();
+        if (colorMap.getImageWidth() > image_max_size) {
+          scaleT.setAspect(ScaleAspect.KEEP_WIDTH);
+          scaleT.setScaleWidth(image_max_size);
+        } else {
+          scaleT.setAspect(ScaleAspect.KEEP_HEIGHT);
+          scaleT.setScaleHeight(image_max_size);
+        }
+        scaleT.transformImage(colorMap);
+      }
+      int batch_size = Math.max(1, variation_batch_size / colorMaps.size());
+      if (imgId == 0) {
+        batch_size = variation_batch_size - batch_size * (colorMaps.size() - 1);
+      }
 
-          for (int generation = 0; generation <= batch_size; generation++) {
-            List<PointWithIntensity> pointsWithIntensity = new ArrayList<>();
+      for (int generation = 0; generation <= batch_size; generation++) {
+        List<PointWithIntensity> pointsWithIntensity = new ArrayList<>();
 
-            WFImage imgMap;
-            int currDeltaX;
-            int currDeltaY;
-            double currErosion;
-            if (generation == 0 || !(colorMap instanceof SimpleImage)) {
-              imgMap = colorMap;
-              currDeltaX = currDeltaY = 0;
-              currErosion = 0.0;
-            } else {
-              double currZoom = Math.max(1.0 - variation_zoom * randomGenerator.random(), 0.2);
-              double currAngle = variation_rotation * randomGenerator.random() * 180.0 / M_PI;
-              currDeltaX =
-                  Tools.FTOI(
-                      (0.5 - randomGenerator.random())
-                          * variation_position
-                          * (double) colorMap.getImageWidth());
-              currDeltaY =
-                  Tools.FTOI(
-                      (0.5 - randomGenerator.random())
-                          * variation_position
-                          * (double) colorMap.getImageHeight());
-              currErosion = variation_erosion * randomGenerator.random();
-              imgMap = ((SimpleImage) colorMap).clone();
-              RotateTransformer rT = new RotateTransformer();
-              rT.setZoom(currZoom);
-              rT.setCentreX(imgMap.getImageWidth() / 2);
-              rT.setCentreY(imgMap.getImageHeight() / 2);
-              rT.setRadius(
-                  Math.sqrt(
-                              imgMap.getImageWidth() * imgMap.getImageWidth()
-                                  + imgMap.getImageHeight() * imgMap.getImageHeight())
-                          / 2.0
-                      + 1.0);
-              rT.setSmoothing(1);
-              rT.setAmount(currAngle);
-              rT.transformImage(imgMap);
-            }
+        WFImage imgMap;
+        int currDeltaX;
+        int currDeltaY;
+        double currErosion;
+        if (generation == 0 || !(colorMap instanceof SimpleImage)) {
+          imgMap = colorMap;
+          currDeltaX = currDeltaY = 0;
+          currErosion = 0.0;
+        } else {
+          double currZoom = Math.max(1.0 - variation_zoom * randomGenerator.random(), 0.2);
+          double currAngle = variation_rotation * randomGenerator.random() * 180.0 / M_PI;
+          currDeltaX =
+              Tools.FTOI(
+                  (0.5 - randomGenerator.random())
+                      * variation_position
+                      * (double) colorMap.getImageWidth());
+          currDeltaY =
+              Tools.FTOI(
+                  (0.5 - randomGenerator.random())
+                      * variation_position
+                      * (double) colorMap.getImageHeight());
+          currErosion = variation_erosion * randomGenerator.random();
+          imgMap = ((SimpleImage) colorMap).clone();
+          RotateTransformer rT = new RotateTransformer();
+          rT.setZoom(currZoom);
+          rT.setCentreX(imgMap.getImageWidth() / 2);
+          rT.setCentreY(imgMap.getImageHeight() / 2);
+          rT.setRadius(
+              Math.sqrt(
+                          imgMap.getImageWidth() * imgMap.getImageWidth()
+                              + imgMap.getImageHeight() * imgMap.getImageHeight())
+                      / 2.0
+                  + 1.0);
+          rT.setSmoothing(1);
+          rT.setAmount(currAngle);
+          rT.transformImage(imgMap);
+        }
 
-            int xSize = imgMap.getImageWidth();
-            int ySize = imgMap.getImageHeight();
-            int maxSize = Math.max(xSize, ySize);
-            int xMin = 0;
-            int yMin = 0;
+        int xSize = imgMap.getImageWidth();
+        int ySize = imgMap.getImageHeight();
+        int maxSize = Math.max(xSize, ySize);
+        int xMin = 0;
+        int yMin = 0;
 
-            for (int row = 0; row < imgMap.getImageHeight(); row++) {
-              int mappedRow = row + currDeltaX;
-              if (mappedRow >= 0 && mappedRow < imgMap.getImageHeight()) {
-                for (int column = 0; column < imgMap.getImageWidth(); column++) {
-                  int mappedCol = column + currDeltaY;
-                  if (mappedCol >= 0 && mappedCol < imgMap.getImageWidth()) {
-                    double colorValue = getColorValue(imgMap, mappedCol, mappedRow);
-                    if (colorValue >= threshold) {
-                      double x = ((column - xMin) - xSize / 2.0) / (double) maxSize;
-                      double y = ((row - yMin) - ySize / 2.0) / (double) maxSize;
-                      if (currErosion <= EPSILON || currErosion <= randomGenerator.random()) {
-                        pointsWithIntensity.add(
-                            new PointWithIntensity(
-                                x, y, Math.min(colorValue * colorValue + threshold, 1.0)));
-                      }
-                    }
+        for (int row = 0; row < imgMap.getImageHeight(); row++) {
+          int mappedRow = row + currDeltaX;
+          if (mappedRow >= 0 && mappedRow < imgMap.getImageHeight()) {
+            for (int column = 0; column < imgMap.getImageWidth(); column++) {
+              int mappedCol = column + currDeltaY;
+              if (mappedCol >= 0 && mappedCol < imgMap.getImageWidth()) {
+                double colorValue = getColorValue(imgMap, mappedCol, mappedRow);
+                if (colorValue >= threshold) {
+                  double x = ((column - xMin) - xSize / 2.0) / (double) maxSize;
+                  double y = ((row - yMin) - ySize / 2.0) / (double) maxSize;
+                  if (currErosion <= EPSILON || currErosion <= randomGenerator.random()) {
+                    pointsWithIntensity.add(
+                        new PointWithIntensity(
+                            x, y, Math.min(colorValue * colorValue + threshold, 1.0)));
                   }
                 }
               }
             }
-
-            List<Point> finalPoints = distributePoints(pointsWithIntensity);
-            pmap.put(generationId++, finalPoints);
           }
-          RessourceManager.putRessource(key, pmap);
-          _pointsMap = pmap;
         }
+        List<Point> finalPoints = distributePoints(pointsWithIntensity);
+        pmap.put(generationId++, finalPoints);
       }
     }
-    return _pointsMap;
+    return pmap;
   }
 
   private List<Point> distributePoints(List<PointWithIntensity> pointsWithIntensity) {

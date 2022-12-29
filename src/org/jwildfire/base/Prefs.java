@@ -47,7 +47,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_LOOK_AND_FEEL_THEME = "general.look_and_feel.theme.3";
   static final String KEY_GENERAL_PATH_IMAGES = "general.path.images";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
-  static final String KEY_GENERAL_SPECIAL_MAC_OS_FILE_HANDLING = "general.special_mac_os_file_handling";
+  static final String KEY_GENERAL_SPECIAL_MAC_OS_FILE_HANDLING = "general.special_mac_os_file_handling.1";
   static final String KEY_GENERAL_MAC_OS_SEC_BOOKMARKS = "general.mac_os_sec_bookmarks";
   static final String KEY_GENERAL_SHOW_TIPS_AT_STARTUP = "general.show_tips_at_startup";
   static final String KEY_GENERAL_LAST_TIP = "general.last_tip";

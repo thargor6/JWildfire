@@ -19,7 +19,8 @@ package org.jwildfire.create.tina.swing;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
-
+import java.util.StringTokenizer;
+import java.awt.Desktop;
 import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
@@ -33,6 +34,8 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
 import com.l2fprod.common.swing.JFontChooser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NonlinearControlsDelegate {
   private final TinaController owner;
@@ -40,6 +43,8 @@ public class NonlinearControlsDelegate {
   private VariationControlsDelegate[] variationControlsDelegates;
   private JPanel nonlinearParamsPanel;
   private int nonlinearParamsPanelBaseWidth, nonlinearParamsPanelBaseHeight;
+
+  private static final Logger logger = LoggerFactory.getLogger(NonlinearControlsDelegate.class);
 
   public NonlinearControlsDelegate(
       TinaController owner, VariationControlsDelegate[] variationControlsDelegates) {
@@ -709,6 +714,41 @@ public class NonlinearControlsDelegate {
                 }
               }
                 break;
+              case REFERENCE:
+              {
+                byte val[] = var.getFunc().getRessourceValues()[idx];
+                if (val != null) {
+                  String classnameFilenamePair = new String(val).trim();
+                  if(classnameFilenamePair.length()>0 && classnameFilenamePair.contains(" ")) {
+                    try {
+                      StringTokenizer tokenizer = new StringTokenizer(classnameFilenamePair);
+                      String className = tokenizer.nextToken();
+                      String filename = tokenizer.nextToken();
+                      byte[] resource = Tools.getRessourceAsByteArray(Class.forName(className), filename);
+                      Desktop desktop = Desktop.getDesktop();
+                      if(desktop!=null) {
+                        File tmpFile = File.createTempFile("jwf", "."+Tools.getFileExt(filename));
+                        try {
+                          String tmpFilenamename = tmpFile.getAbsolutePath();
+                          Tools.writeFile(tmpFilenamename, resource);
+                          desktop.open(new File(tmpFilenamename));
+                        }
+                        finally {
+                          tmpFile.deleteOnExit();
+                        }
+
+                      }
+                      else {
+                        throw new RuntimeException("Can not display file");
+                      }
+                    }
+                    catch(Exception ex) {
+                      logger.error(String.format("Error loading resource \"%s\"", classnameFilenamePair), ex);
+                    }
+                  }
+                }
+              }
+              break;
               case IMAGE_FILE: {
                 File file = FileDialogTools.selectImageFileForOpen(
                     owner.getMainEditorFrame(), owner.getCenterPanel(), Tools.FILEEXT_PNG, null);
