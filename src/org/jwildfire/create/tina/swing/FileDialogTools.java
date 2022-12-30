@@ -1398,6 +1398,6 @@ public class FileDialogTools {
 
   public static boolean checkReadWriteDirectory(String path) {
     File file = new File(path);
-    return file.exists() && file.isDirectory() && file.canRead() && file.canWrite();
+    return file.exists() && file.isDirectory() /*&& file.canRead() && file.canWrite()*/;
   }
 }
