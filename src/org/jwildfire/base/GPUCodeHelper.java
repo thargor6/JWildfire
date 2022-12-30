@@ -31,8 +31,29 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        "    pVarTP.x += pAmount * tanh(pAffineTP.x) * (1.0 / cos(pAffineTP.x) + effect * M_PI);\n"
-            + "    pVarTP.y += pAmount * tanh(pAffineTP.y) * (1.0 / cos(pAffineTP.y) + effect * M_PI);\n";
+        "    double x = pAmount * pAffineTP.x;\n"
+            + "    double y = pAmount * pAffineTP.y;\n"
+            + "    double fax = fabs(x);\n"
+            + "    double fay = fabs(y);\n"
+            + "\n"
+            + "    if (fax+fay>1) {\n"
+            + "      pVarTP.x += x;\n"
+            + "      pVarTP.y += y;\n"
+            + "    } else {\n"
+            + "      double t;\n"
+            + "      if (fax > fay) {\n"
+            + "        t = (x-fay+1)*.5;\n"
+            + "        if (x<0) t = (x+fay-1)*.5;\n"
+            + "        pVarTP.x += t;\n"
+            + "        pVarTP.y += y;\n"
+            + "      }\n"
+            + "      else {\n"
+            + "        t = (y-fax+1)*.5;\n"
+            + "        if (y<0) t = (y+fax-1)*.5;\n"
+            + "        pVarTP.x += x;\n"
+            + "        pVarTP.y += t;\n"
+            + "      }\n"
+            + "    }\n";
 
      System.err.println(convertCodeSwan(code, "polar", new String[]{}));
     //FlameTransformationContext ctx = new FlameTransformationContext(null, null, 1, 1);

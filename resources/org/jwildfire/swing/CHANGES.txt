@@ -1,3 +1,7 @@
+V7.54 (30.12.2022)
+ - added a check fo writable folders for flames and images, and added some guide how to setup proper paths
+
+
 V7.53 (29.12.2022)
  - fixed a bug in GPU render which did miscalulate the size of the final images
 

@@ -268,6 +268,10 @@ public class JWildfire extends JApplet {
       formulaExplorerFrame.setFormulaExplorerController(formulaExplorerController);
     }
 
+
+    checkWriteAccess(prefs.getTinaFlamePath(),"flames", "tinaFlamePath");
+    checkWriteAccess(prefs.getImagePath(), "images", "imagePath");
+
     try {
       getJFrame(MainEditorFrame.class).setTitle("Welcome to " + Tools.APP_TITLE+" "+ Tools.getAppVersion() +"!");
       getJFrame(MainEditorFrame.class).toFront();
@@ -330,6 +334,11 @@ public class JWildfire extends JApplet {
 */
   }
 
+  private void checkWriteAccess(String path, String caption, String property) {
+    if(!FileDialogTools.checkReadWriteDirectory(path)) {
+      errorHandler.showErrorMessage("Folder access", String.format("Can not access folder \"%s\" which is used to write %s. Please set up a proper path for the property \"%s\" in the Preferences.\nTo enter Preferences choose \"Settings -> Preferences\" from the main menu.\n Then select the property \"%s\" and double-click on it. You may either edit the path manually or select it by clicking at the button with the three dots.", path, caption, property, property), null);
+    }
+  }
 
   class RefreshFlameImageThread implements Runnable {
     private AtomicBoolean cancelSignalled = new AtomicBoolean();

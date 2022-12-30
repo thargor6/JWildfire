@@ -44,29 +44,41 @@ public class StandardErrorHandler implements ErrorHandler {
 
   @Override
   public void handleError(Throwable pThrowable) {
+    logger.error(pThrowable.getMessage(), pThrowable);
+    showErrorMessage(null, pThrowable.getMessage(), pThrowable);
+  }
+
+  public void showErrorMessage(String title, String message, Throwable pThrowable) {
     try {
-      logger.error(pThrowable.getMessage(), pThrowable);
+      showErrorDlg.setTitle(title != null ? title : "System error");
       Point dPos = rootFrame.getLocation();
       int dWidth = rootFrame.getWidth();
       int dHeight = rootFrame.getHeight();
       int wWidth = showErrorDlg.getWidth();
       int wHeight = showErrorDlg.getHeight();
       showErrorDlg.setLocation(dPos.x + (dWidth - wWidth) / 2, dPos.y
-          + (dHeight - wHeight) / 2);
-      {
-        String msg = pThrowable.getMessage();
-        showErrorDlgMessageTextArea.setText(msg);
-        showErrorDlgMessageTextArea.select(0, 0);
+              + (dHeight - wHeight) / 2);
+      if(message!=null) {
+        showErrorDlgMessageTextArea.setText(message);
       }
-      {
+      else {
+        showErrorDlgMessageTextArea.setText("");
+      }
+      showErrorDlgMessageTextArea.select(0, 0);
+
+      if(pThrowable!=null) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         pThrowable.printStackTrace(new PrintStream(os));
         os.flush();
         os.close();
         showErrorDlgStacktraceTextArea.setText(new String(os
-            .toByteArray()));
-        showErrorDlgStacktraceTextArea.select(0, 0);
+                .toByteArray()));
       }
+      else {
+        showErrorDlgStacktraceTextArea.setText("");
+      }
+      showErrorDlgStacktraceTextArea.select(0, 0);
+
       showErrorDlg.setModal(true);
       showErrorDlg.setVisible(true);
     }
@@ -74,7 +86,6 @@ public class StandardErrorHandler implements ErrorHandler {
       ex.printStackTrace();
     }
   }
-
   public void closeShowErrorDlg() {
     showErrorDlg.setVisible(false);
   }
