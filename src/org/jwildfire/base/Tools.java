@@ -63,7 +63,7 @@ public class
 
 Tools {
   public static final String APP_TITLE = "JWildfire";
-  private static final String APP_VERSION = "V7.55 (07.01.2022)";
+  private static final String APP_VERSION = "V7.55 (07.01.2023)";
 
   public static final boolean STEAM_EDITION = false;
   public static final boolean SPECIAL_VERSION = false;
