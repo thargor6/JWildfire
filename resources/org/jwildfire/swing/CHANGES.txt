@@ -1,3 +1,6 @@
+V7.55 (07.01.2022)
+ - fixed a bug with the display-zoom when the property tinaLegacyRealtimePreview was active
+
 V7.54 (30.12.2022)
  - added a check fo writable folders for flames and images, and added some guide how to setup proper paths
 

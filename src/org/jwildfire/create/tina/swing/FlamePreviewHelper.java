@@ -161,7 +161,7 @@ public class FlamePreviewHelper implements IterationObserver {
 
     if (pReRender) {
       if (!pQuickRender || !isProgressivePreviewEnabled(cfg) || (noRenderingWhileMouseMove && pMouseDown)) {
-        SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, noRenderingWhileMouseMove ? pDownScale : 2, pAllowUseCache);
+        SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, noRenderingWhileMouseMove ? 1 : pDownScale, pAllowUseCache);
         if (img != null) {
           imgPanel.setImage(img);
         }
