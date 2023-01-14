@@ -1022,6 +1022,8 @@ public class VariationFuncList {
     registerVariationFunc(Mobius3DWithInverseFunc.class);
     registerVariationFunc(BrushStrokeWFFunc.class);
     registerVariationFunc(PostBrushStrokeWFFunc.class);
+    
+    registerVariationFunc(Cell2Func.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
