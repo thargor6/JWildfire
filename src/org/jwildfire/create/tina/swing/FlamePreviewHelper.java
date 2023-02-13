@@ -728,7 +728,7 @@ public class FlamePreviewHelper implements IterationObserver {
     info.setRenderHDR(false);
     info.setRenderZBuffer(TinaControllerContextService.getContext().isZPass());
     renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
-    if (!prefs.isTinaLegacyRealtimePreview()) {
+    if (!prefs.isTinaLegacyRealtimePreview() && !flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
       renderer.setSleepAmount(prefs.getTinaRealtimePreviewIdleAmount());
     }
     renderer.registerIterationObserver(this);
