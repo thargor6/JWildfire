@@ -28,7 +28,8 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class VariationFuncList {
+public class
+VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
   private static final double VARIATION_COST_THRESHOLD = 0.15;
   private static final double MEMORY_THRESHOLD = 20.0;
@@ -1022,6 +1023,9 @@ public class VariationFuncList {
     registerVariationFunc(Mobius3DWithInverseFunc.class);
     registerVariationFunc(BrushStrokeWFFunc.class);
     registerVariationFunc(PostBrushStrokeWFFunc.class);
+
+    registerVariationFunc(Hourglass3DFunc.class);
+
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
