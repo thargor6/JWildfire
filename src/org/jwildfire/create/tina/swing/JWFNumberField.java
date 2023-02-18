@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -36,6 +36,9 @@ import javax.swing.event.ChangeListener;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
+
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 public class JWFNumberField extends JPanel implements MotionCurveEditor {
   private static final double DFLT_STEP = 0.5;
@@ -170,9 +173,20 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
               public void mouseReleased(MouseEvent e) {
                 mouseAdjusting = false;
 
-                ChangeListener[] changeListeners = spinnerField.getChangeListeners();
-                if(changeListeners!=null && changeListeners.length>0) {
-                  changeListeners[0].stateChanged(new ChangeEvent(spinnerField));
+                boolean hasChanged = false;
+                Object value = getValue();
+                if (value != null && value instanceof Double) {
+                  double currValue = (Double) value;
+                  hasChanged = fabs(currValue - originValue) > EPSILON;
+                } else if (value != null && value instanceof Integer) {
+                  int currValue = (Integer) value;
+                  hasChanged = currValue != originValue;
+                }
+                if(hasChanged) {
+                  ChangeListener[] changeListeners = spinnerField.getChangeListeners();
+                  if(changeListeners!=null && changeListeners.length>0) {
+                    changeListeners[0].stateChanged(new ChangeEvent(spinnerField));
+                  }
                 }
               }
             });
