@@ -6139,6 +6139,9 @@ public class MainEditorFrame extends JFrame {
       getTinaSolidRenderingShadowmapSizeCmb().addItem("4096");
       getTinaSolidRenderingShadowmapSizeCmb().addItem("4608");
       getTinaSolidRenderingShadowmapSizeCmb().addItem("5120");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("6400");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("8192");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("9600");
 
       getXFormDrawModeCmb().removeAllItems();
       getXFormDrawModeCmb().addItem(DrawMode.NORMAL);
