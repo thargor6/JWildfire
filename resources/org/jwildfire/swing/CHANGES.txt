@@ -1,3 +1,13 @@
+V7.60 (07.01.2023)
+ - several major optimizations to solid rendering:
+    -needs less render time (about 66%)
+    -more accurate calcualtion of normal vectors
+    -more accurate lighting calculation
+    -needs less spatial oversampling in order to get clear details in many cases
+ - fixed a bug which prevented entering of values into number-fields manually in some cases
+ - increased the default value of tinaRealtimePreviewIdleAmount (which causes less idling and smoother realtime-preview))
+ - changed the locale of number-fields to US, so that the decimal separator is always a dot (".")
+
 V7.55 (07.01.2023)
  - fixed a bug with the display-zoom when the property tinaLegacyRealtimePreview was active
 

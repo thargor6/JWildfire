@@ -1,41 +1,37 @@
 /*
-  JWildfire - an image and animation processor written in Java 
+  JWildfire - an image and animation processor written in Java
   Copyright (C) 1995-2023 Andreas Maschke
 
-  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
-  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) any later version.
- 
-  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  You should have received a copy of the GNU Lesser General Public License along with this software;
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 package org.jwildfire.create.tina.swing;
 
+import org.jwildfire.base.Tools;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.util.EventObject;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import org.jwildfire.base.Tools;
-import org.jwildfire.base.mathlib.MathLib;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
@@ -44,6 +40,9 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
   private static final double DFLT_STEP = 0.5;
   private static final double DFLT_MOUSE_SPEED = 0.40;
   private static final long serialVersionUID = 1L;
+  private final SpinnerNumberModel spinnerModel;
+  private final JSpinner spinnerField;
+  private final JButton motionCurveBtn;
   private double mouseSpeed;
   private double valueStep;
   private boolean hasMinValue = false;
@@ -53,42 +52,14 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
   private int xMouseOrigin = 0;
   private double originValue = 0.0;
   private boolean onlyIntegers = false;
-  private SpinnerNumberModel spinnerModel;
   private boolean mouseAdjusting = false;
   private int mouseChangeCount = 0;
   private boolean withMotionCurve = false;
   private String motionPropertyName = "";
-
   private String linkedMotionControlName = "";
   private Component linkedMotionControl = null;
-
   private String linkedLabelControlName = "";
   private Component linkedLabelControl = null;
-
-  private JSpinner spinnerField;
-  private JButton motionCurveBtn;
-
-  public static class JWFNumberFieldButton extends JButton {
-    private static final long serialVersionUID = 1L;
-    private JWFNumberField owner;
-
-    public JWFNumberFieldButton() {
-      super();
-    }
-
-    public JWFNumberFieldButton(JWFNumberField pOwner) {
-      super();
-      owner = pOwner;
-    }
-
-    public JWFNumberField getOwner() {
-      return owner;
-    }
-
-    public void setOwner(JWFNumberField pOwner) {
-      owner = pOwner;
-    }
-  }
 
   public JWFNumberField() {
     setLayout(new BorderLayout());
@@ -97,33 +68,34 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     motionCurveBtn.setText("");
     motionCurveBtn.setToolTipText("Create/edit a motion curve");
     motionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 8));
-    motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2-empty.png")));
+    motionCurveBtn.setIcon(
+        new ImageIcon(
+            getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2-empty.png")));
 
     add(motionCurveBtn, BorderLayout.WEST);
-    /*
-        spinnerField = new JSpinner();
-        add(spinnerField, BorderLayout.CENTER);
-        spinnerModel = new SpinnerNumberModel(new Double(0), null, null, new Double(valueStep));
-        spinnerField.setModel(spinnerModel);
-      */
     spinnerModel = new SpinnerNumberModel(new Double(0), null, null, new Double(valueStep));
-    spinnerField = new JSpinner(spinnerModel) {
-      @Override
-      protected JComponent createEditor(SpinnerModel model) {
-        return new NumberEditor(this, "0.#######");
-      }
-    };
+    spinnerField =
+        new JSpinner(spinnerModel) {
+          @Override
+          protected JComponent createEditor(SpinnerModel model) {
+            // return new NumberEditor(this, "0.#######");
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+            DecimalFormat format = new DecimalFormat("0.#######", symbols);
+            return new JWFNumberEditor(this, format);
+          }
+        };
     add(spinnerField, BorderLayout.CENTER);
 
     setValueStep(DFLT_STEP);
     setMouseSpeed(DFLT_MOUSE_SPEED);
     addEvents();
-    ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().setHorizontalAlignment(JTextField.LEADING);
+    ((JSpinner.DefaultEditor) spinnerField.getEditor())
+        .getTextField()
+        .setHorizontalAlignment(JTextField.LEADING);
 
     configureMotionCurveBtn(withMotionCurve);
 
     setCursor();
-
   }
 
   private void configureMotionCurveBtn(boolean visible) {
@@ -144,7 +116,9 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
   }
 
   private void setCursor() {
-    ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+    ((JSpinner.DefaultEditor) spinnerField.getEditor())
+        .getTextField()
+        .setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
   }
 
   private void addEvents() {
@@ -182,57 +156,66 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
                   int currValue = (Integer) value;
                   hasChanged = currValue != originValue;
                 }
-                if(hasChanged) {
+                if (hasChanged) {
                   ChangeListener[] changeListeners = spinnerField.getChangeListeners();
-                  if(changeListeners!=null && changeListeners.length>0) {
+                  if (changeListeners != null && changeListeners.length > 0) {
                     changeListeners[0].stateChanged(new ChangeEvent(spinnerField));
                   }
                 }
               }
             });
 
-    ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().addMouseMotionListener(
-        new java.awt.event.MouseMotionAdapter() {
+    ((JSpinner.DefaultEditor) spinnerField.getEditor())
+        .getTextField()
+        .addMouseMotionListener(
+            new java.awt.event.MouseMotionAdapter() {
 
-          @Override
-          public void mouseDragged(MouseEvent e) {
-            if (!isEnabled())
-              return;
-            double MINMOVE = 3;
-            double dx = xMouseOrigin - e.getX();
-            if (mouseChangeCount > 0 || dx > MINMOVE || dx < -MINMOVE) {
-              double value = (originValue) - dx * valueStep * mouseSpeed * EditingPrecision.getCurrent().getMultiplier();
-              if (hasMinValue && value < minValue) {
-                value = minValue;
+              @Override
+              public void mouseDragged(MouseEvent e) {
+                if (!isEnabled()) return;
+                double MINMOVE = 3;
+                double dx = xMouseOrigin - e.getX();
+                if (mouseChangeCount > 0 || dx > MINMOVE || dx < -MINMOVE) {
+                  double value =
+                      (originValue)
+                          - dx
+                              * valueStep
+                              * mouseSpeed
+                              * EditingPrecision.getCurrent().getMultiplier();
+                  if (hasMinValue && value < minValue) {
+                    value = minValue;
+                  } else if (hasMaxValue && value > maxValue) {
+                    value = maxValue;
+                  }
+                  spinnerField.setValue(value);
+                  mouseChangeCount++;
+                }
               }
-              else if (hasMaxValue && value > maxValue) {
-                value = maxValue;
-              }
-              spinnerField.setValue(value);
-              mouseChangeCount++;
-            }
-          }
+            });
 
-        });
-
-    ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().addMouseWheelListener(
+    ((JSpinner.DefaultEditor) spinnerField.getEditor())
+        .getTextField()
+        .addMouseWheelListener(
             new java.awt.event.MouseWheelListener() {
 
               @Override
               public void mouseWheelMoved(MouseWheelEvent e) {
-                if (!isEnabled())
-                  return;
+                if (!isEnabled()) return;
                 int notches = e.getWheelRotation();
-                if(notches!=0) {
+                if (notches != 0) {
                   if (onlyIntegers) {
-                    setValue(getDoubleValue() - (notches > 0 ? 1: -1));
+                    setValue(getDoubleValue() - (notches > 0 ? 1 : -1));
                   } else {
                     setValue(getDoubleValue() - notches * valueStep);
                   }
                 }
               }
             });
+  }
 
+  public String getText() {
+    // return Tools.doubleToString((Double) getValue());
+    return ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().getText();
   }
 
   public void setText(String pText) {
@@ -242,19 +225,13 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
         val = Tools.FTOI(val);
       }
       spinnerField.setValue(val);
-    }
-    else
-      spinnerField.setValue(0.0);
-  }
-
-  public String getText() {
-    return Tools.doubleToString((Double) getValue());
+    } else spinnerField.setValue(0.0);
   }
 
   public void setToolTipText(String pText) {
     spinnerField.setToolTipText(pText);
   }
-  
+
   public boolean isHasMinValue() {
     return hasMinValue;
   }
@@ -303,8 +280,7 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     this.onlyIntegers = onlyIntegers;
     if (onlyIntegers) {
       spinnerModel.setStepSize(1.0);
-    }
-    else {
+    } else {
       spinnerModel.setStepSize(valueStep);
     }
   }
@@ -317,12 +293,15 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     return val;
   }
 
+  public void setValue(double value) {
+    spinnerField.setValue(value);
+  }
+
   public Integer getIntValue() {
     Object value = getValue();
     if (value instanceof Double) {
       return Tools.FTOI((Double) value);
-    }
-    else {
+    } else {
       return (Integer) value;
     }
   }
@@ -331,8 +310,7 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     Object value = getValue();
     if (value instanceof Integer) {
       return 1.0 * ((Integer) value);
-    }
-    else {
+    } else {
       return (Double) value;
     }
   }
@@ -343,15 +321,10 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
 
   public int getMouseChangeCount() {
     return mouseChangeCount;
-
   }
 
   public void addChangeListener(ChangeListener listener) {
     spinnerField.addChangeListener(listener);
-  }
-
-  public void setValue(double value) {
-    spinnerField.setValue(value);
   }
 
   @Override
@@ -395,7 +368,9 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
   }
 
   public Component getLinkedMotionControl() {
-    if (linkedMotionControlName != null && linkedMotionControlName.length() > 0 && linkedMotionControl == null) {
+    if (linkedMotionControlName != null
+        && linkedMotionControlName.length() > 0
+        && linkedMotionControl == null) {
       for (Component component : getParent().getComponents()) {
         if (linkedMotionControlName.equals(component.getName())) {
           linkedMotionControl = component;
@@ -419,8 +394,7 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     for (Component component : parent.getComponents()) {
       if (component instanceof JLabel && name.equals(component.getName())) {
         return (JLabel) component;
-      }
-      else if (component instanceof Container) {
+      } else if (component instanceof Container) {
         JLabel res = _findControl((Container) component, name);
         if (res != null) {
           return res;
@@ -431,7 +405,9 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
   }
 
   public JLabel getLinkedLabelControl() {
-    if (linkedLabelControlName != null && linkedLabelControlName.length() > 0 && linkedLabelControl == null) {
+    if (linkedLabelControlName != null
+        && linkedLabelControlName.length() > 0
+        && linkedLabelControl == null) {
       Container parent = getParent();
       while (parent != null && linkedLabelControl == null) {
         linkedLabelControl = _findControl(parent, linkedLabelControlName);
@@ -441,23 +417,23 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     return (JLabel) linkedLabelControl;
   }
 
+  public boolean isEnabled() {
+    return spinnerField.isEnabled();
+  }
+
   public void setEnabled(boolean enabled) {
     spinnerField.setEnabled(enabled);
     motionCurveBtn.setEnabled(enabled);
-  }
-
-  public boolean isEnabled() {
-    return spinnerField.isEnabled();
   }
 
   public void enableMotionCurveBtn(boolean enabled) {
     motionCurveBtn.setEnabled(enabled);
   }
 
-/*  public void enableSpinnerField(boolean enabled) {
-    spinnerField.setEnabled(enabled);
-  }
-*/
+  /*  public void enableSpinnerField(boolean enabled) {
+      spinnerField.setEnabled(enabled);
+    }
+  */
   public double getMouseSpeed() {
     return mouseSpeed;
   }
@@ -477,11 +453,104 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
   public void setHasCurve(boolean pHasCurve) {
     if (motionCurveBtn != null) {
       if (pHasCurve) {
-        motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2a.png")));
-      }
-      else {
-        motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2-empty.png")));
+        motionCurveBtn.setIcon(
+            new ImageIcon(
+                getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2a.png")));
+      } else {
+        motionCurveBtn.setIcon(
+            new ImageIcon(
+                getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2-empty.png")));
       }
     }
+  }
+
+  public static class JWFNumberFieldButton extends JButton {
+    private static final long serialVersionUID = 1L;
+    private JWFNumberField owner;
+
+    public JWFNumberFieldButton() {
+      super();
+    }
+
+    public JWFNumberFieldButton(JWFNumberField pOwner) {
+      super();
+      owner = pOwner;
+    }
+
+    public JWFNumberField getOwner() {
+      return owner;
+    }
+
+    public void setOwner(JWFNumberField pOwner) {
+      owner = pOwner;
+    }
+  }
+}
+
+class JWFNumberEditor extends JSpinner.DefaultEditor {
+
+  public JWFNumberEditor(JSpinner spinner, DecimalFormat format) {
+    super(spinner);
+    if (!(spinner.getModel() instanceof SpinnerNumberModel)) {
+      throw new IllegalArgumentException("model not a SpinnerNumberModel");
+    }
+    SpinnerNumberModel model = (SpinnerNumberModel) spinner.getModel();
+    NumberFormatter formatter = new JWFNumberEditorFormatter(model, format);
+    DefaultFormatterFactory factory = new DefaultFormatterFactory(formatter);
+    JFormattedTextField ftf = getTextField();
+    ftf.setEditable(true);
+    ftf.setFormatterFactory(factory);
+    ftf.setHorizontalAlignment(JTextField.RIGHT);
+    try {
+      String maxString = formatter.valueToString(model.getMinimum());
+      String minString = formatter.valueToString(model.getMaximum());
+      ftf.setColumns(Math.max(maxString.length(), minString.length()));
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public DecimalFormat getFormat() {
+    return (DecimalFormat) ((NumberFormatter) (getTextField().getFormatter())).getFormat();
+  }
+
+  public SpinnerNumberModel getModel() {
+    return (SpinnerNumberModel) (getSpinner().getModel());
+  }
+
+  @Override
+  public void setComponentOrientation(ComponentOrientation o) {
+    super.setComponentOrientation(o);
+    getTextField().setHorizontalAlignment(o.isLeftToRight() ? JTextField.RIGHT : JTextField.LEFT);
+  }
+}
+
+class JWFNumberEditorFormatter extends NumberFormatter {
+  private final SpinnerNumberModel model;
+
+  JWFNumberEditorFormatter(SpinnerNumberModel model, NumberFormat format) {
+    super(format);
+    this.model = model;
+    setValueClass(model.getValue().getClass());
+  }
+
+  @Override
+  public Comparable<?> getMinimum() {
+    return model.getMinimum();
+  }
+
+  @Override
+  public void setMinimum(Comparable min) {
+    model.setMinimum(min);
+  }
+
+  @Override
+  public Comparable<?> getMaximum() {
+    return model.getMaximum();
+  }
+
+  @Override
+  public void setMaximum(Comparable max) {
+    model.setMaximum(max);
   }
 }
