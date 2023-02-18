@@ -1023,6 +1023,8 @@ VariationFuncList {
     registerVariationFunc(Mobius3DWithInverseFunc.class);
     registerVariationFunc(BrushStrokeWFFunc.class);
     registerVariationFunc(PostBrushStrokeWFFunc.class);
+    
+    registerVariationFunc(Cell2Func.class);
 
     registerVariationFunc(Hourglass3DFunc.class);
 
