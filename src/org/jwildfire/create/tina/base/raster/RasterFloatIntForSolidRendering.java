@@ -121,6 +121,9 @@ public class RasterFloatIntForSolidRendering extends RasterFloatInt {
     }
   }
 
+  private static final int MAX_NORMALS_SAMPLES = 2;
+  private static final double NORMALS_REFRESH_RATE = 0.125;
+
   @Override
   public synchronized void addSamples(PlotSample[] pPlotBuffer, int pCount) {
     for (int i = 0; i < pCount; i++) {
@@ -153,8 +156,9 @@ public class RasterFloatIntForSolidRendering extends RasterFloatInt {
         if (withDOF) {
           dofBuf[x][y] = (float) sample.dofDist;
         }
-        if ((normalsCalculator.hasNormalAtLocation(x, y) && randGen.random() > 0.85) || randGen.random() > 0.5) {
-          normalsCalculator.refreshNormalAtLocation(x, y);
+        double r = randGen.random();
+        if (!normalsCalculator.hasNormalAtLocation(x, y) || r < NORMALS_REFRESH_RATE) {
+          normalsCalculator.refreshNormalAtLocation(x, y, MAX_NORMALS_SAMPLES);
         }
       }
     }
@@ -164,11 +168,11 @@ public class RasterFloatIntForSolidRendering extends RasterFloatInt {
   public void finalizeRaster() {
     // No call to super here
     normalsCalculator.refreshAllNormals();
-
+/*
     nxBuf = RasterTools.medianCut(nxBuf);
     nyBuf = RasterTools.medianCut(nyBuf);
     nzBuf = RasterTools.medianCut(nzBuf);
-
+*/
     aoBuf = new float[rasterWidth][rasterHeight];
     if (aoCalculator != null) {
       aoCalculator.refreshAO(aoBuf);

@@ -470,14 +470,20 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public class DefaultPointProjector implements PointProjector {
-    XYZPoint untransformed = new XYZPoint();
+    final XYZPoint untransformed = new XYZPoint();
 
     @Override
     public void projectPoint(XYZPoint q) {
       if (q.doHide)
         return;
-      // TODO overkill, need only xyz
-      untransformed.assign(q);
+      //untransformed.assign(q);
+      untransformed.x = q.x;
+      untransformed.y = q.y;
+      untransformed.z = q.z;
+      untransformed.redColor = q.redColor;
+      untransformed.greenColor = q.greenColor;
+      untransformed.blueColor = q.blueColor;
+
       boolean insideView = view.project(q, prj);
       if (prj.hasLight != null && !p.receiveOnlyShadows) {
         for (int i = 0; i < prj.hasLight.length; i++) {

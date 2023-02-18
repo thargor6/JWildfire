@@ -530,8 +530,7 @@ public class LogDensityFilter {
           DistantLight light = flame.getSolidRenderSettings().getLights().get(i);
           VectorD lightDir = lightViewCalculator.getLightDir()[i];
           double visibility = light.isCastShadows() && rp.hasShadows ? rp.visibility[i] : avgVisibility;
-
-          double cosa = VectorD.dot(lightDir, normal);
+          double cosa = -VectorD.dot(lightDir, normal);
           if (cosa > MathLib.EPSILON) {
             double diffResponse = material.getLightDiffFunc().evaluate(cosa);
             rawColor.addFrom(
@@ -548,7 +547,6 @@ public class LogDensityFilter {
                   visibility * specularResponse * specularIntensity * light.getIntensity());
             }
           }
-
           // http://www.reindelsoftware.com/Documents/Mapping/Mapping.html
           if (reflectionMap != null) {
             double reflectionMapIntensity = Math.max(0.0, withSSAO ? (material.getReflMapIntensity() - rp.ao * aoInt * aoDiffuseInfluence) : material.getReflMapIntensity());
