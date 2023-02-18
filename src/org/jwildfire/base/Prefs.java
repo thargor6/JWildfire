@@ -150,7 +150,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_GPU_MODE_DEFAULT_ENABLED = "tina.gpu_mode_default_enabled";
   static final String KEY_TINA_LEGACY_REALTIME_PREVIEW = "tina.legacy_realtime_preview";
 
-  static final String KEY_TINA_REALTIME_PREVIEW_IDLE_AMOUNT = "tina.realtime_preview_idle_amount";
+  static final String KEY_TINA_REALTIME_PREVIEW_IDLE_AMOUNT = "tina.realtime_preview_idle_amount.2";
 
   static final String KEY_TINA_FARENDER_OPTS = "tina.farender_opts";
   static final String KEY_TINA_DEFAULT_NEW_FLAME_TITLE = "tina.default.new_flame_title";
@@ -264,7 +264,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaLegacyRealtimePreview = false;
 
   @Property(description = "Amount of idle cpu-time when refreshing the realtime preview. The lower the value, the more idle time, i. e. the less cpu power will be utilized, which means slower refresh, but less system-load. A value of zero means to turn idling of the cpu off, which means both maximum refresh rate and maximum system load. This property only applies only when tinaLegacyRealtimePreview is set to false. A change of this property requires a program-restart.", category = PropertyCategory.TINA)
-  private int tinaRealtimePreviewIdleAmount = 1000;
+  private int tinaRealtimePreviewIdleAmount = 10000;
 
   @Property(description = "Commandline-options added when invokling the external GPU-renderer. Refer to the documentation or sourcecode for more information.", category = PropertyCategory.TINA)
   private String tinaFARenderOptions = "-nde";
