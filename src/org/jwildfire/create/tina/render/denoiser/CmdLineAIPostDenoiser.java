@@ -24,7 +24,7 @@ public abstract class CmdLineAIPostDenoiser implements AIPostDenoiser {
   private final String FILE_EXT = "_denoise";
   private final String DENOISER_PATH = "Denoiser";
 
-  // Changes the original image as a side-effect. Could be easily changed, but this would requiere more memory.
+  // Changes the original image as a side effect. Could be easily changed, but this would require more memory.
   // On the other side, the original image is not needed in any way.
   @Override
   public SimpleImage denoise(SimpleImage img, double blend) {

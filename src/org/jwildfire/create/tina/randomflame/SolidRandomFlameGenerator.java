@@ -19,6 +19,8 @@ package org.jwildfire.create.tina.randomflame;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.solidrender.DistantLight;
+import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.variation.PrimitivesWFFunc;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -30,13 +32,20 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
   protected void randomizeSolidRenderingSettings(Flame flame) {
     flame.getSolidRenderSettings().setSolidRenderingEnabled(true);
     flame.setPreserveZ(true);
-    flame.getSolidRenderSettings().getMaterials().get(0).setDiffuse(0.6 + Math.random() * 0.4);
+    flame.getSolidRenderSettings().getMaterials().get(0).setDiffuse(0.3 + Math.random() * 0.3);
     flame.getSolidRenderSettings().getMaterials().get(0).setAmbient(0.7 + Math.random() * 0.3);
     flame.getSolidRenderSettings().getMaterials().get(0).setPhong(0.2 + Math.random() * 0.8);
     flame.getSolidRenderSettings().getMaterials().get(0).setPhongSize(2.0 + Math.random() * 10.0);
 
-    flame.getSolidRenderSettings().getLights().get(0).setAzimuth(60.0 + Math.random() * 60.0);
-    flame.getSolidRenderSettings().getLights().get(0).setAltitude(Math.random() * 360.0);
+    flame.getSolidRenderSettings().getMaterials().get(0).setLightDiffFunc(Math.random() < 0.5 ? LightDiffFuncPreset.COSA_SQUARE: LightDiffFuncPreset.COSA);
+
+    flame.getSolidRenderSettings().getLights().get(0).setAltitude(60.0 + Math.random() * 60.0);
+    flame.getSolidRenderSettings().getLights().get(0).setAzimuth(Math.random() * 360.0);
+
+    flame.getSolidRenderSettings().setShadowType(ShadowType.FAST);
+
+    flame.getSolidRenderSettings().setShadowmapSize(4096);
+    flame.getSolidRenderSettings().setShadowmapBias(0.05+Math.random()*0.1);
   }
 
   protected VariationFunc getRandomVariation() {

@@ -84,7 +84,7 @@ public class ShadowCalculator implements Serializable {
     lightY = new double[lightCount];
     shadowIntensity = new double[lightCount];
 
-    shadowMapSize = flame.getSolidRenderSettings().getShadowmapSize();
+    shadowMapSize = Tools.FTOI(flame.getSolidRenderSettings().getShadowmapSize() * flame.getPixelsPerUnitScale());
     if (shadowMapSize < 64) {
       shadowMapSize = 64;
     }
