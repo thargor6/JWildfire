@@ -528,9 +528,10 @@ public class LogDensityFilter {
 
         for (int i = 0; i < flame.getSolidRenderSettings().getLights().size(); i++) {
           DistantLight light = flame.getSolidRenderSettings().getLights().get(i);
-          VectorD lightDir = lightViewCalculator.getLightDir()[i];
+          VectorD lightDir = lightViewCalculator.
+                  getLightDir()[i];
           double visibility = light.isCastShadows() && rp.hasShadows ? rp.visibility[i] : avgVisibility;
-          double cosa = -VectorD.dot(lightDir, normal);
+          double cosa = VectorD.dot(lightDir, normal);
           if (cosa > MathLib.EPSILON) {
             double diffResponse = material.getLightDiffFunc().evaluate(cosa);
             rawColor.addFrom(

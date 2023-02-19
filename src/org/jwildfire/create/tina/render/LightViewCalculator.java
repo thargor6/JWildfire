@@ -58,7 +58,8 @@ public class LightViewCalculator implements Serializable {
       a.m[2][1] = sina;
       a.m[2][2] = cosa * cosb;
 
-      lightDir[i] = Matrix3D.multiply(a, new VectorD(0.0, 0.0, -1.0));
+      Matrix3D aT = Matrix3D.transpose(a);
+      lightDir[i] = Matrix3D.multiply(aT, new VectorD(0.0, 0.0, -1.0));
 
       if (light.isCastShadows()) {
         lightProjectionMatrix[i] = a;

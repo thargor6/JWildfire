@@ -284,5 +284,19 @@ public final class VecMathLib {
       res.z = v.x * a.m[2][0] + v.y * a.m[2][1] + v.z * a.m[2][2];
       return res;
     }
+
+    public static Matrix3D transpose(Matrix3D a) {
+      Matrix3D res = new Matrix3D();
+      res.m[0][0] = a.m[0][0];
+      res.m[0][1] = a.m[1][0];
+      res.m[0][2] = a.m[2][0];
+      res.m[1][0] = a.m[0][1];
+      res.m[1][1] = a.m[1][1];
+      res.m[1][2] = a.m[2][1];
+      res.m[2][0] = a.m[0][2];
+      res.m[2][1] = a.m[1][2];
+      res.m[2][2] = a.m[2][2];
+      return res;
+    }
   }
 }
