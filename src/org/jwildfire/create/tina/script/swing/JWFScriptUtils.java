@@ -103,8 +103,7 @@ public class JWFScriptUtils {
 
               "YU-", "YU--Choose", "YU--cot", "YU--coth", "YU--cothtest", "YU--csc",
               "YU--csch", "YU--curl", "YU--curlZO", "YU--foci", "YU--ho", "YU--invpolar",
-              "YU--log", "YU--secant", "YU--spiralwing", "YU--tancos", "YU-Yugen"
-
+              "YU--log", "YU--secant", "YU--spiralwing", "YU--tancos", "YU-Yugen",
       };
       List<String> resLst = Arrays.asList(ressources);
       Collections.sort(resLst);

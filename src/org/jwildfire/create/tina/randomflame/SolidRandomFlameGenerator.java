@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.randomflame;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.solidrender.DistantLight;
+import org.jwildfire.create.tina.variation.PrimitivesWFFunc;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
@@ -29,6 +30,13 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
   protected void randomizeSolidRenderingSettings(Flame flame) {
     flame.getSolidRenderSettings().setSolidRenderingEnabled(true);
     flame.setPreserveZ(true);
+    flame.getSolidRenderSettings().getMaterials().get(0).setDiffuse(0.6 + Math.random() * 0.4);
+    flame.getSolidRenderSettings().getMaterials().get(0).setAmbient(0.7 + Math.random() * 0.3);
+    flame.getSolidRenderSettings().getMaterials().get(0).setPhong(0.2 + Math.random() * 0.8);
+    flame.getSolidRenderSettings().getMaterials().get(0).setPhongSize(2.0 + Math.random() * 10.0);
+
+    flame.getSolidRenderSettings().getLights().get(0).setAzimuth(60.0 + Math.random() * 60.0);
+    flame.getSolidRenderSettings().getLights().get(0).setAltitude(Math.random() * 360.0);
   }
 
   protected VariationFunc getRandomVariation() {
@@ -48,7 +56,7 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
 
   protected VariationFunc getRandom3DShape() {
     VariationFunc varFunc;
-    switch (Tools.randomInt(10)) {
+    switch (Tools.randomInt(23)) {
       case 0: {
         varFunc = VariationFuncList.getVariationFuncInstance("yplot2d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getYPlot2DWFFuncPresets().getRandomPresetId());
@@ -61,6 +69,7 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("direct_color", 1);
         break;
       }
+      case 9:
       case 1: {
         varFunc = VariationFuncList.getVariationFuncInstance("yplot3d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getYPlot3DWFFuncPresets().getRandomPresetId());
@@ -73,7 +82,10 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("direct_color", 1);
         break;
       }
-      case 7: {
+      case 10:
+      case 11:
+      case 12:
+      case 2: {
         varFunc = VariationFuncList.getVariationFuncInstance("polarplot2d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getPolarPlot2DWFFuncPresets().getRandomPresetId());
         varFunc.setParameter("tmin", -Math.PI);
@@ -85,8 +97,11 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("direct_color", 1);
         break;
       }
-      case 8:
-      case 9: {
+      case 14:
+      case 15:
+      case 16:
+      case 17:
+      case 3: {
         varFunc = VariationFuncList.getVariationFuncInstance("polarplot3d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getPolarPlot3DWFFuncPresets().getRandomPresetId());
         varFunc.setParameter("tmin", -Math.PI);
@@ -98,8 +113,11 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("direct_color", 1);
         break;
       }
-      case 2:
-      case 3: {
+      case 18:
+      case 19:
+      case 20:
+      case 21:
+      case 4: {
         varFunc = VariationFuncList.getVariationFuncInstance("parplot2d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getParPlot2DWFFuncPresets().getRandomPresetId());
         varFunc.setParameter("umin", -Math.PI);
@@ -110,8 +128,7 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("color_mode", Math.random() > 0.666 ? 2 : Math.random() < 0.5 ? 0 : 1);
         break;
       }
-      case 4:
-      case 6: {
+      case 5: {
         varFunc = VariationFuncList.getVariationFuncInstance("dla3d_wf", true);
         varFunc.setParameter("max_iter", 100 + Math.random() * 200);
         varFunc.setParameter("inner_blur_radius", Math.random() * 0.5 + 0.1);
@@ -119,8 +136,8 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("glue_radius", 0.6 + Math.random() * 0.8);
         break;
       }
-      case 5:
-      default: {
+      case 6:
+      {
         varFunc = VariationFuncList.getVariationFuncInstance("obj_mesh_primitive_wf", true);
         varFunc.setParameter("primitive", Tools.randomInt(OBJMeshPrimitiveWFFunc.LOWPOLY_SHAPE_COUNT));
         varFunc.setParameter("scale_x", 1);
@@ -133,6 +150,14 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("subdiv_smooth_passes", 12);
         varFunc.setParameter("subdiv_smooth_lambda", 0.42);
         varFunc.setParameter("subdiv_smooth_mu", -0.45);
+        break;
+      }
+      case 7:
+      case 8:
+      default:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("primitives_wf", true);
+        varFunc.setParameter("shape", Tools.randomInt(PrimitivesWFFunc.SHAPE_COUNT));
         break;
       }
     }

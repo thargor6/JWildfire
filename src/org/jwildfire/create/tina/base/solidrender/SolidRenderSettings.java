@@ -74,8 +74,8 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     {
       DistantLight light = new DistantLight();
       lights.add(light);
-      light.setAltitude(60);
-      light.setAzimuth(-30.0);
+      light.setAltitude(55);
+      light.setAzimuth(-22);
       light.setIntensity(0.8);
       light.setShadowIntensity(0.8);
       light.setRed(1.0);
@@ -87,9 +87,9 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     {
       DistantLight light = new DistantLight();
       lights.add(light);
-      light.setAltitude(55);
-      light.setAzimuth(-15.0);
-      light.setIntensity(0.5);
+      light.setAltitude(64);
+      light.setAzimuth(55);
+      light.setIntensity(0.6);
       light.setShadowIntensity(0.7);
       light.setRed(1.0);
       light.setGreen(1.0);
@@ -103,24 +103,10 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     materials.clear();
     {
       MaterialSettings material = new MaterialSettings();
-      material.setAmbient(0.6);
-      material.setDiffuse(0.4);
-      material.setPhong(0.8);
-      material.setPhongSize(12.0);
-      material.setPhongRed(1.0);
-      material.setPhongGreen(1.0);
-      material.setPhongBlue(1.0);
-      material.setReflMapIntensity(0.5);
-      material.setReflMapFilename(null);
-      materials.add(material);
-    }
-
-    {
-      MaterialSettings material = new MaterialSettings();
-      material.setAmbient(0.8);
-      material.setDiffuse(0.1);
+      material.setAmbient(0.5);
+      material.setDiffuse(0.7);
       material.setPhong(0.6);
-      material.setPhongSize(15.0);
+      material.setPhongSize(24.0);
       material.setPhongRed(1.0);
       material.setPhongGreen(1.0);
       material.setPhongBlue(1.0);

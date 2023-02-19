@@ -42,7 +42,7 @@ public class SolidJulia3DRandomFlameGenerator extends SolidRandomFlameGenerator 
     flame.setWidth(601);
     flame.setHeight(338);
     flame.setPixelsPerUnit(100.0+Math.random()*100.0);
-    flame.setCamZoom(0.3 + Math.random() * 0.5);
+    flame.setCamZoom(0.6 + Math.random() * 0.7);
 
     randomizeSolidRenderingSettings(flame);
 

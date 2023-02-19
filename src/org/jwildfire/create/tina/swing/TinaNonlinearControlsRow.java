@@ -263,7 +263,6 @@ public class TinaNonlinearControlsRow {
 
   private void addNumberField(final String pParamName, Object pParamValue, int pOffset) {
     final JWFNumberField field = new JWFNumberField();
-    field.setValueStep(0.01);
     field.setPreferredSize(new Dimension(56, 24));
     field.setText("");
     field.setSize(new Dimension(NUMBERFIELD_WIDTH, 24));
@@ -271,9 +270,11 @@ public class TinaNonlinearControlsRow {
     field.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     if (pParamValue != null) {
       if (pParamValue instanceof Integer) {
+        field.setValueStep(1.0);
         field.setOnlyIntegers(true);
         field.setValue((Integer) pParamValue);
       } else {
+        field.setValueStep(0.01);
         field.setValue((Double) pParamValue);
       }
     }
@@ -302,7 +303,6 @@ public class TinaNonlinearControlsRow {
         }
       }
     });
-
   }
 
   private void refreshSliderWithoutRefresh(String pParamName, double pValue) {

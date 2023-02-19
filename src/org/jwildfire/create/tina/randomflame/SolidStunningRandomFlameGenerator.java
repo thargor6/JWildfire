@@ -38,7 +38,7 @@ public class SolidStunningRandomFlameGenerator extends SolidRandomFlameGenerator
     flame.setWidth(601);
     flame.setHeight(338);
     flame.setPixelsPerUnit(100.0+Math.random()*100.0);
-    flame.setCamZoom(0.3 + Math.random() * 0.5);
+    flame.setCamZoom(0.5 + Math.random() * 0.7);
 
     randomizeSolidRenderingSettings(flame);
 
