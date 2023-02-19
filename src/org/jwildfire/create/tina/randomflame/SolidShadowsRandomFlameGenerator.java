@@ -43,6 +43,7 @@ public class SolidShadowsRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new SolidStunningRandomFlameGenerator());
     generators.add(new SolidJulia3DRandomFlameGenerator());
     generators.add(new SolidStunningRandomFlameGenerator());
+    generators.add(new SolidrecursiveRandomFlameGenerator());
   }
 
   private static final String SOLID_RANDGEN = "SOLID_RANDGEN";

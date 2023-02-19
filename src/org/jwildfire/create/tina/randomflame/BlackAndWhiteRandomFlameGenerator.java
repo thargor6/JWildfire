@@ -74,6 +74,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
       generators.add(new SolidJulia3DRandomFlameGenerator());
       generators.add(new SolidShadowsRandomFlameGenerator());
       generators.add(new SolidLabyrinthRandomFlameGenerator());
+      generators.add(new SolidrecursiveRandomFlameGenerator());
     }
     generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new SphericalRandomFlameGenerator());

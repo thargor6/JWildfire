@@ -75,7 +75,8 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
       allGenerators.add(new SolidStunningRandomFlameGenerator());
       allGenerators.add(new SolidJulia3DRandomFlameGenerator());
       allGenerators.add(new SolidShadowsRandomFlameGenerator());
-      //allGenerators.add(new SolidLabyrinthRandomFlameGenerator());
+      allGenerators.add(new SolidrecursiveRandomFlameGenerator());
+      allGenerators.add(new SolidLabyrinthRandomFlameGenerator());
     }
     allGenerators.add(new SphericalRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
