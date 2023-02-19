@@ -78,8 +78,15 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("direct_color", 1);
         break;
       }
-      case 9:
-      case 1: {
+      case 1:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("seashell3D", true);
+        varFunc.setParameter("height", 3.0 + Math.random()*3.0);
+        varFunc.setParameter("inner_radius", 0.2+Math.random()*0.4);
+        varFunc.setParameter("final_radius", 0.2+Math.random()*0.4);
+        break;
+      }
+      case 2: {
         varFunc = VariationFuncList.getVariationFuncInstance("yplot3d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getYPlot3DWFFuncPresets().getRandomPresetId());
         varFunc.setParameter("xmin", -3);
@@ -91,10 +98,22 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("direct_color", 1);
         break;
       }
-      case 10:
-      case 11:
-      case 12:
-      case 2: {
+      case 3:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("text_wf", true);
+        break;
+      }
+      case 4:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("terrain3D", true);
+        break;
+      }
+      case 5:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("superShape3d", true);
+        break;
+      }
+      case 6: {
         varFunc = VariationFuncList.getVariationFuncInstance("polarplot2d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getPolarPlot2DWFFuncPresets().getRandomPresetId());
         varFunc.setParameter("tmin", -Math.PI);
@@ -106,11 +125,27 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("direct_color", 1);
         break;
       }
-      case 14:
-      case 15:
-      case 16:
-      case 17:
-      case 3: {
+      case 7:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("sunflower", true);
+        break;
+      }
+      case 8:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("rhodonea", true);
+        break;
+      }
+      case 9:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("dustpoint", true);
+        break;
+      }
+      case 10:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("klein_group", true);
+        break;
+      }
+      case 11: {
         varFunc = VariationFuncList.getVariationFuncInstance("polarplot3d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getPolarPlot3DWFFuncPresets().getRandomPresetId());
         varFunc.setParameter("tmin", -Math.PI);
@@ -122,11 +157,28 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("direct_color", 1);
         break;
       }
-      case 18:
-      case 19:
-      case 20:
-      case 21:
-      case 4: {
+      case 12:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("butterfly_fay", true);
+        break;
+      }
+      case 13:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("knots3D", true);
+        break;
+      }
+      case 14:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("mandelbrot", true);
+        break;
+      }
+      case 15:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("pie3D", true);
+        varFunc.setParameter("thickness", 0.2+Math.random()*0.4);
+        break;
+      }
+      case 16: {
         varFunc = VariationFuncList.getVariationFuncInstance("parplot2d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getParPlot2DWFFuncPresets().getRandomPresetId());
         varFunc.setParameter("umin", -Math.PI);
@@ -137,7 +189,7 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("color_mode", Math.random() > 0.666 ? 2 : Math.random() < 0.5 ? 0 : 1);
         break;
       }
-      case 5: {
+      case 17: {
         varFunc = VariationFuncList.getVariationFuncInstance("dla3d_wf", true);
         varFunc.setParameter("max_iter", 100 + Math.random() * 200);
         varFunc.setParameter("inner_blur_radius", Math.random() * 0.5 + 0.1);
@@ -145,7 +197,7 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("glue_radius", 0.6 + Math.random() * 0.8);
         break;
       }
-      case 6:
+      case 18:
       {
         varFunc = VariationFuncList.getVariationFuncInstance("obj_mesh_primitive_wf", true);
         varFunc.setParameter("primitive", Tools.randomInt(OBJMeshPrimitiveWFFunc.LOWPOLY_SHAPE_COUNT));
@@ -161,8 +213,21 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc.setParameter("subdiv_smooth_mu", -0.45);
         break;
       }
-      case 7:
-      case 8:
+      case 19:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("sattractor3D", true);
+        break;
+      }
+      case 20:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("oscilloscope2", true);
+        break;
+      }
+      case 21:
+      {
+        varFunc = VariationFuncList.getVariationFuncInstance("spirograph", true);
+        break;
+      }
       default:
       {
         varFunc = VariationFuncList.getVariationFuncInstance("primitives_wf", true);

@@ -847,3 +847,4 @@ triantruchet; -1; -1; -1; -1; true; true
 mandala; -1; -1; -1; -1; true; true
 brush_stroke_wf; -1; 0.04807; -1; -1; true; true
 post_brush_stroke_wf; -1; 0.027909; -1; -1; true; true
+hourglass3D; 0.00250823; 0.00674299; 1.741; 3.47148438; false; false
