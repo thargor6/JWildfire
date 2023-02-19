@@ -1027,7 +1027,8 @@ VariationFuncList {
     registerVariationFunc(Cell2Func.class);
 
     registerVariationFunc(Hourglass3DFunc.class);
-
+    registerVariationFunc(PreAffine3DFunc.class);
+    registerVariationFunc(PostAffine3DFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
