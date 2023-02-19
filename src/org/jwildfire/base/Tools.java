@@ -63,16 +63,16 @@ public class
 
 Tools {
   public static final String APP_TITLE = "JWildfire";
-  private static final String APP_VERSION = "V7.55 (07.01.2023)";
+  private static final String APP_VERSION = "V8.00 (19.02.2023)";
 
-  public static final boolean STEAM_EDITION = false;
+  public static final boolean STEAM_EDITION = true;
   public static final boolean SPECIAL_VERSION = false;
 
   public static final int MAX_SPATIAL_OVERSAMPLING = 6;
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
-  public static final int PLOT_BUFFER_SIZE = 4096;
+  public static final int PLOT_BUFFER_SIZE = 4096 * 2;
 
   private static final Pixel toolPixel = new Pixel();
   public static final String FILE_ENCODING = "utf-8";
@@ -291,7 +291,8 @@ Tools {
     }
   }
 
-  public static double stringToDouble(String pValue) {
+  public static double
+  stringToDouble(String pValue) {
     pValue = pValue.replace(',', '.');
     return Double.parseDouble(pValue);
   }
