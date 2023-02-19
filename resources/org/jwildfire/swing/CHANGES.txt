@@ -1,3 +1,7 @@
+
+V8.01 (xx.xx.2023)
+ -new "cell2"-variation by Brad Stefanov (was already included in 8.00 but did not make it into the release notes)
+
 V8.00 (19.02.2023)
  - huge improvements in solid rendering, hence the big change in version number:
     -now it feels like it should have from the start, i.e. it's fun to use
