@@ -21,16 +21,10 @@ import org.jwildfire.base.Tools;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.Locale;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
@@ -78,10 +72,13 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
         new JSpinner(spinnerModel) {
           @Override
           protected JComponent createEditor(SpinnerModel model) {
-            // return new NumberEditor(this, "0.#######");
-            DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
-            DecimalFormat format = new DecimalFormat("0.#######", symbols);
-            return new JWFNumberEditor(this, format);
+            final Locale currLocale = Locale.getDefault();
+            try {
+              Locale.setDefault(Locale.US);
+              return new NumberEditor(this, "0.#######");
+            } finally {
+              Locale.setDefault(currLocale);
+            }
           }
         };
     add(spinnerField, BorderLayout.CENTER);
@@ -187,6 +184,9 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
                   } else if (hasMaxValue && value > maxValue) {
                     value = maxValue;
                   }
+                  if(onlyIntegers) {
+                    value = Tools.FTOI(value);
+                  } 
                   spinnerField.setValue(value);
                   mouseChangeCount++;
                 }
@@ -214,8 +214,13 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
   }
 
   public String getText() {
-    // return Tools.doubleToString((Double) getValue());
-    return ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().getText();
+    Object value = getValue();
+    if (value instanceof Double) {
+      return Tools.doubleToString((Double) getValue());
+    } else {
+      return String.valueOf(value);
+    }
+    // return ((JSpinner.DefaultEditor) spinnerField.getEditor()).getTextField().getText();
   }
 
   public void setText(String pText) {
@@ -430,10 +435,6 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     motionCurveBtn.setEnabled(enabled);
   }
 
-  /*  public void enableSpinnerField(boolean enabled) {
-      spinnerField.setEnabled(enabled);
-    }
-  */
   public double getMouseSpeed() {
     return mouseSpeed;
   }
@@ -484,73 +485,5 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     public void setOwner(JWFNumberField pOwner) {
       owner = pOwner;
     }
-  }
-}
-
-class JWFNumberEditor extends JSpinner.DefaultEditor {
-
-  public JWFNumberEditor(JSpinner spinner, DecimalFormat format) {
-    super(spinner);
-    if (!(spinner.getModel() instanceof SpinnerNumberModel)) {
-      throw new IllegalArgumentException("model not a SpinnerNumberModel");
-    }
-    SpinnerNumberModel model = (SpinnerNumberModel) spinner.getModel();
-    NumberFormatter formatter = new JWFNumberEditorFormatter(model, format);
-    DefaultFormatterFactory factory = new DefaultFormatterFactory(formatter);
-    JFormattedTextField ftf = getTextField();
-    ftf.setEditable(true);
-    ftf.setFormatterFactory(factory);
-    ftf.setHorizontalAlignment(JTextField.RIGHT);
-    try {
-      String maxString = formatter.valueToString(model.getMinimum());
-      String minString = formatter.valueToString(model.getMaximum());
-      ftf.setColumns(Math.max(maxString.length(), minString.length()));
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public DecimalFormat getFormat() {
-    return (DecimalFormat) ((NumberFormatter) (getTextField().getFormatter())).getFormat();
-  }
-
-  public SpinnerNumberModel getModel() {
-    return (SpinnerNumberModel) (getSpinner().getModel());
-  }
-
-  @Override
-  public void setComponentOrientation(ComponentOrientation o) {
-    super.setComponentOrientation(o);
-    getTextField().setHorizontalAlignment(o.isLeftToRight() ? JTextField.RIGHT : JTextField.LEFT);
-  }
-}
-
-class JWFNumberEditorFormatter extends NumberFormatter {
-  private final SpinnerNumberModel model;
-
-  JWFNumberEditorFormatter(SpinnerNumberModel model, NumberFormat format) {
-    super(format);
-    this.model = model;
-    setValueClass(model.getValue().getClass());
-  }
-
-  @Override
-  public Comparable<?> getMinimum() {
-    return model.getMinimum();
-  }
-
-  @Override
-  public void setMinimum(Comparable min) {
-    model.setMinimum(min);
-  }
-
-  @Override
-  public Comparable<?> getMaximum() {
-    return model.getMaximum();
-  }
-
-  @Override
-  public void setMaximum(Comparable max) {
-    model.setMaximum(max);
   }
 }

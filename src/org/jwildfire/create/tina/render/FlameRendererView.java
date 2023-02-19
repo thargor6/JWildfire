@@ -131,7 +131,6 @@ public class FlameRendererView {
     double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom() * flame.getPixelsPerUnitScale();
     double corner_x = flame.getCentreX() - (double) imageWidth / pixelsPerUnit / 2.0;
     double corner_y = flame.getCentreY() - (double) imageHeight / pixelsPerUnit / 2.0;
-    int oversample = flame.getSpatialOversampling();
     double border_size = (double)borderWidth / (double)(pixelsPerUnit);
 
     camX0 = corner_x - border_size;
@@ -165,7 +164,8 @@ public class FlameRendererView {
   public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
     if (doProject3D) {
       if (solidHardShadows) {
-        lightViewCalculator.project(pPoint, pProjectedPoint);
+        lightViewCalculator.
+                project(pPoint, pProjectedPoint);
       }
 
       applyCameraMatrix(pPoint);
@@ -225,13 +225,8 @@ public class FlameRendererView {
             }
           }
           else if (dist > areaMinusFade) {
-            /*
-                        double scl = (dist - areaMinusFade) / fade;
-                        double sclDist = dist * scl * scl;*/
-
             double scl = GfxMathLib.smootherstep(0.0, 1.0, (dist - areaMinusFade) / fade);
             double sclDist = scl * dist;
-
             pProjectedPoint.dofDist = sclDist;
             if (solidFlame) {
               dofBlurShape.applyOnlyCamera(camPoint, pPoint, sclDist, zr);
