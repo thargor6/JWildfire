@@ -272,6 +272,14 @@ public class JWildfire extends JApplet {
     checkWriteAccess(prefs.getTinaFlamePath(),"flames", "tinaFlamePath");
     checkWriteAccess(prefs.getImagePath(), "images", "imagePath");
 
+    checkSpacesInPath(prefs.getImagePath(), "flames", "tinaFlamePath");
+    checkSpacesInPath(prefs.getImagePath(), "images", "imagePath");
+    checkSpacesInPath(prefs.getTinaMeshPath(), "meshes", "tinaMeshPath");
+    checkSpacesInPath(prefs.getTinaGradientPath(), "gradients", "tinaGradientPath");
+    checkSpacesInPath(prefs.getTinaJWFScriptPath(), "scripts", "tinaJWFScriptPath");
+    checkSpacesInPath(prefs.getTinaJWFMoviePath(), "movie files", "tinaJWFMoviePath");
+    checkSpacesInPath(prefs.getTinaCustomVariationsPath(), "custom variations", "tinaCustomVariationsPath");
+
     try {
       getJFrame(MainEditorFrame.class).setTitle("Welcome to " + Tools.APP_TITLE+" "+ Tools.getAppVersion() +"!");
       getJFrame(MainEditorFrame.class).toFront();
@@ -340,6 +348,11 @@ public class JWildfire extends JApplet {
     }
   }
 
+  private void checkSpacesInPath(String path, String caption, String property) {
+    if(path!=null && path.contains(" ")) {
+      errorHandler.showErrorMessage("Folder access", String.format("The path \"%s\" contains space characters. This could cause problems when accessing %s. Please set up a path without space characters for the property \"%s\" in the Preferences.\nTo enter Preferences, choose \"Settings -> Preferences\" from the main menu.\nThen select the property \"%s\" and double-click on it. You may either edit the path manually or select it by clicking at the button with the three dots.", path, caption, property, property), null);
+    }
+  }
   class RefreshFlameImageThread implements Runnable {
     private AtomicBoolean cancelSignalled = new AtomicBoolean();
     private boolean done;
