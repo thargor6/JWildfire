@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -53,7 +53,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_LAST_TIP = "general.last_tip";
 
   static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
-  static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib";
+  static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib.1";
   static final String KEY_GENERAL_PATH_THUMBNAILS = "general.path.thumbnails";
 
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
