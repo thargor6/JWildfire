@@ -268,17 +268,19 @@ public class JWildfire extends JApplet {
       formulaExplorerFrame.setFormulaExplorerController(formulaExplorerController);
     }
 
+    if (!prefs.isSkipPathCheckAtStartup()) {
+      checkWriteAccess(prefs.getTinaFlamePath(), "flames", "tinaFlamePath");
+      checkWriteAccess(prefs.getImagePath(), "images", "imagePath");
 
-    checkWriteAccess(prefs.getTinaFlamePath(),"flames", "tinaFlamePath");
-    checkWriteAccess(prefs.getImagePath(), "images", "imagePath");
-
-    checkSpacesInPath(prefs.getImagePath(), "flames", "tinaFlamePath");
-    checkSpacesInPath(prefs.getImagePath(), "images", "imagePath");
-    checkSpacesInPath(prefs.getTinaMeshPath(), "meshes", "tinaMeshPath");
-    checkSpacesInPath(prefs.getTinaGradientPath(), "gradients", "tinaGradientPath");
-    checkSpacesInPath(prefs.getTinaJWFScriptPath(), "scripts", "tinaJWFScriptPath");
-    checkSpacesInPath(prefs.getTinaJWFMoviePath(), "movie files", "tinaJWFMoviePath");
-    checkSpacesInPath(prefs.getTinaCustomVariationsPath(), "custom variations", "tinaCustomVariationsPath");
+      checkSpacesInPath(prefs.getImagePath(), "flames", "tinaFlamePath");
+      checkSpacesInPath(prefs.getImagePath(), "images", "imagePath");
+      checkSpacesInPath(prefs.getTinaMeshPath(), "meshes", "tinaMeshPath");
+      checkSpacesInPath(prefs.getTinaGradientPath(), "gradients", "tinaGradientPath");
+      checkSpacesInPath(prefs.getTinaJWFScriptPath(), "scripts", "tinaJWFScriptPath");
+      checkSpacesInPath(prefs.getTinaJWFMoviePath(), "movie files", "tinaJWFMoviePath");
+      checkSpacesInPath(
+          prefs.getTinaCustomVariationsPath(), "custom variations", "tinaCustomVariationsPath");
+    }
 
     try {
       getJFrame(MainEditorFrame.class).setTitle("Welcome to " + Tools.APP_TITLE+" "+ Tools.getAppVersion() +"!");

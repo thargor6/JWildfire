@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -36,6 +36,7 @@ public class PrefsWriter {
       addValue(sb, Prefs.KEY_GENERAL_LOOK_AND_FEEL_THEME, pPrefs.getLookAndFeelTheme());
     }
     addValue(sb, Prefs.KEY_GENERAL_SHOW_TIPS_AT_STARTUP, pPrefs.isShowTipsAtStartup());
+    addValue(sb, Prefs.KEY_GENERAL_SKIP_PATH_CHECK_AT_STARTUP, pPrefs.isSkipPathCheckAtStartup());
     addValue(sb, Prefs.KEY_GENERAL_SPECIAL_MAC_OS_FILE_HANDLING, pPrefs.isSpecialMacOsFileHandling());
     addValue(sb, Prefs.KEY_GENERAL_MAC_OS_SEC_BOOKMARKS, pPrefs.isMacOsUseSecurityScopedBookmarks());
     addValue(sb, Prefs.KEY_GENERAL_LAST_TIP, pPrefs.getLastTip());

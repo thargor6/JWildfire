@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -125,6 +125,7 @@ public class PrefsReader {
         pPrefs.setMovieFlamesPath(getProperty(props, Prefs.KEY_TINA_PATH_MOVIEFLAMES, pPrefs.getMovieFlamesPath()));
         pPrefs.setSoundFilePath(getProperty(props, Prefs.KEY_GENERAL_PATH_SOUND_FILES, pPrefs.getSoundFilePath()));
         pPrefs.setShowTipsAtStartup(getBooleanProperty(props, Prefs.KEY_GENERAL_SHOW_TIPS_AT_STARTUP, pPrefs.isShowTipsAtStartup()));
+        pPrefs.setSkipPathCheckAtStartup(getBooleanProperty(props, Prefs.KEY_GENERAL_SKIP_PATH_CHECK_AT_STARTUP, pPrefs.isSkipPathCheckAtStartup()));
         pPrefs.setSpecialMacOsFileHandling(getBooleanProperty(props, Prefs.KEY_GENERAL_SPECIAL_MAC_OS_FILE_HANDLING, pPrefs.isSpecialMacOsFileHandling()));
         pPrefs.setMacOsUseSecurityScopedBookmarks(getBooleanProperty(props, Prefs.KEY_GENERAL_MAC_OS_SEC_BOOKMARKS, pPrefs.isMacOsUseSecurityScopedBookmarks()));
         pPrefs.setLastTip(getIntProperty(props, Prefs.KEY_GENERAL_LAST_TIP, pPrefs.getLastTip()));
