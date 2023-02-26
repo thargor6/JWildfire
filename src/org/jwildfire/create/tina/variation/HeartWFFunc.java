@@ -22,13 +22,12 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class HeartWFFunc extends VariationFunc implements SupportsGPU {
-  private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_SCALEX = "scale_x";
-  private static final String PARAM_SHIFTT = "shift_t";
-  private static final String PARAM_SCALE_T_LEFT = "scale_r_left";
-  private static final String PARAM_SCALE_T_RIGHT = "scale_r_right";
-  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SHIFTT, PARAM_SCALE_T_LEFT, PARAM_SCALE_T_RIGHT};
+  private static final String PARAM_SCALE_X = "scale_x";
+  private static final String PARAM_SHIFT_T = "shift_t";
+  private static final String PARAM_SCALE_R_LEFT = "scale_r_left";
+  private static final String PARAM_SCALE_R_RIGHT = "scale_r_right";
+  private static final String[] paramNames = {PARAM_SCALE_X, PARAM_SHIFT_T, PARAM_SCALE_R_LEFT, PARAM_SCALE_R_RIGHT};
 
   private double scale_x = 1.0;
   private double shift_t = 0.0;
@@ -76,13 +75,13 @@ public class HeartWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_SCALEX.equalsIgnoreCase(pName))
+    if (PARAM_SCALE_X.equalsIgnoreCase(pName))
       scale_x = pValue;
-    else if (PARAM_SHIFTT.equalsIgnoreCase(pName))
+    else if (PARAM_SHIFT_T.equalsIgnoreCase(pName))
       shift_t = pValue;
-    else if (PARAM_SCALE_T_LEFT.equalsIgnoreCase(pName))
+    else if (PARAM_SCALE_R_LEFT.equalsIgnoreCase(pName))
       scale_r_left = pValue;
-    else if (PARAM_SCALE_T_RIGHT.equalsIgnoreCase(pName))
+    else if (PARAM_SCALE_R_RIGHT.equalsIgnoreCase(pName))
       scale_r_right = pValue;
     else
       throw new IllegalArgumentException(pName);
