@@ -25,14 +25,12 @@ public class HeartWFFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALEX = "scale_x";
-  private static final String PARAM_SCALET = "scale_t";
   private static final String PARAM_SHIFTT = "shift_t";
   private static final String PARAM_SCALE_T_LEFT = "scale_r_left";
   private static final String PARAM_SCALE_T_RIGHT = "scale_r_right";
-  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALET, PARAM_SHIFTT, PARAM_SCALE_T_LEFT, PARAM_SCALE_T_RIGHT};
+  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SHIFTT, PARAM_SCALE_T_LEFT, PARAM_SCALE_T_RIGHT};
 
   private double scale_x = 1.0;
-  private double scale_t = 1.0;
   private double shift_t = 0.0;
   private double scale_r_left = 1.0;
   private double scale_r_right = 1.0;
@@ -73,15 +71,13 @@ public class HeartWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{scale_x, scale_t, shift_t, scale_r_left, scale_r_right};
+    return new Object[]{scale_x, shift_t, scale_r_left, scale_r_right};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_SCALEX.equalsIgnoreCase(pName))
       scale_x = pValue;
-    else if (PARAM_SCALET.equalsIgnoreCase(pName))
-      scale_t = pValue;
     else if (PARAM_SHIFTT.equalsIgnoreCase(pName))
       shift_t = pValue;
     else if (PARAM_SCALE_T_LEFT.equalsIgnoreCase(pName))
