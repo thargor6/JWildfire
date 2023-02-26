@@ -16,6 +16,7 @@
 */
 package org.jwildfire.swing;
 
+import java.awt.*;
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -29,6 +30,7 @@ import com.l2fprod.common.propertysheet.Property;
 import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 import com.l2fprod.common.propertysheet.PropertySheet;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
+import org.jwildfire.base.Prefs;
 
 public class PropertyPanel extends PropertySheetPanel {
 
@@ -49,13 +51,19 @@ public class PropertyPanel extends PropertySheetPanel {
           registry.registerEditor(pedit.getKey(), pedit.getValue());
         }
       }
+
       setMode(PropertySheet.VIEW_AS_CATEGORIES);
       setSortingCategories(true);
       setSortingProperties(true);
       setRestoreToggleStates(true);
 
-      setToolBarVisible(false);
+      setToolBarVisible(true);
       setDescriptionVisible(true);
+
+      getTable().setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 12));
+      getTable().setRowHeight(26);
+      getTable().setDoubleBuffered(true);
+      getTable().setShowGrid(true);
 
       if (pManagedObject != null) {
 

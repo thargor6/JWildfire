@@ -6,6 +6,7 @@ V8.xx (xx.xx.2023)
  -added a check for path-settings which contain space-characters and display a warning in this case
   - this check can be skipped by enabling the property "skipPathCheckAtStartup" in the Preferences
  -added a context-menu to the resources-dialog for editing text (copy, cut, paste)
+ -made the properties-editor in the Preferences-window more accessible, increased the size of the button for selecting folders
  -removed the parameters "X" and "Y" of "circleLinear" which were never used
  -removed the parameter "scale_t" of "heart_wf" which was never used
 

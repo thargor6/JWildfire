@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -49,6 +49,9 @@ public class FolderPropertyEditor extends AbstractPropertyEditor {
     };
     ((JPanel) editor).add("*", textfield = new JTextField());
     ((JPanel) editor).add(button = ComponentFactory.Helper.getFactory().createMiniButton());
+
+    button.setPreferredSize(new Dimension(96, 26));
+    button.setText("Select...");
     if (asTableEditor) {
       textfield.setBorder(LookAndFeelTweaks.EMPTY_BORDER);
     }
@@ -57,13 +60,16 @@ public class FolderPropertyEditor extends AbstractPropertyEditor {
         selectFile();
       }
     });
+/*
     ((JPanel) editor).add(cancelButton = ComponentFactory.Helper.getFactory().createMiniButton());
-    cancelButton.setText("X");
+    cancelButton.setPreferredSize(new Dimension(64, 26));
+    cancelButton.setText("Clear");
     cancelButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         selectNull();
       }
     });
+ */
     textfield.setTransferHandler(new FileTransferHandler());
   }
 
