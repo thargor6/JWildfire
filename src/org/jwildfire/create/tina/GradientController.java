@@ -199,7 +199,7 @@ public class GradientController {
     {
       String[] ressources = {"flam3-palettes.xml"};
       List<String> resLst = Arrays.asList(ressources);
-      Collections.sort(resLst);
+      Collections.sort(resLst, String::compareToIgnoreCase);
       ressources = resLst.toArray(new String[] {});
 
       // for the base path inside the jar file
@@ -210,6 +210,9 @@ public class GradientController {
           InputStream is = reader.getClass().getResourceAsStream(ressource);
           if (is != null) {
             List<RGBPalette> palettes = reader.readPalettes(is);
+            palettes.sort(
+                (p1, p2) -> (p1.getFlam3Name()!=null ? p1.getFlam3Name() : "").compareToIgnoreCase(p2.getFlam3Name())
+            );
             if (palettes.size() > 0) {
               GradientInternalNode node = new GradientInternalNode(ressource);
               node.getGradientLibraryList().addAll(palettes);
@@ -275,7 +278,7 @@ public class GradientController {
 
               @Override
               public int compare(File o1, File o2) {
-                return o1.getName().compareTo(o2.getName());
+                return o1.getName().compareToIgnoreCase(o2.getName());
               }
             });
       } catch (Exception ex) {
@@ -303,6 +306,8 @@ public class GradientController {
   private void readGradients(GradientUserNode pNode, List<String> pFilenames) {
     for (String filename : pFilenames) {
       List<RGBPalette> gradients = new UniversalPaletteReader().readPalettes(filename);
+      gradients.sort(
+          (p1, p2) -> (p1.getFlam3Name()!=null ? p1.getFlam3Name(): "").compareToIgnoreCase(p2.getFlam3Name()));
       if (gradients != null && gradients.size() > 0) {
         pNode.getGradientLibraryList().addAll(gradients);
       }

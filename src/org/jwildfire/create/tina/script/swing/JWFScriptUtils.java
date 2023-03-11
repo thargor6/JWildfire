@@ -106,7 +106,7 @@ public class JWFScriptUtils {
               "YU--log", "YU--secant", "YU--spiralwing", "YU--tancos", "YU-Yugen",
       };
       List<String> resLst = Arrays.asList(ressources);
-      Collections.sort(resLst);
+      Collections.sort(resLst, String::compareToIgnoreCase);
       ressources = resLst.toArray(new String[]{});
 
       // for the base path inside the jar file
@@ -163,7 +163,7 @@ public class JWFScriptUtils {
 
           @Override
           public int compare(File o1, File o2) {
-            return o1.getName().compareTo(o2.getName());
+            return o1.getName().compareToIgnoreCase(o2.getName());
           }
 
         });
