@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -363,10 +363,7 @@ public class TinaControllerParameter {
   public JButton mutaGenLoadFlameFromFileBtn;
   public JProgressBar mutaGenProgressBar;
   public JWFNumberField mutaGenAmountREd;
-  public JComboBox<MutationType> mutaGenHorizontalTrend1Cmb;
-  public JComboBox<MutationType> mutaGenHorizontalTrend2Cmb;
-  public JComboBox<MutationType> mutaGenVerticalTrend1Cmb;
-  public JComboBox<MutationType> mutaGenVerticalTrend2Cmb;
+  public JComboBox<MutationType> mutaGenMutationTrendCmb;
   public JButton mutaGenBackBtn;
   public JButton mutaGenForwardBtn;
   public JTextPane mutaGenHintPane;
@@ -1270,10 +1267,7 @@ public class TinaControllerParameter {
       JButton pMutaGenLoadFlameFromFileBtn,
       JProgressBar pMutaGenProgressBar,
       JWFNumberField pMutaGenAmountREd,
-      JComboBox pMutaGenHorizontalTrend1Cmb,
-      JComboBox pMutaGenHorizontalTrend2Cmb,
-      JComboBox pMutaGenVerticalTrend1Cmb,
-      JComboBox pMutaGenVerticalTrend2Cmb,
+      JComboBox pMutaGenMuationTrendCmb,
       JButton pMutaGenBackButtonBtn,
       JButton pMutaGenForwardButtonBtn,
       JTextPane pMutaGenHintPane,
@@ -1308,10 +1302,7 @@ public class TinaControllerParameter {
     this.mutaGenLoadFlameFromFileBtn = pMutaGenLoadFlameFromFileBtn;
     this.mutaGenProgressBar = pMutaGenProgressBar;
     this.mutaGenAmountREd = pMutaGenAmountREd;
-    this.mutaGenHorizontalTrend1Cmb = pMutaGenHorizontalTrend1Cmb;
-    this.mutaGenHorizontalTrend2Cmb = pMutaGenHorizontalTrend2Cmb;
-    this.mutaGenVerticalTrend1Cmb = pMutaGenVerticalTrend1Cmb;
-    this.mutaGenVerticalTrend2Cmb = pMutaGenVerticalTrend2Cmb;
+    this.mutaGenMutationTrendCmb = pMutaGenMuationTrendCmb;
     this.mutaGenBackBtn = pMutaGenBackButtonBtn;
     this.mutaGenForwardBtn = pMutaGenForwardButtonBtn;
     this.mutaGenHintPane = pMutaGenHintPane;

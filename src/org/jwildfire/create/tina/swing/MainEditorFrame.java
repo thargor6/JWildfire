@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -5859,9 +5859,8 @@ public class MainEditorFrame extends JFrame {
         mutaGenFrame.getMutaGen16Pnl(), mutaGenFrame.getMutaGen17Pnl(), mutaGenFrame.getMutaGen18Pnl(), mutaGenFrame.getMutaGen19Pnl(), mutaGenFrame.getMutaGen20Pnl(),
         mutaGenFrame.getMutaGen21Pnl(), mutaGenFrame.getMutaGen22Pnl(), mutaGenFrame.getMutaGen23Pnl(), mutaGenFrame.getMutaGen24Pnl(), mutaGenFrame.getMutaGen25Pnl(),
         mutaGenFrame.getMutaGenLoadFlameFromEditorBtn(), mutaGenFrame.getMutaGenLoadFlameFromFileBtn(), mutaGenFrame.getMutaGenProgressBar(), mutaGenFrame.getMutaGenAmountREd(),
-        mutaGenFrame.getMutaGenHorizontalTrend1Cmb(), mutaGenFrame.getMutaGenHorizontalTrend2Cmb(), mutaGenFrame.getMutaGenVerticalTrend1Cmb(), mutaGenFrame.getMutaGenVerticalTrend2Cmb(),
-        mutaGenFrame.getMutaGenBackBtn(), mutaGenFrame.getMutaGenForwardBtn(), mutaGenFrame.getMutaGenHintPane(), mutaGenFrame.getMutaGenSaveFlameToEditorBtn(),
-        mutaGenFrame.getMutaGenSaveFlameToFileBtn());
+        mutaGenFrame.getMutaGenMuationTrendCmb(), mutaGenFrame.getMutaGenBackBtn(), mutaGenFrame.getMutaGenForwardBtn(), mutaGenFrame.getMutaGenHintPane(),
+        mutaGenFrame.getMutaGenSaveFlameToEditorBtn(), mutaGenFrame.getMutaGenSaveFlameToFileBtn());
 
     params.setFlameBrowserParams(flameBrowserFrame.getFlameBrowserTree(), flameBrowserFrame.getFlameBrowserImagesPanel(),
         flameBrowserFrame.getFlameBrowserRefreshBtn(), flameBrowserFrame.getFlameBrowserChangeFolderBtn(), flameBrowserFrame.getFlameBrowserToEditorBtn(),

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -60,10 +60,7 @@ public class MutaGenController {
   private final JButton loadFlameFromFileBtn;
   private final JProgressBar progressBar;
   private final JWFNumberField amountREd;
-  private final JComboBox<MutationType> horizontalTrend1Cmb;
-  private final JComboBox<MutationType> horizontalTrend2Cmb;
-  private final JComboBox<MutationType> verticalTrend1Cmb;
-  private final JComboBox<MutationType> verticalTrend2Cmb;
+  private final JComboBox<MutationType> mutationTrendCmb;
   private final JButton backButton;
   private final JButton forwardButton;
   private final JButton saveFlameToEditorBtn;
@@ -131,10 +128,7 @@ public class MutaGenController {
       JButton pLoadFlameFromFileBtn,
       JProgressBar pProgressBar,
       JWFNumberField pAmountREd,
-      JComboBox<MutationType> pHorizontalTrend1Cmb,
-      JComboBox<MutationType> pHorizontalTrend2Cmb,
-      JComboBox<MutationType> pVerticalTrend1Cmb,
-      JComboBox<MutationType> pVerticalTrend2Cmb,
+      JComboBox<MutationType> pMutationTrendCmb,
       JButton pBackButton,
       JButton pForwardButton,
       JTextPane pHintPane,
@@ -149,20 +143,14 @@ public class MutaGenController {
     loadFlameFromFileBtn = pLoadFlameFromFileBtn;
     progressBar = pProgressBar;
     amountREd = pAmountREd;
-    horizontalTrend1Cmb = pHorizontalTrend1Cmb;
-    horizontalTrend2Cmb = pHorizontalTrend2Cmb;
-    verticalTrend1Cmb = pVerticalTrend1Cmb;
-    verticalTrend2Cmb = pVerticalTrend2Cmb;
+    mutationTrendCmb = pMutationTrendCmb;
     backButton = pBackButton;
     forwardButton = pForwardButton;
     hintPane = pHintPane;
     saveFlameToEditorBtn = pSaveFlameToEditorBtn;
     saveFlameToFileBtn = pSaveFlameToFileBtn;
 
-    refreshTrendCmb(horizontalTrend1Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeHoriz1(), true);
-    refreshTrendCmb(horizontalTrend2Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeHoriz2(), true);
-    refreshTrendCmb(verticalTrend1Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeVert1(), true);
-    refreshTrendCmb(verticalTrend2Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeVert2(), true);
+    refreshTrendCmb(mutationTrendCmb, Prefs.getPrefs().getTinaMutaGenMutationTrend(), true);
     amountREd.setValue(1.0);
     initHintsPane();
   }
@@ -625,10 +613,10 @@ public class MutaGenController {
   }
 
   private List<MutationType> createMutationTypes(int pX, int pY) {
-    MutationType horizType1 = (MutationType) horizontalTrend1Cmb.getSelectedItem();
-    MutationType horizType2 = (MutationType) horizontalTrend2Cmb.getSelectedItem();
-    MutationType vertType1 = (MutationType) verticalTrend1Cmb.getSelectedItem();
-    MutationType vertType2 = (MutationType) verticalTrend2Cmb.getSelectedItem();
+    MutationType horizType1 = (MutationType) mutationTrendCmb.getSelectedItem();
+    MutationType horizType2 = (MutationType) mutationTrendCmb.getSelectedItem();
+    MutationType vertType1 = (MutationType) mutationTrendCmb.getSelectedItem();
+    MutationType vertType2 = (MutationType) mutationTrendCmb.getSelectedItem();
 
     List<MutationType> mutations = new ArrayList<MutationType>();
     if (Math.random() < 0.5) {

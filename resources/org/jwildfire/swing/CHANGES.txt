@@ -7,6 +7,8 @@ V8.xx (xx.xx.2023)
   - this check can be skipped by enabling the property "skipPathCheckAtStartup" in the Preferences
  -added a context-menu to the resources-dialog for editing text (copy, cut, paste)
  -made the properties-editor in the Preferences-window more accessible, increased the size of the button for selecting folders
+ -exchanged the four mutation-trend-combo-boxes in the MutaGen by a single combobox. This allows to select the trend for all four mutations
+  with one click. Having four separate combo-boxed gave too much control where it is not needed.
  -alphabetic sorting of gradients and scripts inside of their tree-views
  -removed the parameters "X" and "Y" of "circleLinear" which were never used
  -removed the parameter "scale_t" of "heart_wf" which was never used

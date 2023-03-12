@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,12 +22,21 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
@@ -111,17 +120,8 @@ public class MutaGenFrame extends JFrame {
   private JButton mutaGenBackBtn;
   private JButton mutaGenLoadFlameFromEditorBtn;
   private JProgressBar mutaGenProgressBar;
-  private JComboBox mutaGenHorizontalTrend1Cmb;
-  private JComboBox mutaGenVerticalTrend1Cmb;
+  private JComboBox mutaGenMutationTrendCmb;
   private JButton mutaGenLoadFlameFromFileBtn;
-  private JPanel panel_55;
-  private JLabel lblH;
-  private JComboBox mutaGenHorizontalTrend2Cmb;
-  private JPanel panel_56;
-  private JLabel lblV;
-  private JPanel panel_57;
-  private JLabel lblVertical;
-  private JComboBox mutaGenVerticalTrend2Cmb;
   private JPanel panel_58;
   private JButton mutaGenForwardBtn;
   private JTextPane mutaGenHintPane;
@@ -307,22 +307,19 @@ public class MutaGenFrame extends JFrame {
 
       JLabel lblTrendVertical = new JLabel();
       panel_9.add(lblTrendVertical);
-      lblTrendVertical.setText("Horiz 1");
-      lblTrendVertical.setPreferredSize(new Dimension(40, 22));
+      lblTrendVertical.setText("Mutat. trend");
+      lblTrendVertical.setPreferredSize(new Dimension(64, 22));
       lblTrendVertical.setHorizontalAlignment(SwingConstants.RIGHT);
       lblTrendVertical.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
-      mutaGenHorizontalTrend1Cmb = new JComboBox();
-      panel_9.add(mutaGenHorizontalTrend1Cmb);
-      mutaGenHorizontalTrend1Cmb.setPreferredSize(new Dimension(125, 24));
-      mutaGenHorizontalTrend1Cmb.setMinimumSize(new Dimension(125, 24));
-      mutaGenHorizontalTrend1Cmb.setMaximumSize(new Dimension(30000, 24));
-      mutaGenHorizontalTrend1Cmb.setMaximumRowCount(32);
-      mutaGenHorizontalTrend1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      mutaGenHorizontalTrend1Cmb.setAlignmentX(1.0f);
-      panel_8.add(getPanel_55());
-      panel_8.add(getPanel_56());
-      panel_8.add(getPanel_57());
+      mutaGenMutationTrendCmb = new JComboBox();
+      panel_9.add(mutaGenMutationTrendCmb);
+      mutaGenMutationTrendCmb.setPreferredSize(new Dimension(158, 24));
+      mutaGenMutationTrendCmb.setMinimumSize(new Dimension(125, 24));
+      mutaGenMutationTrendCmb.setMaximumSize(new Dimension(30000, 24));
+      mutaGenMutationTrendCmb.setMaximumRowCount(32);
+      mutaGenMutationTrendCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      mutaGenMutationTrendCmb.setAlignmentX(1.0f);
       panel_8.add(getPanel_58());
 
     }
@@ -620,118 +617,12 @@ public class MutaGenFrame extends JFrame {
     return mutaGenProgressBar;
   }
 
-  public JComboBox getMutaGenHorizontalTrend1Cmb() {
-    return mutaGenHorizontalTrend1Cmb;
-  }
-
-  public JComboBox getMutaGenVerticalTrend1Cmb() {
-    return mutaGenVerticalTrend1Cmb;
+  public JComboBox getMutaGenMuationTrendCmb() {
+    return mutaGenMutationTrendCmb;
   }
 
   public JButton getMutaGenLoadFlameFromFileBtn() {
     return mutaGenLoadFlameFromFileBtn;
-  }
-
-  private JPanel getPanel_55() {
-    if (panel_55 == null) {
-      panel_55 = new JPanel();
-      panel_55.setPreferredSize(new Dimension(10, 28));
-      panel_55.setMinimumSize(new Dimension(10, 28));
-      panel_55.setMaximumSize(new Dimension(32767, 28));
-      panel_55.add(getLblH());
-
-      mutaGenHorizontalTrend2Cmb = new JComboBox();
-      panel_55.add(mutaGenHorizontalTrend2Cmb);
-      mutaGenHorizontalTrend2Cmb.setPreferredSize(new Dimension(125, 24));
-      mutaGenHorizontalTrend2Cmb.setMinimumSize(new Dimension(125, 24));
-      mutaGenHorizontalTrend2Cmb.setMaximumSize(new Dimension(30000, 24));
-      mutaGenHorizontalTrend2Cmb.setMaximumRowCount(32);
-      mutaGenHorizontalTrend2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      mutaGenHorizontalTrend2Cmb.setAlignmentX(1.0f);
-    }
-    return panel_55;
-  }
-
-  private JLabel getLblH() {
-    if (lblH == null) {
-      lblH = new JLabel();
-      lblH.setText("Horiz 2");
-      lblH.setPreferredSize(new Dimension(40, 22));
-      lblH.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblH.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return lblH;
-  }
-
-  public JComboBox getMutaGenHorizontalTrend2Cmb() {
-    return mutaGenHorizontalTrend2Cmb;
-  }
-
-  private JPanel getPanel_56() {
-    if (panel_56 == null) {
-      panel_56 = new JPanel();
-      panel_56.setPreferredSize(new Dimension(10, 28));
-      panel_56.setMinimumSize(new Dimension(10, 28));
-      panel_56.setMaximumSize(new Dimension(32767, 28));
-      panel_56.add(getLblV());
-
-      mutaGenVerticalTrend1Cmb = new JComboBox();
-      panel_56.add(mutaGenVerticalTrend1Cmb);
-      mutaGenVerticalTrend1Cmb.setPreferredSize(new Dimension(125, 24));
-      mutaGenVerticalTrend1Cmb.setMinimumSize(new Dimension(125, 24));
-      mutaGenVerticalTrend1Cmb.setMaximumSize(new Dimension(30000, 24));
-      mutaGenVerticalTrend1Cmb.setMaximumRowCount(32);
-      mutaGenVerticalTrend1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      mutaGenVerticalTrend1Cmb.setAlignmentX(1.0f);
-    }
-    return panel_56;
-  }
-
-  private JLabel getLblV() {
-    if (lblV == null) {
-      lblV = new JLabel();
-      lblV.setText("Vert 1");
-      lblV.setPreferredSize(new Dimension(40, 22));
-      lblV.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblV.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return lblV;
-  }
-
-  private JPanel getPanel_57() {
-    if (panel_57 == null) {
-      panel_57 = new JPanel();
-      panel_57.setPreferredSize(new Dimension(10, 28));
-      panel_57.setMinimumSize(new Dimension(10, 28));
-      panel_57.setMaximumSize(new Dimension(32767, 28));
-      panel_57.add(getLblVertical());
-      panel_57.add(getMutaGenVerticalTrend2Cmb());
-    }
-    return panel_57;
-  }
-
-  private JLabel getLblVertical() {
-    if (lblVertical == null) {
-      lblVertical = new JLabel();
-      lblVertical.setText("Vert 2");
-      lblVertical.setPreferredSize(new Dimension(40, 22));
-      lblVertical.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblVertical.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return lblVertical;
-  }
-
-  JComboBox getMutaGenVerticalTrend2Cmb() {
-    if (mutaGenVerticalTrend2Cmb == null) {
-      mutaGenVerticalTrend2Cmb = new JComboBox();
-      mutaGenVerticalTrend2Cmb.setPreferredSize(new Dimension(125, 24));
-      mutaGenVerticalTrend2Cmb.setMinimumSize(new Dimension(125, 24));
-      mutaGenVerticalTrend2Cmb.setMaximumSize(new Dimension(30000, 24));
-      mutaGenVerticalTrend2Cmb.setMaximumRowCount(32);
-      mutaGenVerticalTrend2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      mutaGenVerticalTrend2Cmb.setAlignmentX(1.0f);
-    }
-    return mutaGenVerticalTrend2Cmb;
   }
 
   private JPanel getPanel_58() {
@@ -744,7 +635,7 @@ public class MutaGenFrame extends JFrame {
       JLabel lblAmount = new JLabel();
       panel_58.add(lblAmount);
       lblAmount.setText("Strength");
-      lblAmount.setPreferredSize(new Dimension(48, 22));
+      lblAmount.setPreferredSize(new Dimension(64, 22));
       lblAmount.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_58.add(getMutaGenAmountREd());
       panel_58.add(getMutaGenRefreshBtn());
@@ -815,7 +706,7 @@ public class MutaGenFrame extends JFrame {
       });
       mutaGenRefreshBtn.setToolTipText("Recalculate the current generation using the current chosen strength value");
       mutaGenRefreshBtn.setText("Refresh");
-      mutaGenRefreshBtn.setPreferredSize(new Dimension(100, 24));
+      mutaGenRefreshBtn.setPreferredSize(new Dimension(88, 24));
       mutaGenRefreshBtn.setMnemonic(KeyEvent.VK_R);
       mutaGenRefreshBtn.setMinimumSize(new Dimension(100, 24));
       mutaGenRefreshBtn.setMaximumSize(new Dimension(160, 24));

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -70,7 +70,6 @@ import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
-import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.*;
 import org.jwildfire.transform.TextTransformer;
 import org.jwildfire.transform.TextTransformer.FontStyle;
@@ -232,8 +231,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       flamePanels[24] = parameterObject.mutaGen25Pnl;
       mutaGenController = new MutaGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel, flamePanels,
           parameterObject.mutaGenLoadFlameFromEditorBtn, parameterObject.mutaGenLoadFlameFromFileBtn, parameterObject.mutaGenProgressBar,
-          parameterObject.mutaGenAmountREd, parameterObject.mutaGenHorizontalTrend1Cmb, parameterObject.mutaGenHorizontalTrend2Cmb,
-          parameterObject.mutaGenVerticalTrend1Cmb, parameterObject.mutaGenVerticalTrend2Cmb, parameterObject.mutaGenBackBtn, parameterObject.mutaGenForwardBtn,
+          parameterObject.mutaGenAmountREd, parameterObject.mutaGenMutationTrendCmb, parameterObject.mutaGenBackBtn, parameterObject.mutaGenForwardBtn,
           parameterObject.mutaGenHintPane, parameterObject.mutaGenSaveFlameToEditorBtn, parameterObject.mutaGenSaveFlameToFileBtn);
     }
 

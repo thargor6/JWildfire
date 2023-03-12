@@ -176,11 +176,7 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPES_USER2 = "tina.mutagen.mutationtypes_user2";
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPES_USER3 = "tina.mutagen.mutationtypes_user3";
 
-  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_HORIZ1 = "tina.mutagen.mutationtype_horiz1";
-  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_HORIZ2 = "tina.mutagen.mutationtype_horiz2";
-  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT1 = "tina.mutagen.mutationtype_vert1";
-  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2 = "tina.mutagen.mutationtype_vert2";
-
+  public static final String KEY_TINA_MUTAGEN_MUTATION_TREND = "tina.mutagen.mutation_trend";
   public static final String KEY_TINA_QUICK_MUTATIONS_BATCH_SIZE = "tina.quick_mutations.batch_size";
   public static final String KEY_TINA_QUICK_MUTATIONS_DEFAULT_MUTATION_TYPE = "tina.quick_mutations.default_mutation_type";
 
@@ -391,14 +387,8 @@ public class Prefs extends ManagedObject {
   @Property(description = "User-defined mutation-sub-types for mutation-type USER3 in the MutaGen", category = PropertyCategory.TINA)
   private String tinaMutaGenMutationTypesUser3 = "AFFINE_3D, BOKEH, RANDOM_FLAME";
 
-  @Property(description = "Default mutation-type at category \"Horiz 1\" in the MutaGen", category = PropertyCategory.TINA)
-  private String tinaMutaGenMutationTypeHoriz1 = "USER1";
-  @Property(description = "Default mutation-type at category \"Horiz 2\" in the MutaGen", category = PropertyCategory.TINA)
-  private String tinaMutaGenMutationTypeHoriz2 = "USER2";
-  @Property(description = "Default mutation-type at category \"Vert 1\" in the MutaGen", category = PropertyCategory.TINA)
-  private String tinaMutaGenMutationTypeVert1 = "ALL";
-  @Property(description = "Default mutation-type at category \"Vert 2\" in the MutaGen", category = PropertyCategory.TINA)
-  private String tinaMutaGenMutationTypeVert2 = "USER3";
+  @Property(description = "Default mutation-trend in the MutaGen", category = PropertyCategory.TINA)
+  private String tinaMutaGenMutationTrend = "ALL";
   @Property(description = "Default batch size for creating quick mutations in the main editor", category = PropertyCategory.TINA)
   private int tinaQuickMutationBatchSize = 5;
   @Property(description = "Default mutation-type for creating quick mutations in the main editor", category = PropertyCategory.TINA)
@@ -874,10 +864,7 @@ public class Prefs extends ManagedObject {
     tinaMutaGenMutationTypesUser2 = pSrc.tinaMutaGenMutationTypesUser2;
     tinaMutaGenMutationTypesUser3 = pSrc.tinaMutaGenMutationTypesUser3;
 
-    tinaMutaGenMutationTypeHoriz1 = pSrc.tinaMutaGenMutationTypeHoriz1;
-    tinaMutaGenMutationTypeHoriz2 = pSrc.tinaMutaGenMutationTypeHoriz2;
-    tinaMutaGenMutationTypeVert1 = pSrc.tinaMutaGenMutationTypeVert1;
-    tinaMutaGenMutationTypeVert2 = pSrc.tinaMutaGenMutationTypeVert2;
+    tinaMutaGenMutationTrend = pSrc.tinaMutaGenMutationTrend;
 
     tinaQuickMutationBatchSize = pSrc.tinaQuickMutationBatchSize;
     tinaQuickMutationDefaultMutationType = pSrc.tinaQuickMutationDefaultMutationType;
@@ -1464,36 +1451,12 @@ public class Prefs extends ManagedObject {
     tinaMutaGenMutationTypesUser3 = pTinaMutaGenMutationTypesUser3;
   }
 
-  public String getTinaMutaGenMutationTypeHoriz1() {
-    return tinaMutaGenMutationTypeHoriz1;
+  public String getTinaMutaGenMutationTrend() {
+    return tinaMutaGenMutationTrend;
   }
 
-  public void setTinaMutaGenMutationTypeHoriz1(String pTinaMutaGenMutationTypeHoriz1) {
-    tinaMutaGenMutationTypeHoriz1 = pTinaMutaGenMutationTypeHoriz1;
-  }
-
-  public String getTinaMutaGenMutationTypeHoriz2() {
-    return tinaMutaGenMutationTypeHoriz2;
-  }
-
-  public void setTinaMutaGenMutationTypeHoriz2(String pTinaMutaGenMutationTypeHoriz2) {
-    tinaMutaGenMutationTypeHoriz2 = pTinaMutaGenMutationTypeHoriz2;
-  }
-
-  public String getTinaMutaGenMutationTypeVert1() {
-    return tinaMutaGenMutationTypeVert1;
-  }
-
-  public void setTinaMutaGenMutationTypeVert1(String pTinaMutaGenMutationTypeVert1) {
-    tinaMutaGenMutationTypeVert1 = pTinaMutaGenMutationTypeVert1;
-  }
-
-  public String getTinaMutaGenMutationTypeVert2() {
-    return tinaMutaGenMutationTypeVert2;
-  }
-
-  public void setTinaMutaGenMutationTypeVert2(String pTinaMutaGenMutationTypeVert2) {
-    tinaMutaGenMutationTypeVert2 = pTinaMutaGenMutationTypeVert2;
+  public void setTinaMutaGenMutationTrend(String pTinaMutaGenMutationTrend) {
+    tinaMutaGenMutationTrend = pTinaMutaGenMutationTrend;
   }
 
   public String getIflamesFlameLibraryPath() {
