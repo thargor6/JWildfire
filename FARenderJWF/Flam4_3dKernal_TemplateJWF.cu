@@ -4215,7 +4215,9 @@ extern "C" __global__ void iteratePointsKernal(struct VariationListNode *d_g_var
 
 #ifndef FOR_2D
             projectJWF(&activePoint[index], d_g_Camera, randStates);
-            applyRotation(&activePoint[index], d_g_Camera->rotatedViewOffsetx, d_g_Camera->rotatedViewOffsety);
+			if(fabsf(d_g_Camera->pitch)<1.0e-6 && fabsf(d_g_Camera->yaw)<1.0e-6 && fabsf(d_g_Camera->bank)<1.0e-6) {
+              applyRotation(&activePoint[index], d_g_Camera->rotatedViewOffsetx, d_g_Camera->rotatedViewOffsety);
+			}
 #else
             applyRotation( &activePoint[index], cosRotation, sinRotation);
 #endif
