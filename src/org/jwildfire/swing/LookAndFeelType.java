@@ -73,7 +73,7 @@ public enum LookAndFeelType {
     @Override
     public void changeTheme(String pTheme) throws Exception {
       if(JWILDFIRE.equals(pTheme)) {
-        // dark them for JWildfire, bases on https://stackoverflow.com/questions/36128291/how-to-make-a-swing-application-have-dark-nimbus-theme-netbeans
+        // dark theme for JWildfire, bases on https://stackoverflow.com/questions/36128291/how-to-make-a-swing-application-have-dark-nimbus-theme-netbeans
         // javax.swing.UIManager.put( "control", new Color( 128, 128, 128) );
         // javax.swing.UIManager.put( "info", new Color(128,128,128) );
         // javax.swing.UIManager.put( "nimbusBase", new Color( 18, 30, 49) );
@@ -121,7 +121,7 @@ public enum LookAndFeelType {
         javax.swing.UIManager.put("nimbusSelectedText", new Color(255, 255, 255));
         javax.swing.UIManager.put("nimbusSelectionBackground", new Color(57, 105, 138));
         javax.swing.UIManager.put("text", new Color(0, 0, 0));
-        javax.swing.UIManager.put( "nimbusBlueGrey", new Color( 146,151,161) );
+        javax.swing.UIManager.put("nimbusBlueGrey", new Color( 146,151,161) );
       }
     }
   },

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -31,17 +31,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import org.jwildfire.base.QualityProfile;
-import org.jwildfire.base.QualityProfileComparator;
+import org.jwildfire.base.QualityProfileComparator;import org.sunflow.image.Color;
 
 public class QualityProfileDialog extends JDialog {
   private static final long serialVersionUID = 1L;
@@ -115,9 +109,15 @@ public class QualityProfileDialog extends JDialog {
     lblSize.setBounds(6, 35, 118, 22);
     contentPanel.add(lblSize);
 
-    defaultCBx = new JCheckBox("Default profile");
-    defaultCBx.setBounds(125, 212, 223, 18);
+    defaultCBx = new JCheckBox("");
+    defaultCBx.setBounds(125, 212, 24, 18);
     contentPanel.add(defaultCBx);
+    {
+      JLabel lbl = new JLabel();
+      lbl.setText("Default profile");
+      lbl.setBounds(152, 212, 223, 18);
+      contentPanel.add(lbl);
+    }
 
     newBtn = new JButton();
     newBtn.addActionListener(new ActionListener() {
@@ -208,15 +208,29 @@ public class QualityProfileDialog extends JDialog {
     lblQuality.setBounds(6, 60, 118, 22);
     contentPanel.add(lblQuality);
 
-    withHDRCBx = new JCheckBox("with HDR");
+    withHDRCBx = new JCheckBox("");
     withHDRCBx.setEnabled(false);
-    withHDRCBx.setBounds(125, 152, 223, 18);
+    withHDRCBx.setBounds(125, 152, 24, 18);
     contentPanel.add(withHDRCBx);
+    {
+      JLabel lbl = new JLabel();
+      lbl.setText("with HDR");
+      lbl.setBounds(152, 152, 223, 18);
+      contentPanel.add(lbl);
+    }
 
-    withZBufferCBx = new JCheckBox("with Z-Buffer");
+    withZBufferCBx = new JCheckBox("");
     withZBufferCBx.setEnabled(false);
-    withZBufferCBx.setBounds(125, 182, 223, 18);
+    withZBufferCBx.setBounds(125, 182, 24, 18);
     contentPanel.add(withZBufferCBx);
+    {
+      JLabel lbl = new JLabel();
+      lbl.setText("with Z-Buffer");
+      lbl.setBounds(152, 182, 223, 18);
+      contentPanel.add(lbl);
+    }
+
+
     {
       JPanel buttonPane = new JPanel();
       buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));

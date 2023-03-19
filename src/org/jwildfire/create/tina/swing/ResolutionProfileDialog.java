@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -131,9 +131,16 @@ public class ResolutionProfileDialog extends JDialog {
     xLabel.setBounds(200, 35, 22, 22);
     contentPanel.add(xLabel);
 
-    defaultCBx = new JCheckBox("Default profile");
-    defaultCBx.setBounds(100, 69, 223, 18);
+    defaultCBx = new JCheckBox("");
+    defaultCBx.setBounds(100, 69, 24, 18);
     contentPanel.add(defaultCBx);
+    {
+      JLabel lbl = new JLabel();
+      lbl.setText("Default profile");
+      lbl.setBounds(127, 69, 223, 18);
+      contentPanel.add(lbl);
+    }
+
 
     newBtn = new JButton();
     newBtn.addActionListener(new ActionListener() {
