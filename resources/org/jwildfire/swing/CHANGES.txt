@@ -16,6 +16,7 @@ V8.10 (21.03.2023)
  -fixed a problem with the undo-manager which caused the undo-button be inactive even if they where undo-steps available
  -fixed a problem where sending a flame to the batch-renderer did not cause to render the preview
  -fixed a bug which an InvalidOutputStream -error on macOS when creating voxel-stacks
+ -fixed a bug which an InvalidOutputStream -error on macOS when creating a quilt-render
 
 V8.00 (19.02.2023)
  - huge improvements in solid rendering, hence the big change in version number:

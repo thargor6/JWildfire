@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -22,11 +22,13 @@ import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
+import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
 import org.jwildfire.transform.ComposeTransformer;
 
+import java.awt.*;
 import java.io.File;
 
 public class QuiltFlameRenderer {
@@ -72,6 +74,8 @@ public class QuiltFlameRenderer {
               RenderedFlame res = currRenderer.renderFlame(info);
               if (!cancelSignalled) {
                 try {
+                  FileDialogTools.ensureFileAccess(
+                      new Frame(), null, segmentFilename);
                   new ImageWriter().saveImage(res.getImage(), segmentFilename);
                 } catch (Exception ex) {
                   throw new RuntimeException(ex);
@@ -159,6 +163,7 @@ public class QuiltFlameRenderer {
     }
 
     try {
+      FileDialogTools.ensureFileAccess(new Frame(), null, filename);
       new ImageWriter().saveImage(img, filename);
       finalImageMerged = true;
       // delete segments
