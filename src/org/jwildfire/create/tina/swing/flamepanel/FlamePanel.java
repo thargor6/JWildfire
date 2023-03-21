@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -252,6 +252,9 @@ public class FlamePanel extends ImagePanel {
   }
 
   public Rectangle getParentImageBounds() {
+    if(this.getParent()==null) {
+    	return new Rectangle(0,0,0,0);
+    }
     Rectangle bounds = this.getParent().getBounds();
     if (!config.isProgressivePreview() && flameHolder.getFlame() != null && flameHolder.getFlame().getStereo3dMode() != Stereo3dMode.NONE && 
     		flameHolder.getFlame().getStereo3dPreview() == Stereo3dPreview.SIDE_BY_SIDE_FULL) {
