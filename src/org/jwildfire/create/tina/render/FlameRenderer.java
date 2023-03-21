@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.render;
 
+import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -51,6 +52,7 @@ import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.render.image.*;
 import org.jwildfire.create.tina.render.postdof.PostDOFBuffer;
 import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
+import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.Pixel;
@@ -1094,6 +1096,7 @@ public class FlameRenderer {
           }
           String filename = String.format(pFilenamePattern, fileIdx++);
           try {
+            FileDialogTools.ensureFileAccess(new Frame(), null, filename);
             new ImageWriter().saveImage(renderedFlame.getImage(), filename);
           }
           catch (Exception ex) {
