@@ -4219,7 +4219,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       int stackSize = undoManager.getUndoStackSize(getCurrFlame());
       if (stackSize > 0) {
         int pos = undoManager.getUndoStackPosition(getCurrFlame());
-        data.undoButton.setEnabled(pos > 0 && pos < stackSize);
+        data.undoButton.setEnabled(pos >= 0 && pos < stackSize);
         if (undoDebug) {
           data.undoButton.setText("U " + pos);
         }

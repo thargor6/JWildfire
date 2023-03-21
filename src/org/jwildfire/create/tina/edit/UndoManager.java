@@ -71,7 +71,7 @@ public class UndoManager<T extends Assignable<T>> {
     List<UndoItem<T>> stack = getUndoStack(pInitialState);
     if (stack.size() > 0) {
       Integer pos = getUndoStackPosition(pInitialState);
-      if (pos > 0) {
+      if (pos >= 0) {
         if (pos == stack.size() - 1) {
           UndoItem<T> prevState = stack.get(stack.size() - 1);
           if (!prevState.getData().isEqual(pInitialState)) {
@@ -82,6 +82,9 @@ public class UndoManager<T extends Assignable<T>> {
           }
         } else {
           pos--;
+        }
+        if(pos<0) {
+          pos=0;
         }
         undoStackPosition.put(pInitialState, pos);
         if (pos >= 0 && pos < stack.size()) {
