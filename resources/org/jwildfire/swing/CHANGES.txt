@@ -1,5 +1,4 @@
-
-V8.xx (xx.xx.2023)
+V8.10 (21.03.2023)
  -new "cell2"-variation by Brad Stefanov (was already included in 8.00 but did not make it into the release notes)
  -fixed a bug in the math library which causes some variations to fail which used trigonometric functions with large
   arguments (e.g. "phoenix_julia")
