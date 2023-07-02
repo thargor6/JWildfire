@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageAll">
-    <property name="release" value="8.10"/>
+    <property name="release" value="8.11"/>
     <property name="dist.dir" location="build/dist"/>
     <property name="installer.dir" location="build/installer"/>
     <property name="build.dir" location="build/classes"/>
