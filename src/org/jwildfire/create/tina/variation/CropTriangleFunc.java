@@ -14,12 +14,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.base.mathlib.Complex;
-import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-
-import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
 
 public class CropTriangleFunc extends VariationFunc {
 	
@@ -131,7 +127,7 @@ public class CropTriangleFunc extends VariationFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_CROP};
 	}
 
 }

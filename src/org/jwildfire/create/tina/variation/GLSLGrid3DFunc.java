@@ -1,14 +1,12 @@
 package org.jwildfire.create.tina.variation;
 
+import java.util.Random;
 import js.glsl.G;
 import js.glsl.mat3;
 import js.glsl.vec3;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-
-import java.util.Random;
-
 
 public class GLSLGrid3DFunc extends GLSLFunc {
 
@@ -162,7 +160,7 @@ public class GLSLGrid3DFunc extends GLSLFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
   }
 
 }

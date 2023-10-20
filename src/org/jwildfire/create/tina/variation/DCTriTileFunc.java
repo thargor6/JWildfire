@@ -17,16 +17,15 @@
 package org.jwildfire.create.tina.variation;
 
 
+import static org.jwildfire.base.Tools.limitValue;
+import static org.jwildfire.base.mathlib.MathLib.*;
+
+import java.io.Serializable;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
-
-import java.io.Serializable;
-
-import static org.jwildfire.base.Tools.limitValue;
-import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class DCTriTileFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -1141,7 +1140,7 @@ public class DCTriTileFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE };
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE };
   }
 
 }

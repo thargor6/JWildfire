@@ -16,13 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.mathlib.MathLib.max;
+import static org.jwildfire.base.mathlib.MathLib.min;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-
-import static org.jwildfire.base.mathlib.MathLib.max;
-import static org.jwildfire.base.mathlib.MathLib.min;
 
 public class PostCropFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
@@ -119,7 +119,7 @@ public class PostCropFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
   @Override
   public String getGPUCode(FlameTransformationContext context) {

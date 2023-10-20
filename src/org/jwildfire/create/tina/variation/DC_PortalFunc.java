@@ -2,20 +2,14 @@ package org.jwildfire.create.tina.variation;
 
 
 import java.util.Random;
-
-import org.jwildfire.base.Tools;
+import js.glsl.G;
+import js.glsl.vec2;
+import js.glsl.vec3;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
-
-import js.glsl.G;
-import js.glsl.vec2;
-import js.glsl.vec3;
-import js.glsl.vec4;
-
-
 
 public class DC_PortalFunc  extends DC_BaseFunc implements SupportsGPU {
 
@@ -205,7 +199,7 @@ public class DC_PortalFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};		
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {

@@ -1,25 +1,12 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-import java.util.Random;
-
+import js.glsl.G;
+import js.glsl.vec2;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.palette.RGBColor;
-import org.jwildfire.create.tina.palette.RGBPalette;
-
-import js.glsl.G;
-import js.glsl.mat2;
-import js.glsl.vec2;
-import js.glsl.vec3;
-import js.glsl.vec4;
-
-
 
 public class  CropCrossFunc  extends VariationFunc  {
 
@@ -154,7 +141,7 @@ double sdCross( vec2 p,  vec2 b, double r )
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_CROP};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_CROP};
 	}
 
 }
