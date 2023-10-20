@@ -21,10 +21,7 @@ import java.util.stream.Collectors;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.PostSymmetryType;
-import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.*;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.io.AbstractFlameWriter;
 import org.jwildfire.create.tina.io.SimpleXMLBuilder;
@@ -389,6 +386,21 @@ public class FAFlameWriter extends AbstractFlameWriter {
         break;
     }
     flame.setPostSymmetryType(PostSymmetryType.NONE);
+
+    switch(flame.getBgColorType()) {
+      case GRADIENT_2X2:
+        flame.setBgColorType(BGColorType.SINGLE_COLOR);
+        flame.setBgColorRed(Tools.roundColor((flame.getBgColorLLRed() + flame.getBgColorLRRed() + flame.getBgColorULRed() + flame.getBgColorURRed() ) / 4.0));
+        flame.setBgColorGreen(Tools.roundColor((flame.getBgColorLLGreen() + flame.getBgColorLRGreen() + flame.getBgColorULGreen() + flame.getBgColorURGreen() ) / 4.0));
+        flame.setBgColorBlue(Tools.roundColor((flame.getBgColorLLBlue() + flame.getBgColorLRBlue() + flame.getBgColorULBlue() + flame.getBgColorURBlue() ) / 4.0));
+        break;
+      case GRADIENT_2X2_C:
+        flame.setBgColorType(BGColorType.SINGLE_COLOR);
+        flame.setBgColorRed(Tools.roundColor((flame.getBgColorLLRed() + flame.getBgColorLRRed() + flame.getBgColorULRed() + flame.getBgColorURRed() + flame.getBgColorCCRed() ) / 5.0));
+        flame.setBgColorGreen(Tools.roundColor((flame.getBgColorLLGreen() + flame.getBgColorLRGreen() + flame.getBgColorULGreen() + flame.getBgColorURGreen() + flame.getBgColorCCRed() ) / 5.0));
+        flame.setBgColorBlue(Tools.roundColor((flame.getBgColorLLBlue() + flame.getBgColorLRBlue() + flame.getBgColorULBlue() + flame.getBgColorURBlue() + flame.getBgColorCCRed() ) / 5.0));
+        break;
+    }
 
     // split prepost-variations into 2 variations
     for(Layer layer: flame.getLayers()) {
