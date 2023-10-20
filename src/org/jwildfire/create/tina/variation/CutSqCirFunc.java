@@ -1,26 +1,12 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
 
-import java.util.Random;
 
+import js.glsl.vec2;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.palette.RGBColor;
-import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.image.SimpleImage;
-
-import js.glsl.G;
-import js.glsl.mat2;
-import js.glsl.vec2;
-import js.glsl.vec3;
-import js.glsl.vec4;
-
-
 
 public class  CutSqCirFunc  extends VariationFunc implements SupportsGPU  {
 	  private static final long serialVersionUID = 1L;
@@ -143,7 +129,7 @@ public class  CutSqCirFunc  extends VariationFunc implements SupportsGPU  {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {

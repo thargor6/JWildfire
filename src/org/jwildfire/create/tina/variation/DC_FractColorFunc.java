@@ -1,30 +1,17 @@
 package org.jwildfire.create.tina.variation;
 
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-import java.time.Duration;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Calendar;
 import java.util.Random;
-
+import js.glsl.G;
+import js.glsl.vec2;
+import js.glsl.vec3;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.palette.RGBColor;
-import org.jwildfire.create.tina.palette.RGBPalette;
-
-import js.glsl.G;
-import js.glsl.mat2;
-import js.glsl.vec2;
-import js.glsl.vec3;
-import js.glsl.vec4;
-
-
 
 public class DC_FractColorFunc  extends DC_BaseFunc implements SupportsGPU {
 
@@ -142,7 +129,7 @@ public class DC_FractColorFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 	public String getGPUCode(FlameTransformationContext context) {
 		   return   "float x,y;"

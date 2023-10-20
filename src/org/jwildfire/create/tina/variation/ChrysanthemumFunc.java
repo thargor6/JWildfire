@@ -16,7 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static  org.jwildfire.base.mathlib.MathLib.*;
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -51,7 +52,7 @@ public class ChrysanthemumFunc extends SimpleVariationFunc implements SupportsGP
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 
   @Override

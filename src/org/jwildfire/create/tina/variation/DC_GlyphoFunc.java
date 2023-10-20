@@ -1,25 +1,13 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import java.util.Random;
-
-import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.palette.RGBColor;
-import org.jwildfire.create.tina.palette.RGBPalette;
-
 import js.glsl.G;
-import js.glsl.mat2;
 import js.glsl.vec2;
 import js.glsl.vec3;
-import js.glsl.vec4;
-
-
+import org.jwildfire.base.Tools;
 
 public class DC_GlyphoFunc  extends DC_BaseFunc implements SupportsGPU {
 
@@ -42,26 +30,16 @@ public class DC_GlyphoFunc  extends DC_BaseFunc implements SupportsGPU {
 	private static final String PARAM_F1 = "f1";
 	private static final String PARAM_F2 = "f2";
 	private static final String PARAM_F3 = "f3";
-
-
-
+	private static final String[] additionalParamNames = { PARAM_ZOOM,PARAM_SEED,PARAM_TIME,PARAM_F1,PARAM_F2,PARAM_F3};
 	double zoom=7.0;
-	private int seed = 10000;
 	double time=0.0;
 	double f1=0.115;
 	double f2=0.75;
 	double f3=1.5;
-
-
-	Random randomize=new Random(seed);
-	
  	long last_time=System.currentTimeMillis();
  	long elapsed_time=0;
-	
-
-	private static final String[] additionalParamNames = { PARAM_ZOOM,PARAM_SEED,PARAM_TIME,PARAM_F1,PARAM_F2,PARAM_F3};
-
-
+	private int seed = 10000;
+	Random randomize=new Random(seed);
 
 	public vec3 getRGBColor(double xp,double yp)
 	{
@@ -149,7 +127,7 @@ public class DC_GlyphoFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {

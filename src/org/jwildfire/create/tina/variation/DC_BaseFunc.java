@@ -1,19 +1,14 @@
 package org.jwildfire.create.tina.variation;
 
 
+import js.glsl.vec2;
+import js.glsl.vec3;
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.render.FlameRenderer;
-
-import js.glsl.G;
-import js.glsl.vec2;
-import js.glsl.vec3;
-
 
 public abstract class DC_BaseFunc  extends VariationFunc {
 
