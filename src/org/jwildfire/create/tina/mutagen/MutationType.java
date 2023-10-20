@@ -95,6 +95,12 @@ public enum MutationType {
       return PainterlyStyleMutation.class;
     }
   },
+  RANDOM_BG_COLOR {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return RandomBGColorMutation.class;
+    }
+  },
   RANDOM_FLAME {
     @Override
     protected Class<? extends Mutation> getMutationClass() {
