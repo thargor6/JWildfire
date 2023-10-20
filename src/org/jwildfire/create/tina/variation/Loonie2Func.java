@@ -152,7 +152,7 @@ public class Loonie2Func extends VariationFunc implements SupportsGPU {
         + "      xrt = swp;\n"
         + "      r2 = fmaxf(r2, xrt * _coss + fabsf(yrt) * _sins);\n"
         + "    }\n"
-        + "    r2 = r2 * _cosc + __loonie2_circle * _sinc;\n"
+        + "    r2 = r2 * _cosc + circle * _sinc;\n"
         + "    if (i > 1) {\n"
         + "      r2 = r2*r2;\n"
         + "    } else {\n"
