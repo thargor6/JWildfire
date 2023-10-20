@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.mutagen.RandomParamMutation;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 
 public class DualityRandomFlameGenerator extends RandomFlameGenerator {
   private final List<String> preferedVariations = new ArrayList<String>();
@@ -200,7 +201,7 @@ public class DualityRandomFlameGenerator extends RandomFlameGenerator {
 
   private String getRandomVariationName() {
     while (true) {
-      String name = VariationFuncList.getRandomVariationname();
+      String name = VariationFuncList.getRandomVariationname(Math.random() > 0.75 ? VariationFuncType.VARTYPE_2D : VariationFuncType.VARTYPE_3D);
       if (!name.startsWith("fract") && !name.startsWith("inflate") && !name.startsWith("pre_") && !name.startsWith("post_") 
           && !name.startsWith("prepost_") && !name.equals("flatten")) {
         return name;

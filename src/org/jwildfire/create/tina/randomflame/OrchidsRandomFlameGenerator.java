@@ -24,6 +24,7 @@ import org.jwildfire.create.tina.mutagen.RandomGradientMutation;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 
 public class OrchidsRandomFlameGenerator extends RandomFlameGenerator {
 
@@ -234,7 +235,7 @@ public class OrchidsRandomFlameGenerator extends RandomFlameGenerator {
           xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(Math.random() < 0.5 ? "polar" : "polar2", true));
         }
         else {
-          xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
+          xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(Math.random() > 0.75 ? VariationFuncType.VARTYPE_2D : VariationFuncType.VARTYPE_3D), true));
         }
       }
       if (Math.random() > 0.666) {

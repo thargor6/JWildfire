@@ -23,6 +23,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.variation.VariationFuncType;
 
 public class GhostsRandomFlameGenerator extends RandomFlameGenerator {
 
@@ -47,7 +48,7 @@ public class GhostsRandomFlameGenerator extends RandomFlameGenerator {
         xForm.addVariation(0.5 + Math.random(), varFunc);
       }
       {
-        VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
+        VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(Math.random() > 0.75 ? VariationFuncType.VARTYPE_2D : VariationFuncType.VARTYPE_3D), true);
         xForm.addVariation(0.05 + Math.random() * 0.15, varFunc).setPriority(Math.random() < 0.5 ? -1 : 1);
       }
 
