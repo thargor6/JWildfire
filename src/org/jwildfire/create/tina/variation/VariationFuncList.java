@@ -1197,7 +1197,7 @@ VariationFuncList {
 
   public static boolean isValidRandomVariation(String name) {
     return (((!considerVariationCosts || getVariationEvalCost(name) < VARIATION_COST_THRESHOLD) || Math.random()<0.1) &&
-           !(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0 && Math.random()<0.42) && !(name.indexOf("pre_") == 0 && Math.random()<0.44)
+           !(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0)
            && !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf") && !name.equals("flatten"))
            && (VariationFuncList.supportedVariations.isEmpty() || VariationFuncList.supportedVariations.contains(name));
   }

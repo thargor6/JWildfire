@@ -31,6 +31,7 @@
 
 package org.jwildfire.create.tina.variation.mesh;
 
+import java.util.Random;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
@@ -39,8 +40,6 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.VariationFuncType;
-
-import java.util.Random;
 
 public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   private static final long serialVersionUID = 1L;
@@ -339,7 +338,6 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[] {
-      VariationFuncType.VARTYPE_3D,
       VariationFuncType.VARTYPE_SIMULATION,
       VariationFuncType.VARTYPE_DC,
       VariationFuncType.VARTYPE_BASE_SHAPE

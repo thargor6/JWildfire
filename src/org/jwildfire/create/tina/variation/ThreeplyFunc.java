@@ -3,11 +3,6 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
-import org.jwildfire.base.Tools;
-
 public class ThreeplyFunc extends VariationFunc {
 
   private static final long serialVersionUID = 1L;
@@ -76,6 +71,6 @@ public class ThreeplyFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE};
   }
 }

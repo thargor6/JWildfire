@@ -16,13 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import js.glsl.G;
+import js.glsl.vec3;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-
-import js.glsl.G;
-import js.glsl.vec2;
-import js.glsl.vec3;
 
 public class Octahedron3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
@@ -118,7 +116,7 @@ public class Octahedron3DFunc extends VariationFunc implements SupportsGPU {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
 	  @Override
 	  public String getGPUCode(FlameTransformationContext context) {

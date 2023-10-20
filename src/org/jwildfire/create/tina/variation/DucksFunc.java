@@ -1,6 +1,7 @@
 package org.jwildfire.create.tina.variation;
 
 
+import java.io.StringReader;
 import js.colordomain.Complex;
 import org.codehaus.janino.ClassBodyEvaluator;
 import org.codehaus.janino.Scanner;
@@ -8,9 +9,6 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-
-import java.io.StringReader;
-
 
 public class DucksFunc extends VariationFunc {
 
@@ -897,7 +895,7 @@ public class DucksFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
   }
 
 }

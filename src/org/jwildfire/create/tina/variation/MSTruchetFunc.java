@@ -16,8 +16,6 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -26,24 +24,15 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
-
 import org.jwildfire.base.Tools;
-import org.jwildfire.base.mathlib.GfxMathLib;
-import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.variation.MSTruchetFunc.Point;
 import org.jwildfire.create.tina.variation.MSTruchetFunc.QuadTree;
 import org.jwildfire.create.tina.variation.MSTruchetFunc.Rectangle;
-import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
 public class MSTruchetFunc extends AbstractBufferedImageWFFunc {
@@ -468,7 +457,7 @@ public class MSTruchetFunc extends AbstractBufferedImageWFFunc {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC};
 	}
 
 }
