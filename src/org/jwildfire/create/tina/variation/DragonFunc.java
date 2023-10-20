@@ -26,13 +26,12 @@ package org.jwildfire.create.tina.variation;
  * Line_thickness : 1..200
  */
 
+import java.util.Arrays;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-
-import java.util.Arrays;
 
 public class DragonFunc extends VariationFunc {
 
@@ -320,7 +319,7 @@ public class DragonFunc extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
   }
 
 }

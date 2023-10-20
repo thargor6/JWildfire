@@ -19,22 +19,20 @@
 package org.jwildfire.create.tina.variation;
 
 
+import static org.jwildfire.base.mathlib.MathLib.fmod;
+
 import csk.taprats.geometry.Line;
 import csk.taprats.geometry.Point;
 import csk.taprats.geometry.Triangle;
 import csk.taprats.geometry.Triangulate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import megamu.mesh.MPolygon;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.plot.DrawFunc;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-
 
 /**
  * @author Jesus Sosa
@@ -195,7 +193,7 @@ public class SunflowerVoroniFunc extends DrawFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
   }
 
 }

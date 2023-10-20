@@ -2,14 +2,12 @@ package org.jwildfire.create.tina.variation;
 
 
 import csk.taprats.geometry.Point;
+import java.awt.*;
+import java.util.Random;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-
-import java.awt.*;
-import java.util.Random;
-
 
 public class Mandala2Func extends VariationFunc {
 
@@ -472,7 +470,7 @@ public class Mandala2Func extends VariationFunc {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
   }
 
 }

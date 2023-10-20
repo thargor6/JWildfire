@@ -210,7 +210,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[] {
-      VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE
+      VariationFuncType.VARTYPE_BASE_SHAPE
     };
   }
 }
