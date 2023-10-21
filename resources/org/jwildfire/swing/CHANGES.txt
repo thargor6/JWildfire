@@ -1,3 +1,13 @@
+V8.20 (21.10.2023)
+ -upgraded the GPU render to CUDA 11.8, works also on NVIDIA 4xxx GPU's now
+ -new "Underwater"-random-flame-generator, most generated flames also work well with the GPU render
+ -new "RANDOM_BG_COLOR"-mutation, makes it easy to play with different backgrounds for "Underwater"-flames
+ -fixed a bug in the GPU-implementation of "loonie2"
+ -added a non-ugly flame for selftest of the gpu render (selftest.bat in the FARenderJWF-folder)
+ -adjusted the variation-type of many variations, leading to better random-flames in some cases
+ -slightly improved the quality of various random-flame-generators
+ -when using GPU render, automatically convert background-gradients to an average background color (because GPU render currently only supports a single background color)
+
 V8.11 (02.07.2023)
  -upgraded the WIX- and jpackage-versions, so this is only a technical update
 

@@ -84,7 +84,19 @@ public class UnderwaterRandomFlameGenerator extends RandomFlameGenerator {
         xForm.setPostCoeff21(0);
 
         // variation 1
-        xForm.addVariation(0.41432335, VariationFuncList.getVariationFuncInstance("linear3D", true));
+        if (Math.random() > 0.333) {
+          xForm.addVariation(
+              0.41432335, VariationFuncList.getVariationFuncInstance("linear3D", true));
+        }
+        else {
+          xForm.addVariation(
+                  0.25 + Math.random() * 0.5,
+                  VariationFuncList.getVariationFuncInstance(
+                          VariationFuncList.getRandomVariationname(
+                                  Math.random() < 0.65
+                                          ? VariationFuncType.VARTYPE_2D
+                                          : VariationFuncType.VARTYPE_3D)));
+        }
         // variation 2
         {
           if(Math.random()>0.5) {
@@ -133,7 +145,20 @@ public class UnderwaterRandomFlameGenerator extends RandomFlameGenerator {
         xForm.setPostCoeff21(0);
 
         // variation 1
-        xForm.addVariation(0.21369106, VariationFuncList.getVariationFuncInstance("linear3D", true));
+        if (Math.random() > 0.42) {
+          xForm.addVariation(
+              0.21369106, VariationFuncList.getVariationFuncInstance("linear3D", true));
+        }
+        else {
+          xForm.addVariation(
+                  0.125 + Math.random() * 0.25,
+                  VariationFuncList.getVariationFuncInstance(
+                          VariationFuncList.getRandomVariationname(
+                                  Math.random() < 0.65
+                                          ? VariationFuncType.VARTYPE_2D
+                                          : VariationFuncType.VARTYPE_3D)));
+
+        }
         // variation 2
         xForm.addVariation(0.61264366, VariationFuncList.getVariationFuncInstance("foci", true));
         // variation 3
@@ -157,8 +182,8 @@ public class UnderwaterRandomFlameGenerator extends RandomFlameGenerator {
           XFormTransformService.localTranslate(xForm, -0.15 + 0.3*Math.random(), -0.15 + 0.3*Math.random(), false);
         }
       }
-      // create final transform 1
-      if(Math.random() > 0.666)  {
+      // create final transform
+      if(Math.random() > 0.72)  {
         XForm xForm = new XForm();
         layer.getFinalXForms().add(xForm);
         xForm.setWeight(0);
@@ -203,7 +228,7 @@ public class UnderwaterRandomFlameGenerator extends RandomFlameGenerator {
       /*if(Math.random()>0.5)*/ {
       flame.setBgColorType(BGColorType.SINGLE_COLOR);
       int r, g, b;
-      if(Math.random()<0.25) {
+      if(Math.random()<0.125) {
         r = 0;
         g = 102;
         b = 102;
@@ -211,13 +236,13 @@ public class UnderwaterRandomFlameGenerator extends RandomFlameGenerator {
       else {
         if(Math.random()<0.5) {
           r = 0;
-          g = (int)(60 + 82 *  Math.random());
+          g = (int)(50 + 102 *  Math.random());
           b = g;
         }
         else {
           r = 0;
-          g = (int)(60 + 82 *  Math.random());
-          b = (int)(60 + 82 *  Math.random());
+          g = (int)(50 + 102 *  Math.random());
+          b = (int)(50 + 102 *  Math.random());
         }
       }
       flame.setBgColorRed(r);

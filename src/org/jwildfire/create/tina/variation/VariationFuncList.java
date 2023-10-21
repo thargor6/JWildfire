@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class
 VariationFuncList {
@@ -1169,7 +1170,7 @@ VariationFuncList {
 
   public static String getRandomVariationname() {
     if(TinaControllerContextService.getContext().isGpuMode()) {
-      return getRandomVariationname(VariationFuncType.VARTYPE_SUPPORTS_GPU);
+      return internalGetRandomVariationname(VariationFuncType.VARTYPE_SUPPORTS_GPU);
     } else {
       int idx =
           Math.min(
@@ -1180,10 +1181,31 @@ VariationFuncList {
   }
 
   public static String getRandomVariationname(VariationFuncType variationFuncType) {
+    if(TinaControllerContextService.getContext().isGpuMode()) {
+      return internalGetRandomVariationname(VariationFuncType.VARTYPE_SUPPORTS_GPU, variationFuncType);
+    }
+    else {
+      return internalGetRandomVariationname(variationFuncType);
+    }
+  }
+
+  private static String internalGetRandomVariationname(VariationFuncType variationFuncType) {
     if(variationsByType==null) {
       refreshNameList();
     }
     List<String> variations = variationsByType.get(variationFuncType);
+    int idx = Math.min((int) (Math.random() * variations.size()), variations.size()-1);
+    return idx >=0 ? variations.get(idx) : DEFAULT_VARIATION;
+  }
+
+
+  private static String internalGetRandomVariationname(VariationFuncType variationFuncType1,VariationFuncType variationFuncType2) {
+    if(variationsByType==null) {
+      refreshNameList();
+    }
+    List<String> variationsType1 = variationsByType.get(variationFuncType1);
+    List<String> variationsType2 = variationsByType.get(variationFuncType2);
+    List<String> variations = variationsType1.stream().filter(variationsType2::contains).collect(Collectors.toList());
     int idx = Math.min((int) (Math.random() * variations.size()), variations.size()-1);
     return idx >=0 ? variations.get(idx) : DEFAULT_VARIATION;
   }
