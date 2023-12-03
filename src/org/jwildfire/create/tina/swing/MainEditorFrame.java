@@ -6320,6 +6320,7 @@ public class MainEditorFrame extends JFrame {
     pCmb.addItem(XFormScriptType.ROTATE_5TH_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_LAST_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_FINAL_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_BG_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_POST_FULL);
     pCmb.addItem(XFormScriptType.ROTATE_POST_FIRST_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_POST_2ND_XFORM);
@@ -6328,6 +6329,7 @@ public class MainEditorFrame extends JFrame {
     pCmb.addItem(XFormScriptType.ROTATE_POST_5TH_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_POST_LAST_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_POST_FINAL_XFORM);
+    pCmb.addItem(XFormScriptType.ROTATE_POST_BG_XFORM);
     pCmb.setSelectedItem(XFormScriptType.NONE);
   }
 
