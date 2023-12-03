@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -667,6 +667,9 @@ public enum LeapMotionOutputChannel {
     }
     else if (pProperty.getIndex1() >= layer.getXForms().size() && pProperty.getIndex1() < (layer.getXForms().size() + layer.getFinalXForms().size())) {
       return layer.getFinalXForms().get(pProperty.getIndex1() - layer.getXForms().size());
+    }
+    else if (pProperty.getIndex1() >= (layer.getXForms().size() + layer.getFinalXForms().size()) && pProperty.getIndex1() < (layer.getXForms().size() + layer.getFinalXForms().size() + layer.getBGXForms().size())) {
+      return layer.getBGXForms().get(pProperty.getIndex1() - layer.getXForms().size() - layer.getFinalXForms().size());
     }
     else {
       return null;

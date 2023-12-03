@@ -82,6 +82,10 @@ public class JWFFlameWriter extends AbstractFlameWriter {
       for (XForm xForm : layer.getFinalXForms()) {
         xb.emptyElement("finalxform", createXFormAttrList(xb, layer, xForm, null, true));
       }
+      // BGXForms
+      for (XForm xForm : layer.getBGXForms()) {
+        xb.emptyElement("bgxform", createXFormAttrList(xb, layer, xForm, null, true));
+      }
       // Palette
       {
         xb.beginElement("palette",

@@ -475,6 +475,20 @@ public class FlamePanel extends ImagePanel {
               }
             }
           }
+          for (int i = 0; i < layer.getBGXForms().size(); i++) {
+            XForm xForm = layer.getBGXForms().get(i);
+            if ((pass == 0 && (selectedXForm == null || xForm != selectedXForm)) || (pass == 1 && xForm == selectedXForm)) {
+              boolean isSelected = xForm == selectedXForm;
+              if (prefs.isTinaEditorControlsWithShadows()) {
+                g.setColor(SHADOW_COLOR);
+                drawXForm(g, xForm, i, layer.getXForms().size(), true, true, isSelected);
+                drawXForm(g, xForm, i, layer.getXForms().size(), true, false, isSelected);
+              }
+              else {
+                drawXForm(g, xForm, i, layer.getXForms().size(), true, false, isSelected);
+              }
+            }
+          }
           if (selectedXForm == null) {
             break;
           }

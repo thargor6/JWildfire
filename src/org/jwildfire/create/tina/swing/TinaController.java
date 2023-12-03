@@ -1537,7 +1537,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       @Override
       public int getRowCount() {
-        return getCurrLayer() != null ? getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() : 0;
+        return getCurrLayer() != null ? getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() + getCurrLayer().getBGXForms().size() : 0;
       }
 
       @Override
@@ -1561,13 +1561,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
         if (getCurrFlame() != null) {
-          XForm xForm = rowIndex < getCurrLayer().getXForms().size() ? getCurrLayer().getXForms().get(rowIndex) : getCurrLayer().getFinalXForms().get(rowIndex - getCurrLayer().getXForms().size());
+          XForm xForm = rowIndex < getCurrLayer().getXForms().size() ? getCurrLayer().getXForms().get(rowIndex) :
+                  rowIndex >= getCurrLayer().getXForms().size() && rowIndex < getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() ?
+                          getCurrLayer().getFinalXForms().get(rowIndex - getCurrLayer().getXForms().size()) : getCurrLayer().getBGXForms().get(rowIndex - getCurrLayer().getXForms().size() - getCurrLayer().getFinalXForms().size());
           if (xForm.getColorType() == ColorType.UNSET) {
             xForm.setColorType(rowIndex < getCurrLayer().getXForms().size() ? ColorType.DIFFUSION : ColorType.NONE);
           }
           switch (columnIndex) {
             case COL_TRANSFORM:
-              return rowIndex < getCurrLayer().getXForms().size() ? "Transf" + String.valueOf(rowIndex + 1) : "Final" + String.valueOf(rowIndex - getCurrLayer().getXForms().size() + 1);
+              return rowIndex < getCurrLayer().getXForms().size() ? "Transf" + (rowIndex + 1) :
+                      rowIndex >= getCurrLayer().getXForms().size() && rowIndex < getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() ?
+                      "Final" + (rowIndex - getCurrLayer().getXForms().size() + 1) : "Backgr" + (rowIndex - getCurrLayer().getXForms().size() - getCurrLayer().getFinalXForms().size() + 1);
             case COL_VARIATIONS:
               return getXFormCaption(xForm);
             case COL_WEIGHT:
@@ -1861,7 +1865,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       @Override
       public int getRowCount() {
         XForm xForm = getCurrXForm();
-        return xForm != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0 ? getCurrLayer().getXForms().size() : 0;
+        return xForm != null && (getCurrLayer().getFinalXForms().indexOf(xForm) < 0) && (getCurrLayer().getBGXForms().indexOf(xForm) < 0) ? getCurrLayer().getXForms().size() : 0;
       }
 
       @Override
@@ -2348,22 +2352,25 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  enum XFormType {
-    NORMAL, FINAL, BOTH
+  enum EditXFormType {
+    NORMAL, FINAL, BACKGROUND, ALL
   }
 
   public XForm getCurrXForm() {
-    return getCurrXForm(XFormType.BOTH);
+    return getCurrXForm(EditXFormType.ALL);
   }
 
-  public XForm getCurrXForm(XFormType pXFormType) {
+  public XForm getCurrXForm(EditXFormType pXFormType) {
     if (getCurrLayer() != null) {
       int row = data.transformationsTable.getSelectedRow();
-      if (row >= 0 && row < getCurrLayer().getXForms().size() && (pXFormType == XFormType.BOTH || pXFormType == XFormType.NORMAL)) {
+      if (row >= 0 && row < getCurrLayer().getXForms().size() && (pXFormType == EditXFormType.ALL || pXFormType == EditXFormType.NORMAL)) {
         return getCurrLayer().getXForms().get(row);
       }
-      if (row >= getCurrLayer().getXForms().size() && row < (getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size()) && (pXFormType == XFormType.BOTH || pXFormType == XFormType.FINAL)) {
+      if (row >= getCurrLayer().getXForms().size() && row < (getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size()) && (pXFormType == EditXFormType.ALL || pXFormType == EditXFormType.FINAL)) {
         return getCurrLayer().getFinalXForms().get(row - getCurrLayer().getXForms().size());
+      }
+      if (row >= (getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size()) && row < (getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() + getCurrLayer().getBGXForms().size()) && (pXFormType == EditXFormType.ALL || pXFormType == EditXFormType.BACKGROUND)) {
+        return getCurrLayer().getBGXForms().get(row - getCurrLayer().getXForms().size() - getCurrLayer().getFinalXForms().size());
       }
     }
     return null;
@@ -2734,16 +2741,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void duplicateXForm() {
     int fromId = data.transformationsTable.getSelectedRow();
-    if (fromId < 0 || fromId >= getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size())
+    if (fromId < 0 || fromId >= getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() + getCurrLayer().getBGXForms().size())
       return;
-    boolean isFinal = (fromId >= getCurrLayer().getXForms().size());
     XForm xForm = new XForm();
     xForm.assign(getCurrXForm());
     saveUndoPoint();
-    if (isFinal) {
-      getCurrLayer().getFinalXForms().add(xForm);
-    }
-    else {
+    XFormType xFormType;
+    if(fromId < getCurrLayer().getXForms().size()) {
+      xFormType = XFormType.XFORM;
       getCurrLayer().getXForms().add(xForm);
       if (fromId >= 0 && fromId < getCurrLayer().getXForms().size()) {
         // copy xaos from values
@@ -2757,6 +2762,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
       }
     }
+    else if(fromId >= getCurrLayer().getXForms().size() && fromId < getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size()) {
+      xFormType = XFormType.FINAL_XFORM;
+      getCurrLayer().getFinalXForms().add(xForm);
+    }
+    else {
+      xFormType = XFormType.BACKGROUND;
+      getCurrLayer().getBGXForms().add(xForm);
+    }
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2764,7 +2777,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     finally {
       gridRefreshing = false;
     }
-    int row = getCurrLayer().getXForms().size() + (isFinal ? getCurrLayer().getFinalXForms().size() : 0) - 1;
+    int row;
+    switch (xFormType) {
+      case FINAL_XFORM:
+        row = getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() - 1; break;
+      case BACKGROUND:
+        row = getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() + getCurrLayer().getBGXForms().size() - 1; break;
+      default:
+      case XFORM:
+        row = getCurrLayer().getXForms().size() - 1; break;
+    }
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(true, false, 1, true, false);
   }
@@ -2772,10 +2794,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void deleteXForm() {
     int row = data.transformationsTable.getSelectedRow();
     saveUndoPoint();
-    if (row >= getCurrLayer().getXForms().size()) {
-      getCurrLayer().getFinalXForms().remove(row - getCurrLayer().getXForms().size());
-    }
-    else {
+
+    if(row < getCurrLayer().getXForms().size()) {
       getCurrLayer().getXForms().remove(getCurrXForm());
       // adjust xaos
       for (int i = 0; i < getCurrLayer().getXForms().size(); i++) {
@@ -2785,6 +2805,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
         xFormi.getModifiedWeights()[getCurrLayer().getXForms().size()] = 1;
       }
+    }
+    else if(row >= getCurrLayer().getXForms().size() && row < getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size()) {
+      getCurrLayer().getFinalXForms().remove(row - getCurrLayer().getXForms().size());
+    }
+    else {
+      getCurrLayer().getBGXForms().remove(row - getCurrLayer().getXForms().size() - getCurrLayer().getFinalXForms().size());
     }
     gridRefreshing = true;
     try {
@@ -2811,6 +2837,25 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       gridRefreshing = false;
     }
     int row = getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() - 1;
+    data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
+    refreshFlameImage(true, false, 1, true, false);
+  }
+
+  public void addBGForm() {
+    XForm xForm = new XForm();
+    xForm.addVariation(1.0, new Linear3DFunc());
+    xForm.setColorSymmetry(1.0);
+    xForm.setColorType(ColorType.NONE);
+    saveUndoPoint();
+    getCurrLayer().getBGXForms().add(xForm);
+    gridRefreshing = true;
+    try {
+      refreshTransformationsTable();
+    }
+    finally {
+      gridRefreshing = false;
+    }
+    int row = getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() + getCurrLayer().getBGXForms().size() - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(true, false, 1, true, false);
   }
@@ -3364,7 +3409,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void transformationWeightREd_changed() {
     XForm xForm = getCurrXForm();
-    if (!gridRefreshing && xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0) {
+    if (!gridRefreshing && xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0 && getCurrLayer().getBGXForms().indexOf(xForm) < 0) {
       xFormTextFieldChanged(null, data.transformationWeightREd, "weight", 1.0);
       gridRefreshing = true;
       try {
@@ -3492,6 +3537,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           for (int i = 0; i < layer.getFinalXForms().size(); i++) {
             if (xForm == layer.getFinalXForms().get(i)) {
               int row = layer.getXForms().size() + i;
+              afterTriangleSelected(xForm, row);
+              return;
+            }
+          }
+          for (int i = 0; i < layer.getBGXForms().size(); i++) {
+            if (xForm == layer.getBGXForms().get(i)) {
+              int row = layer.getXForms().size() + layer.getFinalXForms().size() + i;
               afterTriangleSelected(xForm, row);
               return;
             }
@@ -5337,12 +5389,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             xForm.randomizeModColorEffects();
           }
         }
-        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshXFormUI(getCurrXForm(EditXFormType.ALL));
         refreshFlameImage(true, false, 1, true, false);
       }
     }
     else {
-      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      XForm xForm = getCurrXForm(EditXFormType.NORMAL);
       if (xForm != null) {
         saveUndoPoint();
         xForm.randomizeModColorEffects();
@@ -5362,12 +5414,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             xForm.randomizeModGamma();
           }
         }
-        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshXFormUI(getCurrXForm(EditXFormType.ALL));
         refreshFlameImage(true, false, 1, true, false);
       }
     }
     else {
-      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      XForm xForm = getCurrXForm(EditXFormType.NORMAL);
       if (xForm != null) {
         saveUndoPoint();
         xForm.randomizeModGamma();
@@ -5387,12 +5439,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             xForm.randomizeModContrast();
           }
         }
-        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshXFormUI(getCurrXForm(EditXFormType.ALL));
         refreshFlameImage(true, false, 1, true, false);
       }
     }
     else {
-      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      XForm xForm = getCurrXForm(EditXFormType.NORMAL);
       if (xForm != null) {
         saveUndoPoint();
         xForm.randomizeModContrast();
@@ -5412,12 +5464,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             xForm.randomizeModSaturation();
           }
         }
-        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshXFormUI(getCurrXForm(EditXFormType.ALL));
         refreshFlameImage(true, false, 1, true, false);
       }
     }
     else {
-      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      XForm xForm = getCurrXForm(EditXFormType.NORMAL);
       if (xForm != null) {
         saveUndoPoint();
         xForm.randomizeModSaturation();
@@ -5437,12 +5489,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             xForm.randomizeModHue();
           }
         }
-        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshXFormUI(getCurrXForm(EditXFormType.ALL));
         refreshFlameImage(true, false, 1, true, false);
       }
     }
     else {
-      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      XForm xForm = getCurrXForm(EditXFormType.NORMAL);
       if (xForm != null) {
         saveUndoPoint();
         xForm.randomizeModHue();
@@ -5462,12 +5514,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             xForm.resetModColorEffects();
           }
         }
-        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshXFormUI(getCurrXForm(EditXFormType.ALL));
         refreshFlameImage(true, false, 1, true, false);
       }
     }
     else {
-      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      XForm xForm = getCurrXForm(EditXFormType.NORMAL);
       if (xForm != null) {
         saveUndoPoint();
         xForm.resetModColorEffects();

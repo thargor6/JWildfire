@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -58,6 +58,9 @@ public class Layer implements Assignable<Layer>, Serializable {
   @AnimAware
   private final List<XForm> finalXForms = new XFormList(this);
 
+  @AnimAware
+  private final List<XForm> bgXForms = new XFormList(this);
+
   private String name = "";
 
   private String gradientMapFilename = "";
@@ -83,6 +86,9 @@ public class Layer implements Assignable<Layer>, Serializable {
     return finalXForms;
   }
 
+  public List<XForm> getBGXForms() {
+    return bgXForms;
+  }
   public RGBPalette getPalette() {
     return palette;
   }
@@ -238,6 +244,19 @@ public class Layer implements Assignable<Layer>, Serializable {
         }
       }
     }
+    {
+      for (XForm xForm : this.getBGXForms()) {
+        xForm.initTransform();
+        if(pFlameTransformationContext.getThreadId()==0) {
+          for (Variation var : xForm.getVariations()) {
+            var.getFunc().initOnce(pFlameTransformationContext, this, xForm, var.getAmount());
+          }
+        }
+        for (Variation var : xForm.getVariations()) {
+          var.getFunc().init(pFlameTransformationContext, this, xForm, var.getAmount());
+        }
+      }
+    }
     for (int k = 0; k < n; k++) {
       XForm xform = getXForms().get(k);
       double totValue = 0;
@@ -295,6 +314,10 @@ public class Layer implements Assignable<Layer>, Serializable {
     for (XForm xForm : pSrc.getFinalXForms()) {
       finalXForms.add(xForm.makeCopy());
     }
+    bgXForms.clear();
+    for (XForm xForm : pSrc.getBGXForms()) {
+      bgXForms.add(xForm.makeCopy());
+    }
   }
 
   @Override
@@ -317,7 +340,7 @@ public class Layer implements Assignable<Layer>, Serializable {
         !gradientMapFilename.equals(pSrc.gradientMapFilename) ||
         smoothGradient != pSrc.smoothGradient ||
         !palette.isEqual(pSrc.palette) || (visible != pSrc.visible) ||
-        (xForms.size() != pSrc.xForms.size()) || (finalXForms.size() != pSrc.finalXForms.size())) {
+        (xForms.size() != pSrc.xForms.size()) || (finalXForms.size() != pSrc.finalXForms.size()) || (bgXForms.size() != pSrc.bgXForms.size())) {
       return false;
     }
     for (int i = 0; i < xForms.size(); i++) {
@@ -327,6 +350,11 @@ public class Layer implements Assignable<Layer>, Serializable {
     }
     for (int i = 0; i < finalXForms.size(); i++) {
       if (!finalXForms.get(i).isEqual(pSrc.finalXForms.get(i))) {
+        return false;
+      }
+    }
+    for (int i = 0; i < bgXForms.size(); i++) {
+      if (!bgXForms.get(i).isEqual(pSrc.bgXForms.get(i))) {
         return false;
       }
     }

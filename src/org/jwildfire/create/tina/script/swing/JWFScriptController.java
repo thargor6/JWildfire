@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,6 +22,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XFormType;
 import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
@@ -435,11 +436,15 @@ public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
 
     for (int i = 0; i < pLayer.getXForms().size(); i++) {
       XForm xForm = pLayer.getXForms().get(i);
-      addXForm(pSB, xForm, i, false);
+      addXForm(pSB, xForm, i, XFormType.XFORM);
     }
     for (int i = 0; i < pLayer.getFinalXForms().size(); i++) {
       XForm xForm = pLayer.getFinalXForms().get(i);
-      addXForm(pSB, xForm, i, true);
+      addXForm(pSB, xForm, i, XFormType.FINAL_XFORM);
+    }
+    for (int i = 0; i < pLayer.getBGXForms().size(); i++) {
+      XForm xForm = pLayer.getFinalXForms().get(i);
+      addXForm(pSB, xForm, i, XFormType.BACKGROUND);
     }
     //    sb.append("  // create the gradient\n");
     //    for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
@@ -449,14 +454,20 @@ public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
     pSB.append("  }\n");
   }
 
-  private void addXForm(StringBuilder pSB, XForm pXForm, int pIndex, boolean pFinalXForm) {
-    pSB.append("    // create " + (pFinalXForm ? "final transform" : "transform") + " " + (pIndex + 1) + "\n");
+  private void addXForm(StringBuilder pSB, XForm pXForm, int pIndex, XFormType pXFormType) {
+    pSB.append("    // create " + pXFormType.getCaption() + " " + (pIndex + 1) + "\n");
     pSB.append("    {\n");
     pSB.append("      XForm xForm = new XForm();\n");
-    if (pFinalXForm) {
-      pSB.append("      layer.getFinalXForms().add(xForm);\n");
-    } else {
-      pSB.append("      layer.getXForms().add(xForm);\n");
+    switch (pXFormType) {
+      case XFORM:
+        pSB.append("      layer.getXForms().add(xForm);\n");
+        break;
+      case FINAL_XFORM:
+        pSB.append("      layer.getFinalXForms().add(xForm);\n");
+        break;
+      case BACKGROUND:
+        pSB.append("      layer.getBGXForms().add(xForm);\n");
+        break;
     }
     pSB.append("      xForm.setWeight(" + Tools.doubleToString(pXForm.getWeight()) + ");\n");
     pSB.append("      xForm.setColor(" + Tools.doubleToString(pXForm.getColor()) + ");\n");
@@ -475,11 +486,11 @@ public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
     }
     switch (pXForm.getColorType()) {
       case NONE:
-        if (!pFinalXForm)
+        if (XFormType.XFORM.equals(pXFormType))
           pSB.append("      xForm.setColorType(ColorType.NONE);\n");
         break;
       case DIFFUSION:
-        if (pFinalXForm) {
+        if (XFormType.FINAL_XFORM.equals(pXFormType)) {
           pSB.append("      xForm.setColorType(ColorType.DIFFUSION);\n");
         }
         break;
@@ -616,7 +627,7 @@ public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
       pSB.append("\n");
     }
 
-    if (!pFinalXForm) {
+    if (XFormType.XFORM.equals(pXFormType)) {
       boolean hasHeader = false;
       for (int i = 0; i < pXForm.getModifiedWeights().length; i++) {
         if (fabs(pXForm.getModifiedWeights()[i] - 1.0) > EPSILON) {

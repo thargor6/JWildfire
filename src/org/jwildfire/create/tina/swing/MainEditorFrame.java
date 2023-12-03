@@ -340,6 +340,7 @@ public class MainEditorFrame extends JFrame {
   private JSlider tinaPaletteBrightnessSlider = null;
 
   private JButton tinaAddFinalTransformationButton = null;
+  private JButton tinaAddBGTransformationButton = null;
   private JLabel affineC00Lbl = null;
   private JWFNumberField affineC00REd = null;
   private JLabel affineC01Lbl = null;
@@ -6520,9 +6521,9 @@ public class MainEditorFrame extends JFrame {
       tinaAddFinalTransformationButton = new JButton();
       tinaAddFinalTransformationButton.setActionCommand("Add Final");
       tinaAddFinalTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaAddFinalTransformationButton.setPreferredSize(new Dimension(90, 24));
+      tinaAddFinalTransformationButton.setPreferredSize(new Dimension(55, 24));
       tinaAddFinalTransformationButton.setToolTipText("Add final transformation");
-      tinaAddFinalTransformationButton.setText("Add final");
+      tinaAddFinalTransformationButton.setText("Final");
       tinaAddFinalTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.addFinalXForm();
@@ -6532,6 +6533,22 @@ public class MainEditorFrame extends JFrame {
     return tinaAddFinalTransformationButton;
   }
 
+  private JButton getTinaAddBGTransformationButton() {
+    if (tinaAddBGTransformationButton == null) {
+      tinaAddBGTransformationButton = new JButton();
+      tinaAddBGTransformationButton.setToolTipText("Add background transformation");
+      tinaAddBGTransformationButton.setText("B");
+      tinaAddBGTransformationButton.setPreferredSize(new Dimension(35, 24));
+      tinaAddBGTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+
+      tinaAddBGTransformationButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.addBGForm();
+        }
+      });
+    }
+    return tinaAddBGTransformationButton;
+  }
   private JLabel getAffineC00Lbl() {
     if (affineC00Lbl == null) {
       affineC00Lbl = new JLabel();
@@ -6846,7 +6863,17 @@ public class MainEditorFrame extends JFrame {
       panel_1.add(getTinaAddLinkedTransformationButton());
       trnsformationsEastPanel.add(getPanel_19());
       trnsformationsEastPanel.add(getTinaDeleteTransformationButton(), null);
-      trnsformationsEastPanel.add(getTinaAddFinalTransformationButton(), null);
+//      trnsformationsEastPanel.add(getTinaAddFinalTransformationButton(), null);
+
+      JPanel panel_3 = new JPanel();
+      FlowLayout flowLayout_3 = (FlowLayout) panel_3.getLayout();
+      flowLayout_3.setAlignment(FlowLayout.LEFT);
+      flowLayout_3.setVgap(0);
+      flowLayout_3.setHgap(0);
+      panel_3.setPreferredSize(new Dimension(90, 24));
+      trnsformationsEastPanel.add(panel_3);
+      panel_3.add(getTinaAddFinalTransformationButton());
+      panel_3.add(getTinaAddBGTransformationButton());
     }
     return trnsformationsEastPanel;
   }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -790,6 +790,9 @@ public class AnimationService {
       case ROTATE_FINAL_XFORM:
       case ROTATE_POST_FINAL_XFORM:
         return layer.getFinalXForms().size() > 0 ? layer.getFinalXForms().get(0) : null;
+      case ROTATE_BG_XFORM:
+      case ROTATE_POST_BG_XFORM:
+        return layer.getBGXForms().size() > 0 ? layer.getBGXForms().get(0) : null;
       default:
         throw new IllegalArgumentException(pScript.toString());
     }

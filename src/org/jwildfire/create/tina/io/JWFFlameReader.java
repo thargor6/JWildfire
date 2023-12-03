@@ -83,6 +83,7 @@ public class JWFFlameReader extends AbstractFlameReader {
 
         readXForms(layerXML, flame, layer);
         readFinalXForms(layerXML, flame, layer);
+        readBGXForms(layerXML, flame, layer);
         readColors(layerXML, layer);
         if(layer.getGradientEditorHueCurve().getX().length==0) {
           layer.recalcHSLCurves();

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -115,6 +115,7 @@ public class FlameMorphService {
         layer.assign(layer1);
         layer.getXForms().clear();
         layer.getFinalXForms().clear();
+        layer.getBGXForms().clear();
         layer.setWeight(morphValue(layer1.getWeight(), layer2.getWeight(), fScl));
         layer.setDensity(morphValue(layer1.getDensity(), layer2.getDensity(), fScl));
         // morph XForms
@@ -163,6 +164,30 @@ public class FlameMorphService {
 
             XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames, pCompat);
             layer.getFinalXForms().add(morphedXForm);
+          }
+        }
+        // morph bg XForms
+        {
+          int size1 = layer1.getBGXForms().size();
+          int size2 = layer2.getBGXForms().size();
+          int maxSize = size1 > size2 ? size1 : size2;
+          for (int i = 0; i < maxSize; i++) {
+            XForm xForm1 = i < size1 ? layer1.getBGXForms().get(i) : null;
+            if (xForm1 == null) {
+              xForm1 = new XForm();
+              xForm1.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+              xForm1.setWeight(0.0);
+            }
+
+            XForm xForm2 = i < size2 ? layer2.getBGXForms().get(i) : null;
+            if (xForm2 == null) {
+              xForm2 = new XForm();
+              xForm2.addVariation(0.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+              xForm2.setWeight(0.0);
+            }
+
+            XForm morphedXForm = morphXForms(pPrefs, xForm1, xForm2, fScl, pFrame, pFrames, pCompat);
+            layer.getBGXForms().add(morphedXForm);
           }
         }
         // morph colors

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -1449,6 +1449,26 @@ public class AbstractFlameReader {
     }
   }
 
+  protected void readBGXForms(String flameXML, Flame flame, Layer layer) {
+    // BGXForm
+    {
+      int p = 0;
+      while (true) {
+        int ps = flameXML.indexOf("<bgxform ", p + 1);
+        if (ps < 0)
+          break;
+        int pe = flameXML.indexOf("</bgxform>", ps + 1);
+        if (pe < 0) {
+          pe = flameXML.indexOf("/>", ps + 1);
+        }
+        String hs = flameXML.substring(ps + 7, pe);
+        XForm xForm = new XForm();
+        parseXFormAttributes(flame, xForm, hs);
+        layer.getBGXForms().add(xForm);
+        p = pe + 2;
+      }
+    }
+  }
   protected void readXForms(String flameXML, Flame flame, Layer layer) {
     // XForms
     {
