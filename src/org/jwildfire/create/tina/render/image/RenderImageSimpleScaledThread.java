@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,6 +21,7 @@ import org.jwildfire.create.tina.render.GammaCorrectedRGBPoint;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.LogDensityFilter;
 import org.jwildfire.create.tina.render.LogDensityPoint;
+import org.jwildfire.create.tina.render.backdrop.FlameBackgroundRenderContext;
 import org.jwildfire.image.SimpleImage;
 
 public class RenderImageSimpleScaledThread extends AbstractImageRenderThread {
@@ -33,7 +34,9 @@ public class RenderImageSimpleScaledThread extends AbstractImageRenderThread {
   private final SimpleImage newImg;
   private final int renderScale;
 
-  public RenderImageSimpleScaledThread(Flame pFlame, LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pRenderScale, int pStartRow, int pEndRow, SimpleImage pImg, SimpleImage pNewImg) {
+  private final FlameBackgroundRenderContext ctx;
+
+  public RenderImageSimpleScaledThread(Flame pFlame, LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pRenderScale, int pStartRow, int pEndRow, SimpleImage pImg, SimpleImage pNewImg, int pThreadId) {
     logDensityFilter = pLogDensityFilter;
     gammaCorrectionFilter = pGammaCorrectionFilter;
     renderScale = pRenderScale;
@@ -43,6 +46,7 @@ public class RenderImageSimpleScaledThread extends AbstractImageRenderThread {
     rbgPoint = new GammaCorrectedRGBPoint();
     img = pImg;
     newImg = pNewImg;
+    ctx = new FlameBackgroundRenderContext(pFlame, pThreadId);
   }
 
   @Override
@@ -51,7 +55,7 @@ public class RenderImageSimpleScaledThread extends AbstractImageRenderThread {
     try {
       for (int i = startRow; i < endRow; i++) {
         for (int j = 0; j < img.getImageWidth(); j++) {
-          logDensityFilter.transformPointSimple(logDensityPnt, j, i);
+          logDensityFilter.transformPointSimple(ctx, logDensityPnt, j, i);
           gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
           int x = j * renderScale;
           int y = i * renderScale;

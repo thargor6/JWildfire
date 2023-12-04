@@ -45,7 +45,8 @@ import org.jwildfire.create.tina.base.raster.RasterPointCloud;
 import org.jwildfire.create.tina.base.raster.RasterPointCloud.PCPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
-import org.jwildfire.create.tina.render.backdrop.FlameBackdropHandler;
+import org.jwildfire.create.tina.render.backdrop.FlameBackgroundHandler;
+import org.jwildfire.create.tina.render.backdrop.FlameBackgroundRenderContext;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
@@ -465,7 +466,7 @@ public class FlameRenderer {
         if (renderScale > 0) {
           res.getImage().resetImage(res.getImage().getImageWidth() * renderScale, res.getImage().getImageHeight() * renderScale);
         }
-        if (flame.getBGImageFilename().length() > 0) {
+        if (flame.getBGImageFilename().length() > 0 && !flame.hasBGTransforms()) {
           try {
             res.getImage().fillBackground((SimpleImage) RessourceManager.getImage(flame.getBGImageFilename()));
           }
@@ -474,7 +475,7 @@ public class FlameRenderer {
           }
         }
         else {
-          new FlameBackdropHandler(flame).fillBackground(res.getImage());
+          new FlameBackgroundHandler(flame).fillBackground(res.getImage());
         }
       }
       if (renderHDR) {
@@ -626,7 +627,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pHDRImage.getImageHeight();
-        RenderHDRImageThread thread = new RenderHDRImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pHDRImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer, flame) : null);
+        RenderHDRImageThread thread = new RenderHDRImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pHDRImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer, flame) : null, threads.size());
         threads.add(thread);
         if (threadCount > 1) {
           Thread t= new Thread(thread);
@@ -656,7 +657,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-        RenderImageThread thread = new RenderImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer, flame) : null);
+        RenderImageThread thread = new RenderImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer, flame) : null, threads.size());
         threads.add(thread);
         if (threadCount > 1) {
           Thread t =  new Thread(thread);
@@ -686,7 +687,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-        RenderImageSimpleScaledThread thread = new RenderImageSimpleScaledThread(flame, logDensityFilter, gammaCorrectionFilter, renderScale, startRow, endRow, pImage, newImg);
+        RenderImageSimpleScaledThread thread = new RenderImageSimpleScaledThread(flame, logDensityFilter, gammaCorrectionFilter, renderScale, startRow, endRow, pImage, newImg, threads.size());
         threads.add(thread);
         if (threadCount > 1) {
           Thread t = new Thread(thread);
@@ -706,7 +707,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < rowsPerThread - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-        RenderImageSimpleThread thread = new RenderImageSimpleThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage);
+        RenderImageSimpleThread thread = new RenderImageSimpleThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage, threads.size());
         threads.add(thread);
         if (threadCount > 1) {
           Thread t = new Thread(thread);
@@ -781,7 +782,7 @@ public class FlameRenderer {
       if (pState != null) {
         t.setResumeState(pState[i]);
       }
-      t.setTonemapper(new SampleTonemapper(flame, raster, rasterWidth, rasterHeight, imageWidth, imageHeight, randGen));
+      t.setTonemapper(new SampleTonemapper(flame, raster, rasterWidth, rasterHeight, imageWidth, imageHeight, randGen, renderThreads.size()));
       renderThreads.add(t);
       if (pStartThreads) {
         Thread executingThread = new Thread(t);
@@ -1077,6 +1078,7 @@ public class FlameRenderer {
 
       if (!forceAbort) {
         LogDensityPoint logDensityPnt = new LogDensityPoint(flame.getActiveLightCount());
+        FlameBackgroundRenderContext bgCtx = new FlameBackgroundRenderContext(flame, 0);
         while (slices.size() > 0) {
           if (forceAbort) {
             break;
@@ -1089,7 +1091,7 @@ public class FlameRenderer {
           GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
           for (int i = 0; i < img.getImageHeight(); i++) {
             for (int j = 0; j < img.getImageWidth(); j++) {
-              logDensityFilter.transformPoint(logDensityPnt, j, i);
+              logDensityFilter.transformPoint(bgCtx, logDensityPnt, j, i);
               gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
               img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
             }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.render;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
+import org.jwildfire.create.tina.render.backdrop.FlameBackgroundRenderContext;
 import org.jwildfire.image.Pixel;
 
 public class SampleTonemapper {
@@ -35,7 +36,9 @@ public class SampleTonemapper {
   private int imageWidth;
   private int imageHeight;
 
-  public SampleTonemapper(Flame pFlame, AbstractRaster pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight, AbstractRandomGenerator pRandGen) {
+  private final FlameBackgroundRenderContext ctx;
+
+  public SampleTonemapper(Flame pFlame, AbstractRaster pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight, AbstractRandomGenerator pRandGen, int pThreadId) {
     logDensityPnt = new LogDensityPoint(pFlame.getActiveLightCount());
     toolPixel = new Pixel();
     flame = pFlame.makeCopy();
@@ -49,10 +52,11 @@ public class SampleTonemapper {
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
     logDensityFilter.setRaster(pRaster, pRasterWidth, pRasterHeight, pImageWidth, pImageHeight);
+    ctx = new FlameBackgroundRenderContext(flame, pThreadId);
   }
 
   public int tonemapSample(int pX, int pY) {
-    logDensityFilter.transformPointSimple(logDensityPnt, pX-logDensityFilter.getBorderWidth(), pY-logDensityFilter.getBorderWidth());
+    logDensityFilter.transformPointSimple(ctx, logDensityPnt, pX-logDensityFilter.getBorderWidth(), pY-logDensityFilter.getBorderWidth());
     gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, pX, pY);
     toolPixel.r = rbgPoint.red;
     toolPixel.g = rbgPoint.green;

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,15 +24,22 @@ import org.jwildfire.base.mathlib.VecMathLib.RGBColorD;
 import org.jwildfire.base.mathlib.VecMathLib.UVPairD;
 import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.base.raster.RasterPoint;
 import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
+import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
+import org.jwildfire.create.tina.render.backdrop.FlameBackgroundRenderContext;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
@@ -109,7 +116,7 @@ public class LogDensityFilter {
     destImageHeight = pImageHeight;
   }
 
-  public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
+  public void transformPointSimple(FlameBackgroundRenderContext ctx, LogDensityPoint pFilteredPnt, int pX, int pY) {
     double balanceRed = logScaleCalculator.getBalanceRed();
     double balanceGreen = logScaleCalculator.getBalanceGreen();
     double balanceBlue = logScaleCalculator.getBalanceBlue();
@@ -164,7 +171,7 @@ public class LogDensityFilter {
       pFilteredPnt.solidGreen *= dCount;
       pFilteredPnt.solidBlue *= dCount;
     }
-    calculateBGColor(pFilteredPnt, pX, pY);
+    calculateBGColor(ctx, pFilteredPnt, pX, pY);
   }
 
   private void getZSample(ZBufferSample pDest, int pX, int pY) {
@@ -186,7 +193,7 @@ public class LogDensityFilter {
     return (double) pSampleCount / (double) rasterSize * oversample;
   }
 
-  public void transformPoint(LogDensityPoint pFilteredPnt, int pX, int pY) {
+  public void transformPoint(FlameBackgroundRenderContext ctx, LogDensityPoint pFilteredPnt, int pX, int pY) {
     pFilteredPnt.clear();
 
     if (showIndicators && !solidRendering) {
@@ -447,7 +454,7 @@ public class LogDensityFilter {
       }
     }
     pFilteredPnt.clip();
-    calculateBGColor(pFilteredPnt, pX, pY);
+    calculateBGColor(ctx, pFilteredPnt, pX, pY);
   }
 
   public void transformZPoint(ZBufferSample pAccumSample, ZBufferSample pSample, int pX, int pY) {
@@ -577,7 +584,8 @@ public class LogDensityFilter {
     return false;
   }
 
-  public void calculateBGColor(LogDensityPoint dest, int pX, int pY) {
+  public void calculateBGColor(FlameBackgroundRenderContext ctx, LogDensityPoint dest, int pX, int pY) {
+    final Flame renderFlame = ctx.getPreparedFlame();
     if (bgImage != null) {
       Pixel toolPixel = dest.toolPixel;
       if (destImageWidth == bgImage.getImageWidth() && destImageHeight == bgImage.getImageHeight()) {
@@ -616,13 +624,13 @@ public class LogDensityFilter {
       }
     }
     else {
-      switch (flame.getBgColorType()) {
+      switch (renderFlame.getBgColorType()) {
         case GRADIENT_2X2: {
           double x = (double) pX / (double) (destImageWidth - 1);
           double y = (double) pY / (double) (destImageHeight - 1);
-          dest.bgRed = Tools.roundColor(GfxMathLib.blerp(flame.getBgColorULRed(), flame.getBgColorURRed(), flame.getBgColorLLRed(), flame.getBgColorLRRed(), x, y));
-          dest.bgGreen = Tools.roundColor(GfxMathLib.blerp(flame.getBgColorULGreen(), flame.getBgColorURGreen(), flame.getBgColorLLGreen(), flame.getBgColorLRGreen(), x, y));
-          dest.bgBlue = Tools.roundColor(GfxMathLib.blerp(flame.getBgColorULBlue(), flame.getBgColorURBlue(), flame.getBgColorLLBlue(), flame.getBgColorLRBlue(), x, y));
+          dest.bgRed = Tools.roundColor(GfxMathLib.blerp(renderFlame.getBgColorULRed(), renderFlame.getBgColorURRed(), renderFlame.getBgColorLLRed(), renderFlame.getBgColorLRRed(), x, y));
+          dest.bgGreen = Tools.roundColor(GfxMathLib.blerp(renderFlame.getBgColorULGreen(), renderFlame.getBgColorURGreen(), renderFlame.getBgColorLLGreen(), renderFlame.getBgColorLRGreen(), x, y));
+          dest.bgBlue = Tools.roundColor(GfxMathLib.blerp(renderFlame.getBgColorULBlue(), renderFlame.getBgColorURBlue(), renderFlame.getBgColorLLBlue(), renderFlame.getBgColorLRBlue(), x, y));
 
         }
           break;
@@ -638,37 +646,37 @@ public class LogDensityFilter {
             x = (double) pX / (double) w2;
             if (pY <= h2) {
               y = (double) pY / (double) h2;
-              ulRed = flame.getBgColorULRed();
-              urRed = GfxMathLib.lerp(flame.getBgColorULRed(), flame.getBgColorURRed(), 0.5);
-              llRed = GfxMathLib.lerp(flame.getBgColorLLRed(), flame.getBgColorULRed(), 0.5);
-              lrRed = flame.getBgColorCCRed();
+              ulRed = renderFlame.getBgColorULRed();
+              urRed = GfxMathLib.lerp(renderFlame.getBgColorULRed(), renderFlame.getBgColorURRed(), 0.5);
+              llRed = GfxMathLib.lerp(renderFlame.getBgColorLLRed(), renderFlame.getBgColorULRed(), 0.5);
+              lrRed = renderFlame.getBgColorCCRed();
 
-              ulGreen = flame.getBgColorULGreen();
-              urGreen = GfxMathLib.lerp(flame.getBgColorULGreen(), flame.getBgColorURGreen(), 0.5);
-              llGreen = GfxMathLib.lerp(flame.getBgColorLLGreen(), flame.getBgColorULGreen(), 0.5);
-              lrGreen = flame.getBgColorCCGreen();
+              ulGreen = renderFlame.getBgColorULGreen();
+              urGreen = GfxMathLib.lerp(renderFlame.getBgColorULGreen(), renderFlame.getBgColorURGreen(), 0.5);
+              llGreen = GfxMathLib.lerp(renderFlame.getBgColorLLGreen(), renderFlame.getBgColorULGreen(), 0.5);
+              lrGreen = renderFlame.getBgColorCCGreen();
 
-              ulBlue = flame.getBgColorULBlue();
-              urBlue = GfxMathLib.lerp(flame.getBgColorULBlue(), flame.getBgColorURBlue(), 0.5);
-              llBlue = GfxMathLib.lerp(flame.getBgColorLLBlue(), flame.getBgColorULBlue(), 0.5);
-              lrBlue = flame.getBgColorCCBlue();
+              ulBlue = renderFlame.getBgColorULBlue();
+              urBlue = GfxMathLib.lerp(renderFlame.getBgColorULBlue(), renderFlame.getBgColorURBlue(), 0.5);
+              llBlue = GfxMathLib.lerp(renderFlame.getBgColorLLBlue(), renderFlame.getBgColorULBlue(), 0.5);
+              lrBlue = renderFlame.getBgColorCCBlue();
             }
             else {
               y = (double) (pY - h2) / (double) h2;
-              ulRed = GfxMathLib.lerp(flame.getBgColorULRed(), flame.getBgColorLLRed(), 0.5);
-              urRed = flame.getBgColorCCRed();
-              llRed = flame.getBgColorLLRed();
-              lrRed = GfxMathLib.lerp(flame.getBgColorLLRed(), flame.getBgColorLRRed(), 0.5);
+              ulRed = GfxMathLib.lerp(renderFlame.getBgColorULRed(), renderFlame.getBgColorLLRed(), 0.5);
+              urRed = renderFlame.getBgColorCCRed();
+              llRed = renderFlame.getBgColorLLRed();
+              lrRed = GfxMathLib.lerp(renderFlame.getBgColorLLRed(), renderFlame.getBgColorLRRed(), 0.5);
 
-              ulGreen = GfxMathLib.lerp(flame.getBgColorULGreen(), flame.getBgColorLLGreen(), 0.5);
-              urGreen = flame.getBgColorCCGreen();
-              llGreen = flame.getBgColorLLGreen();
-              lrGreen = GfxMathLib.lerp(flame.getBgColorLLGreen(), flame.getBgColorLRGreen(), 0.5);
+              ulGreen = GfxMathLib.lerp(renderFlame.getBgColorULGreen(), renderFlame.getBgColorLLGreen(), 0.5);
+              urGreen = renderFlame.getBgColorCCGreen();
+              llGreen = renderFlame.getBgColorLLGreen();
+              lrGreen = GfxMathLib.lerp(renderFlame.getBgColorLLGreen(), renderFlame.getBgColorLRGreen(), 0.5);
 
-              ulBlue = GfxMathLib.lerp(flame.getBgColorULBlue(), flame.getBgColorLLBlue(), 0.5);
-              urBlue = flame.getBgColorCCBlue();
-              llBlue = flame.getBgColorLLBlue();
-              lrBlue = GfxMathLib.lerp(flame.getBgColorLLBlue(), flame.getBgColorLRBlue(), 0.5);
+              ulBlue = GfxMathLib.lerp(renderFlame.getBgColorULBlue(), renderFlame.getBgColorLLBlue(), 0.5);
+              urBlue = renderFlame.getBgColorCCBlue();
+              llBlue = renderFlame.getBgColorLLBlue();
+              lrBlue = GfxMathLib.lerp(renderFlame.getBgColorLLBlue(), renderFlame.getBgColorLRBlue(), 0.5);
             }
           }
           else {
@@ -676,37 +684,37 @@ public class LogDensityFilter {
             if (pY <= h2) {
               y = (double) pY / (double) h2;
 
-              ulRed = GfxMathLib.lerp(flame.getBgColorULRed(), flame.getBgColorURRed(), 0.5);
-              urRed = flame.getBgColorURRed();
-              llRed = flame.getBgColorCCRed();
-              lrRed = GfxMathLib.lerp(flame.getBgColorURRed(), flame.getBgColorLRRed(), 0.5);
+              ulRed = GfxMathLib.lerp(renderFlame.getBgColorULRed(), renderFlame.getBgColorURRed(), 0.5);
+              urRed = renderFlame.getBgColorURRed();
+              llRed = renderFlame.getBgColorCCRed();
+              lrRed = GfxMathLib.lerp(renderFlame.getBgColorURRed(), renderFlame.getBgColorLRRed(), 0.5);
 
-              ulGreen = GfxMathLib.lerp(flame.getBgColorULGreen(), flame.getBgColorURGreen(), 0.5);
-              urGreen = flame.getBgColorURGreen();
-              llGreen = flame.getBgColorCCGreen();
-              lrGreen = GfxMathLib.lerp(flame.getBgColorURGreen(), flame.getBgColorLRGreen(), 0.5);
+              ulGreen = GfxMathLib.lerp(renderFlame.getBgColorULGreen(), renderFlame.getBgColorURGreen(), 0.5);
+              urGreen = renderFlame.getBgColorURGreen();
+              llGreen = renderFlame.getBgColorCCGreen();
+              lrGreen = GfxMathLib.lerp(renderFlame.getBgColorURGreen(), renderFlame.getBgColorLRGreen(), 0.5);
 
-              ulBlue = GfxMathLib.lerp(flame.getBgColorULBlue(), flame.getBgColorURBlue(), 0.5);
-              urBlue = flame.getBgColorURBlue();
-              llBlue = flame.getBgColorCCBlue();
-              lrBlue = GfxMathLib.lerp(flame.getBgColorURBlue(), flame.getBgColorLRBlue(), 0.5);
+              ulBlue = GfxMathLib.lerp(renderFlame.getBgColorULBlue(), renderFlame.getBgColorURBlue(), 0.5);
+              urBlue = renderFlame.getBgColorURBlue();
+              llBlue = renderFlame.getBgColorCCBlue();
+              lrBlue = GfxMathLib.lerp(renderFlame.getBgColorURBlue(), renderFlame.getBgColorLRBlue(), 0.5);
             }
             else {
               y = (double) (pY - h2) / (double) h2;
-              ulRed = flame.getBgColorCCRed();
-              urRed = GfxMathLib.lerp(flame.getBgColorURRed(), flame.getBgColorLRRed(), 0.5);
-              llRed = GfxMathLib.lerp(flame.getBgColorLLRed(), flame.getBgColorLRRed(), 0.5);
-              lrRed = flame.getBgColorLRRed();
+              ulRed = renderFlame.getBgColorCCRed();
+              urRed = GfxMathLib.lerp(renderFlame.getBgColorURRed(), renderFlame.getBgColorLRRed(), 0.5);
+              llRed = GfxMathLib.lerp(renderFlame.getBgColorLLRed(), renderFlame.getBgColorLRRed(), 0.5);
+              lrRed = renderFlame.getBgColorLRRed();
 
-              ulGreen = flame.getBgColorCCGreen();
-              urGreen = GfxMathLib.lerp(flame.getBgColorURGreen(), flame.getBgColorLRGreen(), 0.5);
-              llGreen = GfxMathLib.lerp(flame.getBgColorLLGreen(), flame.getBgColorLRGreen(), 0.5);
-              lrGreen = flame.getBgColorLRGreen();
+              ulGreen = renderFlame.getBgColorCCGreen();
+              urGreen = GfxMathLib.lerp(renderFlame.getBgColorURGreen(), renderFlame.getBgColorLRGreen(), 0.5);
+              llGreen = GfxMathLib.lerp(renderFlame.getBgColorLLGreen(), renderFlame.getBgColorLRGreen(), 0.5);
+              lrGreen = renderFlame.getBgColorLRGreen();
 
-              ulBlue = flame.getBgColorCCBlue();
-              urBlue = GfxMathLib.lerp(flame.getBgColorURBlue(), flame.getBgColorLRBlue(), 0.5);
-              llBlue = GfxMathLib.lerp(flame.getBgColorLLBlue(), flame.getBgColorLRBlue(), 0.5);
-              lrBlue = flame.getBgColorLRBlue();
+              ulBlue = renderFlame.getBgColorCCBlue();
+              urBlue = GfxMathLib.lerp(renderFlame.getBgColorURBlue(), renderFlame.getBgColorLRBlue(), 0.5);
+              llBlue = GfxMathLib.lerp(renderFlame.getBgColorLLBlue(), renderFlame.getBgColorLRBlue(), 0.5);
+              lrBlue = renderFlame.getBgColorLRBlue();
 
             }
           }
@@ -717,10 +725,57 @@ public class LogDensityFilter {
         }
           break;
         default:
-          dest.bgRed = flame.getBgColorRed();
-          dest.bgGreen = flame.getBgColorGreen();
-          dest.bgBlue = flame.getBgColorBlue();
+          dest.bgRed = renderFlame.getBgColorRed();
+          dest.bgGreen = renderFlame.getBgColorGreen();
+          dest.bgBlue = renderFlame.getBgColorBlue();
           break;
+      }
+    }
+
+    if(!renderFlame.getFirstLayer().getBGXForms().isEmpty()) {
+      double imgSize = MathLib.sqrt(destImageWidth * destImageWidth + destImageHeight * destImageHeight) * 0.5;
+      final double coordScale = 1.41;
+      double x = ((double) pX - (double) (destImageWidth - 1) * 0.5) / imgSize * coordScale;
+      double y = ((double) pY - (double) (destImageHeight - 1) * 0.5) / imgSize * coordScale;
+      for(Layer layer: renderFlame.getLayers()) {
+        if(!layer.getBGXForms().isEmpty()) {
+          XYZPoint affineT = new XYZPoint(); // affine part of the transformation
+          XYZPoint varT = new XYZPoint(); // complete transformation
+          XYZPoint p = new XYZPoint();
+          XYZPoint q = new XYZPoint();
+          p.x = x;
+          p.y = y;
+          p.z = 0.0;
+          p.color = 0.0;
+          p.material = 0.0;
+          p.modGamma = 0.0;
+          p.modContrast = 0.0;
+          p.modSaturation = 0.0;
+          p.modHue = 0.0;
+          for(XForm xform: layer.getBGXForms()) {
+            xform.transformPoint(ctx.getFlameTransformationCtx(), affineT, varT, p, q);
+            if(q.rgbColor) {
+              dest.bgRed += q.redColor;
+              dest.bgGreen += q.greenColor;
+              dest.bgBlue += q.blueColor;
+            }
+            else {
+              RenderColor[] colorMap = layer.getColorMap();
+              double paletteIdxScl = colorMap.length - 2;
+              int colorIdx = (int) (q.color * paletteIdxScl + 0.5);
+              if (colorIdx < 0)
+                colorIdx = 0;
+              else if (colorIdx >= RGBPalette.PALETTE_SIZE)
+                colorIdx = RGBPalette.PALETTE_SIZE - 1;
+
+              RenderColor color = colorMap[colorIdx];
+
+              dest.bgRed += color.red;
+              dest.bgGreen += color.green;
+              dest.bgBlue += color.blue;
+            }
+          }
+        }
       }
     }
   }

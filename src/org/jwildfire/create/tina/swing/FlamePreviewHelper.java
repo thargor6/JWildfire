@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.farender.FAFlameWriter;
 import org.jwildfire.create.tina.farender.FARenderResult;
 import org.jwildfire.create.tina.farender.FARenderTools;
 import org.jwildfire.create.tina.render.*;
-import org.jwildfire.create.tina.render.backdrop.FlameBackdropHandler;
+import org.jwildfire.create.tina.render.backdrop.FlameBackgroundHandler;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
@@ -748,7 +748,7 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   private void initImage(SimpleImage pImage, Flame flame) {
-    if (flame.getBGImageFilename() != null && !flame.getBGImageFilename().isEmpty()) {
+    if (flame.getBGImageFilename() != null && !flame.getBGImageFilename().isEmpty() && !flame.hasBGTransforms()) {
       try {
         SimpleImage bgImg = (SimpleImage) RessourceManager.getImage(flame.getBGImageFilename());
         pImage.fillBackground(bgImg);
@@ -756,7 +756,7 @@ public class FlamePreviewHelper implements IterationObserver {
         ex.printStackTrace();
       }
     } else {
-      new FlameBackdropHandler(flame).fillBackground(pImage);
+      new FlameBackgroundHandler(flame).fillBackground(pImage);
     }
   }
 

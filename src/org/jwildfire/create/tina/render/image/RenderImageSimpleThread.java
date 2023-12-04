@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,6 +21,7 @@ import org.jwildfire.create.tina.render.GammaCorrectedRGBPoint;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.LogDensityFilter;
 import org.jwildfire.create.tina.render.LogDensityPoint;
+import org.jwildfire.create.tina.render.backdrop.FlameBackgroundRenderContext;
 import org.jwildfire.image.SimpleImage;
 
 public class RenderImageSimpleThread extends AbstractImageRenderThread {
@@ -31,7 +32,9 @@ public class RenderImageSimpleThread extends AbstractImageRenderThread {
   private final GammaCorrectedRGBPoint rbgPoint;
   private final SimpleImage img;
 
-  public RenderImageSimpleThread(Flame pFlame, LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleImage pImg) {
+  private final FlameBackgroundRenderContext ctx;
+
+  public RenderImageSimpleThread(Flame pFlame, LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleImage pImg, int pThreadId) {
     logDensityFilter = pLogDensityFilter;
     gammaCorrectionFilter = pGammaCorrectionFilter;
     startRow = pStartRow;
@@ -39,6 +42,7 @@ public class RenderImageSimpleThread extends AbstractImageRenderThread {
     logDensityPnt = new LogDensityPoint(pFlame.getActiveLightCount());
     rbgPoint = new GammaCorrectedRGBPoint();
     img = pImg;
+    ctx = new FlameBackgroundRenderContext(pFlame, pThreadId);
   }
 
   @Override
@@ -47,7 +51,7 @@ public class RenderImageSimpleThread extends AbstractImageRenderThread {
     try {
       for (int i = startRow; i < endRow; i++) {
         for (int j = 0; j < img.getImageWidth(); j++) {
-          logDensityFilter.transformPointSimple(logDensityPnt, j, i);
+          logDensityFilter.transformPointSimple(ctx, logDensityPnt, j, i);
           gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
           img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }

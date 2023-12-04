@@ -26,7 +26,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
-import org.jwildfire.create.tina.render.backdrop.FlameBackdropHandler;
+import org.jwildfire.create.tina.render.backdrop.FlameBackgroundHandler;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -108,7 +108,7 @@ public class DetachedPreviewController implements IterationObserver {
     flame.setSampleDensity(10);
     info.setRenderHDR(false);
     info.setRenderZBuffer(false);
-    new FlameBackdropHandler(flame).fillBackground(image);
+    new FlameBackgroundHandler(flame).fillBackground(image);
     renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
     renderer.registerIterationObserver(this);
 

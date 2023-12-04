@@ -21,6 +21,7 @@ import org.jwildfire.create.tina.render.GammaCorrectedHDRPoint;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.LogDensityFilter;
 import org.jwildfire.create.tina.render.LogDensityPoint;
+import org.jwildfire.create.tina.render.backdrop.FlameBackgroundRenderContext;
 import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
 import org.jwildfire.image.SimpleHDRImage;
 
@@ -34,7 +35,9 @@ public class RenderHDRImageThread extends AbstractImageRenderThread {
   private final SimpleHDRImage img;
   private final PostDOFCalculator dofCalculator;
 
-  public RenderHDRImageThread(Flame pFlame, LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleHDRImage pImg, PostDOFCalculator pDofCalculator) {
+  private final FlameBackgroundRenderContext ctx;
+
+  public RenderHDRImageThread(Flame pFlame, LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleHDRImage pImg, PostDOFCalculator pDofCalculator, int pThreadId) {
     logDensityFilter = pLogDensityFilter;
     gammaCorrectionFilter = pGammaCorrectionFilter;
     startRow = pStartRow;
@@ -43,6 +46,7 @@ public class RenderHDRImageThread extends AbstractImageRenderThread {
     rbgPoint = new GammaCorrectedHDRPoint();
     img = pImg;
     dofCalculator = pDofCalculator;
+    ctx = new FlameBackgroundRenderContext(pFlame, pThreadId);
   }
 
   @Override
@@ -51,7 +55,7 @@ public class RenderHDRImageThread extends AbstractImageRenderThread {
     try {
       for (int i = startRow; i < endRow; i++) {
         for (int j = 0; j < img.getImageWidth(); j++) {
-          logDensityFilter.transformPoint(logDensityPnt, j, i);
+          logDensityFilter.transformPoint(ctx, logDensityPnt, j, i);
           gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint, j, i);
           if (dofCalculator != null) {
             dofCalculator.addSample(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue, logDensityPnt.dofDist, logDensityPnt.rp.zBuf);
