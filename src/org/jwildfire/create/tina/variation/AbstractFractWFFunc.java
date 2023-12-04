@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -27,7 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractFractWFFunc extends VariationFunc {
+public abstract class AbstractFractWFFunc extends VariationFunc implements SupportsBackground {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_MAX_ITER = "max_iter";
@@ -49,6 +49,8 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
   private static final String PARAM_Z_FILL = "z_fill";
   private static final String PARAM_Z_LOGSCALE = "z_logscale";
 
+  private static final String PARAM_COLOR_ONLY = "color_only";
+
   protected int max_iter = 100;
   protected double xmin = -1.6;
   protected double xmax = 1.6;
@@ -68,6 +70,8 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
   protected int buddhabrot_min_iter = 7;
   protected double z_fill = 0.0;
   protected int z_logscale = 0;
+
+  protected int color_only = 0;
 
   public AbstractFractWFFunc() {
     initParams();
@@ -183,8 +187,14 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
     double x0 = 0.0, y0 = 0.0;
     int iterCount = 0;
     for (int i = 0; i < max_clip_iter; i++) {
-      x0 = (xmax - xmin) * pContext.random() + xmin;
-      y0 = (ymax - ymin) * pContext.random() + ymin;
+      if(color_only > 0) {
+        x0 = pAffineTP.x;
+        y0 = pAffineTP.y;
+      }
+      else {
+        x0 = (xmax - xmin) * pContext.random() + xmin;
+        y0 = (ymax - ymin) * pContext.random() + ymin;
+      }
       iterCount = iterator.iterate(x0, y0, max_iter);
       if ((clip_iter_max < 0 && iterCount >= (max_iter + clip_iter_max)) || (clip_iter_min > 0 && iterCount <= clip_iter_min)) {
         if (i == max_clip_iter - 1) {
@@ -199,8 +209,10 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
       }
     }
 
-    pVarTP.x += scale * pAmount * (x0 + offsetx);
-    pVarTP.y += scale * pAmount * (y0 + offsety);
+    if(color_only <= 0) {
+      pVarTP.x += scale * pAmount * (x0 + offsetx);
+      pVarTP.y += scale * pAmount * (y0 + offsety);
+    }
 
     double z;
     if (z_logscale == 1) {
@@ -263,6 +275,7 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
     lst.add(PARAM_OFFSETZ);
     lst.add(PARAM_Z_FILL);
     lst.add(PARAM_Z_LOGSCALE);
+    lst.add(PARAM_COLOR_ONLY);
     return lst.toArray(new String[0]);
   }
 
@@ -288,6 +301,7 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
     lst.add(offsetz);
     lst.add(z_fill);
     lst.add(z_logscale);
+    lst.add(color_only);
     return lst.toArray();
   }
 
@@ -329,7 +343,15 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
       z_fill = limitVal(pValue, 0, 1);
     else if (PARAM_Z_LOGSCALE.equalsIgnoreCase(pName))
       z_logscale = limitIntVal(Tools.FTOI(pValue), 0, 1);
+    else if (PARAM_COLOR_ONLY.equalsIgnoreCase(pName))
+      color_only = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (!setCustomParameter(pName, pValue))
       throw new IllegalArgumentException(pName);
   }
+
+  @Override
+  public void prepareBackgroundRendering(FlameTransformationContext ctx) {
+    this.color_only = 1;
+  }
+
 }
