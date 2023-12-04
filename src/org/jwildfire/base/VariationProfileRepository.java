@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -93,6 +93,7 @@ public class VariationProfileRepository {
     res.add(createZTransformProfile());
     res.add(createEscapeTimeFractalProfile());
     res.add(createSupportsExternalShapesProfile());
+    res.add(createSupportsBackgroundRenderingProfile());
     res.add(createSupportsGPUProfile());
     return res;
   }
@@ -206,6 +207,14 @@ public class VariationProfileRepository {
     res.setName("Ext. images/shapes");
     res.setVariationProfileType(VariationProfileType.INCLUDE_TYPES);
     res.getVariationTypes().add(VariationFuncType.VARTYPE_SUPPORTS_EXTERNAL_SHAPES);
+    return res;
+  }
+
+  private static VariationProfile createSupportsBackgroundRenderingProfile() {
+    VariationProfile res = new VariationProfile();
+    res.setName("Background tx");
+    res.setVariationProfileType(VariationProfileType.INCLUDE_TYPES);
+    res.getVariationTypes().add(VariationFuncType.VARTYPE_SUPPORTS_BACKGROUND);
     return res;
   }
 

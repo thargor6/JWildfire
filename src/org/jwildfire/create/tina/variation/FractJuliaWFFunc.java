@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -189,7 +189,7 @@ public class FractJuliaWFFunc extends AbstractFractWFFunc implements SupportsGPU
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTS_BACKGROUND};
   }
 
   @Override

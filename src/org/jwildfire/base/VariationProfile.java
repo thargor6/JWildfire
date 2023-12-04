@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class VariationProfile implements VariationProfileFilter, Assignable<VariationProfile> {
-  public static final String KEY_COUNT = "varProfiles.count.2";
+  public static final String KEY_COUNT = "varProfiles.count.3";
   public static final String KEY_NAME = "varProfiles.name";
   public static final String KEY_DEFAULT = "varProfiles.default";
   public static final String KEY_PROFILE_TYPE = "varProfiles.profileType";

@@ -23,7 +23,9 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.SupportsBackground;
 import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class FlameBackgroundRenderContext {
   private final Flame preparedFlame;
@@ -36,6 +38,13 @@ public class FlameBackgroundRenderContext {
 
     for(Layer layer: preparedFlame.getLayers()) {
       for(XForm xform: layer.getBGXForms()) {
+        for(int i=0; i < xform.getVariationCount(); i++) {
+          VariationFunc var = xform.getVariation(i).getFunc();
+          if(var instanceof SupportsBackground) {
+            ((SupportsBackground)var).prepareBackgroundRendering(ctx);
+          }
+        }
+
         xform.initTransform();
         if(ctx.getThreadId()==0) {
           for (Variation var : xform.getVariations()) {
