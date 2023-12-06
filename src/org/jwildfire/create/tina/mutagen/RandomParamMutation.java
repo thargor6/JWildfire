@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -71,42 +71,47 @@ public class RandomParamMutation extends AbstractMutation {
     if (variations.size() > 0) {
       int idx = (int) (Math.random() * variations.size());
       VariationFunc var = variations.get(idx);
-      int pIdx = (int) (Math.random() * var.getParameterNames().length);
-      Object oldVal = var.getParameterValues()[pIdx];
-      if (oldVal instanceof Integer) {
-        int o = (Integer) oldVal;
-        int da = Tools.FTOI(pAmount);
-        if (da < 1) {
-          da = 1;
-        }
+
+      applyToVarFunc(var, pAmount);
+    }
+  }
+
+  public void applyToVarFunc(VariationFunc var, double pAmount) {
+    int pIdx = (int) (Math.random() * var.getParameterNames().length);
+    Object oldVal = var.getParameterValues()[pIdx];
+    if (oldVal instanceof Integer) {
+      int o = (Integer) oldVal;
+      int da = Tools.FTOI(pAmount);
+      if (da < 1) {
+        da = 1;
+      }
+      if (o >= 0) {
+        o += da;
+      }
+      else {
+        o -= da;
+      }
+      var.setParameter(var.getParameterNames()[pIdx], o);
+    }
+    else if (oldVal instanceof Double) {
+      double o = (Double) oldVal;
+      if (o < EPSILON || Math.random() < 0.3) {
         if (o >= 0) {
-          o += da;
+          o += 0.1 * pAmount;
         }
         else {
-          o -= da;
+          o -= 0.1 * pAmount;
         }
-        var.setParameter(var.getParameterNames()[pIdx], o);
       }
-      else if (oldVal instanceof Double) {
-        double o = (Double) oldVal;
-        if (o < EPSILON || Math.random() < 0.3) {
-          if (o >= 0) {
-            o += 0.1 * pAmount;
-          }
-          else {
-            o -= 0.1 * pAmount;
-          }
+      else {
+        if (o >= 0) {
+          o += o / 100.0 * pAmount;
         }
         else {
-          if (o >= 0) {
-            o += o / 100.0 * pAmount;
-          }
-          else {
-            o -= o / 100.0 * pAmount;
-          }
+          o -= o / 100.0 * pAmount;
         }
-        var.setParameter(var.getParameterNames()[pIdx], o);
       }
+      var.setParameter(var.getParameterNames()[pIdx], o);
     }
   }
 

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -43,6 +43,7 @@ public class AllMutation implements Mutation {
     types.add(MutationType.LOCAL_GAMMA);
     types.add(MutationType.SIMILAR_GRADIENT);
     types.add(MutationType.RANDOM_BG_COLOR);
+    types.add(MutationType.RANDOM_BACKGROUND);
     types.add(MutationType.AFFINE);
     types.add(MutationType.CHANGE_WEIGHT);
     types.add(MutationType.AFFINE_3D);
@@ -62,6 +63,7 @@ public class AllMutation implements Mutation {
     types.add(MutationType.COLOR_TYPE);
     types.add(MutationType.LOCAL_GAMMA);
     types.add(MutationType.RANDOM_BG_COLOR);
+    types.add(MutationType.RANDOM_BACKGROUND);
     types.add(MutationType.ADD_TRANSFORM);
     types.add(MutationType.AFFINE);
     types.add(MutationType.PAINTERLY_STYLE);

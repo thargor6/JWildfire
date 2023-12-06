@@ -175,6 +175,7 @@ public class MutaGenController {
     }
     pCmb.addItem(MutationType.PAINTERLY_STYLE);
     pCmb.addItem(MutationType.RANDOM_BG_COLOR);
+    pCmb.addItem(MutationType.RANDOM_BACKGROUND);
     pCmb.addItem(MutationType.RANDOM_GRADIENT);
     pCmb.addItem(MutationType.RANDOM_PARAMETER);
     pCmb.addItem(MutationType.RANDOM_ZTRANSFORM);
