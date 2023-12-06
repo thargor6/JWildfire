@@ -1440,7 +1440,7 @@ public class AbstractFlameReader {
         if (pe < 0) {
           pe = flameXML.indexOf("/>", ps + 1);
         }
-        String hs = flameXML.substring(ps + 7, pe);
+        String hs = flameXML.substring(ps + 12, pe);
         XForm xForm = new XForm();
         parseXFormAttributes(flame, xForm, hs);
         layer.getFinalXForms().add(xForm);
@@ -1461,7 +1461,7 @@ public class AbstractFlameReader {
         if (pe < 0) {
           pe = flameXML.indexOf("/>", ps + 1);
         }
-        String hs = flameXML.substring(ps + 7, pe);
+        String hs = flameXML.substring(ps + 9, pe);
         XForm xForm = new XForm();
         parseXFormAttributes(flame, xForm, hs);
         layer.getBGXForms().add(xForm);

@@ -734,7 +734,7 @@ public class LogDensityFilter {
 
     if(!renderFlame.getFirstLayer().getBGXForms().isEmpty()) {
       double imgSize = MathLib.sqrt(destImageWidth * destImageWidth + destImageHeight * destImageHeight) * 0.5;
-      final double coordScale = 1.41;
+      final double coordScale = 1.41 / renderFlame.getCamZoom();
       double x = ((double) pX - (double) (destImageWidth - 1) * 0.5) / imgSize * coordScale;
       double y = ((double) pY - (double) (destImageHeight - 1) * 0.5) / imgSize * coordScale;
       for(Layer layer: renderFlame.getLayers()) {
@@ -754,10 +754,11 @@ public class LogDensityFilter {
           p.modHue = 0.0;
           for(XForm xform: layer.getBGXForms()) {
             xform.transformPoint(ctx.getFlameTransformationCtx(), affineT, varT, p, q);
+            double weight = xform.getWeight();
             if(q.rgbColor) {
-              dest.bgRed += q.redColor;
-              dest.bgGreen += q.greenColor;
-              dest.bgBlue += q.blueColor;
+              dest.bgRed += q.redColor * weight;
+              dest.bgGreen += q.greenColor * weight;
+              dest.bgBlue += q.blueColor * weight;
             }
             else {
               RenderColor[] colorMap = layer.getColorMap();
@@ -770,9 +771,9 @@ public class LogDensityFilter {
 
               RenderColor color = colorMap[colorIdx];
 
-              dest.bgRed += color.red;
-              dest.bgGreen += color.green;
-              dest.bgBlue += color.blue;
+              dest.bgRed += color.red * weight;
+              dest.bgGreen += color.green * weight;
+              dest.bgBlue += color.blue * weight;
             }
           }
         }

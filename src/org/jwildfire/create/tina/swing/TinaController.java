@@ -65,6 +65,7 @@ import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.create.tina.swing.flamepanel.XFormControlsHolder;
 import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.FractDragonWFFunc;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
@@ -1558,6 +1559,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         return null;
       }
 
+
+      private boolean isValidRowIndexForWeight(int row) {
+        return (row < getCurrLayer().getXForms().size()) ||
+                (row >= getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() && row < getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() + getCurrLayer().getBGXForms().size());
+      }
+
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
         if (getCurrFlame() != null) {
@@ -1575,7 +1582,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             case COL_VARIATIONS:
               return getXFormCaption(xForm);
             case COL_WEIGHT:
-              return rowIndex < getCurrLayer().getXForms().size() ? frameControlsUtil.getEvaluatedPropertyValue(xForm, "weight") : "";
+              return isValidRowIndexForWeight(rowIndex) ? frameControlsUtil.getEvaluatedPropertyValue(xForm, "weight") : "";
           }
         }
         return null;
@@ -1588,8 +1595,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       @Override
       public void setValueAt(Object aValue, int row, int column) {
-        if (getCurrLayer() != null && column == COL_WEIGHT && row < getCurrLayer().getXForms().size()) {
-          XForm xForm = getCurrLayer().getXForms().get(row);
+        if (getCurrLayer() != null && column == COL_WEIGHT && isValidRowIndexForWeight(row)) {
+          XForm xForm = row < getCurrLayer().getXForms().size() ? getCurrLayer().getXForms().get(row) : getCurrLayer().getBGXForms().get(row - getCurrLayer().getXForms().size() - getCurrLayer().getFinalXForms().size());
           String valStr = (String) aValue;
           if (valStr == null || valStr.length() == 0) {
             valStr = "0";
@@ -2843,9 +2850,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void addBGForm() {
     XForm xForm = new XForm();
-    xForm.addVariation(1.0, new Linear3DFunc());
+    xForm.addVariation(1.0, new FractDragonWFFunc());
     xForm.setColorSymmetry(1.0);
     xForm.setColorType(ColorType.NONE);
+    xForm.setWeight(0.5);
     saveUndoPoint();
     getCurrLayer().getBGXForms().add(xForm);
     gridRefreshing = true;
@@ -3409,7 +3417,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void transformationWeightREd_changed() {
     XForm xForm = getCurrXForm();
-    if (!gridRefreshing && xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0 && getCurrLayer().getBGXForms().indexOf(xForm) < 0) {
+    if (!gridRefreshing && xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0) {
       xFormTextFieldChanged(null, data.transformationWeightREd, "weight", 1.0);
       gridRefreshing = true;
       try {
