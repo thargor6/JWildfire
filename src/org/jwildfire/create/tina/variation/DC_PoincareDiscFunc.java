@@ -68,7 +68,7 @@ int checkers2=1;
 		nfp=new vec2(sa,-ca);
 	}
 	
-	vec2 mbtpc(vec2 z){//Möbius Transform Peserving (unit) Circle
+	vec2 mbtpc(vec2 z){//Mï¿½bius Transform Peserving (unit) Circle
 		vec2 zn=new vec2(z.x*mba.x-z.y*mba.y+mbb.x,
 						z.x*mba.y+z.y*mba.x+mbb.y);
 		vec2 zd=new vec2(z.x*mbb.x+z.y*mbb.y+mba.x,
@@ -186,7 +186,7 @@ int checkers2=1;
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTS_BACKGROUND};
 	}
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {

@@ -10,7 +10,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 
-public abstract class DC_BaseFunc  extends VariationFunc {
+public abstract class DC_BaseFunc  extends VariationFunc implements SupportsBackground {
 
 	/*
 	 * Base Class for DC_Variations
@@ -215,8 +215,13 @@ public abstract class DC_BaseFunc  extends VariationFunc {
 	public boolean dynamicParameterExpansion(String pName) {
 		// preset_id doesn't really expand parameters, but it changes them; this will make them refresh
 		return true;
-	}	
-	
+	}
+
+	@Override
+	public void prepareBackgroundRendering(FlameTransformationContext ctx) {
+		this.colorOnly = 1;
+	}
+
 }
 
 

@@ -301,7 +301,7 @@ public class DC_TrianTessFunc  extends DC_BaseFunc implements SupportsGPU {
 		double r=G.length(pos);
 		vec3 z3=new vec3(pos.multiply(2.0),1.-spaceType*r*r).multiply(1./(1.+spaceType*r*r));
 		if(spaceType==-1. && r>=1.) 
-			return backGroundColor;//We are outside Poincaré disc.
+			return backGroundColor;//We are outside Poincarï¿½ disc.
 		
 		z3=Rotate(z3);
 		z3=fold(z3);
@@ -555,7 +555,7 @@ public class DC_TrianTessFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTS_BACKGROUND};
 	}
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {

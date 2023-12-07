@@ -105,7 +105,7 @@ public class DC_KaleidoscopicFunc  extends DC_BaseFunc implements SupportsGPU {
 		     uv=smallKoleidoscope(uv);
 		 // uv=koleidoscope(uv);  // does the same as smallKoleidoscope(uv)
 		    
-		  // Fractal Colors by Robert Schütze (trirop): http://glslsandbox.com/e#29611
+		  // Fractal Colors by Robert Schï¿½tze (trirop): http://glslsandbox.com/e#29611
 		  vec3 p = new vec3 (uv, zoom);
 		  for (int i = 0; i < 44; i++)
 		  {
@@ -243,7 +243,7 @@ public class DC_KaleidoscopicFunc  extends DC_BaseFunc implements SupportsGPU {
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTS_BACKGROUND};
 	}
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {

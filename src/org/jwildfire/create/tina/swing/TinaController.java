@@ -37,6 +37,7 @@ import org.jwildfire.create.tina.leapmotion.LeapMotionMainEditorController;
 import org.jwildfire.create.tina.meshgen.MeshGenController;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.mutagen.MutationType;
+import org.jwildfire.create.tina.mutagen.RandomBackgroundMutation;
 import org.jwildfire.create.tina.mutagen.WeightingFieldMutation;
 import org.jwildfire.create.tina.palette.*;
 import org.jwildfire.create.tina.quilt.QuiltRendererController;
@@ -2850,7 +2851,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void addBGForm() {
     XForm xForm = new XForm();
-    xForm.addVariation(1.0, new FractDragonWFFunc());
+    // xForm.addVariation(1.0, new FractDragonWFFunc());
+    new RandomBackgroundMutation().applyToXForm(xForm, 1.0);
     xForm.setColorSymmetry(1.0);
     xForm.setColorType(ColorType.NONE);
     xForm.setWeight(0.5);

@@ -352,6 +352,7 @@ public abstract class AbstractFractWFFunc extends VariationFunc implements Suppo
   @Override
   public void prepareBackgroundRendering(FlameTransformationContext ctx) {
     this.color_only = 1;
+    this.buddhabrot_mode = 0;
   }
 
 }

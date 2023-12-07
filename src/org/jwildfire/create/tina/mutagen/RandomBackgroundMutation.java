@@ -37,7 +37,11 @@ class RandomBackgroundMutation extends AbstractMutation {
     pLayer.getBGXForms().clear();
     XForm xForm = new XForm();
     pLayer.getBGXForms().add(xForm);
-    xForm.setWeight((0.25 + Math.random() * 0.5)*mutationStrength);
+    applyToXForm(xForm, mutationStrength);
+  }
+
+  public void applyToXForm(XForm xForm, double mutationStrength) {
+    xForm.setWeight((0.25 + Math.random() * 0.5)* mutationStrength);
     String fName = VariationFuncList.getRandomVariationname(VariationFuncType.VARTYPE_SUPPORTS_BACKGROUND);
     VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fName, true);
     xForm.addVariation((0.5 + Math.random()), varFunc);
