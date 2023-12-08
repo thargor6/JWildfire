@@ -223,7 +223,7 @@ public class AbstractFlameWriter {
     if (xForm.isHasZXPostCoeffs()) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZX_POST, xForm.getZXPostCoeff00() + " " + xForm.getZXPostCoeff01() + " " + xForm.getZXPostCoeff10() + " " + xForm.getZXPostCoeff11() + " " + xForm.getZXPostCoeff20() + " " + xForm.getZXPostCoeff21()));
     }
-    {
+    if(layer.getXForms().indexOf(xForm)>=0) {
       String hs = "";
       for (int i = 0; i < layer.getXForms().size() - 1; i++) {
         hs += xForm.getModifiedWeights()[i] + " ";
