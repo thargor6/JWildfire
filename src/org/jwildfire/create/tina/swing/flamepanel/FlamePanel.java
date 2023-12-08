@@ -897,6 +897,16 @@ public class FlamePanel extends ImagePanel {
             return xForm;
           }
         }
+        for (XForm xForm : layer.getBGXForms()) {
+          if (getHandler(flamePanelTriangleMode).isInsideXForm(xForm, x, y)) {
+            if (config.getMouseDragOperation() == MouseDragOperation.POINTS) {
+              config.setSelectedPoint(getHandler(flamePanelTriangleMode).selectNearestPoint(xForm, x, y));
+              redrawAfterMouseClick = true;
+              reRender = true;
+            }
+            return xForm;
+          }
+        }
       }
     }
     // select nearest point

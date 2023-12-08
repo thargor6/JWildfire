@@ -731,10 +731,10 @@ public class AnimationService {
           case ROTATE_4TH_XFORM:
           case ROTATE_5TH_XFORM:
           case ROTATE_LAST_XFORM:
-          case ROTATE_FINAL_XFORM: {
+          case ROTATE_FINAL_XFORM:
+          case ROTATE_BG_XFORM: {
             XForm xForm = null;
             xForm = getXForm(pScript.getScriptType(), layer, xForm);
-
             if (xForm != null) {
               EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, 360.0);
               MotionCurve curve = xForm.getXYRotateCurve();
@@ -791,7 +791,6 @@ public class AnimationService {
       case ROTATE_POST_FINAL_XFORM:
         return layer.getFinalXForms().size() > 0 ? layer.getFinalXForms().get(0) : null;
       case ROTATE_BG_XFORM:
-      case ROTATE_POST_BG_XFORM:
         return layer.getBGXForms().size() > 0 ? layer.getBGXForms().get(0) : null;
       default:
         throw new IllegalArgumentException(pScript.toString());

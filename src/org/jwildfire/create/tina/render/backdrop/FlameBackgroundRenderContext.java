@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.render.backdrop;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -33,7 +34,9 @@ public class FlameBackgroundRenderContext {
   private final FlameTransformationContext ctx;
 
   public FlameBackgroundRenderContext(Flame pFlame, int pThreadID) {
-    this.preparedFlame = pFlame.makeCopy();
+    double time = pFlame.getFrame() >= 0 ? pFlame.getFrame() : 0;
+    this.preparedFlame = AnimationService.evalMotionCurves(pFlame.makeCopy(), time);
+
     this.ctx = new FlameTransformationContext(new FlameRenderer(preparedFlame, Prefs.getPrefs(), false, true), new MarsagliaRandomGenerator(), pThreadID, 1);
 
     for(Layer layer: preparedFlame.getLayers()) {
