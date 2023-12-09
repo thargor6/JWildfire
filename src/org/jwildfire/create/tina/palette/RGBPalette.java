@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -265,7 +265,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
       }
       for (int i = 0; i < PALETTE_SIZE; i++) {
         RGBColor color = getRawColor(i);
-        int idx = i + modShift;
+        int idx = i + modShift % 255;
         if (idx < 0) {
           idx += PALETTE_SIZE;
         }
