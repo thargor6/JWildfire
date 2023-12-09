@@ -123,7 +123,7 @@ public class FARenderTools {
         }
       }
 
-      String cmd = getLaunchCmd(pFlameFilename, pWidth, pHeight, pQuality, pMergedRender, pFlame.isBGTransparency() || pFlame.hasBGTransforms());
+      String cmd = getLaunchCmd(pFlameFilename, pWidth, pHeight, pQuality, pMergedRender, pFlame.isBGTransparency() || pFlame.hasBGTransforms() || pFlame.hasComplexBackgroundColor());
       ByteArrayOutputStream os = new ByteArrayOutputStream();
       int returnCode = launchAsync(cmd, os);
       String msg = new String(os.toByteArray());
@@ -132,7 +132,7 @@ public class FARenderTools {
       if (returnCode == 0) {
         res.setOutputFilename(outputFilename);
       }
-      if(pFlame.hasBGTransforms()) {
+      if(pFlame.hasBGTransforms() || pFlame.hasComplexBackgroundColor()) {
         SimpleImage fgImage =  new ImageReader().loadImageWithAlpha(res.getOutputFilename());
         SimpleImage bgImage = new SimpleImage(pWidth, pHeight);
         new FlameBackgroundHandler(pFlame).fillBackground(bgImage);

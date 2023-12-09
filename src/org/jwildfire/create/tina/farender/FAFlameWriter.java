@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -386,22 +386,6 @@ public class FAFlameWriter extends AbstractFlameWriter {
         break;
     }
     flame.setPostSymmetryType(PostSymmetryType.NONE);
-
-    switch(flame.getBgColorType()) {
-      case GRADIENT_2X2:
-        flame.setBgColorType(BGColorType.SINGLE_COLOR);
-        flame.setBgColorRed(Tools.roundColor((flame.getBgColorLLRed() + flame.getBgColorLRRed() + flame.getBgColorULRed() + flame.getBgColorURRed() ) / 4.0));
-        flame.setBgColorGreen(Tools.roundColor((flame.getBgColorLLGreen() + flame.getBgColorLRGreen() + flame.getBgColorULGreen() + flame.getBgColorURGreen() ) / 4.0));
-        flame.setBgColorBlue(Tools.roundColor((flame.getBgColorLLBlue() + flame.getBgColorLRBlue() + flame.getBgColorULBlue() + flame.getBgColorURBlue() ) / 4.0));
-        break;
-      case GRADIENT_2X2_C:
-        flame.setBgColorType(BGColorType.SINGLE_COLOR);
-        flame.setBgColorRed(Tools.roundColor((flame.getBgColorLLRed() + flame.getBgColorLRRed() + flame.getBgColorULRed() + flame.getBgColorURRed() + flame.getBgColorCCRed() ) / 5.0));
-        flame.setBgColorGreen(Tools.roundColor((flame.getBgColorLLGreen() + flame.getBgColorLRGreen() + flame.getBgColorULGreen() + flame.getBgColorURGreen() + flame.getBgColorCCRed() ) / 5.0));
-        flame.setBgColorBlue(Tools.roundColor((flame.getBgColorLLBlue() + flame.getBgColorLRBlue() + flame.getBgColorULBlue() + flame.getBgColorURBlue() + flame.getBgColorCCRed() ) / 5.0));
-        break;
-    }
-
     // split prepost-variations into 2 variations
     for(Layer layer: flame.getLayers()) {
       for (XForm xForm : layer.getXForms()) {

@@ -2009,4 +2009,18 @@ public class Flame implements Assignable<Flame>, Serializable {
   public boolean hasBGTransforms() {
     return getLayers().stream().anyMatch(layer -> !layer.getBGXForms().isEmpty());
   }
+
+  public boolean hasComplexBackgroundColor() {
+    switch(getBgColorType()) {
+      case GRADIENT_2X2:
+        return getBgColorLLRed() > 0 || getBgColorLRRed() > 0 || getBgColorULRed() > 0  || getBgColorURRed() > 0 ||
+               getBgColorLLGreen() > 0 || getBgColorLRGreen() > 0 || getBgColorULGreen() > 0  || getBgColorURGreen() > 0 ||
+               getBgColorLLBlue() > 0 || getBgColorLRBlue() > 0 || getBgColorULBlue() > 0  || getBgColorURBlue() > 0;
+      case GRADIENT_2X2_C:
+        return getBgColorLLRed() > 0 || getBgColorLRRed() > 0 || getBgColorULRed() > 0  || getBgColorURRed() > 0 || getBgColorCCRed() > 0 ||
+                getBgColorLLGreen() > 0 || getBgColorLRGreen() > 0 || getBgColorULGreen() > 0  || getBgColorURGreen() > 0 || getBgColorCCGreen() > 0 ||
+                getBgColorLLBlue() > 0 || getBgColorLRBlue() > 0 || getBgColorULBlue() > 0  || getBgColorURBlue() > 0 || getBgColorCCBlue() > 0;
+    }
+    return getBGImageFilename()!=null && !getBGImageFilename().isEmpty();
+  }
 }
