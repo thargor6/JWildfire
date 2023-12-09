@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class DCPerlinFunc extends VariationFunc implements SupportsGPU {
+public class DCPerlinFunc extends VariationFunc implements SupportsGPU, SupportsBackground {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_SHAPE = "shape";
@@ -40,7 +40,9 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_Z = "z";
   private static final String PARAM_SELECT_BAILOUT = "select_bailout";
 
-  private static final String[] paramNames = {PARAM_SHAPE, PARAM_MAP, PARAM_SELECT_CENTRE, PARAM_SELECT_RANGE, PARAM_CENTRE, PARAM_RANGE, PARAM_EDGE, PARAM_SCALE, PARAM_OCTAVES, PARAM_AMPS, PARAM_FREQS, PARAM_Z, PARAM_SELECT_BAILOUT};
+	private static final String PARAM_COLOR_ONLY = "color_only";
+
+  private static final String[] paramNames = {PARAM_SHAPE, PARAM_MAP, PARAM_SELECT_CENTRE, PARAM_SELECT_RANGE, PARAM_CENTRE, PARAM_RANGE, PARAM_EDGE, PARAM_SCALE, PARAM_OCTAVES, PARAM_AMPS, PARAM_FREQS, PARAM_Z, PARAM_SELECT_BAILOUT, PARAM_COLOR_ONLY};
 
   private int shape = 0;
   private int map = 0;
@@ -55,6 +57,8 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU {
   private double freqs = 2.0;
   private double z = 0.0;
   private int select_bailout = 10;
+
+	private int color_only = 0;
 
   private final static int SHAPE_SQUARE = 0;
   private final static int SHAPE_DISC = 1;
@@ -86,8 +90,8 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU {
         // Assign Vx, Vy according to shape
         switch (shape) {
           case SHAPE_SQUARE:
-            Vx = (1.0 + this.edge) * (pContext.random() - 0.5);
-            Vy = (1.0 + this.edge) * (pContext.random() - 0.5);
+            Vx = (1.0 + this.edge) * ((color_only > 0 ? pAffineTP.x : pContext.random()) - 0.5);
+            Vy = (1.0 + this.edge) * ((color_only > 0 ? pAffineTP.y : pContext.random()) - 0.5);
             r = Vx * Vx > Vy * Vy ? Vx : Vy;
             if (r > 1.0 - this.edge) {
               e = 0.5 * (r - 1.0 + this.edge) / this.edge;
@@ -207,7 +211,7 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{shape, map, select_centre, select_range, centre, range, edge, scale, octaves, amps, freqs, z, select_bailout};
+    return new Object[]{shape, map, select_centre, select_range, centre, range, edge, scale, octaves, amps, freqs, z, select_bailout, color_only};
   }
 
   @Override
@@ -238,6 +242,8 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU {
       z = pValue;
     else if (PARAM_SELECT_BAILOUT.equalsIgnoreCase(pName))
       select_bailout = limitIntVal(Tools.FTOI(pValue), 2, 1000);
+		else if (PARAM_COLOR_ONLY.equalsIgnoreCase(pName))
+			color_only = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
       throw new IllegalArgumentException(pName);
   }
@@ -261,7 +267,7 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE,VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTS_BACKGROUND};
   }
 	public String getGPUCode(FlameTransformationContext context) {
 		 return	  "    float _notch_bottom, _notch_top;"
@@ -894,4 +900,10 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU {
 				+"    return n;"
 				+"  }";
 		 }
+
+	@Override
+	public void prepareBackgroundRendering(FlameTransformationContext ctx) {
+    color_only = 1;
+		shape = SHAPE_SQUARE;
+	}
 }
