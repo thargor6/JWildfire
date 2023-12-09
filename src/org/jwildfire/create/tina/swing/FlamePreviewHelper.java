@@ -271,7 +271,7 @@ public class FlamePreviewHelper implements IterationObserver {
                         width,
                         height,
                         prefs.getTinaRenderPreviewQuality(),
-                        preparedFlames.size() > 1);
+                        preparedFlames.size() > 1, flame);
               } finally {
                 try {
                   if (gpuProgressUpdater != null) {

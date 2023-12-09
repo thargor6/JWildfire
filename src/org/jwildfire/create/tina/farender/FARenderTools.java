@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -27,7 +27,12 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.backdrop.FlameBackgroundHandler;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
+import org.jwildfire.io.ImageWriter;
 import org.jwildfire.launcher.StreamRedirector;
+import org.jwildfire.transform.ComposeTransformer;
 
 public class FARenderTools {
   private static boolean faRenderChecked = false;
@@ -72,7 +77,7 @@ public class FARenderTools {
     }
   }
 
-  private static String getLaunchCmd(String pFlameFilename, int pWidth, int pHeight, int pQuality, boolean pMergedRender) {
+  private static String getLaunchCmd(String pFlameFilename, int pWidth, int pHeight, int pQuality, boolean pMergedRender, boolean pAlpha) {
     StringBuilder cmd = new StringBuilder();
     String exePath=new File(Tools.getPathRelativeToCodeSource(FARENDER_JWF_PATH), FARENDER_EXE).getAbsolutePath();
     if (exePath.indexOf(" ") >= 0) {
@@ -89,6 +94,9 @@ public class FARenderTools {
     if(pMergedRender) {
       cmd.append(" -merge");
     }
+    if(pAlpha) {
+      cmd.append(" -alpha");
+    }
 
     String opts = Prefs.getPrefs().getTinaFARenderOptions();
     if(opts==null) {
@@ -103,7 +111,7 @@ public class FARenderTools {
     return cmd.toString();
   }
 
-  public static FARenderResult invokeFARender(String pFlameFilename, int pWidth, int pHeight, int pQuality, boolean pMergedRender) {
+  public static FARenderResult invokeFARender(String pFlameFilename, int pWidth, int pHeight, int pQuality, boolean pMergedRender, Flame pFlame) {
     try {
       String outputFilename = Tools.trimFileExt(pFlameFilename) + ".png";
       {
@@ -115,7 +123,7 @@ public class FARenderTools {
         }
       }
 
-      String cmd = getLaunchCmd(pFlameFilename, pWidth, pHeight, pQuality, pMergedRender);
+      String cmd = getLaunchCmd(pFlameFilename, pWidth, pHeight, pQuality, pMergedRender, pFlame.isBGTransparency() || pFlame.hasBGTransforms());
       ByteArrayOutputStream os = new ByteArrayOutputStream();
       int returnCode = launchAsync(cmd, os);
       String msg = new String(os.toByteArray());
@@ -123,6 +131,36 @@ public class FARenderTools {
       res.setCommand(cmd);
       if (returnCode == 0) {
         res.setOutputFilename(outputFilename);
+      }
+      if(pFlame.hasBGTransforms()) {
+        SimpleImage fgImage =  new ImageReader().loadImageWithAlpha(res.getOutputFilename());
+        SimpleImage bgImage = new SimpleImage(pWidth, pHeight);
+        new FlameBackgroundHandler(pFlame).fillBackground(bgImage);
+        if(fgImage.getImageWidth()!=bgImage.getImageWidth() || fgImage.getImageHeight()!=bgImage.getImageHeight()) {
+          throw new Exception("Image size mismatch");
+        }
+        for(int h=0;h<bgImage.getImageHeight();h++) {
+          for(int w=0;w<bgImage.getImageWidth();w++) {
+            int bgR = bgImage.getRValue(w, h);
+            int bgG = bgImage.getGValue(w, h);
+            int bgB = bgImage.getBValue(w, h);
+            int fgA = fgImage.getAValue(w, h);
+            int fgR = fgImage.getRValue(w, h);
+            int fgG = fgImage.getGValue(w, h);
+            int fgB = fgImage.getBValue(w, h);
+
+            if(fgR==0 && fgG==0 && fgB==0) {
+              fgA = 0;
+            }
+
+            int r = (fgR * fgA + bgR * (255-fgA)) / 255;
+            int g = (fgG * fgA + bgG * (255-fgA)) / 255;
+            int b = (fgB * fgA + bgB * (255-fgA)) / 255;
+            bgImage.setARGB(w, h, 255, r, g, b);
+          }
+        }
+
+        new ImageWriter().saveImage(bgImage, res.getOutputFilename());
       }
       return res;
     }

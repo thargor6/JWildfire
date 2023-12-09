@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -352,7 +352,7 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
             gpuFlameWriter.writeFlame(gpuFlameParams, tmpFile.getAbsolutePath());
             long t0 = System.currentTimeMillis();
             FARenderResult renderResult =
-                FARenderTools.invokeFARender(tmpFile.getAbsolutePath(), width, height, quality, preparedFlames.size() > 1);
+                FARenderTools.invokeFARender(tmpFile.getAbsolutePath(), width, height, quality, preparedFlames.size() > 1, getCurrFlame());
             long t1 = System.currentTimeMillis();
             try {
               if (renderResult.getReturnCode() == 0) {

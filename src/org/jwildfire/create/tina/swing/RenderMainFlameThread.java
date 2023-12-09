@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -195,7 +195,7 @@ public class RenderMainFlameThread implements Runnable {
         FileDialogTools.ensureFileAccess(null, null, gpuRenderFlameFilename);
         List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame, zForPass);
         new FAFlameWriter().writeFlame(preparedFlames, gpuRenderFlameFilename);
-        FARenderResult gpuRenderRes = FARenderTools.invokeFARender(gpuRenderFlameFilename, width, height, quality, preparedFlames.size() > 1);
+        FARenderResult gpuRenderRes = FARenderTools.invokeFARender(gpuRenderFlameFilename, width, height, quality, preparedFlames.size() > 1, newFlame);
         if (gpuRenderRes.getReturnCode() != 0) {
           throw new Exception(gpuRenderRes.getMessage());
         } else {
