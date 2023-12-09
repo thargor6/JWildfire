@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -72,7 +72,7 @@ public class FARendererInterface implements GPURenderer {
       try {
         FileDialogTools.ensureFileAccess(new Frame(), new JPanel(), tmpFile.getAbsolutePath());
         new FAFlameWriter().writeFlame(Collections.singletonList(flame), tmpFile.getAbsolutePath());
-        FARenderResult openClRenderRes = FARenderTools.invokeFARender(tmpFile.getAbsolutePath(), 64, 64, 10, false);
+        FARenderResult openClRenderRes = FARenderTools.invokeFARender(tmpFile.getAbsolutePath(), 64, 64, 10, false, flame);
         if(openClRenderRes.getReturnCode()==0 && openClRenderRes.getOutputFilename()!=null) {
           try {
             new File(openClRenderRes.getOutputFilename()).delete();
