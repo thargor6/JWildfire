@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -30,8 +30,8 @@ public class XFormTransformService {
     res.val[1][1] = pMatrix1.val[1][0] * pMatrix2.val[0][1] + pMatrix1.val[1][1] * pMatrix2.val[1][1] + pMatrix1.val[1][2] * pMatrix2.val[2][1];
     res.val[1][2] = pMatrix1.val[1][0] * pMatrix2.val[0][2] + pMatrix1.val[1][1] * pMatrix2.val[1][2] + pMatrix1.val[1][2] * pMatrix2.val[2][2];
     res.val[2][0] = pMatrix1.val[2][0] * pMatrix2.val[0][0] + pMatrix1.val[2][1] * pMatrix2.val[1][0] + pMatrix1.val[2][2] * pMatrix2.val[2][0];
-    res.val[2][0] = pMatrix1.val[2][0] * pMatrix2.val[0][1] + pMatrix1.val[2][1] * pMatrix2.val[1][1] + pMatrix1.val[2][2] * pMatrix2.val[2][1];
-    res.val[2][0] = pMatrix1.val[2][0] * pMatrix2.val[0][2] + pMatrix1.val[2][1] * pMatrix2.val[1][2] + pMatrix1.val[2][2] * pMatrix2.val[2][2];
+    res.val[2][1] = pMatrix1.val[2][0] * pMatrix2.val[0][1] + pMatrix1.val[2][1] * pMatrix2.val[1][1] + pMatrix1.val[2][2] * pMatrix2.val[2][1];
+    res.val[2][2] = pMatrix1.val[2][0] * pMatrix2.val[0][2] + pMatrix1.val[2][1] * pMatrix2.val[1][2] + pMatrix1.val[2][2] * pMatrix2.val[2][2];
     return res;
   }
 
