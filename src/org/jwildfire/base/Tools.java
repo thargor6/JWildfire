@@ -61,9 +61,9 @@ import org.jwildfire.io.ImageReader;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  private static final String APP_VERSION = "V8.20 (21.10.2023)";
+  private static final String APP_VERSION = "V8.50 BETA (10.12.2023)";
 
-  public static final boolean STEAM_EDITION = true;
+  public static final boolean STEAM_EDITION = false;
   public static final boolean SPECIAL_VERSION = false;
 
   public static final int MAX_SPATIAL_OVERSAMPLING = 6;

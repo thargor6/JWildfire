@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -789,7 +789,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     refreshImageFields();
     refreshMotionFields();
     refreshBaseFlameFields();
-    refreshPreview();
+    if(getIFlamesFunc()!=null) {
+      refreshPreview();
+    }
   }
 
   public void redoAction() {
@@ -1217,33 +1219,38 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private void refreshImageFields() {
     IFlamesFunc iflame = getIFlamesFunc();
     if (iflame == null) {
-      edgesNorthButton.setSelected(false);
-      edgesWestButton.setSelected(false);
-      edgesEastButton.setSelected(false);
-      edgesSouthButton.setSelected(false);
-      erodeButton.setSelected(false);
-      erodeSizeField.setValue(0.0);
-      maxImageWidthField.setValue(0.0);
-      structureThresholdField.setValue(0.0);
-      structureDensityField.setValue(0.0);
-      globalScaleXField.setValue(0.0);
-      globalScaleYField.setValue(0.0);
-      globalScaleZField.setValue(0.0);
-      globalOffsetXField.setValue(0.0);
-      globalOffsetYField.setValue(0.0);
-      globalOffsetZField.setValue(0.0);
-      shapeDistributionCmb.setSelectedIndex(-1);
-      iflameBrightnessField.setValue(0.0);
-      imageBrightnessField.setValue(0.0);
-      iflameDensityField.setValue(0.0);
-      previewButton.setSelected(false);
-      statisticsTextArea.setText("");
-      imageRedChangeField.setValue(0.0);
-      imageGreenChangeField.setValue(0.0);
-      imageBlueChangeField.setValue(0.0);
-      imageHueChangeField.setValue(0.0);
-      imageSaturationChangeField.setValue(0.0);
-      imageLightnessChangeField.setValue(0.0);
+      try {
+        edgesNorthButton.setSelected(false);
+        edgesWestButton.setSelected(false);
+        edgesEastButton.setSelected(false);
+        edgesSouthButton.setSelected(false);
+        erodeButton.setSelected(false);
+        erodeSizeField.setValue(0.0);
+        maxImageWidthField.setValue(0.0);
+        structureThresholdField.setValue(0.0);
+        structureDensityField.setValue(0.0);
+        globalScaleXField.setValue(0.0);
+        globalScaleYField.setValue(0.0);
+        globalScaleZField.setValue(0.0);
+        globalOffsetXField.setValue(0.0);
+        globalOffsetYField.setValue(0.0);
+        globalOffsetZField.setValue(0.0);
+        shapeDistributionCmb.setSelectedIndex(-1);
+        iflameBrightnessField.setValue(0.0);
+        imageBrightnessField.setValue(0.0);
+        iflameDensityField.setValue(0.0);
+        previewButton.setSelected(false);
+        statisticsTextArea.setText("");
+        imageRedChangeField.setValue(0.0);
+        imageGreenChangeField.setValue(0.0);
+        imageBlueChangeField.setValue(0.0);
+        imageHueChangeField.setValue(0.0);
+        imageSaturationChangeField.setValue(0.0);
+        imageLightnessChangeField.setValue(0.0);
+      }
+      catch(Exception ex) {
+        throw new RuntimeException("Not a valid iflame. To add regular flames, please use the flame-library");
+      }
     }
     else {
       edgesNorthButton.setSelected(iflame.getImageParams().getConv_north() == 1);

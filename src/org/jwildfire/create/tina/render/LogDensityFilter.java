@@ -44,6 +44,9 @@ import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+
 public class LogDensityFilter {
   private final ColorFunc colorFunc;
 
@@ -754,11 +757,18 @@ public class LogDensityFilter {
           p.modHue = 0.0;
           for(XForm xform: layer.getBGXForms()) {
             xform.transformPoint(ctx.getFlameTransformationCtx(), affineT, varT, p, q);
-            double weight = xform.getWeight();
+            double amount;
+            if(fabs(affineT.weightMapValue)>EPSILON && fabs(xform.getWeightingFieldVarAmountIntensity())>EPSILON) {
+              amount = xform.getWeight() * (1.0 + affineT.weightMapValue * xform.getWeightingFieldVarAmountIntensity());
+            }
+            else {
+              amount = xform.getWeight();
+            }
+
             if(q.rgbColor) {
-              dest.bgRed += q.redColor * weight;
-              dest.bgGreen += q.greenColor * weight;
-              dest.bgBlue += q.blueColor * weight;
+              dest.bgRed += q.redColor * amount;
+              dest.bgGreen += q.greenColor * amount;
+              dest.bgBlue += q.blueColor * amount;
             }
             else {
               RenderColor[] colorMap = layer.getColorMap();
@@ -771,9 +781,9 @@ public class LogDensityFilter {
 
               RenderColor color = colorMap[colorIdx];
 
-              dest.bgRed += color.red * weight;
-              dest.bgGreen += color.green * weight;
-              dest.bgBlue += color.blue * weight;
+              dest.bgRed += color.red * amount;
+              dest.bgGreen += color.green * amount;
+              dest.bgBlue += color.blue * amount;
             }
           }
         }

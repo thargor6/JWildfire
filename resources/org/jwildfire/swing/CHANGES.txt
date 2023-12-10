@@ -1,3 +1,41 @@
+V8.50 (09.12.2023)
+- introducing a new type of transform: background transforms.
+    - a background transform calculates a layer of a background, typically using one of the dc-type of variations
+    - this way you can add very interesting backgrounds which also evaluate very fast (in comparison to the "classical iterations")
+    - the intensity ("brightness") of the background is controlled by the "weight" parameter of the background transform
+    - use the small "B"-button (which is located right of the "Final"-transform-button) to add a random background transform to the current layer
+    - currently, about 60 variations support background transforms
+       - please note, that you can also combine them with regular "pre_"-type-variations
+       - you can make most variations to work as a "pre_"-type-variation in the user-interface by pressing the small "pre"-buttons
+       - this way you can apply interesting deform-effects to your backgrounds
+    - background-transforms can also be animated like regular transforms
+    - you can control the position, size and orientation by changing the affine-part of the background transform ("triangles")
+       - please note that this affine-transform is applied to the coordinates of the background
+       - so it appears somewhat like an inverse transform
+       - e.g. moving to the right, will move the background to the left
+       - e.g. scaling down the triangle will zoom into the background, etc.
+    - currently, the following variations support background-transforms directly:
+        colormap_wf, dc_acrilic, dc_apollonian, dc_booleans, dc_cairotiles, dc_circlesblue, dc_circuits, dc_code,
+        dc_ducks, dc_fingerprint, dc_fractaldots, dc_fractcolor, dc_gabornoise, dc_glypho, dc_gmandelbroot, dc_grid3D,
+        dc_hexagons, dc_hoshi, dc_hyperbolictile, dc_inversion, dc_kaleidocomplex, dc_kaleidoscopic, dc_kaliset,
+        dc_kaliset2, dc_layers, dc_linear, dc_mandala, dc_mandbrot, dc_mandelbox2D, dc_menger, dc_moebiuslog, dc_pentatiles,
+        dc_perlin, dc_poincaredisc, dc_portal, dc_quadtree, dc_randomoctree, dc_rotations, dc_spacefold, dc_squares,
+        dc_starsfield, dc_sunflower, dc_tesla, dc_tree, dc_triantess, dc_truchet, dc_turbulence, dc_voronoise, dc_vortex,
+        dc_warping, dc_worley, f_complex, fract_dragon_wf, fract_formula_julia_wf, fract_formula_mand_wf, fract_julia_wf,
+        fract_mandelbrot_wf, fract_meteors_wf, fract_pearls_wf, fract_salamander_wf, iconattractor_js, swirl3D_wf
+- GPU render now also supports transparency
+- variation-filter in the user interface ("Background transform"), which shows only variations which are suitable for background transforms
+- new RANDOM_BACKGROUND-mutation to add background-transforms, which is available both in the "Quick Mutations"-tab and the MutaGen-window as well
+- new "Flame with Background"-random-flame-generator to generate flames with background-transforms
+- GPU render now supports bg transforms (by compositing
+- GPU render now supports background images and background gradients (by compositing)
+- the "shift"-parameter of the gradient can now be easilier be animate to created color-cycling animations (as suggested by
+Hugo Orosz)
+- fixed an internal matrix-multiplicatiopn-bug, reported by Brenda661
+- fixed a bug regarding to saving the window-position of the Easy Movie Maker, as reported by Hugo Orosz
+- restored the internal "TM*" scripts (which got lost due to unknown reason)
+- on GPU the xcolorshift, ycolorshift, and zcolorshift variables now also work with post_mirror, as reported by Brad Stefanov
+
 V8.20 (21.10.2023)
  -upgraded the GPU render to CUDA 11.8, works also on NVIDIA 4xxx GPU's now
  -new "Underwater"-random-flame-generator, most generated flames also work well with the GPU render
