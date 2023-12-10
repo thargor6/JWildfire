@@ -64,7 +64,7 @@ public class JWildfire extends JApplet {
     mainInternalFrames.add(new DefaultJFrameHolder<>(MutaGenFrame.class, this, WindowPrefs.WINDOW_MUTAGEN, "Fractal flames: MutaGen"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(InteractiveRendererFrame.class, this, WindowPrefs.WINDOW_INTERACTIVERENDERER, "Fractal flames: Interactive renderer"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(FlameBrowserFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Flame browser"));
-    mainInternalFrames.add(new DefaultJFrameHolder<>(EasyMovieMakerFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Easy movie maker"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(EasyMovieMakerFrame.class, this, WindowPrefs.WINDOW_EASYMOVIEMAKER, "Fractal flames: Easy movie maker"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(DancingFlamesFrame.class, this, WindowPrefs.WINDOW_DANCINGFLAMES, "Fractal flames: Dancing flames"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(BatchFlameRendererFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(QuiltFlameRendererFrame.class, this, WindowPrefs.WINDOW_QUILTFLAMERENDERER, "Fractal flames: Quilt renderer"));

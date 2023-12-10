@@ -443,7 +443,7 @@ public class JWFScriptController implements Consumer<DefaultMutableTreeNode> {
       addXForm(pSB, xForm, i, XFormType.FINAL_XFORM);
     }
     for (int i = 0; i < pLayer.getBGXForms().size(); i++) {
-      XForm xForm = pLayer.getFinalXForms().get(i);
+      XForm xForm = pLayer.getBGXForms().get(i);
       addXForm(pSB, xForm, i, XFormType.BACKGROUND);
     }
     //    sb.append("  // create the gradient\n");

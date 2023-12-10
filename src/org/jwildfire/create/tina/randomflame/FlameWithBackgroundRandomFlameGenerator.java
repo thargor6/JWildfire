@@ -126,12 +126,12 @@ public class FlameWithBackgroundRandomFlameGenerator extends RandomFlameGenerato
 
   @Override
   protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
-    new RandomBackgroundMutation().execute(pFlame.getFirstLayer(), 1.0);
     return pFlame;
   }
 
   @Override
   protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    new RandomBackgroundMutation().execute(pFlame.getFirstLayer(), 1.0);
     return pFlame;
   }
 }

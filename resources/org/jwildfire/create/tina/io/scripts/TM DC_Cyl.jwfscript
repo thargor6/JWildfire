@@ -1,0 +1,298 @@
+/* ScriptInfo
+Tile Maker DC_Cylinder by MG
+author="Missy Gainer" category="Randomizer"
+info="Randomizes a flame by Missy Gainer"
+*/
+
+// A special Thank You to Andreas Maschke, Mick Hogan, Michael Bourne and Jesus Sosa for code help
+
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.io.UniversalPaletteReader;
+import org.jwildfire.create.tina.io.UniversalPaletteReader;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.mutagen.RandomGradientMutation;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import static org.jwildfire.create.tina.base.DrawMode.HIDDEN;
+import org.jwildfire.base.mathlib.MathLib;
+import java.util.List;
+import org.jwildfire.create.tina.randomgradient.StrongHueRandomGradientGenerator;
+
+public int range(int min, int max) {return min + (int)(Math.random()*(max-min + 1));}
+public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+    
+  boolean fadeColors = true;
+  int randomPoints = 50;  
+  boolean uniformWidth = true;
+  StrongHueRandomGradientGenerator gradientGen = new StrongHueRandomGradientGenerator();
+  RGBPalette newGradient = gradientGen.generatePalette(randomPoints, fadeColors, uniformWidth); 
+
+  Flame flame=new Flame();  
+  flame.getLayers().clear();
+  flame.setCamRoll(0);
+  flame.setCamPitch(0);
+  flame.setCamYaw(0);
+  flame.setCamPerspective(0);
+  flame.setWidth(800);
+  flame.setHeight(600);
+  flame.setPixelsPerUnit(140);
+  flame.setCamZoom(1);
+  flame.setBGTransparency(false);
+  flame.setBrightness(40);
+  flame.setLowDensityBrightness(0.6);
+  flame.setContrast(.1);
+  flame.setGamma(2.5);
+  flame.setCentreX(0);
+  flame.setCentreY(0);
+  flame.setName("Script by Missy Gainer");
+  
+  
+  // CREATE LAYER 1
+  {
+    Layer layer = new Layer();
+    flame.getLayers().add(layer);
+    layer.setWeight(1);
+    layer.setVisible(true);
+
+	
+	 // CREATE TRANSFORM 1
+    {	  
+      XForm xForm = new XForm();
+      layer.getXForms().add(xForm);
+      xForm.setWeight(5);
+      xForm.setColor(1.0*Math.random());
+      xForm.setColorSymmetry(1.0*Math.random());
+	  xForm.setDrawMode(HIDDEN);
+
+      xForm.setCoeff00(1); // a
+      xForm.setCoeff10(0); // b
+      xForm.setCoeff20(0); // e
+      xForm.setCoeff01(0); // c
+      xForm.setCoeff11(1); // d
+      xForm.setCoeff21(0); // f
+
+      xForm.setPostCoeff00(0.5025276);
+      xForm.setPostCoeff10(0.5025276);
+      xForm.setPostCoeff01(-0.5025276);
+      xForm.setPostCoeff11(0.5025276);
+      xForm.setPostCoeff20(0);
+      xForm.setPostCoeff21(0);
+
+	  String desirables[] = {
+ "acosech", "acosh", "acoth", "affine3D","anamorphcyl", "apocarpet_js", "apollony", "arcsinh", "arctanh", "arctruchet", "asteria", "atan", "atan2_spirals", "auger", "auger", "barycentroid", "bent", "bent", "bent2", "bipolar", "blade", "blade3D", "blob", "blob3D", "blur3D", "boarders", "boarders2", "brownian_js", "bsplit", "bubble", "bubble2", "bubbleT3D", "butterfly", "butterfly3D", "butterfly_fay", "bwrands", "bwraps7", "cannabiscurve_wf", "cardioid", "cell", "chunk", "circlesplit", "clifford_js", "cloverleaf_wf", "collideoscope", "complex", "conic", "cos2_bs", "cosh2_bs", "cosine", "cot2_bs", "cothq", "cpow", "cpow2", "cpow3_wf", "crackle", "cross", "crown_js", "csc2_bs", "csch2_bs", "cschq", "cubic3D", "cubicLattice_3D", "curl3D", "curve", "dc_bubble", "dc_carpet", "dc_crackle_wf", "dc_cube", "dc_cylinder2", "dc_dmodulus", "dc_gnarly", "dc_hexes_wf", "dc_perlin", "dc_triangle", "deltaA", "devil_warp", "diamond", "diamond", "dinis_surface_wf", "dustpoint", "edisc", "erf3D", "eyefish", "hadamard_js", "handkerchief", "heart", "heart_wf", "helicoid", "helix", "hexaplay3D", "hexes", "hexnix3D", "ho", "horseshoe", "htree_js", "hyperbolic", "hyperbolicellipse", "hypercrop", "hypershift2", "hypertile", "hypertile1", "hypertile2", "hypertile3D", "hypertile3D1", "hypertile3D2", "iconattractor_js", "idisc", "intersection", "invtree_js", "inversion", "invpolar", "isosfplot3d_wf", "jac_asn", "jac_cn", "jac_dn", "jac_sn", "jubiQ", "julia", "julia3D", "julia3Dq", "julia3Dz", "juliac", "julian", "julian2", "julian3Dx", "juliaq", "juliascope", "klein_group", "koch_js", "lace_js", "layered_spiral", "lazysusan", "lissajous", "log_db", "lozi", "lsystem_js", "mandelbrot", "mask", "maurer_lines", "mcarpet", "minkQM", "mobius", "nBlur", "ngon", "npolar", "onion", "onion2", "ovoid3d", "panorama1",  "perspective", "petal", "phoenix_julia", "polar2", "popcorn2_3D", "pow_block", "power", "pressure_wave", "pulse", "quaternion", "r_circleblur", "rays2", "rhodonea", "ripple", "rippled", "rose_wf", "rosoni", "rsquares_js", "sattractor_js", "scrambly", "scry", "scry2", "scry_3D", "sec2_bs", "secant2", "sech2_bs", "separation", "shredlin", "shredrad", "siercarpet_js", "sigmoid", "sin2_bs", "sinh2_bs", "sintrange", "sinusoidal3d", "sph3D", "spherical", "spiralwing", "splitbrdr", "splits", "splits3D", "squarize", "squish", "starblur", "stripes", "sunflower", "sunvoroni", "svf", "swirl", "swirl3D_wf", "synth", "tan2_bs", "taprats", "target", "target_sp", "terrain3D", "threepoint_js", "triantruchet", "twintrian", "unpolar", "vibration2", "w", "waffle", "wallpaper_js", "wangtiles", "waveblur_wf", "waves2_3D", "waves2_3D", "wedge", "whitney_umbrella", "whorl", "woggle_js", "xerf", "xheart", "xheart_blur_wf", "yin_yang", "yplot2d_wf", }; 
+
+  int listLength = desirables.length;
+ 
+
+      // variation 1
+      {
+        VariationFunc varFunc=VariationFuncList.getVariationFuncInstance(desirables[range(1,listLength)-1], true);
+        xForm.addVariation(0.3, varFunc);
+      }  
+
+      // variation 2
+      {
+        VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("post_mirror_wf", true);
+        varFunc.setParameter("xaxis", 1);
+        varFunc.setParameter("yaxis", 1);
+        varFunc.setParameter("zaxis", 0);
+        varFunc.setParameter("xshift", 0);
+        varFunc.setParameter("yshift", 0);
+        varFunc.setParameter("zshift", 0);
+        xForm.addVariation(1, varFunc);
+      }
+	  
+	  // variation 3
+      {
+        VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("post_smartcrop", true);
+        varFunc.setParameter("power", 4);
+        varFunc.setParameter("radius", 0.35);
+        varFunc.setParameter("roundstr", 0);
+        varFunc.setParameter("roundwidth", 0);
+        varFunc.setParameter("distortion", 1);
+        varFunc.setParameter("edge", 0);
+        varFunc.setParameter("scatter", 0);
+        varFunc.setParameter("offset", 0);
+        varFunc.setParameter("cropmode", 1);
+        varFunc.setParameter("static", 2);
+        xForm.addVariation(1, varFunc);
+      }
+    }	  
+	
+	
+   // CREATE TRANSFORM 2
+    {
+      XForm xForm = new XForm();
+      layer.getXForms().add(xForm);
+      xForm.setWeight(3);
+      xForm.setColor(1.0*Math.random());
+      xForm.setColorSymmetry(1.0*Math.random());
+	  xForm.setDrawMode(HIDDEN);
+
+      xForm.setCoeff00(1); // a
+      xForm.setCoeff10(0); // b
+      xForm.setCoeff20(0); // e
+      xForm.setCoeff01(0); // c
+      xForm.setCoeff11(1); // d
+      xForm.setCoeff21(0); // f
+
+      xForm.setPostCoeff00(0.263827);
+      xForm.setPostCoeff10(0.263827);
+      xForm.setPostCoeff01(-0.263827);
+      xForm.setPostCoeff11(0.263827);
+      xForm.setPostCoeff20(-0.5);
+      xForm.setPostCoeff21(-0.5);
+
+	  String desirables[] = {
+"acosech", "acosh", "acoth", "affine3D","anamorphcyl", "apocarpet_js", "apollony", "arcsinh", "arctanh", "arctruchet", "asteria", "atan", "atan2_spirals", "auger", "auger", "barycentroid", "bent", "bent", "bent2", "bipolar", "blade", "blade3D", "blob", "blob3D", "blur3D", "boarders", "boarders2", "brownian_js", "bsplit", "bubble", "bubble2", "bubbleT3D", "butterfly", "butterfly3D", "butterfly_fay", "bwrands", "bwraps7", "cannabiscurve_wf", "cardioid", "cell", "chunk", "circlesplit", "clifford_js", "cloverleaf_wf", "collideoscope", "complex", "conic", "cos2_bs", "cosh2_bs", "cosine", "cot2_bs", "cothq", "cpow", "cpow2", "cpow3_wf", "crackle", "cross", "crown_js", "csc2_bs", "csch2_bs", "cschq", "cubic3D", "cubicLattice_3D", "curl3D", "curve", "dc_bubble", "dc_carpet", "dc_crackle_wf", "dc_cube", "dc_cylinder2", "dc_dmodulus", "dc_gnarly", "dc_hexes_wf", "dc_perlin", "dc_triangle", "deltaA", "devil_warp", "diamond", "diamond", "dinis_surface_wf", "dustpoint", "edisc", "erf3D", "eyefish", "hadamard_js", "handkerchief", "heart", "heart_wf", "helicoid", "helix", "hexaplay3D", "hexes", "hexnix3D", "ho", "horseshoe", "htree_js", "hyperbolic", "hyperbolicellipse", "hypercrop", "hypershift2", "hypertile", "hypertile1", "hypertile2", "hypertile3D", "hypertile3D1", "hypertile3D2", "iconattractor_js", "idisc", "intersection", "invtree_js", "inversion", "invpolar", "isosfplot3d_wf", "jac_asn", "jac_cn", "jac_dn", "jac_sn", "jubiQ", "julia", "julia3D", "julia3Dq", "julia3Dz", "juliac", "julian", "julian2", "julian3Dx", "juliaq", "juliascope", "klein_group", "koch_js", "lace_js", "layered_spiral", "lazysusan", "lissajous", "log_db", "lozi", "lsystem_js", "mandelbrot", "mask", "maurer_lines", "mcarpet", "minkQM", "mobius", "nBlur", "ngon", "npolar", "onion", "onion2", "ovoid3d", "panorama1",  "perspective", "petal", "phoenix_julia", "polar2", "popcorn2_3D", "pow_block", "power", "pressure_wave", "pulse", "quaternion", "r_circleblur", "rays2", "rhodonea", "ripple", "rippled", "rose_wf", "rosoni", "rsquares_js", "sattractor_js", "scrambly", "scry", "scry2", "scry_3D", "sec2_bs", "secant2", "sech2_bs", "separation", "shredlin", "shredrad", "siercarpet_js", "sigmoid", "sin2_bs", "sinh2_bs", "sintrange", "sinusoidal3d", "sph3D", "spherical", "spiralwing", "splitbrdr", "splits", "splits3D", "squarize", "squish", "starblur", "stripes", "sunflower", "sunvoroni", "svf", "swirl", "swirl3D_wf", "synth", "tan2_bs", "taprats", "target", "target_sp", "terrain3D", "threepoint_js", "triantruchet", "twintrian", "unpolar", "vibration2", "w", "waffle", "wallpaper_js", "wangtiles", "waveblur_wf", "waves2_3D", "waves2_3D", "wedge", "whitney_umbrella", "whorl", "woggle_js", "xerf", "xheart", "xheart_blur_wf", "yin_yang", "yplot2d_wf", };
+
+  int listLength = desirables.length;
+ 
+
+    // variation 1
+      {
+        VariationFunc varFunc=VariationFuncList.getVariationFuncInstance(desirables[range(1,listLength)-1], true);
+        xForm.addVariation(0.3, varFunc);
+      }  
+
+	// variation 2
+      {
+        VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("post_mirror_wf", true);
+        varFunc.setParameter("xaxis", 1);
+        varFunc.setParameter("yaxis", 1);
+        varFunc.setParameter("zaxis", 0);
+        varFunc.setParameter("xshift", 0);
+        varFunc.setParameter("yshift", 0);
+        varFunc.setParameter("zshift", 0);
+        xForm.addVariation(1, varFunc);
+      }
+
+	// variation 3
+      {
+        VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("post_smartcrop", true);
+        varFunc.setParameter("power", 30);
+        varFunc.setParameter("radius", 0.7);
+        varFunc.setParameter("roundstr", 0);
+        varFunc.setParameter("roundwidth", 0);
+        varFunc.setParameter("distortion", 0);
+        varFunc.setParameter("edge", 0);
+        varFunc.setParameter("scatter", 0);
+        varFunc.setParameter("offset", 0);
+        varFunc.setParameter("cropmode", 1);
+        varFunc.setParameter("static", 2);
+        xForm.addVariation(1, varFunc);
+      }
+    }
+	
+	
+   // CREATE TRANSFORM 3
+    {
+      XForm xForm = new XForm();
+      layer.getXForms().add(xForm);
+      xForm.setWeight(2);
+      xForm.setColor(1.0*Math.random());
+      xForm.setColorSymmetry(1.0*Math.random());
+      xForm.setMaterial(0);
+      xForm.setMaterialSpeed(0);
+	  xForm.setDrawMode(HIDDEN);
+
+      xForm.setCoeff00(1); // a
+      xForm.setCoeff10(0); // b
+      xForm.setCoeff20(0); // e
+      xForm.setCoeff01(0); // c
+      xForm.setCoeff11(1); // d
+      xForm.setCoeff21(0); // f
+
+      xForm.setPostCoeff00(0.70710678);
+      xForm.setPostCoeff10(-0.70710678);
+      xForm.setPostCoeff01(0.70710678);
+      xForm.setPostCoeff11(0.70710678);
+      xForm.setPostCoeff20(0);
+      xForm.setPostCoeff21(0.5);
+
+      // variation 1
+      {
+        VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("dc_cylinder", true);
+        varFunc.setParameter("offset", 0);
+        varFunc.setParameter("angle", 0);
+        varFunc.setParameter("scale", 0.5);
+        varFunc.setParameter("x", 0.125);
+        varFunc.setParameter("y", 0.125);
+        varFunc.setParameter("blur", 1);
+        xForm.addVariation(0.3, varFunc);
+      }
+    }	
+
+	
+    // CREATE TRANSFORM 4
+    {
+      XForm xForm = new XForm();
+      layer.getXForms().add(xForm);
+      xForm.setWeight(6);
+      xForm.setColor(1.0*Math.random());
+      xForm.setColorSymmetry(.98);
+      xForm.setMaterial(0);
+      xForm.setMaterialSpeed(0);
+
+      xForm.setCoeff00(1); // a
+      xForm.setCoeff10(0); // b
+      xForm.setCoeff20(0); // e
+      xForm.setCoeff01(0); // c
+      xForm.setCoeff11(1); // d
+      xForm.setCoeff21(0); // f
+
+      xForm.setPostCoeff00(1);
+      xForm.setPostCoeff10(0);
+      xForm.setPostCoeff01(0);
+      xForm.setPostCoeff11(1);
+      xForm.setPostCoeff20(0);
+      xForm.setPostCoeff21(0);
+
+      // variation 1
+      {
+        VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("log_tile2", true);
+        varFunc.setParameter("spreadx", 1);
+        varFunc.setParameter("spready", 1);
+        varFunc.setParameter("spreadz", 0);
+        xForm.addVariation(1, varFunc);
+      }
+	  
+	   // variation 2
+      {
+        VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("post_mirror_wf", true);
+        varFunc.setParameter("xaxis", 1);
+        varFunc.setParameter("yaxis", 1);
+        varFunc.setParameter("zaxis", 0);
+        varFunc.setParameter("xshift", 0);
+        varFunc.setParameter("yshift", 0);
+        varFunc.setParameter("zshift", 0);
+        varFunc.setParameter("xscale", 1);
+        varFunc.setParameter("yscale", 1);
+        varFunc.setParameter("xcolorshift", 0);
+        varFunc.setParameter("ycolorshift", 0);
+        varFunc.setParameter("zcolorshift", 0);
+        xForm.addVariation(1, varFunc);
+      }
+    }
+  
+  
+   // Either update the currently selected flame (to not need to create a new thumbnail
+  // in the thumbnail ribbon after each run of the script...
+  Flame selFlame = pEnv.getCurrFlame();
+  if(selFlame!=null) {
+    selFlame.assign(flame);
+    pEnv.getCurrLayer().setPalette(newGradient);
+    pEnv.refreshUI();
+  }
+  // ...or load the flame in the editor and refresh the UI
+  else {
+    pEnv.setCurrFlame(flame);
+  }
+ }
+}
+

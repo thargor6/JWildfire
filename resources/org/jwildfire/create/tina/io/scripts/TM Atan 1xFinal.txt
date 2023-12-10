@@ -1,0 +1,14 @@
+NAME:  Tile Maker Atan with one final transform by MG
+
+AUTHOR:  Missy Gainer 
+
+CATEGORY:  Randomizer
+
+INFO:  This script has been optimized for JWildfire 4.0 using the latest variations. This script randomizes two transforms and uses Atan in-between them on the diagonal. One final transform is applied to this script. If you kept the folder structure when unzipping the downloaded file, you should have three subfolders under the main Tile Maker folder.  One folder will contain five scripts with no final transforms added, one folder will contain five scripts with one random final transform added, and one folder will contain five scripts with two random transforms added.  
+
+SUGGESTIONS:  If you would like to see the variations inside the squares and circles enlarged or reduced in size, simply change the variation amount from 0.3 to a larger or smaller number in the nonlinear tab. Also try changing the variation parameters to achieve a different look.  You can change the pitch and other settings in the camera view to get perspective as well.
+
+CREDIT:  Original flame created by Missy Gainer. A special Thank You to Andreas Maschke, Mick Hogan, Michael Bourne and Jesus Sosa for the code help.
+
+
+
