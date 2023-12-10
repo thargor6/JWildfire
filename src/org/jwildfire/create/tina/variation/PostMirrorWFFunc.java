@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -129,12 +129,17 @@ public class PostMirrorWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {
-    // based on code from the cudaLibrary.xml compilation, created by Steven Brodhead Sr.
-    return "if (__post_mirror_wf_xaxis > 0.f && RANDFLOAT() < 0.5f)\n"
+    return "if (__post_mirror_wf_xaxis > 0.f && RANDFLOAT() < 0.5f) {\n"
         + "    __px = -__px - __post_mirror_wf_xshift;\n"
-        + "if (__post_mirror_wf_yaxis > 0.f && RANDFLOAT() < 0.5f)\n"
+        + "    __pal = fmodf(__pal + __post_mirror_wf_xcolorshift, 1.0f); \n"
+        + "}\n"
+        + "if (__post_mirror_wf_yaxis > 0.f && RANDFLOAT() < 0.5f) {\n"
         + "    __py = -__py - __post_mirror_wf_yshift;            \n"
-        + "if (__post_mirror_wf_zaxis > 0.f && RANDFLOAT() < 0.5f)\n"
-        + "    __pz = -__pz - __post_mirror_wf_zshift;";
+        + "    __pal = fmodf(__pal + __post_mirror_wf_ycolorshift, 1.0f); \n"
+        + "}\n"
+        + "if (__post_mirror_wf_zaxis > 0.f && RANDFLOAT() < 0.5f) {\n"
+        + "    __pz = -__pz - __post_mirror_wf_zshift;"
+        + "    __pal = fmodf(__pal + __post_mirror_wf_zcolorshift, 1.0f); \n"
+        + "}\n";
   }
 }
