@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2022 Andreas Maschke
+  Copyright (C) 1995-2023 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -29,8 +29,8 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
 
   protected List<DefaultRenderIterationState> iterationState;
 
-  public DefaultRenderThread(Prefs pPrefs, int pThreadId, int pThreadGroupSize, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, int pSleepAmount) {
-    super(pPrefs, pThreadId, pThreadGroupSize, pRenderer, pRenderPackets, pSamples, pSlices, pSleepAmount);
+  public DefaultRenderThread(Prefs pPrefs, int pThreadId, int pThreadGroupSize, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
+    super(pPrefs, pThreadId, pThreadGroupSize, pRenderer, pRenderPackets, pSamples, pSlices);
 
     iterationState = new ArrayList<DefaultRenderIterationState>();
 
@@ -115,19 +115,9 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
             state.validateState();
           }
         }
-        if(sleepAmount>0 && (iter % sleepAmount==0)) {
+        if (iter % 100000 == 0) {
           try {
-            Thread.sleep(sleepDuration++);
-            if(sleepDuration>3) {
-              sleepDuration=1;
-            }
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-        else if (iter % 100000 == 0) {
-          try {
-            Thread.sleep(3);
+            Thread.sleep(1);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }

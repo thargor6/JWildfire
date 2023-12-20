@@ -96,8 +96,6 @@ public class FlameRenderer {
   private final Prefs prefs;
   private boolean preview;
 
-  private int sleepAmount = 0;
-
   private List<IterationObserver> iterationObservers;
   private List<AbstractRenderThread> runningThreads;
   private boolean forceAbort;
@@ -726,7 +724,7 @@ public class FlameRenderer {
   }
 
   private AbstractRenderThread createFlameRenderThread(int pThreadId, int pThreadGroupSize, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
-    return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, sleepAmount);
+    return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices);
   }
 
   private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices) {
@@ -1181,11 +1179,4 @@ public class FlameRenderer {
     return raster;
   }
 
-  public int getSleepAmount() {
-    return sleepAmount;
-  }
-
-  public void setSleepAmount(int sleepAmount) {
-    this.sleepAmount = sleepAmount;
-  }
 }
