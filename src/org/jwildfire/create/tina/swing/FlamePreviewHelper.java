@@ -112,8 +112,8 @@ public class FlamePreviewHelper implements IterationObserver {
     randomBatchHolder = pRandomBatchHolder;
 
     if(prefs.isTinaLegacyRealtimePreview()) {
-      initialImageUpdateInterval = 5 - 1;
-      imageUpdateInterval = 8 - 2;
+      initialImageUpdateInterval = 7;
+      imageUpdateInterval = 9;
       maxImageUpdateIncInterval = 200 + 300;
     }
     else {
@@ -728,9 +728,7 @@ public class FlamePreviewHelper implements IterationObserver {
     info.setRenderHDR(false);
     info.setRenderZBuffer(TinaControllerContextService.getContext().isZPass());
     renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
-    if (!prefs.isTinaLegacyRealtimePreview() && !flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
-      renderer.setSleepAmount(prefs.getTinaRealtimePreviewIdleAmount());
-    }
+
     renderer.registerIterationObserver(this);
 
     SimpleImage image =

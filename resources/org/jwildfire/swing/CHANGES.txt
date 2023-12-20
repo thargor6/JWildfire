@@ -35,6 +35,8 @@ Hugo Orosz)
 - fixed a bug regarding to saving the window-position of the Easy Movie Maker, as reported by Hugo Orosz
 - restored the internal "TM*" scripts (which got lost due to unknown reason)
 - on GPU the xcolorshift, ycolorshift, and zcolorshift variables now also work with post_mirror, as reported by Brad Stefanov
+- removed the parameter tinaRealtimePreviewIdleAmount, which caused more problem than it was helpful
+- some optimizations
 
 V8.20 (21.10.2023)
  -upgraded the GPU render to CUDA 11.8, works also on NVIDIA 4xxx GPU's now
