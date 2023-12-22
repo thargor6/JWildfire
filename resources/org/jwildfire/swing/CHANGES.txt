@@ -1,4 +1,4 @@
-V8.50 (09.12.2023)
+V8.50 (22.12.2023)
 - introducing a new type of transform: background transforms.
     - a background transform calculates a layer of a background, typically using one of the dc-type of variations
     - this way you can add very interesting backgrounds which also evaluate very fast (in comparison to the "classical iterations")
@@ -24,6 +24,7 @@ V8.50 (09.12.2023)
         dc_warping, dc_worley, f_complex, fract_dragon_wf, fract_formula_julia_wf, fract_formula_mand_wf, fract_julia_wf,
         fract_mandelbrot_wf, fract_meteors_wf, fract_pearls_wf, fract_salamander_wf, iconattractor_js, swirl3D_wf
 - GPU render now also supports transparency
+- new "mobius_dragon_3D"-variation by Whittaker Courtney, with added GPU-support
 - variation-filter in the user interface ("Background transform"), which shows only variations which are suitable for background transforms
 - new RANDOM_BACKGROUND-mutation to add background-transforms, which is available both in the "Quick Mutations"-tab and the MutaGen-window as well
 - new "Flame with Background"-random-flame-generator to generate flames with background-transforms

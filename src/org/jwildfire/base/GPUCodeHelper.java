@@ -31,31 +31,89 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        "    double x = pAmount * pAffineTP.x;\n"
-            + "    double y = pAmount * pAffineTP.y;\n"
-            + "    double fax = fabs(x);\n"
-            + "    double fay = fabs(y);\n"
-            + "\n"
-            + "    if (fax+fay>1) {\n"
-            + "      pVarTP.x += x;\n"
-            + "      pVarTP.y += y;\n"
-            + "    } else {\n"
-            + "      double t;\n"
-            + "      if (fax > fay) {\n"
-            + "        t = (x-fay+1)*.5;\n"
-            + "        if (x<0) t = (x+fay-1)*.5;\n"
-            + "        pVarTP.x += t;\n"
-            + "        pVarTP.y += y;\n"
-            + "      }\n"
-            + "      else {\n"
-            + "        t = (y-fax+1)*.5;\n"
-            + "        if (y<0) t = (y+fax-1)*.5;\n"
-            + "        pVarTP.x += x;\n"
-            + "        pVarTP.y += t;\n"
-            + "      }\n"
-            + "    }\n";
+        " double zc = pVarTP.color;\n" +
+                "    double random = pContext.random();\n" +
+                "    double x1 = pAffineTP.x;\n" +
+                "    double y1 = pAffineTP.y;\n" +
+                "    double z1 = pAffineTP.z;\n" +
+                "    double spreadx = -x_spread;\n" +
+                "    double spready = -y_spread;\n" +
+                "    double spreadz = -z_spread;\n" +
+                "    Complex z = new Complex(pAffineTP.x, pAffineTP.y + 1.0);\n" +
+                "    Complex z2 = new Complex(re, im);\n" +
+                "\n" +
+                "    for (int i = 0; i < iterations; i++){\n" +
+                "      z.re = pAffineTP.x;\n" +
+                "      z.im = pAffineTP.y + 1.0;\n" +
+                "      z.Div(z2);\n" +
+                "\n" +
+                "      // reciprocal of z for 3D\n" +
+                "      double r1 = pAmount/(z.re*z.re+z.im*z.im+z1*z1);\n" +
+                "      z.re = z.re * r1;\n" +
+                "      z.im = -z.im * r1;\n" +
+                "      pVarTP.z = -z1 * r1;\n" +
+                "\n" +
+                "      z.Scale(pAmount);\n" +
+                "      pAffineTP.x = z.re;\n" +
+                "      pAffineTP.y = z.im + 1.0;\n" +
+                "\n" +
+                "\n" +
+                "      // line\n" +
+                "      if (line_enable == 1){\n" +
+                "        if ( random < line_weight){\n" +
+                "          z.re = pContext.random() * spreadx;\n" +
+                "          z.im = 0.0;\n" +
+                "          pVarTP.z = 0.0;\n" +
+                "          pVarTP.color += line_color_shift;\n" +
+                "        }\n" +
+                "      }\n" +
+                "      // experimental iteration coloring that didn't work out but may add in the future:\n" +
+                "      //zc += ((double)k*.1);\n" +
+                "    }\n" +
+                "\n" +
+                "    // Log_tile by Zy0rg implemented into JWildfire by Brad Stefanov\n" +
+                "    //converted to a post variation by Whittaker Courtney\n" +
+                "\n" +
+                "    if (pContext.random() < 0.5)\n" +
+                "      spreadx = x_spread;\n" +
+                "\n" +
+                "    if (pContext.random() < 0.5)\n" +
+                "      spready = y_spread;\n" +
+                "\n" +
+                "    if (pContext.random() < 0.5)\n" +
+                "      spreadz = z_spread;\n" +
+                "\n" +
+                "    if(random < 0.5){\n" +
+                "      z.re = pAmount * x_add + (z.re + spreadx * round(log(pContext.random())/log(log_spread)));\n" +
+                "      z.im = pAmount * (y_add + (z.im + spready * round(log(pContext.random())/log(log_spread))))+1.0;\n" +
+                "      pVarTP.z = pAmount * (pVarTP.z + spreadz * round(log(pContext.random())/log(log_spread)));\n" +
+                "    }\n" +
+                "    else{\n" +
+                "      z.re = pAmount * (-z.re + spreadx * round(log(pContext.random())/log(log_spread)));\n" +
+                "      z.im = pAmount * (-2 -(z.im + spready * round(log(pContext.random())/log(log_spread))))+1.0;\n" +
+                "      pVarTP.z = pAmount * (-pVarTP.z + spreadz * round(log(pContext.random())/log(log_spread)));\n" +
+                "    }\n" +
+                "\n" +
+                "// magnitude coloring:\n" +
+                "    double mag = sqrt(z.re*z.re+z.im*z.im+z1*z1)*(mag_color_scale /6);\n" +
+                "\n" +
+                "    if (mag_color == 1){\n" +
+                "      zc += tanh(mag);\n" +
+                "    }\n" +
+                "\n" +
+                "\n" +
+                "    pVarTP.x = z.re;\n" +
+                "    pVarTP.y = z.im;\n" +
+                "    pVarTP.color = zc;\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "    if (pContext.isPreserveZCoordinate()) {\n" +
+                "      pVarTP.z += pAmount * pAffineTP.z;\n" +
+                "    }";
 
-     System.err.println(convertCodeSwan(code, "polar", new String[]{}));
+//     System.err.println(convertCodeSwan(code, "mobius_dragon_3D", new String[]{}));
+     System.err.println(convertCode(code, "mobius_dragon_3D", new String[]{}));
     //FlameTransformationContext ctx = new FlameTransformationContext(null, null, 1, 1);
     //System.err.println(new ParPlot2DWFFunc().getGPUCode(ctx));
   }

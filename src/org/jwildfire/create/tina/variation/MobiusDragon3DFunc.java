@@ -21,7 +21,7 @@ import org.jwildfire.base.Tools;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
 
-public class MobiusDragon3DFunc extends VariationFunc {
+public class MobiusDragon3DFunc extends VariationFunc implements SupportsGPU {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RE = "re";
@@ -195,4 +195,86 @@ public class MobiusDragon3DFunc extends VariationFunc {
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
+
+  @Override
+  public String getGPUCode(FlameTransformationContext context) {
+    return  "    float zc = __pal;\n" +
+            "    float random = RANDFLOAT();\n" +
+            "    float x1 = __x;\n" +
+            "    float y1 = __y;\n" +
+            "    float z1 = __z;\n" +
+            "    float spreadx = -__mobius_dragon_3D_x_spread;\n" +
+            "    float spready = -__mobius_dragon_3D_y_spread;\n" +
+            "    float spreadz = -__mobius_dragon_3D_z_spread;\n" +
+            "    Complex z;\n" +
+            "    Complex_Init(&z, __x, __y + 1.0f);\n" +
+            "    Complex z2;\n" +
+            "    Complex_Init(&z2, __mobius_dragon_3D_re, __mobius_dragon_3D_im);\n" +
+            "\n" +
+            "    for (int i = 0; i < __mobius_dragon_3D_iterations; i++){\n" +
+            "      z.re = __x;\n" +
+            "      z.im = __y + 1.0;\n" +
+            "      Complex_Div(&z, &z2);\n" +
+            "\n" +
+            "      \n" +
+            "      float r1 = __mobius_dragon_3D/(z.re*z.re+z.im*z.im+z1*z1);\n" +
+            "      z.re = z.re * r1;\n" +
+            "      z.im = -z.im * r1;\n" +
+            "      __pz = -z1 * r1;\n" +
+            "\n" +
+            "      Complex_Scale(&z, __mobius_dragon_3D);\n" +
+            "      __x = z.re;\n" +
+            "      __y = z.im + 1.0f;\n" +
+            "\n" +
+            "      \n" +
+            "      if (__mobius_dragon_3D_line_enable == 1){\n" +
+            "        if (random < __mobius_dragon_3D_line_weight){\n" +
+            "          z.re = RANDFLOAT() * spreadx;\n" +
+            "          z.im = 0.0f;\n" +
+            "          __pz = 0.0f;\n" +
+            "          __pal += __mobius_dragon_3D_line_color_shift;\n" +
+            "        }\n" +
+            "      }\n" +
+            "      \n" +
+            "      \n" +
+            "    }\n" +
+            "\n" +
+            "    \n" +
+            "    \n" +
+            "\n" +
+            "    if (RANDFLOAT() < 0.5f)\n" +
+            "      spreadx = __mobius_dragon_3D_x_spread;\n" +
+            "\n" +
+            "    if (RANDFLOAT() < 0.5f)\n" +
+            "      spready = __mobius_dragon_3D_y_spread;\n" +
+            "\n" +
+            "    if (RANDFLOAT() < 0.5f)\n" +
+            "      spreadz = __mobius_dragon_3D_z_spread;\n" +
+            "\n" +
+            "    if(random < 0.5f){\n" +
+            "      z.re = __mobius_dragon_3D * __mobius_dragon_3D_x_add + (z.re + spreadx * roundf(logf(RANDFLOAT())/logf(__mobius_dragon_3D_log_spread)));\n" +
+            "      z.im = __mobius_dragon_3D * (__mobius_dragon_3D_y_add + (z.im + spready * roundf(logf(RANDFLOAT())/logf(__mobius_dragon_3D_log_spread))))+1.0;\n" +
+            "      __pz = __mobius_dragon_3D * (__pz + spreadz * roundf(logf(RANDFLOAT())/logf(__mobius_dragon_3D_log_spread)));\n" +
+            "    }\n" +
+            "    else{\n" +
+            "      z.re = __mobius_dragon_3D * (-z.re + spreadx * roundf(logf(RANDFLOAT())/logf(__mobius_dragon_3D_log_spread)));\n" +
+            "      z.im = __mobius_dragon_3D * (-2 -(z.im + spready * roundf(logf(RANDFLOAT())/logf(__mobius_dragon_3D_log_spread))))+1.0;\n" +
+            "      __pz = __mobius_dragon_3D * (-__pz + spreadz * roundf(logf(RANDFLOAT())/logf(__mobius_dragon_3D_log_spread)));\n" +
+            "    }\n" +
+            "\n" +
+            "\n" +
+            "    float mag = sqrtf(z.re*z.re+z.im*z.im+z1*z1)*(__mobius_dragon_3D_mag_color_scale / 6.0f);\n" +
+            "\n" +
+            "    if (__mobius_dragon_3D_mag_color == 1){\n" +
+            "      zc += tanhf(mag);\n" +
+            "    }\n" +
+            "\n" +
+            "\n" +
+            "    __px = z.re;\n" +
+            "    __py = z.im;\n" +
+            "    __pal = zc;\n" +
+            "\n" +
+            (context.isPreserveZCoordinate() ? "      __pz += __mobius_dragon_3D * __z;\n" : "");
+  }
+
 }
