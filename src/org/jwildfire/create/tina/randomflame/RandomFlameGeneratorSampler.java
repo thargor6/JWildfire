@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.mutagen.RandomParamMutation;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
@@ -133,8 +134,11 @@ public class RandomFlameGeneratorSampler {
         layer.setPalette(palette);
       }
       flame = randGen.postProcessFlameBeforeRendering(randGenState, flame);
+      if(Math.random()>0.666) {
+        new RandomParamMutation().execute(flame.getFirstLayer(), 0.125 + Math.random() * 0.25);
+      }
       // render it   
-      flame.setSampleDensity(25);
+      flame.setSampleDensity(22);
       RenderedFlame renderedFlame;
 
       flame.applyFastOversamplingSettings();

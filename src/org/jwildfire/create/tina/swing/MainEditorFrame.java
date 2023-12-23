@@ -7021,7 +7021,7 @@ public class MainEditorFrame extends JFrame {
           RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance((String) randomSymmetryCmb.getSelectedItem(), true);
           RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) randomGradientCmb.getSelectedItem(), true);
           RandomWeightingFieldGenerator randWeightingFieldGen = RandomWeightingFieldGeneratorList.getRandomWeightingFieldGeneratorInstance((String) randomWeightingFieldCmb.getSelectedItem(), true);
-          tinaController.createRandomBatch(-1, randGen, randSymmGen, randGradientGen, randWeightingFieldGen, RandomBatchQuality.NORMAL);
+          tinaController.createRandomBatch(-1, randGen, randSymmGen, randGradientGen, randWeightingFieldGen, RandomBatchQuality.LOW);
         }
       });
     }
