@@ -67,13 +67,14 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
       if (pProcessor != null) {
         pProcessor.postProcessImage(image);
       }
+
       try {
-        imageRootPanel.repaint(3, 0, 0, imageWidth, imageHeight);
+        imageRootPanel.repaint(0, 0, 0, imageWidth, imageHeight);
       }
       catch(Exception ex) {
         ex.printStackTrace();
       }
-      /*
+/*
       SwingUtilities.invokeLater(new Runnable() {
         @Override
         public void run() {

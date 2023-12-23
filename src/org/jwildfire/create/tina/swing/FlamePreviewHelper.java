@@ -402,7 +402,7 @@ public class FlamePreviewHelper implements IterationObserver {
                 img = background;
               }
 
-              if (!cfg.isNoControls() && messageHelper != null) {
+              if (!cfg.isNoControls() && messageHelper != null && !pMouseDown) {
                 messageHelper.showStatusMessage(
                     flame, "render time (CPU): " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
               }
