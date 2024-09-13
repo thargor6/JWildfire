@@ -1032,6 +1032,8 @@ VariationFuncList {
     registerVariationFunc(PostAffine3DFunc.class);
 
     registerVariationFunc(MobiusDragon3DFunc.class);
+    
+    registerVariationFunc(QuadFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
