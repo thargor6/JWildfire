@@ -318,9 +318,9 @@ public class MaurerLinesFunc extends VariationFunc {
   private double line_count = 360;
   private double theta_step_size_param = 71;  // specified in degrees
   private double initial_theta_param = 0; // specified in degrees
-  private double render_mode = DEFAULT;
-  private double render_submode = DEFAULT;
-  private double tangent_submode = DEFAULT;
+  private int render_mode = DEFAULT;
+  private int render_submode = DEFAULT;
+  private int tangent_submode = DEFAULT;
   private double render_modifier1 = 1.0;
   private double render_modifier2 = 1.0;
   private double render_modifier3 = 1.0;
