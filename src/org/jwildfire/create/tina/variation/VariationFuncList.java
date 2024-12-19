@@ -1035,6 +1035,8 @@ VariationFuncList {
     
     registerVariationFunc(QuadFunc.class);
     registerVariationFunc(RingTileFunc.class);
+    registerVariationFunc(WhirligigFunc.class);
+    
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
