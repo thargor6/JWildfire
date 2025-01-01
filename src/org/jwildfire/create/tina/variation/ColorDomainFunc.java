@@ -251,6 +251,64 @@ public class ColorDomainFunc extends VariationFunc {
     } else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+    size = (int) (Math.random() * 4000 + 1000);
+    re_min = -Math.random() * 3.0;
+    if (Math.random() < 0.2)
+      im_min = re_min;
+    else
+      im_min = -Math.random() * 3.0;
+    if (Math.random() < 0.75) {
+      re_max = -re_min;
+      im_max = -im_min;
+    } else {
+      re_max = Math.random() * 3.0;
+      im_max = Math.random() * 3.0;
+    }
+    if (Math.random() < 0.6) {
+      nIters = (int) (Math.random() * 4 + 1);
+    } else {
+      nIters = (int) (Math.random() * 19 + 1);
+    }
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 9)) {
+    case 0:
+      re_min += mutateStep(re_min, pAmount);
+      break;
+    case 1:
+      re_max += mutateStep(re_max, pAmount);
+      break;
+    case 2:
+      im_min += mutateStep(im_min, pAmount);
+      break;
+    case 3:
+      im_max += mutateStep(im_max, pAmount);
+      break;
+    case 4:
+      re_min += mutateStep(re_min, pAmount);
+      re_max += mutateStep(re_max, pAmount);
+      break;
+    case 5:
+      im_min += mutateStep(im_min, pAmount);
+      im_max += mutateStep(im_max, pAmount);
+      break;
+    case 6:
+      nIters += pAmount;
+      if (nIters > 20) nIters = 1;
+      break;
+    case 7:
+      setParameter(PARAM_ZOOMIN, 1);
+      break;
+    case 8:
+      setParameter(PARAM_ZOOMOUT, 1);
+      break;
+    }
+  }
 
   @Override
   public boolean dynamicParameterExpansion() {

@@ -47,8 +47,8 @@ public class TinaNonlinearControlsRow {
   private final JToggleButton nonlinearParamsPostButton;
   private final JButton nonlinearParamsUpButton;
   private final JToggleButton toggleParamsPnlButton;
-
   private final JToggleButton toggleFavouriteButton;
+  private final JButton nonlinearParamsRandomButton;
 
   private final List<JComponent> paramsPnlComponents = new ArrayList<>();
   private final Map<String, JWFNumberField> paramsPnlNumberFields = new HashMap<>();
@@ -59,7 +59,7 @@ public class TinaNonlinearControlsRow {
 
   public TinaNonlinearControlsRow(int pIndex, JPanel pRootPanel, JLabel pNonlinearVarLbl, JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JWFNumberField pNonlinearVarREd, JWFNumberField pNonlinearParamsREd,
                                   JButton pNonlinearParamsLeftButton, JToggleButton pNonlinearParamsPreButton, JToggleButton pNonlinearParamsPostButton, JButton pNonlinearParamsUpButton,
-                                  JToggleButton pToggleParamsPnlButton, JToggleButton pToggleFavouriteButton) {
+                                  JToggleButton pToggleParamsPnlButton, JToggleButton pToggleFavouriteButton, JButton pNonlinearParamsRandomButton) {
     index = pIndex;
     rootPanel = pRootPanel;
     rootPnlBaseWidth = rootPanel.getPreferredSize().width;
@@ -75,6 +75,7 @@ public class TinaNonlinearControlsRow {
     nonlinearParamsUpButton = pNonlinearParamsUpButton;
     toggleParamsPnlButton = pToggleParamsPnlButton;
     toggleFavouriteButton = pToggleFavouriteButton;
+    nonlinearParamsRandomButton = pNonlinearParamsRandomButton;
   }
 
   public void initControls() {
@@ -159,6 +160,10 @@ public class TinaNonlinearControlsRow {
 
   public JToggleButton getToggleFavouriteButton() {
     return toggleFavouriteButton;
+  }
+
+  public JButton getNonlinearParamsRandomButton() {
+    return nonlinearParamsRandomButton;
   }
 
   private void removeParamsPnlComponents() {

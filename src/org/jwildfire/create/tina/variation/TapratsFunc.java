@@ -105,7 +105,7 @@ public class TapratsFunc extends DrawFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_ID.equalsIgnoreCase(pName)) {
-      id = (int) Tools.limitValue(pValue, 0, patterns.length);
+      id = (int) Tools.limitValue(pValue, 0, patterns.length - 1);
     } else if (PARAM_STYLE.equalsIgnoreCase(pName)) {
       style = (int) Tools.limitValue(pValue, 0, 5);
     } else if (PARAM_WIDTH.equalsIgnoreCase(pName))
@@ -133,6 +133,60 @@ public class TapratsFunc extends DrawFunc {
   @Override
   public String getName() {
     return "taprats";
+  }
+  
+  @Override
+  public void randomize() {
+    id = (int) (Math.random() * patterns.length);
+    style = (int) (Math.random() * 6);
+    width = Math.random() * 0.1;
+    gap = Math.random() * 0.1;
+    fill = (int) (Math.random() * 2);
+    q = Math.random() * 1.9 - 1.0;
+    s = (int) (Math.random() * 2 + 1);
+    rosetteflag = (int) (Math.random() * 2);
+    sd = Math.random() * 2.5 + 1.0;
+    ss = (int) (Math.random() * 3 + 1);
+    infer = (int) (Math.random() * 2);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 11)) {
+    case 0:
+      id = (id + 1) % patterns.length;
+      break;
+    case 1:
+      style = (style + 1) % 6;
+      break;
+    case 2:
+      width += mutateStep(width, pAmount);
+      break;
+    case 3:
+      gap += mutateStep(gap, pAmount);
+      break;
+    case 4:
+      fill = (fill + 1) % 2;
+      break;
+    case 5:
+      q += mutateStep(q, pAmount);
+      break;
+    case 6:
+      s = s % 2 + 1;
+      break;
+    case 7:
+      rosetteflag = (rosetteflag + 1) % 2;
+      break;
+    case 8:
+      sd += mutateStep(sd, pAmount);
+      break;
+    case 9:
+      ss = ss % 3 + 1;
+      break;
+    case 10:
+      infer = (infer + 1) % 2;
+      break;
+    }
   }
 
   @Override

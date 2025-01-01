@@ -460,6 +460,95 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
   }
 
   @Override
+  public void randomize() {
+    mb_mode = (int) (Math.random() * 3);
+    mb_count = (int) (Math.random() * 200 + 50);
+    mb_min_radius = Math.random() * 0.4 + 0.1;
+    mb_max_radius = mb_min_radius + Math.random() * 0.5;
+    mb_negative = Math.random() * 0.5;
+    mb_seed = (int) (Math.random() * 1000000);
+    mb_sharpness = Math.random() * 4.0 + 1.0;
+    border_size = Math.random() * 0.5;
+    xmax = Math.random() * 2.5 + 2.5;
+    xmin = Math.random() * 2.5 - 5.0;
+    ymax = Math.random() * 2.5 + 2.5;
+    ymin = Math.random() * 2.5 - 5.0;
+    zmax = Math.random() * 2.5 + 2.5;
+    zmin = Math.random() * 2.5 - 5.0;
+    max_iter = (int) (Math.random() * 100 + 100);
+    direct_color = (int) (Math.random() * 2);
+    if (colorMapHolder.getColormap_filename() == null) 
+      color_mode = (int) (Math.random() * 7 + 3);
+    else {
+      color_mode = (int) (Math.random() * 10);
+      colorMapHolder.setBlend_colormap((int) (Math.random() * 2));
+    }
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 17)) {
+    case 0:
+      mb_mode = (mb_mode + 1) % 3;
+      break;
+    case 1:
+      mb_count += pAmount;
+      break;
+    case 2:
+      mb_min_radius += mutateStep(mb_min_radius, pAmount);
+      break;
+    case 3:
+      mb_max_radius += mutateStep(mb_max_radius, pAmount);
+      break;
+    case 4:
+      mb_negative += mutateStep(mb_negative, pAmount);
+      break;
+    case 5:
+      mb_seed += pAmount;
+      break;
+    case 6:
+      mb_sharpness += mutateStep(mb_sharpness, pAmount);
+      break;
+    case 7:
+      border_size += mutateStep(border_size, pAmount);
+      break;
+    case 8:
+      xmax += mutateStep(xmax, pAmount);
+      break;
+    case 9:
+      xmin += mutateStep(xmin, pAmount);
+      break;
+    case 10:
+      ymax += mutateStep(ymax, pAmount);
+      break;
+    case 11:
+      ymin += mutateStep(ymin, pAmount);
+      break;
+    case 12:
+      zmax += mutateStep(zmax, pAmount);
+      break;
+    case 13:
+      zmin += mutateStep(zmin, pAmount);
+      break;
+    case 14:
+      max_iter += pAmount;
+      break;
+    case 15:
+      direct_color = (direct_color + 1) % 2;
+      break;
+    case 16:
+      color_mode += 1;
+      if (color_mode > 9) {
+        if (colorMapHolder.getColormap_filename() == null)
+          color_mode = 3;
+        else
+          color_mode = 0;
+      }
+      break;
+    }
+  }
+  
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC};
   }

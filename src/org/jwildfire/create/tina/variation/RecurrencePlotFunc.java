@@ -447,13 +447,129 @@ public class RecurrencePlotFunc extends VariationFunc implements SupportsGPU {
     } else if (pName.equalsIgnoreCase(PARAM_SCALE)) {
       scale = pValue;
     } else if (pName.equalsIgnoreCase(PARAM_ANGLE)) {
-      angle = (int) pValue;
+      angle = pValue;
     } else if (pName.equalsIgnoreCase(PARAM_OFFSET)) {
       offset = pValue;
     } else if (pName.equalsIgnoreCase(PARAM_MAXDIST)) {
       maxdist = pValue;
     } else
       throw new IllegalArgumentException(pName);
+  }
+  
+  @Override
+  public void randomize() {
+    id = (int) (Math.random() * 30);
+    a = Math.random() * 5.0;
+    b = Math.random() * 5.0;
+    k = (int) (Math.random() * 10);
+    maxdist = Math.random() * 6.0;
+    switch (id) {
+    case 5:
+      a = Math.random() * 10.0 + 1.25;
+      break;
+    case 6:
+      a = Math.random() * 1000 + 5.0;
+      b = Math.random() * 1000 + 5.0;
+      break;
+    case 9:
+      a = Math.random() * 4.0 + 1.0;
+      maxdist = Math.random();
+      break;
+    case 10:
+    case 16:
+      a = Math.random() * 9.0 + 1.0;
+      maxdist = Math.random() * 4.5 + 0.5;
+      break;
+    case 18:
+      a = Math.random() * 4.0 + 1.0;
+      b = Math.random() * 4.0 + 1.0;
+      maxdist = Math.random() * 2.0;
+      break;
+    case 20:
+    case 21:
+      maxdist = Math.random() * 50;
+      break;
+    case 22:
+      a = Math.random() * 500.0 + 20.0;
+      b = (int) (Math.random() * 8 + 2);
+      maxdist = Math.random() * 49.0 + 1.0;
+      break;
+    case 23:
+      a = Math.random() * 1000.0 + 50.0;
+      b = Math.random() * 4.5 + 0.5;
+      break;
+    case 24:
+    case 25:
+      a = Math.random() * 600.0 + 200.0;
+      b = Math.random() * 4.0 + 1.0;
+      k = (int) (Math.random() * 8 + 2);
+      maxdist = Math.random() * 15.0;
+      break;
+    case 26:
+      a = Math.random() * 95.0 + 5.0;
+      b = Math.random() * 4.5 + 0.5;
+      k = (int) (Math.random() * 8 + 2);
+      maxdist = Math.random() * 14.0 + 1.0;
+      break;
+    case 27:
+      a = Math.random() * 2.0 + 1.0;
+      b = Math.random() * 10.0 + 5.0;
+      maxdist = Math.random() * 0.1 + 0.01;
+      break;
+    case 28:
+      a = Math.random() + 0.4;
+      b = Math.random() * 8.0 + 4.0;
+      k = (int) (Math.random() * 15 + 1);
+      maxdist = Math.random() * 0.25 + 0.01;
+      break;
+    case 29:
+      a = Math.random() * 500.0 + 5.0;
+      k = (int) (Math.random() * 11 + 2);
+      maxdist = Math.random() * 500.0 + 5.0;
+      break;
+    }
+    N = (int) (Math.random() * 1000 + 100);
+    dc = (int) (Math.random() * 3);
+    scale = Math.random();
+    angle = Math.random() * Math.PI * 2 - Math.PI;
+    offset = Math.random();
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 10)) {
+    case 0:
+      id = (id + 1) % 30;
+      setParameter(PARAM_ID, id);
+      break;
+    case 1:
+      a += mutateStep(a, pAmount);
+      break;
+    case 2:
+      b += mutateStep(b, pAmount);
+      break;
+    case 3:
+      k += (int) pAmount;
+      break;
+    case 4:
+      N += (int) pAmount;
+      break;
+    case 5:
+      dc = (dc + 1) % 3;
+      break;
+    case 6:
+      scale += mutateStep(scale, pAmount);
+      break;
+    case 7:
+      angle += mutateStep(angle, pAmount);
+      break;
+    case 8:
+      offset += mutateStep(offset, pAmount);
+      break;
+    case 9:
+      maxdist += mutateStep(maxdist, pAmount);
+      break;
+    }
   }
 
   @Override

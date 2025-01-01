@@ -103,6 +103,12 @@ public class Torus3DFunc extends VariationFunc implements SupportsGPU {
 		return true;
 	}
 
+    @Override
+    public void randomize() {
+      r1 = Math.random() * 0.5;
+      r2 = Math.random() * 0.5;
+    }
+
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};

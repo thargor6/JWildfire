@@ -170,6 +170,36 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   public String[] getRessourceNames() {
     return ressourceNames;
   }
+  
+  @Override
+  public void randomize() {
+    scaleX = Math.random() * 1.5 + 0.5;
+    scaleY = Math.random() * 1.5 + 0.5;
+    scaleZ = Math.random() * 1.5 + 0.5;
+    offsetX = Math.random();
+    offsetY = Math.random();
+    offsetZ = Math.random();
+    color_mode = (int) (Math.random() * 3);
+    this.setParameter(PARAM_PRESETID, (int) (Math.random() * 21 + 1));
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 12)) {
+    case 0:
+      color_mode += 1;
+      if (color_mode > 2) color_mode = 0;
+      break;
+    case 1:
+      presetId += 1;
+      if (presetId > 21) presetId = 1;
+      this.setParameter(PARAM_PRESETID, presetId);
+      break;
+    default:
+      super.mutate(pAmount);
+      break;
+    }
+  }
 
   @Override
   public byte[][] getRessourceValues() {

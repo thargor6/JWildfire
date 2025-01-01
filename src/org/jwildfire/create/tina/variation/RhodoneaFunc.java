@@ -464,6 +464,30 @@ public class RhodoneaFunc extends VariationFunc {
   public String getName() {
     return "rhodonea";
   }
+  
+  @Override
+  public void randomize() {
+    if (Math.random() < 0.75) {
+      knumer = (int) (Math.random() * 99 + 1);
+      kdenom = (int) (Math.random() * 99 + 1);
+    } else {
+      knumer = Math.random() * 5.0 + 1.0;
+      kdenom = Math.random() * 5.0 + 1.0;
+    }
+    if (Math.random() < 0.25) radial_offset = 0.0;
+    else radial_offset = Math.random() * 2.0 - 1.0;
+    inner_mode = (int) (Math.random() * 7);
+    outer_mode = (int) (Math.random() * 7);
+    inner_spread = Math.random();
+    outer_spread = Math.random();
+    spread_split = Math.random() * 1.5 + 0.5;
+    if (Math.random() < 0.5) cycles_param = 0.0;
+    else cycles_param = Math.random() * 9.9 + 0.1;
+    cycle_offset = Math.random() * 2 * Math.PI - Math.PI;
+    metacycles = Math.random() * 4.0 + 1.0;
+    metacycle_expansion = Math.random() * 0.5 - 0.25;
+    fill = (Math.random() < 0.5) ? 0.0 : Math.random();
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

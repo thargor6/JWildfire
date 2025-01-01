@@ -128,6 +128,16 @@ public class CurlSpFunc extends VariationFunc implements SupportsGPU {
   private double zeps(double x) {
     return ((x) == 0 ? SMALL_EPSILON : (x));
   }
+  
+  @Override
+  public void randomize() {
+    pow = Math.random() * 3.75 + 0.25;
+    c1 = Math.random() * 5.0 - 2.5;
+    c2 = Math.random() * 2.0 - 1.0;
+    sx = Math.random();
+    sy = Math.random();
+    dc = Math.random() * 4.0 - 2.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

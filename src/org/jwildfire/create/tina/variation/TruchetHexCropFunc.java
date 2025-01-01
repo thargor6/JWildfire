@@ -175,6 +175,14 @@ public class TruchetHexCropFunc extends VariationFunc implements SupportsGPU {
 	public String getName() {
 		return "truchet_hex_crop";
 	}
+	
+	@Override
+	public void randomize() {
+	  wd = Math.random() * 0.5;
+	  mode = (int) (Math.random() * 3);
+	  inv = (int) (Math.random() * 2);
+	  seed = (int) (Math.random() * 1000000);
+	}
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {

@@ -299,6 +299,51 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
     imgWidth = colorMap.getImageWidth();
     imgHeight = colorMap.getImageHeight();
   }
+  
+  @Override
+  public void randomize() {
+    mode = (int) (Math.random() * 4);
+    colorMode = (int) (Math.random() * 2);
+    bias = Math.random() * 2.0 - 1.0;
+    scaleX = Math.random() + 0.5;
+    scaleY = Math.random() + 0.5;
+    offsetX = Math.random();
+    offsetY = Math.random();
+    tileX = (int) (Math.random() * 2.0);
+    tileY = (int) (Math.random() * 2.0);
+  }
+
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 9)) {
+    case 0:
+      mode += 1;
+      if (mode > 3) mode = 0;
+      break;
+    case 1:
+      colorMode = (colorMode == 0) ? 1 : 0;
+      break;
+    case 2:
+      bias += mutateStep(bias, pAmount);
+    case 3:
+      scaleX += mutateStep(scaleX, pAmount);
+      break;
+    case 4:
+      scaleY += mutateStep(scaleY, pAmount);
+      break;
+    case 5:
+      offsetX += mutateStep(offsetX, pAmount);
+      break;
+    case 6:
+      offsetY += mutateStep(offsetY, pAmount);
+    case 7:
+      tileX = (tileX == 0) ? 1 : 0;
+      break;
+    case 8:
+      tileY = (tileY == 0) ? 1 : 0;
+      break;
+    }
+  }
 
   private static SimpleImage dfltImage = null;
 

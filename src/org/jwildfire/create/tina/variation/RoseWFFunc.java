@@ -85,6 +85,14 @@ public class RoseWFFunc extends VariationFunc implements SupportsGPU {
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
+  
+  @Override
+  public void randomize() {
+    amp = Math.random() + 0.1;
+    waves = (int) (Math.random() * 25 + 1);
+    if (Math.random() < 0.5) filled = 0.0;
+    else filled = Math.random();
+  }
 
   @Override
   public String getGPUCode(FlameTransformationContext context) {

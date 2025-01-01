@@ -84,6 +84,18 @@ public class SiercarpetFunc extends VariationFunc implements SupportsGPU {
     } else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+    m = (int) (Math.random() * 10 + 3);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    m += 1;
+    if (m > 12)
+      m = 3;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

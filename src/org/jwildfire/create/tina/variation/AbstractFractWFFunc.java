@@ -355,4 +355,9 @@ public abstract class AbstractFractWFFunc extends VariationFunc implements Suppo
     this.buddhabrot_mode = 0;
   }
 
+  @Override
+  public boolean enableRandomizeButton() {
+    return false;
+  }
+
 }

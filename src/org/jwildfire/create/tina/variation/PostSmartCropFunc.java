@@ -237,6 +237,21 @@ public class PostSmartCropFunc extends VariationFunc implements SupportsGPU {
   public int getPriority() {
     return 1;
   }
+  
+  @Override
+  public void randomize() {
+    power = (int) (Math.random() * 6 + 3);
+    if (Math.random() < 0.4) power -= Math.random();
+    radius = Math.random() * 5.0 - 2.5;
+    roundstr = Math.random() * power * power * 0.6 - power * power * 0.3;
+    roundwidth = Math.random() * 8.0 - 4.0;
+    distortion = Math.random() * 5.0 - 2.5;
+    edge = Math.random();
+    scatter = Math.random() * 3.0 - 1.5;
+    offset = Math.random() * 0.2;
+    cropmode = (int) (Math.random()* 6);
+    if (cropmode > 2) cropmode = 1;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

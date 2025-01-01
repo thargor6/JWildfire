@@ -198,6 +198,17 @@ public class Truchet2Func extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "truchet2";
   }
+  
+  @Override
+  public void randomize() {
+    exponent1 = Math.random() * 3.0;
+    exponent2 = Math.random() * 3.0;
+    width1 = Math.random() * 2.0;
+    width2 = Math.random() * 2.0;
+    scale = Math.random() * 14.0 + 1.0;
+    seed = Math.random() * 100.0;
+    inverse = (int) (Math.random() * 2);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

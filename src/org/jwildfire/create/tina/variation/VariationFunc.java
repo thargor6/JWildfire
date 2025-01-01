@@ -16,9 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
 import java.io.Serializable;
 
@@ -139,6 +142,67 @@ public abstract class VariationFunc implements Serializable {
     } else {
       return pValue;
     }
+  }
+  
+  protected double mutateStep(double pVal, double pAmount) {
+    double step = 0;
+    if (pVal < EPSILON || Math.random() < 0.3) {
+      if (pVal >= 0)
+        step = 0.1 * pAmount;
+      else
+        step = -0.1 * pAmount;
+    } else {
+      if (pVal >= 0) 
+        step = pVal / 100.0 * pAmount;
+      else
+        step = pVal / -100.0 * pAmount;
+    }
+    return step;
+  }
+  
+  public void mutate(double pAmount) {
+    int pIdx = (int) (Math.random() * getParameterNames().length);
+    Object oldVal = getParameterValues()[pIdx];
+    if (oldVal instanceof Integer) {
+      int o = (Integer) oldVal;
+      int da = Tools.FTOI(pAmount);
+      if (da < 1) {
+        da = 1;
+      }
+      if (o >= 0) {
+        o += da;
+      }
+      else {
+        o -= da;
+      }
+      setParameter(getParameterNames()[pIdx], o);
+    }
+    else if (oldVal instanceof Double) {
+      double o = (Double) oldVal;
+      o += mutateStep(o, pAmount);
+      setParameter(getParameterNames()[pIdx], o);
+    }
+  }
+
+  public void randomize() {
+    if (this.getParameterNames().length > 0) {
+      String[] paramNames = this.getParameterNames();
+      Object[] paramValues = this.getParameterValues();
+      for (int pIdx=0; pIdx < paramNames.length; pIdx++) {
+        if (paramValues[pIdx] instanceof Integer) {
+          int val = (int) (Math.random() * 11.0 - 5.0);
+          this.setParameter(paramNames[pIdx], val);
+        }
+        else if (paramValues[pIdx] instanceof Double) {
+          double val = Math.random() * 5.0 - 2.5;
+          this.setParameter(paramNames[pIdx], val);
+        }
+      }
+    }
+  }
+  
+  public boolean enableRandomizeButton() {
+    return true;
   }
 
   public Object[] joinArrays(Object[] array1, Object[] array2) {

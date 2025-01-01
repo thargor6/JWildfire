@@ -144,6 +144,16 @@ public class SunFlowersFunc extends DrawFunc {
   public String getName() {
     return "sunflower";
   }
+  
+  @Override
+  public void randomize() {
+    nPoints = (int) (Math.random() * 900 + 10);
+    shape = (int) (Math.random() * 8 + 3);
+    scale = Math.random() * Math.random() * 0.5;
+    angle = Math.random() * 360.0;
+    fill = Math.random();
+    invert = (int) (Math.random() * 2);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

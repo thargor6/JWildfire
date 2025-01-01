@@ -92,6 +92,13 @@ public class StarBlurFunc extends VariationFunc implements SupportsGPU {
     starblur_length = sqrt(1.0 + sqr(range) - 2.0 * range * cos(starblur_alpha));
     starblur_alpha = asin(sin(starblur_alpha) * range / starblur_length);
   }
+  
+  @Override
+  public void randomize() {
+    power = (int) (Math.random() * 10 + 2);
+    if (Math.random() < 0.4) power *= -1;
+    range = Math.random() * 2.0 - 1.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

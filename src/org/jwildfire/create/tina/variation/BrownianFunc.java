@@ -471,6 +471,17 @@ public class BrownianFunc extends VariationFunc {
   public String getName() {
     return "brownian_js";
   }
+  
+  @Override
+  public void randomize() {
+    variation = Math.random() * 99 + 1;
+    seed_param = (int) (Math.random() * 1000000);
+    setParameter(PARAM_LEVEL, (int) (Math.random() * 15 + 1));
+    line_thickness_param = Math.random() * 2.5 + 0.1;
+    point_thickness_param = Math.random() * 2.5 + 0.1;
+    show_lines_param = Math.random();
+    show_points_param = Math.random();
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -428,6 +428,11 @@ public static class randomizeCode
     	  throw new IllegalArgumentException(pName);
     }
 
+    @Override
+    public boolean enableRandomizeButton() {
+      return false;
+    }
+
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_EDIT_FORMULA, VariationFuncType.VARTYPE_SUPPORTS_BACKGROUND};

@@ -73,6 +73,11 @@ public class CurliecueFunc2 extends VariationFunc {
   }
 
   @Override
+  public boolean enableRandomizeButton() {
+    return false;
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
   }

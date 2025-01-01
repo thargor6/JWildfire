@@ -119,6 +119,12 @@ public class OctogonPrism3DFunc extends VariationFunc implements SupportsGPU {
 		return true;
 	}
 
+    @Override
+    public void randomize() {
+      r = Math.random() * 0.5;
+      h = Math.random() * 0.5;
+    }
+
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};

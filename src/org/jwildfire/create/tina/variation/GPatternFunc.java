@@ -245,6 +245,33 @@ public class GPatternFunc extends DrawFunc {
   public String getName() {
     return "gpattern";
   }
+  
+  @Override
+  public void randomize() {
+    seed = (int) (Math.random() * 1000000);
+    width = Math.random() * 10;
+    height = Math.random() * 10;
+    lineheight = Math.random() * 1.49 + 0.01;
+    angle = Math.random() * 360.0 - 180.0;
+    randPos = Math.random() - 0.5;
+    randSize = Math.random() - 0.5;
+    double r = Math.random();
+    if (r < 0.5) {
+      fill = 1; outline = 0;
+    } else if (r < 0.75) {
+      fill = 0; outline = 1;
+    } else {
+      fill = 1; outline = 1;
+    }
+    color = Math.random();
+    speedcolor = Math.random();
+    outlinecolor = Math.random();
+    String polys = "" + (int) (Math.random() * 7 + 3);
+    for (int i = 0; i < Math.random() * 8 + 2; i++) {
+      polys += "," + (int) (Math.random() * 7 + 3);
+    }
+    string = polys;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

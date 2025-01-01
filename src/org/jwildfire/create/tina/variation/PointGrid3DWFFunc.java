@@ -135,6 +135,21 @@ public class PointGrid3DWFFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+    xmin = Math.random() * 4.0 - 4.1;
+    xmax = Math.random() * 4.0 + 0.1;
+    xcount = (int) (Math.random() * 20 + 5);
+    ymin = Math.random() * 4.0 - 4.1;
+    ymax = Math.random() * 4.0 + 0.1;
+    ycount = (int) (Math.random() * 20 + 5);
+    zmin = Math.random() * 4.0 - 4.1;
+    zmax = Math.random() * 4.0 + 0.1;
+    zcount = (int) (Math.random() * 20 + 5);
+    distortion = Math.random() * 5.0;
+    seed = (int) (Math.random() * 1000000);
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }

@@ -422,6 +422,32 @@ public abstract class AbstractBrushStrokeWFFunc extends VariationFunc {
     }
     return dfltImage;
   }
+  
+  @Override
+  public void randomize() {
+    blend = Math.random();
+    grid_size = Math.random() * 0.25;
+    grid_deform = Math.random() * 5.0 - 2.5;
+    grid_brush_rotate = Math.random() * 4.0 * Math.PI - 2.0 * Math.PI;
+    grid_brush_scale = Math.random() * 5.0 - 2.5;
+    grid_brush_blend = Math.random();
+    color_channel = (int) (Math.random() * 3.0);
+    threshold = Math.random() * 0.8 + 0.1;
+    variation_batch_size = (int) (Math.random() * 20 + 1);
+    variation_zoom = Math.random() * 3.0 - 1.5;
+    variation_position = Math.random() - 0.5;
+    variation_rotation = Math.random() * 2.0 * Math.PI - Math.PI;
+    variation_erosion = Math.random();
+    variation_seed = (int) (Math.random() * 99999);
+    antialias_radius = Math.random() + 0.5;
+    if (brush_list != null && brush_list.equals("001, 005, 012") || Math.random() < 0.3) {
+      rnd_brush_seed = (int) (Math.random() * 99999 + 1);
+      rnd_brush_min_count = (int) (Math.random() * 4 + 1);
+      rnd_brush_max_count = (int) (Math.random() * 5 + rnd_brush_min_count);
+    } else {
+      rnd_brush_seed = 0;
+    }
+  }
 
   @Override
   public String[] getRessourceNames() {

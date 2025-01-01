@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.base.Tools;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class WhirligigFunc extends VariationFunc implements SupportsGPU {
+public class WhirligigFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_MODE = "Mode";

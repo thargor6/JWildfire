@@ -127,6 +127,12 @@ public class PolylogarithmFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "polylogarithm";
   }
+  
+  @Override
+  public void randomize() {
+    n = (int) (Math.random() * 5 + 1);
+    zpow = Math.random() * 5.0 - 2.5;
+  }
 
   public double HarmonicS(int N) { // Defined in Crandall's paper
     if (N < 1)

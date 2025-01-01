@@ -117,6 +117,14 @@ public class BoundingBox3DFunc extends VariationFunc implements SupportsGPU {
 		return true;
 	}
 
+    @Override
+    public void randomize() {
+      dx = Math.random() * 0.5;
+      dy = Math.random() * 0.5;
+      dz = Math.random() * 0.5;
+      r = Math.random() * 0.25;
+    }
+
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};

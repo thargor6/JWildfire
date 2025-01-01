@@ -235,6 +235,58 @@ public class GlynnS3SubflWFFunc extends SubFlameWFFunc implements NotDesiredForG
   }
 
   @Override
+  public void randomize() {
+    weight = Math.random();
+    show = (int) (Math.random() * 2);
+    radius = Math.random() * 2.0 + 0.1;
+    thickness = Math.random();
+    contrast = Math.random();
+    pow = Math.random() + 0.5;
+    type = (int) (Math.random() * 2);
+    phi1 = Math.random() * 360.0;
+    phi2 = Math.random() * 360.0;
+    super.randomize();
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 16)) {
+    case 0:
+      weight += mutateStep(weight, pAmount);
+      break;
+    case 1:
+      show = (show + 1) % 2;
+      break;
+    case 2:
+      radius += mutateStep(radius, pAmount);
+      break;
+    case 3:
+      thickness += mutateStep(thickness, pAmount);
+      if (thickness > 1.0) thickness = 0.0;
+      break;
+    case 4:
+      contrast += mutateStep(contrast, pAmount);
+      if (contrast > 1.0) contrast = 0.0;
+      break;
+    case 5:
+      pow += mutateStep(pow, pAmount);
+      break;
+    case 6:
+      type = (type + 1) % 2;
+      break;
+    case 7:
+      phi1 += mutateStep(phi1, pAmount);
+      break;
+    case 8:
+      phi2 += mutateStep(phi2, pAmount);
+      break;
+    default:
+      super.mutate(pAmount);
+      break;
+    }
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_EXTERNAL_SHAPES};
   }

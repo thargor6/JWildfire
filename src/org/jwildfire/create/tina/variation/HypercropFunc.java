@@ -101,6 +101,30 @@ public class HypercropFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "hypercrop";
   }
+  
+  @Override
+  public void randomize() {
+    n = (int) (Math.random() * 18 + 3);
+    rad = Math.random();
+    zero = (int) (Math.random() * 3);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 3)) {
+    case 0:
+      n += pAmount;
+      if (n < 3) n = 3;
+      break;
+    case 1:
+      rad += mutateStep(rad, pAmount);
+      break;
+    case 2:
+      zero += 1;
+      if (zero > 2) zero = 0;
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

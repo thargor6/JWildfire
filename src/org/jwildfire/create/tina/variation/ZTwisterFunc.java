@@ -76,6 +76,11 @@ public class ZTwisterFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public boolean enableRandomizeButton() {
+    return false;
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }

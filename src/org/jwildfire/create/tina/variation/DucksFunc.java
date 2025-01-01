@@ -892,6 +892,30 @@ public class DucksFunc extends VariationFunc {
     } else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+    size = (int) (Math.random() * 2500 + 500);
+    re_min = -Math.random() * 5.0;
+    re_max = Math.random() * 5.0;
+    im_min = -Math.random() * 5.0;
+    im_max = Math.random() * 5.0;
+    juliamode = (int) (Math.random() * 2.0);
+    c_re = Math.random() * 4.0 - 2.0;
+    c_im = Math.random() * 4.0 - 2.0;
+    MaxIters = (int) (Math.random() * 30 + 30);
+    nIters = (int) (Math.random() * 5 + 1);
+    colortype = (int) (Math.random() * 5);
+    escape = Math.random() * 11.0;
+    C = Math.random() * 2.0;
+    colorFactor = Math.random();
+    Gradient = (int) (Math.random() * 2);
+    colorScale = Math.random() * 10.0;
+    colorCycle = Math.random() * 9.0 + 1.0;
+    colorOffset = Math.random() * 20.0 - 10.0;
+    colorMirror = (int) (Math.random() * 2);
+    colorRainbow = (int) (Math.random() * 2);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

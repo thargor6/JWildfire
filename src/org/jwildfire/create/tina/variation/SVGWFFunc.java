@@ -634,6 +634,48 @@ public class SVGWFFunc extends VariationFunc {
     lastB = pB;
     return lastColorIdx;
   }
+  
+  @Override
+  public void randomize() {
+    scale_x = Math.random() * 5.0 - 2.5;
+    scale_y = Math.random() * 5.0 - 2.5;
+    offset_x = Math.random() * 5.0 - 2.5;
+    offset_y = Math.random() * 5.0 - 2.5;
+    resolution_multiplier = Math.random() * 2.9 + 0.1;
+    pre_antialias = (int) (Math.random() * 2);
+    antialias_radius = Math.random();
+    true_color = (int) (Math.random() * 2);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 8)) {
+    case 0:
+      scale_x += mutateStep(scale_x, pAmount);
+      break;
+    case 1:
+      scale_y += mutateStep(scale_y, pAmount);
+      break;
+    case 2:
+      offset_x += mutateStep(offset_x, pAmount);
+      break;
+    case 3:
+      offset_y += mutateStep(offset_y, pAmount);
+      break;
+    case 4:
+      resolution_multiplier += mutateStep(resolution_multiplier, pAmount);
+      break;
+    case 5:
+      pre_antialias = (pre_antialias + 1) % 2;
+      break;
+    case 6:
+      antialias_radius += mutateStep(antialias_radius, pAmount);
+      break;
+    case 7:
+      true_color = (true_color + 1) % 2;
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

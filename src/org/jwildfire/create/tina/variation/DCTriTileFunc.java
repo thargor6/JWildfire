@@ -1137,6 +1137,11 @@ public class DCTriTileFunc extends VariationFunc {
   public String getName() {
     return "dc_triTile";
   }
+  
+  @Override
+  public boolean enableRandomizeButton() {
+    return false;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

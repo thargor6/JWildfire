@@ -116,6 +116,18 @@ public class PointGridWFFunc extends VariationFunc implements SupportsGPU {
     _dx = (xmax - xmin) / (double) xcount;
     _dy = (ymax - ymin) / (double) ycount;
   }
+  
+  @Override
+  public void randomize() {
+    xmin = Math.random() * 4.0 - 4.1;
+    xmax = Math.random() * 4.0 + 0.1;
+    xcount = (int) (Math.random() * 95 + 5);
+    ymin = Math.random() * 4.0 - 4.1;
+    ymax = Math.random() * 4.0 + 0.1;
+    ycount = (int) (Math.random() * 95 + 5);
+    distortion = Math.random() * 5.0;
+    seed = (int) (Math.random() * 1000000);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

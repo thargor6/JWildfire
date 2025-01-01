@@ -186,6 +186,70 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
     center = new Double3(center_x, center_y, center_z);
     r_max = SCATTER_ADJUST * blur_strength;
   }
+  
+  @Override
+  public void randomize() {
+    blur_type = (int) (Math.random() * 3);
+    blur_shape = (int) (Math.random() * 2);
+    blur_strength = Math.random() * 1.5 + 0.25;
+    min_distance = Math.random();
+    invert_distance = (int) (Math.random() * 2);
+    mul_x = Math.random();
+    mul_y = Math.random();
+    mul_z = Math.random();
+    mul_c = Math.random();
+    center_x = Math.random() * 2.0 - 1.0;
+    center_y = Math.random() * 2.0 - 1.0;
+    center_z = Math.random() * 2.0 - 1.0;
+    alpha = Math.random();
+  }
+  
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 13)) {
+    case 0:
+      blur_type += 1;
+      if (blur_type > 2) blur_type = 0;
+      break;
+    case 1:
+      blur_shape += 1;
+      if (blur_shape > 1) blur_shape = 0;
+      break;
+    case 2:
+      blur_strength += mutateStep(blur_strength, pAmount);
+      break;
+    case 3:
+      min_distance += mutateStep(min_distance, pAmount);
+      break;
+    case 4:
+      invert_distance += 1;
+      if (invert_distance > 1) invert_distance = 0;
+      break;
+    case 5:
+      mul_x += mutateStep(mul_x, pAmount);
+      break;
+    case 6:
+      mul_y += mutateStep(mul_y, pAmount);
+      break;
+    case 7:
+      mul_z += mutateStep(mul_z, pAmount);
+      break;
+    case 8:
+      mul_c += mutateStep(mul_c, pAmount);
+      break;
+    case 9:
+      center_x += mutateStep(center_x, pAmount);
+      break;
+    case 10:
+      center_y += mutateStep(center_y, pAmount);
+      break;
+    case 11:
+      center_z += mutateStep(center_z, pAmount);
+      break;
+    case 12:
+      alpha += mutateStep(alpha, pAmount);
+      break;
+    }
+  }
 
   protected static class Double4 {
     double x;

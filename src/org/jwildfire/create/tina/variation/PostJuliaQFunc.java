@@ -89,6 +89,16 @@ public class PostJuliaQFunc extends VariationFunc {
   }
 
   @Override
+  public void randomize() {
+    power = (int) (Math.random() * 10 + 2);
+    divisor = (int) (Math.random() * (power - 2) + 1);
+    if (Math.random() < 0.5)
+      power *= -1;
+    if (Math.random() < 0.5)
+      divisor *= -1;
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_POST};
   }

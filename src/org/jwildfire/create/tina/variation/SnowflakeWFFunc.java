@@ -130,6 +130,24 @@ public class SnowflakeWFFunc extends VariationFunc {
   public String getName() {
     return "snowflake_wf";
   }
+  
+  @Override
+  public void randomize() {
+    buffer_size = (int) (Math.random() * 225 + 300);
+    max_iter = (int) (Math.random() * 1400 + 100);
+    bg_freeze_level = Math.random() * 0.3 + 0.3;
+    fg_freeze_speed = Math.random() * 0.1;
+    diffusion_speed = Math.random() * 0.25;
+    diffusion_asymmetry = Math.random();
+    rnd_bg_noise = Math.random() * 0.5;
+    threshold = Math.random() * 0.5 + 0.25;
+    seed = (int) (Math.random() * 1000000);
+    scale = Math.random() + 0.5;
+    jitter = Math.random() * 0.01;
+    dc_color = (int) (Math.random() * 2);
+    dc_color_scale = Math.random() * 3.0;
+    dc_color_offset = Math.random() * 0.5 - 0.25;
+  }
 
   private String makeKey() {
     return buffer_size + "#" + max_iter + "#" + bg_freeze_level + "#" + fg_freeze_speed + "#" + diffusion_speed + "#" + diffusion_asymmetry + "#" + rnd_bg_noise + "#" + threshold + "#" + seed + "#" + scale + "#" + jitter;

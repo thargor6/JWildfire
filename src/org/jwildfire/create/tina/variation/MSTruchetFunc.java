@@ -454,6 +454,13 @@ public class MSTruchetFunc extends AbstractBufferedImageWFFunc {
 		else
 			super.setParameter(pName, pValue);
     }
+    
+    @Override
+    public void randomize() {
+      seed = (int) (Math.random() * 1000000);
+      complexity = (int) (Math.random() * 100 + 1);
+      super.randomize();
+    }
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {

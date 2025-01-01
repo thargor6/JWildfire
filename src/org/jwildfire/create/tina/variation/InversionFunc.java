@@ -743,10 +743,128 @@ public class InversionFunc extends VariationFunc {
     } else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+    scale = Math.random() * 2.5;
+    rotation_pi_fraction = Math.random() * 2.0 - 1.0;
+    shape_mode = (int) (Math.random() * 7);
+    a = Math.random() * 1.5 + 0.5;
+    b = Math.random() * 1.5 + 0.5;
+    c = Math.random() * 1.5 + 0.5;
+    d = Math.random() * 1.5 + 0.5;
+    e = Math.random() * 1.5 + 0.5;
+    f = Math.random() * 1.5 + 0.5;
+    if (shape_mode == 3) {
+      a = (int) (Math.random() * 7 + 3);
+    } else if (shape_mode == 4) {
+      a = Math.random() * 8.0 + 2.0;
+      b = Math.random() * 4.0 + 1.0;
+      c = Math.random() * 2.0 - 1.0;
+    } else if (shape_mode == 6) {
+      c = (int) (Math.random() * 13 + 3);
+      if (Math.random() < 0.5) c -= Math.random();
+    }
+    inversion_mode = (int) (Math.random() * 3);
+    hide_uninverted = Math.random() < 0.5;
+    ring_mode = (int) (Math.random() * 3);
+    if (scale < 1.0) 
+      ring_scale = Math.random() * 1.5 + 1.0;
+    else
+      ring_scale = Math.random() * 0.6 + 0.4;
+    pnorm_point = Math.random() * 2.0 + 1.0;
+    pnorm_shape = Math.random() * 2.0 + 1.0;
+    pnorm_pmod = Math.random() * 2.0;
+    pnorm_smod = Math.random() * 4.8 + 0.2;
+    draw_shape = Math.random();
+    shape_thickness = Math.random() * 15.0;
+    passthrough = (Math.random() < 0.75) ? 0.0 : Math.random();
+    direct_color_measure = (int) (Math.random() * 5);
+    direct_color_gradient = (int) (Math.random() * 2 + 1);
+    color_low_thresh = Math.random();
+    color_high_thresh = Math.random();
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 24)) {
+    case 0:
+      scale += mutateStep(scale, pAmount);
+      break;
+    case 1:
+      rotation_pi_fraction += mutateStep(rotation_pi_fraction, pAmount);
+      break;
+    case 2:
+      shape_mode = (shape_mode + 1) % 7;
+      break;
+    case 3:
+      a += mutateStep(a, pAmount);
+      break;
+    case 4:
+      b += mutateStep(b, pAmount);
+      break;
+    case 5:
+      c += mutateStep(c, pAmount);
+      break;
+    case 6:
+      d += mutateStep(d, pAmount);
+      break;
+    case 7:
+      e += mutateStep(e, pAmount);
+      break;
+    case 8:
+      f += mutateStep(f, pAmount);
+      break;
+    case 9:
+      inversion_mode = (inversion_mode + 1) % 3;
+      break;
+    case 10:
+      hide_uninverted = ! hide_uninverted;
+      break;
+    case 11:
+      ring_mode = (ring_mode + 1) % 3;
+      break;
+    case 12:
+      ring_scale += mutateStep(ring_scale, pAmount);
+      break;
+    case 13:
+      pnorm_point += mutateStep(pnorm_point, pAmount);
+      break;
+    case 14:
+      pnorm_shape += mutateStep(pnorm_shape, pAmount);
+      break;
+    case 15:
+      pnorm_pmod += mutateStep(pnorm_pmod, pAmount);
+      break;
+    case 16:
+      pnorm_smod += mutateStep(pnorm_smod, pAmount);
+      break;
+    case 17:
+      draw_shape += mutateStep(draw_shape, pAmount);
+      break;
+    case 18:
+      shape_thickness += mutateStep(shape_thickness, pAmount);
+      break;
+    case 19:
+      passthrough += mutateStep(passthrough, pAmount);
+      break;
+    case 20:
+      direct_color_measure = (direct_color_measure + 1) % 5;
+      break;
+    case 21:
+      direct_color_gradient = (direct_color_gradient % 2) + 1;
+      break;
+    case 22:
+      color_low_thresh += mutateStep(color_low_thresh, pAmount);
+      break;
+    case 23:
+      color_high_thresh += mutateStep(color_high_thresh, pAmount);
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};
   }
-
 }

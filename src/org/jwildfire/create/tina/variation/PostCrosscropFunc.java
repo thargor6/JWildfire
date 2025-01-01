@@ -110,6 +110,15 @@ public class PostCrosscropFunc extends VariationFunc {
   }
   
   @Override
+  public void randomize() {
+    x = Math.random();
+    y = Math.random();
+    z = Math.random();
+    rotation = Math.random() * 180.0 - 90.0;
+    reverse = (int) (Math.random() * 2);
+  }
+  
+  @Override
   public int getPriority() {
     return 1;
   }

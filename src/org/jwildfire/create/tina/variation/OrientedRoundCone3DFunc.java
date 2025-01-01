@@ -154,6 +154,18 @@ public class OrientedRoundCone3DFunc extends VariationFunc implements SupportsGP
 		return true;
 	}
 
+    @Override
+    public void randomize() {
+      p1 = Math.random() - 0.5;
+      p2 = Math.random() - 0.5;
+      p3 = Math.random() - 0.5;
+      p4 = Math.random() - 0.5;
+      p5 = Math.random() - 0.5;
+      p6 = Math.random() - 0.5;
+      p7 = Math.random() * 0.25;
+      p8 = Math.random() * 0.25;
+    }
+
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
