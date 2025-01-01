@@ -1,0 +1,201 @@
+##01
+Hilbert { ; the name of the l-system ";" means comments until the end of line
+angle 4 ; angle 4 means 90 Degress (360/4=90)
+axiom X
+X=-YF+XFX+FY-
+Y=+XF-YFY-FX+
+}
+##02
+Koch{
+Angle 6 ; angle 6 means 60 Degress (360/6=60)
+Axiom F ; iteration 0 only one line.
+F=F+F--F+F ; 
+}
+##03
+KochIsland { ; The Science of Fractal Images, page 283
+angle 4
+axiom F+F+F+F
+F=F+F-F-FFF+F+F-F
+}
+##04
+KochSnowflake { ; The Science of Fractal Images, page 276
+angle 6
+axiom F--F--F
+F=F-F++F-F
+}
+##05
+Peano { ; Chaos and Fractals, page 384
+angle 4
+axiom F
+F=FF+F+F+FF+F+F-F
+}
+##06
+SierpinskiCarpet {
+Angle 4
+Axiom F
+F=F+F-F-F-G+F+F+F-F
+G=GGG
+}
+##07
+SierpinskiTriangle { ; The Science of Fractal Images, page 282
+angle 6
+axiom FXF--FF--FF
+F=FF
+X=--FXF++FXF++FXF--
+}
+##08
+Alfonseca { ; Manuel Alfonseca rendered for fractint
+Angle 16 ; angle 16 means 90 Degress (360/16=22.5)
+Axiom A
+A=f-[A+A]+f[+fA]-A
+f=ff
+}
+##09
+ADH155 { ; Anthony Hanmer 2000
+Angle 45 ; Cesaro variation
+Axiom f
+f=f++++++++++f--------------------f++++++++++f
+}
+##10
+Crystal {
+  angle  4
+  axiom  F+F+F+F
+  F=FF+F++F+F
+}
+##11
+Cross5c { ; Gary Teachout.  Same as Quartet in fractint.l
+  Angle 4
+  Axiom x
+  x=fx+fy-fx-fxfy+
+  y=-fxfy+fy+fx-fy
+  f=3
+  }
+##12
+Fass1 { ; Adrian Mariano, from the Algorithmic Beauty of Plants
+ ; FASS curve (3x3 tiles form macrotile), Figure 1.16a p.17
+  angle 4
+  axiom -L
+  L=LF+RFR+FL-F-LFLFL-FRFR+
+  R=-LFLF+RFRFR+F+RF-LFL-FR
+}
+##13
+Hex-7-b { ; Gary Teachout *
+  angle 12
+  axiom fx
+  f=
+  x=-f++f-x-f--f+y---f--f+y+f++f-x+++f++f-x-f++f-x+++f--f+y--
+  y=+f++f-x-f--f+y+f--f+y---f--f+y---f++f-x+++f++f-x+++f--f+y
+}
+##14
+Board {
+  angle  4
+  axiom  F+F+F+F
+  F = FF+F+F+F+FF
+}
+##15
+Sphinx { ; by Herb Savage
+  Angle 6
+  Axiom X
+  X=+FF-YFF+FF--FFF|X|F--YFFFYFFF|
+  Y=-FF+XFF-FF++FFF|Y|F++XFFFXFFF|
+  F=GG
+  G=GG
+}
+##16
+PT7    {; Jaume Bartrolí
+        ; Pythagorean Tree
+        ; From "Chaos and Fractals" by Peitgen, Jürgens and Saupe
+        ; Inspired on Figures 2.64 and 2.65, p. 128 and 129
+        ; Construction with a triangle of sides 5, 12 and 13
+        ; Using D, \nn and /nn, 67.38° is acos(5/13)
+Angle 3 ; Only to avoid errors, we do not use this angle
+Axiom D\90D[A]\90D[B]\90D
+A=/67.38@.3846D[A]\90D[B]\90D\90D
+B=/157.38@.9231D\90D[A]\90D[B]\90D
+}
+##17
+Seaweed06 { ; 
+  Angle 22
+  Axiom F
+  X=-F[-X]-F[+X] 
+  F=F[-X]F
+  }
+  ##18
+  Seaweed08 { ; 
+  Angle 15
+  Axiom xy
+  x=<1+F>1+<1F>1[+y][-y]<1F>1-<1F>1[+y][-y] 
+  y=<1-F>1-<1F>1[+x][-x]<1F>1+<1F>1[+x][-x] 
+  f=<10F[+x][-x][+y][-y]F>10
+  }
+  ##19
+  Seaweed05 { ; 
+  Angle 30
+  Axiom f
+  x=--<5F[X][y]++F>5[X][y] 
+  y=++<5F[X][y]--F>5[X][y]  
+  f=<10F[X][y]F>10
+  }
+  ##20
+  Sapin3 { ;
+  Angle 15  
+  Axiom x
+  x=>5F[-X][+X]>5F[--X][++X]>5F<5[---X][+++X]
+  x=F<5[----X][++++X]F<5[-----X][+++++X]
+  f=c52f@0.9975c32f@0.9935c11F
+  }
+  ##21
+  Root { ; 
+  Angle 23
+  Axiom X
+  X=+F[-X]--F[+X]
+  F=-F[+F]+F[-F] 
+  }
+ ##22
+ Plant08 { ; 
+  Angle 10
+  Axiom F
+  F=F[+X]F[-Y]
+  X=S-T
+  Y=T+S
+  S=-<2F+<2F-<2FF+<2FF-<2FFF+<2FFF-FFF>2-FFFFF>2+FFFFF>2-FFFFF>2+FFFFF>2-FFFFF>2
+  T=+<2F-<2F+<2FF-<2FF+<2FFF-<2FFF+FFF>2+FFFFF>2-FFFFF>2+FFFFF>2-FFFFF>2+FFFFF>2
+  }
+ ##23
+ PlantsByRoad { ;
+  Angle 15
+  Axiom x
+  x=+<18F[+x][-x]-F>18[+x][-x]
+  f=<10ff>10
+  }
+ ##24
+ Plant02B { ;
+  Angle 50
+  Axiom x
+  x=@.95F[s][t]
+  s=-<2F-<2F-<2FF-<2FFF[s][t]
+  s=-<2F[s][t]F[s][t]F[s][t]F[s][t]F>2[s][t]
+  s=-@.95F[s][t]@.95F[s][t]@.95F[s][t]>2
+  s=-@.95F[s][t]@.95F[s][t]>2-@.95F[s][t]
+  t=+<2F+<2F+<2FF+<2FFF[s][t]
+  t=+<2F[s][t]F[s][t]F[s][t]F[s][t]F>2[s][t]
+  t=+@.95F[s][t]@.95F[s][t]@.95F[s][t]>2
+  t=+@.95F[s][t]@.95F[s][t]>2+@.95F[s][t]
+  f=fffff
+  }
+ ##25
+ Leaves4 { ; 
+  Angle 30      
+  Axiom x
+  x=F[++++s][----t]@.9326F[+++s][---t]
+  x=@.8557F[++s][--t]@.7788F[+s][-t];@.7019F[x]
+  s=+<5F[++s][---s]-<5F[++s][---s]-<5@.9326F[++s][---s]
+  s=-@.8557F>5[++s][---s]-@.7788F>5[+s][--s]-@.7019F>5[s][-s]
+  t=-<5F[+++t][--t]+<5F[+++t][--t]+<5@.9326F[+++t][--t]
+  t=+@.8557F>5[+++t][--t]+@.7788F>5[++t][-t]+@.7019F>5[+t][t]
+  f=<10F<10F>10F>10      ;f=<10FFFF>10
+  }
+
+
+  
+
