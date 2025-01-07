@@ -1772,8 +1772,9 @@ Each nonlinear transformation can have one or more of the following categories:
 Currently, there are about 800 nonlinear transformations included in JWildfire.
 Sometimes this is just too much, even just to play around with. You can reduce this list by using the _Filter_ option.
 
-The _Filter_ option consists of two drop-down lists where you can choose up two _Variation profiles_:
+The _Filter_ option consists of a toggle button and two drop-down lists where you can choose up two _Variation profiles_:
 
+ - when the _heart_ *favourites button* is selected, only favourite variations are displayed. Variations are selected as favourites by selecting the _heart_ toggle button to the left of the variation name in any of the variation slots.
  - when the *first* _Variation profiles_ is selected, only the variations which are inside the selected profile are displayed.
  - when *two* _Variation profiles_ are selected, only the variations which are inside the both profiles are displayed.
  - the *second* drop-down list alternatively allows you to select an *_inverted variation profile_* (prefixed by "!=" in the list).
@@ -1817,7 +1818,7 @@ For example: typing s-u-b-f will select _subflame_wf_-variation.
 
 ====== Removing nonlinear transformations
 There is a special empty entry in the drop-down list. It is the top entry and should be used if you want to
-remove a specific nonlinear transformation from your fractal.
+remove a specific nonlinear transformation from your fractal. (The _Home_ key is a quick way to select the top entry.)
 
 When you select this entry the corresponding variations will be removed and the following variations (if any) will move up.
 
@@ -1825,12 +1826,12 @@ When you select this entry the corresponding variations will be removed and the 
 image::images/nonlinear_transformations_remove.jpg[scaledwidth=50%]
 
 ====== Editing nonlinear transformations
-At each variation-slow there are the following options to edit the nonlinear transformation:
+At each variation-slot there are the following options to edit the nonlinear transformation:
 
  - a _numeric field_ right of the name: this is the *amount* of this nonlinear transformation.
  - a _drop-down list_ below the name: here you can select a *parameter* of this nonlinear transformation you want to edit.
 Some nonlinear transformations have no parameters. In this case the _drop-down list_ is empty.
- - a _numeric field_ right of the *parameter* _drop-down list_: this is the amount of the currently selected parameter.
+ - a _numeric field_ right of the *parameter* _drop-down list_: this is the value of the currently selected parameter.
  - a small _yellow/gray_ toggle button left of the name: use this button to make this transformation a _pre_-transformation.
 Any non-linear transformation having the prefix "pre_" in the name usually is a _pre_-transformation by convention. In this case
 the button will be active. You may change it to use this transformation as a _non-_pre_-transformation.
@@ -1840,12 +1841,14 @@ the button will be active. You may change it to use this transformation as a _no
  - a small _green arrow_ button left of the *parameter* _drop-down list_: Here you can show/hide an optional parameter panel,
 with which you can control all parameters of the currently selected variation with separate sliders. Since this takes up a lot of space,
 it can be switched on/off separately for each variant.
+ - a _heart_ toggle button at the top left: this is the *favourite* toggle button; if it is active, the selected variation is in the *favourite variation* filter and will be displayed when the *favourite variation* toggle button is active (if allowed by the other filters).
+ - a _die_ button to the left of *Params*: this is the *randomize* button. Left-click it to set all the parameters to random values. Right-click it to mutate one parameter by nudging it's value a bit.
 
 [.thumb]
 image::images/nonlinear_transformations_params.jpg[scaledwidth=50%]
 
  - an _arrow_ button right of the *amount* field: here you can move this variation up one position.
- - small _cog_ button right of the *parameter *amount*: some variations have not only numeric parameters. In this case
+ - small _cog_ button right of the *parameter value*: some variations have non-numeric parameters. In this case
 you will need to click at this button to open a popup which allows to edit the corresponding parameter.
 For example, the _svg_wf_ variation has a _svg_ parameter that points to an external *.svg* file.
 If you click the _cog_ button with the parameter selected, you get a file selection dialog.
