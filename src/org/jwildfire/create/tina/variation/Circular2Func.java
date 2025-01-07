@@ -84,6 +84,14 @@ public class Circular2Func extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+    angle = Math.random() * 180.0 - 90.0;
+    seed = Math.random() * Math.PI;
+    xx = Math.random() * 200.0 - 100.0;
+    yy = Math.random() * 200.0 - 100.0;
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }

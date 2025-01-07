@@ -190,6 +190,29 @@ public class SunflowerVoroniFunc extends DrawFunc {
   public String getName() {
     return "sunvoroni";
   }
+  
+  @Override
+  public void randomize() {
+    nPoints = (int) (Math.random() * 900 + 10);
+    Iters = (int) (Math.random() * 3 + 2);
+    angle = Math.random() * 360.0;
+    colormode = (int) (Math.random() * 3);
+    switch ((int) (Math.random() * 3)) {
+    case 0:
+      outline = 1;
+      fill = 0;
+      break;
+    case 1:
+      outline = 0;
+      fill = 1;
+      break;
+    case 2:
+      outline = 1;
+      fill = 1;
+      break;
+    }
+    outlinecolor = Math.random();
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

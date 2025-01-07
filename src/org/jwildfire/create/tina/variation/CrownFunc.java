@@ -81,6 +81,12 @@ public class CrownFunc extends VariationFunc implements SupportsGPU {
     } else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+    a = Math.random() * 5.0 + 1.25;
+    b = Math.random() * 0.75 + 0.25;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -138,6 +138,18 @@ public String getName() {
   return "post_bulbtorus_crop";
 }
 
+@Override
+public void randomize() {
+  power1 = Math.random() * 14.0 + 1.0;
+  power2 = Math.random() * 14.0 + 1.0;
+  iterations = (int) (Math.random() * 25 + 1);
+  bailout = Math.random() * 25.0 + 1.0;
+  scalex = Math.random() * 3.75 + 0.25;
+  scaley = Math.random() * 3.75 + 0.25;
+  scalez = Math.random() * 3.75 + 0.25;
+  pcolor = Math.random();
+}
+
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL,VariationFuncType.VARTYPE_DC};

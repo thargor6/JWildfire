@@ -140,6 +140,11 @@ public abstract class GLSLFunc extends VariationFunc {
     return true;
   }
 
+  @Override
+  public boolean enableRandomizeButton() {
+    return false;
+  }
+
 }
 
 

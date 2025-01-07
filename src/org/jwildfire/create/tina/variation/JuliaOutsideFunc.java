@@ -106,6 +106,13 @@ else{
   public String getName() {
     return "julia_outside";
   }
+  
+  @Override
+  public void randomize() {
+    re_div = Math.random() * 5.0 - 2.5;
+    im_div = Math.random() * 5.0 - 2.5;
+    mode = (int) (Math.random() * 3.0);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

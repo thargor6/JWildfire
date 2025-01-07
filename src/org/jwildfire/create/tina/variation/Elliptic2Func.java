@@ -129,6 +129,21 @@ public class Elliptic2Func extends VariationFunc implements SupportsGPU {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _v = pAmount / (M_PI / h);
   }
+  
+  @Override
+  public void randomize() {
+    a1 = Math.random();
+    a2 = Math.random() * 0.5 + 0.75;
+    a3 = Math.random() * 2.0 - 1.0;
+    b1 = Math.random() * 1.0 + 1.0;
+    b2 = Math.random() * 1.5 + 0.5;
+    c = Math.random() * 0.5 + 0.25;
+    d = Math.random() * 1.5 + 0.25;
+    e = Math.random();
+    f = Math.random() * 1.5 + 0.5;
+    g = Math.random() * 1.5 + 0.5;
+    h = Math.random() * 2.0 + 1.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

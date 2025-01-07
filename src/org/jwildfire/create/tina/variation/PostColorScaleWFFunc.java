@@ -93,6 +93,44 @@ public class PostColorScaleWFFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+    if (Math.random() < 0.75) {
+      scale_x = 0.0;
+      scale_y = 0.0;
+    } else {
+      scale_x = Math.random();
+      scale_y = Math.random();
+    }
+    scale_z = Math.random() * 2.0 - 1.0;
+    offset_z = Math.random() * 2.0 - 1.0;
+    reset_z = (int) (Math.random() * 2);
+    sides = (int) (Math.random() * 2);
+  }
+  
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 6)) {
+    case 0:
+      scale_x += mutateStep(scale_x, pAmount);
+      break;
+    case 1:
+      scale_y += mutateStep(scale_y, pAmount);
+      break;
+    case 2:
+      scale_z += mutateStep(scale_z, pAmount);
+      break;
+    case 3:
+      offset_z += mutateStep(offset_z, pAmount);
+      break;
+    case 4:
+      reset_z = (reset_z > 0) ? 0 : 1;
+      break;
+    case 5:
+      sides = (sides > 0) ? 0 : 1;
+      break;
+    }
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }

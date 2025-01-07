@@ -152,6 +152,17 @@ public class RosoniFunc extends VariationFunc {
   public String getName() {
     return "rosoni";
   }
+  
+  @Override
+  public void randomize() {
+    maxiter = (int) (Math.random() * 1024 + 1);
+    sweetiter = (int) (Math.random() * maxiter);
+    altshapes = (int) (Math.random() * 2);
+    cutoff = Math.random() * 3.0 - 1.5;
+    radius = Math.random() * 1.5;
+    dx = Math.random() * 2.0 - 1.0;
+    dy = Math.random() * 2.0 - 1.0;
+  }
 
   private double _sina, _cosa;
 

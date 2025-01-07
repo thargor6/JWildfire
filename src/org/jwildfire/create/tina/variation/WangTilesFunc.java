@@ -823,6 +823,64 @@ public class WangTilesFunc extends VariationFunc {
   public String getName() {
     return "wangtiles";
   }
+  
+  @Override
+  public void randomize() {
+    id = (int) (Math.random() * Id.length);
+    seed = (int) (Math.random() * 1000000);
+    square = (int) (Math.random() * 2);
+    scaleX = Math.random() * 5.0 - 2.5;
+    scaleY = Math.random() * 5.0 - 2.5;
+    scaleZ = Math.random() * 5.0 - 2.5;
+    offsetX = (scaleX > 0) ? Math.random() * (1 + scaleX) - scaleX : Math.random() * (1 - scaleX);
+    offsetY = (scaleY > 0) ? Math.random() * (1 + scaleY) - scaleY : Math.random() * (1 - scaleY);
+    offsetZ = Math.random() * 5.0 - 2.5;
+    tileX = (Math.random() < 0.2) ? 0 : 1;
+    tileY = (Math.random() < 0.2) ? 0 : 1;
+    resetZ = (int) (Math.random() * 2);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 12)) {
+    case 0:
+      id = (id + 1) % Id.length;
+      break;
+    case 1:
+      seed += 1;
+      break;
+    case 2:
+      square = (square + 1) % 2;
+      break;
+    case 3:
+      scaleX = mutateStep(scaleX, pAmount);
+      break;
+    case 4:
+      scaleY = mutateStep(scaleY, pAmount);
+      break;
+    case 5:
+      scaleZ = mutateStep(scaleZ, pAmount);
+      break;
+    case 6:
+      offsetX = mutateStep(offsetX, pAmount);
+      break;
+    case 7:
+      offsetY = mutateStep(offsetY, pAmount);
+      break;
+    case 8:
+      offsetZ = mutateStep(offsetZ, pAmount);
+      break;
+    case 9:
+      tileX = (tileX + 1) % 2;
+      break;
+    case 10:
+      tileY = (tileY + 1) % 2;
+      break;
+    case 11:
+      resetZ = (resetZ + 1) % 2;
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -121,6 +121,12 @@ public class TriPrism3DFunc extends VariationFunc implements SupportsGPU {
 		return true;
 	}
 
+    @Override
+    public void randomize() {
+      p1 = Math.random() * 0.5;
+      p2 = Math.random() * 0.5;
+    }
+
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE};

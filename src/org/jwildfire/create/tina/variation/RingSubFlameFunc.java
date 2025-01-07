@@ -225,6 +225,54 @@ public class RingSubFlameFunc extends SubFlameWFFunc implements NotDesiredForGPU
   }
 
   @Override
+  public void randomize() {
+    hide = (int) (Math.random() * 2);
+    radius = Math.random() * 0.5 + 0.1;
+    cropradius = radius + Math.random() * 0.75 + 0.1;
+    thickness = Math.random();
+    contrast = Math.random();
+    pow = Math.random() + 0.5;
+    scatter_area = Math.random() * 2.5;
+    zero = (int) (Math.random() * 2);
+    super.randomize();
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 15)) {
+    case 0:
+      hide = (hide + 1) % 2;
+      break;
+    case 1:
+      radius += mutateStep(radius, pAmount);
+      break;
+    case 2:
+      cropradius += mutateStep(cropradius, pAmount);
+      break;
+    case 3:
+      thickness += mutateStep(thickness, pAmount);
+      if (thickness > 1.0) thickness = 0.0;
+      break;
+    case 4:
+      contrast += mutateStep(contrast, pAmount);
+      if (contrast > 1.0) contrast = 0.0;
+      break;
+    case 5:
+      pow += mutateStep(pow, pAmount);
+      break;
+    case 6:
+      scatter_area += mutateStep(scatter_area, pAmount);
+      break;
+    case 7:
+      zero = (zero + 1) % 2;
+      break;
+    default:
+      super.mutate(pAmount);
+      break;
+    }
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_EXTERNAL_SHAPES};
   }

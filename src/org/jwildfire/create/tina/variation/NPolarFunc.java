@@ -98,6 +98,14 @@ public class NPolarFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+    n = (int) (Math.random() * 10 + 2);
+    if (Math.random() < 0.5)
+      n *= -1;
+    parity = (int) (Math.random() * 2);
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }

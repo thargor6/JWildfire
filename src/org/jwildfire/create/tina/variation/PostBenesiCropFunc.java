@@ -126,6 +126,16 @@ public String getName() {
   return "post_benesi_crop";
 }
 
+@Override
+public void randomize() {
+  iterations = (int) (Math.random() * 200 + 1);
+  bailout = Math.random() * 25.0 + 1.0;
+  scalex = Math.random() * 3.75 + 0.25;
+  scaley = Math.random() * 3.75 + 0.25;
+  scalez = Math.random() * 3.75 + 0.25;
+  pcolor = (int) (Math.random() * 2);
+}
+
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL,VariationFuncType.VARTYPE_DC};

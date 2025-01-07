@@ -893,6 +893,60 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
       return this.mesh;
     }
   }
+  
+  @Override
+  public void randomize() {
+    preset_id = WFFuncPresetsStore.getSAttractor3DWFFuncPresets().getRandomPresetId();
+    refreshFormulaFromPreset(preset_id);
+    startx += Math.random() * 0.2 - 0.1;
+    starty += Math.random() * 0.2 - 0.1;
+    startz += Math.random() * 0.2 - 0.1;
+    param_a += Math.random() * 0.2 - 0.1;
+    param_b += Math.random() * 0.2 - 0.1;
+    param_c += Math.random() * 0.2 - 0.1;
+    param_d += Math.random() * 0.2 - 0.1;
+    param_e += Math.random() * 0.2 - 0.1;
+    param_f += Math.random() * 0.2 - 0.1;
+    param_g += Math.random() * 0.2 - 0.1;
+    param_h += Math.random() * 0.2 - 0.1;
+    super.randomize();
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 18)) {
+    case 0:
+      radius += mutateStep(radius, pAmount);
+      break;
+    case 1:
+      stepTime += mutateStep(stepTime, pAmount);
+      break;
+    case 2:
+      startx += mutateStep(startx, pAmount);
+      break;
+    case 3:
+      starty += mutateStep(starty, pAmount);
+      break;
+    case 4:
+      startz += mutateStep(startz, pAmount);
+      break;
+    case 5:
+      param_a += mutateStep(param_a, pAmount);
+      break;
+    case 6:
+      param_b += mutateStep(param_b, pAmount);
+      break;
+    case 7:
+      param_c += mutateStep(param_c, pAmount);
+      break;
+    case 8:
+      param_d += mutateStep(param_d, pAmount);
+      break;
+    default:
+      super.mutate(pAmount);
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -94,6 +94,19 @@ public class LissajousFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "lissajous";
   }
+  
+  @Override
+  public void randomize() {
+    tmin = -Math.random() * 25.0;
+    tmax = Math.random() * 25.0;
+    a = (int) (Math.random() * 10 + 1);
+    if (Math.random() < 0.5) a -= Math.random();
+    b = (int) (Math.random() * 10 + 1);
+    if (Math.random() < 0.5) b -= Math.random();
+    c = Math.random() * 0.4 - 0.2;
+    d = Math.random() * 2.0 * Math.PI - Math.PI;
+    e = Math.random() * 0.1;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

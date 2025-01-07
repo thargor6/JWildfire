@@ -46,7 +46,7 @@ class RandomBackgroundMutation extends AbstractMutation {
     VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fName, true);
     xForm.addVariation((0.5 + Math.random()), varFunc);
     new AffineMutation().applyToXForm(xForm, mutationStrength);
-    new RandomParamMutation().applyToVarFunc(varFunc, mutationStrength);
+    varFunc.mutate(mutationStrength);
   }
 
 }

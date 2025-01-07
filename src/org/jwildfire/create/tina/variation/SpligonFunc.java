@@ -84,6 +84,15 @@ public class SpligonFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "spligon";
   }
+  
+  @Override
+  public void randomize() {
+    if (Math.random() < 0.8) sides = Math.random() * 10.0 + 2.0;
+    else sides = Math.random() * 98.0 + 2.0;
+    if (Math.random() < 0.5) sides = (int) sides;
+    r = Math.random() * 3.0 - 1.5;
+    i = Math.random() * (4 * sides - 4) - 2 * sides;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -146,6 +146,16 @@ public class PostMandelbulb3dCropFunc extends VariationFunc {
   public int getPriority() {
     return 1;
   }
+  
+  @Override
+  public void randomize() {
+    power = Math.random() * 12.0 + 3.0;
+    if (Math.random() < 0.5) power = (int) power;
+    xz = Math.random() * 5.0 - 2.5;
+    iterations = (int) (Math.random() * 20 + 1);
+    bailout = Math.random() * 3.5 + 0.5;
+    filled = (int) (Math.random() * 2);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -74,6 +74,12 @@ public class CircularFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "circular";
   }
+  
+  @Override
+  public void randomize() {
+    angle = Math.random() * 180.0 - 90.0;
+    seed = Math.random() * Math.PI;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

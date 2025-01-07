@@ -92,6 +92,12 @@ public class Hypershift2Func extends VariationFunc {
   }
 
   @Override
+  public void randomize() {
+    p = (int) (Math.random() * 8 + 3);
+    q = (int) (Math.random() * 8 + 3);
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }

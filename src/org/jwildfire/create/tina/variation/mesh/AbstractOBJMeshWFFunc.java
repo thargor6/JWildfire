@@ -288,4 +288,59 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
     displacementMapHolder.init();
     _displ_amount = displacementMapHolder.getDispl_amount();
   }
+
+  @Override
+  public void randomize() {
+    scaleX = Math.random() * 1.5 + 0.5;
+    scaleY = Math.random() * 1.5 + 0.5;
+    scaleZ = Math.random() * 1.5 + 0.5;
+    offsetX = Math.random() * 2.0 - 1.0;
+    offsetY = Math.random() * 2.0 - 1.0;
+    offsetZ = Math.random() * 2.0 - 1.0;
+    subdiv_level = (int) (Math.random() * 6);
+    subdiv_smooth_passes = (int) (Math.random() * 24);
+    subdiv_smooth_lambda = Math.random();
+    subdiv_smooth_mu = -Math.random();
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 10)) {
+    case 0:
+      scaleX += mutateStep(scaleX, pAmount);
+      break;
+    case 1:
+      scaleY += mutateStep(scaleY, pAmount);
+      break;
+    case 2:
+      scaleZ += mutateStep(scaleZ, pAmount);
+      break;    
+    case 3:
+      offsetX += mutateStep(offsetX, pAmount);
+      break;
+    case 4:
+      offsetY += mutateStep(offsetY, pAmount);
+      break;
+    case 5:
+      offsetZ += mutateStep(offsetZ, pAmount);
+      break;
+    case 6:
+      subdiv_level += 1;
+      if (subdiv_level > 6) subdiv_level = 0;
+      break;
+    case 7:
+      subdiv_smooth_passes += 1;
+      if (subdiv_smooth_passes > 24) subdiv_smooth_passes = 0;
+      break;
+    case 8:
+      subdiv_smooth_lambda += mutateStep(subdiv_smooth_lambda, pAmount);
+      break;
+    case 9:
+      subdiv_smooth_mu += mutateStep(subdiv_smooth_mu, pAmount);
+      break;
+    }
+  }
+
 }
+
+

@@ -71,6 +71,12 @@ public class LoqFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "loq";
   }
+  
+  @Override
+  public void randomize() {
+    base = Math.random() * 9.0 + 1.25;
+    if (Math.random() < 0.5) base = 1 / base;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

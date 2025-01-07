@@ -145,6 +145,17 @@ public class PostAexion3dCropFunc extends VariationFunc {
 	public String getName() {
 		return "post_aexion_crop";
 	}
+	
+	@Override
+	public void randomize() {
+	  Iters = (int) (Math.random() * 150 + 1);
+	  cadd = Math.random() * 0.75 - 1.0;
+	  bailout = Math.random() * 10.0 + 1.0;
+	  scalex = Math.random() * 5.0 - 2.5;
+      scaley = Math.random() * 5.0 - 2.5;
+      scalez = Math.random() * 5.0 - 2.5;
+      pcolor = (int) (Math.random() * 2);
+	}
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {

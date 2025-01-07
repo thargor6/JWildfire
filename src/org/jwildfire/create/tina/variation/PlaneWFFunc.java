@@ -263,6 +263,54 @@ public class PlaneWFFunc extends VariationFunc {
     }
     return res;
   }
+  
+  @Override
+  public void randomize() {
+    position = Math.random() * 5.0 - 2.5;
+    size = Math.random() * 15.0;
+    axis = (int) (Math.random() * 3);
+    direct_color = (int) (Math.random() * 2);
+    color_mode = (int) (Math.random() * 4);
+    colorMapHolder.setBlend_colormap((int) (Math.random() * 2));
+    displacementMapHolder.setBlend_displ_map((int) (Math.random() * 2));
+    displacementMapHolder.setDispl_amount(Math.random() * 2.0 - 1.0);
+    calc_color_idx = (int) (Math.random() * 2);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 9)) {
+    case 0:
+      position += mutateStep(position, pAmount);
+      break;
+    case 1:
+      size += mutateStep(size, pAmount);
+      break;
+    case 2:
+      axis = (axis + 1) % 3;
+      break;
+    case 3:
+      direct_color = 1 - direct_color;
+      break;
+    case 4:
+      color_mode = (color_mode + 1) % 4;
+      break;
+    case 5:
+      colorMapHolder.setBlend_colormap(1 - colorMapHolder.getBlend_colormap());
+      break;
+    case 6:
+      displacementMapHolder.setBlend_displ_map(1 - displacementMapHolder.getBlend_displ_map());
+      break;
+    case 7:
+      double displ_amount = displacementMapHolder.getDispl_amount();
+      displ_amount += mutateStep(displ_amount, pAmount);
+      displacementMapHolder.setDispl_amount(displ_amount);
+      break;
+    case 8:
+      calc_color_idx = 1 - calc_color_idx;
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

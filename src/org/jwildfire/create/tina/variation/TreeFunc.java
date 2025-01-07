@@ -348,6 +348,19 @@ public class TreeFunc extends VariationFunc {
   public String getName() {
     return "tree_js";
   }
+  
+  @Override
+  public void randomize() {
+    show_points_param = (int) (Math.random() * 11);
+    show_lines_param = (show_points_param == 0) ? 1 : (int) (Math.random() * 11);
+    line_thickness_param = Math.random() * 10.0;
+    point_thickness_param = Math.random() * 10.0;
+    bend_angle = Math.random() * 180.0 - 90.0;
+    branch_angle = Math.random() * 180.0 - 90.0;
+    branch_ratio = Math.random() * 0.8 + 0.1;
+    level = (int) (Math.random() * 10 + 1);
+    setParameter(PARAM_LEVEL, level);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

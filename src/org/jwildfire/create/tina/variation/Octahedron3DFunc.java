@@ -113,6 +113,11 @@ public class Octahedron3DFunc extends VariationFunc implements SupportsGPU {
 		// preset_id doesn't really expand parameters, but it changes them; this will make them refresh
 		return true;
 	}
+	
+	@Override
+	public void randomize() {
+	  h = Math.random() * 0.49 + 0.1;
+	}
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {

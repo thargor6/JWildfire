@@ -531,7 +531,38 @@ public class IsoSFPlot3DWFFunc extends VariationFunc implements SupportsGPU {
       else if (pVarTP.color > 1.0) pVarTP.color = 1.0;
     }
   }
-
+  
+  @Override
+  public void randomize() {
+    if (Math.random() < 0.5) {
+      preset_id = WFFuncPresetsStore.getIsoSFPlot3DWFFuncPresets().getRandomPresetId();
+      refreshFormulaFromPreset(preset_id);
+    } else {
+      preset_id = -1;
+      xmin = Math.random() * 3.0 - 4.0;
+      xmax = Math.random() * 3.0 + 1.0;
+      ymin = Math.random() * 3.0 - 4.0;
+      ymax = Math.random() * 3.0 + 1.0;
+      zmin = Math.random() * 3.0 - 4.0;
+      zmax = Math.random() * 3.0 + 1.0;
+    }
+    param_a = Math.random() * 5.0 - 2.5;
+    param_b = Math.random() * 5.0 - 2.5;
+    param_c = Math.random() * 5.0 - 2.5;
+    param_d = Math.random() * 5.0 - 2.5;
+    param_e = Math.random() * 5.0 - 2.5;
+    param_f = Math.random() * 5.0 - 2.5;
+    thickness = Math.random() * 0.99 + 0.01;
+    max_iter = (int) (Math.random() * 200 + 1);
+    direct_color = (int) (Math.random() * 2);
+    if (colorMapHolder.getColormap_filename() == null) 
+      color_mode = (int) (Math.random() * 7 + 3);
+    else {
+      color_mode = (int) (Math.random() * 10);
+      colorMapHolder.setBlend_colormap((int) (Math.random() * 2));
+    }
+  }
+  
   @Override
   public boolean dynamicParameterExpansion() {
     return true;

@@ -310,6 +310,25 @@ public abstract class AbstractBufferedImageWFFunc extends VariationFunc {
 	            pVarTP.z += pAmount * pAffineTP.z;
 	        }
 	    }
+	    
+	    @Override
+	    public void randomize() {
+	      if (Math.random() < 0.5) {
+	        scaleX = 1.0;
+	        scaleY = 1.0;
+	        scaleZ = 0.0;
+	      } else {
+	        scaleX = Math.random() * 1.8 + 0.2;
+            scaleY = Math.random() * 1.8 + 0.2;
+            scaleZ = Math.random();
+	      }
+          offsetX = Math.random();
+          offsetY = Math.random();
+          offsetZ = Math.random() * 2.0 - 1.0;
+          tileX = (int) (Math.random() * 2);
+          tileY = (int) (Math.random() * 2);
+          resetZ = (int) (Math.random() * 2);
+	    }
 
 		@Override
 		public boolean dynamicParameterExpansion() {

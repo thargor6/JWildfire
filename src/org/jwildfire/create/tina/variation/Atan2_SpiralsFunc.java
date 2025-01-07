@@ -134,6 +134,24 @@ public class Atan2_SpiralsFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "atan2_spirals";
   }
+  
+  @Override
+  public void randomize() {
+    r_mult = Math.random() * 5.0 - 2.5;
+    r_add = Math.random() * 2.0;
+    xy2_mult = Math.random() * 5.0 - 2.5;
+    xy2_add = Math.random() * 5.0 - 2.5;
+    x_mult = Math.random() * 4.0 + 1.0;
+    x_add = Math.random() * 3.0 - 1.0;
+    yx_div = Math.random() * 4.9 + 0.1;
+    yx_add = Math.random() * 5.0 - 2.5;
+    yy_div = Math.random() * 4.9 + 0.1;
+    yy_add = Math.random() * 3.0 - 1.5;
+    sin_add = Math.random() * Math.PI;
+    y_mult = Math.random() * 1.5 + 0.5;
+    r_power = Math.random() * 5.0 - 2.5;
+    x2y2_power = Math.random() * 5.0 - 2.5;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

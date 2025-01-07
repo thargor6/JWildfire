@@ -5788,40 +5788,40 @@ public class MainEditorFrame extends JFrame {
     nonlinearControlsRows = new TinaNonlinearControlsRow[12];
     nonlinearControlsRows[0] = new TinaNonlinearControlsRow(0, getNonlinearVar1Panel(), nonlinearVar1Lbl, getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
         getNonlinearParams1REd(), getNonlinearParams1LeftButton(), getNonlinearParams1PreButton(), getNonlinearParams1PostButton(), null,
-        getNonlinearParams1ToggleParamsPnlButton(), getNonlinearParams1ToggleFavButton());
+        getNonlinearParams1ToggleParamsPnlButton(), getNonlinearParams1ToggleFavButton(), getNonlinearParams1RandomButton());
     nonlinearControlsRows[1] = new TinaNonlinearControlsRow(1, getNonlinearVar2Panel(), nonlinearVar2Lbl, getNonlinearVar2Cmb(), getNonlinearParams2Cmb(), getNonlinearVar2REd(),
         getNonlinearParams2REd(), getNonlinearParams2LeftButton(), getNonlinearParams2PreButton(), getNonlinearParams2PostButton(), getNonlinearParams2UpButton(),
-        getNonlinearParams2ToggleParamsPnlButton(), getNonlinearParams2ToggleFavButton());
+        getNonlinearParams2ToggleParamsPnlButton(), getNonlinearParams2ToggleFavButton(), getNonlinearParams2RandomButton());
     nonlinearControlsRows[2] = new TinaNonlinearControlsRow(2, getNonlinearVar3Panel(), nonlinearVar3Lbl, getNonlinearVar3Cmb(), getNonlinearParams3Cmb(), getNonlinearVar3REd(),
         getNonlinearParams3REd(), getNonlinearParams3LeftButton(), getNonlinearParams3PreButton(), getNonlinearParams3PostButton(), getNonlinearParams3UpButton(),
-        getNonlinearParams3ToggleParamsPnlButton(), getNonlinearParams3ToggleFavButton());
+        getNonlinearParams3ToggleParamsPnlButton(), getNonlinearParams3ToggleFavButton(), getNonlinearParams3RandomButton());
     nonlinearControlsRows[3] = new TinaNonlinearControlsRow(3, getNonlinearVar4Panel(), nonlinearVar4Lbl, getNonlinearVar4Cmb(), getNonlinearParams4Cmb(), getNonlinearVar4REd(),
         getNonlinearParams4REd(), getNonlinearParams4LeftButton(), getNonlinearParams4PreButton(), getNonlinearParams4PostButton(), getNonlinearParams4UpButton(),
-        getNonlinearParams4ToggleParamsPnlButton(), getNonlinearParams4ToggleFavButton());
+        getNonlinearParams4ToggleParamsPnlButton(), getNonlinearParams4ToggleFavButton(), getNonlinearParams4RandomButton());
     nonlinearControlsRows[4] = new TinaNonlinearControlsRow(4, getNonlinearVar5Panel(), nonlinearVar5Lbl, getNonlinearVar5Cmb(), getNonlinearParams5Cmb(), getNonlinearVar5REd(),
         getNonlinearParams5REd(), getNonlinearParams5LeftButton(), getNonlinearParams5PreButton(), getNonlinearParams5PostButton(), getNonlinearParams5UpButton(),
-        getNonlinearParams5ToggleParamsPnlButton(), getNonlinearParams5ToggleFavButton());
+        getNonlinearParams5ToggleParamsPnlButton(), getNonlinearParams5ToggleFavButton(), getNonlinearParams5RandomButton());
     nonlinearControlsRows[5] = new TinaNonlinearControlsRow(5, getNonlinearVar6Panel(), nonlinearVar6Lbl, getNonlinearVar6Cmb(), getNonlinearParams6Cmb(), getNonlinearVar6REd(),
         getNonlinearParams6REd(), getNonlinearParams6LeftButton(), getNonlinearParams6PreButton(), getNonlinearParams6PostButton(), getNonlinearParams6UpButton(),
-        getNonlinearParams6ToggleParamsPnlButton(), getNonlinearParams6ToggleFavButton());
+        getNonlinearParams6ToggleParamsPnlButton(), getNonlinearParams6ToggleFavButton(), getNonlinearParams6RandomButton());
     nonlinearControlsRows[6] = new TinaNonlinearControlsRow(6, getNonlinearVar7Panel(), nonlinearVar7Lbl, getNonlinearVar7Cmb(), getNonlinearParams7Cmb(), getNonlinearVar7REd(),
         getNonlinearParams7REd(), getNonlinearParams7LeftButton(), getNonlinearParams7PreButton(), getNonlinearParams7PostButton(), getNonlinearParams7UpButton(),
-        getNonlinearParams7ToggleParamsPnlButton(), getNonlinearParams7ToggleFavButton());
+        getNonlinearParams7ToggleParamsPnlButton(), getNonlinearParams7ToggleFavButton(), getNonlinearParams7RandomButton());
     nonlinearControlsRows[7] = new TinaNonlinearControlsRow(7, getNonlinearVar8Panel(), nonlinearVar8Lbl, getNonlinearVar8Cmb(), getNonlinearParams8Cmb(), getNonlinearVar8REd(),
         getNonlinearParams8REd(), getNonlinearParams8LeftButton(), getNonlinearParams8PreButton(), getNonlinearParams8PostButton(), getNonlinearParams8UpButton(),
-        getNonlinearParams8ToggleParamsPnlButton(), getNonlinearParams8ToggleFavButton());
+        getNonlinearParams8ToggleParamsPnlButton(), getNonlinearParams8ToggleFavButton(), getNonlinearParams8RandomButton());
     nonlinearControlsRows[8] = new TinaNonlinearControlsRow(8, getNonlinearVar9Panel(), nonlinearVar9Lbl, getNonlinearVar9Cmb(), getNonlinearParams9Cmb(), getNonlinearVar9REd(),
         getNonlinearParams9REd(), getNonlinearParams9LeftButton(), getNonlinearParams9PreButton(), getNonlinearParams9PostButton(), getNonlinearParams9UpButton(),
-        getNonlinearParams9ToggleParamsPnlButton(), getNonlinearParams9ToggleFavButton());
+        getNonlinearParams9ToggleParamsPnlButton(), getNonlinearParams9ToggleFavButton(), getNonlinearParams9RandomButton());
     nonlinearControlsRows[9] = new TinaNonlinearControlsRow(9, getNonlinearVar10Panel(), nonlinearVar10Lbl, getNonlinearVar10Cmb(), getNonlinearParams10Cmb(), getNonlinearVar10REd(),
         getNonlinearParams10REd(), getNonlinearParams10LeftButton(), getNonlinearParams10PreButton(), getNonlinearParams10PostButton(), getNonlinearParams10UpButton(),
-        getNonlinearParams10ToggleParamsPnlButton(), getNonlinearParams10ToggleFavButton());
+        getNonlinearParams10ToggleParamsPnlButton(), getNonlinearParams10ToggleFavButton(), getNonlinearParams10RandomButton());
     nonlinearControlsRows[10] = new TinaNonlinearControlsRow(10, getNonlinearVar11Panel(), nonlinearVar11Lbl, getNonlinearVar11Cmb(), getNonlinearParams11Cmb(), getNonlinearVar11REd(),
         getNonlinearParams11REd(), getNonlinearParams11LeftButton(), getNonlinearParams11PreButton(), getNonlinearParams11PostButton(), getNonlinearParams11UpButton(),
-        getNonlinearParams11ToggleParamsPnlButton(), getNonlinearParams11ToggleFavButton());
+        getNonlinearParams11ToggleParamsPnlButton(), getNonlinearParams11ToggleFavButton(), getNonlinearParams11RandomButton());
     nonlinearControlsRows[11] = new TinaNonlinearControlsRow(11, getNonlinearVar12Panel(), nonlinearVar12Lbl, getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
         getNonlinearParams12REd(), getNonlinearParams12LeftButton(), getNonlinearParams12PreButton(), getNonlinearParams12PostButton(), getNonlinearParams12UpButton(),
-        getNonlinearParams12ToggleParamsPnlButton(), getNonlinearParams12ToggleFavButton());
+        getNonlinearParams12ToggleParamsPnlButton(), getNonlinearParams12ToggleFavButton(), getNonlinearParams12RandomButton());
 
     ComboboxTools.initVariationProfileCmb(getTinaVariationProfile1Cmb(), true, false);
     ComboboxTools.initVariationProfileCmb(getTinaVariationProfile2Cmb(), false, true);
@@ -7228,6 +7228,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar1Panel.add(nonlinearParams1ToggleFavButton);
+      
+      nonlinearParams1RandomButton = new JButton();
+      nonlinearParams1RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams1RandomButton.setText("");
+      nonlinearParams1RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams1RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams1RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams1RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams1RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams1RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(0);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(0);
+          }
+        }
+      });
+      nonlinearVar1Panel.add(nonlinearParams1RandomButton);
     }
     return nonlinearVar1Panel;
   }
@@ -7366,6 +7385,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar2Panel.add(nonlinearParams2ToggleFavButton);
+      
+      nonlinearParams2RandomButton = new JButton();
+      nonlinearParams2RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams2RandomButton.setText("");
+      nonlinearParams2RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams2RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams2RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams2RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams2RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams2RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(1);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(1);
+          }
+        }
+      });
+      nonlinearVar2Panel.add(nonlinearParams2RandomButton);
     }
     return nonlinearVar2Panel;
   }
@@ -7603,6 +7641,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar3Panel.add(nonlinearParams3ToggleFavButton);
+      
+      nonlinearParams3RandomButton = new JButton();
+      nonlinearParams3RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams3RandomButton.setText("");
+      nonlinearParams3RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams3RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams3RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams3RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams3RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams3RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(2);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(2);
+          }
+        }
+      });
+      nonlinearVar3Panel.add(nonlinearParams3RandomButton);
     }
     return nonlinearVar3Panel;
   }
@@ -8678,6 +8735,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar4Panel.add(nonlinearParams4ToggleFavButton);
+      
+      nonlinearParams4RandomButton = new JButton();
+      nonlinearParams4RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams4RandomButton.setText("");
+      nonlinearParams4RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams4RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams4RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams4RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams4RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams4RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(3);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(3);
+          }
+        }
+      });
+      nonlinearVar4Panel.add(nonlinearParams4RandomButton);
     }
     return nonlinearVar4Panel;
   }
@@ -8974,7 +9050,26 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar5Panel.add(nonlinearParams5ToggleFavButton);
-    }
+      
+      nonlinearParams5RandomButton = new JButton();
+      nonlinearParams5RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams5RandomButton.setText("");
+      nonlinearParams5RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams5RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams5RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams5RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams5RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams5RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(4);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(4);
+          }
+        }
+      });
+      nonlinearVar5Panel.add(nonlinearParams5RandomButton);
+}
     return nonlinearVar5Panel;
   }
 
@@ -9210,6 +9305,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar6Panel.add(nonlinearParams6ToggleFavButton);
+      
+      nonlinearParams6RandomButton = new JButton();
+      nonlinearParams6RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams6RandomButton.setText("");
+      nonlinearParams6RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams6RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams6RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams6RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams6RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams6RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(5);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(5);
+          }
+        }
+      });
+      nonlinearVar6Panel.add(nonlinearParams6RandomButton);
     }
     return nonlinearVar6Panel;
   }
@@ -9446,6 +9560,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar7Panel.add(nonlinearParams7ToggleFavButton);
+      
+      nonlinearParams7RandomButton = new JButton();
+      nonlinearParams7RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams7RandomButton.setText("");
+      nonlinearParams7RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams7RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams7RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams7RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams7RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams7RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(6);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(6);
+          }
+        }
+      });
+      nonlinearVar7Panel.add(nonlinearParams7RandomButton);
     }
     return nonlinearVar7Panel;
   }
@@ -9682,6 +9815,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar8Panel.add(nonlinearParams8ToggleFavButton);
+      
+      nonlinearParams8RandomButton = new JButton();
+      nonlinearParams8RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams8RandomButton.setText("");
+      nonlinearParams8RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams8RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams8RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams8RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams8RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams8RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(7);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(7);
+          }
+        }
+      });
+      nonlinearVar8Panel.add(nonlinearParams8RandomButton);
     }
     return nonlinearVar8Panel;
   }
@@ -9918,6 +10070,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar9Panel.add(nonlinearParams9ToggleFavButton);
+      
+      nonlinearParams9RandomButton = new JButton();
+      nonlinearParams9RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams9RandomButton.setText("");
+      nonlinearParams9RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams9RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams9RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams9RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams9RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams9RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(8);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(8);
+          }
+        }
+      });
+      nonlinearVar9Panel.add(nonlinearParams9RandomButton);
     }
     return nonlinearVar9Panel;
   }
@@ -10154,6 +10325,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar10Panel.add(nonlinearParams10ToggleFavButton);
+      
+      nonlinearParams10RandomButton = new JButton();
+      nonlinearParams10RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams10RandomButton.setText("");
+      nonlinearParams10RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams10RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams10RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams10RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams10RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams10RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(9);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(9);
+          }
+        }
+      });
+      nonlinearVar10Panel.add(nonlinearParams10RandomButton);
     }
     return nonlinearVar10Panel;
   }
@@ -10390,6 +10580,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar11Panel.add(nonlinearParams11ToggleFavButton);
+      
+      nonlinearParams11RandomButton = new JButton();
+      nonlinearParams11RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams11RandomButton.setText("");
+      nonlinearParams11RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams11RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams11RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams11RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams11RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams11RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(10);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(10);
+          }
+        }
+      });
+      nonlinearVar11Panel.add(nonlinearParams11RandomButton);
     }
     return nonlinearVar11Panel;
   }
@@ -10626,6 +10835,25 @@ public class MainEditorFrame extends JFrame {
         }
       });
       nonlinearVar12Panel.add(nonlinearParams12ToggleFavButton);
+      
+      nonlinearParams12RandomButton = new JButton();
+      nonlinearParams12RandomButton.setToolTipText("Left: Randomize all params; Right: Mutate one param");
+      nonlinearParams12RandomButton.setText("");
+      nonlinearParams12RandomButton.setSize(new Dimension(22, 22));
+      nonlinearParams12RandomButton.setPreferredSize(new Dimension(22, 22));
+      nonlinearParams12RandomButton.setLocation(new Point(293, 26));
+      nonlinearParams12RandomButton.setBounds(0, 26, 22, 24);
+      nonlinearParams12RandomButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      nonlinearParams12RandomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonRightClicked(11);
+          } else {
+            tinaController.getNonlinearControls().nonlinearParamsRandomButtonClicked(11);
+          }
+        }
+      });
+      nonlinearVar12Panel.add(nonlinearParams12RandomButton);
     }
     return nonlinearVar12Panel;
   }
@@ -11246,6 +11474,18 @@ public class MainEditorFrame extends JFrame {
   private JToggleButton nonlinearParams11PostButton;
   private JToggleButton nonlinearParams7PostButton;
   private JToggleButton nonlinearParams3PostButton;
+  private JButton nonlinearParams1RandomButton;
+  private JButton nonlinearParams2RandomButton;
+  private JButton nonlinearParams3RandomButton;
+  private JButton nonlinearParams4RandomButton;
+  private JButton nonlinearParams5RandomButton;
+  private JButton nonlinearParams6RandomButton;
+  private JButton nonlinearParams7RandomButton;
+  private JButton nonlinearParams8RandomButton;
+  private JButton nonlinearParams9RandomButton;
+  private JButton nonlinearParams10RandomButton;
+  private JButton nonlinearParams11RandomButton;
+  private JButton nonlinearParams12RandomButton;
   private JButton flameToBatchButton;
   private JPanel mainPrevievPnl;
   private JToggleButton realtimePreviewToggleButton;
@@ -19084,6 +19324,54 @@ public class MainEditorFrame extends JFrame {
 
   public JToggleButton getNonlinearParams3PostButton() {
     return nonlinearParams3PostButton;
+  }
+  
+  public JButton getNonlinearParams1RandomButton() {
+    return nonlinearParams1RandomButton;
+  }
+
+  public JButton getNonlinearParams2RandomButton() {
+    return nonlinearParams2RandomButton;
+  }
+
+  public JButton getNonlinearParams3RandomButton() {
+    return nonlinearParams3RandomButton;
+  }
+
+  public JButton getNonlinearParams4RandomButton() {
+    return nonlinearParams4RandomButton;
+  }
+
+  public JButton getNonlinearParams5RandomButton() {
+    return nonlinearParams5RandomButton;
+  }
+
+  public JButton getNonlinearParams6RandomButton() {
+    return nonlinearParams6RandomButton;
+  }
+
+  public JButton getNonlinearParams7RandomButton() {
+    return nonlinearParams7RandomButton;
+  }
+
+  public JButton getNonlinearParams8RandomButton() {
+    return nonlinearParams8RandomButton;
+  }
+
+  public JButton getNonlinearParams9RandomButton() {
+    return nonlinearParams9RandomButton;
+  }
+
+  public JButton getNonlinearParams10RandomButton() {
+    return nonlinearParams10RandomButton;
+  }
+
+  public JButton getNonlinearParams11RandomButton() {
+    return nonlinearParams11RandomButton;
+  }
+
+  public JButton getNonlinearParams12RandomButton() {
+    return nonlinearParams12RandomButton;
   }
 
   private JButton getFlameToBatchButton() {

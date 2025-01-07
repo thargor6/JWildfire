@@ -164,6 +164,15 @@ public class PostMandelbox3dCropFunc extends VariationFunc {
   public int getPriority() {
     return 1;
   }
+  
+  @Override
+  public void randomize() {
+    scale = Math.random() + 1.5;
+    radius = Math.random();
+    f = Math.random() * 0.5 + 0.75;
+    iterations = (int) (Math.random() * 11 + 5);
+    bailout = Math.random() * 18.0 + 2.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -100,6 +100,13 @@ public class HypertileFunc extends VariationFunc implements SupportsGPU {
     re = r * cos(a);
     im = r * sin(a);
   }
+  
+  @Override
+  public void randomize() {
+    p = (int) (Math.random() * 8 + 3);
+    q = (int) (Math.random() * 8 + 3);
+    n = (int) (Math.random() * p);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

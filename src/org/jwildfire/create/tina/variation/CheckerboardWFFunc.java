@@ -42,15 +42,15 @@ public class CheckerboardWFFunc extends VariationFunc implements SupportsGPU {
   private static final int AXIS_YZ = 1;
   private static final int AXIS_ZX = 2;
 
-  private double position = 3.0;
-  private double size = 10.0;
-  private int axis = AXIS_ZX;
-  private double displ_amount = 0.05;
-  private double checker_color1 = Math.random() * 0.5;
-  private double checker_color2 = Math.random() * 0.5 + 0.5;
-  private double side_color = Math.random() * 0.75;
-  private double checker_size = 0.1 + Math.random() * 0.2;
-  private int with_sides = 1;
+    private double position = 3.0;
+    private double size = 10.0;
+    private int axis = AXIS_ZX;
+    private double displ_amount = 0.05;
+    private double checker_color1 = Math.random() * 0.5;
+    private double checker_color2 = Math.random() * 0.5 + 0.5;
+    private double side_color = Math.random() * 0.75;
+    private double checker_size = 0.1 + Math.random() * 0.2;
+    private int with_sides = 1;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -166,6 +166,19 @@ public class CheckerboardWFFunc extends VariationFunc implements SupportsGPU {
     if ((_max_checks) * checker_size >= 1.0) {
       _max_checks--;
     }
+  }
+  
+  @Override
+  public void randomize() {
+    position = Math.random() * 6.0 - 3.0;
+    size = Math.random() * 10.0 + 1.0;
+    axis = (int) (Math.random() * 3);
+    displ_amount = Math.random() * 0.2;
+    checker_color1 = Math.random();
+    checker_color2 = Math.random();
+    side_color = Math.random();
+    checker_size = Math.random() * 0.48 + 0.02;
+    with_sides = (int) (Math.random() * 2);
   }
 
   @Override

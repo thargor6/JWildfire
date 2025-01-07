@@ -105,6 +105,12 @@ public class Cylinder3DFunc extends VariationFunc implements SupportsGPU {
 		// preset_id doesn't really expand parameters, but it changes them; this will make them refresh
 		return true;
 	}
+	
+	@Override
+	public void randomize() {
+	  d = Math.random() * 0.5;
+	  h = Math.random() * 0.5;
+	}
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {

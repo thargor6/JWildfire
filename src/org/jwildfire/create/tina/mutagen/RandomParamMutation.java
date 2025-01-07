@@ -72,46 +72,7 @@ public class RandomParamMutation extends AbstractMutation {
       int idx = (int) (Math.random() * variations.size());
       VariationFunc var = variations.get(idx);
 
-      applyToVarFunc(var, pAmount);
-    }
-  }
-
-  public void applyToVarFunc(VariationFunc var, double pAmount) {
-    int pIdx = (int) (Math.random() * var.getParameterNames().length);
-    Object oldVal = var.getParameterValues()[pIdx];
-    if (oldVal instanceof Integer) {
-      int o = (Integer) oldVal;
-      int da = Tools.FTOI(pAmount);
-      if (da < 1) {
-        da = 1;
-      }
-      if (o >= 0) {
-        o += da;
-      }
-      else {
-        o -= da;
-      }
-      var.setParameter(var.getParameterNames()[pIdx], o);
-    }
-    else if (oldVal instanceof Double) {
-      double o = (Double) oldVal;
-      if (o < EPSILON || Math.random() < 0.3) {
-        if (o >= 0) {
-          o += 0.1 * pAmount;
-        }
-        else {
-          o -= 0.1 * pAmount;
-        }
-      }
-      else {
-        if (o >= 0) {
-          o += o / 100.0 * pAmount;
-        }
-        else {
-          o -= o / 100.0 * pAmount;
-        }
-      }
-      var.setParameter(var.getParameterNames()[pIdx], o);
+      var.mutate(pAmount);
     }
   }
 

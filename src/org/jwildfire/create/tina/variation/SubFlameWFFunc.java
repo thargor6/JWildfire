@@ -413,6 +413,45 @@ public class SubFlameWFFunc extends VariationFunc implements NotDesiredForGPURen
 
     return varCopy;
   }
+  
+  @Override
+  public void randomize() {
+    scale = Math.random() * 5.0 - 2.5;
+    angle = Math.random() * 360.0 - 180.0;
+    offset_x = Math.random() * 5.0 - 2.5;
+    offset_y = Math.random() * 5.0 - 2.5;
+    offset_z = Math.random() * 5.0 - 2.5;
+    colorscale_z = Math.random() * 5.0 - 2.5;
+    color_mode = (int) (Math.random() * 7 - 2);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 7)) {
+    case 0:
+      scale += mutateStep(scale, pAmount);
+      break;
+    case 1:
+      angle += mutateStep(angle, 10.0 * pAmount);
+      break;
+    case 2:
+      offset_x += mutateStep(offset_x, pAmount);
+      break;
+    case 3:
+      offset_y += mutateStep(offset_y, pAmount);
+      break;
+    case 4:
+      offset_z += mutateStep(offset_z, pAmount);
+      break;
+    case 5:
+      colorscale_z += mutateStep(colorscale_z, pAmount);
+      break;
+    case 6:
+      color_mode += 1;
+      if (color_mode > 4) color_mode = -2;
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

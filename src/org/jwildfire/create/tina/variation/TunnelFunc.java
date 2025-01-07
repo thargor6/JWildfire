@@ -108,6 +108,12 @@ public class TunnelFunc  extends VariationFunc implements SupportsGPU {
 	}
 	
 	@Override
+	public void randomize() {
+	  sx = Math.random() * 250.0;
+	  sy = Math.random() * 250.0;
+	}
+	
+	@Override
 	public boolean dynamicParameterExpansion() {
 		return true;
 	}

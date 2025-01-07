@@ -106,6 +106,13 @@ public class  CropXFunc  extends VariationFunc  {
 		else
 		      throw new IllegalArgumentException(pName);
 	}
+	
+	@Override
+	public void randomize() {
+	  radius = Math.random();
+	  w = Math.random();
+	  invert = (int) (Math.random() * 2);
+	}
 
 	@Override
 	public boolean dynamicParameterExpansion() {

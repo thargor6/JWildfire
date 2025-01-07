@@ -222,6 +222,11 @@ public abstract class DC_BaseFunc  extends VariationFunc implements SupportsBack
 		this.colorOnly = 1;
 	}
 
+	@Override
+	public boolean enableRandomizeButton() {
+	  return false;
+	}
+
 }
 
 

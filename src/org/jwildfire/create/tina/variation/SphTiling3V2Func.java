@@ -132,6 +132,19 @@ public class SphTiling3V2Func extends VariationFunc {
   public String getName() {
     return "sphtiling3v2";
   }
+  
+  @Override
+  public void randomize() {
+    a = Math.random();
+    b = Math.random();
+    c = Math.random();
+    d = Math.random();
+    e = Math.random();
+    f = Math.random();
+    dc = (int) (Math.random() * 2);
+    dc1 = Math.random();
+    dc2 = Math.random();
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -125,6 +125,48 @@ public class Spirograph3DFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+    a = Math.random();
+    b = Math.random() * 2.0 - 1.0;
+    c = Math.random();
+    tmin = -Math.random() * 250.0;
+    tmax = Math.random() * 250.0;
+    width = Math.random() * Math.random() * 0.05;
+    mode = (int) (Math.random() * 5);
+    direct_color = (int) (Math.random() * 2);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 8)) {
+    case 0:
+      a += mutateStep(a, pAmount);
+      break;
+    case 1:
+      b += mutateStep(b, pAmount);
+      break;
+    case 2:
+      c += mutateStep(c, pAmount);
+      break;
+    case 3:
+      tmin += mutateStep(tmin, pAmount);
+      break;
+    case 4:
+      tmax += mutateStep(tmax, pAmount);
+      break;
+    case 5:
+      width += mutateStep(width, pAmount);
+      break;
+    case 6:
+      mode = (mode + 1) % 5;
+      break;
+    case 7:
+      direct_color = 1 - direct_color;
+      break;
+    }
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC,VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
