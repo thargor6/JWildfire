@@ -44,12 +44,12 @@ public class PostMandelbulb3dCropFunc extends VariationFunc {
   if ( filled == 1 )
   {
       double fillAmount = (pAmount + 1) * 2;
-      pAffineTP.x = pContext.random() * fillAmount - fillAmount / 2;
-      pAffineTP.y = pContext.random() * fillAmount - fillAmount / 2;
-      pAffineTP.z = pContext.random() * fillAmount - fillAmount / 2;
-      x = pAffineTP.x;
-      y = pAffineTP.y;
-      z = pAffineTP.z;      
+      pVarTP.x = pContext.random() * fillAmount - fillAmount / 2;
+      pVarTP.y = pContext.random() * fillAmount - fillAmount / 2;
+      pVarTP.z = pContext.random() * fillAmount - fillAmount / 2;
+      x = pVarTP.x;
+      y = pVarTP.y;
+      z = pVarTP.z;      
   }
   else
   {
@@ -92,9 +92,9 @@ public class PostMandelbulb3dCropFunc extends VariationFunc {
    if (sqrt(xf*xf + yf*yf + zf*zf) < bailout)
    {
        pVarTP.doHide = false;
-       pVarTP.x = pAmount * pAffineTP.x;
-       pVarTP.y = pAmount * pAffineTP.y;
-       pVarTP.z = pAmount * pAffineTP.z; 
+       pVarTP.x = pAmount * pVarTP.x;
+       pVarTP.y = pAmount * pVarTP.y;
+       pVarTP.z = pAmount * pVarTP.z; 
    }
    else
    {
@@ -105,10 +105,6 @@ public class PostMandelbulb3dCropFunc extends VariationFunc {
    
   }
               
-	if (pContext.isPreserveZCoordinate()) {
-		pVarTP.z = pAmount * pAffineTP.z;
-	}
-
   }
   
   @Override
