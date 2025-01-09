@@ -138,6 +138,8 @@ VariationFuncList {
     registerVariationFunc(ZConeFunc.class);
     registerVariationFunc(HemisphereFunc.class);
     registerVariationFunc(Rings2Func.class);
+    registerVariationFunc(Rings3Func.class);
+    registerVariationFunc(RingerFunc.class);
     registerVariationFunc(RectanglesFunc.class);
     registerVariationFunc(PDJFunc.class);
     registerVariationFunc(JuliaScopeFunc.class);
