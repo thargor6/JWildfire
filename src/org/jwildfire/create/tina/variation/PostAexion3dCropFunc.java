@@ -135,7 +135,7 @@ public class PostAexion3dCropFunc extends VariationFunc {
 		else if (PARAM_SCALEZ.equalsIgnoreCase(pName))
 			    scalez = pValue;    
 		else if (PARAM_SCOLOR.equalsIgnoreCase(pName))
-		  pcolor = limitVal(Tools.FTOI(pValue), 0.0, 1.0); 
+		  pcolor = limitVal(pValue, 0.0, 1.0); 
 
 		else
 			throw new IllegalArgumentException(pName);
@@ -154,12 +154,17 @@ public class PostAexion3dCropFunc extends VariationFunc {
 	  scalex = Math.random() * 5.0 - 2.5;
       scaley = Math.random() * 5.0 - 2.5;
       scalez = Math.random() * 5.0 - 2.5;
-      pcolor = (int) (Math.random() * 2);
+      pcolor = Math.random();
+	}
+
+    @Override
+	public int getPriority() {
+	  return 1;
 	}
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {
-		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL,VariationFuncType.VARTYPE_DC};
+		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL,VariationFuncType.VARTYPE_DC};
 	}
 
 

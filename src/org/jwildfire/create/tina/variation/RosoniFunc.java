@@ -78,11 +78,11 @@ public class RosoniFunc extends VariationFunc {
       if (altshapes == 0) {
         r2 = sqr(xrt - dx) + sqr(yrt - dy) - sqr(radius); // circle
         if (radius < 0.0)
-          r2 = Math.max(fabs(xrt - dx), fabs(y - dy)) + radius; // square
+          r2 = Math.max(fabs(xrt - dx), fabs(yrt - dy)) + radius; // square
       } else {
         r2 = ((xrt - dx) < 0.0) ? -(xrt - dx) : ((sqr(yrt - dy)) - sqr(xrt - dx) * (sqr(radius) - sqr(xrt - dx))); // lemniscate
         if (radius < 0.0)
-          r2 = fabs(atan2(y - dy, xrt - dx)) * M_1_PI + radius; // angle
+          r2 = fabs(atan2(yrt - dy, xrt - dx)) * M_1_PI + radius; // angle
       }
       cerc ^= (r2 <= 0.0);
       // rotate around to get the the sides!!! :D
@@ -159,7 +159,7 @@ public class RosoniFunc extends VariationFunc {
     sweetiter = (int) (Math.random() * maxiter);
     altshapes = (int) (Math.random() * 2);
     cutoff = Math.random() * 3.0 - 1.5;
-    radius = Math.random() * 1.5;
+    radius = Math.random() * 3.0 - 1.5;
     dx = Math.random() * 2.0 - 1.0;
     dy = Math.random() * 2.0 - 1.0;
   }
