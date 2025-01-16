@@ -306,9 +306,9 @@ public class GradientController {
   private void readGradients(GradientUserNode pNode, List<String> pFilenames) {
     for (String filename : pFilenames) {
       List<RGBPalette> gradients = new UniversalPaletteReader().readPalettes(filename);
-      gradients.sort(
-          (p1, p2) -> (p1.getFlam3Name()!=null ? p1.getFlam3Name(): "").compareToIgnoreCase(p2.getFlam3Name()));
       if (gradients != null && gradients.size() > 0) {
+        gradients.sort(
+            (p1, p2) -> (p1.getFlam3Name()!=null ? p1.getFlam3Name(): "").compareToIgnoreCase(p2.getFlam3Name()));
         pNode.getGradientLibraryList().addAll(gradients);
       }
     }
