@@ -696,7 +696,7 @@ z = 4*sin(3*t) - 10*sin(6*t);
       zC2 = last.z;
 
       n = facets;
-      R = radius;
+      R = fabs(radius) < 0.01 ? 0.01 : radius;
 
 
       a = xC2 - xC0;
