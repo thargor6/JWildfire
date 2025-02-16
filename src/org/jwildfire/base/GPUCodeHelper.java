@@ -23,6 +23,11 @@ import org.jwildfire.create.tina.variation.plot.PolarPlot3DWFFunc;
 import org.jwildfire.create.tina.variation.plot.YPlot2DWFFunc;
 import org.jwildfire.create.tina.variation.plot.YPlot3DWFFunc;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.jwildfire.create.tina.variation.VariationFuncType.*;
+
 public class GPUCodeHelper {
 
   public static void main(String args[]) {
@@ -31,91 +36,219 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        " double zc = pVarTP.color;\n" +
-                "    double random = pContext.random();\n" +
-                "    double x1 = pAffineTP.x;\n" +
-                "    double y1 = pAffineTP.y;\n" +
-                "    double z1 = pAffineTP.z;\n" +
-                "    double spreadx = -x_spread;\n" +
-                "    double spready = -y_spread;\n" +
-                "    double spreadz = -z_spread;\n" +
-                "    Complex z = new Complex(pAffineTP.x, pAffineTP.y + 1.0);\n" +
-                "    Complex z2 = new Complex(re, im);\n" +
+        "    // Mobiq by zephyrtronium converted to work in JWildfire by Brad Stefanov\n" +
+                "\t/*  Qlib uses the notation T + X i + Y j + Z k, so I used the following while\n" +
+                "    simplifying. I took a usual Mobius transform (ax + b) / (cx + d) and made\n" +
+                "    a, b, c, and d quaternions instead of just complex numbers, with x being\n" +
+                "    a quaternion FTx + FTy i + FTz j + 0 k. Multiplying quaternions happens to\n" +
+                "    be a very complex thing, and dividing is no simpler, so I needed to use\n" +
+                "    names that are easily and quickly typed while simplifying to prevent\n" +
+                "    massive insanity/violence/genocide. I then found switching back from those\n" +
+                "    names in my head to be rather difficult and confusing, so I decided to\n" +
+                "    use these macros instead.\n" +
+                "*/\n" +
                 "\n" +
-                "    for (int i = 0; i < iterations; i++){\n" +
-                "      z.re = pAffineTP.x;\n" +
-                "      z.im = pAffineTP.y + 1.0;\n" +
-                "      z.Div(z2);\n" +
+                "    double t1 = qat;\n" +
+                "    double t2 = pAffineTP.x;\n" +
+                "    double t3 = qbt;\n" +
+                "    double t4 = qct;\n" +
+                "    double t5 = qdt;\n" +
+                "    double x1 = qax;\n" +
+                "    double x2 = pAffineTP.y;\n" +
+                "    double x3 = qbx;\n" +
+                "    double x4 = qcx;\n" +
+                "    double x5 = qdx;\n" +
+                "    double y1 = qay;\n" +
+                "    double y2 = pAffineTP.z;\n" +
+                "    double y3 = qby;\n" +
+                "    double y4 = qcy;\n" +
+                "    double y5 = qdy;\n" +
+                "    double z1 = qaz;\n" +
+                "    /* z2 is 0 and simplified out (there is no fourth generated coordinate). */\n" +
+                "    double z3 = qbz;\n" +
+                "    double z4 = qcz;\n" +
+                "    double z5 = qdz;\n" +
                 "\n" +
-                "      // reciprocal of z for 3D\n" +
-                "      double r1 = pAmount/(z.re*z.re+z.im*z.im+z1*z1);\n" +
-                "      z.re = z.re * r1;\n" +
-                "      z.im = -z.im * r1;\n" +
-                "      pVarTP.z = -z1 * r1;\n" +
-                "\n" +
-                "      z.Scale(pAmount);\n" +
-                "      pAffineTP.x = z.re;\n" +
-                "      pAffineTP.y = z.im + 1.0;\n" +
-                "\n" +
-                "\n" +
-                "      // line\n" +
-                "      if (line_enable == 1){\n" +
-                "        if ( random < line_weight){\n" +
-                "          z.re = pContext.random() * spreadx;\n" +
-                "          z.im = 0.0;\n" +
-                "          pVarTP.z = 0.0;\n" +
-                "          pVarTP.color += line_color_shift;\n" +
-                "        }\n" +
-                "      }\n" +
-                "      // experimental iteration coloring that didn't work out but may add in the future:\n" +
-                "      //zc += ((double)k*.1);\n" +
-                "    }\n" +
-                "\n" +
-                "    // Log_tile by Zy0rg implemented into JWildfire by Brad Stefanov\n" +
-                "    //converted to a post variation by Whittaker Courtney\n" +
-                "\n" +
-                "    if (pContext.random() < 0.5)\n" +
-                "      spreadx = x_spread;\n" +
-                "\n" +
-                "    if (pContext.random() < 0.5)\n" +
-                "      spready = y_spread;\n" +
-                "\n" +
-                "    if (pContext.random() < 0.5)\n" +
-                "      spreadz = z_spread;\n" +
-                "\n" +
-                "    if(random < 0.5){\n" +
-                "      z.re = pAmount * x_add + (z.re + spreadx * round(log(pContext.random())/log(log_spread)));\n" +
-                "      z.im = pAmount * (y_add + (z.im + spready * round(log(pContext.random())/log(log_spread))))+1.0;\n" +
-                "      pVarTP.z = pAmount * (pVarTP.z + spreadz * round(log(pContext.random())/log(log_spread)));\n" +
-                "    }\n" +
-                "    else{\n" +
-                "      z.re = pAmount * (-z.re + spreadx * round(log(pContext.random())/log(log_spread)));\n" +
-                "      z.im = pAmount * (-2 -(z.im + spready * round(log(pContext.random())/log(log_spread))))+1.0;\n" +
-                "      pVarTP.z = pAmount * (-pVarTP.z + spreadz * round(log(pContext.random())/log(log_spread)));\n" +
-                "    }\n" +
-                "\n" +
-                "// magnitude coloring:\n" +
-                "    double mag = sqrt(z.re*z.re+z.im*z.im+z1*z1)*(mag_color_scale /6);\n" +
-                "\n" +
-                "    if (mag_color == 1){\n" +
-                "      zc += tanh(mag);\n" +
-                "    }\n" +
+                "    double nt = t1 * t2 - x1 * x2 - y1 * y2 + t3;\n" +
+                "    double nx = t1 * x2 + x1 * t2 - z1 * y2 + x3;\n" +
+                "    double ny = t1 * y2 + y1 * t2 + z1 * x2 + y3;\n" +
+                "    double nz = z1 * t2 + x1 * y2 - y1 * x2 + z3;\n" +
+                "    double dt = t4 * t2 - x4 * x2 - y4 * y2 + t5;\n" +
+                "    double dx = t4 * x2 + x4 * t2 - z4 * y2 + x5;\n" +
+                "    double dy = t4 * y2 + y4 * t2 + z4 * x2 + y5;\n" +
+                "    double dz = z4 * t2 + x4 * y2 - y4 * x2 + z5;\n" +
+                "    double ni = pAmount / (sqr(dt) + sqr(dx) + sqr(dy) + sqr(dz));\n" +
                 "\n" +
                 "\n" +
-                "    pVarTP.x = z.re;\n" +
-                "    pVarTP.y = z.im;\n" +
-                "    pVarTP.color = zc;\n" +
-                "\n" +
-                "\n" +
-                "\n" +
-                "    if (pContext.isPreserveZCoordinate()) {\n" +
-                "      pVarTP.z += pAmount * pAffineTP.z;\n" +
-                "    }";
+                "    pVarTP.x += (nt * dt + nx * dx + ny * dy + nz * dz) * ni;\n" +
+                "    pVarTP.y += (nx * dt - nt * dx - ny * dz + nz * dy) * ni;\n" +
+                "    pVarTP.z += (ny * dt - nt * dy - nz * dx + nx * dz) * ni;\n";
 
 //     System.err.println(convertCodeSwan(code, "mobius_dragon_3D", new String[]{}));
-     System.err.println(convertCode(code, "mobius_dragon_3D", new String[]{}));
+     //System.err.println(convertCode(code, "mobius_dragon_3D", new String[]{}));
     //FlameTransformationContext ctx = new FlameTransformationContext(null, null, 1, 1);
     //System.err.println(new ParPlot2DWFFunc().getGPUCode(ctx));
+    System.err.println(createSwanVariation(new MobiqFunc(), code));
+  }
+
+  private String createSwanVariation(VariationFunc variationFunc, String code) {
+    StringBuilder sb = new StringBuilder();
+    // params
+    if(variationFunc.getParameterNames().length > 0) {
+      addIndented(0, sb, "class " + variationFunc.getClass().getSimpleName() + " extends VariationFuncWaves:\n");
+      for (String paramName : variationFunc.getParameterNames()) {
+        addIndented(1, sb, "const PARAM_" + paramNameToSwan(paramName) + " = \"" + paramName + "\"\n");
+      }
+      addIndented(0, sb, "\n");
+      addIndented(1, sb, "var __params: Array[VariationParam] = [\n");
+      for(int idx = 0; idx < variationFunc.getParameterNames().length; idx++) {
+        String paramName = paramNameToSwan(variationFunc.getParameterNames()[idx]);
+        Object paramValue = variationFunc.getParameterValues()[idx];
+        if(paramValue instanceof Double) {
+          addIndented(2, sb, "VariationParam.new(PARAM_" + paramName + ", FlameParameter.DataType.FLOAT, " + paramValue + ")");
+        }
+        else if(paramValue instanceof Integer) {
+          addIndented(2, sb, "VariationParam.new(PARAM_" + paramName + ", FlameParameter.DataType.INT, " + paramValue + ")");
+        }
+        else {
+          throw new IllegalArgumentException("Unsupported parameter type: " + paramValue.getClass().getName());
+        }
+        if(idx < variationFunc.getParameterNames().length - 1) {
+          sb.append(",\n");
+        }
+        else {
+          sb.append("\n");
+        }
+      }
+      addIndented(2, sb, "]\n");
+
+      addIndented(0, sb, "\n");
+      addIndented(1, sb, "func get_params() -> Array[VariationParam]:\n");
+      addIndented(2, sb, "return __params;\n");
+      addIndented(0, sb, "\n");
+    }
+    // shader code
+    addIndented(1, sb, "func get_shader_code(ctx: RenderFlamePrepareContext,_xform: RenderXForm, variation: RenderVariation) -> String:\n");
+    addIndented(2, sb, "return \"\"\"{\n");
+    addIndented(1, sb, "float amount = %s;\n");
+    for(int idx = 0; idx < variationFunc.getParameterNames().length; idx++) {
+      String paramName = variationFunc.getParameterNames()[idx];
+      Object paramValue = variationFunc.getParameterValues()[idx];
+      if(paramValue instanceof Double) {
+        addIndented(1, sb, "float " + variationFunc.getName() +  "_" + paramName + " = %s;\n");
+      }
+      else if(paramValue instanceof Integer) {
+        addIndented(1, sb, "int " + variationFunc.getName() +  "_" + paramName + " = %s;\n");
+      }
+    }
+
+    addIndented(2, sb, convertCodeSwan( code, variationFunc.getName(), variationFunc.getParameterNames()));
+
+    if(variationFunc.getParameterNames().length > 0) {
+      addIndented(2, sb, "}\"\"\" % [variation.amount.to_glsl(ctx), \n");
+      for(int idx = 0; idx < variationFunc.getParameterNames().length; idx++) {
+        String paramName = paramNameToSwan(variationFunc.getParameterNames()[idx]);
+        addIndented(3, sb, "variation.params[PARAM_" + paramName + "].to_glsl(ctx)");
+        if(idx < variationFunc.getParameterNames().length - 1) {
+          sb.append(",\n");
+        }
+        else {
+          sb.append("]\n");
+        }
+      }
+
+    }
+    else {
+      addIndented(2, sb, "}\"\"\" % variation.amount.to_glsl(ctx)\n");
+    }
+    addIndented(0, sb, "\n");
+
+    // name etc
+    addIndented(1, sb, "func get_name() -> String:\n");
+    addIndented(2, sb, "return '" + variationFunc.getName() + "';\n");
+    addIndented(0, sb, "\n");
+
+    addIndented(1, sb, "func get_variation_types() -> Array[Variation.VariationType]:\n");
+    addIndented(2, sb, "return [" + variationTypesToSwan(variationFunc.getVariationTypes()) +  "]\n");
+    addIndented(0, sb, "\n");
+
+    return sb.toString();
+  }
+
+  private String variationTypesToSwan(VariationFuncType[] variationTypes) {
+    List<String> res = new ArrayList<>();
+    for(VariationFuncType variationType: variationTypes) {
+      switch(variationType) {
+        case VARTYPE_2D:
+          res.add("Variation.VariationType.VARTYPE_2D");
+          break;
+        case VARTYPE_3D:
+          res.add("Variation.VariationType.VARTYPE_3D");
+          break;
+        case VARTYPE_CROP:
+          res.add("Variation.VariationType.VARTYPE_CROP");
+          break;
+        case VARTYPE_BLUR:
+          res.add("Variation.VariationType.VARTYPE_BLUR");
+          break;
+        case VARTYPE_ZTRANSFORM:
+          res.add("Variation.VariationType.VARTYPE_ZTRANSFORM");
+          break;
+        case VARTYPE_DC:
+          res.add("Variation.VariationType.VARTYPE_DC");
+          break;
+        case VARTYPE_SIMULATION:
+          res.add("Variation.VariationType.VARTYPE_SIMULATION");
+          break;
+        case VARTYPE_POST:
+          res.add("Variation.VariationType.VARTYPE_POST");
+          break;
+        case VARTYPE_PRE:
+          res.add("Variation.VariationType.VARTYPE_PRE");
+          break;
+        case VARTYPE_BASE_SHAPE:
+          res.add("Variation.VariationType.VARTYPE_BASE_SHAPE");
+          break;
+        case VARTYPE_EDIT_FORMULA:
+          res.add("Variation.VariationType.VARTYPE_EDIT_FORMULA");
+          break;
+        case VARTYPE_SUPPORTS_EXTERNAL_SHAPES:
+          res.add("Variation.VariationType.VARTYPE_SUPPORTS_EXTERNAL_SHAPES");
+          break;
+        case VARTYPE_ESCAPE_TIME_FRACTAL:
+          res.add("Variation.VariationType.VARTYPE_ESCAPE_TIME_FRACTAL");
+          break;
+        case VARTYPE_SUPPORTS_BACKGROUND:
+          res.add("Variation.VariationType.VARTYPE_SUPPORTS_BACKGROUND");
+          break;
+        case VARTYPE_PREPOST:
+          res.add("Variation.VariationType.VARTYPE_PREPOST");
+          break;
+      }
+    }
+
+    return String.join(", ", res);
+  }
+
+  private String paramNameToSwan(String paramName) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < paramName.length(); i++) {
+      char c = paramName.charAt(i);
+      if (Character.isUpperCase(c)) {
+        sb.append("_");
+        sb.append(Character.toUpperCase(c));
+      } else {
+        sb.append(Character.toUpperCase(c));
+      }
+    }
+    return sb.toString();
+  }
+
+  private void addIndented(int indent, StringBuilder sb, String s) {
+    for (int i = 0; i < indent; i++) {
+      sb.append("\t");
+    }
+    sb.append(s);
   }
 
   private String convertCode(String code, String varName, String paramNames[]) {
@@ -241,7 +374,7 @@ public class GPUCodeHelper {
             .replaceAll("this\\.", "");
 
     for(String paramName: paramNames) {
-      newCode = newCode.replaceAll("([\\s\\(\\-\\+\\*]+)("+paramName+")([\\s\\+\\-\\*\\);]+)", "$1__"+varName+"_"+paramName+"$3");
+      newCode = newCode.replaceAll("([\\s\\(\\-\\+\\*]+)("+paramName+")([\\s\\+\\-\\*\\);]+)", "$1"+varName+"_"+paramName+"$3");
     }
     return newCode;
   }
