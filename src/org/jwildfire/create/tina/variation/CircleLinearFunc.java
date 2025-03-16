@@ -123,6 +123,19 @@ public class CircleLinearFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "circleLinear";
   }
+  
+  @Override
+  public void randomize() {
+    Sc = Math.random() * 0.99 + 0.01;
+    if (Math.random() < 0.7)
+      K = Math.random();
+    else
+      K = Math.random() * 5.0 - 2.5;
+    Dens1 = Math.random() * 1.9 + 0.1;
+    Dens2 = Math.random();
+    Reverse = (int) (Math.random() * 2);
+    Seed = (int) (Math.random() * 1000000);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

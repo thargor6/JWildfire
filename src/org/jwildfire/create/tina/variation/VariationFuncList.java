@@ -138,6 +138,8 @@ VariationFuncList {
     registerVariationFunc(ZConeFunc.class);
     registerVariationFunc(HemisphereFunc.class);
     registerVariationFunc(Rings2Func.class);
+    registerVariationFunc(Rings3Func.class);
+    registerVariationFunc(RingerFunc.class);
     registerVariationFunc(RectanglesFunc.class);
     registerVariationFunc(PDJFunc.class);
     registerVariationFunc(JuliaScopeFunc.class);
@@ -1032,6 +1034,11 @@ VariationFuncList {
     registerVariationFunc(PostAffine3DFunc.class);
 
     registerVariationFunc(MobiusDragon3DFunc.class);
+    
+    registerVariationFunc(QuadFunc.class);
+    registerVariationFunc(RingTileFunc.class);
+    registerVariationFunc(WhirligigFunc.class);
+    
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

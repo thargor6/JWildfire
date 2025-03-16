@@ -190,6 +190,62 @@ public class Falloff2Func extends VariationFunc implements SupportsGPU {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _rmax = 0.04 * scatter;
   }
+  
+  @Override
+  public void randomize() {
+    scatter = Math.random() * 1.5 + 0.2;
+    mindist = Math.random();
+    mul_x = Math.random();
+    mul_y = Math.random();
+    mul_z = Math.random();
+    mul_c = Math.random();
+    x0 = Math.random() * 2.0 - 1.0;
+    y0 = Math.random() * 2.0 - 1.0;
+    z0 = Math.random() * 2.0 - 1.0;
+    invert = (int) (Math.random() * 2);
+    type = (int) (Math.random() * 3);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 11)) {
+    case 0:
+      scatter += mutateStep(scatter, pAmount);
+      break;
+    case 1:
+      mindist += mutateStep(mindist, pAmount);
+      break;
+    case 2:
+      mul_x += mutateStep(mul_x, pAmount);
+      break;
+    case 3:
+      mul_y += mutateStep(mul_y, pAmount);
+      break;
+    case 4:
+      mul_z += mutateStep(mul_z, pAmount);
+      break;
+    case 5:
+      mul_c += mutateStep(mul_c, pAmount);
+      break;
+    case 6:
+      x0 += mutateStep(x0, pAmount);
+      break;
+    case 7:
+      y0 += mutateStep(y0, pAmount);
+      break;
+    case 8:
+      z0 += mutateStep(z0, pAmount);
+      break;
+    case 9:
+      invert += 1;
+      if (invert > 1) invert = 0;
+      break;
+    case 10:
+      type += 1;
+      if (type > 2) type = 0;
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

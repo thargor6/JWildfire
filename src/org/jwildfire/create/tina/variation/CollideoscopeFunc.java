@@ -102,6 +102,12 @@ public class CollideoscopeFunc extends VariationFunc implements SupportsGPU {
     ka = M_PI * a;
     ka_kn = ka / (double) num;
   }
+  
+  @Override
+  public void randomize() {
+    a = Math.random();
+    num = (int) (Math.random() * 10 + 1);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

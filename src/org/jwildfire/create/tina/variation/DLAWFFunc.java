@@ -79,8 +79,10 @@ public class DLAWFFunc extends VariationFunc {
       seed = Tools.FTOI(pValue);
     else if (PARAM_SCALE.equalsIgnoreCase(pName))
       scale = pValue;
-    else if (PARAM_JITTER.equalsIgnoreCase(pName))
+    else if (PARAM_JITTER.equalsIgnoreCase(pName)) {
       jitter = pValue;
+      if (jitter < 0.01) jitter = 0.01;
+      }
     else
       throw new IllegalArgumentException(pName);
   }
@@ -238,6 +240,33 @@ public class DLAWFFunc extends VariationFunc {
     _max_iter = pContext.isPreview() ? (max_iter < 6000) ? max_iter : 6000 : max_iter;
     // points are read from cache
     _points = getPoints();
+  }
+  
+  @Override
+  public void randomize() {
+    max_iter = (int) (Math.random() * 24000 + 1000);
+    seed = (int) (Math.random() * 10000);
+    scale = Math.random() * 10.0 + 5.0;
+    double r = Math.random();
+    jitter = r*r * 0.99 + 0.01;
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 4)) {
+    case 0:
+      max_iter += 50 * pAmount;
+      break;
+    case 1:
+      seed += pAmount;
+      break;
+    case 2:
+      scale += mutateStep(scale, pAmount);
+      break;
+    case 3:
+      jitter += 0.001 * pAmount;
+      break;
+    }
   }
 
   @Override

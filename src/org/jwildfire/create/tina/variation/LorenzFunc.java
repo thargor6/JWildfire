@@ -84,6 +84,17 @@ public class LorenzFunc extends VariationFunc implements SupportsGPU {
     else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+    a = Math.random() * 24.0 + 1.0;
+    b = Math.random() * 25.0 + 25.0;
+    c = Math.random() * 4.5 + 1.0;
+    h = Math.random() * 0.01 + 0.00001;
+    centerx = Math.random() * 30.0 - 15.0;
+    centery = Math.random() * 30.0 - 15.0;
+    scale = Math.random() * 2400.0 + 100.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

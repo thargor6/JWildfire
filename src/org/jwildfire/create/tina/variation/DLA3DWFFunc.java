@@ -649,7 +649,39 @@ public class DLA3DWFFunc extends VariationFunc {
       }
     }
   }
-
+  
+  @Override
+  public void randomize() {
+    max_iter = (int) (Math.random() * 750 + 1);
+    seed = (int) (Math.random()* 10000);
+    inner_blur_radius = Math.random() * 0.5 + 0.01;
+    double r = Math.random();
+    outer_blur_radius = r * r * 0.25 + 0.01;
+    junction_scale = Math.random() * 2.0 + 0.5;
+    dc_color = (int) (Math.random() * 2);
+    glue_radius = Math.random() * 1.4 + 0.1;
+    force_x = Math.random() * 2.0 - 1.0;
+    force_y = Math.random() * 2.0 - 1.0;
+    force_z = Math.random() * 2.0 - 1.0;
+    display_nodes = (int) (Math.random() * 2);
+    display_junctions = (int) (Math.random() * 2);
+    if (display_nodes == 0 && display_junctions == 0) display_junctions = 1;
+    
+    node_sdiv_level = (int) (Math.random() * 6);
+    node_sdiv_smooth_passes = (int) (Math.random() * 24);
+    node_sdiv_smooth_lambda = Math.random();
+    node_sdiv_smooth_mu = -Math.random();
+    nodeColorMapHolder.setBlend_colormap((int) (Math.random() * 2));
+    node_mesh_scale = Math.random() * 2.0 + 0.5;
+    
+    junct_sdiv_level = (int) (Math.random() * 6);
+    junct_sdiv_smooth_passes = (int) (Math.random() * 24);
+    junct_sdiv_smooth_lambda = Math.random();
+    junct_sdiv_smooth_mu = -Math.random();
+    junctColorMapHolder.setBlend_colormap((int) (Math.random() * 2));
+    junct_mesh_scale = Math.random() * 2.0 + 0.5;
+  }
+  
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};

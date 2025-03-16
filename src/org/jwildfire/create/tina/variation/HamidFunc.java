@@ -504,8 +504,8 @@ public class HamidFunc extends VariationFunc {
     DoublePoint2D out = null;
     DoubleLine2D line = null;
 
-    if (presetId > nMax)
-      presetId = nMax;
+    if (presetId >= nMax)
+      presetId = nMax - 1;
 
     String peekmethod = methods[presetId];
 
@@ -547,7 +547,7 @@ public class HamidFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_PRESETID.equalsIgnoreCase(pName)) {
-      presetId = limitIntVal(Tools.FTOI(pValue), 0, nMax);
+      presetId = limitIntVal(Tools.FTOI(pValue), 0, nMax - 1);
     } else if (PARAM_NPOINTS.equalsIgnoreCase(pName))
       npoints = (int) pValue;
     else if (PARAM_FILLED.equalsIgnoreCase(pName))
@@ -591,6 +591,14 @@ public class HamidFunc extends VariationFunc {
   @Override
   public String getName() {
     return "hamid_js";
+  }
+  
+  @Override
+  public void randomize() {
+    super.randomize();
+    presetId = (int) (Math.random() * nMax);
+    npoints = (int) (Math.random() * 5000 + 500);
+    filled = (int) (Math.random() * 2);
   }
 
   @Override

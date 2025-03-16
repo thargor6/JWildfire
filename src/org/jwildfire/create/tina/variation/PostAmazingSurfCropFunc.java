@@ -133,7 +133,7 @@ mat3  rotationMatrix3(vec3 v, double angle)
 
 @Override
 public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-// post_mandeltorus_crop by Jesus Sosa
+// post_asurf_crop by Jesus Sosa
 
 double x=pVarTP.x*scalex;
 double y=pVarTP.y*scaley;
@@ -212,33 +212,55 @@ public void setParameter(String pName, double pValue) {
   else if (PARAM_SCALEZ.equalsIgnoreCase(pName))
 		    scalez = pValue;    
   else if (PARAM_SCOLOR.equalsIgnoreCase(pName))
-	    pcolor = limitVal(Tools.FTOI(pValue), 0.0, 1.0); 
+	    pcolor = limitVal(pValue, 0.0, 1.0); 
   else if (PARAM_MODE.equalsIgnoreCase(pName))
 	    mode = limitIntVal(Tools.FTOI(pValue), 0, 1); 
   else if (PARAM_ANGLE.equalsIgnoreCase(pName))
 	    angle = pValue; 
   else if (PARAM_ROTVX.equalsIgnoreCase(pName))
 	    rotX = pValue;
-else if (PARAM_ROTVY.equalsIgnoreCase(pName))
-		rotY = pValue;
-else if (PARAM_ROTVZ.equalsIgnoreCase(pName))
-	    rotZ = pValue;
-else if (PARAM_MINR.equalsIgnoreCase(pName))
-	minRR = pValue;    
-else if (PARAM_MAXR.equalsIgnoreCase(pName))
-    maxRR = pValue;   
-  else
-    throw new IllegalArgumentException(pName);
-}
-
-@Override
-public String getName() {
-  return "post_asurf_crop";
-}
+  else if (PARAM_ROTVY.equalsIgnoreCase(pName))
+  		rotY = pValue;
+  else if (PARAM_ROTVZ.equalsIgnoreCase(pName))
+  	    rotZ = pValue;
+  else if (PARAM_MINR.equalsIgnoreCase(pName))
+  	minRR = pValue;    
+  else if (PARAM_MAXR.equalsIgnoreCase(pName))
+      maxRR = pValue;   
+    else
+      throw new IllegalArgumentException(pName);
+  }
+  
+  @Override
+  public String getName() {
+    return "post_asurf_crop";
+  }
+  
+  @Override
+  public void randomize() {
+    iterations = (int) (Math.random() * 25 + 1);
+    bailout = Math.random() * 25.0 + 1.0;
+    scalex = Math.random() * 3.75 + 0.25;
+    scaley = Math.random() * 3.75 + 0.25;
+    scalez = Math.random() * 3.75 + 0.25;
+    pcolor = Math.random();
+    mode = (int) (Math.random() * 2);
+    angle = Math.random() * 360.0 - 180.0;
+    rotX = Math.random() * 5.0;
+    rotY = Math.random() * 5.0;
+    rotZ = Math.random() * 5.0;
+    minRR = Math.random() * 3.0;
+    maxRR = Math.random() * 4.0 + 1.0;
+  }
+  
+  @Override
+  public int getPriority() {
+    return 1;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL,VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP,  VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL,VariationFuncType.VARTYPE_DC};
   }
 
 }

@@ -357,6 +357,48 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     imgWidth = colorMap.getImageWidth();
     imgHeight = colorMap.getImageHeight();
   }
+  
+  @Override
+  public void randomize() {
+    scaleX = Math.random() * 2.0 + 0.5;
+    scaleY = Math.random() * 2.0 + 0.5;
+    scaleZ = Math.random() * 0.6 - 0.3;
+    offsetX = Math.random();
+    offsetY = Math.random();
+    offsetZ = Math.random();
+    tileX = (int) (Math.random() * 2.0);
+    tileY = (int) (Math.random() * 2.0);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 8)) {
+    case 0:
+      scaleX += mutateStep(scaleX, pAmount);
+      break;
+    case 1:
+      scaleY += mutateStep(scaleY, pAmount);
+      break;
+    case 2:
+      scaleZ += mutateStep(scaleZ, pAmount);
+      break;
+    case 3:
+      offsetX += mutateStep(offsetX, pAmount);
+      break;
+    case 4:
+      offsetY += mutateStep(offsetY, pAmount);
+      break;
+    case 5:
+      offsetZ += mutateStep(offsetZ, pAmount);
+      break;
+    case 6:
+      tileX = (tileX == 0) ? 1 : 0;
+      break;
+    case 7:
+      tileY = (tileY == 0) ? 1 : 0;
+      break;
+    }
+  }
 
   private String getCurrImageFilename(FlameTransformationContext pContext) {
     if (is_sequence > 0) {

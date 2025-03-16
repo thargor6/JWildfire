@@ -154,6 +154,22 @@ public class Hypertile3D2bFunc extends VariationFunc implements SupportsGPU {
 		s2z = k - sqr(cx);
 	}
 
+	  @Override
+	  public void randomize() {
+	    p = (int) (Math.random() * 8 + 3);
+	    q = (int) (Math.random() * 8 + 3);
+	    b = Math.random() * 2.5;
+        c = Math.random() * 2.5;
+        d = Math.random() * 2.5;
+        e = Math.random() * 2.5;
+        f = Math.random() * 2.5;
+        g = Math.random() * 2.5;
+        h = Math.random() * 2.5;
+        i = Math.random() * 2.5;
+        j = Math.random() * 2.5;
+        k = Math.random() * 2.5;
+	  }
+
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};

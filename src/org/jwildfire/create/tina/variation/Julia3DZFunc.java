@@ -137,6 +137,13 @@ public class Julia3DZFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+    power = (int) (Math.random() * 10 + 2);
+    if (Math.random() < 0.5)
+      power *= -1;
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }

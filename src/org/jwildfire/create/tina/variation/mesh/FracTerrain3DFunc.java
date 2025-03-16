@@ -334,6 +334,37 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
     super.transform(pContext, pXForm, pAffineTP, pVarTP, pAmount);
     if (dc == 1) pVarTP.color = MathLib.fmod(pVarTP.y, 1.0);
   }
+  
+  @Override
+  public void randomize() {
+    roughness = Math.random() * 0.5 + 0.4;
+    exaggeration = Math.random() * 0.5 + 0.05;
+    n = (int) (Math.random() * 6 + 2);
+    seed = (int) (Math.random() * 10000);
+    super.randomize();
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 14)) {
+    case 0:
+      roughness += mutateStep(roughness, pAmount);
+      break;
+    case 1:
+      exaggeration += mutateStep(exaggeration, pAmount);
+      break;
+    case 2:
+      n += 1;
+      if (n > 8) n = 1;
+      break;
+    case 3:
+      seed += 1;
+      break;
+    default:
+      super.mutate(pAmount);
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

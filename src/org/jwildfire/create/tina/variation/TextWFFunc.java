@@ -225,6 +225,18 @@ public class TextWFFunc extends VariationFunc {
   public String getName() {
     return "text_wf";
   }
+  
+  @Override
+  public void randomize() {
+    font_size = (int) (Math.random() * 490 + 10);
+    antialias = Math.random();
+    scale_x = Math.random() * 1.75 + 0.25;
+    if (Math.random() < 0.2) scale_x *= -1;
+    scale_y = Math.random() * 1.75 + 0.25;
+    if (Math.random() < 0.2) scale_y *= -1;
+    offset_x = Math.random() * 2.0 - 1.0;
+    offset_y = Math.random() * 2.0 - 1.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

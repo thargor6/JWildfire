@@ -65,6 +65,16 @@ public class Swirl3DWFFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "swirl3D_wf";
   }
+  
+  @Override
+  public void randomize() {
+    n = (int) (Math.random() * 50 - 25);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    n = (int) n + pAmount;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

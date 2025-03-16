@@ -178,6 +178,89 @@ public class SuperShape3DFunc extends VariationFunc implements SupportsGPU {
     rho_pi = rho * M_2_PI;
     phi_pi = phi * M_2_PI;
   }
+  
+  @Override
+  public void randomize() {
+    rho = Math.random() * 17.272 + 2.467;
+    phi = Math.random() * 17.272 + 2.467;
+    m1 = Math.random() * 9.0 + 3.0;
+    if (Math.random() < 0.5) m1 = (int) m1;
+    m2 = Math.random() * 9.0 + 3.0;
+    if (Math.random() < 0.5) m2 = (int) m2;
+    a1 = Math.random() * 1.5 + 0.5;
+    a2 = Math.random() * 1.5 + 0.5;
+    b1 = Math.random() * 1.5 + 0.5;
+    b2 = Math.random() * 1.5 + 0.5;
+    n1_1 = Math.random() * 5.0 - 2.5;
+    n1_2 = Math.random() * 5.0 - 2.5;
+    n2_1 = Math.random() * 5.0 - 2.5;
+    n2_2 = Math.random() * 5.0 - 2.5;
+    n3_1 = Math.random() * 5.0 - 2.5;
+    n3_2 = Math.random() * 5.0 - 2.5;
+    spiral = (Math.random() < 0.5) ? 0.0 : Math.random() * 2.0 - 1.0;
+    toroidmap = (int) (Math.random() * 2);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 18)) {
+    case 0:
+      rho += mutateStep(rho, pAmount);
+      break;
+    case 1:
+      phi += mutateStep(phi, pAmount);
+      break;
+    case 2:
+      m1 = (int) (m1 + pAmount);
+      break;
+    case 3:
+      m1 += mutateStep(m1, pAmount);
+      break;
+    case 4:
+      m2 = (int) (m2 + pAmount);
+      break;
+    case 5:
+      m2 += mutateStep(m2, pAmount);
+      break;
+    case 6:
+      a1 += mutateStep(a1, pAmount);
+      break;
+    case 7:
+      a2 += mutateStep(a2, pAmount);
+      break;
+    case 8:
+      b1 += mutateStep(b1, pAmount);
+      break;
+    case 9:
+      b2 += mutateStep(b2, pAmount);
+      break;
+    case 10:
+      n1_1 += mutateStep(n1_1, pAmount);
+      break;
+    case 11:
+      n1_2 += mutateStep(n1_2, pAmount);
+      break;
+    case 12:
+      n2_1 += mutateStep(n2_1, pAmount);
+      break;
+    case 13:
+      n2_2 += mutateStep(n2_2, pAmount);
+      break;
+    case 14:
+      n3_1 += mutateStep(n3_1, pAmount);
+      break;
+    case 15:
+      n3_2 += mutateStep(n3_2, pAmount);
+      break;
+    case 16:
+      spiral += mutateStep(spiral, pAmount);
+      break;
+    case 17:
+      toroidmap += 1;
+      if (toroidmap > 1) toroidmap = 0;
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

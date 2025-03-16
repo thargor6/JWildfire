@@ -286,6 +286,89 @@ public class Knots3DFunc extends AbstractOBJMeshWFFunc {
       }
     }
   }
+  
+  @Override
+  public void randomize() {
+    preset_id = WFFuncPresetsStore.getKnots3DWFFuncPresets().getRandomPresetId();
+    refreshFormulaFromPreset(preset_id);
+    steps = (int) (Math.random() * 1500 + 500);
+    radius = Math.random() * 49.0 + 1.0;
+    facets = (int) (Math.random() * 10 + 2);
+    param_a = Math.random() * 5.0 - 2.5;
+    param_b = Math.random() * 5.0 - 2.5;
+    param_c = Math.random() * 5.0 - 2.5;
+    param_d = Math.random() * 5.0 - 2.5;
+    param_e = Math.random() * 5.0 - 2.5;
+    param_f = Math.random() * 5.0 - 2.5;
+    param_g = Math.random() * 5.0 - 2.5;
+    param_h = Math.random() * 5.0 - 2.5;
+    scaleX = Math.random() * 0.04 + 0.01;
+    scaleY = Math.random() * 0.04 + 0.01;
+    scaleZ = Math.random() * 0.04 + 0.01;
+    offsetX = Math.random() * 2.0 - 1.0;
+    offsetY = Math.random() * 2.0 - 1.0;
+    offsetZ = Math.random() * 2.0 - 1.0;
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 18)) {
+    case 0:
+      preset_id = (preset_id + 1) % 24;
+      break;
+    case 1:
+      steps += 1;
+      break;
+    case 2:
+      radius += mutateStep(radius, pAmount);
+      break;
+    case 3:
+      facets += 1;
+      break;
+    case 4:
+      param_a += mutateStep(param_a, pAmount);
+      break;
+    case 5:
+      param_b += mutateStep(param_b, pAmount);
+      break;
+    case 6:
+      param_c += mutateStep(param_c, pAmount);
+      break;
+    case 7:
+      param_d += mutateStep(param_d, pAmount);
+      break;
+    case 8:
+      param_e += mutateStep(param_e, pAmount);
+      break;
+    case 9:
+      param_f += mutateStep(param_f, pAmount);
+      break;
+    case 10:
+      param_g += mutateStep(param_g, pAmount);
+      break;
+    case 11:
+      param_h += mutateStep(param_h, pAmount);
+      break;
+    case 12:
+      scaleX += mutateStep(scaleX, pAmount);
+      break;
+    case 13:
+      scaleY += mutateStep(scaleY, pAmount);
+      break;
+    case 14:
+      scaleZ += mutateStep(scaleZ, pAmount);
+      break;
+    case 15:
+      offsetX += mutateStep(offsetX, pAmount);
+      break;
+    case 16:
+      offsetY += mutateStep(offsetY, pAmount);
+      break;
+    case 17:
+      offsetZ += mutateStep(offsetZ, pAmount);
+      break;
+    }
+  }
 
   @Override
   public String[] getRessourceNames() {
@@ -613,7 +696,7 @@ z = 4*sin(3*t) - 10*sin(6*t);
       zC2 = last.z;
 
       n = facets;
-      R = radius;
+      R = fabs(radius) < 0.01 ? 0.01 : radius;
 
 
       a = xC2 - xC0;

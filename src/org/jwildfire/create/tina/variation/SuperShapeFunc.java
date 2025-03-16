@@ -100,6 +100,18 @@ public class SuperShapeFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "super_shape";
   }
+  
+  @Override
+  public void randomize() {
+    rnd = Math.random();
+    m = Math.random() * 9.0 + 3.0;
+    if (Math.random() < 0.5) m = (int) m;
+    n1 = Math.random() * 5.0 - 2.5;
+    n2 = Math.random() * 5.0 - 2.5;
+    n3 = Math.random() * 5.0 - 2.5;
+    holes = Math.random() - 0.75;
+    if (holes > 0.0) holes = 0.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

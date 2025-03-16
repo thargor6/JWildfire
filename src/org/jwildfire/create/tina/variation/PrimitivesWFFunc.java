@@ -351,6 +351,34 @@ public class PrimitivesWFFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "primitives_wf";
   }
+  
+  @Override
+  public void randomize() {
+    shape = (int) (Math.random() * 7);
+    a = Math.random() * 2.0 + 0.1;
+    b = Math.random() * (2.0 - a / 2.0) + a / 2.0;
+    filled = (int) (Math.random() * 2);
+  }
+  
+  public void mutate(double pAmount) {
+    int r = (int) (Math.random() * (shape == 6 ? 4 : 2));
+    switch (r) {
+    case 0:
+      shape += 1;
+      if (shape > 6) shape = 0;
+      break;
+    case 1:
+      filled += 1;
+      if (filled > 1) filled = 0;
+      break;
+    case 2:
+      a += mutateStep(a, pAmount);
+      break;
+    case 3:
+      b += mutateStep(b, pAmount);
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

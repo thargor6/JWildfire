@@ -121,6 +121,14 @@ public class Rhombus3DFunc extends VariationFunc implements SupportsGPU {
 		return true;
 	}
 
+    @Override
+    public void randomize() {
+      la = Math.random() * 0.5;
+      lb = Math.random() * 0.5;
+      h = Math.random() * 0.5;
+      r = Math.random() * 0.25;
+    }
+
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};

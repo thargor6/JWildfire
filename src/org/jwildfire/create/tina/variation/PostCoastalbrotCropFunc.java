@@ -106,7 +106,7 @@ mat3 euler_rotation(vec3 rot)
 
 @Override
 public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-// post_mandeltorus_crop by Jesus Sosa
+// post_coastalbrot_crop by Jesus Sosa
 
 double x=pVarTP.x*scalex;
 double y=pVarTP.y*scaley;
@@ -177,7 +177,7 @@ public void setParameter(String pName, double pValue) {
   else if (PARAM_SCALEZ.equalsIgnoreCase(pName))
 		    scalez = pValue;    
   else if (PARAM_SCOLOR.equalsIgnoreCase(pName))
-	    pcolor = limitVal(Tools.FTOI(pValue), 0.0, 1.0); 
+	    pcolor = limitVal(pValue, 0.0, 1.0); 
   else if (PARAM_ROTX.equalsIgnoreCase(pName))
 	    a = pValue;    
 else if (PARAM_ROTY.equalsIgnoreCase(pName))
@@ -193,8 +193,26 @@ public String getName() {
   return "post_coastalbrot_crop";
 }
 
+@Override
+public void randomize() {
+  iterations = (int) (Math.random() * 19 + 1);
+  bailout = Math.random() * 25.0 + 1.0;
+  scalex = Math.random() * 3.75 + 0.25;
+  scaley = Math.random() * 3.75 + 0.25;
+  scalez = Math.random() * 3.75 + 0.25;
+  pcolor = Math.random();
+  a = Math.random() * 360.0 - 180.0;
+  b = Math.random() * 360.0 - 180.0;
+  c = Math.random() * 360.0 - 180.0;
+}
+
+  @Override
+  public int getPriority() {
+    return 1;
+  }
+  
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL,VariationFuncType.VARTYPE_DC};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP, VariationFuncType.VARTYPE_POST, VariationFuncType.VARTYPE_ESCAPE_TIME_FRACTAL,VariationFuncType.VARTYPE_DC};
   }
 }

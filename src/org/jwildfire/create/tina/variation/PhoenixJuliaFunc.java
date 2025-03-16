@@ -105,6 +105,24 @@ public class PhoenixJuliaFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+    power = (int) (Math.random() * 10 + 2);
+    if (Math.random() < 0.5)
+      power *= -1;
+    double r = Math.random();
+    if (r < 0.4)
+      dist = Math.random() * 0.5 + 0.75;
+    else if (r < 0.8)
+      dist = Math.random() * 3.3 + 0.2;
+    else 
+      dist = 1.0;
+    if (Math.random() < 0.4) 
+      dist *= -1;
+    x_distort = Math.random() * 5.0 - 2.5;
+    y_distort = Math.random() * 5.0 - 2.5;
+  }
+  
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }

@@ -221,6 +221,20 @@ public class TruchetFunc extends VariationFunc implements SupportsGPU {
       size = 10.0;
     }
   }
+  
+  @Override
+  public void randomize() {
+    extended = (int) (Math.random() * 2);
+    exponent = Math.random() * 2.0;
+    arc_width = Math.random();
+    rotation = Math.random() * Math.PI / 2.0;
+    size = Math.random() * 10.0;
+    if (extended == 0) 
+      seed = Math.random() * 99.0 + 1.0;
+    else
+      seed = (int) (Math.random() * 10000 + 1000);
+    direct_color = (int) (Math.random() * 2);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

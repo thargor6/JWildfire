@@ -111,9 +111,9 @@ public class PostMandelbox3dCropFunc extends VariationFunc {
    if (mag < bailout)
    {
        pVarTP.doHide = false;
-       pVarTP.x = pAmount * pAffineTP.x;
-       pVarTP.y = pAmount * pAffineTP.y;
-       pVarTP.z = pAmount * pAffineTP.z;    
+       pVarTP.x = pAmount * pVarTP.x;
+       pVarTP.y = pAmount * pVarTP.y;
+       pVarTP.z = pAmount * pVarTP.z;    
    }
    else
    {
@@ -123,10 +123,6 @@ public class PostMandelbox3dCropFunc extends VariationFunc {
    
   }
               
-	if (pContext.isPreserveZCoordinate()) {
-		pVarTP.z += pAmount * pAffineTP.z;
-	}
-
   }
   
   @Override
@@ -163,6 +159,15 @@ public class PostMandelbox3dCropFunc extends VariationFunc {
   @Override
   public int getPriority() {
     return 1;
+  }
+  
+  @Override
+  public void randomize() {
+    scale = Math.random() + 1.5;
+    radius = Math.random();
+    f = Math.random() * 0.5 + 0.75;
+    iterations = (int) (Math.random() * 11 + 5);
+    bailout = Math.random() * 18.0 + 2.0;
   }
 
   @Override

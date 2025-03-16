@@ -119,6 +119,19 @@ public class CornersFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "corners";
   }
+  
+  @Override
+  public void randomize() {
+    x = Math.random() * 5.0 - 2.5;
+    y = Math.random() * 5.0 - 2.5;
+    mult_x = Math.random() * 1.25 + 0.25;
+    mult_y = Math.random() * 1.25 + 0.25;
+    x_power = Math.random() * 0.75 + 0.25;
+    y_power = Math.random() * 0.75 + 0.25;
+    xy_power_add = Math.random() - 0.5;
+    log_mode = (int) (Math.random() * 2);
+    log_base = Math.random() * 0.5 + 2.5;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

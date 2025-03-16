@@ -251,6 +251,11 @@ public class MaurerRoseFunc extends VariationFunc {
   }
 
   @Override
+  public boolean enableRandomizeButton() {
+    return false;
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE};
   }

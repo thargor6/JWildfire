@@ -135,6 +135,17 @@ double sdCylinder(vec3 p, vec3 a, vec3 b, double r)
 		return true;
 	}
 
+    @Override
+    public void randomize() {
+      p1 = Math.random() - 0.5;
+      p2 = Math.random() - 0.5;
+      p3 = Math.random() - 0.5;
+      p4 = Math.random() - 0.5;
+      p5 = Math.random() - 0.5;
+      p6 = Math.random() - 0.5;
+      p7 = Math.random() * 0.5;
+    }
+
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};

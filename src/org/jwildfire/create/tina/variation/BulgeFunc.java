@@ -47,7 +47,9 @@ public class BulgeFunc extends VariationFunc implements SupportsGPU {
     pVarTP.x += pAmount * (rn * (pAffineTP.x )/r);
     pVarTP.y += pAmount * (rn * (pAffineTP.y )/r);
 
-
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -70,18 +72,13 @@ public class BulgeFunc extends VariationFunc implements SupportsGPU {
 
   
   @Override
-  public int getPriority() {
-    return 1;
-  }
-  
-  @Override
   public String getName() {
     return "bulge";
   }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 	 @Override
 	  public String getGPUCode(FlameTransformationContext context) {

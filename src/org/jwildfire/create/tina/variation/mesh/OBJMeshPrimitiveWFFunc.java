@@ -208,6 +208,21 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
   }
 
   @Override
+  public void randomize() {
+    primitive = (int) (Math.random() * primitives.length);
+    super.randomize();
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    if (Math.random() < 0.1) {
+      primitive += 1;
+      if (primitive >= primitives.length) primitive = 0;
+    } else
+      super.mutate(pAmount);
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[] {
       VariationFuncType.VARTYPE_BASE_SHAPE

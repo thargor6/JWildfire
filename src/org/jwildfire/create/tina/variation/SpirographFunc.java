@@ -99,6 +99,19 @@ public class SpirographFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "spirograph";
   }
+  
+  @Override
+  public void randomize() {
+    a = Math.random();
+    b = Math.random() * 2.0 - 1.0;
+    c1 = Math.random();
+    c2 = (Math.random() < 0.8) ? c1 : Math.random();
+    d = (Math.random() < 0.75) ? 0.0 : Math.random() * 2.0 - 1.0;
+    tmin = -Math.random() * 250.0;
+    tmax = Math.random() * 250.0;
+    ymin = (Math.random() < 0.75) ? 0.0 : -Math.random() * 0.05;
+    ymax = (Math.random() < 0.75) ? 0.0 : Math.random() * 0.05;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

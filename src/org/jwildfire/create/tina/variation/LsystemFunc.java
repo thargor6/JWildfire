@@ -1168,6 +1168,68 @@ public class LsystemFunc extends VariationFunc {
   public String getName() {
     return "lsystem_js";
   }
+  
+  @Override
+  public void randomize() {
+    Iters = (int) (Math.random() * 5 + 1);
+    step = Math.random() * 0.5 + 0.05;
+    angle = (Math.random() < 0.75) ? 0 : 5 * ((int) (Math.random() * 72));
+    presetId = (int) (Math.random() * 26);
+    double r = Math.random();
+    if (r < 0.5) {
+      show_lines_param = 1;
+      show_points_param = 0;
+    } else if (r < 0.75) {
+      show_lines_param = 0;
+      show_points_param = 1;
+    } else {
+      show_lines_param = 1;
+      show_points_param = 1;
+    }
+    line_thickness_param = Math.random() * 1.5 + 0.5;
+    point_thickness_param = Math.random() * 4.0 + 1.0;
+    color_mode = (int) (Math.random() * 2);
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 8)) {
+    case 0:
+      step += mutateStep(step, pAmount);
+      break;
+    case 1:
+      angle += Math.random() * pAmount;
+      break;
+    case 2:
+      show_lines_param += 1;
+      if (show_lines_param > 1) {
+        show_lines_param = 0;
+        if (show_points_param == 0) show_points_param = 1;
+      }
+      break;
+    case 3:
+      line_thickness_param += mutateStep(line_thickness_param, pAmount);
+      break;
+    case 4:
+      show_points_param += 1;
+      if (show_points_param > 1) {
+        show_points_param = 0;
+        if (show_lines_param == 0) show_lines_param = 1;
+      }
+      break;
+    case 5:
+      point_thickness_param += mutateStep(point_thickness_param, pAmount);
+      break;
+    case 6:
+      color_mode += 1;
+      if (color_mode > 1) color_mode = 0;
+      break;
+    default:
+      presetId += 1;
+      if (presetId > 25) presetId = 0;
+      break;
+    }
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -105,6 +105,13 @@ public class Hypertile3DFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+    p = (int) (Math.random() * 8 + 3);
+    q = (int) (Math.random() * 8 + 3);
+    n = (int) (Math.random() * p);
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }

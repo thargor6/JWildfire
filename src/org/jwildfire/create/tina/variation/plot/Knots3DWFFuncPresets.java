@@ -24,7 +24,7 @@ public class Knots3DWFFuncPresets extends WFFuncPresets<Knots3DWFFuncPreset> {
 
   @Override
   protected Knots3DWFFuncPreset createDefaultPreset() {
-    return new Knots3DWFFuncPreset(-1, "x", "y", "z", 1000.0, 1.0, 4.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+    return new Knots3DWFFuncPreset(-1, "100 * cos(t)", "100 * sin(t)", "cos(t)", 1000.0, 1.0, 4.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
   }
 
   @Override

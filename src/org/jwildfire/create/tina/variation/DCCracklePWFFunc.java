@@ -204,6 +204,12 @@ public class DCCracklePWFFunc extends DCCrackleWFFunc {
     } else
       super.setParameter(pName, pValue);
   }
+  
+  @Override
+  public void randomize() {
+    super.randomize();
+    setParameter(PARAM_PRESET, (int)(Math.random() * 21));
+  }
 
   @Override
   public boolean dynamicParameterExpansion() {

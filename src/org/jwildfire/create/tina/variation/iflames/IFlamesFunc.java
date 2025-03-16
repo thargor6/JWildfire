@@ -187,6 +187,11 @@ public class IFlamesFunc extends VariationFunc {
   public String getName() {
     return "iflames_wf";
   }
+  
+  @Override
+  public boolean enableRandomizeButton() {
+    return false;
+  }
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

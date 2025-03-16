@@ -503,6 +503,39 @@ public class YPlot3DWFFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+    if (Math.random() < 0.5) {
+      preset_id = WFFuncPresetsStore.getYPlot3DWFFuncPresets().getRandomPresetId();
+      refreshFormulaFromPreset(preset_id);
+    } else {
+      preset_id = -1;
+      xmin = Math.random() * 3.0 - 4.0;
+      xmax = Math.random() * 3.0 + 1.0;
+      zmin = Math.random() * 3.0 - 4.0;
+      zmax = Math.random() * 3.0 + 1.0;
+    }
+    ymin = Math.random() * 3.0 - 4.0;
+    ymax = Math.random() * 3.0 + 1.0;
+    param_a = Math.random() * 5.0 - 2.5;
+    param_b = Math.random() * 5.0 - 2.5;
+    param_c = Math.random() * 5.0 - 2.5;
+    param_d = Math.random() * 5.0 - 2.5;
+    param_e = Math.random() * 5.0 - 2.5;
+    param_f = Math.random() * 5.0 - 2.5;
+    direct_color = (int) (Math.random() * 2);
+    if (colorMapHolder.getColormap_filename() == null) 
+      color_mode = (int) (Math.random() * 2 + 1);
+    else {
+      color_mode = (int) (Math.random() * 3);
+      colorMapHolder.setBlend_colormap((int) (Math.random() * 2));
+    }
+    if (displacementMapHolder.getDispl_map_filename() != null) {
+      displacementMapHolder.setDispl_amount(Math.random());
+      displacementMapHolder.setBlend_displ_map((int) (Math.random() * 2));
+    }
+  }
+  
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[] {
       VariationFuncType.VARTYPE_BASE_SHAPE,

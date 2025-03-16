@@ -149,6 +149,8 @@ public class NonlinearControlsDelegate {
       pRow.getToggleParamsPnlButton().setEnabled(false);
       pRow.getToggleFavouriteButton().setSelected(false);
       pRow.getToggleFavouriteButton().setEnabled(false);
+      pRow.getNonlinearParamsRandomButton().setSelected(false);
+      pRow.getNonlinearParamsRandomButton().setEnabled(false);
       owner.updateToggleFavIcon(pRow.getToggleFavouriteButton());
 
       if (pRow.getNonlinearParamsUpButton() != null) {
@@ -174,7 +176,7 @@ public class NonlinearControlsDelegate {
       pRow.getToggleFavouriteButton().setSelected(VariationFavouriteService.isFavourite(varFunc.getName()));
       owner.updateToggleFavIcon(pRow.getToggleFavouriteButton());
 
-
+      pRow.getNonlinearParamsRandomButton().setEnabled(pVar.getFunc().getParameterNames().length > 0 && pVar.getFunc().enableRandomizeButton());
 
       pRow.getNonlinearVarCmb().setSelectedItem(varFunc.getName());
       if (pRow.getNonlinearVarCmb().getSelectedIndex() < 0) {
@@ -367,6 +369,7 @@ public class NonlinearControlsDelegate {
     if (pRow.getNonlinearParamsUpButton() != null)
       pRow.getNonlinearParamsUpButton().setEnabled(false);
     pRow.getToggleParamsPnlButton().setEnabled(false);
+    pRow.getNonlinearParamsRandomButton().setEnabled(false);
   }
 
   void enableNonlinearControls(TinaNonlinearControlsRow pRow, boolean pRessource) {
@@ -1009,4 +1012,25 @@ public class NonlinearControlsDelegate {
     }
   }
 
+  public void nonlinearParamsRandomButtonClicked(int pIdx) {
+    XForm xForm = owner.getCurrXForm();
+    if (xForm != null && pIdx < xForm.getVariationCount()) {
+      owner.saveUndoPoint();
+      Variation var = xForm.getVariation(pIdx);
+      var.getFunc().randomize();
+      this.refreshParamControls(xForm);
+      owner.refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+
+  public void nonlinearParamsRandomButtonRightClicked(int pIdx) {
+    XForm xForm = owner.getCurrXForm();
+    if (xForm != null && pIdx < xForm.getVariationCount()) {
+      owner.saveUndoPoint();
+      Variation var = xForm.getVariation(pIdx);
+      var.getFunc().mutate(1);
+      this.refreshParamControls(xForm);
+      owner.refreshFlameImage(true, false, 1, true, false);
+      }
+    }
 }
