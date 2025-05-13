@@ -48,41 +48,43 @@ public class OrientedCylinder3DFunc extends VariationFunc implements SupportsGPU
 
   private static final String[] additionalParamNames = { PARAM_P1,PARAM_P2,PARAM_P3,PARAM_P4,PARAM_P5,PARAM_P6,PARAM_P7};
   
-//// arbitrary orientation
-double sdCylinder(vec3 p, vec3 a, vec3 b, double r)
-{
-    vec3 pa = p.minus(a);
-    vec3 ba = b.minus(a);
-    double baba = G.dot(ba,ba);
-    double paba = G.dot(pa,ba);
-
-    double x = G.length(pa.multiply(baba).minus(ba.multiply(paba)))-( r*baba);
-    double y = G.abs(paba-baba*0.5)-baba*0.5;
-    double x2 = x*x;
-    double y2 = y*y*baba;
-    double d = (G.max(x,y)<0.0)?-G.min(x2,y2):(((x>0.0)?x2:0.0)+((y>0.0)?y2:0.0));
-    return G.sign(d)*G.sqrt(G.abs(d))/baba;
-}	
+	//// arbitrary orientation
+	double sdCylinder(vec3 p, vec3 a, vec3 b, double r)
+	{
+	    vec3 pa = p.minus(a);
+	    vec3 ba = b.minus(a);
+	    double baba = G.dot(ba,ba);
+	    double paba = G.dot(pa,ba);
+	
+	    double x = G.length(pa.multiply(baba).minus(ba.multiply(paba)))-( r*baba);
+	    double y = G.abs(paba-baba*0.5)-baba*0.5;
+	    double x2 = x*x;
+	    double y2 = y*y*baba;
+	    double d = (G.max(x,y)<0.0)?-G.min(x2,y2):(((x>0.0)?x2:0.0)+((y>0.0)?y2:0.0));
+	    return G.sign(d)*G.sqrt(G.abs(d))/baba;
+	}	
   
-  @Override
-  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double x = (pContext.random() - 0.5);
-    double y = (pContext.random() - 0.5);
-    double z = (pContext.random() - 0.5);
-    
-    vec3 p=new vec3(x,y,z);
-
-
-    double distance=sdCylinder(p,new vec3(p1,p2,p3),new vec3(p4,p5,p6),p7);
-    pVarTP.doHide=true;
-    if(distance <0.0)
-    {
- 	    pVarTP.doHide=false;
-    	pVarTP.x=pAmount*x;
-    	pVarTP.y=pAmount*y;
-    	pVarTP.z=pAmount*z;
-    }
-  }
+	@Override
+	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+		for (int i=1; i<=50; i++) {
+			double x = (pContext.random() - 0.5);
+	    double y = (pContext.random() - 0.5);
+	    double z = (pContext.random() - 0.5);
+	    
+	    vec3 p=new vec3(x,y,z);
+	    double distance=sdCylinder(p,new vec3(p1,p2,p3),new vec3(p4,p5,p6),p7);
+	    
+	    if(distance <0.0)
+	    {
+	    	pVarTP.doHide=false;
+	    	pVarTP.x+=pAmount*x;
+	    	pVarTP.y+=pAmount*y;
+	    	pVarTP.z+=pAmount*z;
+	    	return;
+	    }
+		}
+	  pVarTP.doHide=true;
+	}
   
   @Override
   public String getName() {

@@ -56,22 +56,26 @@ public class SolidAngle3DFunc extends VariationFunc implements SupportsGPU {
   
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double x = (pContext.random() - 0.5);
-    double y = (pContext.random() - 0.5);
-    double z = (pContext.random() - 0.5);
-    
-    vec3 p=new vec3(x,y,z);
-
-    double distance=sdSolidAngle(p,new vec2(p1,p2),p3);
+		for (int i=1; i<=50; i++) {
+			double x = (pContext.random() - 0.5);
+	    double y = (pContext.random() - 0.5);
+	    double z = (pContext.random() - 0.5);
+	    
+	    vec3 p=new vec3(x,y,z);
+	    double distance=sdSolidAngle(p,new vec2(p1,p2),p3);
+	    
+	    if(distance <0.0)
+	    {
+	    	pVarTP.doHide=false;
+	    	pVarTP.x+=pAmount*x;
+	    	pVarTP.y+=pAmount*y;
+	    	pVarTP.z+=pAmount*z;
+	    	return;
+	    }
+		}
     pVarTP.doHide=true;
-    if(distance <0.0)
-    {
- 	    pVarTP.doHide=false;
-    	pVarTP.x=pAmount*x;
-    	pVarTP.y=pAmount*y;
-    	pVarTP.z=pAmount*z;
-    }
   }
+
  
   @Override
   public String getName() {

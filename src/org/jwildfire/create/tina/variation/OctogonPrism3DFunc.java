@@ -42,26 +42,29 @@ public class OctogonPrism3DFunc extends VariationFunc implements SupportsGPU {
 
   private static final String[] additionalParamNames = { PARAM_R,PARAM_H};
 	
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double x = (pContext.random() - 0.5);
-    double y = (pContext.random() - 0.5);
-    double z = (pContext.random() - 0.5);
-    
-    vec3 p=new vec3(x,y,z);
-
-    double distance=sdOctogonPrism(p,r,h);
+		for (int i=1; i<=50; i++) {
+			double x = (pContext.random() - 0.5);
+	    double y = (pContext.random() - 0.5);
+	    double z = (pContext.random() - 0.5);
+	    
+	    vec3 p=new vec3(x,y,z);
+	    double distance=sdOctogonPrism(p,r,h);
+	    
+	    if(distance <0.0)
+	    {
+	    	pVarTP.doHide=false;
+	    	pVarTP.x+=pAmount*x;
+	    	pVarTP.y+=pAmount*y;
+	    	pVarTP.z+=pAmount*z;
+	    	return;
+	    }
+		}
     pVarTP.doHide=true;
-    if(distance <0.0)
-    {
- 	    pVarTP.doHide=false;
-    	pVarTP.x=pAmount*x;
-    	pVarTP.y=pAmount*y;
-    	pVarTP.z=pAmount*z;
-    }
   }
 
-//
   double sdOctogonPrism(  vec3 p,  double r, double h )
   {
     vec3 k = new vec3(-0.9238795325,   // sqrt(2+sqrt(2))/2 

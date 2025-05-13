@@ -44,39 +44,42 @@ public class Cone3DFunc extends VariationFunc implements SupportsGPU {
   private static final String[] additionalParamNames = { PARAM_P1,PARAM_P2,PARAM_P3};
   
   
-//vertical
-double sdCone( vec3 p, vec2 c, double h )
-{
-   vec2 q = new vec2(c.x,-c.y).multiply(h/c.y);
-   vec2 w = new vec2( G.length(new vec2 (p.x,p.z)), p.y );
-   
-   vec2 a = w.minus(q.multiply(G.clamp( G.dot(w,q)/G.dot(q,q), 0.0, 1.0 )));
-   vec2 b = w.minus(q.multiply(new vec2( G.clamp( w.x/q.x, 0.0, 1.0 ), 1.0 )));
-   double k = G.sign( q.y );
-   double d = G.min(G.dot( a, a ),G.dot(b, b));
-   double s = G.max( k*(w.x*q.y-w.y*q.x),k*(w.y-q.y)  );
-	return Math.sqrt(d)*G.sign(s);
-}
-  
-  @Override
-  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double x = (pContext.random() - 0.5);
-    double y = (pContext.random() - 0.5);
-    double z = (pContext.random() - 0.5);
-    
-    vec3 p=new vec3(x,y,z);
+	//vertical
+	double sdCone( vec3 p, vec2 c, double h )
+	{
+	   vec2 q = new vec2(c.x,-c.y).multiply(h/c.y);
+	   vec2 w = new vec2( G.length(new vec2 (p.x,p.z)), p.y );
+	   
+	   vec2 a = w.minus(q.multiply(G.clamp( G.dot(w,q)/G.dot(q,q), 0.0, 1.0 )));
+	   vec2 b = w.minus(q.multiply(new vec2( G.clamp( w.x/q.x, 0.0, 1.0 ), 1.0 )));
+	   double k = G.sign( q.y );
+	   double d = G.min(G.dot( a, a ),G.dot(b, b));
+	   double s = G.max( k*(w.x*q.y-w.y*q.x),k*(w.y-q.y)  );
+		return Math.sqrt(d)*G.sign(s);
+	}
+	  
+	@Override
+	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+		for (int i=1; i<=50; i++) {
+			double x = (pContext.random() - 0.5);
+	    double y = (pContext.random() - 0.5);
+	    double z = (pContext.random() - 0.5);
+	    
+	    vec3 p=new vec3(x,y,z);
+	    double distance=sdCone(p,new vec2(p1,p2),p3);
+	    
+	    if(distance <0.0)
+	    {
+	    	pVarTP.doHide=false;
+	    	pVarTP.x+=pAmount*x;
+	    	pVarTP.y+=pAmount*y;
+	    	pVarTP.z+=pAmount*z;
+	    	return;
+	    }
+		}
+	  pVarTP.doHide=true;
+	}
 
-    double distance=sdCone(p,new vec2(p1,p2),p3); 
-    pVarTP.doHide=true;
-    if(distance <0.0)
-    {
- 	    pVarTP.doHide=false;
-    	pVarTP.x=pAmount*x;
-    	pVarTP.y=pAmount*y;
-    	pVarTP.z=pAmount*z;
-    }
-  }
-  
   @Override
   public String getName() {
     return "cone3D";
