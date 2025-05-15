@@ -423,6 +423,19 @@ double sdBox( vec2 p, vec2 b )
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		type = (int) (Math.random() * 13);
+		contour = Math.random() < 0.3 ? 0 : 1;
+		zoom = Math.random() * 5.0 + 0.1;
+		if (contour == 0 && zoom < 2) zoom = 2;
+		invert = (int) (Math.random() * 2);
+		n = (int) (Math.random() * 7 + 3);
+		thick = Math.random() * 0.5 + 0.01;
+		time = Math.random() * 100.0;
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}

@@ -298,6 +298,21 @@ double getColor(vec2 pos){
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		Iterations = (int) (Math.random() * 20 + 1);
+		SRadius = Math.random() * 0.098 + 0.002;
+		pParam = (int) (Math.random() * 11 + 2);
+		qParam = (int) (Math.random() * 11 + 2);
+		rParam = (int) (Math.random() * 11 + 2);
+		U = Math.random();
+		V = Math.random();
+		W = Math.random();
+		zoom = Math.random() + 1.0;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}

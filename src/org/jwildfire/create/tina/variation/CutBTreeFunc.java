@@ -154,6 +154,15 @@ public class CutBTreeFunc  extends VariationFunc  implements SupportsGPU {
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		time = Math.random() * 1000.0;
+		thickness = Math.random() * 9.0 + 1.0;
+		zoom = Math.random() + 0.3;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}

@@ -210,6 +210,19 @@ public class CutWoodFunc  extends VariationFunc implements SupportsGPU {
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		x0 = Math.random() * 10.0 - 5.0;
+		y0 = Math.random() * 10.0 - 5.0;
+		noise_freq = Math.random() * 1.9 + 0.1;
+		noise_smoothing = Math.random();
+		line_count = Math.random() * 49.0 + 1.0;
+		line_width = Math.random() * 0.4 + 0.1;
+		zoom = Math.random() * (20 / Math.sqrt(line_count) - 1 / line_count) + 1 / line_count;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}

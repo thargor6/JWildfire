@@ -166,6 +166,14 @@ public class CutWebFunc  extends VariationFunc implements SupportsGPU {
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		setParameter(PARAM_SEED, (int) (Math.random() * 1000000));
+		thick = Math.random() * 0.9;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}
