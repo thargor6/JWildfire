@@ -1038,6 +1038,7 @@ VariationFuncList {
     registerVariationFunc(QuadFunc.class);
     registerVariationFunc(RingTileFunc.class);
     registerVariationFunc(WhirligigFunc.class);
+    registerVariationFunc(TessShapeFunc.class);
     
 
     resolvedAliasMap = new HashMap<>();
