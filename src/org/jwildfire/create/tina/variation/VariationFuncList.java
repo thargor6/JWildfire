@@ -1038,6 +1038,8 @@ VariationFuncList {
     registerVariationFunc(QuadFunc.class);
     registerVariationFunc(RingTileFunc.class);
     registerVariationFunc(WhirligigFunc.class);
+    registerVariationFunc(KIFS3DFunc.class);
+    
     
 
     resolvedAliasMap = new HashMap<>();
