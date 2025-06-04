@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2023 Andreas Maschke
+  Copyright (C) 1995-2025 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -152,6 +152,10 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_GPU_MODE_DEFAULT_ENABLED = "tina.gpu_mode_default_enabled";
   static final String KEY_TINA_LEGACY_REALTIME_PREVIEW = "tina.legacy_realtime_preview";
 
+  static final String KEY_TINA_USE_SWAN_FOR_GPU_RENDERING = "tina.use_swan_for_gpu_rendering";
+  static final String KEY_TINA_SWAN_INSTALLATION_PATH = "tina.swan_installation_path";
+  static final String KEY_TINA_SWAN_API_PORT = "tina.swan_api_port";
+
   static final String KEY_TINA_FARENDER_OPTS = "tina.farender_opts";
   static final String KEY_TINA_DEFAULT_NEW_FLAME_TITLE = "tina.default.new_flame_title";
 
@@ -256,8 +260,17 @@ public class Prefs extends ManagedObject {
   @Property(description = "Enable the \"Leap Motion\"-tab (because this feature is very rarely used, it is hidden by default. Requires restart of the application after change.)", category = PropertyCategory.TINA)
   private boolean tinaEnableLeapMotionTab = false;
 
-  @Property(description = "Enable the GPU-mode in the main editor per default (if available). Requires restart of the application after change.", category = PropertyCategory.TINA)
+  @Property(description = "Enable the GPU-mode in the main editor per default (if available). Requires restart of the application after change.", category = PropertyCategory.GPU_RENDERING)
   private boolean tinaGpuModeDefaultEnabled = false;
+
+   @Property(description = "Use JWildfireSwan as integrated GPU renderer (You will need a local installation of JWildfireSwan to use this feature).", category = PropertyCategory.GPU_RENDERING)
+  private boolean useSwanForGpuRendering = false;
+
+  @Property(description = "Path to a local installation of JWildfireSwan (to be used as integrated GPU renderer).", category = PropertyCategory.GPU_RENDERING, editorClass = FolderPropertyEditor.class)
+  private String swanInstallationPath = null;
+
+  @Property(description = "Port to communicate with JWildfireSwan for GPU renderingp", category = PropertyCategory.GPU_RENDERING)
+  private int swanApiPort = 8081;
 
   @Property(description = "Use progressive refresh of the preview after each change of a property and even while dragging the mouse. This causes a lot of flickering and was superseeded by a less flickering update method since version 7.40. Enabling this property restores the previous behaviour. A change of this property requires a program-restart.", category = PropertyCategory.TINA)
   private boolean tinaLegacyRealtimePreview = false;
@@ -929,8 +942,36 @@ public class Prefs extends ManagedObject {
     iflamesImageLibraryPath = pSrc.iflamesImageLibraryPath;
     iflamesLoadLibraryAtStartup = pSrc.iflamesLoadLibraryAtStartup;
 
+    useSwanForGpuRendering = pSrc.useSwanForGpuRendering;
+    swanInstallationPath = pSrc.swanInstallationPath;
+    swanApiPort = pSrc.swanApiPort;
+
     securityScopedBookmarks.clear();
     securityScopedBookmarks= new HashMap<>(pSrc.securityScopedBookmarks);
+  }
+
+  public boolean isUseSwanForGpuRendering() {
+    return useSwanForGpuRendering;
+  }
+
+  public void setUseSwanForGpuRendering(boolean useSwanForGpuRendering) {
+    this.useSwanForGpuRendering = useSwanForGpuRendering;
+  }
+
+  public String getSwanInstallationPath() {
+    return swanInstallationPath;
+  }
+
+  public void setSwanInstallationPath(String swanInstallationPath) {
+    this.swanInstallationPath = swanInstallationPath;
+  }
+
+  public int getSwanApiPort() {
+    return swanApiPort;
+  }
+
+  public void setSwanApiPort(int swanApiPort) {
+    this.swanApiPort = swanApiPort;
   }
 
   public int getTinaRenderThreads() {
