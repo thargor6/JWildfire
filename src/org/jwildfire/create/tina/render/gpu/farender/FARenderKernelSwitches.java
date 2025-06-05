@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2025 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -14,10 +14,17 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.farender;
+package org.jwildfire.create.tina.render.gpu.farender;
 
-import org.jwildfire.create.tina.variation.VariationFunc;
+public enum FARenderKernelSwitches {
+  ADD_FEATURE_CELLULAR_NOISE,
+  ADD_FEATURE_CUBIC_NOISE,
+  ADD_FEATURE_PERLIN_NOISE,
+  ADD_FEATURE_SIMPLEX_NOISE,
+  ADD_FEATURE_VALUE_NOISE,
+  ADD_FEATURE_WHITE_NOISE,
 
-public interface VariationnameTransformer {
-  String transformVariationName(VariationFunc func);
+  ADD_FEATURE_WFIELDS, ADD_FEATURE_WFIELDS_JITTER,
+
+  ADD_FEATURE_DOF
 }

@@ -23,7 +23,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.farender.FARenderTools;
+import org.jwildfire.create.tina.render.gpu.farender.FARenderTools;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.*;
 

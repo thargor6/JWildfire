@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2023 Andreas Maschke
+  Copyright (C) 1995-2025 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,68 +14,27 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.farender;
+package org.jwildfire.create.tina.render.gpu.farender;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.backdrop.FlameBackgroundHandler;
+import org.jwildfire.create.tina.render.gpu.CmdLauncherTools;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.io.ImageWriter;
-import org.jwildfire.launcher.StreamRedirector;
-import org.jwildfire.transform.ComposeTransformer;
 
 public class FARenderTools {
-  private static boolean faRenderChecked = false;
-  private static boolean faRenderAvalailable = false;
-
-  private static String cudaLibrary= null;
-  private static boolean cudaLibraryChecked = false;
-
   private static final String FARENDER_JWF_PATH = "FARenderJWF";
 
-
   private static final String FARENDER_EXE = "FARender.exe";
-
-  private static void launchSync(String[] pCmd) {
-    Runtime runtime = Runtime.getRuntime();
-    try {
-      runtime.exec(pCmd);
-    }
-    catch (Exception ex) {
-      throw new RuntimeException(ex);
-    }
-  }
-
-  private static int launchAsync(String pCmd, OutputStream pOS) {
-    try {
-      Runtime runtime = Runtime.getRuntime();
-      Process proc = runtime.exec(pCmd);
-
-      StreamRedirector outputStreamHandler = new StreamRedirector(proc.getInputStream(), pOS, false);
-      StreamRedirector errorStreamHandler = new StreamRedirector(proc.getErrorStream(), pOS, false);
-      errorStreamHandler.start();
-      outputStreamHandler.start();
-      if(proc.waitFor(5, TimeUnit.MINUTES)) {
-        return proc.exitValue();
-      }
-      else {
-        return -1;
-      }
-    }
-    catch (Exception ex) {
-      throw new RuntimeException(ex);
-    }
-  }
 
   private static String getLaunchCmd(String pFlameFilename, int pWidth, int pHeight, int pQuality, boolean pMergedRender, boolean pAlpha) {
     StringBuilder cmd = new StringBuilder();
@@ -125,7 +84,7 @@ public class FARenderTools {
 
       String cmd = getLaunchCmd(pFlameFilename, pWidth, pHeight, pQuality, pMergedRender, pFlame.isBGTransparency() || pFlame.hasBGTransforms() || pFlame.hasComplexBackgroundColor());
       ByteArrayOutputStream os = new ByteArrayOutputStream();
-      int returnCode = launchAsync(cmd, os);
+      int returnCode = CmdLauncherTools.launchAsync(cmd, os);
       String msg = new String(os.toByteArray());
       FARenderResult res = new FARenderResult(returnCode, msg);
       res.setCommand(cmd);

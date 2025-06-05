@@ -16,13 +16,36 @@
 */
 package org.jwildfire.create.tina.render.gpu;
 
+import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.render.gpu.farender.FARendererInterface;
+import org.jwildfire.create.tina.render.gpu.swanrender.SwanRendererInterface;
+
 public class GPURendererFactory {
   private static Boolean selfTestResult = null;
 
   public static boolean isAvailable() {
     if (selfTestResult == null) {
+      Prefs prefs = Prefs.getPrefs();
+      if (prefs.isUseSwanForGpuRendering()) {
+        try {
+          GPURenderer swanRenderer = new SwanRendererInterface();
+          selfTestResult = Boolean.valueOf(swanRenderer.performSelfTests());
+          if (selfTestResult.booleanValue()) {
+            gpuRenderer = swanRenderer;
+            return true;
+          }
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      // fallback to FARendererInterface
       try {
-        selfTestResult = Boolean.valueOf(getGPURendererInstance().performSelfTests());
+        GPURenderer faRenderer = new FARendererInterface();
+        selfTestResult = Boolean.valueOf(faRenderer.performSelfTests());
+        if (selfTestResult.booleanValue()) {
+          gpuRenderer = faRenderer;
+          return true;
+        }
       } catch (Exception ex) {
         ex.printStackTrace();
         selfTestResult = Boolean.FALSE;
@@ -31,12 +54,9 @@ public class GPURendererFactory {
     return selfTestResult.booleanValue();
   }
 
-  private static GPURenderer instance = null;
+  private static GPURenderer gpuRenderer = null;
 
   public static GPURenderer getGPURendererInstance() {
-    if(instance==null) {
-      instance = new FARendererInterface();
-    }
-    return instance;
+    return isAvailable() ? gpuRenderer : null;
   }
 }
