@@ -16,6 +16,17 @@
 */
 package org.jwildfire.create.tina.render.gpu;
 
+import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.ProgressUpdater;
+import org.jwildfire.create.tina.swing.FlameMessageHelper;
+import org.jwildfire.create.tina.swing.GpuProgressUpdater;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.swing.ErrorHandler;
+import org.slf4j.Logger;
+
 public interface GPURenderer {
   boolean performSelfTests();
+  SimpleImage renderPreview(Flame flame, int width, int height, Prefs prefs, ProgressUpdater mainProgressUpdater, GpuProgressUpdater gpuProgressUpdater, FlameMessageHelper messageHelper, FlamePanelConfig flamePanelConfig, ErrorHandler errorHandler, Logger logger);
 }

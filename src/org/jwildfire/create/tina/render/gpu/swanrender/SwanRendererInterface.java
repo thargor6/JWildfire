@@ -24,18 +24,25 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.FlameReader;
+import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.gpu.GPURenderer;
 import org.jwildfire.create.tina.render.gpu.farender.FAFlameWriter;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderResult;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderTools;
 import org.jwildfire.create.tina.swing.FileDialogTools;
+import org.jwildfire.create.tina.swing.FlameMessageHelper;
+import org.jwildfire.create.tina.swing.GpuProgressUpdater;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
+import org.jwildfire.swing.ErrorHandler;
+import org.slf4j.Logger;
 
 public class SwanRendererInterface implements GPURenderer {
 
   @Override
   public boolean performSelfTests() {
     if(SwanRenderTools.getSwanApiVersion() > 0) {
-      SwanRenderTools.renderFlame();
       return true;
     }
     SwanRenderTools.launchSwan();
@@ -46,7 +53,6 @@ public class SwanRendererInterface implements GPURenderer {
       while(retries < maxRetries) {
         if(SwanRenderTools.getSwanApiVersion() > 0) {
           System.err.println("Swan API version: " + SwanRenderTools.getSwanApiVersion());
-          SwanRenderTools.renderFlame();
           return true;
         }
         Thread.currentThread().sleep(250);
@@ -57,4 +63,45 @@ public class SwanRendererInterface implements GPURenderer {
     }
     return false;
   }
+
+  public SimpleImage renderPreview(Flame flame, int width, int height, Prefs prefs, ProgressUpdater mainProgressUpdater, GpuProgressUpdater gpuProgressUpdater, FlameMessageHelper messageHelper, FlamePanelConfig flamePanelConfig, ErrorHandler errorHandler, Logger logger) {
+    try {
+      final int PROGRESS_STEPS = 25;
+      mainProgressUpdater.initProgress(PROGRESS_STEPS);
+      if (gpuProgressUpdater != null) {
+        gpuProgressUpdater.signalCancel();
+      }
+      if (gpuProgressUpdater != null && gpuProgressUpdater.isFinished()) {
+        gpuProgressUpdater = null;
+      }
+      if (gpuProgressUpdater == null) {
+        gpuProgressUpdater = new GpuProgressUpdater(mainProgressUpdater, PROGRESS_STEPS);
+        new Thread(gpuProgressUpdater).start();
+      }
+      try {
+        long t0 = System.currentTimeMillis();
+
+        SwanApiRenderFlameResultTo renderResult = SwanRenderTools.renderFlame(flame, width, height, prefs.getTinaRenderPreviewQuality());
+        SimpleImage img = SwanRenderTools.decodeImageFromResult(renderResult);
+        mainProgressUpdater.updateProgress(PROGRESS_STEPS);
+        if (!flamePanelConfig.isNoControls() && messageHelper != null) {
+          long t1 = System.currentTimeMillis();
+          messageHelper.showStatusMessage(
+                  flame, "render time (GPU): " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+          //logger.info(openClRenderRes.getMessage());
+        }
+        return img;
+      }
+      finally {
+        if (gpuProgressUpdater != null) {
+          gpuProgressUpdater.signalCancel();
+        }
+     }
+    } catch (Exception ex) {
+      logger.error(ex.getMessage(), ex);
+      errorHandler.handleError(ex);
+    }
+    return null;
+  }
+
 }

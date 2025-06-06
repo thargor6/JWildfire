@@ -19,14 +19,24 @@ package org.jwildfire.create.tina.render.gpu.farender;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.gpu.GPURenderer;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.swing.FileDialogTools;
+import org.jwildfire.create.tina.swing.FlameMessageHelper;
+import org.jwildfire.create.tina.swing.GpuProgressUpdater;
+import org.jwildfire.create.tina.swing.TinaControllerContextService;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
+import org.jwildfire.swing.ErrorHandler;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.Collections;
+import java.util.List;
 
 public class FARendererInterface implements GPURenderer {
   private final String FLAME_XML =
@@ -96,4 +106,75 @@ public class FARendererInterface implements GPURenderer {
       return false;
     }
   }
+
+  @Override
+  public SimpleImage renderPreview(Flame flame, int width, int height, Prefs prefs, ProgressUpdater mainProgressUpdater, GpuProgressUpdater gpuProgressUpdater, FlameMessageHelper messageHelper, FlamePanelConfig flamePanelConfig, ErrorHandler errorHandler, Logger logger) {
+    try {
+      final int PROGRESS_STEPS = 25;
+      File tmpFile = File.createTempFile("jwf", ".flame");
+      try {
+        FileDialogTools.ensureFileAccess(
+                new Frame(), new JPanel(), tmpFile.getAbsolutePath());
+        mainProgressUpdater.initProgress(PROGRESS_STEPS);
+        if (gpuProgressUpdater != null) {
+          gpuProgressUpdater.signalCancel();
+        }
+        if (gpuProgressUpdater != null && gpuProgressUpdater.isFinished()) {
+          gpuProgressUpdater = null;
+        }
+        if (gpuProgressUpdater == null) {
+          gpuProgressUpdater = new GpuProgressUpdater(mainProgressUpdater, PROGRESS_STEPS);
+          new Thread(gpuProgressUpdater).start();
+        }
+        FARenderResult openClRenderRes;
+        long t0 = System.currentTimeMillis();
+        try {
+          List<Flame> preparedFlames =
+                  FARenderTools.prepareFlame(
+                          flame, TinaControllerContextService.getContext().isZPass());
+          new FAFlameWriter().writeFlame(preparedFlames, tmpFile.getAbsolutePath());
+          openClRenderRes =
+                  FARenderTools.invokeFARender(
+                          tmpFile.getAbsolutePath(),
+                          width,
+                          height,
+                          prefs.getTinaRenderPreviewQuality(),
+                          preparedFlames.size() > 1, flame);
+        } finally {
+          try {
+            if (gpuProgressUpdater != null) {
+              gpuProgressUpdater.signalCancel();
+            }
+          } catch (Exception ex) {
+            // EMPTY
+          }
+        }
+        if (openClRenderRes.getReturnCode() != 0) {
+          throw new Exception(openClRenderRes.getMessage());
+        } else {
+          SimpleImage img = new ImageReader().loadImage(openClRenderRes.getOutputFilename());
+          mainProgressUpdater.updateProgress(PROGRESS_STEPS);
+          if (!flamePanelConfig.isNoControls() && messageHelper != null) {
+            long t1 = System.currentTimeMillis();
+            messageHelper.showStatusMessage(
+                    flame, "render time (GPU): " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+            logger.info(openClRenderRes.getMessage());
+          }
+          return img;
+        }
+      } finally {
+        if (!tmpFile.delete()) {
+          tmpFile.deleteOnExit();
+        }
+        if (gpuProgressUpdater != null) {
+          gpuProgressUpdater.signalCancel();
+        }
+      }
+    } catch (Exception ex) {
+      logger.error(ex.getMessage(), ex);
+      errorHandler.handleError(ex);
+    }
+    return null;
+  }
+
 }

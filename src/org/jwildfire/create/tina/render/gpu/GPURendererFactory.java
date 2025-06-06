@@ -56,7 +56,7 @@ public class GPURendererFactory {
 
   private static GPURenderer gpuRenderer = null;
 
-  public static GPURenderer getGPURendererInstance() {
+  public static GPURenderer getGPURenderer() {
     return isAvailable() ? gpuRenderer : null;
   }
 }
