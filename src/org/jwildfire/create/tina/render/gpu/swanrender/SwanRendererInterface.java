@@ -34,15 +34,25 @@ public class SwanRendererInterface implements GPURenderer {
 
   @Override
   public boolean performSelfTests() {
+    if(SwanRenderTools.getSwanApiVersion() > 0) {
+      return true;
+    }
     SwanRenderTools.launchSwan();
     try {
-      Thread.currentThread().sleep(5000);
+      Thread.currentThread().sleep(2000);
+      final int maxRetries = 80;
+      int retries = 0;
+      while(retries < maxRetries) {
+        if(SwanRenderTools.getSwanApiVersion() > 0) {
+          System.err.println("Swan API version: " + SwanRenderTools.getSwanApiVersion());
+          return true;
+        }
+        Thread.currentThread().sleep(250);
+        retries++;
+      }
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
-    SwanRenderTools.getSwanVersion();
- //   if (!Tools.OSType.WINDOWS.equals(Tools.getOSType())) {
-      return false;
-  //  }
-   }
+    return false;
+  }
 }

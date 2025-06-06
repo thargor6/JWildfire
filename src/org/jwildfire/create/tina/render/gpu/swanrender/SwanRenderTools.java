@@ -27,6 +27,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+import com.cedarsoftware.io.JsonIo;
+import com.cedarsoftware.io.ReadOptions;
+import com.cedarsoftware.io.ReadOptionsBuilder;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.render.gpu.CmdLauncherTools;
@@ -130,12 +133,19 @@ public class SwanRenderTools {
     }
   }
 
-  public static String getSwanVersion() {
+  public static SwanApiVersionTo getSwanVersion() {
     String urlPath = getSwanApiBaseUrl() + "/v1/info";
     String response = performGetRequest(urlPath);
-    System.err.println("Swan API response: " + response);
-
-    return response;
+    ReadOptions readOptions = new ReadOptionsBuilder().build();
+    SwanApiVersionTo version = JsonIo.toJava(response, readOptions).asClass(SwanApiVersionTo.class);
+    return version;
   }
 
+  public static int getSwanApiVersion() {
+    try {
+      return getSwanVersion().getApiVersion() != null ? getSwanVersion().getApiVersion() : -1;
+    } catch (Exception e) {
+      return -1; // SWAN is not running or not available
+    }
+  }
 }
