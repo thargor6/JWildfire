@@ -16,32 +16,51 @@
 */
 package org.jwildfire.create.tina.render.gpu.swanrender;
 
-public class SwanApiVersionTo {
-  private String application;
-  private String version;
-  private Integer api_version;
+public class SwanApiRenderFlameResultTo {
+  private byte[] image;
+  private Double reached_quality;
+  private Integer image_width;
+  private Integer image_height;
+  private Double elapsed_time;
 
-  public String getApplication() {
-    return application;
+  public byte[] getImage() {
+    return image;
   }
 
-  public void setApplication(String application) {
-    this.application = application;
+  public void setImage(byte[] image) {
+    this.image = image;
   }
 
-  public String getVersion() {
-    return version;
+  public Double getReached_quality() {
+    return reached_quality;
   }
 
-  public void setVersion(String version) {
-    this.version = version;
+  public void setReached_quality(Double reached_quality) {
+    this.reached_quality = reached_quality;
   }
 
-  public Integer getApi_version() {
-    return api_version;
+  public Integer getImage_width() {
+    return image_width;
   }
 
-  public void setApi_version(Integer api_version) {
-    this.api_version = api_version;
+  public void setImage_width(Integer image_width) {
+    this.image_width = image_width;
   }
+
+  public Integer getImage_height() {
+    return image_height;
+  }
+
+  public void setImage_height(Integer image_height) {
+    this.image_height = image_height;
+  }
+
+  public Double getElapsed_time() {
+    return elapsed_time;
+  }
+
+  public void setElapsed_time(Double elapsed_time) {
+    this.elapsed_time = elapsed_time;
+  }
+
 }

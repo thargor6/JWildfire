@@ -35,6 +35,7 @@ public class SwanRendererInterface implements GPURenderer {
   @Override
   public boolean performSelfTests() {
     if(SwanRenderTools.getSwanApiVersion() > 0) {
+      SwanRenderTools.renderFlame();
       return true;
     }
     SwanRenderTools.launchSwan();
@@ -45,6 +46,7 @@ public class SwanRendererInterface implements GPURenderer {
       while(retries < maxRetries) {
         if(SwanRenderTools.getSwanApiVersion() > 0) {
           System.err.println("Swan API version: " + SwanRenderTools.getSwanApiVersion());
+          SwanRenderTools.renderFlame();
           return true;
         }
         Thread.currentThread().sleep(250);
