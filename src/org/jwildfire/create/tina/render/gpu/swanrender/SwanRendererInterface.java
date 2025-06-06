@@ -35,6 +35,12 @@ public class SwanRendererInterface implements GPURenderer {
   @Override
   public boolean performSelfTests() {
     SwanRenderTools.launchSwan();
+    try {
+      Thread.currentThread().sleep(5000);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+    SwanRenderTools.getSwanVersion();
  //   if (!Tools.OSType.WINDOWS.equals(Tools.getOSType())) {
       return false;
   //  }

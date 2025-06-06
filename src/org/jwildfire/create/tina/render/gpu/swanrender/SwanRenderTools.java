@@ -16,9 +16,15 @@
 */
 package org.jwildfire.create.tina.render.gpu.swanrender;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import org.jwildfire.base.Prefs;
@@ -74,6 +80,62 @@ public class SwanRenderTools {
     String[] cmd = getLaunchCmd();
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     CmdLauncherTools.launchAsyncNoWait(cmd, os);
+  }
+
+  private static String getSwanApiBaseUrl() {
+    Prefs prefs = Prefs.getPrefs();
+    int swanApiPort = prefs.getSwanApiPort();
+    if (swanApiPort <= 0) {
+      swanApiPort = 8080;
+    }
+    return "http://localhost:" + swanApiPort + "/api";
+  }
+
+  public static String performGetRequest(String urlPath) {
+    try {
+      URL url = new URL(urlPath);
+      HttpURLConnection con = (HttpURLConnection) url.openConnection();
+      con.setRequestMethod("GET");
+      con.setConnectTimeout(500);
+      con.setReadTimeout(500);
+
+      int status = con.getResponseCode();
+      Reader streamReader;
+      if (status > 299) {
+        streamReader = new InputStreamReader(con.getErrorStream());
+      } else {
+        streamReader = new InputStreamReader(con.getInputStream());
+      }
+
+      BufferedReader in = new BufferedReader(streamReader);
+      try {
+        String inputLine;
+        StringBuffer content = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+          content.append(inputLine);
+        }
+
+        if (status > 299) {
+          throw new RuntimeException("Error response from SWAN API: " + content.toString());
+        }
+        else {
+          return content.toString();
+        }
+      }
+      finally{
+        in.close();
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static String getSwanVersion() {
+    String urlPath = getSwanApiBaseUrl() + "/v1/info";
+    String response = performGetRequest(urlPath);
+    System.err.println("Swan API response: " + response);
+
+    return response;
   }
 
 }
