@@ -21,6 +21,7 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.render.gpu.farender.FAFlameWriter;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderResult;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderTools;
@@ -339,88 +340,19 @@ public class FlamesGPURenderController implements FlameChangeOberserver, Message
       failed = false;
       try {
         try {
-          File tmpFile =
-              File.createTempFile(
-                  System.currentTimeMillis() + "_" + Thread.currentThread().getId(), ".flam3");
-          boolean hasError=false;
-          try {
-            statsTextArea.setText("");
-            FAFlameWriter gpuFlameWriter = new FAFlameWriter(FlamesGPURenderController.this);
-            List<Flame> preparedFlames = FARenderTools.prepareFlame(getCurrFlame(), TinaControllerContextService.getContext().isZPass());
-            String gpuFlameParams = gpuFlameWriter.getFlameXML(preparedFlames);
-            gpuFlameParamsTextArea.setText(gpuFlameParams);
-            gpuFlameWriter.writeFlame(gpuFlameParams, tmpFile.getAbsolutePath());
-            long t0 = System.currentTimeMillis();
-            FARenderResult renderResult =
-                FARenderTools.invokeFARender(tmpFile.getAbsolutePath(), width, height, quality, preparedFlames.size() > 1, getCurrFlame());
-            long t1 = System.currentTimeMillis();
-            try {
-              if (renderResult.getReturnCode() == 0) {
-                if (renderResult.getMessage() != null) {
-                  statsTextArea.append(renderResult.getMessage() + "\n");
-                }
-                if (!aiPostDenoiserDisableCheckbox.isSelected()
-                    && !AIPostDenoiserType.NONE.equals(getCurrFlame().getAiPostDenoiser())) {
-                  long dt0 = System.currentTimeMillis();
-                  if (AIPostDenoiserFactory.denoiseImage(
-                      renderResult.getOutputFilename(),
-                      getCurrFlame().getAiPostDenoiser(),
-                      getCurrFlame().getPostOptiXDenoiserBlend())) {
-                    long dt1 = System.currentTimeMillis();
-                    t1 = dt1;
-                    statsTextArea.append(
-                        "\n\n"
-                            + "AI-Post-Denoiser: "
-                            + Tools.doubleToString((dt1 - dt0) / 1000.0)
-                            + "s");
-                  }
-                }
-                SimpleImage img = new ImageReader().loadImage(renderResult.getOutputFilename());
-                if (img.getImageWidth() == image.getImageWidth()
-                    && img.getImageHeight() == image.getImageHeight()) {
-                  image.setBufferedImage(
-                      img.getBufferedImg(), img.getImageWidth(), img.getImageHeight());
-                  imageRootPanel.repaint();
-                  gpuRenderInfoLbl.setText(
-                      "Elapsed: " + Tools.doubleToString((t1 - t0) / 1000.0) + "s");
-                } else {
-                  hasError = true;
-                  throw new Exception(
-                      "Invalid image size <"
-                          + img.getImageWidth()
-                          + "x"
-                          + img.getImageHeight()
-                          + ">");
-                }
-              } else {
-                hasError = true;
-                statsTextArea.append("\n\n" +
-                    (renderResult.getMessage() != null ? renderResult.getMessage() : "")
-                        + "\n\n"
-                        + (renderResult.getCommand() != null ? renderResult.getCommand() : ""));
-              }
-            } finally {
-              try {
-                if (renderResult.getOutputFilename() != null
-                    && !renderResult.getOutputFilename().isEmpty()) {
-                  File f = new File(renderResult.getOutputFilename());
-                  if (f.exists()) {
-                    if (!f.delete()) {
-                      f.deleteOnExit();
-                    }
-                  }
-                }
-              } catch (Exception innerError) {
-                innerError.printStackTrace();
-              }
-            }
-          } finally {
-            if (!(hasError && keepFlameFileOnError)) {
-              if (!tmpFile.delete()) {
-                tmpFile.deleteOnExit();
-              }
-            }
-          }
+          GPURendererFactory.getGPURenderer().renderFlameForGpuController(
+              getCurrFlame(),
+              width,
+              height,
+              quality,
+              statsTextArea,
+              gpuFlameParamsTextArea,
+              aiPostDenoiserDisableCheckbox,
+              imageRootPanel,
+              FlamesGPURenderController.this,
+              gpuRenderInfoLbl,
+              image,
+              keepFlameFileOnError);
         } catch (Throwable ex) {
           failed = true;
           error = ex;

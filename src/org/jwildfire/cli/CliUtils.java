@@ -20,6 +20,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.render.gpu.farender.FAFlameWriter;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderResult;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderTools;
@@ -63,26 +64,7 @@ public class CliUtils {
     }
 
     if(renderOptions.isUseGPU()) {
-      boolean zForPass = false;
-      String tmpFlam3Filename = Tools.trimFileExt(flameFilename) + ".flam3";
-      String gpuRenderFlameFilename = zForPass ? Tools.makeZBufferFilename(tmpFlam3Filename, flame.getZBufferFilename()) : tmpFlam3Filename;
-      try {
-        List<Flame> preparedFlames = FARenderTools.prepareFlame(renderFlame, zForPass);
-        new FAFlameWriter().writeFlame(preparedFlames, gpuRenderFlameFilename);
-        FARenderResult gpuRenderRes = FARenderTools.invokeFARender(gpuRenderFlameFilename,
-                renderOptions.getRenderWidth(), renderOptions.getRenderHeight(), Tools.FTOI(renderOptions.getRenderQuality()), preparedFlames.size() > 1, renderFlame);
-        if (gpuRenderRes.getReturnCode() != 0) {
-          throw new Exception(gpuRenderRes.getMessage());
-        } else {
-          if (!AIPostDenoiserType.NONE.equals(renderFlame.getAiPostDenoiser()) && !renderFlame.isPostDenoiserOnlyForCpuRender()) {
-            AIPostDenoiserFactory.denoiseImage(new File(gpuRenderRes.getOutputFilename()).getAbsolutePath(), renderFlame.getAiPostDenoiser(), renderFlame.getPostOptiXDenoiserBlend());
-          }
-        }
-      } finally {
-        if (!new File(gpuRenderFlameFilename).delete()) {
-          new File(gpuRenderFlameFilename).deleteOnExit();
-        }
-      }
+      GPURendererFactory.getGPURenderer().renderFlameFromCli(renderFlame, flameFilename, renderOptions);
     } else {
       RenderInfo renderInfo =
           new RenderInfo(

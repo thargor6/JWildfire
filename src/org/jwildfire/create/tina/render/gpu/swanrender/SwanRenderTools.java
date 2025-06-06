@@ -191,6 +191,7 @@ public class SwanRenderTools {
     renderFlameTo.setRender_width(render_width);
     renderFlameTo.setRender_height(render_height);
     renderFlameTo.setRender_quality(render_quality);
+    // TODO: prefs
     renderFlameTo.setSwarm_size(1024);
     renderFlameTo.setIterations_per_frame(20);
     renderFlameTo.setFrame(1);

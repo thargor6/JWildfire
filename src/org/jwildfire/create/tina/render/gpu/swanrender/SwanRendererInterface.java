@@ -22,15 +22,20 @@ import java.util.Collections;
 import javax.swing.*;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.cli.RenderOptions;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.ProgressUpdater;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.gpu.GPURenderer;
 import org.jwildfire.create.tina.render.gpu.farender.FAFlameWriter;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderResult;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderTools;
 import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.create.tina.swing.FlameMessageHelper;
+import org.jwildfire.create.tina.swing.FlamesGPURenderController;
 import org.jwildfire.create.tina.swing.GpuProgressUpdater;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.image.SimpleImage;
@@ -80,7 +85,6 @@ public class SwanRendererInterface implements GPURenderer {
       }
       try {
         long t0 = System.currentTimeMillis();
-
         SwanApiRenderFlameResultTo renderResult = SwanRenderTools.renderFlame(flame, width, height, prefs.getTinaRenderPreviewQuality());
         SimpleImage img = SwanRenderTools.decodeImageFromResult(renderResult);
         mainProgressUpdater.updateProgress(PROGRESS_STEPS);
@@ -104,4 +108,45 @@ public class SwanRendererInterface implements GPURenderer {
     return null;
   }
 
+  @Override
+  public void renderFlameFromCli(Flame renderFlame, String flameFilename, RenderOptions renderOptions) throws Exception {
+    // TODO: implement
+    //  new ImageWriter().saveImage(renderResult.getImage(), Tools.trimFileExt(flameFilename)+".png");
+  }
+
+  @Override
+  public void renderFlameForEditor(Flame newFlame, String gpuRenderFlameFilename, int width, int height, int quality, boolean zForPass) throws Exception {
+
+  }
+
+  @Override
+  public void renderFlameForGpuController(Flame currFlame, int width, int height, int quality, JTextArea statsTextArea, JTextArea gpuFlameParamsTextArea, JCheckBox aiPostDenoiserDisableCheckbox, JPanel imageRootPanel, FlamesGPURenderController controller, JLabel gpuRenderInfoLbl, SimpleImage image, boolean keepFlameFileOnError) throws Exception {
+    //gpuFlameParamsTextArea.setText(gpuFlameParams);
+    long t0 = System.currentTimeMillis();
+    SwanApiRenderFlameResultTo renderResult = SwanRenderTools.renderFlame(currFlame, width, height, quality);
+    SimpleImage img = SwanRenderTools.decodeImageFromResult(renderResult);
+    long t1 = System.currentTimeMillis();
+    if (img != null && img.getImageWidth() > 0 && img.getImageHeight() > 0) {
+      if (img.getImageWidth() == image.getImageWidth()
+              && img.getImageHeight() == image.getImageHeight()) {
+        image.setBufferedImage(
+                img.getBufferedImg(), img.getImageWidth(), img.getImageHeight());
+        imageRootPanel.repaint();
+        gpuRenderInfoLbl.setText(
+                "Elapsed: " + Tools.doubleToString((t1 - t0) / 1000.0) + "s");
+      } else {
+        throw new Exception(
+                "Invalid image size <"
+                        + img.getImageWidth()
+                        + "x"
+                        + img.getImageHeight()
+                        + ">");
+      }
+    }
+  }
+
+  @Override
+  public void renderFlameForBatch(Flame newFlame, String openClFlameFilename, int width, int height, int quality, boolean zForPass, boolean disablePostDenoiser, boolean updateProgress, Job job) throws Exception {
+
+  }
 }

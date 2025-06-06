@@ -18,12 +18,17 @@ package org.jwildfire.create.tina.render.gpu.farender;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.cli.RenderOptions;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.render.ProgressUpdater;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
+import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.gpu.GPURenderer;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.create.tina.swing.FlameMessageHelper;
+import org.jwildfire.create.tina.swing.FlamesGPURenderController;
 import org.jwildfire.create.tina.swing.GpuProgressUpdater;
 import org.jwildfire.create.tina.swing.TinaControllerContextService;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
@@ -35,6 +40,7 @@ import org.slf4j.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -177,4 +183,159 @@ public class FARendererInterface implements GPURenderer {
     return null;
   }
 
+  @Override
+  public void renderFlameFromCli(Flame renderFlame, String flameFilename, RenderOptions renderOptions)  throws Exception {
+    boolean zForPass = false;
+    String tmpFlam3Filename = Tools.trimFileExt(flameFilename) + ".flam3";
+    String gpuRenderFlameFilename = zForPass ? Tools.makeZBufferFilename(tmpFlam3Filename, renderFlame.getZBufferFilename()) : tmpFlam3Filename;
+    try {
+      List<Flame> preparedFlames = FARenderTools.prepareFlame(renderFlame, zForPass);
+      new FAFlameWriter().writeFlame(preparedFlames, gpuRenderFlameFilename);
+      FARenderResult gpuRenderRes = FARenderTools.invokeFARender(gpuRenderFlameFilename,
+              renderOptions.getRenderWidth(), renderOptions.getRenderHeight(), Tools.FTOI(renderOptions.getRenderQuality()), preparedFlames.size() > 1, renderFlame);
+      if (gpuRenderRes.getReturnCode() != 0) {
+        throw new Exception(gpuRenderRes.getMessage());
+      } else {
+        if (!AIPostDenoiserType.NONE.equals(renderFlame.getAiPostDenoiser()) && !renderFlame.isPostDenoiserOnlyForCpuRender()) {
+          AIPostDenoiserFactory.denoiseImage(new File(gpuRenderRes.getOutputFilename()).getAbsolutePath(), renderFlame.getAiPostDenoiser(), renderFlame.getPostOptiXDenoiserBlend());
+        }
+      }
+    } finally {
+      if (!new File(gpuRenderFlameFilename).delete()) {
+        new File(gpuRenderFlameFilename).deleteOnExit();
+      }
+    }
+  }
+
+  @Override
+  public void renderFlameForEditor(Flame newFlame, String gpuRenderFlameFilename, int width, int height, int quality, boolean zForPass) throws Exception {
+    try {
+      List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame, zForPass);
+      new FAFlameWriter().writeFlame(preparedFlames, gpuRenderFlameFilename);
+      FARenderResult gpuRenderRes = FARenderTools.invokeFARender(gpuRenderFlameFilename, width, height, quality, preparedFlames.size() > 1, newFlame);
+      if (gpuRenderRes.getReturnCode() != 0) {
+        throw new Exception(gpuRenderRes.getMessage());
+      } else {
+        if (!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser()) && !newFlame.isPostDenoiserOnlyForCpuRender()) {
+          AIPostDenoiserFactory.denoiseImage(gpuRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend());
+        }
+      }
+    } finally {
+      if (!new File(gpuRenderFlameFilename).delete()) {
+        new File(gpuRenderFlameFilename).deleteOnExit();
+      }
+    }
+  }
+
+  @Override
+  public void renderFlameForGpuController(Flame currFlame, int width, int height, int quality, JTextArea statsTextArea, JTextArea gpuFlameParamsTextArea, JCheckBox aiPostDenoiserDisableCheckbox, JPanel imageRootPanel, FlamesGPURenderController controller, JLabel gpuRenderInfoLbl, SimpleImage image, boolean keepFlameFileOnError) throws Exception {
+    boolean hasError=false;
+    File tmpFile =
+            File.createTempFile(
+                    System.currentTimeMillis() + "_" + Thread.currentThread().getId(), ".flam3");
+    try {
+      statsTextArea.setText("");
+      FAFlameWriter gpuFlameWriter = new FAFlameWriter(controller);
+      List<Flame> preparedFlames = FARenderTools.prepareFlame(currFlame, TinaControllerContextService.getContext().isZPass());
+      String gpuFlameParams = gpuFlameWriter.getFlameXML(preparedFlames);
+      gpuFlameParamsTextArea.setText(gpuFlameParams);
+      gpuFlameWriter.writeFlame(gpuFlameParams, tmpFile.getAbsolutePath());
+      long t0 = System.currentTimeMillis();
+      FARenderResult renderResult =
+              FARenderTools.invokeFARender(tmpFile.getAbsolutePath(), width, height, quality, preparedFlames.size() > 1, currFlame);
+      long t1 = System.currentTimeMillis();
+      try {
+        if (renderResult.getReturnCode() == 0) {
+          if (renderResult.getMessage() != null) {
+            statsTextArea.append(renderResult.getMessage() + "\n");
+          }
+          if (!aiPostDenoiserDisableCheckbox.isSelected()
+                  && !AIPostDenoiserType.NONE.equals(currFlame.getAiPostDenoiser())) {
+            long dt0 = System.currentTimeMillis();
+            if (AIPostDenoiserFactory.denoiseImage(
+                    renderResult.getOutputFilename(),
+                    currFlame.getAiPostDenoiser(),
+                    currFlame.getPostOptiXDenoiserBlend())) {
+              long dt1 = System.currentTimeMillis();
+              t1 = dt1;
+              statsTextArea.append(
+                      "\n\n"
+                              + "AI-Post-Denoiser: "
+                              + Tools.doubleToString((dt1 - dt0) / 1000.0)
+                              + "s");
+            }
+          }
+          SimpleImage img = new ImageReader().loadImage(renderResult.getOutputFilename());
+          if (img.getImageWidth() == image.getImageWidth()
+                  && img.getImageHeight() == image.getImageHeight()) {
+            image.setBufferedImage(
+                    img.getBufferedImg(), img.getImageWidth(), img.getImageHeight());
+            imageRootPanel.repaint();
+            gpuRenderInfoLbl.setText(
+                    "Elapsed: " + Tools.doubleToString((t1 - t0) / 1000.0) + "s");
+          } else {
+            hasError = true;
+            throw new Exception(
+                    "Invalid image size <"
+                            + img.getImageWidth()
+                            + "x"
+                            + img.getImageHeight()
+                            + ">");
+          }
+        } else {
+          hasError = true;
+          statsTextArea.append("\n\n" +
+                  (renderResult.getMessage() != null ? renderResult.getMessage() : "")
+                  + "\n\n"
+                  + (renderResult.getCommand() != null ? renderResult.getCommand() : ""));
+        }
+      } finally {
+        try {
+          if (renderResult.getOutputFilename() != null
+                  && !renderResult.getOutputFilename().isEmpty()) {
+            File f = new File(renderResult.getOutputFilename());
+            if (f.exists()) {
+              if (!f.delete()) {
+                f.deleteOnExit();
+              }
+            }
+          }
+        } catch (Exception innerError) {
+          innerError.printStackTrace();
+        }
+      }
+    } finally {
+      if (!(hasError && keepFlameFileOnError)) {
+        if (!tmpFile.delete()) {
+          tmpFile.deleteOnExit();
+        }
+      }
+    }
+  }
+
+  @Override
+  public void renderFlameForBatch(Flame newFlame, String openClFlameFilename, int width, int height, int quality, boolean zForPass, boolean disablePostDenoiser, boolean updateProgress, Job job) throws Exception {
+    try {
+      List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame, zForPass);
+      new FAFlameWriter().writeFlame(preparedFlames, openClFlameFilename);
+      long t0 = Calendar.getInstance().getTimeInMillis();
+      FARenderResult openClRenderRes = FARenderTools.invokeFARender(openClFlameFilename, width, height, quality, preparedFlames.size() > 1, newFlame);
+      long t1 = Calendar.getInstance().getTimeInMillis();
+      if (openClRenderRes.getReturnCode() != 0) {
+        throw new Exception(openClRenderRes.getMessage());
+      } else {
+        if (!disablePostDenoiser && !AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser()) && !newFlame.isPostDenoiserOnlyForCpuRender()) {
+          AIPostDenoiserFactory.denoiseImage(openClRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend());
+          t1 = Calendar.getInstance().getTimeInMillis();
+        }
+        if (updateProgress) {
+          job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+        }
+      }
+    } finally {
+      if (!new File(openClFlameFilename).delete()) {
+        new File(openClFlameFilename).deleteOnExit();
+      }
+    }
+  }
 }

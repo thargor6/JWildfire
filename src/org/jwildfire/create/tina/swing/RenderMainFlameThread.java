@@ -26,6 +26,7 @@ import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
 import org.jwildfire.create.tina.render.gpu.farender.FAFlameWriter;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderResult;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderTools;
@@ -188,26 +189,11 @@ public class RenderMainFlameThread implements Runnable {
   }
 
   private void renderFlameOnGPU(Flame flame, String primaryFilename, int width, int height, int quality, boolean zForPass) throws Exception {
-      String flameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
-      String gpuRenderFlameFilename = zForPass ? Tools.makeZBufferFilename(flameFilename, flame.getZBufferFilename()) : flameFilename;
-      try {
-        Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
-        FileDialogTools.ensureFileAccess(null, null, gpuRenderFlameFilename);
-        List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame, zForPass);
-        new FAFlameWriter().writeFlame(preparedFlames, gpuRenderFlameFilename);
-        FARenderResult gpuRenderRes = FARenderTools.invokeFARender(gpuRenderFlameFilename, width, height, quality, preparedFlames.size() > 1, newFlame);
-        if (gpuRenderRes.getReturnCode() != 0) {
-          throw new Exception(gpuRenderRes.getMessage());
-        } else {
-          if (!AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser()) && !flame.isPostDenoiserOnlyForCpuRender()) {
-            AIPostDenoiserFactory.denoiseImage(gpuRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend());
-          }
-        }
-      } finally {
-        if (!new File(gpuRenderFlameFilename).delete()) {
-          new File(gpuRenderFlameFilename).deleteOnExit();
-        }
-      }
+    String flameFilename = Tools.trimFileExt(primaryFilename) + ".flam3";
+    String gpuRenderFlameFilename = zForPass ? Tools.makeZBufferFilename(flameFilename, flame.getZBufferFilename()) : flameFilename;
+    Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
+    FileDialogTools.ensureFileAccess(null, null, gpuRenderFlameFilename);
+    GPURendererFactory.getGPURenderer().renderFlameForEditor(newFlame, gpuRenderFlameFilename, width, height, quality, zForPass);
   }
 
   private GpuProgressUpdater gpuProgressUpdater=null;
