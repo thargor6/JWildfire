@@ -36,6 +36,8 @@ import com.cedarsoftware.io.WriteOptionsBuilder;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.render.gpu.CmdLauncherTools;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
 
 public class SwanRenderTools {
   private static final String SWAN_CMD_MAC_OS =
@@ -192,6 +194,17 @@ public class SwanRenderTools {
                   + "A66000A66000A56100A56100  </palette>\n"
                   + "</flame>\n";
 
+  public static byte[] hexStringToByteArray(String s) {
+    int len = s.length();
+    byte[] data = new byte[len / 2];
+    for (int i = 0; i < len; i += 2) {
+      data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+              + Character.digit(s.charAt(i+1), 16));
+    }
+    return data;
+  }
+
+
   public static SwanApiRenderFlameResultTo renderFlame() {
     String urlPath = getSwanApiBaseUrl() + "/v1/render-flame";
 
@@ -202,6 +215,7 @@ public class SwanRenderTools {
     renderFlameTo.setRender_quality(1000.0);
     renderFlameTo.setSwarm_size(1024);
     renderFlameTo.setIterations_per_frame(12);
+    renderFlameTo.setFrame(1);
 
     WriteOptions writeOptions = new WriteOptionsBuilder().closeStream(false).build();
     ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -214,10 +228,17 @@ public class SwanRenderTools {
         throw new RuntimeException(e);
       }
     }
-
     String response = performHttpRequest(urlPath, 600000,"POST", os.toByteArray());
     ReadOptions readOptions = new ReadOptionsBuilder().build();
     SwanApiRenderFlameResultTo result = JsonIo.toJava(response, readOptions).asClass(SwanApiRenderFlameResultTo.class);
+    try {
+      ImageReader imageReader = new ImageReader();
+      byte img_data[] = hexStringToByteArray(result.getImage_hex());
+      SimpleImage img = imageReader.loadImage(img_data);
+      System.err.println("Image loaded: " + img.getImageWidth()+" x " + img.getImageHeight());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
     return result;
   }
 

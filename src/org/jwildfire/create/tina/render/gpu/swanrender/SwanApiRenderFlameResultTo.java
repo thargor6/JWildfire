@@ -17,18 +17,18 @@
 package org.jwildfire.create.tina.render.gpu.swanrender;
 
 public class SwanApiRenderFlameResultTo {
-  private byte[] image;
+  private String image_hex;
   private Double reached_quality;
   private Integer image_width;
   private Integer image_height;
   private Double elapsed_time;
 
-  public byte[] getImage() {
-    return image;
+  public String getImage_hex() {
+    return image_hex;
   }
 
-  public void setImage(byte[] image) {
-    this.image = image;
+  public void setImage_hex(String image_hex) {
+    this.image_hex = image_hex;
   }
 
   public Double getReached_quality() {
