@@ -17,29 +17,25 @@
 package org.jwildfire.create.tina.render.gpu.swanrender;
 
 import java.awt.*;
-import java.io.File;
-import java.util.Collections;
+import java.util.Calendar;
 import javax.swing.*;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.cli.RenderOptions;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.batch.Job;
-import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserFactory;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
 import org.jwildfire.create.tina.render.gpu.GPURenderer;
-import org.jwildfire.create.tina.render.gpu.farender.FAFlameWriter;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderResult;
 import org.jwildfire.create.tina.render.gpu.farender.FARenderTools;
-import org.jwildfire.create.tina.swing.FileDialogTools;
 import org.jwildfire.create.tina.swing.FlameMessageHelper;
 import org.jwildfire.create.tina.swing.FlamesGPURenderController;
 import org.jwildfire.create.tina.swing.GpuProgressUpdater;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.image.SimpleImage;
-import org.jwildfire.io.ImageReader;
+import org.jwildfire.io.ImageWriter;
 import org.jwildfire.swing.ErrorHandler;
 import org.slf4j.Logger;
 
@@ -110,13 +106,16 @@ public class SwanRendererInterface implements GPURenderer {
 
   @Override
   public void renderFlameFromCli(Flame renderFlame, String flameFilename, RenderOptions renderOptions) throws Exception {
-    // TODO: implement
-    //  new ImageWriter().saveImage(renderResult.getImage(), Tools.trimFileExt(flameFilename)+".png");
+    SwanApiRenderFlameResultTo renderResult = SwanRenderTools.renderFlame(renderFlame, renderOptions.getRenderWidth(), renderOptions.getRenderHeight(), renderOptions.getRenderQuality());
+    SimpleImage img = SwanRenderTools.decodeImageFromResult(renderResult);
+    new ImageWriter().saveImage(img, Tools.trimFileExt(flameFilename)+".png");
   }
 
   @Override
   public void renderFlameForEditor(Flame newFlame, String gpuRenderFlameFilename, int width, int height, int quality, boolean zForPass) throws Exception {
-
+    SwanApiRenderFlameResultTo renderResult = SwanRenderTools.renderFlame(newFlame, width, height, quality);
+    SimpleImage img = SwanRenderTools.decodeImageFromResult(renderResult);
+    new ImageWriter().saveImage(img, Tools.trimFileExt(gpuRenderFlameFilename)+".png");
   }
 
   @Override
@@ -147,6 +146,13 @@ public class SwanRendererInterface implements GPURenderer {
 
   @Override
   public void renderFlameForBatch(Flame newFlame, String openClFlameFilename, int width, int height, int quality, boolean zForPass, boolean disablePostDenoiser, boolean updateProgress, Job job) throws Exception {
-
+    long t0 = Calendar.getInstance().getTimeInMillis();
+    SwanApiRenderFlameResultTo renderResult = SwanRenderTools.renderFlame(newFlame, width, height, quality);
+    SimpleImage img = SwanRenderTools.decodeImageFromResult(renderResult);
+    new ImageWriter().saveImage(img, Tools.trimFileExt(openClFlameFilename)+".png");
+    long t1 = Calendar.getInstance().getTimeInMillis();
+    if (updateProgress) {
+       job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+    }
   }
 }
