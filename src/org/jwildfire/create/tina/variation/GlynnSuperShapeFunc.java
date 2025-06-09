@@ -238,6 +238,22 @@ public class GlynnSuperShapeFunc extends VariationFunc {
     return "glynnSShape";
   }
 
+  @Override
+  public void randomize() {
+  	radius = Math.random() * 1.5 + 0.25;
+  	radius1 = Math.random() * radius + 0.02;
+  	phi1 = Math.random() * 360.0 - 180.0;
+  	thickness = Math.random();
+  	pow = Math.random() * 2.0 + 0.5;
+  	contrast = Math.random();
+    m = Math.random() * 9.0 + 3.0;
+    if (Math.random() < 0.5) m = (int) m;
+    n1 = Math.random() * 5.0 - 2.5;
+    n2 = Math.random() * 5.0 - 2.5;
+    n3 = Math.random() * 5.0 - 2.5;
+    scale = Math.random() * 0.75 + 0.25;
+  }
+
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};

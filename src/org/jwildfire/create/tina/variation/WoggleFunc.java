@@ -81,6 +81,11 @@ public class WoggleFunc extends VariationFunc implements SupportsGPU {
     } else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+  	setParameter(PARAM_M, Math.random() * 11 + 2);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

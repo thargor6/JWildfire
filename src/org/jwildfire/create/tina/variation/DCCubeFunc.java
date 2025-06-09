@@ -127,6 +127,19 @@ public class DCCubeFunc extends VariationFunc {
   public String getName() {
     return "dc_cube";
   }
+  
+  @Override
+  public void randomize() {
+  	c1 = Math.random();
+  	c2 = Math.random();
+  	c3 = Math.random();
+  	c4 = Math.random();
+  	c5 = Math.random();
+  	c6 = Math.random();
+  	x = Math.random() * 2.0 + 0.5;
+  	y = Math.random() * 2.0 + 0.5;
+  	z = Math.random() * 2.0 + 0.5;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

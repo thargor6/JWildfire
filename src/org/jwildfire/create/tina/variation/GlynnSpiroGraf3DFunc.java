@@ -267,6 +267,23 @@ public class GlynnSpiroGraf3DFunc extends VariationFunc {
     return "glynnspiro";
   }
 
+  @Override
+  public void randomize() {
+  	radius = Math.random() * 1.5 + 0.25;
+  	radius1 = Math.random() * radius + 0.02;
+  	phi1 = Math.random() * 360.0 - 180.0;
+  	thickness = Math.random();
+  	pow = Math.random() * 2.0 + 0.5;
+  	contrast = Math.random();
+    a = Math.random();
+    b = Math.random() * 2.0 - 1.0;
+    c = Math.random();
+    time = Math.random() * 1000.0;
+    scale = Math.random() * 0.75 + 0.25;
+    width = Math.random() * Math.random() * 0.05;
+    mode = (int) (Math.random() * 5);
+  }
+
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};

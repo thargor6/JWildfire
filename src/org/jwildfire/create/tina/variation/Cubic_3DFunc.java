@@ -137,6 +137,12 @@ public class Cubic_3DFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "cubic3D";
   }
+  
+  @Override
+  public void randomize() {
+  	xpand = Math.random() * 2.0 - 0.5;
+  	style = Math.random() * 9.0 - 3.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

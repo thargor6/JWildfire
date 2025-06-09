@@ -249,6 +249,27 @@ public class PRose3DFunc extends VariationFunc implements SupportsGPU {
     _optDir = 0.0;
     _petalsSign = 0.0;
   }
+  
+  @Override
+  public void randomize() {
+  	l = Math.random() * 1.5 + 0.5;
+  	k = 3.0 + (Math.random() < 0.5 ? Math.random() * 10.0 : Tools.randomInt(15));
+  	c = Math.random() * Math.TAU - Math.PI;
+  	z1 = Math.random() * 2.0;
+  	z2 = Math.random() * 2.0;
+  	refSc = Math.random() * 1.5 + 0.5;
+  	opt = Math.random() + 1.0;
+  	if (Math.random() < 0.5) opt = -opt;
+  	optSc = Math.random() * 1.5 + 0.5;
+  	opt3 = Math.random();
+  	transp = Math.random();
+  	dist = Math.random() * 3.0;
+  	wagsc = Math.random() * 5.0 - 2.5;
+  	crvsc = Math.random() * 3.0;
+  	f = Math.random() * 6;
+  	wigsc = Math.random() * 5.0 - 2.5;
+  	offset = Math.random() * 4.0 - 2.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

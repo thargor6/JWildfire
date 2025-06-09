@@ -73,6 +73,14 @@ public class PieFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "pie";
   }
+  
+  @Override
+  public void randomize() {
+  	slices = Math.random() * (Math.random() < 0.6 ? 10 : 50) + 2;
+  	if (Math.random() < 0.75) slices = Math.round(slices);
+  	rotation = Math.random() * Math.TAU - Math.PI;
+  	thickness = (Math.random() + Math.random()) / 2.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

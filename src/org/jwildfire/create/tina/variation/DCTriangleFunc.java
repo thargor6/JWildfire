@@ -143,6 +143,12 @@ public class DCTriangleFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     A = scatter_area < -1 ? -1 : scatter_area > 1 ? 1 : scatter_area;
   }
+  
+  @Override
+  public void randomize() {
+  	scatter_area = Math.random() * 2.0 - 1.0;
+  	zero_edges = (int) (Math.random() * 2);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -197,6 +197,20 @@ public class MandalaFunc extends DrawFunc {
     } else
       return false;
   }
+  
+  @Override
+  public void randomize() {
+  	width = (int) (Math.random() * 400 + 100);
+  	size = Math.random();
+  	num = (int) (Math.random() * 16);
+  	denom = (int) (Math.random() * 14 + 3);
+  	if ((num * 2) % denom == 0) denom += 1;
+  	minsky = (int) (Math.random() * 2);
+  	wobble_pick = (int) (Math.random() * wobble_dat.length);
+  	wrap_range_pick = (int) (Math.random() * wrap_dat.length);
+  	extra_hskew_pick = (int) (Math.random() * skew_dat.length);
+  	colorid = (int) (Math.random() * 2);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

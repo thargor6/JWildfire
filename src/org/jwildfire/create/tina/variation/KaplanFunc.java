@@ -161,6 +161,13 @@ public class KaplanFunc  extends VariationFunc implements SupportsGPU {
 	}
 
 	@Override
+	public void randomize() {
+		setParameter(PARAM_SEED, (int) (Math.random() * 1000000));
+		N = (int) (Math.random() * 1450 + 50);
+		invert = (int) (Math.random() * 2);
+	}
+	
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}

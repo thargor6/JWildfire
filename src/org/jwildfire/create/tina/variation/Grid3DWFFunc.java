@@ -296,6 +296,25 @@ public class Grid3DWFFunc extends VariationFunc {
   }
 
   @Override
+  public void randomize() {
+  	size = Math.random();
+  	size_spread = Math.random() * 2.0;
+  	spacing = Math.random() * 0.5 + 0.5;
+  	alpha = Math.random() * Math.TAU - Math.PI;
+  	alpha_spread = Math.random();
+  	beta = Math.random() * Math.TAU - Math.PI;
+  	beta_spread = Math.random();
+  	gamma = Math.random() * Math.TAU - Math.PI;
+  	gamma_spread = Math.random();
+  	c1 = Math.random();
+  	c2 = Math.random();
+  	c3 = Math.random();
+  	c4 = Math.random();
+  	c5 = Math.random();
+  	c6 = Math.random();
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
   }

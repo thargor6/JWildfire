@@ -125,6 +125,12 @@ public class CubicLattice3DFunc extends VariationFunc implements SupportsGPU {
       _iStyle = 1;
     }
   }
+  
+  @Override
+  public void randomize() {
+  	xpand = Math.random() * 0.7 + 0.05;
+  	style = (Math.random() < 0.5) ? 1 : 2;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

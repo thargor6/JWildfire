@@ -73,6 +73,14 @@ public class Pie3DFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+  	slices = Math.random() * (Math.random() < 0.6 ? 10 : 50) + 2;
+  	if (Math.random() < 0.75) slices = Math.round(slices);
+  	rotation = Math.random() * Math.TAU - Math.PI;
+  	thickness = (Math.random() + Math.random()) / 2.0;
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }

@@ -105,6 +105,15 @@ public class CircleRandFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "circleRand";
   }
+  
+  @Override
+  public void randomize() {
+  	Sc = Math.random() * 1.5 + 0.1;
+  	Dens = Math.random() * 0.9 + 0.1;
+  	X = Math.random() * 9.0 + 1.0;
+  	Y = Math.random() * 9.0 + 1.0;
+  	Seed = (int) (Math.random() * 1000000);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

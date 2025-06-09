@@ -202,6 +202,34 @@ public class DCDModulusFunc extends VariationFunc {
 
     oldColor = 0.5;
   }
+  
+  @Override
+  public void randomize() {
+  	x = Math.random() * 4.5 + 0.5;
+  	if (Math.random() < 0.2) {
+  		y = Math.random() * 4.5 + 0.5;
+  	} else {
+  		double delta = Math.random() * Math.random() * 0.5;
+  		if (Math.random() < 0.5) delta *= -1;
+  		y = x + delta;
+  	}
+  	{
+	  	double delta = Math.random() * Math.random() * 40.0;
+	  	if (Math.random() < 0.5) delta *= -1;
+	  	setParameter(PARAM_ANGLE, 45 + delta);
+  	}
+  	shiftx = Math.random() * 2.0 * x - x;
+  	shifty = Math.random() * 2.0 * y - y;
+  	color1 = Math.random();
+  	color2 = Math.random();
+  	if (angle <= 45) {
+  		speed1 = (45 - angle) / 45 + Math.random() * 0.2;
+  		speed2 = 0;
+  	} else {
+  		speed1 = 0;
+  		speed2 = (angle - 45) / 45 + Math.random() * 0.2;
+  	}
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
