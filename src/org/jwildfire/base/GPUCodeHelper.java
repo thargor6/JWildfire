@@ -36,66 +36,117 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        "    // Mobiq by zephyrtronium converted to work in JWildfire by Brad Stefanov\n" +
-                "\t/*  Qlib uses the notation T + X i + Y j + Z k, so I used the following while\n" +
-                "    simplifying. I took a usual Mobius transform (ax + b) / (cx + d) and made\n" +
-                "    a, b, c, and d quaternions instead of just complex numbers, with x being\n" +
-                "    a quaternion FTx + FTy i + FTz j + 0 k. Multiplying quaternions happens to\n" +
-                "    be a very complex thing, and dividing is no simpler, so I needed to use\n" +
-                "    names that are easily and quickly typed while simplifying to prevent\n" +
-                "    massive insanity/violence/genocide. I then found switching back from those\n" +
-                "    names in my head to be rather difficult and confusing, so I decided to\n" +
-                "    use these macros instead.\n" +
-                "*/\n" +
+        "    /* hexnix3D by Larry Berlin, http://aporev.deviantart.com/art/3D-Plugins-Collection-One-138514007?q=gallery%3Aaporev%2F8229210&qo=15 */\n" +
+                "    if (_fcycle > 5) {// Resets the cyclic counting\n" +
+                "      _fcycle = 0;\n" +
+                "      _rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses new 6 or 3 nodes\n" +
+                "    }\n" +
+                "    if (_bcycle > 2) {\n" +
+                "      _bcycle = 0;\n" +
+                "      _rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses new 6 or 3 nodes\n" +
+                "    }\n" +
                 "\n" +
-                "    double t1 = qat;\n" +
-                "    double t2 = pAffineTP.x;\n" +
-                "    double t3 = qbt;\n" +
-                "    double t4 = qct;\n" +
-                "    double t5 = qdt;\n" +
-                "    double x1 = qax;\n" +
-                "    double x2 = pAffineTP.y;\n" +
-                "    double x3 = qbx;\n" +
-                "    double x4 = qcx;\n" +
-                "    double x5 = qdx;\n" +
-                "    double y1 = qay;\n" +
-                "    double y2 = pAffineTP.z;\n" +
-                "    double y3 = qby;\n" +
-                "    double y4 = qcy;\n" +
-                "    double y5 = qdy;\n" +
-                "    double z1 = qaz;\n" +
-                "    /* z2 is 0 and simplified out (there is no fourth generated coordinate). */\n" +
-                "    double z3 = qbz;\n" +
-                "    double z4 = qcz;\n" +
-                "    double z5 = qdz;\n" +
+                "    double lrmaj = pAmount; // Sets hexagon length radius - major plane\n" +
+                "    double smooth = 1.0;\n" +
+                "    double smRotxTP = 0.0;\n" +
+                "    double smRotyTP = 0.0;\n" +
+                "    double smRotxFT = 0.0;\n" +
+                "    double smRotyFT = 0.0;\n" +
+                "    double gentleZ = 0.0;\n" +
                 "\n" +
-                "    double nt = t1 * t2 - x1 * x2 - y1 * y2 + t3;\n" +
-                "    double nx = t1 * x2 + x1 * t2 - z1 * y2 + x3;\n" +
-                "    double ny = t1 * y2 + y1 * t2 + z1 * x2 + y3;\n" +
-                "    double nz = z1 * t2 + x1 * y2 - y1 * x2 + z3;\n" +
-                "    double dt = t4 * t2 - x4 * x2 - y4 * y2 + t5;\n" +
-                "    double dx = t4 * x2 + x4 * t2 - z4 * y2 + x5;\n" +
-                "    double dy = t4 * y2 + y4 * t2 + z4 * x2 + y5;\n" +
-                "    double dz = z4 * t2 + x4 * y2 - y4 * x2 + z5;\n" +
-                "    double ni = pAmount / (sqr(dt) + sqr(dx) + sqr(dy) + sqr(dz));\n" +
+                "    if (fabs(pAmount) <= 0.5) {\n" +
+                "      smooth = pAmount * 2.0;\n" +
+                "    } else {\n" +
+                "      smooth = 1.0;\n" +
+                "    }\n" +
+                "    double boost = 0.0; //  Boost is the separation distance between the two planes\n" +
+                "    int posNeg = 1;\n" +
+                "    int loc60;\n" +
+                "    int loc120;\n" +
+                "    double scale = this.scale;\n" +
+                "    double scale3 = this._3side;\n" +
                 "\n" +
+                "    if (pContext.random() < 0.5) {\n" +
+                "      posNeg = -1;\n" +
+                "    }\n" +
                 "\n" +
-                "    pVarTP.x += (nt * dt + nx * dx + ny * dy + nz * dz) * ni;\n" +
-                "    pVarTP.y += (nx * dt - nt * dx - ny * dz + nz * dy) * ni;\n" +
-                "    pVarTP.z += (ny * dt - nt * dy - nz * dx + nx * dz) * ni;\n";
+                "    // Determine whether one or two major planes\n" +
+                "    int majplane = 0;\n" +
+                "    double abmajp = fabs(this.majp);\n" +
+                "    if (abmajp <= 1.0) {\n" +
+                "      majplane = 0; // 0= 1 plate active  1= transition to two plates active  2= defines two plates\n" +
+                "      boost = 0.0;\n" +
+                "    } else if (abmajp > 1.0 && abmajp < 2.0) {\n" +
+                "      majplane = 1;\n" +
+                "      boost = 0.0;\n" +
+                "    } else {\n" +
+                "      majplane = 2;\n" +
+                "      boost = (abmajp - 2.0) * 0.5; // distance above and below XY plane\n" +
+                "    }\n" +
+                "\n" +
+                "    //      Creating Z factors relative to the planes \n" +
+                "    if (majplane == 0) {\n" +
+                "      pVarTP.z += smooth * pAffineTP.z * scale * this.zlift; // single plate instructions\n" +
+                "    } else if (majplane == 1 && this.majp < 0.0) {// Transition for reversing plates  because  majp is negative value\n" +
+                "      if (this.majp < -1.0 && this.majp >= -2.0) {\n" +
+                "        gentleZ = (abmajp - 1.0); //  Set transition smoothing values  0.00001 to 1.0    \n" +
+                "      } else {\n" +
+                "        gentleZ = 1.0; // full effect explicit default value\n" +
+                "      }\n" +
+                "      // Begin reverse transition - starts with pVarTP.z==pVarTP.z proceeds by gradual negative\n" +
+                "      if (posNeg < 0) {\n" +
+                "        pVarTP.z += -2.0 * (pVarTP.z * gentleZ); // gradually grows negative plate, in place, no boost,\n" +
+                "      }\n" +
+                "    }\n" +
+                "    if (majplane == 2 && this.majp < 0.0) {// Begin the splitting operation, animation transition is done\n" +
+                "      if (posNeg > 0) {//  The splitting operation positive side\n" +
+                "        pVarTP.z += (smooth * (pAffineTP.z * scale * this.zlift + boost));\n" +
+                "      } else {//  The splitting operation negative side\n" +
+                "        pVarTP.z = (pVarTP.z - (2.0 * smooth * pVarTP.z)) + (smooth * posNeg * (pAffineTP.z * scale * this.zlift + boost));\n" +
+                "      }\n" +
+                "    } else {//  majp > 0.0       The splitting operation\n" +
+                "      pVarTP.z += smooth * (pAffineTP.z * scale * this.zlift + (posNeg * boost));\n" +
+                "    }\n" +
+                "\n" +
+                "    if (this._rswtch <= 1) {//  Occasion to build using 60 degree segments    \n" +
+                "      loc60 = (int) trunc(pContext.random() * 6.0); // random nodes selection\n" +
+                "      //loc60 = this.fcycle;   // sequential nodes selection - seems to create artifacts that are progressively displaced\n" +
+                "      smRotxTP = (smooth * scale * pVarTP.x * _seg60x[loc60]) - (smooth * scale * pVarTP.y * _seg60y[loc60]);\n" +
+                "      smRotyTP = (smooth * scale * pVarTP.y * _seg60x[loc60]) + (smooth * scale * pVarTP.x * _seg60y[loc60]);\n" +
+                "      smRotxFT = (pAffineTP.x * smooth * scale * _seg60x[loc60]) - (pAffineTP.y * smooth * scale * _seg60y[loc60]);\n" +
+                "      smRotyFT = (pAffineTP.y * smooth * scale * _seg60x[loc60]) + (pAffineTP.x * smooth * scale * _seg60y[loc60]);\n" +
+                "\n" +
+                "      pVarTP.x = pVarTP.x * (1.0 - smooth) + smRotxTP + smRotxFT + smooth * lrmaj * _seg60x[loc60];\n" +
+                "      pVarTP.y = pVarTP.y * (1.0 - smooth) + smRotyTP + smRotyFT + smooth * lrmaj * _seg60y[loc60];\n" +
+                "\n" +
+                "      this._fcycle += 1;\n" +
+                "    } else { // Occasion to build on 120 degree segments\n" +
+                "      loc120 = (int) trunc(pContext.random() * 3.0); // random nodes selection\n" +
+                "      //loc120 = this.bcycle;  // sequential nodes selection - seems to create artifacts that are progressively displaced\n" +
+                "      smRotxTP = (smooth * scale * pVarTP.x * _seg120x[loc120]) - (smooth * scale * pVarTP.y * _seg120y[loc120]);\n" +
+                "      smRotyTP = (smooth * scale * pVarTP.y * _seg120x[loc120]) + (smooth * scale * pVarTP.x * _seg120y[loc120]);\n" +
+                "      smRotxFT = (pAffineTP.x * smooth * scale * _seg120x[loc120]) - (pAffineTP.y * smooth * scale * _seg120y[loc120]);\n" +
+                "      smRotyFT = (pAffineTP.y * smooth * scale * _seg120x[loc120]) + (pAffineTP.x * smooth * scale * _seg120y[loc120]);\n" +
+                "\n" +
+                "      pVarTP.x = pVarTP.x * (1.0 - smooth) + smRotxTP + smRotxFT + smooth * lrmaj * scale3 * _seg120x[loc120];\n" +
+                "      pVarTP.y = pVarTP.y * (1.0 - smooth) + smRotyTP + smRotyFT + smooth * lrmaj * scale3 * _seg120y[loc120];\n" +
+                "\n" +
+                "      this._bcycle += 1;\n" +
+                "    }\n";
 
 //     System.err.println(convertCodeSwan(code, "mobius_dragon_3D", new String[]{}));
      //System.err.println(convertCode(code, "mobius_dragon_3D", new String[]{}));
     //FlameTransformationContext ctx = new FlameTransformationContext(null, null, 1, 1);
     //System.err.println(new ParPlot2DWFFunc().getGPUCode(ctx));
-    System.err.println(createSwanVariation(new MobiqFunc(), code));
+    System.err.println(createSwanVariation(new Hexnix3DFunc(), code));
   }
 
   private String createSwanVariation(VariationFunc variationFunc, String code) {
     StringBuilder sb = new StringBuilder();
+    addIndented(0, sb, "### " + variationFunc.getClass().getSimpleName() + "\n");
+    addIndented(0, sb, "class " + variationFunc.getClass().getSimpleName() + " extends VariationFuncWaves:\n");
     // params
     if(variationFunc.getParameterNames().length > 0) {
-      addIndented(0, sb, "class " + variationFunc.getClass().getSimpleName() + " extends VariationFuncWaves:\n");
       for (String paramName : variationFunc.getParameterNames()) {
         addIndented(1, sb, "const PARAM_" + paramNameToSwan(paramName) + " = \"" + paramName + "\"\n");
       }
@@ -124,7 +175,7 @@ public class GPUCodeHelper {
 
       addIndented(0, sb, "\n");
       addIndented(1, sb, "func get_params() -> Array[VariationParam]:\n");
-      addIndented(2, sb, "return __params;\n");
+      addIndented(2, sb, "return __params\n");
       addIndented(0, sb, "\n");
     }
     // shader code
@@ -156,7 +207,6 @@ public class GPUCodeHelper {
           sb.append("]\n");
         }
       }
-
     }
     else {
       addIndented(2, sb, "}\"\"\" % variation.amount.to_glsl(ctx)\n");
@@ -165,7 +215,7 @@ public class GPUCodeHelper {
 
     // name etc
     addIndented(1, sb, "func get_name() -> String:\n");
-    addIndented(2, sb, "return '" + variationFunc.getName() + "';\n");
+    addIndented(2, sb, "return '" + variationFunc.getName() + "'\n");
     addIndented(0, sb, "\n");
 
     addIndented(1, sb, "func get_variation_types() -> Array[Variation.VariationType]:\n");
@@ -365,7 +415,7 @@ public class GPUCodeHelper {
             // resolve sgn()
             .replaceAll("([\\s\\(]+)sgnf\\((\\w*)\\)", "$1($2<0.f ? -1 : $2>0.f ? 1 : 0)")
             // pContext.random()
-            .replaceAll("pContext\\.random\\(\\)", "rand8(tex, rngState)")
+            .replaceAll("pContext\\.random\\(\\)", "rand8(uv, rngState)")
             // boolean -> short
             .replaceAll("boolean", "short")
             // comments
