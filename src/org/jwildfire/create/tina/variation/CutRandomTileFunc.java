@@ -326,6 +326,14 @@ public class CutRandomTileFunc  extends VariationFunc implements SupportsGPU {
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		seed = (int) (Math.random() * 1000000);
+		zoom = Math.random() * 20.0 + 0.5;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}

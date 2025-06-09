@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2023 Andreas Maschke
+  Copyright (C) 1995-2025 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -235,6 +235,9 @@ public class PrefsReader {
         pPrefs.setTinaDefaultExpandNonlinearParams(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS, pPrefs.isTinaDefaultExpandNonlinearParams()));
         pPrefs.setTinaEnableLeapMotionTab(getBooleanProperty(props, Prefs.KEY_TINA_ENABLE_LEAP_MOTION_TAB, pPrefs.isTinaEnableLeapMotionTab()));
         pPrefs.setTinaGpuModeDefaultEnabled(getBooleanProperty(props, Prefs.KEY_TINA_GPU_MODE_DEFAULT_ENABLED, pPrefs.isTinaGpuModeDefaultEnabled()));
+        pPrefs.setUseSwanForGpuRendering(getBooleanProperty(props, Prefs.KEY_TINA_USE_SWAN_FOR_GPU_RENDERING, pPrefs.isUseSwanForGpuRendering()));
+        pPrefs.setSwanInstallationPath(getProperty(props, Prefs.KEY_TINA_SWAN_INSTALLATION_PATH, pPrefs.getSwanInstallationPath()));
+        pPrefs.setSwanApiPort(getIntProperty(props, Prefs.KEY_TINA_SWAN_API_PORT, pPrefs.getSwanApiPort()));
         pPrefs.setTinaLegacyRealtimePreview(getBooleanProperty(props, Prefs.KEY_TINA_LEGACY_REALTIME_PREVIEW, pPrefs.isTinaLegacyRealtimePreview()));
         try {
           RasterCreator rasterPointPrecision = RasterCreator.valueOf(getProperty(props, Prefs.KEY_TINA_RASTER_TYPE, RasterCreator.getDefaultValue().toString()));

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2021 Andreas Maschke
+  Copyright (C) 1995-2025 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -14,17 +14,34 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.farender;
+package org.jwildfire.create.tina.render.gpu.swanrender;
 
-public enum FARenderKernelSwitches {
-  ADD_FEATURE_CELLULAR_NOISE,
-  ADD_FEATURE_CUBIC_NOISE,
-  ADD_FEATURE_PERLIN_NOISE,
-  ADD_FEATURE_SIMPLEX_NOISE,
-  ADD_FEATURE_VALUE_NOISE,
-  ADD_FEATURE_WHITE_NOISE,
+public class SwanApiVersionTo {
+  private String application;
+  private String version;
+  private Integer api_version;
 
-  ADD_FEATURE_WFIELDS, ADD_FEATURE_WFIELDS_JITTER,
+  public String getApplication() {
+    return application;
+  }
 
-  ADD_FEATURE_DOF
+  public void setApplication(String application) {
+    this.application = application;
+  }
+
+  public String getVersion() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
+  }
+
+  public Integer getApi_version() {
+    return api_version;
+  }
+
+  public void setApi_version(Integer api_version) {
+    this.api_version = api_version;
+  }
 }

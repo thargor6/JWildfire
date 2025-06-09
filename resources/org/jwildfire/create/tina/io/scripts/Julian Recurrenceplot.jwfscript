@@ -1,0 +1,54 @@
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.mutagen.RandomGradientMutation;
+
+public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  Flame currFlame = pEnv.getCurrFlame(true);
+  currFlame.getXForms().clear();
+  currFlame.getFinalXForms().clear();
+  new RandomGradientMutation().execute(pEnv.getCurrLayer());
+
+  // create xform 1 (recurrenceplot)
+  {
+    XForm xForm = new XForm();
+    xForm.setWeight(0.5);
+    xForm.setColor(0);
+    xForm.setColorSymmetry(-1);
+    xForm.setDrawMode(DrawMode.HIDDEN);
+
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("recurrenceplot", true);
+    varFunc.randomize();
+    xForm.addVariation(1, varFunc);
+    currFlame.getXForms().add(xForm);
+  }
+	
+  // create xform 2 (julian)
+  {
+    XForm xForm = new XForm();
+    xForm.setWeight(0.5);
+    xForm.setColor(1);
+    xForm.setCoeff20(Math.random() * 2.0 - 1.0);
+    xForm.setCoeff21(Math.random() * 2.0 - 1.0);
+
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("julian", true);
+    varFunc.randomize();
+    xForm.addVariation(1, varFunc);
+    currFlame.getXForms().add(xForm);
+}
+
+  currFlame.setCamRoll(0.0);
+  currFlame.setCamPitch(0.0);
+  currFlame.setCamYaw(0.0);
+  currFlame.setCamBank(0.0);
+  currFlame.setCamPerspective(0.0);
+  currFlame.setPixelsPerUnit(50);
+  currFlame.setCamZoom(5);
+  
+  // Refresh the UI
+  pEnv.refreshUI();
+}

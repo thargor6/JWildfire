@@ -192,6 +192,15 @@ public class CutBasicTruchetFunc  extends VariationFunc {
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		seed = (int) (Math.random() * 10000);
+		width = Math.random() * 2.5 + 0.5;
+		zoom = Math.random() * 19.0 + 1.0;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
 	}

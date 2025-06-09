@@ -469,6 +469,19 @@ public class Mandala2Func extends VariationFunc {
   }
 
   @Override
+  public void randomize() {
+  	width = (int) (Math.random() * 900 + 100);
+  	num = (int) (Math.random() * 16);
+  	denom = (int) (Math.random() * 14 + 3);
+  	if ((num * 2) % denom == 0) denom += 1;
+  	minsky = (int) (Math.random() * 2);
+  	wobble_pick = (int) (Math.random() * wobble_dat.length);
+  	wrap_range_pick = (int) (Math.random() * wrap_dat.length);
+  	extra_hskew_pick = (int) (Math.random() * skew_dat.length);
+  	colorid = (int) (Math.random() * 4);
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE};
   }

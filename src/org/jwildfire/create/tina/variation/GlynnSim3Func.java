@@ -127,6 +127,14 @@ public class GlynnSim3Func extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+  	radius = Math.random() * 1.5 + 0.25;
+  	thickness = Math.random();
+  	contrast = Math.random();
+  	pow = Math.random() * 2.0 + 0.5;
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }

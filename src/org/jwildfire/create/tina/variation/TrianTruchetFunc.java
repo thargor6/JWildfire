@@ -256,6 +256,14 @@ public class TrianTruchetFunc extends DrawFunc {
   public String getName() {
     return "triantruchet";
   }
+  
+  @Override
+  public void randomize() {
+  	seed = (int) (Math.random() * 1000000);
+  	size = Math.random() * 3 + 1;
+  	numberTilesPerRow = (int) (Math.random() * 45 + 5);
+  	numberTilesPerColumn = (int) (Math.random() * 45 + 5);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -169,6 +169,14 @@ public class CutCircleDesignFunc  extends VariationFunc implements SupportsGPU{
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		time = Math.random() * 500.0;
+		zoom = Math.random() * 14.0 + 1.0;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}

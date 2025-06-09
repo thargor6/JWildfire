@@ -262,6 +262,15 @@ public class CutZFunc  extends VariationFunc {
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		x0 = Math.random() * 5.0 - 2.5;
+		y0 = Math.random() * 5.0 - 2.5;
+		zoom = Math.random() * 5.0 + 0.5;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
 	}

@@ -83,7 +83,7 @@ public class CutKleinianFunc  extends VariationFunc implements SupportsGPU {
 			z.x = wrap(z.x, 2. * box_size, - box_size);
 			z.x=z.x-f*b/a*z.y;
 	                       
-			//If above the separation line, rotate by 180° about (-b/2, a/2)
+			//If above the separation line, rotate by 180ï¿½ about (-b/2, a/2)
 	        if  (z.y >= a * 0.5 + f *(2.*a-1.95)/4. * G.sign(z.x + b * 0.5)* (1. - G.exp(-(7.2-(1.95-a)*15.)* G.abs(z.x + b * 0.5))))	
 	        {
 	        	z= new vec2(-b, a).minus(z);
@@ -102,7 +102,7 @@ public class CutKleinianFunc  extends VariationFunc implements SupportsGPU {
 	        	flag=1;
 	        	break;
 	        }
-	        //Store prévious iterates
+	        //Store prï¿½vious iterates
 			llz=lz; lz=z;
 		}
 		return flag;
@@ -215,6 +215,18 @@ public class CutKleinianFunc  extends VariationFunc implements SupportsGPU {
 	public boolean dynamicParameterExpansion(String pName) {
 		// preset_id doesn't really expand parameters, but it changes them; this will make them refresh
 		return true;
+	}
+
+	@Override
+	public void randomize() {
+		// Don't change mode
+		zoom = Math.random() * 2.0 + 0.1;
+		box_size = Math.random() * 2.0;
+		time = Math.random();
+		NIters = (int) (Math.random() * 150) + 1;
+		Dx = Math.random() < 0.25 ? 0.0 : Math.random() * 2.0 - 1.0;
+		Dy = Math.random() < 0.25 ? -0.975 : Math.random() * 2.0 - 2.0;
+		invert = (int) (Math.random() * 2);
 	}
 
 	@Override

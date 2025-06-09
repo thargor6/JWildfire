@@ -28,9 +28,9 @@ public class PreAffine3DFunc extends AbstractAffine3DFunc {
 
   @Override
   protected void applyTransform(XYZPoint pAffineTP, XYZPoint pVarTP, double affineX, double affineY, double affineZ) {
-    pAffineTP.x += affineX;
-    pAffineTP.y += affineY;
-    pAffineTP.z += affineZ;
+    pAffineTP.x = affineX;
+    pAffineTP.y = affineY;
+    pAffineTP.z = affineZ;
   }
 
   @Override

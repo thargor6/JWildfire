@@ -124,6 +124,7 @@ public class ImageReader {
   }
 
   public SimpleImage loadImage(byte[] data) throws Exception {
+    System.err.println("SIZE: " + data.length);
     Image fileImg = Toolkit.getDefaultToolkit().createImage(data);
     MediaTracker tracker = new MediaTracker(owner);
     tracker.addImage(fileImg, 0);

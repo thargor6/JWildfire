@@ -256,6 +256,14 @@ public class Cut2eWangTileFunc extends VariationFunc {
     return true;
   }
 
+	@Override
+	public void randomize() {
+		// Don't change mode
+		seed = (int) (Math.random() * 1000000);
+		zoom = Math.random() * 47.0 + 3.0;
+		invert = (int) (Math.random() * 2);
+	}
+
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[] {

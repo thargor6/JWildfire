@@ -168,6 +168,15 @@ public class CutBricksFunc  extends VariationFunc   implements SupportsGPU {
 		// preset_id doesn't really expand parameters, but it changes them; this will make them refresh
 		return true;
 	}
+	
+	@Override
+	public void randomize() {
+		// Don't change mode
+		seed = (int) (Math.random() * 1000000);
+		size = Math.random() * 0.78 + 0.2;
+		zoom = Math.random() * 9.0 + 1.0;
+		invert = (int) (Math.random() * 2);
+	}
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {

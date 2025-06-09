@@ -264,6 +264,23 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU, Supports
     _notch_top = (_notch_top < -0.75) ? -0.75 : _notch_top;
     _notch_top = (_notch_top > 3.0) ? 3.0 : _notch_top;
   }
+  
+  @Override
+  public void randomize() {
+  	shape = (int) (Math.random() * 3);
+  	map = (int) (Math.random() * 6);
+  	select_centre = Math.random() + Math.random() - 1;
+  	select_range = Math.random() * 2.0;
+  	centre = Math.random();
+  	range = (Math.random() + Math.random() + Math.random()) / 3.0;
+  	edge = (Math.random() < 0.5) ? 0.0 : Math.random() * 2.0;
+  	scale = Math.random() * 10.0 + 0.1;
+  	octaves = (int) (Math.random() * 5 + 1);
+  	amps = (Math.random() < 0.4) ? 2.0 : Math.random() * 3.0 + 1.0;
+  	freqs = (Math.random() < 0.4) ? 2.0 : Math.random() * 3.0 + 1.0;
+  	z = Math.random() * 10.0 - 5.0;
+  	select_bailout = 10;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

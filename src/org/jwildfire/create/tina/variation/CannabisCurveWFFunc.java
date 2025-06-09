@@ -78,6 +78,11 @@ public class CannabisCurveWFFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "cannabiscurve_wf";
   }
+  
+  @Override
+  public void randomize() {
+  	filled = Math.random();
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

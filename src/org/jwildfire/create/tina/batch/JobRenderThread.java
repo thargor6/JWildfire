@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2023 Andreas Maschke
+  Copyright (C) 1995-2025 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -26,9 +26,10 @@ import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.farender.FAFlameWriter;
-import org.jwildfire.create.tina.farender.FARenderResult;
-import org.jwildfire.create.tina.farender.FARenderTools;
+import org.jwildfire.create.tina.render.gpu.GPURendererFactory;
+import org.jwildfire.create.tina.render.gpu.farender.FAFlameWriter;
+import org.jwildfire.create.tina.render.gpu.farender.FARenderResult;
+import org.jwildfire.create.tina.render.gpu.farender.FARenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -153,30 +154,9 @@ public class JobRenderThread implements Runnable {
   private void renderSingleFrame(Job job, int width, int height, RenderInfo info, Flame flame, String primaryFilename, boolean updateProgress, boolean zForPass) throws Exception {
     if (useGPU) {
       String openClFlameFilename = (zForPass ? "zbuf_" : "") + Tools.trimFileExt(primaryFilename) + ".flam3";
-      try {
-        Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
-        FileDialogTools.ensureFileAccess(parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), openClFlameFilename);
-        List<Flame> preparedFlames = FARenderTools.prepareFlame(newFlame, zForPass);
-        new FAFlameWriter().writeFlame(preparedFlames, openClFlameFilename);
-        long t0 = Calendar.getInstance().getTimeInMillis();
-        FARenderResult openClRenderRes = FARenderTools.invokeFARender(openClFlameFilename, width, height, qualityProfile.getQuality(), preparedFlames.size() > 1, newFlame);
-        long t1 = Calendar.getInstance().getTimeInMillis();
-        if (openClRenderRes.getReturnCode() != 0) {
-          throw new Exception(openClRenderRes.getMessage());
-        } else {
-          if (!disablePostDenoiser && !AIPostDenoiserType.NONE.equals(newFlame.getAiPostDenoiser()) && !newFlame.isPostDenoiserOnlyForCpuRender()) {
-            AIPostDenoiserFactory.denoiseImage(openClRenderRes.getOutputFilename(), newFlame.getAiPostDenoiser(), newFlame.getPostOptiXDenoiserBlend());
-            t1 = Calendar.getInstance().getTimeInMillis();
-          }
-          if (updateProgress) {
-            job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
-          }
-        }
-      } finally {
-        if (!new File(openClFlameFilename).delete()) {
-          new File(openClFlameFilename).deleteOnExit();
-        }
-      }
+      Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
+      FileDialogTools.ensureFileAccess(parentCtrl.getMainEditorFrame(), parentCtrl.getCenterPanel(), openClFlameFilename);
+      GPURendererFactory.getGPURenderer().renderFlameForBatch(newFlame, openClFlameFilename, width, height, qualityProfile.getQuality(), zForPass, disablePostDenoiser, updateProgress, job);
     } else {
       if(disablePostDenoiser) {
         flame.setAiPostDenoiser(AIPostDenoiserType.NONE);

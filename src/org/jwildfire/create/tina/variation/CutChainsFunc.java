@@ -143,6 +143,15 @@ public class CutChainsFunc  extends VariationFunc implements SupportsGPU {
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		x0 = Math.random() * 0.42 - 0.21;
+		y0 = Math.random() * 0.52 - 0.26;
+		zoom = Math.random() * 4.5 + 0.5;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}

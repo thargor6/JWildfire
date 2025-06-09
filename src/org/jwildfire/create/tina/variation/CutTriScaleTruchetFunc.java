@@ -434,6 +434,17 @@ public class CutTriScaleTruchetFunc  extends VariationFunc {
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		seed = (int) (Math.random() * 1000000);
+		shape = (int) (Math.random() * 4);
+		levels = (int) (Math.random() * 2);
+		arcs = (int) (Math.random() * 2);
+		zoom = Math.random() * 8.0 + 0.2;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION};
 	}

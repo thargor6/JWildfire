@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2023 Andreas Maschke
+  Copyright (C) 1995-2025 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -22,9 +22,9 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
-import org.jwildfire.create.tina.farender.FAFlameWriter;
-import org.jwildfire.create.tina.farender.FARenderResult;
-import org.jwildfire.create.tina.farender.FARenderTools;
+import org.jwildfire.create.tina.render.gpu.farender.FAFlameWriter;
+import org.jwildfire.create.tina.render.gpu.farender.FARenderResult;
+import org.jwildfire.create.tina.render.gpu.farender.FARenderTools;
 import org.jwildfire.create.tina.render.*;
 import org.jwildfire.create.tina.render.backdrop.FlameBackgroundHandler;
 import org.jwildfire.create.tina.render.denoiser.AIPostDenoiserType;
@@ -241,71 +241,18 @@ public class FlamePreviewHelper implements IterationObserver {
             && gpuModeToggleButton != null
             && gpuModeToggleButton.isSelected()
             && !pQuickRender) {
-          try {
-            final int PROGRESS_STEPS = 25;
-            File tmpFile = File.createTempFile("jwf", ".flame");
-            try {
-              FileDialogTools.ensureFileAccess(
-                  new Frame(), new JPanel(), tmpFile.getAbsolutePath());
-              mainProgressUpdater.initProgress(PROGRESS_STEPS);
-              if (gpuProgressUpdater != null) {
-                gpuProgressUpdater.signalCancel();
-              }
-              if (gpuProgressUpdater != null && gpuProgressUpdater.isFinished()) {
-                gpuProgressUpdater = null;
-              }
-              if (gpuProgressUpdater == null) {
-                gpuProgressUpdater = new GpuProgressUpdater(mainProgressUpdater, PROGRESS_STEPS);
-                new Thread(gpuProgressUpdater).start();
-              }
-              FARenderResult openClRenderRes;
-              long t0 = System.currentTimeMillis();
-              try {
-                List<Flame> preparedFlames =
-                    FARenderTools.prepareFlame(
-                        flame, TinaControllerContextService.getContext().isZPass());
-                new FAFlameWriter().writeFlame(preparedFlames, tmpFile.getAbsolutePath());
-                openClRenderRes =
-                    FARenderTools.invokeFARender(
-                        tmpFile.getAbsolutePath(),
-                        width,
-                        height,
-                        prefs.getTinaRenderPreviewQuality(),
-                        preparedFlames.size() > 1, flame);
-              } finally {
-                try {
-                  if (gpuProgressUpdater != null) {
-                    gpuProgressUpdater.signalCancel();
-                  }
-                } catch (Exception ex) {
-                  // EMPTY
-                }
-              }
-              if (openClRenderRes.getReturnCode() != 0) {
-                throw new Exception(openClRenderRes.getMessage());
-              } else {
-                SimpleImage img = new ImageReader().loadImage(openClRenderRes.getOutputFilename());
-                mainProgressUpdater.updateProgress(PROGRESS_STEPS);
-                if (!cfg.isNoControls() && messageHelper != null) {
-                  long t1 = System.currentTimeMillis();
-                  messageHelper.showStatusMessage(
-                      flame, "render time (GPU): " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-                  logger.info(openClRenderRes.getMessage());
-                }
-                return img;
-              }
-            } finally {
-              if (!tmpFile.delete()) {
-                tmpFile.deleteOnExit();
-              }
-              if (gpuProgressUpdater != null) {
-                gpuProgressUpdater.signalCancel();
-              }
-            }
-          } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-            errorHandler.handleError(ex);
-          }
+          return GPURendererFactory.getGPURenderer()
+              .renderPreview(
+                  flame,
+                  width,
+                  height,
+                  prefs,
+                  mainProgressUpdater,
+                  gpuProgressUpdater,
+                  messageHelper,
+                  cfg,
+                  errorHandler,
+                  logger);
         } else {
           double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
           double oldSampleDensity = flame.getSampleDensity();
