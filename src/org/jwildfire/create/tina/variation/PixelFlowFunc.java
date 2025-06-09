@@ -111,6 +111,15 @@ public class PixelFlowFunc extends VariationFunc implements SupportsGPU {
 	public String getName() {
 		return "pixel_flow";
 	}
+	
+	@Override
+	public void randomize() {
+		angle = Math.random() * 360.0;
+		len = Math.random() * (Math.random() < 0.5 ? 0.5 : 5.0);
+		width = Math.random() * 500.0;
+		seed = (int) (Math.random() * 1000000);
+		enable_dc = (int) (Math.random() * 2);
+	}
 
 	@Override
 	public VariationFuncType[] getVariationTypes() {

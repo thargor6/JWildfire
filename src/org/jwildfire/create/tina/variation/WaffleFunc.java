@@ -110,6 +110,14 @@ public class WaffleFunc extends VariationFunc implements SupportsGPU {
     vcosr = pAmount * cos(rotation);
     vsinr = pAmount * sin(rotation);
   }
+  
+  @Override
+  public void randomize() {
+  	slices = (int) (Math.random() * 15 + 1);
+  	xthickness = Math.random();
+  	ythickness = Math.random();
+  	rotation = Math.random() * Math.TAU - Math.PI;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

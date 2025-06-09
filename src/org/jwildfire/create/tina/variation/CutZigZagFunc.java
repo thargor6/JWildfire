@@ -153,6 +153,15 @@ public class CutZigZagFunc  extends VariationFunc implements SupportsGPU {
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		xpar = Math.random() * 4.5 + 0.5;
+		ypar = Math.random() * 4.5 + 0.5;
+		zoom = Math.random() * 15.0 + 0.5;
+		invert = (int) (Math.random() * 2);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE,VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}

@@ -75,6 +75,11 @@ public class CloverLeafWFFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+  	filled = Math.random();
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }

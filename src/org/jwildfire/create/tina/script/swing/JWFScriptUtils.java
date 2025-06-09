@@ -69,7 +69,7 @@ public class JWFScriptUtils {
               "Crackle_Styles_Chooser_Rev01_by_MH",
               "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame",
               "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Oily_Juliascope_Rev1", "Oily_Rev3",
-              "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3",
+              "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3", "Julian Recurrenceplot",
 
               "Keep 'Em Separated and Framed BS", "Minkowscope-Painting-BS",
 

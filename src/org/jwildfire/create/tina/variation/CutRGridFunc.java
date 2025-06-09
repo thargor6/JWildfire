@@ -146,6 +146,14 @@ public class  CutRGridFunc  extends VariationFunc  implements SupportsGPU {
 	}
 
 	@Override
+	public void randomize() {
+		// Don't change mode
+		zoom = Math.random() * 25.0 + 2.0;
+		invert = (int) (Math.random() * 2);
+		angle = (int) (Math.random() * 90);
+	}
+
+	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
 	}

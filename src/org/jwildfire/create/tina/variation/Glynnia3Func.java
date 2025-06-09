@@ -128,6 +128,17 @@ public class Glynnia3Func extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public void randomize() {
+  	rscale = Math.random() * 4.0 + 1.0;
+  	if (Math.random() < 0.25) rscale = 1 / rscale;
+  	dscale = Math.random() * 9.0 + 1.0;
+  	if (Math.random() < 0.5) dscale = 1 / dscale;
+  	if (Math.random() < 0.1) dscale = -dscale;
+  	rthresh = Math.random() * 2.5;
+  	ythresh = Math.random() * 4.0 - 2.0;
+  }
+
+  @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }

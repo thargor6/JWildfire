@@ -68,6 +68,11 @@ public class SineBlurFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "sineblur";
   }
+  
+  @Override
+  public void randomize() {
+  	power = Math.random() * 3.0 + 0.5;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

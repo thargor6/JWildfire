@@ -458,6 +458,24 @@ public class NBlurFunc extends VariationFunc {
       this._arc_tan2 = (2.0 * atan(this._arc_tan1 / (-2.0)));
     }
   }
+  
+  @Override
+  public void randomize() {
+  	numEdges = (int) (Math.random() * (Math.random() < 0.75 ? 10 : 50) + 3);
+  	if (Math.random() < 0.5) {
+  		numStripes = 0;
+  	} else {
+  		numStripes = (int) (Math.random() * Math.random() * 10);
+  		if (Math.random() < 0.4) numStripes = -numStripes;
+  	}
+  	ratioStripes = Math.random() * 2.0;
+  	ratioHole = Math.random();
+  	circumCircle = Math.random() < 0.75 ? 0 : 1;
+  	adjustToLinear = (int) (Math.random() * 2);
+  	equalBlur = (int) (Math.random() * 2);
+  	exactCalc = (int) (Math.random() * 2);
+  	highlightEdges = Math.random() * 2.0 + 0.1;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

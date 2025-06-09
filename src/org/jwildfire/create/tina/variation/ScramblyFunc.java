@@ -195,6 +195,14 @@ public class ScramblyFunc extends VariationFunc {
       return 0;
     }
   }
+  
+  @Override
+  public void randomize() {
+  	l = (int) (Math.random() * 23 + 3);
+  	seed = (int) (Math.random() * 200);
+  	byrows = (int) (Math.random() * 2);
+  	cellsize = Math.random() * 8.0 + 0.1;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

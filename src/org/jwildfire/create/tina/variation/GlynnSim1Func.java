@@ -139,6 +139,16 @@ public class GlynnSim1Func extends VariationFunc implements SupportsGPU {
   public String[] getParameterAlternativeNames() {
     return new String[]{"GlynnSim1_radius", "GlynnSim1_radius1", "GlynnSim1_Phi1", "GlynnSim1_thickness", "GlynnSim1_pow", "GlynnSim1_contrast"};
   }
+  
+  @Override
+  public void randomize() {
+  	radius = Math.random() * 1.5 + 0.25;
+  	radius1 = Math.random() * radius + 0.02;
+  	phi1 = Math.random() * 360.0 - 180.0;
+  	thickness = Math.random();
+  	pow = Math.random() * 2.0 + 0.5;
+  	contrast = Math.random();
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

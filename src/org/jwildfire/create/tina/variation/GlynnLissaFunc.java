@@ -211,6 +211,23 @@ public class GlynnLissaFunc extends VariationFunc {
     return "glynnlissa";
   }
 
+  @Override
+  public void randomize() {
+  	radius = Math.random() * 1.5 + 0.25;
+  	radius1 = Math.random() * radius + 0.02;
+  	phi1 = Math.random() * 360.0 - 180.0;
+  	thickness = Math.random();
+  	pow = Math.random() * 2.0 + 0.5;
+  	contrast = Math.random();
+    a = (int) (Math.random() * 10 + 1);
+    if (Math.random() < 0.5) a -= Math.random();
+    b = (int) (Math.random() * 10 + 1);
+    if (Math.random() < 0.5) b -= Math.random();
+    width = Math.random() * 0.1;
+    phase = Math.random() * 2.0 * Math.PI - Math.PI;
+    scale = Math.random() * 0.75 + 0.25;
+  }
+
 	@Override
 	public VariationFuncType[] getVariationTypes() {
 		return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION};

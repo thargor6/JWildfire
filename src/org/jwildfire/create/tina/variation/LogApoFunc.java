@@ -69,6 +69,12 @@ public class LogApoFunc extends VariationFunc implements SupportsGPU {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _denom = 0.5 / log(base);
   }
+  
+  @Override
+  public void randomize() {
+  	base = Math.random() * 16.0 + 1.1;
+  	if (Math.random() < 0.5) base = 1 / base;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

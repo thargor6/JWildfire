@@ -23,14 +23,14 @@ public class PostAffine3DFunc extends AbstractAffine3DFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    affineTransform(pContext, pXForm, pAffineTP, pVarTP, pAffineTP.x, pAffineTP.y, pAffineTP.z, pAmount);
+    affineTransform(pContext, pXForm, pAffineTP, pVarTP, pVarTP.x, pVarTP.y, pVarTP.z, pAmount);
   }
 
   @Override
   protected void applyTransform(XYZPoint pAffineTP, XYZPoint pVarTP, double affineX, double affineY, double affineZ) {
-    pVarTP.x += affineX;
-    pVarTP.y += affineY;
-    pVarTP.z += affineZ;
+    pVarTP.x = affineX;
+    pVarTP.y = affineY;
+    pVarTP.z = affineZ;
   }
 
   @Override
