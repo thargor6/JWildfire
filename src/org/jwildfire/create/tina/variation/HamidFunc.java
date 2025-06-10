@@ -82,17 +82,7 @@ public class HamidFunc extends VariationFunc {
           PARAM_G, PARAM_H, PARAM_I, PARAM_J, PARAM_K, PARAM_L, PARAM_M,
           PARAM_N, PARAM_O, PARAM_P};
 
-  private static String[] methods = {"hamid_line_1", "hamid_line_2",
-          "hamid_line_3", "hamid_line_4", "hamid_line_5", "hamid_line_6",
-          "hamid_line_7", "hamid_line_8", "hamid_line_9", "hamid_line_10",
-          "hamid_circle_10", "hamid_circle_11", "hamid_circle_12",
-          "hamid_circle_13", "hamid_circle_14", "hamid_circle_15",
-          "hamid_circle_16", "hamid_circle_17", "hamid_circle_18",
-          "hamid_circle_19"};
-
-  private static int nMax = methods.length;
-
-  // private DynamicArray2D xyPoints = new DynamicArray2D(1000);
+  private static int nMax = 20;
 
   private int presetId = 0;
   private int npoints = 2000;
@@ -114,419 +104,359 @@ public class HamidFunc extends VariationFunc {
   private double o = 1.0;
   private double p = 1.0;
 
-  static class DoublePoint2D {
-    public double x;
-    public double y;
-
-    public DoublePoint2D(double x, double y) {
-      this.x = x;
-      this.y = y;
-    }
-  }
-
-  static class DoubleLine2D {
-    double x1;
-    double y1;
-    double x2;
-    double y2;
-
-    public DoubleLine2D(double x1, double y1, double x2, double y2) {
-      this.x1 = x1;
-      this.y1 = y1;
-      this.x2 = x2;
-      this.y2 = y2;
-    }
-  }
-
-  static class DoubleCircle2D {
-    double x;
-    double y;
-    double r;
-
-    public DoubleCircle2D(double x, double y, double r) {
-      this.x = x;
-      this.y = y;
-      this.r = r;
-    }
-
-  }
-
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer,
                    XForm pXForm, double pAmount) {
-
     Flame flame = pContext.getFlameRenderer().getFlame();
     flame.setAntialiasAmount(0.0);
-    // flame.setPixelsPerUnit(200);
-
-  }
-
-  private DoublePoint2D pCircle(FlameTransformationContext pContext, double x, double y, double radius) {
-    if (filled == 1) {
-      if (pContext.random() > 0.05)
-        radius = radius * pContext.random();
-    }
-    double xout = 0, yout = 0;
-    double a = pContext.random() * 2 * M_PI;
-    double sina = sin(a);
-    double cosa = cos(a);
-
-    xout = x + radius * cosa;
-    yout = y + radius * sina;
-
-    DoublePoint2D value = new DoublePoint2D(xout, yout);
-
-    return value;
-  }
-
-  public DoublePoint2D pLine(FlameTransformationContext pContext, double x1, double y1, double x2, double y2) {
-    double ydiff = y2 - y1;
-    double xdiff = x2 - x1;
-    double m;
-    if (xdiff == 0)
-      m = 10000;
-    else
-      m = ydiff / xdiff; // slope
-    double line_length = Math.sqrt((xdiff * xdiff) + (ydiff * ydiff));
-    double xout = 0, yout = 0;
-    double xoffset = 0, yoffset = 0;
-
-    // draw point at a random distance along line
-    // (along straight line connecting endpoint1 and endpoint2)
-    double d = pContext.random() * line_length;
-    // x = x1 [+-] (d / (sqrt(1 + m^2)))
-    // y = y1 [+-] (m * d / (sqrt(1 + m^2)))
-    // determine sign based on orientation of endpoint2 relative to
-    // endpoint1
-    xoffset = d / Math.sqrt(1 + m * m);
-    if (x2 < x1) {
-      xoffset = -1 * xoffset;
-    }
-    yoffset = Math.abs(m * xoffset);
-    if (y2 < y1) {
-      yoffset = -1 * yoffset;
-    }
-
-    xout = x1 + xoffset;
-    yout = y1 + yoffset;
-
-    DoublePoint2D value = new DoublePoint2D(xout, yout);
-
-    return value;
-  }
-
-  public DoubleLine2D hamid_line_1(Integer I) {
-    double x1 = -MathLib.sin(4. * a * MathLib.M_PI * Integer.valueOf(I)
-            / npoints);
-    double y1 = -MathLib.cos(2. * b * MathLib.M_PI * I / npoints);
-    double x2 = -0.5 * e * MathLib.sin(8. * c * MathLib.M_PI * I / npoints);
-    double y2 = -0.5 * f * MathLib.cos(4. * d * MathLib.M_PI * I / npoints);
-    return new DoubleLine2D(x1, y1, x2, y2);
-  }
-
-  public DoubleLine2D hamid_line_2(Integer I) {
-    double x1 = -MathLib.sin(2. * a * MathLib.M_PI * Integer.valueOf(I)
-            / npoints);
-    double y1 = -MathLib.cos(2. * b * MathLib.M_PI * I / npoints);
-    double x2 = -0.5 * e * MathLib.sin(8.0 * c * MathLib.M_PI * I / npoints);
-    double y2 = -0.5 * f * MathLib.cos(12. * d * MathLib.M_PI * I / npoints);
-    return new DoubleLine2D(x1, y1, x2, y2);
-  }
-
-  public DoubleLine2D hamid_line_3(Integer I) {
-    double x1 = -MathLib.sin(8. * a * MathLib.M_PI * Integer.valueOf(I)
-            / npoints);
-    double y1 = -MathLib.cos(2. * b * MathLib.M_PI * I / npoints);
-    double x2 = -0.5 * e * MathLib.sin(6. * c * MathLib.M_PI * I / npoints);
-    double y2 = -0.5 * f * MathLib.cos(2. * d * MathLib.M_PI * I / npoints);
-    return new DoubleLine2D(x1, y1, x2, y2);
-  }
-
-  public DoubleLine2D hamid_line_4(Integer I) {
-    double x1 = -MathLib.sin(10. * a * MathLib.M_PI * Integer.valueOf(I)
-            / npoints);
-    double y1 = -MathLib.cos(2. * b * MathLib.M_PI * I / npoints);
-    double x2 = -0.5 * e * MathLib.sin(12. * c * MathLib.M_PI * I / npoints);
-    double y2 = -0.5 * f * MathLib.cos(2. * d * MathLib.M_PI * I / npoints);
-    return new DoubleLine2D(x1, y1, x2, y2);
-  }
-
-  public DoubleLine2D hamid_line_5(Integer I) {
-    double x1 = MathLib.sin(10. * a * MathLib.M_PI
-            * (Integer.valueOf(I) + 699) / npoints);
-    double y1 = MathLib.cos(8. * b * MathLib.M_PI * (I + 699) / npoints);
-    double x2 = MathLib.sin(12. * c * MathLib.M_PI * (I + 699) / npoints);
-    double y2 = MathLib.cos(10. * d * MathLib.M_PI * (I + 699) / npoints);
-    return new DoubleLine2D(x1, y1, x2, y2);
-  }
-
-  public DoubleLine2D hamid_line_6(Integer I) {
-    double x1 = -2 * a * MathLib.cos(4. * b * MathLib.M_PI * I / 1000);
-    double y1 = 0.5
-            * c
-            * MathLib.pow(MathLib.cos(6.0 * d * MathLib.M_PI * I / npoints),
-            3 * i);
-
-    double x2 = -2 * e * MathLib.sin(6. * f * MathLib.M_PI * I / npoints)
-            / 15.0 * j;
-    double y2 = (4.0 * g * MathLib.sin(2.0 * h * MathLib.M_PI * I / npoints)
-            / 15.0 * k);
-    return new DoubleLine2D(x1, y1, x2, y2);
-  }
-
-  public DoubleLine2D hamid_line_7(Integer I) {
-    double x1 = 3.0
-            * a
-            * MathLib.pow(
-            MathLib.sin(2. * b * MathLib.M_PI * Integer.valueOf(I)
-                    / npoints), 3 * h);
-    double y1 = -MathLib.cos(8. * c * MathLib.M_PI * I / npoints);
-    double x2 = 1.5
-            * d
-            * MathLib.pow(MathLib.sin(2. * e * MathLib.M_PI * I / npoints), 3 * i);
-    double y2 = -0.5 * f * MathLib.cos(6. * g * MathLib.M_PI * I / npoints);
-    return new DoubleLine2D(x1, y1, x2, y2);
-  }
-
-  public DoubleLine2D hamid_line_8(Integer I) {
-    double x1 = MathLib.cos(6. * a * MathLib.M_PI * Integer.valueOf(I)
-            / npoints);
-    double y1 = -MathLib.cos(8. * b * MathLib.M_PI * I / npoints);
-    double x2 = 1.5 * c
-            * MathLib.pow(MathLib.sin(2. * MathLib.M_PI * I / npoints), 3 * f);
-    double y2 = -0.5 * d * MathLib.cos(6. * e * MathLib.M_PI * I / npoints);
-    return new DoubleLine2D(x1, y1, x2, y2);
-  }
-
-  public DoubleLine2D hamid_line_9(Integer I) {
-    double x1 = Math
-            .pow(MathLib.sin(20. * a * MathLib.M_PI * Integer.valueOf(I)
-                    / npoints), 3);
-    double y1 = MathLib.pow(MathLib.cos(18. * b * MathLib.M_PI * I / npoints),
-            3 * e);
-
-    double x2 = Math
-            .pow(MathLib.sin(16. * c * MathLib.M_PI * Integer.valueOf(I)
-                    / npoints), 3);
-    double y2 = MathLib.pow(MathLib.cos(14. * d * MathLib.M_PI * I / npoints),
-            3 * f);
-    return new DoubleLine2D(x1, y1, x2, y2);
-  }
-
-  public DoublePoint2D A(int n) {
-    double x1 = 0, y1 = 0;
-
-    do {
-      if (n < 100) {
-        x1 = n / 100.0;
-        y1 = 0.0;
-        break;
-      } else if (n < 200) {
-        x1 = 1.0;
-        y1 = (n - 100.) / 100.0;
-        break;
-      } else if (n < 300) {
-        x1 = (300 - n) / 100.0;
-        y1 = 1.0;
-        break;
-      } else if (n < 400) {
-        x1 = 0.0;
-        y1 = (400 - n) / 100.0;
-        break;
-      } else
-        n = n - 400;
-    } while (true);
-
-    return new DoublePoint2D(x1, y1);
-
-  }
-
-  public DoubleLine2D hamid_line_10(Integer I) {
-
-    DoublePoint2D out1 = A(I);
-    DoublePoint2D out2 = A(I + 199);
-    return new DoubleLine2D(out1.x, out1.y, out2.x, out2.y);
-  }
-
-  public DoubleCircle2D hamid_circle_10(Integer I) {
-    double x = 2.0 * a * MathLib.sin(2.0 * b * MathLib.M_PI * I / npoints)
-            / 3.0 + MathLib.sin(36.0 * c * MathLib.M_PI * I / npoints)
-            * MathLib.cos(30.0 * d * MathLib.M_PI * I / npoints) / 3.0 * k
-            + MathLib.pow(MathLib.sin(14.0 * MathLib.M_PI * I / npoints), 3 * l)
-            / 3.0 * m;
-    double y = 2.0 * e * MathLib.cos(2.0 * f * MathLib.M_PI * I / npoints)
-            / 3.0 * n + MathLib.cos(36.0 * g * MathLib.M_PI * I / npoints)
-            * MathLib.cos(30.0 * h * MathLib.M_PI * I / npoints) / 3.0 * o
-            + MathLib.pow(MathLib.cos(14.0 * i * MathLib.M_PI * I / npoints), 3)
-            / 5.0 * p;
-    double radius = 1.0 / 150.0 + MathLib.pow(
-            MathLib.sin(36. * j * MathLib.M_PI * I / npoints), 4) / 9.0;
-    return new DoubleCircle2D(x, y, radius);
-  }
-
-  public DoubleCircle2D hamid_circle_11(Integer I) {
-    double x = MathLib.sin(14.0 * a * MathLib.M_PI * I / npoints);
-    double y = MathLib.cos(32.0 * b * MathLib.M_PI * I / npoints);
-    double radius = MathLib.pow(
-            MathLib.sin(20. * c * MathLib.M_PI * I / npoints), 2) / 3.0 * d;
-    return new DoubleCircle2D(x, y, radius);
-  }
-
-  public DoubleCircle2D hamid_circle_12(Integer I) {
-    double x = 2.0 * a * MathLib.sin(6.0 * b * MathLib.M_PI * I / npoints)
-            / 3.0 + MathLib.sin(36.0 * c * MathLib.M_PI * I / npoints)
-            * MathLib.cos(30.0 * d * MathLib.M_PI * I / npoints) / 4.0
-            + MathLib.pow(MathLib.sin(14.0 * e * MathLib.M_PI * I / npoints), 3 * k)
-            / 4.0 * l;
-    double y = 2.0 * f * MathLib.cos(6.0 * g * MathLib.M_PI * I / npoints)
-            / 3.0 + MathLib.cos(28.0 * h * MathLib.M_PI * I / npoints)
-            * MathLib.cos(30.0 * i * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.cos(14.0 * MathLib.M_PI * I / npoints), 3 * m)
-            / 5.0 * n;
-    double radius = 1.0 / 150.0 + MathLib.pow(
-            MathLib.sin(36. * j * MathLib.M_PI * I / npoints), 4 * o) / 20.0 * p;
-    return new DoubleCircle2D(x, y, radius);
-  }
-
-  public DoubleCircle2D hamid_circle_13(Integer I) {
-    double x = MathLib.sin(10.0 * a * MathLib.M_PI * I / npoints);
-    double y = MathLib.pow(MathLib.cos(28.0 * b * MathLib.M_PI * I / npoints), 3 * e);
-    double radius = MathLib.pow(
-            MathLib.sin(18. * c * MathLib.M_PI * I / npoints), 2) / 3.0 * d;
-    return new DoubleCircle2D(x, y, radius);
-  }
-
-  public DoubleCircle2D hamid_circle_14(Integer I) {
-    double x = 2.0 * a * MathLib.sin(18.0 * b * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.sin(40.0 * c * MathLib.M_PI * I / npoints), 3)
-            * MathLib.cos(30.0 * d * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.sin(34.0 * e * MathLib.M_PI * I / npoints), 3 * k)
-            / 4.0 * l;
-    double y = 2.0 * f * MathLib.cos(18.0 * g * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.cos(28.0 * h * MathLib.M_PI * I / npoints), 3)
-            * MathLib.cos(40.0 * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.cos(34.0 * i * MathLib.M_PI * I / npoints), 3 * m)
-            / 3.0 * n;
-    double radius = 1.0 / 150.0 + MathLib.pow(
-            MathLib.sin(56. * j * MathLib.M_PI * I / npoints), 4 * o) / 8.0 * p;
-    return new DoubleCircle2D(x, y, radius);
-  }
-
-  public DoubleCircle2D hamid_circle_15(Integer I) {
-    double x = 2.0 * a * MathLib.sin(14.0 * b * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.sin(10.0 * c * MathLib.M_PI * I / npoints), 3)
-            * MathLib.cos(28.0 * d * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.sin(46.0 * e * MathLib.M_PI * I / npoints), 3 * m)
-            / 3.0 * n;
-    double y = 2.0 * MathLib.cos(14.0 * f * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.cos(10.0 * g * MathLib.M_PI * I / npoints), 3)
-            * MathLib.cos(28.0 * h * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.cos(34.0 * j * MathLib.M_PI * I / npoints), 3 * o)
-            / 3.0;
-    double radius = 1.0 / 150.0
-            + MathLib.pow(MathLib.sin(72. * k * MathLib.M_PI * I / npoints), 6) / 9.0
-            + MathLib.pow(MathLib.sin(12.0 * l * MathLib.M_PI * I / npoints), 4)
-            / 20.0 * p;
-    return new DoubleCircle2D(x, y, radius);
-  }
-
-  public DoubleCircle2D hamid_circle_16(Integer I) {
-    double x = MathLib.sin(38.0 * a * MathLib.M_PI * I / npoints)
-            * MathLib.cos(26.0 * b * MathLib.M_PI * I / npoints) / 2.0
-            + MathLib.pow(MathLib.sin(18.0 * c * MathLib.M_PI * I / npoints), 3 * l)
-            / 2.0 * m;
-    double y = 2.0 * MathLib.cos(18.0 * d * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.cos(38.0 * e * MathLib.M_PI * I / npoints)
-            * MathLib.cos(36.0 * f * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.cos(18.0 * g * MathLib.M_PI * I / npoints), 3 * n)
-            / 4.0 * o;
-    double radius = 1.0 / 150.0
-            + MathLib.pow(MathLib.sin(18. * h * MathLib.M_PI * I / npoints), 10)
-            * MathLib.pow(MathLib.sin(100.0 * i * MathLib.M_PI * I / npoints), 6)
-            / 100.0
-            + MathLib.pow(MathLib.sin(72.0 * j * MathLib.M_PI * I / npoints), 8)
-            * MathLib.pow(MathLib.cos(18.0 * k * MathLib.M_PI * I / npoints), 6)
-            / 20.0 * p;
-    return new DoubleCircle2D(x, y, radius);
-  }
-
-  public DoubleCircle2D hamid_circle_17(Integer I) {
-    double x = 2.0 * a * MathLib.sin(10.0 * b * MathLib.M_PI * I / npoints)
-            + MathLib.pow(MathLib.sin(6.0 * c * MathLib.M_PI * I / npoints), 3)
-            * MathLib.cos(28.0 * d * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.sin(126.0 * e * MathLib.M_PI * I / npoints) / 10.0 * l;
-    double y = 2.0 * MathLib.cos(6.0 * f * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.cos(18.0 * g * MathLib.M_PI * I / npoints), 3)
-            * MathLib.cos(36.0 * h * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.cos(126.0 * i * MathLib.M_PI * I / npoints) / 10.0 * m;
-    double radius = 1.0
-            / 150.0
-            + MathLib.pow(MathLib.sin(48. * j * MathLib.M_PI * I / npoints), 4)
-            * (1.0 + MathLib.pow(MathLib.sin(12.0 * k * MathLib.M_PI * I / npoints),
-            2 * n)) / 18.0 * o;
-
-    return new DoubleCircle2D(x, y, radius);
-  }
-
-  public DoubleCircle2D hamid_circle_18(Integer I) {
-    double x = 2.0 * a * MathLib.sin(18.0 * b * MathLib.M_PI * I / npoints) / 5.0
-            + MathLib.pow(MathLib.sin(34.0 * c * MathLib.M_PI * I / npoints), 3 * j)
-            / 3.0 * k
-            + MathLib.pow(MathLib.sin(50.0 * d * MathLib.M_PI * I / npoints), 3 * l)
-            / 3.0 * m;
-    double y = 2.0 * MathLib.cos(18.0 * e * MathLib.M_PI * I / npoints) / 3.0
-            + MathLib.pow(MathLib.cos(34.0 * f * MathLib.M_PI * I / npoints), 3)
-            / 3.0
-            + MathLib.pow(MathLib.cos(50.0 * g * MathLib.M_PI * I / npoints), 3 * n)
-            / 10.0 * o;
-    double radius = 1.0 / 150.0 + MathLib.pow(
-            MathLib.sin(58. * i * MathLib.M_PI * I / npoints), 4) / 10.0 * p;
-
-    return new DoubleCircle2D(x, y, radius);
-  }
-
-  public DoubleCircle2D hamid_circle_19(Integer I) {
-    double x = MathLib.cos(10.0 * a * MathLib.M_PI * I / npoints)
-            * (1.0 * c - MathLib.pow(MathLib.sin(16.0 * b * MathLib.M_PI * I / npoints),
-            2 * h) / 2.0 * i);
-    double y = MathLib.sin(10.0 * d * MathLib.M_PI * I / npoints)
-            * (1.0 * f - MathLib.pow(MathLib.cos(34.0 * e * MathLib.M_PI * I / npoints),
-            2 * j) / 2.0 * k);
-    double radius = 1.0 / 200.0 + MathLib.pow(
-            MathLib.sin(52. * g * MathLib.M_PI * I / npoints), 4 * l) / 10.0 * m;
-
-    return new DoubleCircle2D(x, y, radius);
   }
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm,
                         XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    DoublePoint2D out = null;
-    DoubleLine2D line = null;
-
     if (presetId >= nMax)
       presetId = nMax - 1;
 
-    String peekmethod = methods[presetId];
+    int I = (int) (pContext.random() * npoints + 1);
+    double xout = 0, yout = 0;
 
-    try {
-      Method m = this.getClass().getDeclaredMethod(peekmethod,
-              new Class[]{Integer.class});
-      if (presetId < 10) {
-        line = (DoubleLine2D) m.invoke(this,
-                new Object[]{(int) (pContext.random() * npoints + 1)});
-        out = pLine(pContext, line.x1, line.y1, line.x2, line.y2);
-      } else {
-        DoubleCircle2D circle = (DoubleCircle2D) m.invoke(this,
-                new Object[]{(int) (pContext.random() * npoints + 1)});
-        out = pCircle(pContext, circle.x, circle.y, circle.r);
+
+    if(presetId < 10) {
+      double x1 = 0, y1 = 0;
+      double x2 = 0, y2 = 0;
+      switch(presetId) {
+        case 0: {
+          x1 = -MathLib.sin(4. * a * MathLib.M_PI * Integer.valueOf(I)
+                  / npoints);
+          y1 = -MathLib.cos(2. * b * MathLib.M_PI * I / npoints);
+          x2 = -0.5 * e * MathLib.sin(8. * c * MathLib.M_PI * I / npoints);
+          y2 = -0.5 * f * MathLib.cos(4. * d * MathLib.M_PI * I / npoints);
+          break;
+        }
+        case 1:
+        {
+          x1 = -MathLib.sin(2. * a * MathLib.M_PI * Integer.valueOf(I)
+                  / npoints);
+          y1 = -MathLib.cos(2. * b * MathLib.M_PI * I / npoints);
+          x2 = -0.5 * e * MathLib.sin(8.0 * c * MathLib.M_PI * I / npoints);
+          y2 = -0.5 * f * MathLib.cos(12. * d * MathLib.M_PI * I / npoints);
+          break;
+        }
+        case 2: {
+          x1 = -MathLib.sin(8. * a * MathLib.M_PI * Integer.valueOf(I)
+                  / npoints);
+          y1 = -MathLib.cos(2. * b * MathLib.M_PI * I / npoints);
+          x2 = -0.5 * e * MathLib.sin(6. * c * MathLib.M_PI * I / npoints);
+          y2 = -0.5 * f * MathLib.cos(2. * d * MathLib.M_PI * I / npoints);
+          break;
+        }
+        case 3: {
+          x1 = -MathLib.sin(10. * a * MathLib.M_PI * Integer.valueOf(I)
+                  / npoints);
+          y1 = -MathLib.cos(2. * b * MathLib.M_PI * I / npoints);
+          x2 = -0.5 * e * MathLib.sin(12. * c * MathLib.M_PI * I / npoints);
+          y2 = -0.5 * f * MathLib.cos(2. * d * MathLib.M_PI * I / npoints);
+          break;
+        }
+        case 4: {
+          x1 = MathLib.sin(10. * a * MathLib.M_PI
+                  * (Integer.valueOf(I) + 699) / npoints);
+          y1 = MathLib.cos(8. * b * MathLib.M_PI * (I + 699) / npoints);
+          x2 = MathLib.sin(12. * c * MathLib.M_PI * (I + 699) / npoints);
+          y2 = MathLib.cos(10. * d * MathLib.M_PI * (I + 699) / npoints);
+          break;
+        }
+        case 5: {
+          x1 = -2 * a * MathLib.cos(4. * b * MathLib.M_PI * I / 1000);
+          y1 = 0.5
+                  * c
+                  * MathLib.pow(MathLib.cos(6.0 * d * MathLib.M_PI * I / npoints),
+                  3 * i);
+
+          x2 = -2 * e * MathLib.sin(6. * f * MathLib.M_PI * I / npoints)
+                  / 15.0 * j;
+          y2 = (4.0 * g * MathLib.sin(2.0 * h * MathLib.M_PI * I / npoints)
+                  / 15.0 * k);
+          break;
+        }
+        case 6: {
+          x1 = 3.0
+                  * a
+                  * MathLib.pow(
+                  MathLib.sin(2. * b * MathLib.M_PI * Integer.valueOf(I)
+                          / npoints), 3 * h);
+          y1 = -MathLib.cos(8. * c * MathLib.M_PI * I / npoints);
+          x2 = 1.5
+                  * d
+                  * MathLib.pow(MathLib.sin(2. * e * MathLib.M_PI * I / npoints), 3 * i);
+          y2 = -0.5 * f * MathLib.cos(6. * g * MathLib.M_PI * I / npoints);
+          break;
+        }
+        case 7: {
+          x1 = MathLib.cos(6. * a * MathLib.M_PI * Integer.valueOf(I)
+                  / npoints);
+          y1 = -MathLib.cos(8. * b * MathLib.M_PI * I / npoints);
+          x2 = 1.5 * c
+                  * MathLib.pow(MathLib.sin(2. * MathLib.M_PI * I / npoints), 3 * f);
+          y2 = -0.5 * d * MathLib.cos(6. * e * MathLib.M_PI * I / npoints);
+          break;
+        }
+        case 8: {
+          x1 = Math
+                  .pow(MathLib.sin(20. * a * MathLib.M_PI * Integer.valueOf(I)
+                          / npoints), 3);
+          y1 = MathLib.pow(MathLib.cos(18. * b * MathLib.M_PI * I / npoints),
+                  3 * e);
+
+          x2 = Math
+                  .pow(MathLib.sin(16. * c * MathLib.M_PI * Integer.valueOf(I)
+                          / npoints), 3);
+          y2 = MathLib.pow(MathLib.cos(14. * d * MathLib.M_PI * I / npoints),
+                  3 * f);
+          break;
+        }
+        case 9: {
+          {
+            int n = I;
+            do {
+              if (n < 100) {
+                x1 = n / 100.0;
+                y1 = 0.0;
+                break;
+              } else if (n < 200) {
+                x1 = 1.0;
+                y1 = (n - 100.) / 100.0;
+                break;
+              } else if (n < 300) {
+                x1 = (300 - n) / 100.0;
+                y1 = 1.0;
+                break;
+              } else if (n < 400) {
+                x1 = 0.0;
+                y1 = (400 - n) / 100.0;
+                break;
+              } else
+                n = n - 400;
+            } while (true);
+          }
+          {
+            int n = I + 199;
+            do {
+              if (n < 100) {
+                x2 = n / 100.0;
+                y2 = 0.0;
+                break;
+              } else if (n < 200) {
+                x2 = 1.0;
+                y2 = (n - 100.) / 100.0;
+                break;
+              } else if (n < 300) {
+                x2 = (300 - n) / 100.0;
+                y2 = 1.0;
+                break;
+              } else if (n < 400) {
+                x2 = 0.0;
+                y2 = (400 - n) / 100.0;
+                break;
+              } else
+                n = n - 400;
+            } while (true);
+          }
+          break;
+        }
       }
-    } catch (Exception e) {
-      e.printStackTrace();
+
+      double ydiff = y2 - y1;
+      double xdiff = x2 - x1;
+      double m;
+      if (xdiff == 0)
+        m = 10000;
+      else
+        m = ydiff / xdiff; // slope
+      double line_length = Math.sqrt((xdiff * xdiff) + (ydiff * ydiff));
+      double xoffset = 0, yoffset = 0;
+
+      // draw point at a random distance along line
+      // (along straight line connecting endpoint1 and endpoint2)
+      double d = pContext.random() * line_length;
+      // x = x1 [+-] (d / (sqrt(1 + m^2)))
+      // y = y1 [+-] (m * d / (sqrt(1 + m^2)))
+      // determine sign based on orientation of endpoint2 relative to
+      // endpoint1
+      xoffset = d / Math.sqrt(1 + m * m);
+      if (x2 < x1) {
+        xoffset = -1 * xoffset;
+      }
+      yoffset = Math.abs(m * xoffset);
+      if (y2 < y1) {
+        yoffset = -1 * yoffset;
+      }
+
+      xout = x1 + xoffset;
+      yout = y1 + yoffset;
+
+    }
+    else {
+      double x = 0;
+      double y = 0;
+      double radius = 0;
+      switch(presetId) {
+        case 10: {
+          x = 2.0 * a * MathLib.sin(2.0 * b * MathLib.M_PI * I / npoints)
+                  / 3.0 + MathLib.sin(36.0 * c * MathLib.M_PI * I / npoints)
+                  * MathLib.cos(30.0 * d * MathLib.M_PI * I / npoints) / 3.0 * k
+                  + MathLib.pow(MathLib.sin(14.0 * MathLib.M_PI * I / npoints), 3 * l)
+                  / 3.0 * m;
+          y = 2.0 * e * MathLib.cos(2.0 * f * MathLib.M_PI * I / npoints)
+                  / 3.0 * n + MathLib.cos(36.0 * g * MathLib.M_PI * I / npoints)
+                  * MathLib.cos(30.0 * h * MathLib.M_PI * I / npoints) / 3.0 * o
+                  + MathLib.pow(MathLib.cos(14.0 * i * MathLib.M_PI * I / npoints), 3)
+                  / 5.0 * p;
+          radius = 1.0 / 150.0 + MathLib.pow(
+                  MathLib.sin(36. * j * MathLib.M_PI * I / npoints), 4) / 9.0;
+          break;
+        }
+        case 11: {
+          x = MathLib.sin(14.0 * a * MathLib.M_PI * I / npoints);
+          y = MathLib.cos(32.0 * b * MathLib.M_PI * I / npoints);
+          radius = MathLib.pow(
+                  MathLib.sin(20. * c * MathLib.M_PI * I / npoints), 2) / 3.0 * d;
+          break;
+        }
+        case 12: {
+          x = 2.0 * a * MathLib.sin(6.0 * b * MathLib.M_PI * I / npoints)
+                  / 3.0 + MathLib.sin(36.0 * c * MathLib.M_PI * I / npoints)
+                  * MathLib.cos(30.0 * d * MathLib.M_PI * I / npoints) / 4.0
+                  + MathLib.pow(MathLib.sin(14.0 * e * MathLib.M_PI * I / npoints), 3 * k)
+                  / 4.0 * l;
+          y = 2.0 * f * MathLib.cos(6.0 * g * MathLib.M_PI * I / npoints)
+                  / 3.0 + MathLib.cos(28.0 * h * MathLib.M_PI * I / npoints)
+                  * MathLib.cos(30.0 * i * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.cos(14.0 * MathLib.M_PI * I / npoints), 3 * m)
+                  / 5.0 * n;
+          radius = 1.0 / 150.0 + MathLib.pow(
+                  MathLib.sin(36. * j * MathLib.M_PI * I / npoints), 4 * o) / 20.0 * p;
+          break;
+        }
+        case 13: {
+          x = MathLib.sin(10.0 * a * MathLib.M_PI * I / npoints);
+          y = MathLib.pow(MathLib.cos(28.0 * b * MathLib.M_PI * I / npoints), 3 * e);
+          radius = MathLib.pow(
+                  MathLib.sin(18. * c * MathLib.M_PI * I / npoints), 2) / 3.0 * d;
+          break;
+        }
+        case 14: {
+          x = 2.0 * a * MathLib.sin(18.0 * b * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.sin(40.0 * c * MathLib.M_PI * I / npoints), 3)
+                  * MathLib.cos(30.0 * d * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.sin(34.0 * e * MathLib.M_PI * I / npoints), 3 * k)
+                  / 4.0 * l;
+          y = 2.0 * f * MathLib.cos(18.0 * g * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.cos(28.0 * h * MathLib.M_PI * I / npoints), 3)
+                  * MathLib.cos(40.0 * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.cos(34.0 * i * MathLib.M_PI * I / npoints), 3 * m)
+                  / 3.0 * n;
+          radius = 1.0 / 150.0 + MathLib.pow(
+                  MathLib.sin(56. * j * MathLib.M_PI * I / npoints), 4 * o) / 8.0 * p;
+          break;
+        }
+        case 15: {
+          x = 2.0 * a * MathLib.sin(14.0 * b * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.sin(10.0 * c * MathLib.M_PI * I / npoints), 3)
+                  * MathLib.cos(28.0 * d * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.sin(46.0 * e * MathLib.M_PI * I / npoints), 3 * m)
+                  / 3.0 * n;
+          y = 2.0 * MathLib.cos(14.0 * f * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.cos(10.0 * g * MathLib.M_PI * I / npoints), 3)
+                  * MathLib.cos(28.0 * h * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.cos(34.0 * j * MathLib.M_PI * I / npoints), 3 * o)
+                  / 3.0;
+          radius = 1.0 / 150.0
+                  + MathLib.pow(MathLib.sin(72. * k * MathLib.M_PI * I / npoints), 6) / 9.0
+                  + MathLib.pow(MathLib.sin(12.0 * l * MathLib.M_PI * I / npoints), 4)
+                  / 20.0 * p;
+          break;
+        }
+        case 16: {
+          x = MathLib.sin(38.0 * a * MathLib.M_PI * I / npoints)
+                  * MathLib.cos(26.0 * b * MathLib.M_PI * I / npoints) / 2.0
+                  + MathLib.pow(MathLib.sin(18.0 * c * MathLib.M_PI * I / npoints), 3 * l)
+                  / 2.0 * m;
+          y = 2.0 * MathLib.cos(18.0 * d * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.cos(38.0 * e * MathLib.M_PI * I / npoints)
+                  * MathLib.cos(36.0 * f * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.cos(18.0 * g * MathLib.M_PI * I / npoints), 3 * n)
+                  / 4.0 * o;
+          radius = 1.0 / 150.0
+                  + MathLib.pow(MathLib.sin(18. * h * MathLib.M_PI * I / npoints), 10)
+                  * MathLib.pow(MathLib.sin(100.0 * i * MathLib.M_PI * I / npoints), 6)
+                  / 100.0
+                  + MathLib.pow(MathLib.sin(72.0 * j * MathLib.M_PI * I / npoints), 8)
+                  * MathLib.pow(MathLib.cos(18.0 * k * MathLib.M_PI * I / npoints), 6)
+                  / 20.0 * p;
+          break;
+        }
+        case 17: {
+          x = 2.0 * a * MathLib.sin(10.0 * b * MathLib.M_PI * I / npoints)
+                  + MathLib.pow(MathLib.sin(6.0 * c * MathLib.M_PI * I / npoints), 3)
+                  * MathLib.cos(28.0 * d * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.sin(126.0 * e * MathLib.M_PI * I / npoints) / 10.0 * l;
+          y = 2.0 * MathLib.cos(6.0 * f * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.cos(18.0 * g * MathLib.M_PI * I / npoints), 3)
+                  * MathLib.cos(36.0 * h * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.cos(126.0 * i * MathLib.M_PI * I / npoints) / 10.0 * m;
+          radius = 1.0
+                  / 150.0
+                  + MathLib.pow(MathLib.sin(48. * j * MathLib.M_PI * I / npoints), 4)
+                  * (1.0 + MathLib.pow(MathLib.sin(12.0 * k * MathLib.M_PI * I / npoints),
+                  2 * n)) / 18.0 * o;
+
+          break;
+        }
+        case 18: {
+          x = 2.0 * a * MathLib.sin(18.0 * b * MathLib.M_PI * I / npoints) / 5.0
+                  + MathLib.pow(MathLib.sin(34.0 * c * MathLib.M_PI * I / npoints), 3 * j)
+                  / 3.0 * k
+                  + MathLib.pow(MathLib.sin(50.0 * d * MathLib.M_PI * I / npoints), 3 * l)
+                  / 3.0 * m;
+          y = 2.0 * MathLib.cos(18.0 * e * MathLib.M_PI * I / npoints) / 3.0
+                  + MathLib.pow(MathLib.cos(34.0 * f * MathLib.M_PI * I / npoints), 3)
+                  / 3.0
+                  + MathLib.pow(MathLib.cos(50.0 * g * MathLib.M_PI * I / npoints), 3 * n)
+                  / 10.0 * o;
+          radius = 1.0 / 150.0 + MathLib.pow(
+                  MathLib.sin(58. * i * MathLib.M_PI * I / npoints), 4) / 10.0 * p;
+
+          break;
+        }
+        case 19: {
+          x = MathLib.cos(10.0 * a * MathLib.M_PI * I / npoints)
+                  * (1.0 * c - MathLib.pow(MathLib.sin(16.0 * b * MathLib.M_PI * I / npoints),
+                  2 * h) / 2.0 * i);
+          y = MathLib.sin(10.0 * d * MathLib.M_PI * I / npoints)
+                  * (1.0 * f - MathLib.pow(MathLib.cos(34.0 * e * MathLib.M_PI * I / npoints),
+                  2 * j) / 2.0 * k);
+          radius = 1.0 / 200.0 + MathLib.pow(
+                  MathLib.sin(52. * g * MathLib.M_PI * I / npoints), 4 * l) / 10.0 * m;
+
+          break;
+        }
+      }
+
+      if (filled == 1) {
+        if (pContext.random() > 0.05)
+          radius = radius * pContext.random();
+      }
+      double a = pContext.random() * 2 * M_PI;
+      double sina = sin(a);
+      double cosa = cos(a);
+
+      xout = x + radius * cosa;
+      yout = y + radius * sina;
     }
 
-    pVarTP.x += pAmount * out.x;
-    pVarTP.y += pAmount * out.y;
+    pVarTP.x += pAmount * xout;
+    pVarTP.y += pAmount * yout;
 
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;

@@ -23,6 +23,11 @@ import org.jwildfire.create.tina.variation.plot.PolarPlot3DWFFunc;
 import org.jwildfire.create.tina.variation.plot.YPlot2DWFFunc;
 import org.jwildfire.create.tina.variation.plot.YPlot3DWFFunc;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.jwildfire.create.tina.variation.VariationFuncType.*;
+
 public class GPUCodeHelper {
 
   public static void main(String args[]) {
@@ -31,91 +36,269 @@ public class GPUCodeHelper {
 
   private void run() {
     String code =
-        " double zc = pVarTP.color;\n" +
-                "    double random = pContext.random();\n" +
-                "    double x1 = pAffineTP.x;\n" +
-                "    double y1 = pAffineTP.y;\n" +
-                "    double z1 = pAffineTP.z;\n" +
-                "    double spreadx = -x_spread;\n" +
-                "    double spready = -y_spread;\n" +
-                "    double spreadz = -z_spread;\n" +
-                "    Complex z = new Complex(pAffineTP.x, pAffineTP.y + 1.0);\n" +
-                "    Complex z2 = new Complex(re, im);\n" +
+        "    /* hexnix3D by Larry Berlin, http://aporev.deviantart.com/art/3D-Plugins-Collection-One-138514007?q=gallery%3Aaporev%2F8229210&qo=15 */\n" +
+                "    if (_fcycle > 5) {// Resets the cyclic counting\n" +
+                "      _fcycle = 0;\n" +
+                "      _rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses new 6 or 3 nodes\n" +
+                "    }\n" +
+                "    if (_bcycle > 2) {\n" +
+                "      _bcycle = 0;\n" +
+                "      _rswtch = (int) trunc(pContext.random() * 3.0); //  Chooses new 6 or 3 nodes\n" +
+                "    }\n" +
                 "\n" +
-                "    for (int i = 0; i < iterations; i++){\n" +
-                "      z.re = pAffineTP.x;\n" +
-                "      z.im = pAffineTP.y + 1.0;\n" +
-                "      z.Div(z2);\n" +
+                "    double lrmaj = pAmount; // Sets hexagon length radius - major plane\n" +
+                "    double smooth = 1.0;\n" +
+                "    double smRotxTP = 0.0;\n" +
+                "    double smRotyTP = 0.0;\n" +
+                "    double smRotxFT = 0.0;\n" +
+                "    double smRotyFT = 0.0;\n" +
+                "    double gentleZ = 0.0;\n" +
                 "\n" +
-                "      // reciprocal of z for 3D\n" +
-                "      double r1 = pAmount/(z.re*z.re+z.im*z.im+z1*z1);\n" +
-                "      z.re = z.re * r1;\n" +
-                "      z.im = -z.im * r1;\n" +
-                "      pVarTP.z = -z1 * r1;\n" +
+                "    if (fabs(pAmount) <= 0.5) {\n" +
+                "      smooth = pAmount * 2.0;\n" +
+                "    } else {\n" +
+                "      smooth = 1.0;\n" +
+                "    }\n" +
+                "    double boost = 0.0; //  Boost is the separation distance between the two planes\n" +
+                "    int posNeg = 1;\n" +
+                "    int loc60;\n" +
+                "    int loc120;\n" +
+                "    double scale = this.scale;\n" +
+                "    double scale3 = this._3side;\n" +
                 "\n" +
-                "      z.Scale(pAmount);\n" +
-                "      pAffineTP.x = z.re;\n" +
-                "      pAffineTP.y = z.im + 1.0;\n" +
+                "    if (pContext.random() < 0.5) {\n" +
+                "      posNeg = -1;\n" +
+                "    }\n" +
                 "\n" +
+                "    // Determine whether one or two major planes\n" +
+                "    int majplane = 0;\n" +
+                "    double abmajp = fabs(this.majp);\n" +
+                "    if (abmajp <= 1.0) {\n" +
+                "      majplane = 0; // 0= 1 plate active  1= transition to two plates active  2= defines two plates\n" +
+                "      boost = 0.0;\n" +
+                "    } else if (abmajp > 1.0 && abmajp < 2.0) {\n" +
+                "      majplane = 1;\n" +
+                "      boost = 0.0;\n" +
+                "    } else {\n" +
+                "      majplane = 2;\n" +
+                "      boost = (abmajp - 2.0) * 0.5; // distance above and below XY plane\n" +
+                "    }\n" +
                 "\n" +
-                "      // line\n" +
-                "      if (line_enable == 1){\n" +
-                "        if ( random < line_weight){\n" +
-                "          z.re = pContext.random() * spreadx;\n" +
-                "          z.im = 0.0;\n" +
-                "          pVarTP.z = 0.0;\n" +
-                "          pVarTP.color += line_color_shift;\n" +
-                "        }\n" +
+                "    //      Creating Z factors relative to the planes \n" +
+                "    if (majplane == 0) {\n" +
+                "      pVarTP.z += smooth * pAffineTP.z * scale * this.zlift; // single plate instructions\n" +
+                "    } else if (majplane == 1 && this.majp < 0.0) {// Transition for reversing plates  because  majp is negative value\n" +
+                "      if (this.majp < -1.0 && this.majp >= -2.0) {\n" +
+                "        gentleZ = (abmajp - 1.0); //  Set transition smoothing values  0.00001 to 1.0    \n" +
+                "      } else {\n" +
+                "        gentleZ = 1.0; // full effect explicit default value\n" +
                 "      }\n" +
-                "      // experimental iteration coloring that didn't work out but may add in the future:\n" +
-                "      //zc += ((double)k*.1);\n" +
+                "      // Begin reverse transition - starts with pVarTP.z==pVarTP.z proceeds by gradual negative\n" +
+                "      if (posNeg < 0) {\n" +
+                "        pVarTP.z += -2.0 * (pVarTP.z * gentleZ); // gradually grows negative plate, in place, no boost,\n" +
+                "      }\n" +
+                "    }\n" +
+                "    if (majplane == 2 && this.majp < 0.0) {// Begin the splitting operation, animation transition is done\n" +
+                "      if (posNeg > 0) {//  The splitting operation positive side\n" +
+                "        pVarTP.z += (smooth * (pAffineTP.z * scale * this.zlift + boost));\n" +
+                "      } else {//  The splitting operation negative side\n" +
+                "        pVarTP.z = (pVarTP.z - (2.0 * smooth * pVarTP.z)) + (smooth * posNeg * (pAffineTP.z * scale * this.zlift + boost));\n" +
+                "      }\n" +
+                "    } else {//  majp > 0.0       The splitting operation\n" +
+                "      pVarTP.z += smooth * (pAffineTP.z * scale * this.zlift + (posNeg * boost));\n" +
                 "    }\n" +
                 "\n" +
-                "    // Log_tile by Zy0rg implemented into JWildfire by Brad Stefanov\n" +
-                "    //converted to a post variation by Whittaker Courtney\n" +
+                "    if (this._rswtch <= 1) {//  Occasion to build using 60 degree segments    \n" +
+                "      loc60 = (int) trunc(pContext.random() * 6.0); // random nodes selection\n" +
+                "      //loc60 = this.fcycle;   // sequential nodes selection - seems to create artifacts that are progressively displaced\n" +
+                "      smRotxTP = (smooth * scale * pVarTP.x * _seg60x[loc60]) - (smooth * scale * pVarTP.y * _seg60y[loc60]);\n" +
+                "      smRotyTP = (smooth * scale * pVarTP.y * _seg60x[loc60]) + (smooth * scale * pVarTP.x * _seg60y[loc60]);\n" +
+                "      smRotxFT = (pAffineTP.x * smooth * scale * _seg60x[loc60]) - (pAffineTP.y * smooth * scale * _seg60y[loc60]);\n" +
+                "      smRotyFT = (pAffineTP.y * smooth * scale * _seg60x[loc60]) + (pAffineTP.x * smooth * scale * _seg60y[loc60]);\n" +
                 "\n" +
-                "    if (pContext.random() < 0.5)\n" +
-                "      spreadx = x_spread;\n" +
+                "      pVarTP.x = pVarTP.x * (1.0 - smooth) + smRotxTP + smRotxFT + smooth * lrmaj * _seg60x[loc60];\n" +
+                "      pVarTP.y = pVarTP.y * (1.0 - smooth) + smRotyTP + smRotyFT + smooth * lrmaj * _seg60y[loc60];\n" +
                 "\n" +
-                "    if (pContext.random() < 0.5)\n" +
-                "      spready = y_spread;\n" +
+                "      this._fcycle += 1;\n" +
+                "    } else { // Occasion to build on 120 degree segments\n" +
+                "      loc120 = (int) trunc(pContext.random() * 3.0); // random nodes selection\n" +
+                "      //loc120 = this.bcycle;  // sequential nodes selection - seems to create artifacts that are progressively displaced\n" +
+                "      smRotxTP = (smooth * scale * pVarTP.x * _seg120x[loc120]) - (smooth * scale * pVarTP.y * _seg120y[loc120]);\n" +
+                "      smRotyTP = (smooth * scale * pVarTP.y * _seg120x[loc120]) + (smooth * scale * pVarTP.x * _seg120y[loc120]);\n" +
+                "      smRotxFT = (pAffineTP.x * smooth * scale * _seg120x[loc120]) - (pAffineTP.y * smooth * scale * _seg120y[loc120]);\n" +
+                "      smRotyFT = (pAffineTP.y * smooth * scale * _seg120x[loc120]) + (pAffineTP.x * smooth * scale * _seg120y[loc120]);\n" +
                 "\n" +
-                "    if (pContext.random() < 0.5)\n" +
-                "      spreadz = z_spread;\n" +
+                "      pVarTP.x = pVarTP.x * (1.0 - smooth) + smRotxTP + smRotxFT + smooth * lrmaj * scale3 * _seg120x[loc120];\n" +
+                "      pVarTP.y = pVarTP.y * (1.0 - smooth) + smRotyTP + smRotyFT + smooth * lrmaj * scale3 * _seg120y[loc120];\n" +
                 "\n" +
-                "    if(random < 0.5){\n" +
-                "      z.re = pAmount * x_add + (z.re + spreadx * round(log(pContext.random())/log(log_spread)));\n" +
-                "      z.im = pAmount * (y_add + (z.im + spready * round(log(pContext.random())/log(log_spread))))+1.0;\n" +
-                "      pVarTP.z = pAmount * (pVarTP.z + spreadz * round(log(pContext.random())/log(log_spread)));\n" +
-                "    }\n" +
-                "    else{\n" +
-                "      z.re = pAmount * (-z.re + spreadx * round(log(pContext.random())/log(log_spread)));\n" +
-                "      z.im = pAmount * (-2 -(z.im + spready * round(log(pContext.random())/log(log_spread))))+1.0;\n" +
-                "      pVarTP.z = pAmount * (-pVarTP.z + spreadz * round(log(pContext.random())/log(log_spread)));\n" +
-                "    }\n" +
-                "\n" +
-                "// magnitude coloring:\n" +
-                "    double mag = sqrt(z.re*z.re+z.im*z.im+z1*z1)*(mag_color_scale /6);\n" +
-                "\n" +
-                "    if (mag_color == 1){\n" +
-                "      zc += tanh(mag);\n" +
-                "    }\n" +
-                "\n" +
-                "\n" +
-                "    pVarTP.x = z.re;\n" +
-                "    pVarTP.y = z.im;\n" +
-                "    pVarTP.color = zc;\n" +
-                "\n" +
-                "\n" +
-                "\n" +
-                "    if (pContext.isPreserveZCoordinate()) {\n" +
-                "      pVarTP.z += pAmount * pAffineTP.z;\n" +
-                "    }";
+                "      this._bcycle += 1;\n" +
+                "    }\n";
 
 //     System.err.println(convertCodeSwan(code, "mobius_dragon_3D", new String[]{}));
-     System.err.println(convertCode(code, "mobius_dragon_3D", new String[]{}));
+     //System.err.println(convertCode(code, "mobius_dragon_3D", new String[]{}));
     //FlameTransformationContext ctx = new FlameTransformationContext(null, null, 1, 1);
     //System.err.println(new ParPlot2DWFFunc().getGPUCode(ctx));
+    System.err.println(createSwanVariation(new Hexnix3DFunc(), code));
+  }
+
+  private String createSwanVariation(VariationFunc variationFunc, String code) {
+    StringBuilder sb = new StringBuilder();
+    addIndented(0, sb, "### " + variationFunc.getClass().getSimpleName() + "\n");
+    addIndented(0, sb, "class " + variationFunc.getClass().getSimpleName() + " extends VariationFuncWaves:\n");
+    // params
+    if(variationFunc.getParameterNames().length > 0) {
+      for (String paramName : variationFunc.getParameterNames()) {
+        addIndented(1, sb, "const PARAM_" + paramNameToSwan(paramName) + " = \"" + paramName + "\"\n");
+      }
+      addIndented(0, sb, "\n");
+      addIndented(1, sb, "var __params: Array[VariationParam] = [\n");
+      for(int idx = 0; idx < variationFunc.getParameterNames().length; idx++) {
+        String paramName = paramNameToSwan(variationFunc.getParameterNames()[idx]);
+        Object paramValue = variationFunc.getParameterValues()[idx];
+        if(paramValue instanceof Double) {
+          addIndented(2, sb, "VariationParam.new(PARAM_" + paramName + ", FlameParameter.DataType.FLOAT, " + paramValue + ")");
+        }
+        else if(paramValue instanceof Integer) {
+          addIndented(2, sb, "VariationParam.new(PARAM_" + paramName + ", FlameParameter.DataType.INT, " + paramValue + ")");
+        }
+        else {
+          throw new IllegalArgumentException("Unsupported parameter type: " + paramValue.getClass().getName());
+        }
+        if(idx < variationFunc.getParameterNames().length - 1) {
+          sb.append(",\n");
+        }
+        else {
+          sb.append("\n");
+        }
+      }
+      addIndented(2, sb, "]\n");
+
+      addIndented(0, sb, "\n");
+      addIndented(1, sb, "func get_params() -> Array[VariationParam]:\n");
+      addIndented(2, sb, "return __params\n");
+      addIndented(0, sb, "\n");
+    }
+    // shader code
+    addIndented(1, sb, "func get_shader_code(ctx: RenderFlamePrepareContext,_xform: RenderXForm, variation: RenderVariation) -> String:\n");
+    addIndented(2, sb, "return \"\"\"{\n");
+    addIndented(1, sb, "float amount = %s;\n");
+    for(int idx = 0; idx < variationFunc.getParameterNames().length; idx++) {
+      String paramName = variationFunc.getParameterNames()[idx];
+      Object paramValue = variationFunc.getParameterValues()[idx];
+      if(paramValue instanceof Double) {
+        addIndented(1, sb, "float " + variationFunc.getName() +  "_" + paramName + " = %s;\n");
+      }
+      else if(paramValue instanceof Integer) {
+        addIndented(1, sb, "int " + variationFunc.getName() +  "_" + paramName + " = %s;\n");
+      }
+    }
+
+    addIndented(2, sb, convertCodeSwan( code, variationFunc.getName(), variationFunc.getParameterNames()));
+
+    if(variationFunc.getParameterNames().length > 0) {
+      addIndented(2, sb, "}\"\"\" % [variation.amount.to_glsl(ctx), \n");
+      for(int idx = 0; idx < variationFunc.getParameterNames().length; idx++) {
+        String paramName = paramNameToSwan(variationFunc.getParameterNames()[idx]);
+        addIndented(3, sb, "variation.params[PARAM_" + paramName + "].to_glsl(ctx)");
+        if(idx < variationFunc.getParameterNames().length - 1) {
+          sb.append(",\n");
+        }
+        else {
+          sb.append("]\n");
+        }
+      }
+    }
+    else {
+      addIndented(2, sb, "}\"\"\" % variation.amount.to_glsl(ctx)\n");
+    }
+    addIndented(0, sb, "\n");
+
+    // name etc
+    addIndented(1, sb, "func get_name() -> String:\n");
+    addIndented(2, sb, "return '" + variationFunc.getName() + "'\n");
+    addIndented(0, sb, "\n");
+
+    addIndented(1, sb, "func get_variation_types() -> Array[Variation.VariationType]:\n");
+    addIndented(2, sb, "return [" + variationTypesToSwan(variationFunc.getVariationTypes()) +  "]\n");
+    addIndented(0, sb, "\n");
+
+    return sb.toString();
+  }
+
+  private String variationTypesToSwan(VariationFuncType[] variationTypes) {
+    List<String> res = new ArrayList<>();
+    for(VariationFuncType variationType: variationTypes) {
+      switch(variationType) {
+        case VARTYPE_2D:
+          res.add("Variation.VariationType.VARTYPE_2D");
+          break;
+        case VARTYPE_3D:
+          res.add("Variation.VariationType.VARTYPE_3D");
+          break;
+        case VARTYPE_CROP:
+          res.add("Variation.VariationType.VARTYPE_CROP");
+          break;
+        case VARTYPE_BLUR:
+          res.add("Variation.VariationType.VARTYPE_BLUR");
+          break;
+        case VARTYPE_ZTRANSFORM:
+          res.add("Variation.VariationType.VARTYPE_ZTRANSFORM");
+          break;
+        case VARTYPE_DC:
+          res.add("Variation.VariationType.VARTYPE_DC");
+          break;
+        case VARTYPE_SIMULATION:
+          res.add("Variation.VariationType.VARTYPE_SIMULATION");
+          break;
+        case VARTYPE_POST:
+          res.add("Variation.VariationType.VARTYPE_POST");
+          break;
+        case VARTYPE_PRE:
+          res.add("Variation.VariationType.VARTYPE_PRE");
+          break;
+        case VARTYPE_BASE_SHAPE:
+          res.add("Variation.VariationType.VARTYPE_BASE_SHAPE");
+          break;
+        case VARTYPE_EDIT_FORMULA:
+          res.add("Variation.VariationType.VARTYPE_EDIT_FORMULA");
+          break;
+        case VARTYPE_SUPPORTS_EXTERNAL_SHAPES:
+          res.add("Variation.VariationType.VARTYPE_SUPPORTS_EXTERNAL_SHAPES");
+          break;
+        case VARTYPE_ESCAPE_TIME_FRACTAL:
+          res.add("Variation.VariationType.VARTYPE_ESCAPE_TIME_FRACTAL");
+          break;
+        case VARTYPE_SUPPORTS_BACKGROUND:
+          res.add("Variation.VariationType.VARTYPE_SUPPORTS_BACKGROUND");
+          break;
+        case VARTYPE_PREPOST:
+          res.add("Variation.VariationType.VARTYPE_PREPOST");
+          break;
+      }
+    }
+
+    return String.join(", ", res);
+  }
+
+  private String paramNameToSwan(String paramName) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < paramName.length(); i++) {
+      char c = paramName.charAt(i);
+      if (Character.isUpperCase(c)) {
+        sb.append("_");
+        sb.append(Character.toUpperCase(c));
+      } else {
+        sb.append(Character.toUpperCase(c));
+      }
+    }
+    return sb.toString();
+  }
+
+  private void addIndented(int indent, StringBuilder sb, String s) {
+    for (int i = 0; i < indent; i++) {
+      sb.append("\t");
+    }
+    sb.append(s);
   }
 
   private String convertCode(String code, String varName, String paramNames[]) {
@@ -232,7 +415,7 @@ public class GPUCodeHelper {
             // resolve sgn()
             .replaceAll("([\\s\\(]+)sgnf\\((\\w*)\\)", "$1($2<0.f ? -1 : $2>0.f ? 1 : 0)")
             // pContext.random()
-            .replaceAll("pContext\\.random\\(\\)", "rand8(tex, rngState)")
+            .replaceAll("pContext\\.random\\(\\)", "rand8(uv, rngState)")
             // boolean -> short
             .replaceAll("boolean", "short")
             // comments
@@ -241,7 +424,7 @@ public class GPUCodeHelper {
             .replaceAll("this\\.", "");
 
     for(String paramName: paramNames) {
-      newCode = newCode.replaceAll("([\\s\\(\\-\\+\\*]+)("+paramName+")([\\s\\+\\-\\*\\);]+)", "$1__"+varName+"_"+paramName+"$3");
+      newCode = newCode.replaceAll("([\\s\\(\\-\\+\\*]+)("+paramName+")([\\s\\+\\-\\*\\);]+)", "$1"+varName+"_"+paramName+"$3");
     }
     return newCode;
   }
