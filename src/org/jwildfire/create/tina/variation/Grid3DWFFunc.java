@@ -300,11 +300,11 @@ public class Grid3DWFFunc extends VariationFunc {
   	size = Math.random();
   	size_spread = Math.random() * 2.0;
   	spacing = Math.random() * 0.5 + 0.5;
-  	alpha = Math.random() * Math.TAU - Math.PI;
+  	alpha = Math.random() * 2.0 * Math.PI - Math.PI;
   	alpha_spread = Math.random();
-  	beta = Math.random() * Math.TAU - Math.PI;
+  	beta = Math.random() * 2.0 * Math.PI - Math.PI;
   	beta_spread = Math.random();
-  	gamma = Math.random() * Math.TAU - Math.PI;
+  	gamma = Math.random() * 2.0 * Math.PI - Math.PI;
   	gamma_spread = Math.random();
   	c1 = Math.random();
   	c2 = Math.random();

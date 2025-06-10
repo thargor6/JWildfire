@@ -150,7 +150,7 @@ public class CutSpiralFunc  extends VariationFunc implements SupportsGPU {
 	@Override
 	public void randomize() {
 		// Don't change mode
-		time = Math.random() * Math.TAU;
+		time = Math.random() * 2.0 * Math.PI;
 		zoom = Math.random() * 5.0 + 0.01;
 		invert = (int) (Math.random() * 2);
 	}

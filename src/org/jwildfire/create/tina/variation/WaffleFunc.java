@@ -116,7 +116,7 @@ public class WaffleFunc extends VariationFunc implements SupportsGPU {
   	slices = (int) (Math.random() * 15 + 1);
   	xthickness = Math.random();
   	ythickness = Math.random();
-  	rotation = Math.random() * Math.TAU - Math.PI;
+  	rotation = Math.random() * 2.0 * Math.PI - Math.PI;
   }
 
   @Override

@@ -76,7 +76,7 @@ public class Pie3DFunc extends VariationFunc implements SupportsGPU {
   public void randomize() {
   	slices = Math.random() * (Math.random() < 0.6 ? 10 : 50) + 2;
   	if (Math.random() < 0.75) slices = Math.round(slices);
-  	rotation = Math.random() * Math.TAU - Math.PI;
+  	rotation = Math.random() * 2.0 * Math.PI - Math.PI;
   	thickness = (Math.random() + Math.random()) / 2.0;
   }
 

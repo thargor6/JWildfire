@@ -254,7 +254,7 @@ public class PRose3DFunc extends VariationFunc implements SupportsGPU {
   public void randomize() {
   	l = Math.random() * 1.5 + 0.5;
   	k = 3.0 + (Math.random() < 0.5 ? Math.random() * 10.0 : Tools.randomInt(15));
-  	c = Math.random() * Math.TAU - Math.PI;
+  	c = Math.random() * 2.0 * Math.PI - Math.PI;
   	z1 = Math.random() * 2.0;
   	z2 = Math.random() * 2.0;
   	refSc = Math.random() * 1.5 + 0.5;
