@@ -1049,6 +1049,7 @@ VariationFuncList {
     registerVariationFunc(GeometricPrimitivesFunc.class);
     registerVariationFunc(CactusGlobeFunc.class);
     registerVariationFunc(JuliaScopePlusFunc.class);
+    registerVariationFunc(RomanescoFunc.class);
 
     
 
