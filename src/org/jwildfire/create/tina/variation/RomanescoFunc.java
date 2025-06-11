@@ -42,6 +42,11 @@ public class RomanescoFunc extends VariationFunc {
     private static final String PARAM_CONE_STEEPNESS = "cone_steepness";
     private static final String PARAM_FLORET_DETAIL_SIZE = "floret_detail_size";
     private static final String PARAM_FLORET_SHAPE = "floret_shape";
+    
+    // New Rotation Parameters
+    private static final String PARAM_PITCH = "pitch";
+    private static final String PARAM_YAW = "yaw";
+    private static final String PARAM_ROLL = "roll";
 
     // Coloring Parameters
     private static final String PARAM_COLOR_MODE = "color_mode";
@@ -61,6 +66,7 @@ public class RomanescoFunc extends VariationFunc {
             PARAM_CONE_STEEPNESS,
             PARAM_FLORET_DETAIL_SIZE,
             PARAM_FLORET_SHAPE,
+            PARAM_PITCH, PARAM_YAW, PARAM_ROLL, // New
             PARAM_COLOR_MODE,
             PARAM_SOLID_COLOR_IDX,
             PARAM_COLOR_RANGE_MIN,
@@ -68,7 +74,7 @@ public class RomanescoFunc extends VariationFunc {
     };
 
     private double size = 0.5;
-    private int recursion_depth = 5;
+    private int recursion_depth = 7;
     private int num_arms = 1;
     private double arm_spread = 1.0;
     private double arm_elevation = 45.0;
@@ -80,6 +86,9 @@ public class RomanescoFunc extends VariationFunc {
     private double cone_steepness = 1.0;
     private double floret_detail_size = 0.1;
     private int floret_shape = 0;
+    private double pitch = 180.0; // New
+    private double yaw = 0.0;   // New
+    private double roll = 0.0;  // New
     private int color_mode = 0;
     private double solid_color_idx = 0.5;
     private double color_range_min = 0.0;
@@ -117,7 +126,7 @@ public class RomanescoFunc extends VariationFunc {
 
             axis_z.x = cos(arm_angle) * cos(elevation_rad);
             axis_z.y = sin(arm_angle) * cos(elevation_rad);
-            axis_z.z = -sin(elevation_rad); // THIS IS THE FIRST CHANGE (Negative sign)
+            axis_z.z = sin(elevation_rad);
             
             XYZPoint up_vec = new XYZPoint(); up_vec.z=1;
             if (Math.abs(axis_z.z) > 0.999) { up_vec.x=1; up_vec.z=0;}
@@ -135,7 +144,7 @@ public class RomanescoFunc extends VariationFunc {
 
             double local_x = r * cos(spiral_angle);
             double local_y = r * sin(spiral_angle);
-            double local_z = -r * this.cone_steepness; // THIS IS THE SECOND CHANGE (Negative sign)
+            double local_z = r * this.cone_steepness;
 
             pos.x += (axis_x.x * local_x + axis_y.x * local_y + axis_z.x * local_z) * current_scale;
             pos.y += (axis_x.y * local_x + axis_y.y * local_y + axis_z.y * local_z) * current_scale;
@@ -201,6 +210,34 @@ public class RomanescoFunc extends VariationFunc {
         double final_y = pos.y + (axis_x.y * local_x_final + axis_y.y * local_y_final + axis_z.y * local_z_final);
         double final_z = pos.z + (axis_x.z * local_x_final + axis_y.z * local_y_final + axis_z.z * local_z_final);
         
+        // Apply Rotations to the final calculated point
+        if (pitch != 0.0 || yaw != 0.0 || roll != 0.0) {
+            double cos_p = Math.cos(Math.toRadians(pitch));
+            double sin_p = Math.sin(Math.toRadians(pitch));
+            double cos_y = Math.cos(Math.toRadians(yaw));
+            double sin_y = Math.sin(Math.toRadians(yaw));
+            double cos_r = Math.cos(Math.toRadians(roll));
+            double sin_r = Math.sin(Math.toRadians(roll));
+
+            // Yaw (Y-axis rotation)
+            double tempX = final_x * cos_y - final_z * sin_y;
+            double tempZ = final_x * sin_y + final_z * cos_y;
+            final_x = tempX;
+            final_z = tempZ;
+            
+            // Pitch (X-axis rotation)
+            double tempY = final_y * cos_p - final_z * sin_p;
+            tempZ = final_y * sin_p + final_z * cos_p;
+            final_y = tempY;
+            final_z = tempZ;
+
+            // Roll (Z-axis rotation)
+            tempX = final_x * cos_r - final_y * sin_r;
+            tempY = final_x * sin_r + final_y * cos_r;
+            final_x = tempX;
+            final_y = tempY;
+        }
+        
         // Coloring Logic
         double color_index = 0.5;
         double range = color_range_max - color_range_min;
@@ -235,6 +272,7 @@ public class RomanescoFunc extends VariationFunc {
                 size, recursion_depth,
                 num_arms, arm_spread, arm_elevation, arm_twist,
                 floret_count, floret_scale, pattern_spread, spiral_twist, cone_steepness, floret_detail_size, floret_shape,
+                pitch, yaw, roll, // New
                 color_mode, solid_color_idx, color_range_min, color_range_max
         };
     }
@@ -254,6 +292,9 @@ public class RomanescoFunc extends VariationFunc {
         else if (PARAM_CONE_STEEPNESS.equalsIgnoreCase(pName)) cone_steepness = pValue;
         else if (PARAM_FLORET_DETAIL_SIZE.equalsIgnoreCase(pName)) floret_detail_size = pValue;
         else if (PARAM_FLORET_SHAPE.equalsIgnoreCase(pName)) floret_shape = (int) pValue;
+        else if (PARAM_PITCH.equalsIgnoreCase(pName)) pitch = pValue; // New
+        else if (PARAM_YAW.equalsIgnoreCase(pName)) yaw = pValue;     // New
+        else if (PARAM_ROLL.equalsIgnoreCase(pName)) roll = pValue;   // New
         else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) color_mode = (int) pValue;
         else if (PARAM_SOLID_COLOR_IDX.equalsIgnoreCase(pName)) solid_color_idx = pValue;
         else if (PARAM_COLOR_RANGE_MIN.equalsIgnoreCase(pName)) color_range_min = pValue;
