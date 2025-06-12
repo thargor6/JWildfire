@@ -1050,6 +1050,7 @@ VariationFuncList {
     registerVariationFunc(CactusGlobeFunc.class);
     registerVariationFunc(JuliaScopePlusFunc.class);
     registerVariationFunc(RomanescoFunc.class);
+    registerVariationFunc(NaturalFoamFunc.class);
 
     
 
