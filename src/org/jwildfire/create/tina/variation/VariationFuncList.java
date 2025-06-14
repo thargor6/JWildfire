@@ -1051,8 +1051,8 @@ VariationFuncList {
     registerVariationFunc(JuliaScopePlusFunc.class);
     registerVariationFunc(RomanescoFunc.class);
     registerVariationFunc(NaturalFoamFunc.class);
+    registerVariationFunc(DeStijlFunc.class);
 
-    
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
