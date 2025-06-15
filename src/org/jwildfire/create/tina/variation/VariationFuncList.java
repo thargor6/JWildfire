@@ -1040,6 +1040,19 @@ VariationFuncList {
     registerVariationFunc(WhirligigFunc.class);
     registerVariationFunc(TessShapeFunc.class);
     registerVariationFunc(KIFS3DFunc.class);
+    registerVariationFunc(GlynnSim2BFunc.class);
+    registerVariationFunc(ShapeWarpFunc.class);
+    registerVariationFunc(DrunkenTilesFunc.class);
+    registerVariationFunc(ConicalSpiralFunc.class);
+    registerVariationFunc(BoxfoldFunc.class);
+    registerVariationFunc(Cell3DFunc.class);
+    registerVariationFunc(GeometricPrimitivesFunc.class);
+    registerVariationFunc(CactusGlobeFunc.class);
+    registerVariationFunc(JuliaScopePlusFunc.class);
+    registerVariationFunc(RomanescoFunc.class);
+    registerVariationFunc(NaturalFoamFunc.class);
+    registerVariationFunc(DeStijlFunc.class);
+    registerVariationFunc(MeepleFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
