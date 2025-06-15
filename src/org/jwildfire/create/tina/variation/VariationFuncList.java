@@ -1053,6 +1053,7 @@ VariationFuncList {
     registerVariationFunc(NaturalFoamFunc.class);
     registerVariationFunc(DeStijlFunc.class);
     registerVariationFunc(MeepleFunc.class);
+    registerVariationFunc(FloraFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
