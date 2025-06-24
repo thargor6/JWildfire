@@ -49,9 +49,11 @@ public class TapratsFunc extends DrawFunc {
   private static final String PARAM_SS = "Star S";
   private static final String PARAM_INFERIR = "Infer(1/0)";
 
+  private static final String RESSOURCE_ID_REFERENCE = "Id_reference";
+  
   private static final String[] paramNames = {
           PARAM_ID, PARAM_STYLE, PARAM_WIDTH, PARAM_GAP, PARAM_FILL, PARAM_RQ, PARAM_RS, PARAM_ROSETTEFLAG, PARAM_SD, PARAM_SS, PARAM_INFERIR};
-
+  private static final String[] ressourceNames = {RESSOURCE_ID_REFERENCE};
 
   private int id = 0;
   private int style = 2;
@@ -66,6 +68,8 @@ public class TapratsFunc extends DrawFunc {
   private double width = 0.06;
   private double gap = 0.08;
 
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile taprats-ids.pdf";
+  
   public Tiling tiling = null;
   public Map map = null;
   public RenderStyle rstyle = null;
@@ -128,6 +132,24 @@ public class TapratsFunc extends DrawFunc {
       infer = (int) Tools.limitValue(pValue, 0, 1);
     else
       throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {id_reference.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if(RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
   }
 
   @Override

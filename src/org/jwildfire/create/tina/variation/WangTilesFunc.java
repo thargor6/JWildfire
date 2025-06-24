@@ -62,9 +62,11 @@ public class WangTilesFunc extends VariationFunc {
   private static final String PARAM_TILEY = "tile_y";
   private static final String PARAM_RESETZ = "reset_z";
 
+  private static final String RESSOURCE_ID_REFERENCE = "id_reference";
 
   private static final String[] paramNames = {PARAM_ID, PARAM_SEED, PARAM_SQUARE, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ};
-
+  private static final String[] ressourceNames = {RESSOURCE_ID_REFERENCE};
+  
   private int id = 0;
   private int seed = 1000;
   private int square = 1;
@@ -87,6 +89,7 @@ public class WangTilesFunc extends VariationFunc {
 
   private Random rnd = null;
 
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile wangtiles-ids.pdf";
 
   private static final String[] Id = {"block2/bloc", "block2/bowtie", "block2/box", "block2/diag",
           "block2/pool", "block2/spiral", "block2/square", "block2/steps", "block2/1edge2a", "block2/1corn2a", "block2/1corn2b", /*0 --10*/
@@ -679,6 +682,24 @@ public class WangTilesFunc extends VariationFunc {
       resetZ = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {id_reference.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if(RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
   }
 
   private WFImage colorMap;
