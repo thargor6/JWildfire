@@ -77,11 +77,14 @@ public class HamidFunc extends VariationFunc {
   private static final String PARAM_O = "o";
   private static final String PARAM_P = "p";
 
+  private static final String RESSOURCE_ID_REFERENCE = "presetId_reference";
+  
   private static final String[] paramNames = {PARAM_PRESETID, PARAM_NPOINTS,
           PARAM_FILLED, PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F,
           PARAM_G, PARAM_H, PARAM_I, PARAM_J, PARAM_K, PARAM_L, PARAM_M,
           PARAM_N, PARAM_O, PARAM_P};
-
+  private static final String[] ressourceNames = {RESSOURCE_ID_REFERENCE};
+  
   private static int nMax = 20;
 
   private int presetId = 0;
@@ -104,6 +107,8 @@ public class HamidFunc extends VariationFunc {
   private double o = 1.0;
   private double p = 1.0;
 
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile hamid-presets.pdf";
+  
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer,
                    XForm pXForm, double pAmount) {
@@ -531,6 +536,24 @@ public class HamidFunc extends VariationFunc {
     filled = (int) (Math.random() * 2);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {id_reference.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};

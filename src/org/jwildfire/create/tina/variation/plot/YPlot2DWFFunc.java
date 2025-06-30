@@ -59,6 +59,7 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
   private static final String RESSOURCE_FORMULA = "formula";
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
+  private static final String RESSOURCE_ID_REFERENCE = "preset_id_reference";
 
   private static final String[] paramNames = {
     PARAM_PRESET_ID,
@@ -82,7 +83,7 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
   };
 
   private static final String[] ressourceNames = {
-    RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME
+    RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME, RESSOURCE_ID_REFERENCE
   };
 
   private int preset_id = -1;
@@ -111,6 +112,8 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
 
   private final ColorMapHolder colorMapHolder = new ColorMapHolder();
   private final DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
+  
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile yplot2d-presets.pdf";
 
   private YPlot2DFormulaEvaluator evaluator;
 
@@ -295,7 +298,8 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
           : null),
       (displacementMapHolder.getDispl_map_filename() != null
           ? displacementMapHolder.getDispl_map_filename().getBytes()
-          : null)
+          : null),
+      id_reference.getBytes()
     };
   }
 
@@ -311,6 +315,8 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
       displacementMapHolder.clear();
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+    	// ignore read-only parameter
     } else throw new IllegalArgumentException(pName);
   }
 
@@ -322,6 +328,8 @@ public class YPlot2DWFFunc extends VariationFunc implements SupportsGPU {
       return RessourceType.IMAGE_FILENAME;
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) { 
+    	return RessourceType.REFERENCE;
     } else throw new IllegalArgumentException(pName);
   }
 

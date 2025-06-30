@@ -58,7 +58,8 @@ public class IsoSFPlot3DWFFunc extends VariationFunc implements SupportsGPU {
 
   private static final String RESSOURCE_FORMULA = "formula";
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
-
+  private static final String RESSOURCE_ID_REFERENCE = "preset_id_reference";
+  
   private static final String[] paramNames = {
     PARAM_PRESET_ID,
     PARAM_XMIN,
@@ -80,7 +81,7 @@ public class IsoSFPlot3DWFFunc extends VariationFunc implements SupportsGPU {
     PARAM_PARAM_F
   };
 
-  private static final String[] ressourceNames = {RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME};
+  private static final String[] ressourceNames = {RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_ID_REFERENCE};
 
   private static final int CM_COLORMAP_X = 0;
   private static final int CM_COLORMAP_Y = 1;
@@ -121,6 +122,8 @@ public class IsoSFPlot3DWFFunc extends VariationFunc implements SupportsGPU {
 
   private IsoSFPlot3DFormulaEvaluator evaluator;
 
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile isosfplot3d-presets.pdf";
+  
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -222,7 +225,8 @@ public class IsoSFPlot3DWFFunc extends VariationFunc implements SupportsGPU {
       (formula != null ? formula.getBytes() : null),
       (colorMapHolder.getColormap_filename() != null
           ? colorMapHolder.getColormap_filename().getBytes()
-          : null)
+          : null),
+      id_reference.getBytes()
     };
   }
 
@@ -235,6 +239,8 @@ public class IsoSFPlot3DWFFunc extends VariationFunc implements SupportsGPU {
       colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
       colorMapHolder.clear();
       uvIdxMap.clear();
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+    	// ignore read-only parameter
     } else throw new IllegalArgumentException(pName);
   }
 
@@ -244,6 +250,8 @@ public class IsoSFPlot3DWFFunc extends VariationFunc implements SupportsGPU {
       return RessourceType.BYTEARRAY;
     } else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
     } else throw new IllegalArgumentException(pName);
   }
 
