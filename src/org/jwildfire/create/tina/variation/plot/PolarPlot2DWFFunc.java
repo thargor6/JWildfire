@@ -59,10 +59,11 @@ public class PolarPlot2DWFFunc extends VariationFunc implements SupportsGPU {
   private static final String RESSOURCE_FORMULA = "formula";
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
+  private static final String RESSOURCE_ID_REFERENCE = "preset_id_reference";
 
   private static final String[] paramNames = {PARAM_PRESET_ID, PARAM_TMIN, PARAM_TMAX, PARAM_RMIN, PARAM_RMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F};
 
-  private static final String[] ressourceNames = {RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME};
+  private static final String[] ressourceNames = {RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME, RESSOURCE_ID_REFERENCE};
 
   private int preset_id = -1;
 
@@ -93,6 +94,8 @@ public class PolarPlot2DWFFunc extends VariationFunc implements SupportsGPU {
 
   private PolarPlot2DFormulaEvaluator evaluator;
 
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile polarplot2d-presets.pdf";
+  
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     if (evaluator == null) {
@@ -226,7 +229,7 @@ public class PolarPlot2DWFFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][]{(formula != null ? formula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null)};
+    return new byte[][]{(formula != null ? formula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null), id_reference.getBytes()};
   }
 
   @Override
@@ -241,6 +244,8 @@ public class PolarPlot2DWFFunc extends VariationFunc implements SupportsGPU {
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
       displacementMapHolder.clear();
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+    	// ignore read-only parameter
     } else
       throw new IllegalArgumentException(pName);
   }
@@ -253,6 +258,8 @@ public class PolarPlot2DWFFunc extends VariationFunc implements SupportsGPU {
       return RessourceType.IMAGE_FILENAME;
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) { 
+    	return RessourceType.REFERENCE;
     } else
       throw new IllegalArgumentException(pName);
   }

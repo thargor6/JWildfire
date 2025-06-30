@@ -84,7 +84,7 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
   protected static final String PARAM_BLEND_DISPLMAP = "blend_displ_map";
 
   protected static final String PARAM_RECEIVE_ONLY_SHADOWS = "receive_only_shadows";
-
+  
   private static final String[] paramNames = {
     PARAM_PRESETID,
     PARAM_STEPS,
@@ -122,9 +122,10 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
   private static final String RESSOURCE_XFORMULA = "xformula";
   private static final String RESSOURCE_YFORMULA = "yformula";
   private static final String RESSOURCE_ZFORMULA = "zformula";
+  private static final String RESSOURCE_ID_REFERENCE = "presetId_reference";
 
-  private static final String[] ressourceNames = {
-    RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA
+private static final String[] ressourceNames = {
+    RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA, RESSOURCE_ID_REFERENCE
   };
 
   private String xformula;
@@ -153,6 +154,8 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
   double param_f = 1.0;
   double param_g = 1.0;
   double param_h = 1.0;
+  
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile sattractor3d-presets.pdf";
 
   @Override
   public Object[] getParameterValues() {
@@ -207,12 +210,7 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
       (xformula != null ? xformula.getBytes() : null),
       (yformula != null ? yformula.getBytes() : null),
       (zformula != null ? zformula.getBytes() : null),
-      (colorMapHolder.getColormap_filename() != null
-          ? colorMapHolder.getColormap_filename().getBytes()
-          : null),
-      (displacementMapHolder.getDispl_map_filename() != null
-          ? displacementMapHolder.getDispl_map_filename().getBytes()
-          : null)
+      id_reference.getBytes()
     };
   }
 
@@ -227,6 +225,8 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
     } else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
       zformula = pValue != null ? new String(pValue) : "";
       validatePresetId();
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+    	// ignore read-only parameter
     } else throw new IllegalArgumentException(pName);
   }
 
@@ -238,6 +238,8 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
       return RessourceType.BYTEARRAY;
     } else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) { 
+    	return RessourceType.REFERENCE;
     } else throw new IllegalArgumentException(pName);
   }
 

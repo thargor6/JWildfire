@@ -31,6 +31,8 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_PRIMITIVE = "primitive";
+  
+  private static final String RESSOURCE_PRIMITIVE_REFERENCE = "primitive_reference";
 
   private static final String[] paramNames = {
     PARAM_PRIMITIVE,
@@ -82,9 +84,11 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
     "mandelbulb",
     "drop"
   };
+  
+  private String primitive_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile obj_mesh_primitive.pdf";
 
   private static final String[] ressourceNames = {
-    RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME
+    RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME, RESSOURCE_PRIMITIVE_REFERENCE
   };
 
   @Override
@@ -182,7 +186,8 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
           : null),
       (displacementMapHolder.getDispl_map_filename() != null
           ? displacementMapHolder.getDispl_map_filename().getBytes()
-          : null)
+          : null),
+      primitive_reference.getBytes()
     };
   }
 
@@ -195,6 +200,8 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
       displacementMapHolder.clear();
+    } else if (RESSOURCE_PRIMITIVE_REFERENCE.equalsIgnoreCase(pName)) {
+    	// ignore read-only parameter
     } else throw new IllegalArgumentException(pName);
   }
 
@@ -204,6 +211,8 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
       return RessourceType.IMAGE_FILENAME;
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
+    } else if (RESSOURCE_PRIMITIVE_REFERENCE.equalsIgnoreCase(pName)) { 
+    	return RessourceType.REFERENCE;
     } else throw new IllegalArgumentException(pName);
   }
 

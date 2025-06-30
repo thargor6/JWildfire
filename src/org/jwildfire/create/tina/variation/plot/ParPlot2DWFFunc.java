@@ -60,6 +60,7 @@ public class ParPlot2DWFFunc extends VariationFunc implements SupportsGPU {
   private static final String RESSOURCE_ZFORMULA = "zformula";
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
+  private static final String RESSOURCE_ID_REFERENCE = "preset_id_reference";
 
   private static final String[] paramNames = {
     PARAM_PRESET_ID,
@@ -86,7 +87,8 @@ public class ParPlot2DWFFunc extends VariationFunc implements SupportsGPU {
     RESSOURCE_YFORMULA,
     RESSOURCE_ZFORMULA,
     RESSOURCE_COLORMAP_FILENAME,
-    RESSOURCE_DISPL_MAP_FILENAME
+    RESSOURCE_DISPL_MAP_FILENAME,
+    RESSOURCE_ID_REFERENCE
   };
 
   private static final int CM_COLORMAP = 0;
@@ -120,6 +122,8 @@ public class ParPlot2DWFFunc extends VariationFunc implements SupportsGPU {
 
   private ParPlot2DFormulaEvaluator evaluator;
 
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile parplot2d-presets.pdf";
+  
   @Override
   public void transform(
       FlameTransformationContext pContext,
@@ -323,7 +327,8 @@ public class ParPlot2DWFFunc extends VariationFunc implements SupportsGPU {
           : null),
       (displacementMapHolder.getDispl_map_filename() != null
           ? displacementMapHolder.getDispl_map_filename().getBytes()
-          : null)
+          : null),
+      id_reference.getBytes()
     };
   }
 
@@ -345,6 +350,8 @@ public class ParPlot2DWFFunc extends VariationFunc implements SupportsGPU {
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
       displacementMapHolder.clear();
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+    	// ignore read-only parameter
     } else throw new IllegalArgumentException(pName);
   }
 
@@ -360,6 +367,8 @@ public class ParPlot2DWFFunc extends VariationFunc implements SupportsGPU {
       return RessourceType.IMAGE_FILENAME;
     } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) { 
+    	return RessourceType.REFERENCE;
     } else throw new IllegalArgumentException(pName);
   }
 

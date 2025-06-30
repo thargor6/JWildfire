@@ -29,9 +29,10 @@ public class LsystemFunc extends VariationFunc {
   private static final String PARAM_COLOR_MODE = "color_mode";
 
   private static final String RESSOURCE_GRAMMAR = "grammar";
+  private static final String RESSOURCE_ID_REFERENCE = "presetId_reference";
 
   private static final String[] paramNames = {PARAM_ITERS, PARAM_STEP, PARAM_ANGLE, PARAM_PRESETID, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS, PARAM_SHOW_POINTS, PARAM_POINT_THICKNESS, PARAM_COLOR_MODE};
-  private static final String[] ressourceNames = {RESSOURCE_GRAMMAR};
+  private static final String[] ressourceNames = {RESSOURCE_GRAMMAR, RESSOURCE_ID_REFERENCE};
 
   String string = new String(
           "; Small set of Commands for the Lsystem_js variation en JWF \n" +
@@ -71,6 +72,8 @@ public class LsystemFunc extends VariationFunc {
 
   private double line_fraction, point_fraction;
   private double line_threshold, point_threshold;
+  
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile lsystem-presets.pdf";
 
   Render canvas;
 
@@ -1145,13 +1148,15 @@ public class LsystemFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][]{(string != null ? string.getBytes() : null)};
+    return new byte[][]{(string != null ? string.getBytes() : null), id_reference.getBytes()};
   }
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_GRAMMAR.equalsIgnoreCase(pName)) {
       string = pValue != null ? new String(pValue) : "";
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+    	// ignore read-only parameter
     } else
       throw new IllegalArgumentException(pName);
   }
@@ -1160,6 +1165,8 @@ public class LsystemFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_GRAMMAR.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) { 
+    	return RessourceType.REFERENCE;
     } else
       throw new IllegalArgumentException(pName);
   }
