@@ -31,10 +31,15 @@ public class BarycentroidFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_D = "d";
   private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_D};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private double a = 1.0;
   private double b = 0.0;
   private double c = 0.0;
   private double d = 1.0;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile barycentroid.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -107,6 +112,24 @@ public class BarycentroidFunc extends VariationFunc implements SupportsGPU {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "barycentroid";

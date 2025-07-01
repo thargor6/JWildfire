@@ -1,0 +1,43 @@
+3D Plugins Collection, September 2009
+Basic information for using hexnix3D and cubic3D
+by Larry Berlin
+
+http://apophysisrevealed.com/
+http://aporev.deviantart.com/
+
+
+Hexnix3D - A more realistic snowflake maker! 
+
+Named after an essay by Johannes Kepler, 'The Six-cornered Snowflake' which is the first known dissertation about crystalline structures. He wrote in Latin and the Latin for snowflake is 'nix.' Flame patterns rotate for each of the loci. Develops one or two hexagonal plates, each with a 6 sided shape and an inner 3 sided shape. All options are smoothly integrated to make it easy for animators to use and get smooth transition results. This is dramatically different from the original hexaplay3D plugin!
+
+Variables:
+    -hexnix3D_majp  -  Major Plates or Planes, chooses one or two hex plates to draw. Values over 1.0 generate two plates and develop how much separation exists between them. Negative values cause the plate features to have a reversed Z relative to each other.
+    -hexnix3D_scale  -  adjusts the relative size of the XY flame features
+    -hexnix3D_zlift  -  defaults to 0.0, but is useful if you need to inflate height or Z related factors in some circumstances.
+    -hexnix3D_3side  -  This value scales the inner triangle shape relative to the hexagon.
+
+Hints:
+    -Use 3D variations if you expect really cool shapes from side views
+    -Many of the main plugins create very symmetrical effects (about the same size and direction at each vertex) when applied to this variation. A number of additional plugins cause the patterns to skew off to one side of the hexagon and skew the sizes of patterns at the vertices, which is interesting but less 'snowflake like.'
+    -When effects seem a bit blurry, it often helps to use 'foci3D' in small amounts, or negative values.
+    -When used in FX, it works great, but for some reason the feature to reverse the Z factor for the two plates doesn't work in FX.
+    -Use hexnix3D_scale at larger values for interesting effects when patterns from each loci overlap each other. Smaller values for more crystalline effects.
+    -For satisfying initial exploration start with a new flame, make linear3D=0, then activate hexnix3D variation with a value of 1 or 2. Go back to the top of the variation list and one by one explore what happens with each plugin. Remember you need at least two transforms to get a good color rendition from your gradient. To start with leave the second TX on linear3D by itself. Later try other variations with it.
+    -You can split one hexagon into two plates, then in a new TX build another hexagon structure, which will be in the middle between the two other plates. Expand the Z elements of this central feature into a pillar like shape, either with hexnix3D_zlift  or by using the built-in zscale and ztranslate.       
+
+Cubic3D - This is an animation supportive update of the original CubicLattice_3D plugin. A few adjustments to various scale relationships have been made. Two different styles that developed during the writing process have been integrated into the one plugin.
+
+Variables:
+    -cubic3D_xpand   -   Scales the flame features around each node
+    -cubic3D_style   -   Smoothly changes from one style to the other
+
+Hints:
+    -Use 3D variations to create the most interesting effects when you go cubic.
+    -If you use 'inflateZ' plugins to give things shape, keep the amounts small. 
+    -Remember to rotate the cubic structure enough to see all the vertices. It is best to do this in the Transform Editor by activating the Final Transform (FX) and using post_rotate_x,  post_rotate_y, and post_spin_z.
+    -Because those variations give full navigation control, avoid using the camera controls for object navigation. Leave the camera for camera work later. Generally, set Pitch=90 and leave it there. 
+
+
+
+
+

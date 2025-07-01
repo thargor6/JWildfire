@@ -1,0 +1,414 @@
+Synth Explained
+---------------
+
+Synth is a variation partly inspired by old analogue synthesisers - the ones with 100s of knobs 
+which you could use to alter the sound.
+
+Synth is also the logical extension of ngon. Though in fact I designed synth first, then thought 
+"this is crazy, no-one will program this for me", so I set my sights a lot lower with the design 
+for ngon (which Joel Faber coded).
+
+Basically, synth does the same thing as three other variations . . . spherical, bubble and blur,
+but modifies the basic circle shape by using a waveform which you can control by changing the
+many variables. This allows you to spice up old flames by substituting synth for one of your 
+spherical, bubble or blur transforms.
+
+There are 33 variables to tweak in synth, and it is difficult to use, so it is not recommended
+for beginners or non-technical Apo users.
+
+Also, be warned, synth is slow. All the variation plugins I write are slow . . . but sometimes the
+results are worth it :-)
+
+
+Synth variables
+---------------
+
+There are three "general" variables that affect the overall effect:
+
+synth_a                The basic size of the circle shape to use. The default of 1.0 is often fine.
+
+synth_power            Set to -2 to imitate spherical completely in mode 0, it affects the radial
+                       "concentration" of the variation. Negative values are inside out, positive 
+                       values push everything towards the centre. Other useful values are -1 for an
+                       outline, or 0 for no effect at all. 
+                       This variable has no use in mode 1 or "bubble mode"
+
+synth_mode             Selects the basic variation that synth starts from
+
+                       0 = "spherical mode"
+                       1 = "bubble mode"
+                       2 = "blur mode"
+                       
+                       Future versions of synth may have more options
+                       
+There are thirty variables that control the shape of the synth "waveforms" which distort the basic 
+circle shape, and how they are combined. There are five possible waves labelled b, c, d, e and f, 
+and each one uses the same six variables, so only b is shown here, the rest are just repeats:
+
+synth_b                Amplitude. Size of effect from wave b. If set to 0 the wave is "switched off"
+
+synth_b_type           Shape of the wave. There are currently 8 different shapes defined:
+
+                       0 sine
+                       1 cosine
+                       2 square
+                       3 sawtooth
+                       4 triangle
+                       5 concave
+                       6 convex
+                       7 ngon
+
+synth_b_frq            Frequency of wave. A frequency of 1.0 repeats once around the circle. Whole
+                       values are usually best, but the code supports any value
+
+synth_b_skew           Skew effect, from -1.0 to 1.0. Set to 0.0, the wave has its default shape.
+                       Set to -1.0 to get just the left hand side of the wave, set to 1.0 to get 
+                       just the right hand side.
+
+synth_b_phs            Phase of wave. Changing this value moves the wave shape around the circle.
+
+synth_b_layer          Layering. Sets how this wave will combine with the shape made so far (this
+                       is calculated in letter order, from wave b to f). There are currently 4 
+                       layer modes defined:
+                       
+                       0 add
+                       1 multiply
+                       2 maximum
+                       3 minimum
+
+
+Suggestions For Use
+--------------------
+
+Probably the easiest way to search for synth shapes is to use "blur mode" (synth_mode = 2).
+
+You then may have the problem of putting your nice new shape into the flame where you actually
+want it.
+
+The long way to do this is to note down the values you have used, and copy them into your target 
+flame.
+
+A quicker way I have found t is to edit the .flame file in Notepad. Do not do this if you are not 
+comfortable editing HTML, XML or similar code.
+
+The synth_examples.flame file contains some interesting shapes discovered by random generation. 
+The shapes are all "duo-tone" versions, using two similar to show a bit more of the structure.
+
+
+Duo-tone
+---------
+
+To create a "duo-tone" shape, use blur mode, and create an outline shape with synth_power = -0.9, 
+and symmetry = -1.
+
+Once you have the shape you want, duplicate the transform, then change one of the transforms to 
+have synth_power = 0.5 and then edit the color to get a nice combination.
+
+This describes all the modes available in Synth v2. Many of the modes
+are so different to each other, it is best to think of them as different
+variations, they just happen to share some of the same math.
+
+MODES
+-----
+
+mode 0: spherical
+-----------------
+
+Modified version of spherical.
+
+Set synth_power = 2.0, synth_mix = 0.0 to make it identical to spherical.
+
+In this mode:
+
+  synth_power is used to adjust radial effects.
+  
+  synth_smooth = 1 makes the shape closer to a circle near the centre or far 
+    out.
+
+
+
+mode 1: bubble
+--------------
+
+Modified version of bubble.
+
+Set synth_mix = 0.0 to make it identical to bubble.
+
+In this mode:
+
+  synth_power has no effect
+  
+  synth_smooth = 1 adjusts the outside of the bubble to the synth shape, but
+    leaves the centre alone.
+
+
+
+mode 2: blur (legacy)
+---------------------
+
+Creates a circular blur adjusted by the synth shape.
+
+Set synth_power = 2.0, synth_mix = 0.0 to make it _close_ but not identical
+to regular blur.
+
+In this mode:
+
+  synth_power is used to adjust radial effects.
+  
+  synth_smooth = 1 adjusts the unit circle into the synth shape, and 
+    makes the variation less aggressive near the centre or far out.
+
+
+
+mode 3: blur (new)
+------------------
+
+Creates a circular blur adjusted by the synth shape, similar to mode 2. The 
+distribution is different, however, and mode 3 has less noticable "moire".
+
+Set synth_power = 2.0, synth_mix = 0.0 to make it _close_ but not identical
+to regular blur.
+
+In this mode:
+
+  synth_power is used to adjust radial effects.
+  
+  synth_smooth = 1 adjusts the unit circle into the synth shape, and 
+    makes the variation less aggressive near the centre or far out.
+
+
+
+mode 4: blur zigzag
+--------------------
+
+Creates a blur shape which is the raw waveform of the synth.
+
+Set synth_mix = 0.0 to make a straight line.
+
+In this mode:
+
+  synth_power controls the thickness of the line
+  
+  synth_smooth = 1 skews the thickness a little. On some shapes this can 
+    be an attractive effect.
+    
+
+
+mode 5: raw circle
+-------------------
+
+Applies just the synth shape in a circular manner without any other
+combination.
+
+Set synth_mix = 0.0 to make it the same as linear.
+
+In this mode:
+
+  synth_power is ignored
+  
+  synth_smooth = 1 makes the distortion less aggressive (and more like linear)
+    near the origin or at a large distance from it.
+
+
+
+mode 6: raw x
+--------------
+
+Applies the synth distortion to x yalues depending on the y position (imagine
+a wave on the y axis which multiplies all the values in each row).
+
+Set synth_mix = 0.0 to make it the same as linear.
+
+In this mode:
+
+  synth_power is ignored
+  
+  synth_smooth = 1 makes the distortion less aggressive (and more like linear)
+    near the y axis or at a large distance from it.
+
+
+
+mode 7: raw y
+--------------
+
+Applies the synth distortion to y yalues depending on the z position (imagine
+a wave on the x axis which multiplies all the values in each column).
+
+Set synth_mix = 0.0 to make it the same as linear.
+
+In this mode:
+
+  synth_power is ignored
+  
+  synth_smooth = 1 makes the distortion less aggressive (and more like linear)
+    near the x axis or at a large distance from it.
+
+
+
+mode 8: raw xy
+--------------
+
+Applies the synth distortion simultaneously to x yalues depending on the y
+position and y values depending on the x position.
+
+Set synth_mix = 0.0 to make it the same as linear.
+
+In this mode:
+
+  synth_power is ignored
+  
+  synth_smooth = 1 makes the distortion less aggressive (and more like linear)
+    near the axis or at large distances from them.
+
+
+
+mode 9: shift x
+---------------
+
+Adds the synth shape as a shift to x values depending on y. The difference 
+between shift and raw modes is that shift adds values whilst raw multiplies
+them.
+
+Set synth_mix = 0.0 to make it the same as linear.
+
+In this mode synth_power and synth_smooth are both ignored.
+
+
+
+mode 10: shift x
+----------------
+
+Adds the synth shape as a shift to y values depending on x. The difference 
+between shift and raw modes is that shift adds values whilst raw multiplies
+them.
+
+Set synth_mix = 0.0 to make it the same as linear.
+
+In this mode synth_power and synth_smooth are both ignored.
+
+
+
+mode 11: shift x&y
+------------------
+
+Applies "shift x" and "shift y" modes simultaneously.
+
+Set synth_mix = 0.0 to make it the same as linear.
+
+In this mode synth_power and synth_smooth are both ignored.
+
+
+
+mode 12: blur ring
+------------------
+
+Creates a ring shape distorted by the synth effect.
+
+Set synth_mix = 0.0 to make a simple circular ring.
+
+  synth_power controls the thickness of the ring
+  
+  synth_smooth = 1 skews the thickness a little. On some shapes this can 
+    be an attractive effect.
+
+
+
+mode 13: blur ring 2
+---------------------
+
+Creates a ring shape distorted by the synth effect, similar to mode 12, but 
+with a slightly different distribution of intensity.
+
+Set synth_mix = 0.0 to make a simple circular ring.
+
+  synth_power controls the thickness of the ring.
+  
+  synth_smooth has no effect.
+
+
+
+mode 14: swirling
+-----------------
+
+Applies a rotation using the synth shape along an adjusted radius to decide
+how far to rotate.
+
+Set synth_mix = 0.0 to see the effect simplified (I am not sure if this the
+same as any other variation).
+
+  synth_power controls how the radius is used.
+  
+  synth_smooth has no effect.
+
+
+
+mode 15: shift tangent
+----------------------
+
+Uses the distance from the origin (0,0) to determine a tangential shift based
+on the synth value. Imagine the waveform lying along a radius, and sweeping
+around a circle - every point it touches is shifted perpendicular to the radius
+depending on the height of the wave at the point.
+
+Set synth_mix = 0.0 to make it the same as linear.
+
+  synth_power controls how the radius is scaled (effectively this squashes or
+    stretches the synth effect along the radius).
+  
+  synth_smooth has no effect.
+
+
+
+mode 16: shift theta
+--------------------
+
+Uses the distance from the origin (0,0) to determine a rotation shift based
+on the synth value. Imagine the waveform lying along a radius, and sweeping
+around a circle - every point it touches is shifted around the circle
+depending on the height of the wave at the point.
+
+Set synth_mix = 0.0 to make it the same as linear.
+
+  synth_power controls how the radius is scaled (effectively this squashes or
+    stretches the synth effect along the radius).
+  
+  synth_smooth has no effect.
+
+
+
+mode 17: mirror x
+-----------------
+
+Uses the synth waveform as a line which "reflects" points in the y axis. 
+
+Set synth_mix = 0.0 to make this a straight line along the x axis (very 
+similar to an upside-down linear transform).
+
+In this mode synth_power and synth_smooth are both ignored.
+
+
+
+mode 18: mirror xy
+------------------
+
+Uses two synth waveforms as lines which simultaneously reflect points in 
+the x and y axes.
+
+Set synth_mix = 0.0 to make this two straight lines along the axes (very 
+similar to a 180 degree rotated linear transform).
+
+In this mode synth_power and synth_smooth are both ignored.
+
+
+
+mode 19: spherical 2
+--------------------
+
+Modified version of spherical, but with different behaviour to mode 0.
+
+In this mode:
+
+  synth_power is used to adjust radial effects.
+  
+  synth_smooth = 1 makes the shape less different from circular
+    near the centre or far out.

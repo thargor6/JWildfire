@@ -31,6 +31,9 @@ public class Hexnix3DFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_3SIDE = "3side";
   private static final String[] paramNames = {PARAM_MAJP, PARAM_SCALE, PARAM_ZLIFT, PARAM_3SIDE};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private double majp = 1.0; // establishes 1 or 2 planes, and if 2, the distance between them
   private double scale = 0.25; // scales the effect of X and Y
   private double zlift = 0.0; // scales the effect of Z axis within the snowflake
@@ -42,6 +45,8 @@ public class Hexnix3DFunc extends VariationFunc implements SupportsGPU {
   private int _rswtch; //  for choosing between 6 or 3 segments to a plane
   private int _fcycle; //  markers to count cycles... 
   private int _bcycle;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile BasicInfo_hexnix3D_cubic3D.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -173,6 +178,24 @@ public class Hexnix3DFunc extends VariationFunc implements SupportsGPU {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "hexnix3D";

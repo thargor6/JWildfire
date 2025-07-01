@@ -44,6 +44,9 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU, Supports
 
   private static final String[] paramNames = {PARAM_SHAPE, PARAM_MAP, PARAM_SELECT_CENTRE, PARAM_SELECT_RANGE, PARAM_CENTRE, PARAM_RANGE, PARAM_EDGE, PARAM_SCALE, PARAM_OCTAVES, PARAM_AMPS, PARAM_FREQS, PARAM_Z, PARAM_SELECT_BAILOUT, PARAM_COLOR_ONLY};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private int shape = 0;
   private int map = 0;
   private double select_centre = 0.0;
@@ -70,6 +73,8 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU, Supports
   private final static int MAP_QSPHERE = 3;
   private final static int MAP_BUBBLE = 4;
   private final static int MAP_BUBBLE2 = 5;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile dc_perlin.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -248,6 +253,24 @@ public class DCPerlinFunc extends VariationFunc implements SupportsGPU, Supports
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "dc_perlin";

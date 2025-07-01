@@ -1,0 +1,84 @@
+DC_PERLIN by Neil Slater
+
+dc_perlin is a direct colour plugin that creates fixed "blur" shapes, and
+colours them according to the Perlin Noise algorithm.
+
+There are 13 tweakable parameters in dc_perlin:
+
+dc_perlin_shape
+
+  Sets base shape of the blur effect
+
+  0 - square
+  1 - disc
+  2 - blur disc (disc with intensity strongest in centre)
+
+dc_perlin_map
+
+  Sets how the noise function is mapped onto the shape
+
+  0 - flat
+  1 - spherical (very small features in centre, larger features at edge)
+  2 - half spherical (much less distorted than spherical)
+  3 - quarter spherical (somewhere in-between 1 and 2)
+  4 - bubble
+  5 - exaggerated bubble
+
+
+dc_perlin_select_centre
+dc_perlin_select_range
+
+  These two variables set limits for how much of the image displays, based on
+  the noise value at each point. Effectively this makes parts of the blur
+  transparent, creating more interesting shapes.
+
+dc_perlin_centre
+dc_perlin_range
+
+  These two variables set how the range of Perlin noise values (which are
+  normally in the range -1.0 to 1.0) map to the colour values that you see. The
+  default of 0.25 for both means that the dc_perlin variation only uses half of
+  the available gradient, leaving the rest for other colour effects if you wish.
+
+  The names should really be dc_perlin_colour_centre and dc_perlin_colour_range.
+
+dc_perlin_edge
+
+  Sets size of a boundary area where the select variables are more sensitive to
+  deviations from average noise values. The visible effect is a more ragged edge
+  to the blur shape.
+
+dc_perlin_scale
+
+  A scale factor for the noise function. Higher values show more, smaller,
+  features.
+
+dc_perlin_octaves
+
+  Perlin noise works by adding multiple noise functions in octaves. Each octave
+  is usually a smaller, similar version of the basic noise function (yes if
+  there were infinite octaves, that would make Perlin noise a strict fractal).
+  You can set octaves from 1 to 5. Increasing the value makes the render more
+  complex, but also noticeably slower.
+
+dc_perlin_amps
+
+  Value to divide the amplitude of each noise octave by. The default of 2 is
+  normal for Perlin noise, and you usually want values larger than 1.
+
+dc_perlin_freqs
+
+  Value to multiply the scaling of each noise octave by. The default of 2 is
+  normal for Perlin noise, and you usually want values larger than 1.
+
+dc_perlin_z
+
+  Changes location that noise funtion is sampled from. Visually this changes the
+  pattern you see, but not the "style" set by the other params.
+
+dc_perlin_select_bailout
+
+  To prevent infinite loops from odd param values, dc_perlin will give up trying
+  to select a point within select bounds after this many tries. If you see an
+  unwanted "ghost" of the cut-out areas in high quality, you can increase this 
+  value, up to 1000.

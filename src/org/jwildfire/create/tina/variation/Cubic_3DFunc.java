@@ -27,8 +27,13 @@ public class Cubic_3DFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_STYLE = "style";
   private static final String[] paramNames = {PARAM_XPAND, PARAM_STYLE};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private double xpand = 0.25;
   private double style = 1.0;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile BasicInfo_hexnix3D_cubic3D.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -133,6 +138,24 @@ public class Cubic_3DFunc extends VariationFunc implements SupportsGPU {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "cubic3D";

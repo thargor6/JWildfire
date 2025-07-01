@@ -38,6 +38,9 @@ public class PostSmartCropFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_STATIC = "static";
   private static final String[] paramNames = {PARAM_POWER, PARAM_RADIUS, PARAM_ROUNDSTR, PARAM_ROUNDWIDTH, PARAM_DISTORTION, PARAM_EDGE, PARAM_SCATTER, PARAM_OFFSET, PARAM_CROPMODE, PARAM_STATIC};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private double power = 4.0;
   private double radius = 1.0;
   private double roundstr = 0.0;
@@ -48,6 +51,8 @@ public class PostSmartCropFunc extends VariationFunc implements SupportsGPU {
   private double offset = 0.0;
   private int cropmode = 1;
   private int _static = 2;
+  
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile post_smartcrop.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -203,6 +208,24 @@ public class PostSmartCropFunc extends VariationFunc implements SupportsGPU {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "post_smartcrop";

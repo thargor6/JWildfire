@@ -1,0 +1,54 @@
+==========================================================================================
+AUGER APOPHYSIS PLUGIN
+==========================================================================================
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+------------------------------------------------------------------------------------------
+How to use the variables
+------------------------------------------------------------------------------------------
+
+auger_scale             -- Scales the amplitude of the wave function
+auger_frequency         -- Controls the frequency of the wave function
+auger_weight            -- Controls the Weighting factor of the wave 
+                           function against the input coordinates
+auger_symmetry          -- The interpolation value for the x coordinate
+
+------------------------------------------------------------------------------------------
+Understand the math
+------------------------------------------------------------------------------------------
+
+M, N are vectors with 2 components (x, y)!
+Input is s, f, w and h - where s is the scale, w the weight, 
+f the frequency and h the symmetry
+
+a) First we create two wave functions p(x) and q(y):
+
+   p = sin( f * x )
+   q = sin( f * y )
+
+b) Then we add them to the input coordinates while we interpolate
+   the resulting x coordinate with the input one:
+
+   x'   = x + w * ( q * ( s + |x| ) )
+   
+   Nx   = x + h * ( x' - x )
+   Ny   = y + w * ( p * ( s + |y| ) )
+
+b) The output point is now (Nx, Ny)!
+
+
+==========================================================================================
+WRITTEN BY XYRUS02 - VISIT XYRUS02.DEVIANTART.COM!

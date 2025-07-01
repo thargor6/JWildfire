@@ -46,6 +46,9 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
 
   private static final String[] paramNames = {PARAM_BLUR_TYPE, PARAM_BLUR_SHAPE, PARAM_BLUR_STRENGTH, PARAM_MIN_DISTANCE, PARAM_INVERT_DISTANCE, PARAM_MUL_X, PARAM_MUL_Y, PARAM_MUL_Z, PARAM_MUL_C, PARAM_CENTER_X, PARAM_CENTER_Y, PARAM_CENTER_Z, PARAM_ALPHA};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   //adjustment coefficient
   private static final double SCATTER_ADJUST = 0.04;
   // blur types
@@ -73,6 +76,8 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
   private double center_z = 0.0;
 
   protected double alpha = 0.0;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile falloff3.pdf";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -169,6 +174,24 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "falloff3";
