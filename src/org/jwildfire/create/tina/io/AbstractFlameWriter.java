@@ -63,6 +63,7 @@ import org.jwildfire.create.tina.render.gpu.farender.VariationnameTransformer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
+import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 
@@ -200,8 +201,10 @@ public class AbstractFlameWriter {
           if (ressNames != null) {
             byte vals[][] = func.getRessourceValues();
             for (int i = 0; i < ressNames.length; i++) {
-              String hexStr = vals[i] != null && vals[i].length > 0 ? Tools.byteArrayToHexString(vals[i]) : "";
-              attrList.add(xb.createAttr((fName + "_" + ressNames[i]), hexStr));
+            	if (func.getRessourceType(ressNames[i]) != RessourceType.REFERENCE) {
+                String hexStr = vals[i] != null && vals[i].length > 0 ? Tools.byteArrayToHexString(vals[i]) : "";
+                attrList.add(xb.createAttr((fName + "_" + ressNames[i]), hexStr));
+            	}
             }
           }
         }
