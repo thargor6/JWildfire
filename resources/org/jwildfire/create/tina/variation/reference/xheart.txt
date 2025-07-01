@@ -1,0 +1,53 @@
+==========================================================================================
+XHEART APOPHYSIS PLUGIN
+==========================================================================================
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+------------------------------------------------------------------------------------------
+How to use the variables
+------------------------------------------------------------------------------------------
+
+xheart_angle             -- Controls the rotation of the base form
+xheart_ratio	         -- Controls the stretch of the base form
+
+------------------------------------------------------------------------------------------
+Understand the math
+------------------------------------------------------------------------------------------
+
+M, N are vectors with 2 components (x, y)!
+Input is a and b where a is the angle offset and b is the vertical stretch factor
+
+a) First we create an bubble which is stretched along y:
+
+   r²   = ( x² + y² )
+   u	= 4 / ( r² + 4 )
+   v	= ( 6 + 2b ) / ( r² + 4 )
+
+b) We rotate this bubble around the given angle...:
+
+   a    = 0.25 * pi + ( 0.125a * pi )
+   x'	= u * cos a - v * sin a
+   y'   = u * sin a - v * cos a
+
+c) ...and mirror it along the y-Axis:
+
+   Nx   = x'
+   Ny   = f * y'	if x < 0: f = -1, else f = 1
+
+C) The output point is now (Nx, Ny)!
+
+==========================================================================================
+WRITTEN BY XYRUS02 - VISIT XYRUS02.DEVIANTART.COM!

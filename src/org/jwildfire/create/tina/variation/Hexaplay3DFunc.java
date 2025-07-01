@@ -38,9 +38,14 @@ public class Hexaplay3DFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_ZLIFT = "zlift";
   private static final String[] paramNames = {PARAM_MAJP, PARAM_SCALE, PARAM_ZLIFT};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private double majp = 1.0; // establishes 1 or 2 planes, and if 2, the distance between them
   private double scale = 0.25; // scales the effect of X and Y
   private double zlift = 0.25; // scales the effect of Z axis within the snowflake
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile Readme_3D_Lattices.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -121,6 +126,24 @@ public class Hexaplay3DFunc extends VariationFunc implements SupportsGPU {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "hexaplay3D";

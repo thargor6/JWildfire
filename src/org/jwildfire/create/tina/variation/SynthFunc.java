@@ -68,6 +68,9 @@ public class SynthFunc extends VariationFunc {
 
   private static final String[] paramNames = {PARAM_A, PARAM_MODE, PARAM_POWER, PARAM_MIX, PARAM_SMOOTH, PARAM_B, PARAM_B_TYPE, PARAM_B_SKEW, PARAM_B_FRQ, PARAM_B_PHS, PARAM_B_LAYER, PARAM_C, PARAM_C_TYPE, PARAM_C_SKEW, PARAM_C_FRQ, PARAM_C_PHS, PARAM_C_LAYER, PARAM_D, PARAM_D_TYPE, PARAM_D_SKEW, PARAM_D_FRQ, PARAM_D_PHS, PARAM_D_LAYER, PARAM_E, PARAM_E_TYPE, PARAM_E_SKEW, PARAM_E_FRQ, PARAM_E_PHS, PARAM_E_LAYER, PARAM_F, PARAM_F_TYPE, PARAM_F_SKEW, PARAM_F_FRQ, PARAM_F_PHS, PARAM_F_LAYER};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private double a = 1.0;
   private int mode = 3;
   private double power = -2.0;
@@ -108,6 +111,8 @@ public class SynthFunc extends VariationFunc {
   private double f_frq = 1.0;
   private double f_phs = 0.0;
   private int f_layer = 0;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile synth.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -659,6 +664,24 @@ public class SynthFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "synth";

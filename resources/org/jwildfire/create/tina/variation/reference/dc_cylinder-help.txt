@@ -1,0 +1,29 @@
+DC-Cylinder Apophysis Plugin by TJ Anderson a.k.a. FracFx
+
+This is a "combo" plugin, it is based on the Rod Plugin by Branden Brown, a.k.a. zephyrtronium
+and the DC_linear Plugin by Georg Kiehne a.k.a. Xyruso2
+and combines those 2 plugins into one plugin to make the DC-Cylinder and gives you functions not
+available by just using the 2 plugins on a transform.  (Try it and see :p)
+Big thanks go to those awesome people for sharing the original plugins and codes as well as Michael Faber for
+the original Apoplugin.h file
+
+dc_cyl_offset is like rotating the gradient in the gradient editor.
+dc_cyl_angle changes the angle of the gradient (think fruit striped gum).
+dc_cyl_scale is the amount of the DC functions applied (and works in conjunction with cyl_blur).
+cyl_x is like activating the post transform and adjusting the x value.
+cyl_y works like cyl_x only it changes the y value.
+cyl_blur adjusts the amount of "pre-blur".
+
+The color and color speed functions will have no effect if the Direct Color option on the Colors tab is set to 1,
+anything less than 1 and they will have an effect, and this gives you even more color options when tweaking your flame. :)
+Setting the DC variables to 0 will make the plugin work similar to regular cylinder with no DC effect but
+with a slight difference, adjust the cyl_x and cyl_y values to set the size of your cylinder.
+
+Try this plugin anywhere you would normally use Cylinder or Cylinder+Preblur
+Happy Tweaking!
+
+
+
+
+
+

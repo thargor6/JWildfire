@@ -33,6 +33,9 @@ public class Petal3DApoFunc extends VariationFunc implements SupportsGPU {
     private static final String PARAM_SCALE2 = "scale2";
     private static final String PARAM_STYLE = "style";
 
+    private static final String RESSOURCE_DESCRIPTION = "description";
+    private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+    
     private double width = 1.0;
     private double Zshape = 0.25;
     private double scale1 = 0.25;
@@ -41,7 +44,9 @@ public class Petal3DApoFunc extends VariationFunc implements SupportsGPU {
     private static final double M_SQRT1_2 = sqrt(0.5);
     private static final String[] paramNames = { PARAM_WIDTH, PARAM_ZSHAPE, PARAM_SCALE1, PARAM_SCALE2, PARAM_STYLE };
 
-    @Override
+    private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile Readme_petal3D.txt";
+
+   @Override
     public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP,
             double pAmount) {
       // petal3D by Larry Berlin (aporev)
@@ -128,6 +133,24 @@ public class Petal3DApoFunc extends VariationFunc implements SupportsGPU {
         }
     }
 
+    @Override
+    public String[] getRessourceNames() {
+      return ressourceNames;
+    }
+
+    @Override
+    public byte[][] getRessourceValues() {
+      return new byte[][] {description.getBytes()};
+    }
+
+    @Override
+    public RessourceType getRessourceType(String pName) {
+      if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+        return RessourceType.REFERENCE;
+      }
+      else throw new IllegalArgumentException(pName);
+    }
+    
     @Override
     public String getName() {
         return "petal3D_apo";
