@@ -1055,6 +1055,8 @@ VariationFuncList {
     registerVariationFunc(MeepleFunc.class);
     registerVariationFunc(FloraFunc.class);
     registerVariationFunc(ChaosCubesFunc.class);
+    registerVariationFunc(Mandelbox2DFunc.class);
+    registerVariationFunc(MultiIFSFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
