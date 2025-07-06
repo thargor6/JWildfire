@@ -1,0 +1,59 @@
+The post_smartcrop variation is used for cropping (obviously). Works somewhat similar to crop, circlecrop, hexcrop and cropn. But has more options for defining the shape.
+
+Here's short description of variables:
+
+power
+The number shape's angles. 
+* Negative values cause inner part to be cropped instead of outer part.
+* Values from -2 through 2 work as radial crop. Just check how it works. :) (radius, distortion and rounding variables have no effect in this mode)
+
+radius
+The size of cropped shape.
+* Negative values cause inner part to be cropped instead of outer part.
+
+roundstr
+Strength of rounding.
+* At value 1 makes angles perfectly round. Others just give fun results. :)
+
+roundwidth
+Width of rounding.
+* Higher values make corners to be rounded more "roughly"
+* Works only if roundstr variable is other than 0
+tip: experiment with different roundwidth and roundstr combinations for more fun results. :)
+
+distortion
+Exponential distortion of the shape (works somewhat similar to julian's dist variable).
+* The value of 0 forms the circle. Works faster.
+
+edge
+Makes the shape's borders "smoother".
+* Works best with post_scrop_mode 2 (explained lower).
+
+scatter
+Scatters the cropped pixels. Similar to scatter variable of crop and circlecrop.
+* Independent of radius variable. Will work even with radius=0
+
+offset
+"Shifts" the cropped pixels off the shape border.
+* Works better with scatter and edge other than 0.
+* Works best with post_scrop_static=1 (explained lower)
+
+cropmode
+Defines the placement of cropped pixels:
+0. Cropped pixels are placed on point with x=0, y=0.
+* Works best with post_scrop_static=1 (explained lower)
+1. (default) Cropped pixels are placed on shape's border (in a similar to crop or circlecrop way).
+2. Cropped pixels are "scattered" among the uncropped ones. Thus making them "disappear".
+* One of the most fun parts of the plugin. :D
+* edge variable should be used in this mode 'cause otherwise it looks similar to post_scrop_scatter
+* May cause color loss in Apo 2.09 (not in 7x).
+
+static
+Defines which part of the shape may be affected by other variations:
+* For example, if you have one xForm with blur=0.1 and post_smartcrop=1 then only the area defined with static variable will be blurred.
+-1. Only inner (not cropped) part is affected by other variations.
+0. Both inner and outer parts are affected.
+1. Only outer (cropped) part is affected.
+2. The variation works as "post_". i.e is applied after all other ones.
+
+tip: the plugin works faster the less variables you use.

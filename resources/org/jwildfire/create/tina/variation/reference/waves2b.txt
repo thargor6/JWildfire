@@ -1,0 +1,39 @@
+WAVES2B by Luca G
+
+The idea is to make a plugin that is much more customizable than waves2.
+
+It works differently near and far from the center, in some circumstances.
+This leads to (much!) more variety on your final images.
+
+------------------------------------
+
+To make it work like waves2;
+
+1) Use identical values for scalex, scaleinfx (both equal to scalex).
+2) And identical values for scaley, scaleinfy (both equal to scaley).
+3) Use power=1. (pwx and pwy!!!)
+
+Don't move too far from 1 if you like uniform spirals.
+Else, you will get a "smoke effect" (cool) that may quickly go to a noise for high powers.
+The effect is more strong far from the center.
+Ideally you should use a range 0,3 to 2 (the spirals will be more various without strong distortion).
+
+Use of negative powers is allowed but it leads to possibly weird results. (Noisy on some spots).
+
+Other effect; Variation of scales depending on the distance from the center.
+Many pretty effcets are possible. Works if & only if scales are different - scale and scaleinf.
+The "unit" controls the speed of warping from scale to scaleinf.
+
+------------------------------------
+
+Additional controls - Special functions
+
+You can also get new effects if you use this trick;
+
+A very small value, like 0,00009, for waves2b_pwx or waves2b_pwy enables different functions...
+
+But there is a big difference
+
+If you chose 0,00009 as the power  you will render with Jacobi Elliptic function sn(x,k) - You can chose k from the variable waves2b_jacok (it affects the shapes).
+If you chose -0,00009 as the power you will render with the function Bessel J1. The oscillation is muchly different from the sine oscillation.
+

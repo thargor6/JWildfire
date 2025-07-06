@@ -1,0 +1,68 @@
+==========================================================================================
+BARYCENTROID APOPHYSIS PLUGIN
+==========================================================================================
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+------------------------------------------------------------------------------------------
+How to use the variables
+------------------------------------------------------------------------------------------
+
+a, d   			-- Control the "content" of the output
+b, c			-- Control the "borders" of the output
+
+------------------------------------------------------------------------------------------
+Understand the math
+------------------------------------------------------------------------------------------
+
+M is a vector with 2 components (Mx, My)!
+Input variables are a, b, c, d
+f the frequency and h the symmetry
+
+a) First we generate a pile of vectors:
+
+   A    = [a, b]
+   B    = [c, d]
+   C    = [x, y]
+
+b) And we dot product them each other:
+
+   d00  = A * A					
+   d01  = A * B
+   d02  = A * C
+   d11  = B * B
+   d12  = B * C
+
+b) Then we precalculate a common denominator
+
+   h    = ( d00 * d11 - d01 * d01 )
+   
+c) We use the dot products and the denomiator to retrieve the
+   barycentric coordinates of the point (x,y) in the triangle
+   [A, B, 0]:
+   
+   u    = ( d11 * d02 - d01 * d12 ) / h
+   v    = ( d00 * d12 - d01 * d02 ) / h
+   
+d) We square u, v and x, y, sum them up and write the square 
+   roots into output vector M but preserve the signs of u, v:
+
+   Mx   = ( sqrt( u * u + x * x ) * sgn( u ) )
+   My   = ( sqrt( v * v + y * y ) * sgn( v ) )
+
+e) Our output vector is now M
+
+==========================================================================================
+WRITTEN BY XYRUS02 - VISIT XYRUS02.DEVIANTART.COM!

@@ -383,7 +383,7 @@ public class DrunkenTilesFunc extends VariationFunc {
     }
 
     /** Handles reading the object during deserialization. (Unchanged) */
-    @Override
+    //@Override
     public void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
         in.defaultReadObject();
         random = new Random();

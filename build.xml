@@ -70,6 +70,8 @@
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/brush/*.pdf"/>
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/lsystems.txt"/>
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/mesh/lsystems3D.txt"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/reference/*.pdf"/>
+            <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/reference/*.txt"/>
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/variation/variation_costs.txt"/>
             <fileset dir="${res.dir}" includes="org/jwildfire/create/tina/base/weightingfield/mb3dhm.jpg"/>
             <fileset dir="${build.dir}" includes="csk/"/>

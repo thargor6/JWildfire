@@ -38,6 +38,9 @@ public class Waves2BFunc extends VariationFunc implements SupportsGPU {
 
   private static final String[] paramNames = {PARAM_FREQX, PARAM_FREQY, PARAM_PWX, PARAM_PWY, PARAM_SCALEX, PARAM_SCALEINFX, PARAM_SCALEY, PARAM_SCALEINFY, PARAM_UNITY, PARAM_JACOK};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private double freqx = 1.5;
   private double freqy = 2.5;
   private double pwx = 1.0;
@@ -48,6 +51,8 @@ public class Waves2BFunc extends VariationFunc implements SupportsGPU {
   private double scaleinfy = 1.5;
   private double unity = 1.0;
   private double jacok = 0.25;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile waves2b.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -121,6 +126,24 @@ public class Waves2BFunc extends VariationFunc implements SupportsGPU {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   private double safediv(double q, double r) {
     if (r < 1e-10)
       return 1 / r;

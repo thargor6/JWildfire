@@ -34,6 +34,9 @@ public class DCCylinderFunc extends VariationFunc implements SupportsGPU {
 
   private static final String[] paramNames = {PARAM_OFFSET, PARAM_ANGLE, PARAM_SCALE, PARAM_X, PARAM_Y, PARAM_BLUR};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private double offset = 0.0;
   private double angle = 0.0;
   private double scale = 0.5;
@@ -43,6 +46,8 @@ public class DCCylinderFunc extends VariationFunc implements SupportsGPU {
   private int n = 0;
   private double[] r = {0.0, 0.0, 0.0, 0.0};
   private double ldcs, ldca;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile dc_cylinder-help.txt";
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
@@ -108,6 +113,24 @@ public class DCCylinderFunc extends VariationFunc implements SupportsGPU {
     return new String[]{"dc_cyl_offset", "dc_cyl_angle", "dc_cyl_scale", "cyl_x", "cyl_y", "cyl_blur"};
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "dc_cylinder";

@@ -29,10 +29,15 @@ public class XHeartFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_RATIO = "ratio";
   private static final String[] paramNames = {PARAM_ANGLE, PARAM_RATIO};
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private double angle = 0.0;
   private double ratio = 0.0;
   // derived variables
   private double rat, cosa, sina;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile xheart.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -77,6 +82,24 @@ public class XHeartFunc extends VariationFunc implements SupportsGPU {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "xheart";

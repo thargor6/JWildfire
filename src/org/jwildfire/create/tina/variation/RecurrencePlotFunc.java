@@ -32,8 +32,10 @@ public class RecurrencePlotFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_OFFSET = "offset";
   private static final String PARAM_MAXDIST = "tolerance";
 
+  private static final String RESSOURCE_ID_REFERENCE = "func_id_reference";
 
   private static final String[] paramNames = {PARAM_ID, PARAM_A, PARAM_B, PARAM_K, PARAM_N, PARAM_DC, PARAM_SCALE, PARAM_ANGLE, PARAM_OFFSET, PARAM_MAXDIST};
+  private static final String[] ressourceNames = {RESSOURCE_ID_REFERENCE};
 
   double a = 0.5;
   double b = 10.0;
@@ -47,6 +49,8 @@ public class RecurrencePlotFunc extends VariationFunc implements SupportsGPU {
   double y1, y2;
   int dc = 0;
   double oldx = 0.0, oldy = 0.0;
+  
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile recurrenceplot-ids.pdf";
 
   private double ldcs;
 
@@ -367,6 +371,24 @@ public class RecurrencePlotFunc extends VariationFunc implements SupportsGPU {
 
   public Object[] getParameterValues() {
     return new Object[]{id, a, b, k, N, dc, scale, angle, offset, maxdist};
+  }
+
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {id_reference.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if(RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
   }
 
   public void setParameter(String pName, double pValue) {

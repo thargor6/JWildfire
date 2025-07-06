@@ -61,8 +61,9 @@ public class Knots3DFunc extends AbstractOBJMeshWFFunc {
   private static final String RESSOURCE_XFORMULA = "xformula";
   private static final String RESSOURCE_YFORMULA = "yformula";
   private static final String RESSOURCE_ZFORMULA = "zformula";
-
-  private static final String[] ressourceNames = {RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA};
+  private static final String RESSOURCE_ID_REFERENCE = "presetId_reference";
+  
+  private static final String[] ressourceNames = {RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA, RESSOURCE_ID_REFERENCE};
 
   private String xformula;
   private String yformula;
@@ -70,6 +71,8 @@ public class Knots3DFunc extends AbstractOBJMeshWFFunc {
 
   private Knots3DFormulaEvaluator evaluator;
 
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile knots3d-presets.pdf";
+  
   public Knots3DFunc() {
     super();
     preset_id = WFFuncPresetsStore.getKnots3DWFFuncPresets().getRandomPresetId();
@@ -377,7 +380,12 @@ public class Knots3DFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][]{(xformula != null ? xformula.getBytes() : null), (yformula != null ? yformula.getBytes() : null), (zformula != null ? zformula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null)};
+    return new byte[][]{
+    	(xformula != null ? xformula.getBytes() : null), 
+    	(yformula != null ? yformula.getBytes() : null), 
+    	(zformula != null ? zformula.getBytes() : null), 
+    	id_reference.getBytes()
+    	};
   }
 
   @Override
@@ -391,6 +399,8 @@ public class Knots3DFunc extends AbstractOBJMeshWFFunc {
     } else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
       zformula = pValue != null ? new String(pValue) : "";
       validatePresetId();
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+    	// ignore read-only parameter
     } else
       throw new IllegalArgumentException(pName);
   }
@@ -403,6 +413,8 @@ public class Knots3DFunc extends AbstractOBJMeshWFFunc {
       return RessourceType.BYTEARRAY;
     } else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) { 
+    	return RessourceType.REFERENCE; 
     } else
       throw new IllegalArgumentException(pName);
   }

@@ -53,6 +53,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String RESSOURCE_GRAMMAR = "grammar";
+  private static final String RESSOURCE_ID_REFERENCE = "presetId_reference";
+  
   private static final String PARAM_PRESETID = "presetId";
 
   public static final String PARAM_SCALEX = "scale_x";
@@ -98,7 +100,9 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   int presetId = (int) (Math.random() * 21.0 + 1.0);
   int color_mode = 0;
 
-  private static final String[] ressourceNames = {RESSOURCE_GRAMMAR};
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile lsystem3D-presets.pdf";
+  
+  private static final String[] ressourceNames = {RESSOURCE_GRAMMAR, RESSOURCE_ID_REFERENCE};
 
   @Override
   public Object[] getParameterValues() {
@@ -203,7 +207,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] {(grammar != null ? grammar.getBytes() : null)};
+    return new byte[][] {(grammar != null ? grammar.getBytes() : null), id_reference.getBytes()};
   }
 
   @Override
@@ -218,6 +222,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         ls.L_draw();
         mesh = ls.getMesh();
       }
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+    	// ignore read-only parameter
     } else throw new IllegalArgumentException(pName);
   }
 
@@ -225,6 +231,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_GRAMMAR.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
+    } else if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) { 
+    	return RessourceType.REFERENCE;
     } else throw new IllegalArgumentException(pName);
   }
 

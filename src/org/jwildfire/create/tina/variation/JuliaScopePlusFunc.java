@@ -311,7 +311,7 @@ public class JuliaScopePlusFunc extends VariationFunc{
         return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
     }
 
-    @Override
+    //@Override
     public String getGPUCode(FlameTransformationContext context) {
         // GPU code is becoming increasingly complex to maintain as a string with all these options.
         // For now, returning null is safest to ensure CPU fallback.

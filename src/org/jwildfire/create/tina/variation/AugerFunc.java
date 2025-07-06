@@ -28,14 +28,18 @@ public class AugerFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_FREQ = "freq";
   private static final String PARAM_WEIGHT = "weight";
   private static final String PARAM_SYM = "sym";
-  private static final String PARAM_SCALE = "scale";
+  private static final String PARAM_SCALE = "scale";  
+  private static final String RESSOURCE_DESCRIPTION = "description";
 
   private static final String[] paramNames = {PARAM_FREQ, PARAM_WEIGHT, PARAM_SYM, PARAM_SCALE};
-
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
+  
   private double freq = 1.00;
   private double weight = 0.5;
   private double sym = 0.1;
   private double scale = 0.9;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile auger.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -76,6 +80,24 @@ public class AugerFunc extends VariationFunc implements SupportsGPU {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "auger";
