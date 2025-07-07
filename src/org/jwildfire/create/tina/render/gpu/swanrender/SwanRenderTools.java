@@ -16,23 +16,7 @@
 */
 package org.jwildfire.create.tina.render.gpu.swanrender;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import com.cedarsoftware.io.JsonIo;
-import com.cedarsoftware.io.ReadOptions;
-import com.cedarsoftware.io.ReadOptionsBuilder;
-import com.cedarsoftware.io.WriteOptions;
-import com.cedarsoftware.io.WriteOptionsBuilder;
+import com.cedarsoftware.io.*;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
@@ -41,11 +25,15 @@ import org.jwildfire.create.tina.render.gpu.CmdLauncherTools;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class SwanRenderTools {
   private static final String SWAN_CMD_MAC_OS =
       "JWildfireSwan (strong and beautiful).app//Contents/MacOS/JWildfireSwan (strong and beautiful)";
-  private static final String SWAN_CMD_WINDOWS = "JWildfireSwan (strong and beautiful).app";
-  private static final String SWAN_CMD_LINUX = "JWildfireSwan (strong and beautiful).app";
+  private static final String SWAN_CMD_WINDOWS = "JWildfireSwan.exe";
+  private static final String SWAN_CMD_LINUX = "JWildfireSwan.x86_64";
 
   private static String[] getLaunchCmd() {
     String[] cmd = new String[3];

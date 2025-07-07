@@ -97,6 +97,8 @@
             <zipfileset src="lib/logback-core-1.2.3.jar"/>
             <zipfileset src="lib/slf4j-api-1.7.25.jar"/>
             <zipfileset src="lib/commons-cli-1.4.jar"/>
+            <zipfileset src="lib/java-util-3.3.2.jar"/>
+            <zipfileset src="lib/json-io-4.54.0.jar"/>
             <zipfileset src="lib/jcodec-0.2.6-SNAPSHOT.jar"/>
             <zipfileset src="lib/jcodec-javase-0.2.6-SNAPSHOT.jar"/>
             <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
