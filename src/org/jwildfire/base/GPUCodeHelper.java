@@ -28,20 +28,22 @@ public class GPUCodeHelper {
   }
 
   private void run() {
-    VariationFunc codeFunc = new PrimitivesWFFunc();
+    VariationFunc codeFunc = new CutBooleansFunc();
     String code =
             " ";
 
-    String gpucode = "";
+    String gpuCode = "";
+    String gpuFunctions = "";
     FlameTransformationContext ctx = new FlameTransformationContext(null, null, 1, 1);
 
     if(codeFunc instanceof SupportsGPU) {
-      gpucode = ((SupportsGPU) codeFunc).getGPUCode(ctx);
+      gpuCode = ((SupportsGPU) codeFunc).getGPUCode(ctx);
+      gpuFunctions = ((SupportsGPU) codeFunc).getGPUFunctions(ctx);
     }
-    System.err.println(createSwanVariation(codeFunc, code, gpucode));
+    System.err.println(createSwanVariation(codeFunc, code, gpuCode, gpuFunctions));
   }
 
-  private String createSwanVariation(VariationFunc variationFunc, String code, String gpuCode) {
+  private String createSwanVariation(VariationFunc variationFunc, String code, String gpuCode, String gpuFunctions) {
     StringBuilder sb = new StringBuilder();
     addIndented(0, sb, "### " + variationFunc.getClass().getSimpleName() + "\n");
     addIndented(0, sb, "class " + variationFunc.getClass().getSimpleName() + " extends VariationFuncWaves:\n");
@@ -131,10 +133,31 @@ public class GPUCodeHelper {
     addIndented(2, sb, "return [" + variationTypesToSwan(variationFunc.getVariationTypes()) +  "]\n");
     addIndented(0, sb, "\n");
 
+    if(gpuFunctions!= null && gpuFunctions.trim().length() > 0) {
+      addIndented(1, sb, "func get_func_dependencies() -> Array[String]:\n");
+      addIndented(2, sb, "return [VariationUtilFunctions.FUNC_" +variationFunc.getName().toUpperCase()+ "_UTILS]\n");
+      addIndented(0, sb, "\n");
+    }
+
     if(variationFunc.getPriority() !=0) {
       addIndented(1, sb, "func get_default_priority() -> int:\n");
       addIndented(2, sb, "return "+ variationFunc.getPriority() +"\n");
       addIndented(0, sb, "\n");
+    }
+
+    if(gpuFunctions != null && gpuFunctions.trim().length() > 0) {
+      addIndented(1, sb, "###############################################");
+      addIndented(0, sb, "\n");
+      addIndented(
+          1,
+          sb,
+          "mathService.register_function(VariationUtilFunctions.FUNC_" +variationFunc.getName().toUpperCase()+ "_UTILS,\n");
+      addIndented(0, sb, "\"\"\"\n");
+      addIndented(
+              0,
+              sb,
+              convertGpuCodeToSwan(gpuFunctions, "_NONE", new String[]{} ) + "\n");
+      addIndented(0, sb, "\"\"\")\n");
     }
 
     return sb.toString();
@@ -380,6 +403,7 @@ public class GPUCodeHelper {
             .replaceAll("fminf\\(", "min(")
             .replaceAll("fmaxf\\(", "max(")
             .replaceAll("tanf\\(", "tan(")
+                .replaceAll("floorf\\(", "floor(")
                 .replaceAll("Complex_Init\\(&", "Complex_Init(")
                 .replaceAll("Complex_Dec\\(&", "Complex_Dec(")
                 .replaceAll("Complex_Inc\\(&", "Complex_Inc(")
@@ -394,9 +418,7 @@ public class GPUCodeHelper {
                 .replaceAll("Complex_Asin\\(&", "Complex_Asin(")
                 .replaceAll("Complex_Acos\\(&", "Complex_Acos(")
                 .replaceAll("Complex_Atan\\(&", "Complex_Atan(")
-
-
-
+                .replaceAll("__device__", "")
                 .replaceAll("short ", "bool ")
             .replaceAll(" PI ", " M_PI ")
                 .replaceAll(" " + varName + " ", " amount ")
