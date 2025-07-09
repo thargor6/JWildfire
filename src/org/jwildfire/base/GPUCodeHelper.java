@@ -28,7 +28,7 @@ public class GPUCodeHelper {
   }
 
   private void run() {
-    VariationFunc codeFunc = new CutBooleansFunc();
+    VariationFunc codeFunc = new CutJigsawFunc();
     String code =
             " ";
 
@@ -394,6 +394,7 @@ public class GPUCodeHelper {
                 .replaceAll("powf\\(", "pow(")
                 .replaceAll("lroundf\\(", "round(")
             .replaceAll("expf\\(", "exp(")
+                .replaceAll("ceilf\\(", "ceil(")
             .replaceAll("sqrtf\\(", "sqrt(")
             .replaceAll("sqrf\\(", "sqr(")
                 .replaceAll("fabsf\\(", "abs(")
