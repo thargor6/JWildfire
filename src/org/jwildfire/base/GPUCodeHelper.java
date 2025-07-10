@@ -28,7 +28,7 @@ public class GPUCodeHelper {
   }
 
   private void run() {
-    VariationFunc codeFunc = new CutJigsawFunc();
+    VariationFunc codeFunc = new CutSpotsFunc();
     String code =
             " ";
 
@@ -383,10 +383,14 @@ public class GPUCodeHelper {
             .replaceAll("__pal", "_color")
             .replaceAll("__" + varName, varName)
             .replaceAll("make_float3\\(", "vec3(")
-            .replaceAll("float3", "vec3")
+                .replaceAll("make_vec3\\(", "vec3(")
+                .replaceAll("float3", "vec3")
             .replaceAll("make_float2\\(", "vec2(")
+                .replaceAll("make_float4\\(", "vec4(")
+                .replaceAll("make_vec2\\(", "vec2(")
             .replaceAll("float2", "vec2")
             .replaceAll("sinf\\(", "sin(")
+                .replaceAll("floorf\\(", "floor(")
             .replaceAll("cosf\\(", "cos(")
                 .replaceAll("sinhf\\(", "sinh(")
                 .replaceAll("coshf\\(", "cosh(")
