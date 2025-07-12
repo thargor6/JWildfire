@@ -28,7 +28,7 @@ public class GPUCodeHelper {
   }
 
   private void run() {
-    VariationFunc codeFunc = new CutTileIllusionFunc();
+    VariationFunc codeFunc = new CutTrianTessFunc();
     String code =
             " ";
 
