@@ -28,7 +28,7 @@ public class GPUCodeHelper {
   }
 
   private void run() {
-    VariationFunc codeFunc = new CutWoodFunc();
+    VariationFunc codeFunc = new CutZigZagFunc();
     String code =
             " ";
 
