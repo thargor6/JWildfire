@@ -28,7 +28,7 @@ public class GPUCodeHelper {
   }
 
   private void run() {
-    VariationFunc codeFunc = new CutZigZagFunc();
+    VariationFunc codeFunc = new FractSalamanderWFFunc();
     String code =
             " ";
 
