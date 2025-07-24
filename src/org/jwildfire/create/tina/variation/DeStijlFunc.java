@@ -90,7 +90,8 @@ public class DeStijlFunc extends VariationFunc {
                  pVarTP.x += x * pAmount;
                  pVarTP.y += y * pAmount;
             }
-            pVarTP.z += pAffineTP.z * pAmount;
+            
+            if (pContext.isPreserveZCoordinate()) pVarTP.z += pAffineTP.z * pAmount;
 
         } else { // It's inside a cell, so color it
             
@@ -130,8 +131,16 @@ public class DeStijlFunc extends VariationFunc {
     }
     
     @Override
+    public void randomize() {
+    	max_size = Math.random() * 3.0 + 0.25;
+    	min_size = Math.random() * (max_size - 0.1) + 0.01;
+    	chaos = Math.random() * 10 + 0.1;
+    	seed = (int) (Math.random() * 1000000);
+    }
+    
+    @Override
     public String getName() { return "deStijl"; }
 
     @Override
-    public VariationFuncType[] getVariationTypes() { return new VariationFuncType[]{VariationFuncType.VARTYPE_2D}; }
+    public VariationFuncType[] getVariationTypes() { return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC}; }
 }
