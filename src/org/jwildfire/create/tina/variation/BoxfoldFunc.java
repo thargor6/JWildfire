@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XForm;
 
 public class BoxfoldFunc extends VariationFunc {
 
-  private static final long serialVersionUID = 2L; // Increment version ID
+  private static final long serialVersionUID = 2L;
 
   // --- Parameter Names ---
   private static final String PARAM_FOLD_LIMIT = "foldLimit";
@@ -36,7 +36,7 @@ public class BoxfoldFunc extends VariationFunc {
   private double pRotateZ = 0.0; // Degrees
 
   // --- Manual Math Helpers (Workaround for reported missing library methods) ---
-  private static XYZPoint _multiply(XYZPoint p, double factor) { /* ... Copy from previous versions ... */ 
+  private static XYZPoint _multiply(XYZPoint p, double factor) { 
     XYZPoint result = new XYZPoint();
      if (p == null || Double.isNaN(factor) || Double.isInfinite(factor) || 
          Double.isNaN(p.x) || Double.isNaN(p.y) || Double.isNaN(p.z) ||
@@ -50,7 +50,7 @@ public class BoxfoldFunc extends VariationFunc {
     return result;
   }
 
-  private static XYZPoint _negate(XYZPoint p) { /* ... Copy from previous versions ... */
+  private static XYZPoint _negate(XYZPoint p) { 
       XYZPoint result = new XYZPoint();
        if (p == null) {
            result.x = Double.NaN; result.y = Double.NaN; result.z = Double.NaN;
@@ -62,28 +62,20 @@ public class BoxfoldFunc extends VariationFunc {
       return result;
   }
 
-  private static double _limitValueDouble(double value, double min, double max) { /* ... Copy from previous versions ... */
+  private static double _limitValueDouble(double value, double min, double max) { 
       if(Double.isNaN(value)) return min; 
       double actualMin = Math.min(min, max); double actualMax = Math.max(min, max);
       double minnedValue = Math.min(actualMax, value); 
       return Math.max(actualMin, minnedValue);        
   }
 
-  // Constructor
-  public BoxfoldFunc() {
-    System.err.println("INFO: BoxfoldFunc (with rotation): Constructor called."); 
-  }
-
   @Override
   public String getName() {
-    // You could rename this to "boxfoldRot" but keeping "boxfold" is fine
     return "boxfold"; 
   }
 
   @Override
   public String[] getParameterNames() {
-      System.err.println("INFO: BoxfoldFunc (with rotation): getParameterNames() called."); 
-      // Added rotation parameters
       return new String[]{ 
           PARAM_FOLD_LIMIT, 
           PARAM_ROTATE_X, PARAM_ROTATE_Y, PARAM_ROTATE_Z 
@@ -92,8 +84,6 @@ public class BoxfoldFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-      System.err.println("INFO: BoxfoldFunc (with rotation): getParameterValues() called."); 
-      // Added rotation parameters
       return new Object[]{ 
           pFoldLimit,
           pRotateX, pRotateY, pRotateZ
@@ -102,33 +92,16 @@ public class BoxfoldFunc extends VariationFunc {
 
   @Override
   public void setParameter(String pName, double pValue) {
-    System.err.println("INFO: BoxfoldFunc (with rotation): setParameter received: " + pName + " = " + pValue); 
-    try {
-        if (PARAM_FOLD_LIMIT.equalsIgnoreCase(pName)) {
-             if(Double.isNaN(pValue) || Double.isInfinite(pValue) || pValue <= 1e-9) { 
-                 System.err.println("WARN: Invalid foldLimit value: " + pValue + ". Setting to 1.0");
-                 pFoldLimit = 1.0;
-             } else { 
-                 pFoldLimit = _limitValueDouble(pValue, 1e-9, 10000.0); 
-                 System.err.println("  -> pFoldLimit set to: " + pFoldLimit); 
-             }
-        // Handle rotation parameters
-        } else if (PARAM_ROTATE_X.equalsIgnoreCase(pName)) {
-             if(Double.isNaN(pValue) || Double.isInfinite(pValue)) { System.err.println("WARN: Invalid rotateX value: " + pValue); }
-             else { pRotateX = pValue; System.err.println("  -> pRotateX set to: " + pRotateX); } // No specific limits on angle needed
-        } else if (PARAM_ROTATE_Y.equalsIgnoreCase(pName)) {
-             if(Double.isNaN(pValue) || Double.isInfinite(pValue)) { System.err.println("WARN: Invalid rotateY value: " + pValue); }
-             else { pRotateY = pValue; System.err.println("  -> pRotateY set to: " + pRotateY); }
-        } else if (PARAM_ROTATE_Z.equalsIgnoreCase(pName)) {
-             if(Double.isNaN(pValue) || Double.isInfinite(pValue)) { System.err.println("WARN: Invalid rotateZ value: " + pValue); }
-             else { pRotateZ = pValue; System.err.println("  -> pRotateZ set to: " + pRotateZ); }
-        } else {
-          System.err.println("WARN: BoxfoldFunc (with rotation): Unhandled parameter name in setParameter: " + pName);
-        }
-    } catch (Exception e) {
-        System.err.println("ERROR: BoxfoldFunc (with rotation): Exception in setParameter for " + pName + " = " + pValue);
-        e.printStackTrace(System.err); 
-    }
+    if (PARAM_FOLD_LIMIT.equalsIgnoreCase(pName))
+        pFoldLimit = _limitValueDouble(pValue, 1e-9, 10000.0); 
+    else if (PARAM_ROTATE_X.equalsIgnoreCase(pName))
+        pRotateX = pValue;
+    else if (PARAM_ROTATE_Y.equalsIgnoreCase(pName))
+    		pRotateY = pValue;
+    else if (PARAM_ROTATE_Z.equalsIgnoreCase(pName))
+        pRotateZ = pValue;
+    else 
+    		throw new IllegalArgumentException(pName);
   }
 
   @Override
@@ -146,14 +119,6 @@ public class BoxfoldFunc extends VariationFunc {
 
     // 1. Rotate input point to local coordinate system
     XYZPoint pLocal = rotatePoint(pAffineTP, negatedAnglesRad);
-
-    // Handle NaN/Inf after first rotation
-     if (pLocal == null || Double.isNaN(pLocal.x) || Double.isNaN(pLocal.y) || Double.isNaN(pLocal.z) ||
-         Double.isInfinite(pLocal.x) || Double.isInfinite(pLocal.y) || Double.isInfinite(pLocal.z)) {
-         System.err.println("WARN: Boxfold input became NaN/Inf after initial rotation. Outputting (0,0,0).");
-         pVarTP.x = 0.0; pVarTP.y = 0.0; pVarTP.z = 0.0;
-         return;
-     }
 
     // 2. Perform axis-aligned boxfold in local coordinates
     double localX = pLocal.x;
@@ -178,24 +143,8 @@ public class BoxfoldFunc extends VariationFunc {
     pLocalFolded.y = foldedLocalY;
     pLocalFolded.z = foldedLocalZ;
     
-    // Check for NaN/Inf after folding (less likely but possible if F or input was extreme)
-     if (Double.isNaN(foldedLocalX) || Double.isNaN(foldedLocalY) || Double.isNaN(foldedLocalZ) ||
-         Double.isInfinite(foldedLocalX) || Double.isInfinite(foldedLocalY) || Double.isInfinite(foldedLocalZ)) {
-         System.err.println("WARN: Boxfold calculation resulted in NaN/Inf. Outputting (0,0,0).");
-         pVarTP.x = 0.0; pVarTP.y = 0.0; pVarTP.z = 0.0;
-         return;
-     }
-
     // 3. Rotate folded point back to world coordinate system
     XYZPoint pWorldFolded = rotatePoint(pLocalFolded, anglesRad);
-
-    // Check for NaN/Inf after final rotation
-     if (pWorldFolded == null || Double.isNaN(pWorldFolded.x) || Double.isNaN(pWorldFolded.y) || Double.isNaN(pWorldFolded.z) ||
-         Double.isInfinite(pWorldFolded.x) || Double.isInfinite(pWorldFolded.y) || Double.isInfinite(pWorldFolded.z)) {
-         System.err.println("WARN: Boxfold became NaN/Inf after final rotation. Outputting (0,0,0).");
-         pVarTP.x = 0.0; pVarTP.y = 0.0; pVarTP.z = 0.0;
-         return;
-     }
 
     // 4. Set output (JWildfire handles pAmount blending)
     pVarTP.x += pWorldFolded.x * pAmount;
@@ -204,13 +153,11 @@ public class BoxfoldFunc extends VariationFunc {
   }
 
 
-  // --- Re-introduced rotatePoint Helper ---
   // Uses manual XYZPoint creation workaround
   private XYZPoint rotatePoint(XYZPoint pInput, XYZPoint anglesRad) {
     XYZPoint p = new XYZPoint(); 
     // Check if input is null before accessing fields
      if (pInput == null || anglesRad == null) {
-         System.err.println("ERROR: null input to rotatePoint");
          p.x = Double.NaN; p.y = Double.NaN; p.z = Double.NaN;
          return p;
      }
@@ -219,16 +166,6 @@ public class BoxfoldFunc extends VariationFunc {
     double rotZ = anglesRad.z;
     double rotY = anglesRad.y;
     double rotX = anglesRad.x;
-
-    // Check for NaN/Inf angles
-     if (Double.isNaN(rotX) || Double.isNaN(rotY) || Double.isNaN(rotZ) ||
-         Double.isInfinite(rotX) || Double.isInfinite(rotY) || Double.isInfinite(rotZ)) {
-           System.err.println("WARN: NaN/Inf angle in rotatePoint: " + anglesRad);
-           // Return original point? Or NaN point? Let's return original.
-           XYZPoint original = new XYZPoint();
-           original.x = pInput.x; original.y = pInput.y; original.z = pInput.z;
-           return original;
-     }
 
     double cosVal, sinVal;
     double tempX, tempY, tempZ;
@@ -257,18 +194,37 @@ public class BoxfoldFunc extends VariationFunc {
         p.y = tempY; p.z = tempZ;
     }
     
-     // Check for NaN/Inf results from trig functions or multiplications
-     if (Double.isNaN(p.x) || Double.isNaN(p.y) || Double.isNaN(p.z) ||
-         Double.isInfinite(p.x) || Double.isInfinite(p.y) || Double.isInfinite(p.z)) {
-           System.err.println("WARN: NaN/Inf result in rotatePoint for input " + pInput + " angle " + anglesRad);
-           // Return something safe, e.g., original point might be best default
-            XYZPoint original = new XYZPoint();
-            original.x = pInput.x; original.y = pInput.y; original.z = pInput.z;
-            return original;
-     }
-
     return p; 
   }
+  
+  @Override
+  public void randomize() {
+  	pFoldLimit = Math.random() * 5.0 + 0.05;
+  	pRotateX = Math.random() * 360.0 - 180.0;
+  	pRotateY = Math.random() * 360.0 - 180.0;
+  	pRotateZ = Math.random() * 360.0 - 180.0;
+  }
+  
+  public void mutate(double pAmount) {
+    switch ((int) (Math.random() * 4)) {
+    case 0:
+      pFoldLimit += mutateStep(pFoldLimit, pAmount);
+      break;
+    case 1:
+    	pRotateX += 1.0;
+    	break;
+    case 2:
+    	pRotateY += 1.0;
+    	break;
+    case 3:
+    	pRotateZ += 1.0;
+    	break;
+    }
+  }
 
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+  }
 
 }
