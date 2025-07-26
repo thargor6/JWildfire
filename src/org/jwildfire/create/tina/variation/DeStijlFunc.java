@@ -108,7 +108,7 @@ public class DeStijlFunc extends VariationFunc {
             // Pass the original point through
             pVarTP.x += x * pAmount;
             pVarTP.y += y * pAmount;
-            pVarTP.z += pAffineTP.z * pAmount;
+            if (pContext.isPreserveZCoordinate()) pVarTP.z += pAffineTP.z * pAmount;
         }
     }
 
@@ -134,13 +134,14 @@ public class DeStijlFunc extends VariationFunc {
     public void randomize() {
     	max_size = Math.random() * 3.0 + 0.25;
     	min_size = Math.random() * (max_size - 0.1) + 0.01;
+    	line_thickness = Math.random() * 3.0;
     	chaos = Math.random() * 10 + 0.1;
     	seed = (int) (Math.random() * 1000000);
     }
     
     @Override
-    public String getName() { return "deStijl"; }
+    public String getName() { return "de_stijl"; }
 
     @Override
-    public VariationFuncType[] getVariationTypes() { return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC}; }
+    public VariationFuncType[] getVariationTypes() { return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN}; }
 }
