@@ -14,8 +14,6 @@
  * if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  *
- * Modification History:
- * - Added Flower, StarN, Cloud boundary shapes.
  */
 package org.jwildfire.create.tina.variation;
 
@@ -23,7 +21,6 @@ import java.util.Random;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import java.lang.Math; // Using standard Math functions
-import java.text.DecimalFormat; // For formatting alternative names
 
 /**
  * Drunken Tiles Variation for JWildfire.
@@ -33,14 +30,13 @@ import java.text.DecimalFormat; // For formatting alternative names
  * Confined within various boundary shapes (including Flower, StarN, Cloud).
  */
 public class DrunkenTilesFunc extends VariationFunc {
-    private static final long serialVersionUID = 2L; // Increased version ID due to added params
+    private static final long serialVersionUID = 2L;
 
     // --- Parameters ---
     private static final String PARAM_SEED = "seed";
     private static final String PARAM_CELLSIZE = "cellsize";
     private static final String PARAM_RADIUS_FACTOR = "radius_factor";
     private static final String PARAM_OFFSET_STRENGTH = "offset_strength";
-    // Updated comment for boundary types
     private static final String PARAM_SHAPE_BOUNDARY_TYPE = "shape_boundary_type"; // 0:Circ, 1:Sq, 2:Elps, 3:Tri, 4:Rhom, 5:Hex, 6:Star5, 7:Cross, 8:Ring, 9:Flower, 10:StarN, 11:Cloud
     private static final String PARAM_ASPECT_RATIO = "aspect_ratio"; // Ellipse
     private static final String PARAM_INNER_RADIUS_FACTOR = "inner_radius_factor"; // Star5, StarN (depth), Ring
@@ -48,23 +44,21 @@ public class DrunkenTilesFunc extends VariationFunc {
     private static final String PARAM_SPACING = "spacing"; // LazyJess scaling
     private static final String PARAM_INNER_TWIST = "inner_twist";
     private static final String PARAM_OUTER_TWIST = "outer_twist";
-    // New parameters for added shapes
     private static final String PARAM_FLOWER_PETALS = "flowerPetals"; // Flower(9)
     private static final String PARAM_STAR_POINTS = "starPoints"; // StarN(10)
     private static final String PARAM_CLOUD_AMPLITUDE = "cloudAmplitude"; // Cloud(11)
     private static final String PARAM_CLOUD_FREQUENCY = "cloudFrequency"; // Cloud(11)
 
 
-    // Update parameter names array
     private static final String[] paramNames = {
             PARAM_SEED, PARAM_CELLSIZE, PARAM_RADIUS_FACTOR, PARAM_OFFSET_STRENGTH,
             PARAM_SHAPE_BOUNDARY_TYPE, PARAM_ASPECT_RATIO,
             PARAM_INNER_RADIUS_FACTOR, PARAM_ARM_WIDTH_FACTOR,
             PARAM_SPACING, PARAM_INNER_TWIST, PARAM_OUTER_TWIST,
-            PARAM_FLOWER_PETALS, // Added
-            PARAM_STAR_POINTS, // Added
-            PARAM_CLOUD_AMPLITUDE, // Added
-            PARAM_CLOUD_FREQUENCY // Added
+            PARAM_FLOWER_PETALS,
+            PARAM_STAR_POINTS,
+            PARAM_CLOUD_AMPLITUDE,
+            PARAM_CLOUD_FREQUENCY 
     };
 
     // Default values
@@ -73,36 +67,39 @@ public class DrunkenTilesFunc extends VariationFunc {
     private double aspect_ratio = 1.0; private double inner_radius_factor = 0.5;
     private double arm_width_factor = 0.3; private double spacing = 0.1;
     private double inner_twist = 0.0; private double outer_twist = Math.PI;
-    // Defaults for new parameters
     private int flowerPetals = 5;
     private int starPoints = 5;
     private double cloudAmplitude = 0.2;
     private double cloudFrequency = 5.0;
 
 
-    // --- Internal State --- (unchanged)
+    // --- Internal State --- 
     private transient Random random = new Random();
     private transient boolean needsReinitCalcs = true;
     private transient double radius;
     private transient double _r2; // radius squared
 
-    // Constants for shape types (updated)
-    private static final int BOUNDARY_CIRCLE=0; private static final int BOUNDARY_SQUARE=1; private static final int BOUNDARY_ELLIPSE=2; private static final int BOUNDARY_TRIANGLE=3; private static final int BOUNDARY_RHOMBUS=4; private static final int BOUNDARY_HEXAGON=5; private static final int BOUNDARY_STAR5=6; private static final int BOUNDARY_CROSS=7; private static final int BOUNDARY_RING=8;
-    private static final int BOUNDARY_FLOWER=9; // New
-    private static final int BOUNDARY_STAR_N=10; // New (Generalized Star)
-    private static final int BOUNDARY_CLOUD=11; // New
-    private static final int NUM_BOUNDARY_TYPES = 12; // Updated count
+    // Constants for shape types 
+    private static final int BOUNDARY_CIRCLE=0; 
+    private static final int BOUNDARY_SQUARE=1; 
+    private static final int BOUNDARY_ELLIPSE=2; 
+    private static final int BOUNDARY_TRIANGLE=3; 
+    private static final int BOUNDARY_RHOMBUS=4; 
+    private static final int BOUNDARY_HEXAGON=5; 
+    private static final int BOUNDARY_STAR5=6; 
+    private static final int BOUNDARY_CROSS=7; 
+    private static final int BOUNDARY_RING=8;
+    private static final int BOUNDARY_FLOWER=9; 
+    private static final int BOUNDARY_STAR_N=10; 
+    private static final int BOUNDARY_CLOUD=11;
+    private static final int NUM_BOUNDARY_TYPES = 12;
 
     // Other Constants
     private static final double TWO_PI = 2.0 * Math.PI;
     private static final double PI = Math.PI;
 
-    // For formatting alt names
-    private static final DecimalFormat df1 = new DecimalFormat("0.0");
-
-
     /**
-     * Initializes calculated values based on parameters if needed. (Unchanged)
+     * Initializes calculated values based on parameters if needed.
      */
     private void initializeIfNeeded() {
         if (needsReinitCalcs) {
@@ -120,7 +117,7 @@ public class DrunkenTilesFunc extends VariationFunc {
          }
     }
 
-    /** Helper function for Triangle boundary check. (Unchanged) */
+    /** Helper function for Triangle boundary check. */
     private static double pointSign(double p1x, double p1y, double p2x, double p2y, double p3x, double p3y) {
         return (p1x - p3x) * (p2y - p3y) - (p2x - p3x) * (p1y - p3y);
     }
@@ -139,7 +136,7 @@ public class DrunkenTilesFunc extends VariationFunc {
         double inputX = pAffineTP.x; double inputY = pAffineTP.y;
         double finalX = inputX; double finalY = inputY;
 
-        // Determine Grid Cell and Perturbed Center (Unchanged)
+        // Determine Grid Cell and Perturbed Center 
         double invCellSize = 1.0 / cellsize;
         int ix = (int)Math.floor(inputX * invCellSize); int iy = (int)Math.floor(inputY * invCellSize);
         double Cx_reg = (ix + 0.5) * cellsize; double Cy_reg = (iy + 0.5) * cellsize;
@@ -164,8 +161,6 @@ public class DrunkenTilesFunc extends VariationFunc {
             case BOUNDARY_STAR5: { double rO=radius; double rI=radius*Math.max(0.01,Math.min(1.0,inner_radius_factor)); double angleStep=Math.PI/5.0; boolean inside=true; double px=Lx; double py=Ly; double v1x=0,v1y=0,v2x=0,v2y=0; v2x=0; v2y=rO; for(int i=0;i<10;i++){ v1x=v2x; v1y=v2y; double currentAngle=(Math.PI/2.0)+(i+1)*angleStep; double cR=((i+1)%2==0)?rO:rI; v2x=cR*Math.cos(currentAngle); v2y=cR*Math.sin(currentAngle); if((v2x-v1x)*(py-v1y)-(v2y-v1y)*(px-v1x)<0){inside=false;break;} } if(inside){apply_effect=true; localDistSq=Lx*Lx+Ly*Ly;} break; }
             case BOUNDARY_CROSS: { double arm=radius*Math.max(0.01,Math.min(1.0,arm_width_factor)); if((Math.abs(Lx)<=arm && Math.abs(Ly)<=radius)||(Math.abs(Lx)<=radius && Math.abs(Ly)<=arm)){apply_effect=true; localDistSq=Lx*Lx+Ly*Ly;} break; }
             case BOUNDARY_RING: { double rI=radius*Math.max(0.0,Math.min(0.99,inner_radius_factor)); double inner_r2=rI*rI; localDistSq=Lx*Lx+Ly*Ly; if(localDistSq>=inner_r2 && localDistSq<=_r2){apply_effect=true;} break; }
-
-            // --- New Boundary Checks ---
             case BOUNDARY_FLOWER: {
                 double currentRadius = Math.sqrt(Lx * Lx + Ly * Ly);
                 if (currentRadius <= radius) { // Optimization: Check max radius first
@@ -251,8 +246,6 @@ public class DrunkenTilesFunc extends VariationFunc {
                 }
                 break;
             }
-            // --- End New Boundary Checks ---
-
             default: // Fallback to Circle if type is unknown/invalid
                 localDistSq=Lx*Lx+Ly*Ly; if(localDistSq<=_r2) apply_effect=true; break;
         }
@@ -295,7 +288,7 @@ public class DrunkenTilesFunc extends VariationFunc {
             finalX = Cx_pert + twistedLx; finalY = Cy_pert + twistedLy;
         }
 
-        // Apply final transform amount (Unchanged)
+        // Apply final transform amount
         pVarTP.x += pAmount * finalX; pVarTP.y += pAmount * finalY;
         if (pContext.isPreserveZCoordinate()) pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -303,20 +296,16 @@ public class DrunkenTilesFunc extends VariationFunc {
     // --- Parameter Handling ---
 
     @Override
-    public String[] getParameterNames() { return paramNames; } // Updated array
+    public String[] getParameterNames() { return paramNames; } 
 
     @Override
     public Object[] getParameterValues() {
-        // Update returned array
         return new Object[]{
                 seed, cellsize, radius_factor, offset_strength,
                 shape_boundary_type, aspect_ratio,
                 inner_radius_factor, arm_width_factor,
                 spacing, inner_twist, outer_twist,
-                flowerPetals, // Added
-                starPoints, // Added
-                cloudAmplitude, // Added
-                cloudFrequency // Added
+                flowerPetals, starPoints, cloudAmplitude, cloudFrequency
         };
     }
 
@@ -342,7 +331,6 @@ public class DrunkenTilesFunc extends VariationFunc {
         else if (PARAM_SPACING.equalsIgnoreCase(pName)) { spacing = pValue; }
         else if (PARAM_INNER_TWIST.equalsIgnoreCase(pName)) { inner_twist = pValue; }
         else if (PARAM_OUTER_TWIST.equalsIgnoreCase(pName)) { outer_twist = pValue; }
-        // Handle new parameters
         else if (PARAM_FLOWER_PETALS.equalsIgnoreCase(pName)) {
             flowerPetals = Math.max(2, (int) pValue); // Flower needs >= 2 petals
         } else if (PARAM_STAR_POINTS.equalsIgnoreCase(pName)) {
@@ -354,39 +342,33 @@ public class DrunkenTilesFunc extends VariationFunc {
         }
         else { throw new IllegalArgumentException("Unknown parameter: " + pName); }
     }
+    
+    @Override
+    public void randomize() {
+    	seed = (int) (Math.random() * 1000000);
+    	cellsize = Math.random() * 5.0 + 0.01;
+    	radius_factor = Math.random() * 4.0 + 0.1;
+    	offset_strength = Math.random() * 3.0 - 1.5;
+    	shape_boundary_type = (int) (Math.random() * NUM_BOUNDARY_TYPES);
+    	aspect_ratio = Math.random() * 3.75 + 0.25;
+    	inner_radius_factor = Math.random();
+    	arm_width_factor = Math.random();
+    	spacing = Math.random();
+    	inner_twist = Math.random() * TWO_PI - PI;
+    	outer_twist = Math.random() * TWO_PI - PI;
+    	flowerPetals = (int) (Math.random() * 8 + 2);
+    	starPoints = (int) (Math.random() * 7 + 3);
+    	cloudAmplitude = Math.random() * 2.0;
+    	cloudFrequency =  Math.random() * 20 + 0.1;
+    	needsReinitCalcs=true;
+    }
 
     @Override
-    public String getName() { return "drunkenTiles"; }
+    public String getName() { return "drunken_tiles"; }
 
     @Override
     public VariationFuncType[] getVariationTypes() {
         return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
     }
 
-    @Override
-    public String[] getParameterAlternativeNames() {
-        // Update alternative names and comments
-       return new String[]{
-               "dt_seed", "dt_cellsize", "dt_radius_factor", "dt_offset_str",
-               // Updated boundary comment
-               "dt_shape_boundary", // Boundary (0=Circ, 1=Sq, 2=Elps, 3=Tri, 4=Rhom, 5=Hex, 6=Star5, 7=Cross, 8=Ring, 9=Flower, 10=StarN, 11=Cloud)
-               "dt_aspect_ratio",    // Ellipse(2) Aspect Ratio (W/H)
-               "dt_inner_radius",    // Star5(6)/StarN(10)/Ring(8) Inner Radius/Depth Factor
-               "dt_arm_width",     // Cross(7) Arm Width Factor
-               "dt_spacing",         // LazyJess scaling factor
-               "dt_inner_twist", "dt_outer_twist", // Twist params
-               "dt_petals",       // Flower(9) Petal Count (k)
-               "dt_star_points",   // StarN(10) Point Count
-               "dt_cloud_amp",     // Cloud(11) Amplitude
-               "dt_cloud_freq"     // Cloud(11) Frequency
-       };
-    }
-
-    /** Handles reading the object during deserialization. (Unchanged) */
-    //@Override
-    public void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        random = new Random();
-        needsReinitCalcs = true;
-    }
 }
