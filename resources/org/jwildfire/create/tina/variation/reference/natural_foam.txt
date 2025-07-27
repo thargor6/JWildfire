@@ -1,0 +1,69 @@
+The User Manual for natural_foam
+
+Congratulations on your new, one-of-a-kind JWildfire variation! This tool is designed to create organic, complex foam and bubble structures with a high degree of artistic control. This guide will walk you through what each parameter does.
+
+Section 1: The Core Foam Structure
+
+These parameters control the fundamental layout and density of the bubbles. It's best to adjust these first to get a basic shape you like.
+
+density: Controls how many bubbles are in the cluster.
+Low values (5-20): Creates a few large, distinct bubbles.
+High values (50-200): Creates a very dense, tight, and complex foam with many small cells.
+
+iterations: Controls the "refinement" of the bubble walls. This parameter works closely with scale.
+For this to have a noticeable effect, you should first lower the scale parameter (e.g., to 0.2).
+Low values (1-3): Bubble walls will be soft and can overlap.
+High values (5-15): Bubble walls become very sharp, thin, and well-defined, as if the bubbles are compressing each other realistically.
+
+scale: Controls the repulsion strength between bubbles.
+High values (0.8 - 1.0): A very strong push. Bubbles will be clearly separated and round.
+Low values (0.1 - 0.5): A gentle push, which makes the iterations parameter more effective for refining the shape.
+Negative values: An experimental effect! This will attract points instead of pushing them, creating interesting hollow shells and inverted shapes.
+
+spread: Controls the size of the area where the initial bubbles are generated.
+Low values: Creates a small, tight cluster.
+High values: Spreads the bubbles out over a larger area, creating a more scattered or sparse foam.
+
+minRadius / maxRadius: These set the size range of the bubbles.
+For a natural look: Use a wide range (e.g., minRadius = 0.1, maxRadius = 1.0). This creates large bubbles with small ones filling the gaps.
+For a uniform look: Set both values to be very close to each other.
+
+seed: Changes the random layout of the bubbles. If you find a shape you love, write down the seed number so you can recreate it!
+
+Section 2: The Diffusion Blur (Haze and Glow)
+
+This is the advanced blur system we built to give the foam a soft, volumetric quality. For this to work, blur_radius must be greater than 0.
+
+blur_radius: This is the main blur control. It determines the thickness of the hazy glow around the bubble walls. A small value (0.05) gives a subtle softness, while a large value (0.5+) creates a very diffuse, cloud-like effect.
+
+blur_quality: Controls the smoothness of the blur.
+Low values (1-10): The blur can look a bit grainy or noisy.
+High values (25-50+): Produces a very smooth, high-quality haze. Higher values are more computationally intensive and may slow down the render.
+
+Section 3: Final Shaping and Coloring
+
+These controls are applied after the foam and blur are calculated to give the fractal its final form and color.
+
+shapeAmount: This is a powerful control that blends the organic foam with a perfectly spherical shape.
+At 0.0, you see the normal foam structure.
+At 1.0, every cell of the foam is warped onto the surface of its own local bubble, creating a cluster of perfectly spherical, intersecting bubbles.
+Values in between give you a beautiful mix of both looks.
+
+color_data: This overrides JWildfire's default coloring and uses data from the simulation itself to paint the fractal. This works best when you have a full-spectrum "rainbow" gradient selected in the main Coloring tab.
+0 - Off: Standard coloring.
+1 - By Bubble Size: Colors the cells based on their size (radius).
+2 - By Pressure: Colors based on how crowded an area is.
+3 - By Bubble ID: Gives each unique bubble cell its own color from the gradient, creating a mosaic effect.
+
+Section 4: General Utility
+
+zoom: A simple master slider to make the entire final fractal larger or smaller in the frame.
+
+Quick Start Workflow
+
+Start Sharp: Set blur_radius and shapeAmount to 0 to begin.
+Build the Foundation: Play with density, spread, and the radius parameters to get a basic bubble cluster you like.
+Refine the Walls: Lower the scale to around 0.3 and increase iterations to see the bubble walls become more defined.
+Add the Glow: Slowly increase blur_radius to add the hazy effect, then increase blur_quality until it looks smooth.
+Shape the Bubbles: Gently increase shapeAmount towards 1.0 to see the foam cells become more perfectly spherical.
+Reveal the Details: Finally, experiment with the color_data modes to see the intricate internal structure come to life.
