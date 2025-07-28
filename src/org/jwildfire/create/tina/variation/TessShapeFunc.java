@@ -4,13 +4,10 @@
  */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-// Explicit import for FlameTransformationContext is not used
 import static java.lang.Math.*;
-
-// Note: FlameTransformationContext type is used in transform() signature with its short name.
-// Ensure your environment can resolve this type (e.g., via other imports or setup).
 
 public class TessShapeFunc extends VariationFunc {
     private static final long serialVersionUID = 1L;
@@ -42,7 +39,7 @@ public class TessShapeFunc extends VariationFunc {
     // Member variables
     private double strength = 1.0;
     private double shapeSize = 0.8;
-    private int shapeType = 0;      // Correctly int
+    private int shapeType = 0; 
     private double shapeAspectRatio = 1.0;
 
     private double lrRadialAmp = 0.2;
@@ -51,8 +48,8 @@ public class TessShapeFunc extends VariationFunc {
     private double tbWidthFreq = 0.6;
     private double lrRadialPosPhaseDuty = 0.0;
     private double tbPosPhaseDuty = 0.0;
-    private int lrRadialProfileType = 0;   // Correctly int
-    private int tbProfileType = 0;       // Correctly int
+    private int lrRadialProfileType = 0; 
+    private int tbProfileType = 0;
 
     private int operationMode = 0;
 
@@ -200,11 +197,14 @@ public class TessShapeFunc extends VariationFunc {
             }
 
             if (is_inside) {
-                pVarTP.x = x_aff; pVarTP.y = y_aff; pVarTP.z = z_aff;
+            	  pVarTP.doHide = false;
+                pVarTP.x = x_aff; pVarTP.y = y_aff;
             } else {
-                pVarTP.x = Double.NaN; pVarTP.y = Double.NaN; pVarTP.z = Double.NaN;
+                pVarTP.doHide = true;
             }
-
+            if (pContext.isPreserveZCoordinate()) {
+              pVarTP.z += pAmount * pAffineTP.z;
+            }
         } else { // --- Original Fill Mode (operationMode == 0) ---
             double targetShapeX = 0.0; double targetShapeY = 0.0;
             switch (this.shapeType) {
@@ -300,10 +300,7 @@ public class TessShapeFunc extends VariationFunc {
             pVarTP.y = (1.0 - clampedEffectiveAmount) * y_aff + clampedEffectiveAmount * targetShapeY;
 
             if (pContext.isPreserveZCoordinate()) {
-                double targetShapeZ = 0.0;
-                pVarTP.z = (1.0 - clampedEffectiveAmount) * z_aff + clampedEffectiveAmount * targetShapeZ;
-            } else {
-                pVarTP.z = 0.0;
+              pVarTP.z += pAmount * pAffineTP.z;
             }
         }
     }
@@ -325,7 +322,7 @@ public class TessShapeFunc extends VariationFunc {
     public void setParameter(String pName, double pValue) {
         if (PARAM_STRENGTH.equalsIgnoreCase(pName)) this.strength = pValue;
         else if (PARAM_SHAPE_SIZE.equalsIgnoreCase(pName)) this.shapeSize = pValue;
-        else if (PARAM_SHAPE_TYPE.equalsIgnoreCase(pName)) this.shapeType = (int) pValue;
+        else if (PARAM_SHAPE_TYPE.equalsIgnoreCase(pName)) this.shapeType = limitIntVal(Tools.FTOI(pValue), 0, 7);
         else if (PARAM_SHAPE_ASPECT_RATIO.equalsIgnoreCase(pName)) this.shapeAspectRatio = pValue;
         else if (PARAM_LR_RADIAL_AMP.equalsIgnoreCase(pName)) this.lrRadialAmp = pValue;
         else if (PARAM_LR_RADIAL_WIDTH_FREQ.equalsIgnoreCase(pName)) this.lrRadialWidthFreq = pValue;
@@ -333,39 +330,34 @@ public class TessShapeFunc extends VariationFunc {
         else if (PARAM_TB_WIDTH_FREQ.equalsIgnoreCase(pName)) this.tbWidthFreq = pValue;
         else if (PARAM_LR_RADIAL_POS_PHASE_DUTY.equalsIgnoreCase(pName)) this.lrRadialPosPhaseDuty = pValue;
         else if (PARAM_TB_POS_PHASE_DUTY.equalsIgnoreCase(pName)) this.tbPosPhaseDuty = pValue;
-        else if (PARAM_LR_RADIAL_PROFILE_TYPE.equalsIgnoreCase(pName)) this.lrRadialProfileType = (int) pValue;
-        else if (PARAM_TB_PROFILE_TYPE.equalsIgnoreCase(pName)) this.tbProfileType = (int) pValue;
-        else if (PARAM_OPERATION_MODE.equalsIgnoreCase(pName)) this.operationMode = (int) pValue;
+        else if (PARAM_LR_RADIAL_PROFILE_TYPE.equalsIgnoreCase(pName)) this.lrRadialProfileType = limitIntVal(Tools.FTOI(pValue), 0, 4);
+        else if (PARAM_TB_PROFILE_TYPE.equalsIgnoreCase(pName)) this.tbProfileType = limitIntVal(Tools.FTOI(pValue), 0, 4);
+        else if (PARAM_OPERATION_MODE.equalsIgnoreCase(pName)) this.operationMode = limitIntVal(Tools.FTOI(pValue), 0, 1);
     }
 
     @Override
     public String getName() { return "tess_shape"; }
+    
+    @Override
+    public void randomize() {
+    	if (Math.random() < 0.25) strength = Math.random() + 0.01;
+    	else strength = Math.random() * 0.4 + 0.6;
+    	shapeSize = Math.random() * 3.75 + 0.25;
+    	shapeType = (int) (Math.random() * 8);
+    	shapeAspectRatio = Math.random()* 4.0 + 0.1;
+    	lrRadialAmp = Math.random() * TWO_PI - PI;
+    	lrRadialWidthFreq = Math.random() * PI;
+    	tbAmp = Math.random() * TWO_PI - PI;
+    	tbWidthFreq = Math.random() * PI;
+    	lrRadialPosPhaseDuty = Math.random() * 2.0 - 1.0;
+    	tbPosPhaseDuty = Math.random() * 2.0 - 1.0;
+    	lrRadialProfileType = (int) (Math.random() * 5);
+    	tbProfileType = (int) (Math.random() * 5);
+    	// don't change operationMode
+    }
 
-    // Getters and setters
-    public double getStrength() { return strength; }
-    public void setStrength(double strength) { this.strength = strength; }
-    public double getShapeSize() { return shapeSize; }
-    public void setShapeSize(double shapeSize) { this.shapeSize = shapeSize; }
-    public int getShapeType() { return shapeType; }
-    public void setShapeType(int shapeType) { this.shapeType = shapeType; }
-    public double getShapeAspectRatio() { return shapeAspectRatio; }
-    public void setShapeAspectRatio(double shapeAspectRatio) { this.shapeAspectRatio = shapeAspectRatio; }
-    public double getLrRadialAmp() { return lrRadialAmp; }
-    public void setLrRadialAmp(double val) { this.lrRadialAmp = val; }
-    public double getLrRadialWidthFreq() { return lrRadialWidthFreq; }
-    public void setLrRadialWidthFreq(double val) { this.lrRadialWidthFreq = val; }
-    public double getTbAmp() { return tbAmp; }
-    public void setTbAmp(double val) { this.tbAmp = val; }
-    public double getTbWidthFreq() { return tbWidthFreq; }
-    public void setTbWidthFreq(double val) { this.tbWidthFreq = val; }
-    public double getLrRadialPosPhaseDuty() { return lrRadialPosPhaseDuty; }
-    public void setLrRadialPosPhaseDuty(double val) { this.lrRadialPosPhaseDuty = val; }
-    public double getTbPosPhaseDuty() { return tbPosPhaseDuty; }
-    public void setTbPosPhaseDuty(double val) { this.tbPosPhaseDuty = val; }
-    public int getLrRadialProfileType() { return lrRadialProfileType; }
-    public void setLrRadialProfileType(int val) { this.lrRadialProfileType = val; }
-    public int getTbProfileType() { return tbProfileType; }
-    public void setTbProfileType(int val) { this.tbProfileType = val; }
-    public int getOperationMode() { return operationMode; }
-    public void setOperationMode(int operationMode) { this.operationMode = operationMode; }
+    @Override
+    public VariationFuncType[] getVariationTypes() {
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
+    }
 }

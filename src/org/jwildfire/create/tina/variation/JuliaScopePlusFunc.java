@@ -27,7 +27,6 @@ import java.util.EnumSet;
 public class JuliaScopePlusFunc extends VariationFunc{
     private static final long serialVersionUID = 1L;
 
-    // Existing Parameters
     private static final String PARAM_POWER = "power";
     private static final String PARAM_DIST = "dist";
     private static final String PARAM_CX = "cx";
@@ -42,7 +41,6 @@ public class JuliaScopePlusFunc extends VariationFunc{
     private static final String PARAM_RADIAL_OFFSET = "radialOffset";
     private static final String PARAM_ALT_POWER_SCALE = "altPowerScale";
     private static final String PARAM_ALT_POWER_ROTATE = "altPowerRotate";
-    // New Parameters for this iteration
     private static final String PARAM_RND_TERM_MODE = "rndTermMode";
     private static final String PARAM_MANDELBROT_LIKE = "mandelbrotLike";
 
@@ -53,7 +51,7 @@ public class JuliaScopePlusFunc extends VariationFunc{
             PARAM_THETA_SIGN_MODE, PARAM_ANGULAR_OFFSET, PARAM_SWIRL_FACTOR,
             PARAM_FIXED_BRANCH, PARAM_RADIAL_OFFSET,
             PARAM_ALT_POWER_SCALE, PARAM_ALT_POWER_ROTATE,
-            PARAM_RND_TERM_MODE, PARAM_MANDELBROT_LIKE // Added new params
+            PARAM_RND_TERM_MODE, PARAM_MANDELBROT_LIKE
     };
 
     // Fields for parameters
@@ -62,18 +60,17 @@ public class JuliaScopePlusFunc extends VariationFunc{
     private double cX = 0.0;
     private double cY = 0.0;
     private double mixPowerSign = 0.0;
-    private double colorMode = 0.0;
+    private int colorMode = 0;
     private double colorSpeed = 1.0;
-    private double thetaSignMode = 0.0;
+    private int thetaSignMode = 0;
     private double angularOffset = 0.0;
     private double swirlFactor = 0.0;
     private double fixedBranch = -1.0;
     private double radialOffset = 0.0;
     private double altPowerScale = 1.0;
     private double altPowerRotate = 0.0;
-    // Fields for new parameters
-    private double rndTermMode = 0.0; // 0=always+, 1=always-, 2=by_rnd_parity, 3=random
-    private double mandelbrotLike = 0.0; // 0=use cX,cY; 1=use pAffineTP.x,y
+    private int rndTermMode = 0; // 0=always+, 1=always-, 2=by_rnd_parity, 3=random
+    private int mandelbrotLike = 0; // 0=use cX,cY; 1=use pAffineTP.x,y
 
 
     private int absPowerForRandomBranches;
@@ -117,8 +114,8 @@ public class JuliaScopePlusFunc extends VariationFunc{
         
         if (effectivePower == 0) {
             // Determine additive components based on mandelbrotLike mode
-            double addX = (this.mandelbrotLike >= 0.5) ? pAffineTP.x : cX;
-            double addY = (this.mandelbrotLike >= 0.5) ? pAffineTP.y : cY;
+            double addX = (this.mandelbrotLike >= 1) ? pAffineTP.x : cX;
+            double addY = (this.mandelbrotLike >= 1) ? pAffineTP.y : cY;
             pVarTP.x += pAmount * (pAffineTP.x + addX); // Fallback for power 0 might use linear + addX
             pVarTP.y += pAmount * (pAffineTP.y + addY);
 
@@ -143,18 +140,16 @@ public class JuliaScopePlusFunc extends VariationFunc{
         double a;
 
         double thetaTermSign = 1.0;
-        int currentTSM = (int)round(this.thetaSignMode);
-        if (currentTSM == 0) { if ((rnd & 1) != 0) thetaTermSign = -1.0; }
-        else if (currentTSM == 1) { thetaTermSign = 1.0; }
-        else if (currentTSM == 2) { thetaTermSign = -1.0; }
-        else if (currentTSM == 3) { thetaTermSign = (pContext.random(2) == 0) ? 1.0 : -1.0; }
+        if (thetaSignMode == 0) { if ((rnd & 1) != 0) thetaTermSign = -1.0; }
+        else if (thetaSignMode == 1) { thetaTermSign = 1.0; }
+        else if (thetaSignMode == 2) { thetaTermSign = -1.0; }
+        else if (thetaSignMode == 3) { thetaTermSign = (pContext.random(2) == 0) ? 1.0 : -1.0; }
 
         double rndTermComponentSign = 1.0;
-        int currentRTM = (int)round(this.rndTermMode);
-        if (currentRTM == 1) { rndTermComponentSign = -1.0; } // Always -
-        else if (currentRTM == 2) { if ((rnd & 1) != 0) rndTermComponentSign = -1.0; } // Based on rnd parity
-        else if (currentRTM == 3) { rndTermComponentSign = (pContext.random(2) == 0) ? 1.0 : -1.0; } // Random independent
-        // if currentRTM == 0, rndTermComponentSign remains 1.0 (always +)
+        if (rndTermMode == 1) { rndTermComponentSign = -1.0; } // Always -
+        else if (rndTermMode == 2) { if ((rnd & 1) != 0) rndTermComponentSign = -1.0; } // Based on rnd parity
+        else if (rndTermMode == 3) { rndTermComponentSign = (pContext.random(2) == 0) ? 1.0 : -1.0; } // Random independent
+        // if rndTermMode == 0, rndTermComponentSign remains 1.0 (always +)
 
         a = ( (rndTermComponentSign * 2.0 * M_PI * rnd) + (thetaTermSign * theta) ) / effectivePower;
         
@@ -190,7 +185,7 @@ public class JuliaScopePlusFunc extends VariationFunc{
 
         // Apply additive term based on mandelbrotLike mode
         double addX, addY;
-        if (this.mandelbrotLike >= 0.5) {
+        if (this.mandelbrotLike >= 1) {
             addX = pAffineTP.x;
             addY = pAffineTP.y;
         } else {
@@ -201,11 +196,10 @@ public class JuliaScopePlusFunc extends VariationFunc{
         pVarTP.x += pAmount * (dx_component + addX);
         pVarTP.y += pAmount * (dy_component + addY);
         
-        // Color Logic (no changes here from last version)
-        int currentCM = (int)round(this.colorMode);
-        if (currentCM != 0) {
+        // Color Logic
+        if (colorMode != 0) {
             double calculatedColorValue = 0.0;
-            switch (currentCM) {
+            switch (colorMode) {
                 case 1: calculatedColorValue = a / (2.0 * M_PI); break;
                 case 2: calculatedColorValue = log(1.00001 + max(0,r_component_magnitude)); break;
                 case 3: calculatedColorValue = (theta + M_PI) / (2.0 * M_PI); break;
@@ -241,7 +235,7 @@ public class JuliaScopePlusFunc extends VariationFunc{
                             thetaSignMode, angularOffset, swirlFactor,
                             fixedBranch, radialOffset,
                             altPowerScale, altPowerRotate,
-                            rndTermMode, mandelbrotLike}; // Added new params
+                            rndTermMode, mandelbrotLike};
     }
 
     @Override
@@ -251,17 +245,17 @@ public class JuliaScopePlusFunc extends VariationFunc{
         else if (PARAM_CX.equalsIgnoreCase(pName)) cX = pValue;
         else if (PARAM_CY.equalsIgnoreCase(pName)) cY = pValue;
         else if (PARAM_MIX_POWER_SIGN.equalsIgnoreCase(pName)) mixPowerSign = pValue;
-        else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) colorMode = pValue;
+        else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) colorMode = limitIntVal(Tools.FTOI(pValue), 0, 5);
         else if (PARAM_COLOR_SPEED.equalsIgnoreCase(pName)) colorSpeed = pValue;
-        else if (PARAM_THETA_SIGN_MODE.equalsIgnoreCase(pName)) thetaSignMode = pValue;
+        else if (PARAM_THETA_SIGN_MODE.equalsIgnoreCase(pName)) thetaSignMode = limitIntVal(Tools.FTOI(pValue), 0, 3);
         else if (PARAM_ANGULAR_OFFSET.equalsIgnoreCase(pName)) angularOffset = pValue;
         else if (PARAM_SWIRL_FACTOR.equalsIgnoreCase(pName)) swirlFactor = pValue;
         else if (PARAM_FIXED_BRANCH.equalsIgnoreCase(pName)) fixedBranch = pValue;
         else if (PARAM_RADIAL_OFFSET.equalsIgnoreCase(pName)) radialOffset = pValue;
         else if (PARAM_ALT_POWER_SCALE.equalsIgnoreCase(pName)) altPowerScale = pValue; 
         else if (PARAM_ALT_POWER_ROTATE.equalsIgnoreCase(pName)) altPowerRotate = pValue;
-        else if (PARAM_RND_TERM_MODE.equalsIgnoreCase(pName)) rndTermMode = pValue; // Handle new params
-        else if (PARAM_MANDELBROT_LIKE.equalsIgnoreCase(pName)) mandelbrotLike = pValue;
+        else if (PARAM_RND_TERM_MODE.equalsIgnoreCase(pName)) rndTermMode = limitIntVal(Tools.FTOI(pValue), 0, 3);
+        else if (PARAM_MANDELBROT_LIKE.equalsIgnoreCase(pName)) mandelbrotLike = limitIntVal(Tools.FTOI(pValue), 0, 1);
         else throw new IllegalArgumentException(pName);
     }
 
@@ -277,7 +271,6 @@ public class JuliaScopePlusFunc extends VariationFunc{
     
     @Override
     public void randomize() {
-        // Previous params
         power = (int) (Math.random() * 8 + 2); 
         if (Math.random() < 0.5) power *= -1;
         if (power == 0) power = 2;
@@ -291,30 +284,22 @@ public class JuliaScopePlusFunc extends VariationFunc{
         cX = (Math.random() * 4.0) - 2.0;
         cY = (Math.random() * 4.0) - 2.0;
         mixPowerSign = (Math.random() < 0.5) ? 0.0 : 1.0;
-        colorMode = (double)Tools.FTOI(Math.random() * 6.0); 
+        colorMode = Tools.FTOI(Math.random() * 6.0); 
         colorSpeed = 0.25 + Math.random() * 2.75;
-        thetaSignMode = (double)Tools.FTOI(Math.random() * 4.0); 
+        thetaSignMode = Tools.FTOI(Math.random() * 4.0); 
         angularOffset = (Math.random() * 2.0 - 1.0) * M_PI; 
         swirlFactor = (Math.random() * 1.0 - 0.5) * 0.5; 
         fixedBranch = -1.0; 
         radialOffset = (Math.random() * 0.4 - 0.2); 
         altPowerScale = 1.0 + (Math.random() - 0.5) * 0.5; 
         altPowerRotate = (Math.random() - 0.5) * M_PI * 0.25; 
-        
-        // Randomize new parameters
-        rndTermMode = (double)Tools.FTOI(Math.random() * 4.0); // Modes 0-3
-        mandelbrotLike = (Math.random() < 0.25) ? 1.0 : 0.0; // 25% chance for Mandelbrot-like
+        rndTermMode = Tools.FTOI(Math.random() * 4.0); // Modes 0-3
+        mandelbrotLike = (Math.random() < 0.25) ? 1 : 0; // 25% chance for Mandelbrot-like
     }
 
     @Override
     public VariationFuncType[] getVariationTypes() {
-        return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_DC};
     }
 
-    //@Override
-    public String getGPUCode(FlameTransformationContext context) {
-        // GPU code is becoming increasingly complex to maintain as a string with all these options.
-        // For now, returning null is safest to ensure CPU fallback.
-        return null;
-    }
 }
