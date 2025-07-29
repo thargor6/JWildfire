@@ -46,8 +46,11 @@ public class ChaosCubesFunc extends VariationFunc {
   private static final String PARAM_SPHERE_INVERT = "sphereInvert";
   private static final String PARAM_SPHERE_RADIUS = "sphereRadius";
 
+  private static final String RESSOURCE_DESCRIPTION = "description";
+
   // Parameter arrays
   private static final String[] paramNames = {PARAM_MODE, PARAM_MODE7_A, PARAM_MODE7_B, PARAM_MAX_ITERATIONS, PARAM_TWIST_X, PARAM_TWIST_Y, PARAM_TWIST_Z, PARAM_SCALE_X, PARAM_SCALE_Y, PARAM_SCALE_Z, PARAM_OFFSET, PARAM_ROT_X, PARAM_ROT_Y, PARAM_ROT_Z, PARAM_INVERT, PARAM_JULIA, PARAM_COLOR_MODE, PARAM_COLOR_SPEED, PARAM_SPHERE_INVERT, PARAM_SPHERE_RADIUS};
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
 
   // Member variables
   private int mode = 0;
@@ -71,6 +74,7 @@ public class ChaosCubesFunc extends VariationFunc {
   private int sphereInvert = 0;
   private double sphereRadius = 1.0;
 
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile chaosCubes.txt";
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -230,8 +234,57 @@ public class ChaosCubesFunc extends VariationFunc {
   }
 
   @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
+  @Override
+  public void randomize() {
+  	mode = (int) (Math.random() * 8);
+  	mode7_A = (int) (Math.random() * 6);
+  	mode7_B = (int) (Math.random() * 6);
+  	max_iterations = (int) (Math.random() * 8 + 3);
+  	if (Math.random() < 0.75) twistX = 0.0;
+  	else twistX = Math.random() * 6.0 - 3.0;
+  	if (Math.random() < 0.75) twistY = 0.0;
+  	else twistY = Math.random() * 6.0 - 3.0;
+  	if (Math.random() < 0.75) twistZ = 0.0;
+  	else twistZ = Math.random() * 6.0 - 3.0;
+  	scaleX = Math.random() * 0.25 + 0.25;
+  	scaleY = Math.random() * 0.25 + 0.25;
+  	scaleZ = Math.random() * 0.25 + 0.25;
+  	offset = Math.random() * 1.5 + 0.5;
+  	if (Math.random() < 0.75) rotX = 0.0;
+  	else rotX = Math.random() * 180.0 + 90.0;
+  	if (Math.random() < 0.75) rotY = 0.0;
+  	else rotY = Math.random() * 180.0 + 90.0;
+  	if (Math.random() < 0.75) rotZ = 0.0;
+  	else rotZ = Math.random() * 180.0 + 90.0;
+  	invert = mode == 2 ? 0 : (int) (Math.random() * 2);
+  	colorMode = (int) (Math.random() * 6);
+  	colorSpeed = Math.random() * 8.0 - 4.0;
+  	sphereInvert = (int) (Math.random() * 2);
+  	sphereRadius = Math.random() * 1.5 + 0.5;
+  }
+  
+  @Override
   public String getName() { return "chaosCubes"; }
   
   @Override
-  public VariationFuncType[] getVariationTypes() { return new VariationFuncType[] {VariationFuncType.VARTYPE_3D}; }
+  public VariationFuncType[] getVariationTypes() { 
+  	return new VariationFuncType[] {VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC}; 
+  	}
 }
