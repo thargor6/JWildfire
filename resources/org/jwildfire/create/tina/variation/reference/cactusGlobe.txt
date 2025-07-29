@@ -1,0 +1,78 @@
+User Guide: cactusGlobe Variation
+
+cactusGlobe is a powerful 3D variation for creating a wide variety of realistic and abstract globe-shaped cacti and similar succulent plants. You can create everything from simple, classic barrel cacti to complex, geometric species with intersecting spiral patterns, and even entire clusters of branching cacti.
+
+The key to this variation is the pattern_mode parameter, which switches between two fundamentally different ways of building your cactus.
+
+Pattern Mode 0: Ridge Pattern
+This mode is for creating cacti with a single, primary set of ribs that can spiral around the body. The features (areoles and spikes) are placed in a clean, grid-like pattern along these spiraling ridges. This is perfect for classic barrel cacti and most common globe-shaped species.
+
+Use these controls: ribs_1, ribDepth_1, spiral_1, and areoles_per_rib.
+
+Pattern Mode 1: Intersection Pattern
+This mode is for creating cacti with more complex, geometric surfaces, like the beautiful diamond or tiled patterns seen on species like the Bishop's Cap cactus (Astrophytum myriostigma). It works by generating two independent, spiraling rib patterns that overlap.
+
+The features are then placed only at the intersections where the ridges of both patterns cross, creating a distinctive and beautiful geometric look.
+
+Use these controls: All _1 and _2 rib/spiral parameters, plus areole_density and areole_focus.
+
+Parameter Breakdown
+
+Main Shape Controls
+
+generator_mode: 1 creates a cactus from scratch (most common use). 0 attempts to wrap the cactus shape around an existing fractal shape.
+size: The overall size of the main cactus.
+
+Rib Pattern Controls
+
+ribs_1, ribDepth_1, spiral_1: Controls the first set of ribs. ribs_1 sets the number of ribs, ribDepth_1 controls how deep the crevices are, and spiral_1 controls the amount of twist. These are the primary controls in Mode 0.
+ribs_2, ribDepth_2, spiral_2: Controls the second set of ribs. These only have an effect in Mode 1. For a classic tiled look, set spiral_2 to a negative value to make it twist in the opposite direction of spiral_1.
+
+Feature Placement Controls
+
+Used only in Mode 0 (Ridge Pattern):
+areoles_per_rib: Sets the exact number of areoles that appear in a line on each rib.
+
+Used only in Mode 1 (Intersection Pattern):
+areole_density: The overall probability of features appearing.
+areole_focus: This is a very important parameter. It controls how tightly the areoles are clustered at the intersections of the two rib patterns. Higher values create sharper, more precise dots at the intersection peaks.
+
+Feature Appearance Controls (Works in both modes)
+
+areole_size: The radius of the areole (the fuzzy pad that spikes grow from).
+spike_length: The maximum length of the spikes.
+spike_angle_rand: Adds realism by making spikes splay out at slightly random angles instead of all pointing perfectly straight. A value of 0.5 is a good start.
+spike_droop: Makes spikes bend downwards, as if under gravity. Useful for older-looking cacti.
+
+Recursive Pups (Works in both modes)
+This powerful feature lets you create entire clusters of cacti.
+
+recursion_depth: The maximum levels of recursion. 1 gives you the main cactus and its immediate pups. 2 allows pups to grow on pups.
+pup_chance: The probability of branching off to a pup at each level. A value of 0.3 to 0.5 is a good starting point.
+pups_count: The number of pups that can grow around a parent.
+pup_size: How small each new generation is compared to its parent (e.g., 0.5 means they are 50% smaller).
+pups_spread: How far the pups are positioned from their parent.
+pups_vertical_offset: Moves the entire cluster of pups up or down.
+
+Quick Start Recipes
+
+Recipe 1: Classic Spiraling Barrel Cactus
+
+Set pattern_mode to 0.
+Set ribs_1 to 13.
+Set ribDepth_1 to 0.15.
+Set spiral_1 to 1.5.
+Set areoles_per_rib to 12.
+Set areole_size to 0.06.
+Set spike_length to 0.1.
+Make sure ribDepth_2 is 0.
+
+Recipe 2: Geometric Tiled Cactus
+
+Set pattern_mode to 1.
+Set ribs_1 to 8, ribDepth_1 to 0.1, and spiral_1 to 2.0.
+Set ribs_2 to 13, ribDepth_2 to 0.1, and spiral_2 to -3.0.
+Set areole_density to 1.0.
+Set areole_focus to 20.0 for sharp placement.
+Set areole_size to 0.04.
+Set spike_length to 0.05.

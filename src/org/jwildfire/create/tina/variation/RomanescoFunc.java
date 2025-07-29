@@ -21,6 +21,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
+import org.jwildfire.base.Tools;
+
 public class RomanescoFunc extends VariationFunc {
     private static final long serialVersionUID = 1L;
 
@@ -54,6 +56,7 @@ public class RomanescoFunc extends VariationFunc {
     private static final String PARAM_COLOR_RANGE_MIN = "color_range_min";
     private static final String PARAM_COLOR_RANGE_MAX = "color_range_max";
 
+    private static final String RESSOURCE_DESCRIPTION = "description";
 
     private static final String[] paramNames = {
             PARAM_SIZE,
@@ -72,6 +75,7 @@ public class RomanescoFunc extends VariationFunc {
             PARAM_COLOR_RANGE_MIN,
             PARAM_COLOR_RANGE_MAX
     };
+    private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
 
     private double size = 0.5;
     private int recursion_depth = 7;
@@ -93,6 +97,8 @@ public class RomanescoFunc extends VariationFunc {
     private double solid_color_idx = 0.5;
     private double color_range_min = 0.0;
     private double color_range_max = 9.0;
+
+    private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile romanesco.txt";
 
     // Helper methods
     private void cross(XYZPoint res, XYZPoint v1, XYZPoint v2) { res.x = v1.y * v2.z - v1.z * v2.y; res.y = v1.z * v2.x - v1.x * v2.z; res.z = v1.x * v2.y - v1.y * v2.x; }
@@ -291,11 +297,11 @@ public class RomanescoFunc extends VariationFunc {
         else if (PARAM_SPIRAL_TWIST.equalsIgnoreCase(pName)) spiral_twist = pValue;
         else if (PARAM_CONE_STEEPNESS.equalsIgnoreCase(pName)) cone_steepness = pValue;
         else if (PARAM_FLORET_DETAIL_SIZE.equalsIgnoreCase(pName)) floret_detail_size = pValue;
-        else if (PARAM_FLORET_SHAPE.equalsIgnoreCase(pName)) floret_shape = (int) pValue;
+        else if (PARAM_FLORET_SHAPE.equalsIgnoreCase(pName)) floret_shape = limitIntVal(Tools.FTOI(pValue), 0, 3);
         else if (PARAM_PITCH.equalsIgnoreCase(pName)) pitch = pValue; // New
         else if (PARAM_YAW.equalsIgnoreCase(pName)) yaw = pValue;     // New
         else if (PARAM_ROLL.equalsIgnoreCase(pName)) roll = pValue;   // New
-        else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) color_mode = (int) pValue;
+        else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) color_mode = limitIntVal(Tools.FTOI(pValue), 0, 3);
         else if (PARAM_SOLID_COLOR_IDX.equalsIgnoreCase(pName)) solid_color_idx = pValue;
         else if (PARAM_COLOR_RANGE_MIN.equalsIgnoreCase(pName)) color_range_min = pValue;
         else if (PARAM_COLOR_RANGE_MAX.equalsIgnoreCase(pName)) color_range_max = pValue;
@@ -303,8 +309,55 @@ public class RomanescoFunc extends VariationFunc {
     }
     
     @Override
+    public String[] getRessourceNames() {
+      return ressourceNames;
+    }
+
+    @Override
+    public byte[][] getRessourceValues() {
+      return new byte[][] {description.getBytes()};
+    }
+
+    @Override
+    public RessourceType getRessourceType(String pName) {
+      if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+        return RessourceType.REFERENCE;
+      }
+      else throw new IllegalArgumentException(pName);
+    }
+    
+    @Override
+    public void randomize() {
+    	size = Math.random() * 1.75 + 0.25;
+    	recursion_depth = (int) (Math.random() * 12 + 4);
+    	if (Math.random() < 0.4) num_arms = 1;
+    	else num_arms = (int) (Math.random() * 6 + 1);
+    	if (Math.random() < 0.8) arm_spread = Math.random() * 3.0;
+    	else arm_spread = Math.random() * 8.0 - 8.0;
+    	arm_elevation = Math.random() * 360.0 - 180.0;
+    	arm_twist = Math.random() * 4.8 - 2.4;
+    	floret_count = (int) (Math.random() * 225 + 25);
+    	floret_scale = Math.random() * 0.4 + 0.1;
+    	pattern_spread = Math.random();
+    	spiral_twist = Math.random() * 2.0;
+    	if (Math.random() < 0.8) cone_steepness = Math.random() + 0.5;
+    	else cone_steepness = Math.random() * 4.0 - 2.0;
+    	floret_detail_size = Math.random() * 5.0 + 0.1;
+    	floret_shape = (int) (Math.random() * 4);
+    	pitch = Math.random() * 360.0 - 180.0;
+    	yaw = Math.random() * 360.0 - 180.0;
+    	roll = Math.random() * 360.0 - 180.0;
+    	color_mode = (int) (Math.random() * 4);
+    	solid_color_idx = Math.random();
+    	color_range_min = Math.random() * 7.5;
+    	color_range_max = Math.random() * (15.0 - color_range_min) + color_range_min;
+    }
+    
+    @Override
     public String getName() { return "romanesco"; }
 
     @Override
-    public VariationFuncType[] getVariationTypes() { return new VariationFuncType[]{VariationFuncType.VARTYPE_3D}; }
+    public VariationFuncType[] getVariationTypes() { 
+    	return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_DC}; 
+    	}
 }

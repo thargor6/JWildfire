@@ -1,0 +1,45 @@
+ChaosCubes User Manual
+This guide explains how to use the chaosCubes JWildfire variation to create a wide variety of 3D fractals.
+
+Primary Shape Controls
+These parameters define the fundamental shape of your fractal.
+
+fractal_mode: This is the most important parameter. It selects the core algorithm used to generate the fractal.
+ 0: Menger Sponge: The classic cube with square tunnels.
+ 1: 3D Vicsek: A cross-like shape, keeping only the center and face-touching cubes.
+ 2: Center Hole Cube: A solid cube with only the very center sub-cube removed.
+ 3: Jerusalem Cube: Keeps corner and edge cubes, creating an intricate cross shape.
+ 4: Corner Cube: A skeletal shape using only the 8 corner cubes.
+ 5: Edge Cube: A wireframe look using only the 12 edge cubes.
+ 6: Sierpinski Pyramid: A completely different fractal shape based on a pyramid.
+ 7: Hybrid Mode: Blends two different cube-based modes together.
+depth: Controls the number of iterations. Higher values add more detail but take longer to render. Good values are between 4 and 8.
+mode7_A / mode7_B: When fractal_mode is set to 7 (Hybrid), these let you choose which two fractal modes (0-5) to blend together.
+
+Geometric Transformations
+These parameters control the size, shape, and orientation of the fractal.
+
+scale_x / scale_y / scale_z: Stretches or squashes the fractal along each axis. A value of 0.3333333 is a good starting point for classic cube shapes.
+offset: For cube modes, this controls the spacing between the sub-cubes. For the pyramid, it controls the size of the base.
+rotX / rotY / rotZ: Rotates the entire fractal around the X, Y, or Z axis.
+
+Creative Modifiers
+These parameters apply more complex transformations for artistic effects.
+
+twist_x / twist_y / twist_z: Adds a spiral distortion to the fractal along each axis. Use small values (like 0.01 to 0.1) to start.
+julia_mode: When turned on (1), this adds the original point's coordinates back at each step, creating beautiful, organic, and swirling versions of the base shapes.
+invert: Flips the fractal generation rule, essentially turning the shape "inside-out". It keeps the parts that would normally be empty and removes the parts that would normally be solid.
+sphere_invert: When turned on (1), this wraps the entire fractal around a sphere, creating curved, inverted versions of the shapes.
+sphere_radius: Controls the size of the inversion sphere. 1.0 is a good starting value.
+
+Coloring Controls
+These parameters control how the fractal is colored.
+
+color_mode: Selects the coloring algorithm.
+ 0: Default: Uses the standard gradient from the flame.
+ 1: Position: Color is based on the final (x,y,z) position of a point.
+ 2: Index: Color is based on which sub-cube or pyramid vertex was chosen last.
+ 3: Depth/Orbit: Color is based on the point's distance from the center.
+ 4: Iteration Path: Color is based on the total distance the point traveled.
+ 5: Angle: Color is based on the point's angle from the center.
+color_speed: Controls the frequency of the color gradients. Values below 1 stretch the gradient out; values above 1 make it repeat more often.

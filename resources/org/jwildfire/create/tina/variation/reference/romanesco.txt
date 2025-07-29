@@ -1,0 +1,90 @@
+User Manual: romanesco Variation
+
+Overview
+
+Welcome to the romanesco variation! This is a powerful 3D fractal generator designed to create complex, self-similar structures inspired by Romanesco broccoli, cauliflower, and other natural forms. You can create everything from single, perfect conical spirals to entire clusters of branching, alien-like coral.
+
+The key to this variation is its recursive engine. It builds shapes by placing smaller copies of itself onto a parent shape, creating incredible levels of detail.
+
+Getting Started: Quick Recipes
+
+The best way to learn is to start with a working example. Try these settings to see what the variation can do.
+
+Recipe 1: The Classic Romanesco
+This creates a single, iconic, spiraling cone.
+
+size: 3.0
+recursion_depth: 7
+num_arms: 1
+floret_count: 150
+floret_scale: 0.88
+pattern_spread: 0.3
+cone_steepness: 1.5
+spiral_twist: 1.0
+floret_detail_size: 0.1
+floret_shape: 0 (Sphere)
+color_mode: 3 (Height)
+color_range_min: -2.0
+color_range_max: 4.0
+
+Recipe 2: Abstract Branching Coral
+This uses the "Arms" and "Floret Shape" features to create a completely different look.
+
+size: 2.5
+recursion_depth: 6
+num_arms: 7
+arm_spread: 0.6
+arm_elevation: 55.0
+arm_twist: 0.2
+floret_count: 80
+floret_scale: 0.9
+pattern_spread: 0.2
+cone_steepness: 0.7
+floret_detail_size: 0.06
+floret_shape: 3 (Ring)
+color_mode: 1 (Distance from Center)
+color_range_min: 0.0
+color_range_max: 2.5
+
+Parameter Breakdown
+
+Main Controls
+
+size: The overall size of the entire fractal.
+recursion_depth: The most important control for detail. It sets how many levels of self-similar florets are generated. Higher values (8+) create incredible detail but will take much longer to render. Start with 5-7.
+
+Branching (The "Arms")
+These controls are only active when num_arms is greater than 1.
+
+num_arms: The number of main branches that grow from the center. Set to 1 for a single cone.
+arm_spread: Controls how far apart the arms are from the center.
+arm_elevation: Sets the angle of the arms in degrees. 0 makes them spread out flat, while 90 makes them all point straight up.
+arm_twist: Adds a slight spiral to the placement of the arms themselves for a more dynamic look.
+
+Spiral Pattern (The "Florets")
+These parameters define the shape and pattern of each individual cone/branch.
+
+floret_count: The number of smaller cones that appear on each larger cone. Higher values make the spirals look more defined.
+floret_scale: The size of each child floret relative to its parent. This value MUST be less than 1.0 (e.g., 0.85) for the fractal to converge. If it's 1.0 or higher, the fractal will "explode."
+pattern_spread: Controls the width of the cone. It spreads the florets out horizontally. (This was formerly spiral_spread).
+spiral_twist: Controls the tightness of the spiral. 1.0 is the natural golden-angle spiral. Lower values make the spiral tighter; higher values make it looser.
+cone_steepness: Controls the height of the cone. Higher values create a sharper, more pointed cone.
+
+Surface Detail
+
+floret_detail_size: Controls the size of the geometric shape used to render the surface of the florets. If this is 0, the fractal will look like sparse dust.
+floret_shape: A switch to change the basic building block of the fractal.
+ 0: Sphere: The default, bumpy, organic look.
+ 1: Cube: Builds the fractal from tiny cubes.
+ 2: Spike: Creates a texture of sharp, outward-pointing spikes.
+ 3: Ring: Uses tiny rings, creating a delicate and intricate look.
+
+Advanced Coloring
+
+color_mode: A switch to select the coloring algorithm.
+ 0: Solid Color: Uses a single color defined by solid_color_idx.
+ 1: Color by Distance from Center: Creates a gradient from the core of the fractal outwards.
+ 2: Color by Radius from Axis: Creates concentric rings of color around the central (vertical) axis.
+ 3: Color by Height: Creates a vertical gradient.
+solid_color_idx: Selects the color from the gradient when color_mode is 0.
+color_range_min / color_range_max: These sliders define the range over which the gradient is mapped for modes 1, 2, and 3. For example, in "Color by Height" mode, setting this range from 0 to 4 will map your entire color gradient across the Z-axis from Z=0 to Z=4.
