@@ -483,6 +483,26 @@ public class CustomFullVariationWrapperFunc extends VariationFunc implements Sup
   public int getPriority() {
     return full_variation != null ? full_variation.getPriority() : 0;
   }
+  
+  @Override
+  protected double mutateStep(double pVal, double pAmount) {
+  	return full_variation != null ? full_variation.mutateStep(pVal, pAmount) : 0.0;
+  }
+  
+  @Override
+  public void mutate(double pAmount) {
+  	if (full_variation != null) full_variation.mutate(pAmount);
+  }
+  
+  @Override
+  public void randomize() {
+  	if (full_variation != null) full_variation.randomize();
+  }
+  
+  @Override
+  public boolean enableRandomizeButton() {
+  	return full_variation != null ? full_variation.enableRandomizeButton() : true;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
