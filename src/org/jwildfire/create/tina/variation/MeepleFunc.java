@@ -174,7 +174,7 @@ public class MeepleFunc extends VariationFunc {
         if (PARAM_SCALE.equalsIgnoreCase(pName))
             scale = pValue;
         else if (PARAM_FILLED.equalsIgnoreCase(pName))
-            filled = pValue;
+            filled = limitVal(pValue, 0.0, 1.0);
         else if (PARAM_HEAD_WIDTH.equalsIgnoreCase(pName))
             headWidth = pValue;
         else if (PARAM_HEAD_HEIGHT.equalsIgnoreCase(pName))
@@ -201,9 +201,31 @@ public class MeepleFunc extends VariationFunc {
     public String getName() {
         return "meeple";
     }
+    
+    @Override
+    public void randomize() {
+    	scale = Math.random() * 4.5 + 0.5;
+    	if (Math.random() < 0.2) scale = -scale;
+    	filled = Math.random();
+    	headWidth = Math.random() * 3.0 + 0.1;
+    	if (Math.random() < 0.7) headHeight = Math.random() * 1.5 + 0.5;
+    	else headHeight = Math.random() * 6.0 - 3.0;
+    	armLength = Math.random() * 5.0;
+    	armSpread = Math.random() * 4.0 - 2.0;
+    	if (Math.random() < 0.7) bodyWidth = Math.random() * 3.5;
+    	else bodyWidth = Math.random() * 8.0 - 4.0;
+    	if (Math.random() < 0.7) legHeight = Math.random() * 3.0;
+    	else legHeight = Math.random() * 6.0 - 3.0;
+    	if (Math.random() < 0.7) legSpread = Math.random() * 4.0;
+    	else legSpread = Math.random() * 8.0 - 4.0;
+    	if (Math.random() < 0.7) legSeparationWidth = Math.random();
+    	else legSeparationWidth = Math.random() * 2.0 - 1.0;
+    	if (Math.random() < 0.7) legSeparationHeight = Math.random() * 0.5;
+    	else legSeparationHeight = Math.random() * 3.0 - 1.5;
+    }
 
     @Override
     public VariationFuncType[] getVariationTypes() {
-        return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE};
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE};
     }
 }
