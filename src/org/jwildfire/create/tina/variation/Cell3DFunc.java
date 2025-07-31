@@ -88,6 +88,8 @@ public class Cell3DFunc extends VariationFunc {
     private static final String PARAM_CZ_SCALE = "cz_scale";
     private static final String PARAM_CZ_OFFSET = "cz_offset";
 
+    private static final String RESSOURCE_DESCRIPTION = "description";
+
     private static final String[] paramNames = {
             PARAM_SIZE, PARAM_A,
             PARAM_GRID_ROT_X, PARAM_GRID_ROT_Y, PARAM_GRID_ROT_Z,
@@ -115,6 +117,7 @@ public class Cell3DFunc extends VariationFunc {
             PARAM_COLOR_USE_Z_SIGN, PARAM_COLOR_Z_NEG_OFFSET,
             PARAM_CZ_SCALE, PARAM_CZ_OFFSET
     };
+    private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
 
     // --- Member Variables (with defaults) ---
     private double size = 0.60; private double a = 1.0;
@@ -150,6 +153,7 @@ public class Cell3DFunc extends VariationFunc {
     private int color_use_z_sign = 0; private double color_z_neg_offset = 0.1;
     private double cz_scale = 0.05, cz_offset = 0.0;
 
+    private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile cell3D.txt";
 
     private double normalizeColor(double val) {
         double normalized = abs(val);
@@ -375,7 +379,7 @@ public class Cell3DFunc extends VariationFunc {
         else if (PARAM_CELL_IDX_POWER_X.equalsIgnoreCase(pName)) cell_idx_power_x = pValue;
         else if (PARAM_CELL_IDX_POWER_Y.equalsIgnoreCase(pName)) cell_idx_power_y = pValue;
         else if (PARAM_CELL_IDX_POWER_Z.equalsIgnoreCase(pName)) cell_idx_power_z = pValue;
-        else if (PARAM_DXDYDZ_MODE.equalsIgnoreCase(pName)) dxdydz_mode = Tools.FTOI(pValue);
+        else if (PARAM_DXDYDZ_MODE.equalsIgnoreCase(pName)) dxdydz_mode = limitIntVal(Tools.FTOI(pValue), 0, 1);
         else if (PARAM_CELL_SCALE_X.equalsIgnoreCase(pName)) cell_scale_x = pValue;
         else if (PARAM_CELL_SCALE_Y.equalsIgnoreCase(pName)) cell_scale_y = pValue;
         else if (PARAM_CELL_SCALE_Z.equalsIgnoreCase(pName)) cell_scale_z = pValue; // Ensured this line is correct
@@ -397,8 +401,8 @@ public class Cell3DFunc extends VariationFunc {
         else if (PARAM_MOVE_BR_X.equalsIgnoreCase(pName)) move_br_x = pValue;
         else if (PARAM_SPACE_Z.equalsIgnoreCase(pName)) space_z = pValue; else if (PARAM_MOVE_Z.equalsIgnoreCase(pName)) move_z = pValue;
         // Checkerboard
-        else if (PARAM_CHECKERBOARD_MODE.equalsIgnoreCase(pName)) checkerboard_mode = Tools.FTOI(pValue);
-        else if (PARAM_CHECKERBOARD_INVERT.equalsIgnoreCase(pName)) checkerboard_invert = Tools.FTOI(pValue);
+        else if (PARAM_CHECKERBOARD_MODE.equalsIgnoreCase(pName)) checkerboard_mode = limitIntVal(Tools.FTOI(pValue), 0, 1);
+        else if (PARAM_CHECKERBOARD_INVERT.equalsIgnoreCase(pName)) checkerboard_invert = limitIntVal(Tools.FTOI(pValue), 0, 1);
         // Alt Space/Move
         else if (SPACE_XA2.equalsIgnoreCase(pName)) space_xa2 = pValue; else if (SPACE_YA2.equalsIgnoreCase(pName)) space_ya2 = pValue;
         else if (SPACE_XB2.equalsIgnoreCase(pName)) space_xb2 = pValue; else if (SPACE_YB2.equalsIgnoreCase(pName)) space_yb2 = pValue;
@@ -411,16 +415,16 @@ public class Cell3DFunc extends VariationFunc {
         else if (PARAM_MOVE_BR_X2.equalsIgnoreCase(pName)) move_br_x2 = pValue;
         else if (PARAM_SPACE_Z2.equalsIgnoreCase(pName)) space_z2 = pValue; else if (PARAM_MOVE_Z2.equalsIgnoreCase(pName)) move_z2 = pValue;
         // Output
-        else if (PARAM_MIRROR_X.equalsIgnoreCase(pName)) mirror_x = Tools.FTOI(pValue);
-        else if (PARAM_MIRROR_Y.equalsIgnoreCase(pName)) mirror_y = Tools.FTOI(pValue);
-        else if (PARAM_MIRROR_Z.equalsIgnoreCase(pName)) mirror_z = Tools.FTOI(pValue);
-        else if (PARAM_INVERT_Y_OUTPUT.equalsIgnoreCase(pName)) invert_y_output = Tools.FTOI(pValue);
-        else if (PARAM_INVERT_Z_OUTPUT.equalsIgnoreCase(pName)) invert_z_output = Tools.FTOI(pValue);
+        else if (PARAM_MIRROR_X.equalsIgnoreCase(pName)) mirror_x = limitIntVal(Tools.FTOI(pValue), 0, 1);
+        else if (PARAM_MIRROR_Y.equalsIgnoreCase(pName)) mirror_y = limitIntVal(Tools.FTOI(pValue), 0, 1);
+        else if (PARAM_MIRROR_Z.equalsIgnoreCase(pName)) mirror_z = limitIntVal(Tools.FTOI(pValue), 0, 1);
+        else if (PARAM_INVERT_Y_OUTPUT.equalsIgnoreCase(pName)) invert_y_output = limitIntVal(Tools.FTOI(pValue), 0, 1);
+        else if (PARAM_INVERT_Z_OUTPUT.equalsIgnoreCase(pName)) invert_z_output = limitIntVal(Tools.FTOI(pValue), 0, 1);
         else if (PARAM_OFFSET_X.equalsIgnoreCase(pName)) offset_x = pValue;
         else if (PARAM_OFFSET_Y.equalsIgnoreCase(pName)) offset_y = pValue;
         else if (PARAM_OFFSET_Z.equalsIgnoreCase(pName)) offset_z = pValue;
         // Coloring
-        else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) color_mode = Tools.FTOI(pValue);
+        else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) color_mode = limitIntVal(Tools.FTOI(pValue), 0, 1);
         else if (PARAM_CIDX_SCALE_X.equalsIgnoreCase(pName)) cidx_scale_x = pValue;
         else if (PARAM_CIDX_SCALE_Y.equalsIgnoreCase(pName)) cidx_scale_y = pValue;
         else if (PARAM_CIDX_SCALE_Z.equalsIgnoreCase(pName)) cidx_scale_z = pValue;
@@ -430,7 +434,7 @@ public class Cell3DFunc extends VariationFunc {
         else if (PARAM_COLOR_Q2.equalsIgnoreCase(pName)) color_q2 = normalizeColor(pValue);
         else if (PARAM_COLOR_Q3.equalsIgnoreCase(pName)) color_q3 = normalizeColor(pValue);
         else if (PARAM_COLOR_Q4.equalsIgnoreCase(pName)) color_q4 = normalizeColor(pValue);
-        else if (PARAM_COLOR_USE_Z_SIGN.equalsIgnoreCase(pName)) color_use_z_sign = Tools.FTOI(pValue);
+        else if (PARAM_COLOR_USE_Z_SIGN.equalsIgnoreCase(pName)) color_use_z_sign = limitIntVal(Tools.FTOI(pValue), 0, 1);
         else if (PARAM_COLOR_Z_NEG_OFFSET.equalsIgnoreCase(pName)) color_z_neg_offset = pValue;
         else if (PARAM_CZ_SCALE.equalsIgnoreCase(pName)) cz_scale = pValue;
         else if (PARAM_CZ_OFFSET.equalsIgnoreCase(pName)) cz_offset = pValue;
@@ -438,10 +442,28 @@ public class Cell3DFunc extends VariationFunc {
     }
 
     @Override
+    public String[] getRessourceNames() {
+      return ressourceNames;
+    }
+
+    @Override
+    public byte[][] getRessourceValues() {
+      return new byte[][] {description.getBytes()};
+    }
+
+    @Override
+    public RessourceType getRessourceType(String pName) {
+      if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+        return RessourceType.REFERENCE;
+      }
+      else throw new IllegalArgumentException(pName);
+    }
+    
+    @Override
     public String getName() { return "cell3D"; }
 
     @Override
     public VariationFuncType[] getVariationTypes() {
-        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_DC};
     }
 }
