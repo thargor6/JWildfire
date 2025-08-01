@@ -44,6 +44,7 @@ public class JuliaScopePlusFunc extends VariationFunc{
     private static final String PARAM_RND_TERM_MODE = "rndTermMode";
     private static final String PARAM_MANDELBROT_LIKE = "mandelbrotLike";
 
+    private static final String RESSOURCE_DESCRIPTION = "description";
 
     private static final String[] paramNames = {
             PARAM_POWER, PARAM_DIST, PARAM_CX, PARAM_CY,
@@ -53,6 +54,7 @@ public class JuliaScopePlusFunc extends VariationFunc{
             PARAM_ALT_POWER_SCALE, PARAM_ALT_POWER_ROTATE,
             PARAM_RND_TERM_MODE, PARAM_MANDELBROT_LIKE
     };
+    private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
 
     // Fields for parameters
     private int power = genRandomPower();
@@ -72,6 +74,7 @@ public class JuliaScopePlusFunc extends VariationFunc{
     private int rndTermMode = 0; // 0=always+, 1=always-, 2=by_rnd_parity, 3=random
     private int mandelbrotLike = 0; // 0=use cX,cY; 1=use pAffineTP.x,y
 
+    private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile juliascopePlus.txt";
 
     private int absPowerForRandomBranches;
 
@@ -260,6 +263,24 @@ public class JuliaScopePlusFunc extends VariationFunc{
     }
 
     @Override
+    public String[] getRessourceNames() {
+      return ressourceNames;
+    }
+
+    @Override
+    public byte[][] getRessourceValues() {
+      return new byte[][] {description.getBytes()};
+    }
+
+    @Override
+    public RessourceType getRessourceType(String pName) {
+      if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+        return RessourceType.REFERENCE;
+      }
+      else throw new IllegalArgumentException(pName);
+    }
+    
+   @Override
     public String getName() {
         return "juliascopePlus";
     }
