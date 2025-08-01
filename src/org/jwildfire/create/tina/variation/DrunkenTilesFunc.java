@@ -368,7 +368,7 @@ public class DrunkenTilesFunc extends VariationFunc {
 
     @Override
     public VariationFuncType[] getVariationTypes() {
-        return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
     }
 
 }
