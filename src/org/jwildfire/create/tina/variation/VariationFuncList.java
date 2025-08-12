@@ -1055,6 +1055,8 @@ VariationFuncList {
     registerVariationFunc(MeepleFunc.class);
     registerVariationFunc(FloraFunc.class);
     registerVariationFunc(ChaosCubesFunc.class);
+    registerVariationFunc(Mandelbox2DFunc.class);
+    registerVariationFunc(MultiIFSFunc.class);
     registerVariationFunc(PolySurfFunc.class);
 
     resolvedAliasMap = new HashMap<>();
