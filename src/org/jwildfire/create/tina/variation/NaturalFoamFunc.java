@@ -17,6 +17,8 @@
 package org.jwildfire.create.tina.variation;
 
 import java.util.Random;
+
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import static java.lang.Math.sqrt;
@@ -37,8 +39,10 @@ public class NaturalFoamFunc extends VariationFunc {
   private static final String PARAM_BLUR_QUALITY = "blur_quality";
   private static final String PARAM_COLOR_DATA = "color_data";
   private static final String PARAM_ZOOM = "zoom";
+  private static final String RESSOURCE_DESCRIPTION = "description";
   
   private static final String[] paramNames = {PARAM_DENSITY, PARAM_ITERATIONS, PARAM_SCALE, PARAM_SPREAD, PARAM_MIN_RADIUS, PARAM_MAX_RADIUS, PARAM_SEED, PARAM_SHAPE_AMOUNT, PARAM_BLUR_RADIUS, PARAM_BLUR_QUALITY, PARAM_COLOR_DATA, PARAM_ZOOM};
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
 
   private int density = 50;
   private int iterations = 3;
@@ -58,6 +62,8 @@ public class NaturalFoamFunc extends VariationFunc {
   private transient int lastDensity = -1;
   private transient int lastSeed = -1;
   private transient double lastSpread = -1.0;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile natural_foam.txt";
 
   private class Bubble {
       double x, y, z, radius;
@@ -247,7 +253,7 @@ public class NaturalFoamFunc extends VariationFunc {
     else if (PARAM_BLUR_QUALITY.equalsIgnoreCase(pName))
         blur_quality = (int) pValue;
     else if (PARAM_COLOR_DATA.equalsIgnoreCase(pName))
-        color_data = (int) pValue;
+        color_data = limitIntVal(Tools.FTOI(pValue), 0, 3);
     else if (PARAM_ZOOM.equalsIgnoreCase(pName))
       zoom = pValue;
     else
@@ -255,10 +261,44 @@ public class NaturalFoamFunc extends VariationFunc {
   }
 
   @Override
-  public String getName() { return "naturalFoam"; }
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
+  @Override
+  public void randomize() {
+  	density = (int) (Math.random() * 240 + 10);
+  	iterations = (int) (Math.random() * 15 + 1);
+  	scale = Math.random() + 0.1;
+  	spread = Math.random() * 2.5 + 0.5;
+  	minRadius = Math.random() + 0.1;
+  	maxRadius = Math.random() * 2.0 + minRadius;
+  	seed = (int) (Math.random() * 1000000);
+  	shapeAmount = Math.random();
+  	blur_radius = Math.random();
+  	blur_quality = (int) (Math.random() * 51);
+  	color_data = (int) (Math.random() * 4);
+  	//zoom = 1;
+  }
+  
+  @Override
+  public String getName() { return "natural_foam"; }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 }

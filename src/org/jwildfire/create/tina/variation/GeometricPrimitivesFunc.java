@@ -25,9 +25,8 @@ import java.util.List;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class GeometricPrimitivesFunc extends VariationFunc {
-  private static final long serialVersionUID = 29L; // Fixed Hexagon drawing logic
+  private static final long serialVersionUID = 29L;
 
-  //<editor-fold defaultstate="collapsed" desc="Parameters">
   private static final String PARAM_LINE_VS_SHAPE = "line_vs_shape_mix";
   private static final String PARAM_DENSITY = "density";
   private static final String PARAM_SCALE = "scale";
@@ -73,9 +72,7 @@ public class GeometricPrimitivesFunc extends VariationFunc {
   private int recursion_depth = 0;
   private double recursion_shape_mix = 0.5;
   private double recursion_scale = 0.25;
-  //</editor-fold>
 
-  //<editor-fold defaultstate="collapsed" desc="Helper Functions">
   private double randomForCell(double gx, double gy, double salt) {
       double val = gx * 13.9898 + gy * 73.233 + salt;
       return frac(sin(val) * 43758.5453);
@@ -171,7 +168,6 @@ public class GeometricPrimitivesFunc extends VariationFunc {
         out.y = v1.y * (1-t) + v2.y * t;
     }
   }
-  //</editor-fold>
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -281,12 +277,12 @@ public class GeometricPrimitivesFunc extends VariationFunc {
         pVarTP.doHide = false;
         pVarTP.x += out.x * pAmount;
         pVarTP.y += out.y * pAmount;
+        if (pContext.isPreserveZCoordinate()) pVarTP.z += pAmount * pAffineTP.z;
     } else {
         pVarTP.doHide = true;
     }
   }
     
-  //<editor-fold defaultstate="collapsed" desc="boilerplate">
   @Override
   public String[] getParameterNames() { return paramNames; }
   @Override
@@ -314,10 +310,28 @@ public class GeometricPrimitivesFunc extends VariationFunc {
   }
   
   @Override
-  public String[] getParameterAlternativeNames() { return new String[]{"line_mix", "density", "scale", "grid_size", "seed", "jitter", "shape", "mix_shapes", "fill", "radius", "hollow", "sq_size", "conn_mode", "rec_depth", "rec_shape", "rec_scale"}; }
+  public void randomize() {
+  	line_vs_shape_mix = Math.random();
+  	density = Math.random();
+  	scale = Math.random() * 2.5 + 0.5;
+  	gridSize = Math.random() * 1.5 + 0.5;
+  	seed = Math.random() * 50.0;
+  	grid_jitter = Math.random();
+  	shape_type = (int) (Math.random() * 4);
+  	shape_mix_enable = (int) (Math.random() * 2);
+  	fill_prob = Math.random();
+  	radius = Math.random() * 2.0 + 0.1;
+  	hollow = Math.random();
+  	square_size = Math.random() * 2.0 + 0.1;
+  	connection_mode = (int) (Math.random() * 2);
+  	recursion_depth = (int) (Math.random() * 5);
+  	recursion_shape_mix = Math.random();
+  	recursion_scale = Math.random() * 0.9 + 0.1;
+  }
+  
   @Override
   public String getName() { return "geometricPrimitives"; }
+  
   @Override
-  public VariationFuncType[] getVariationTypes() { return new VariationFuncType[]{VariationFuncType.VARTYPE_2D}; }
-  //</editor-fold>
+  public VariationFuncType[] getVariationTypes() { return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE}; }
 }

@@ -22,6 +22,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
+import org.jwildfire.base.Tools;
+
 /**
  * JWildfire variation based on the parametric equations for a conical spiral.
  *
@@ -166,7 +168,7 @@ public class ConicalSpiralFunc extends VariationFunc {
         else if (PARAM_HEIGHT.equalsIgnoreCase(pName))
             height = pValue;
         else if (PARAM_MODE.equalsIgnoreCase(pName))
-            mode = (int) pValue % 3;
+            mode = limitIntVal(Tools.FTOI(pValue), 0, 3);
         else if (PARAM_Z_WAVE_FREQ.equalsIgnoreCase(pName))
             z_wave_freq = pValue;
         else if (PARAM_Z_WAVE_AMP.equalsIgnoreCase(pName))
@@ -176,11 +178,11 @@ public class ConicalSpiralFunc extends VariationFunc {
         else if (PARAM_THICKNESS.equalsIgnoreCase(pName))
             thickness = pValue;
         else if (PARAM_SOLID.equalsIgnoreCase(pName))
-            solid = (int) pValue;
+            solid = limitIntVal(Tools.FTOI(pValue), 0, 1);
         else if (PARAM_COLORIZE.equalsIgnoreCase(pName))
-            colorize = (int) pValue;
+            colorize = limitIntVal(Tools.FTOI(pValue), 0, 1);
         else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName))
-            colorMode = (int) pValue % 4;
+            colorMode = limitIntVal(Tools.FTOI(pValue), 0, 4);
         else if (PARAM_COLOR_SPEED.equalsIgnoreCase(pName))
             colorSpeed = pValue;
         else if (PARAM_COLOR_OFFSET.equalsIgnoreCase(pName))
@@ -193,9 +195,26 @@ public class ConicalSpiralFunc extends VariationFunc {
     public String getName() {
         return "conicalSpiral";
     }
+    
+    @Override
+    public void randomize() {
+    	turns = Math.random() * 50.0 - 25.0;
+    	radius = Math.random() * 16.0 - 8.0;
+    	height = Math.random() * 16.0 - 8.0;
+    	z_wave_freq = Math.random() * 16.0 - 8.0;
+    	z_wave_amp = Math.random() * 10.0 - 5.0;
+    	twist = Math.random() * 10.0 - 5.0;
+    	solid = (int) (Math.random() * 2);
+    	if (solid > 0) thickness = Math.random() * 0.5 + 0.2;
+    	else thickness = Math.random() * 0.1;
+    	colorize = (int) (Math.random() * 2);
+    	colorMode = (int) (Math.random() * 4);
+    	colorSpeed = Math.random() * 3.0;
+    	colorOffset = Math.random();
+    }
 
     @Override
     public VariationFuncType[] getVariationTypes() {
-        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_DC};
     }
 }

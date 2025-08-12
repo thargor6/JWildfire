@@ -128,7 +128,7 @@ public class HypercropFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_CROP,VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_CROP,VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
   @Override
   public String getGPUCode(FlameTransformationContext context) {

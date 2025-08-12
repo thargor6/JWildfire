@@ -22,6 +22,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
+import org.jwildfire.base.Tools;
+
 public class CactusGlobeFunc extends VariationFunc {
     private static final long serialVersionUID = 1L;
 
@@ -60,6 +62,7 @@ public class CactusGlobeFunc extends VariationFunc {
 
     private static final String PARAM_FEATURE_COLOR = "feature_color";
 
+    private static final String RESSOURCE_DESCRIPTION = "description";
 
     private static final String[] paramNames = {
             PARAM_PATTERN_MODE, PARAM_GENERATOR_MODE, PARAM_SIZE,
@@ -71,6 +74,7 @@ public class CactusGlobeFunc extends VariationFunc {
             PARAM_RECURSION_DEPTH, PARAM_PUP_CHANCE, PARAM_PUPS_COUNT, PARAM_PUP_SIZE, PARAM_PUPS_SPREAD, PARAM_PUPS_VERTICAL_OFFSET,
             PARAM_FEATURE_COLOR
     };
+    private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
 
     private int pattern_mode = 0;
     private int generator_mode = 1;
@@ -96,6 +100,7 @@ public class CactusGlobeFunc extends VariationFunc {
     private double pups_vertical_offset = -0.5;
     private double feature_color = 1.0;
 
+    private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile cactusGlobe.txt";
 
     @Override
     public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -273,8 +278,8 @@ public class CactusGlobeFunc extends VariationFunc {
 
     @Override
     public void setParameter(String pName, double pValue) {
-        if (PARAM_PATTERN_MODE.equalsIgnoreCase(pName)) pattern_mode = (int) pValue;
-        else if (PARAM_GENERATOR_MODE.equalsIgnoreCase(pName)) generator_mode = (int) pValue;
+        if (PARAM_PATTERN_MODE.equalsIgnoreCase(pName)) pattern_mode = limitIntVal(Tools.FTOI(pValue), 0, 1);
+        else if (PARAM_GENERATOR_MODE.equalsIgnoreCase(pName)) generator_mode = limitIntVal(Tools.FTOI(pValue), 0, 1);
         else if (PARAM_SIZE.equalsIgnoreCase(pName)) size = pValue;
         else if (PARAM_RIBS_1.equalsIgnoreCase(pName)) ribs_1 = pValue;
         else if (PARAM_RIB_DEPTH_1.equalsIgnoreCase(pName)) ribDepth_1 = pValue;
@@ -283,25 +288,79 @@ public class CactusGlobeFunc extends VariationFunc {
         else if (PARAM_RIB_DEPTH_2.equalsIgnoreCase(pName)) ribDepth_2 = pValue;
         else if (PARAM_SPIRAL_2.equalsIgnoreCase(pName)) spiral_2 = pValue;
         else if (PARAM_AREOLES_PER_RIB.equalsIgnoreCase(pName)) areoles_per_rib = pValue;
-        else if (PARAM_AREOLE_DENSITY.equalsIgnoreCase(pName)) areole_density = pValue;
+        else if (PARAM_AREOLE_DENSITY.equalsIgnoreCase(pName)) areole_density = limitVal(pValue, 0.0, 1.0);
         else if (PARAM_AREOLE_FOCUS.equalsIgnoreCase(pName)) areole_focus = pValue;
         else if (PARAM_AREOLE_SIZE.equalsIgnoreCase(pName)) areole_size = pValue;
         else if (PARAM_SPIKE_LENGTH.equalsIgnoreCase(pName)) spike_length = pValue;
         else if (PARAM_SPIKE_ANGLE_RAND.equalsIgnoreCase(pName)) spike_angle_rand = pValue;
         else if (PARAM_SPIKE_DROOP.equalsIgnoreCase(pName)) spike_droop = pValue;
-        else if (PARAM_RECURSION_DEPTH.equalsIgnoreCase(pName)) recursion_depth = (int) pValue;
-        else if (PARAM_PUP_CHANCE.equalsIgnoreCase(pName)) pup_chance = pValue;
+        else if (PARAM_RECURSION_DEPTH.equalsIgnoreCase(pName)) recursion_depth = limitIntVal(Tools.FTOI(pValue), 0, 8);
+        else if (PARAM_PUP_CHANCE.equalsIgnoreCase(pName)) pup_chance = limitVal(pValue, 0.0, 1.0);
         else if (PARAM_PUPS_COUNT.equalsIgnoreCase(pName)) pups_count = (int)pValue;
         else if (PARAM_PUP_SIZE.equalsIgnoreCase(pName)) pup_size = pValue;
         else if (PARAM_PUPS_SPREAD.equalsIgnoreCase(pName)) pups_spread = pValue;
         else if (PARAM_PUPS_VERTICAL_OFFSET.equalsIgnoreCase(pName)) pups_vertical_offset = pValue;
-        else if (PARAM_FEATURE_COLOR.equalsIgnoreCase(pName)) feature_color = pValue;
+        else if (PARAM_FEATURE_COLOR.equalsIgnoreCase(pName)) feature_color = limitVal(pValue, 0.0, 1.0);
         else throw new IllegalArgumentException(pName);
+    }
+    
+    @Override
+    public String[] getRessourceNames() {
+      return ressourceNames;
+    }
+
+    @Override
+    public byte[][] getRessourceValues() {
+      return new byte[][] {description.getBytes()};
+    }
+
+    @Override
+    public RessourceType getRessourceType(String pName) {
+      if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+        return RessourceType.REFERENCE;
+      }
+      else throw new IllegalArgumentException(pName);
+    }
+    
+    @Override
+    public void randomize() {
+    	pattern_mode = (int) (Math.random() * 2);
+    	// Don't change generator_mode
+    	size = Math.random() * 1.5 + 0.5;
+    	if (Math.random() < 0.8) ribs_1 = (int) (Math.random() * 18 + 3);
+    	else ribs_1 = Math.random() * 22.0 + 3.0;
+    	if (Math.random() < 0.9) ribDepth_1 = Math.random() * 0.6;
+    	else ribDepth_1 = Math.random() * 2.0 - 1.0;
+    	spiral_1 = Math.random() * 3.0 - 1.5;
+    	double r = Math.random();
+    	if (r < 0.25) ribs_2 = 0;
+    	else if (r < 0.65) ribs_2 = (int) (Math.random() * 18 + 3);
+    	else ribs_2 = Math.random() * 22.0 + 3.0;
+    	if (Math.random() < 0.9) ribDepth_2 = Math.random() * 0.6;
+    	else ribDepth_2 = Math.random() * 2.0 - 1.0;
+    	if (Math.random() < 0.5) spiral_2 = -spiral_1;
+    	else spiral_2 = Math.random() * 3.0 - 1.5;
+    	areoles_per_rib = Math.random() * 17.0 + 3.0;
+    	areole_density = Math.random();
+    	areole_focus = Math.random() * 19.0 + 1.0;
+    	areole_size= Math.random() * 25.0;
+    	spike_length = Math.random();
+    	spike_angle_rand = Math.random() * 0.5;
+    	spike_droop = Math.random() * 0.5;
+    	recursion_depth = (int) (Math.random() * 5);
+    	pup_chance = Math.random() * 0.75 + 0.1;
+    	pups_count = (int) (Math.random() * 11);
+    	pup_size = Math.random() * 0.8;
+    	pups_spread = Math.random() * 2.5 + 0.5;
+    	pups_vertical_offset = Math.random() * 2.0 - 1.0;
+    	feature_color = Math.random();
     }
     
     @Override
     public String getName() { return "cactusGlobe"; }
 
     @Override
-    public VariationFuncType[] getVariationTypes() { return new VariationFuncType[]{VariationFuncType.VARTYPE_3D}; }
+    public VariationFuncType[] getVariationTypes() { 
+    	return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_BASE_SHAPE}; 
+    }
 }

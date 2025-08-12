@@ -20,6 +20,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
+import org.jwildfire.base.Tools;
 
 /**
  * FloraFunc Variation
@@ -41,15 +42,20 @@ public class FloraFunc extends VariationFunc {
     private static final String PARAM_SCALE = "scale";
     private static final String PARAM_DISTORT = "distort";
     private static final String PARAM_SHAPE_MOD = "shapeMod";
+    
+    private static final String RESSOURCE_LEAFTYPE_REFERENCE = "leafType_reference";
 
     private static final String[] paramNames = {PARAM_LEAF_TYPE, PARAM_FILLED, PARAM_SCALE, PARAM_DISTORT, PARAM_SHAPE_MOD};
-
+    private static final String[] ressourceNames = {RESSOURCE_LEAFTYPE_REFERENCE};
+    
     // Parameter defaults
     private int leafType = 0; // 0=Ginkgo, 1=Cannabis, 2=Clover, 3=Rose, 4=Daisy, 5=Butterfly, 6=Oak, 7=Teardrop, 8=Lotus, 9=Sycamore, 10=Ash, 11=Monstera, 12=Star Anise, 13=Holly, 14=Sweetgum, 15=Grape, 16=Castor Bean, 17=Hosta, 18=Alocasia, 19=Dandelion, 20=Columbine, 21=Birch, 22=Tulip, 23=Linden, 24=Fiddlehead, 25=Barnsley Fern
     private double filled = 1.0;
     private double scale = 1.0;
     private double distort = 0.1; // Controls the amount of organic distortion
     private double shapeMod = 0.5; // Modifies each shape in a unique way (0-1)
+    
+    private String leaftype_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile flora-leaftypes.pdf";
 
     @Override
     public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -309,9 +315,9 @@ public class FloraFunc extends VariationFunc {
     @Override
     public void setParameter(String pName, double pValue) {
         if (PARAM_LEAF_TYPE.equalsIgnoreCase(pName))
-            leafType = (int) pValue;
+            leafType = limitIntVal(Tools.FTOI(pValue), 0, 25);
         else if (PARAM_FILLED.equalsIgnoreCase(pName))
-            filled = pValue;
+            filled = Tools.limitValue(pValue, 0.0, 1.0);
         else if (PARAM_SCALE.equalsIgnoreCase(pName))
             scale = pValue;
         else if (PARAM_DISTORT.equalsIgnoreCase(pName))
@@ -323,12 +329,40 @@ public class FloraFunc extends VariationFunc {
     }
 
     @Override
+    public String[] getRessourceNames() {
+      return ressourceNames;
+    }
+
+    @Override
+    public byte[][] getRessourceValues() {
+      return new byte[][] {leaftype_reference.getBytes()};
+    }
+
+    @Override
+    public RessourceType getRessourceType(String pName) {
+      if (RESSOURCE_LEAFTYPE_REFERENCE.equalsIgnoreCase(pName)) {
+        return RessourceType.REFERENCE;
+      }
+      else throw new IllegalArgumentException(pName);
+    }
+    
+    @Override
+    public void randomize() {
+    	leafType = (int) (Math.random() * 26);
+    	filled = Math.random();
+    	scale = Math.random() * 2.0 + 0.5;
+    	if (Math.random() < 0.5) distort = Math.random() * 0.2 - 0.1;
+    	else distort = Math.random() - 0.5;
+    	shapeMod = Math.random() * 4.0 - 2.0;
+    }
+
+    @Override
     public String getName() {
         return "flora";
     }
 
     @Override
     public VariationFuncType[] getVariationTypes() {
-        return new VariationFuncType[]{VariationFuncType.VARTYPE_BASE_SHAPE};
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
     }
 }

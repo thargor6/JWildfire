@@ -1,0 +1,106 @@
+Okay, we've taken the original Cell2Func through a significant evolution, culminating in the highly parameterized Cell3D_Func. Here's a summary of the major changes and additions made across these iterations:
+
+I. Foundational Changes (From Cell2Func to Cell2_PlusFunc conceptual stage):
+
+Consistent size and a Logic:
+The parameter a was re-purposed to be a consistent divisor for size.
+actual_cell_size = size / a is now used uniformly for calculating cell indices, intra-cell coordinates (dx, dy), and reconstructing cell positions. This provides more intuitive control over cell dimensions.
+Safeguards were added for a or size being near zero.
+
+Initial 2D Cell Content Transformations:
+Scaling: cell_scale_x, cell_scale_y to scale content within each 2D cell.
+Power Distortion: cell_power_x, cell_power_y to apply a power function to normalized intra-cell coordinates, altering their distribution.
+Rotation: cell_rotate (2D) to rotate content around the center of each 2D cell.
+
+Final 2D Offset:
+offset_x, offset_y to shift the entire pattern after all other calculations.
+
+II. Enhanced 2D Grid Control (From Cell2_PlusFunc to Cell2_SuperFunc conceptual stage):
+
+2D Grid Rotation:
+grid_rotate parameter added to rotate the entire input coordinate system before cell indexing, effectively rotating the whole grid structure.
+
+Intra-Cell Coordinate Mode (dxdy_mode):
+Introduced a mode to change how dx, dy (the coordinates within a cell) are interpreted:
+ 0: Linear (original direct offset).
+ 1: Folded/Mirrored (creates a triangular wave/mirroring effect within the cell).
+
+Symmetrical move_ Parameters for 2D Quadrants:
+The original cell2 had an asymmetric set of move_ parameters for shifting cells based on their quadrant.
+New parameters move_tr_x, move_tr_y (for Top-Right quadrant) and move_br_x (for Bottom-Right X-axis) were added to provide more complete and symmetrical control over cell grid displacement.
+
+III. Coloring Capabilities (From Cell2_SuperFunc to Cell2_UltimateFunc conceptual stage):
+
+color_mode Parameter:
+A master switch to enable different coloring algorithms (0 = default JWildfire coloring).
+
+Coloring Based on Cell Index (Mode 1):
+Color derived from the 2D cell indices (original_x_idx, original_y_idx).
+Parameters: cidx_scale_x, cidx_scale_y, cidx_offset.
+
+Coloring Based on Intra-Cell Distance (Mode 2):
+Color based on the magnitude of (dx, dy) from the cell's origin (after dxdy_mode but before other content transforms).
+Parameter: cdist_scale.
+
+Coloring Based on Quadrant (Mode 3):
+Assigns one of four predefined colors based on the XY quadrant of the original raw cell index.
+Parameters: color_q1, color_q2, color_q3, color_q4.
+Helper: normalizeColor() function to keep color values in the [0,1) range.
+
+IV. Advanced 2D Grid Patterning (From Cell2_UltimateFunc to Cell2_HyperFunc conceptual stage):
+
+Checkerboard Application of Space/Move Parameters:
+checkerboard_mode: Enables alternating between two full sets of space_ and move_ parameters for cells arranged in a checkerboard pattern (based on (original_x_idx_raw + original_y_idx_raw) % 2).
+checkerboard_invert: Flips the checkerboard pattern.
+
+Alternate Set of Space/Move Parameters: 
+A complete duplicate set of all 2D space_ and move_ parameters (e.g., space_xa2, move_tr_x2, etc.) for the alternate cells.
+
+Cell Index Power Distortion (2D):
+cell_idx_power_x, cell_idx_power_y: Applies a power function to the raw cell indices (original_x_idx_raw, original_y_idx_raw) before they are used in the quadrant logic for spacing/movement. This allows for non-linear distortion of the overall cell grid.
+
+V. Full Conversion to 3D (Becoming Cell3D_Func):
+
+Variation Type: Changed to VARTYPE_3D. The function now inherently processes and produces 3D coordinates.
+
+3D Input Processing:
+Grid Rotation: Extended to 3D using Euler angles: grid_rot_x, grid_rot_y, grid_rot_z.
+actual_cell_size applied uniformly to X, Y, and Z dimensions.
+
+3D Cell Indexing & Intra-Cell Coordinates:
+Calculates original_x_idx_raw, original_y_idx_raw, original_z_idx_raw.
+Calculates dx, dy, dz (intra-cell offsets).
+dxdy_mode became dxdydz_mode, affecting Z as well if "Folded".
+
+3D Cell Content Transformations:
+Scaling: Added cell_scale_z.
+Power: Added cell_power_z.
+Rotation: Extended to 3D Euler angles cell_rot_x, cell_rot_y, cell_rot_z for rotating (dx,dy,dz) around the cell center.
+
+3D Cell Index Manipulation:
+Cell Index Power: Added cell_idx_power_z for original_z_idx_raw.
+XY Plane Logic: The existing 2D quadrant logic (with primary and alternate checkerboard parameters) continues to determine modified_x_idx and modified_y_idx.
+
+Z Plane Logic: Independent control for modified_z_idx using:
+space_z, move_z (primary).
+space_z2, move_z2 (alternate for checkerboard mode).
+
+Final Output Calculation:
+Calculates final_x, final_y, final_z.
+Added invert_y_output (default 1, like original cell2) and invert_z_output (default 0) to control negation of Y and Z contributions.
+
+3D Mirroring and Offset:
+Added mirror_z parameter.
+Added offset_z parameter.
+
+3D Coloring Options:
+Mode 1 (Cell Index): Now includes processed_original_z_idx. Added cidx_scale_z.
+Mode 2 (Intra-Cell Distance): Uses sqrt(dx^2+dy^2+dz^2), normalized by actual_cell_size * sqrt(3.0).
+Mode 3 (Octant Influence): XY Quadrant colors can now be modulated by the sign of original_z_idx_raw using color_use_z_sign and color_z_neg_offset.
+Mode 4 (Z-Index Based Color): New mode, color based purely on original_z_idx_raw using cz_scale and cz_offset.
+
+Helper Function: Added rotatePoint3D for applying 3D Euler angle rotations.
+
+Name: Final name Cell3D_Func with getName() returning "cell3D".
+
+This journey has transformed a relatively simple 2D cellular variation into an exceptionally versatile 3D generator with a very extensive set of parameters for deep creative exploration.

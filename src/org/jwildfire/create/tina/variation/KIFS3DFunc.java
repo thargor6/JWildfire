@@ -6,10 +6,6 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-// Base Variation classes
-import org.jwildfire.create.tina.variation.VariationFunc;
-import org.jwildfire.create.tina.variation.VariationFuncType;
-
 // Utilities
 import org.jwildfire.base.Tools;
 // Removed static import for MathLib, using standard java.lang.Math now
@@ -67,7 +63,7 @@ public class KIFS3DFunc extends VariationFunc {
     private static final String PARAM_COLOR_MODE = "color_mode";
     private static final String PARAM_COLOR_SCALE = "color_scale";
 
-    // --- Parameter Names Array (Order Matters!) ---  // MODIFIED: Added PARAM_MIRROR_FOLD
+    // --- Parameter Names Array (Order Matters!) --- 
     private static final String[] paramNames = {
             PARAM_MAX_ITER, PARAM_BAILOUT_RADIUS,
             PARAM_KIFS_SCALE_X, PARAM_KIFS_SCALE_Y, PARAM_KIFS_SCALE_Z, PARAM_SCALE_PIVOT_TYPE,
@@ -83,7 +79,7 @@ public class KIFS3DFunc extends VariationFunc {
             PARAM_COLOR_MODE, PARAM_COLOR_SCALE
     };
 
-    // --- Parameter Values (Instance Variables) & Defaults --- // MODIFIED: Added mirror_fold
+    // --- Parameter Values (Instance Variables) & Defaults ---
     // Iteration & Bailout
     private int max_iter = 7;
     private double bailout_radius = 1.1;
@@ -171,12 +167,12 @@ public class KIFS3DFunc extends VariationFunc {
 
     @Override
     public String[] getParameterNames() {
-        return paramNames; // Updated array reference
+        return paramNames; 
     }
 
     @Override
     public Object[] getParameterValues() {
-        // Return values in the SAME order as paramNames // MODIFIED: Added mirror_fold
+        // Return values in the SAME order as paramNames
         return new Object[]{
                 max_iter, bailout_radius,
                 kifs_scale_x, kifs_scale_y, kifs_scale_z, scale_pivot_type,
@@ -195,40 +191,77 @@ public class KIFS3DFunc extends VariationFunc {
 
     @Override
     public void setParameter(String pName, double pValue) {
-        // Set the value of the parameter identified by pName // MODIFIED: Added mirror_fold
+        // Set the value of the parameter identified by pName 
         if (PARAM_MAX_ITER.equalsIgnoreCase(pName)) max_iter = (int) pValue;
         else if (PARAM_BAILOUT_RADIUS.equalsIgnoreCase(pName)) bailout_radius = pValue;
         else if (PARAM_KIFS_SCALE_X.equalsIgnoreCase(pName)) kifs_scale_x = pValue;
         else if (PARAM_KIFS_SCALE_Y.equalsIgnoreCase(pName)) kifs_scale_y = pValue;
         else if (PARAM_KIFS_SCALE_Z.equalsIgnoreCase(pName)) kifs_scale_z = pValue;
-        else if (PARAM_SCALE_PIVOT_TYPE.equalsIgnoreCase(pName)) scale_pivot_type = (int) pValue;
+        else if (PARAM_SCALE_PIVOT_TYPE.equalsIgnoreCase(pName)) scale_pivot_type = limitIntVal(Tools.FTOI(pValue), 0, 1);
         else if (PARAM_CENTER_X.equalsIgnoreCase(pName)) center_x = pValue;
         else if (PARAM_CENTER_Y.equalsIgnoreCase(pName)) center_y = pValue;
         else if (PARAM_CENTER_Z.equalsIgnoreCase(pName)) center_z = pValue;
         else if (PARAM_OFFSET_X.equalsIgnoreCase(pName)) offset_x = pValue;
         else if (PARAM_OFFSET_Y.equalsIgnoreCase(pName)) offset_y = pValue;
         else if (PARAM_OFFSET_Z.equalsIgnoreCase(pName)) offset_z = pValue;
-        else if (PARAM_MIRROR_FOLD.equalsIgnoreCase(pName)) mirror_fold = (int) pValue;
-        else if (PARAM_FOLD_TYPE.equalsIgnoreCase(pName)) fold_type = (int) pValue;
+        else if (PARAM_MIRROR_FOLD.equalsIgnoreCase(pName)) mirror_fold = limitIntVal(Tools.FTOI(pValue), 0, 1);
+        else if (PARAM_FOLD_TYPE.equalsIgnoreCase(pName)) fold_type = limitIntVal(Tools.FTOI(pValue), 0, 4);
         else if (PARAM_FOLD_PLANE1_NX.equalsIgnoreCase(pName)) fold_plane1_nx = pValue;
         else if (PARAM_FOLD_PLANE1_NY.equalsIgnoreCase(pName)) fold_plane1_ny = pValue;
         else if (PARAM_FOLD_PLANE1_NZ.equalsIgnoreCase(pName)) fold_plane1_nz = pValue;
         else if (PARAM_FOLD_PLANE1_DIST.equalsIgnoreCase(pName)) fold_plane1_dist = pValue;
-        else if (PARAM_FOLD_PLANE1_INTENSITY.equalsIgnoreCase(pName)) fold_plane1_intensity = pValue;
+        else if (PARAM_FOLD_PLANE1_INTENSITY.equalsIgnoreCase(pName)) fold_plane1_intensity = pValue > 0 ? pValue : 0;
         else if (PARAM_EDGE_X.equalsIgnoreCase(pName)) edge_x = pValue;
         else if (PARAM_EDGE_Y.equalsIgnoreCase(pName)) edge_y = pValue;
         else if (PARAM_EDGE_Z.equalsIgnoreCase(pName)) edge_z = pValue;
         else if (PARAM_ROT_X.equalsIgnoreCase(pName)) rot_x = pValue;
         else if (PARAM_ROT_Y.equalsIgnoreCase(pName)) rot_y = pValue;
         else if (PARAM_ROT_Z.equalsIgnoreCase(pName)) rot_z = pValue;
-        else if (PARAM_ROT_ORDER.equalsIgnoreCase(pName)) rot_order = (int) pValue;
-        else if (PARAM_ROT_CENTER_TYPE.equalsIgnoreCase(pName)) rot_center_type = (int) pValue;
-        else if (PARAM_TRANSFORM_ORDER.equalsIgnoreCase(pName)) transform_order = (int) pValue;
-        else if (PARAM_POST_SYMMETRY.equalsIgnoreCase(pName)) post_symmetry = (int) pValue;
-        else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) color_mode = (int) pValue;
+        else if (PARAM_ROT_ORDER.equalsIgnoreCase(pName)) rot_order = limitIntVal(Tools.FTOI(pValue), 0, 1);
+        else if (PARAM_ROT_CENTER_TYPE.equalsIgnoreCase(pName)) rot_center_type = limitIntVal(Tools.FTOI(pValue), 0, 2);
+        else if (PARAM_TRANSFORM_ORDER.equalsIgnoreCase(pName)) transform_order = limitIntVal(Tools.FTOI(pValue), 0, 2);
+        else if (PARAM_POST_SYMMETRY.equalsIgnoreCase(pName)) post_symmetry = limitIntVal(Tools.FTOI(pValue), 0, 7);
+        else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) color_mode = limitIntVal(Tools.FTOI(pValue), 0, 5);
         else if (PARAM_COLOR_SCALE.equalsIgnoreCase(pName)) color_scale = pValue;
         else throw new IllegalArgumentException("Unknown parameter name: " + pName);
     }
+    
+    @Override
+    public void randomize() {
+    	max_iter = (int) (Math.random() * 20 + 3);
+    	bailout_radius = Math.random() * 1.3 + 0.2;
+    	kifs_scale_x = Math.random() * 4.0 - 2.0;
+    	kifs_scale_y = Math.random() * 4.0 - 2.0;
+    	kifs_scale_z = Math.random() * 4.0 - 2.0;
+    	scale_pivot_type = (int) (Math.random() * 2);
+    	center_x = Math.random() * 4.0 - 2.0;
+    	center_y = Math.random() * 4.0 - 2.0;
+    	center_z = Math.random() * 4.0 - 2.0;
+    	offset_x = Math.random() * 4.0 - 2.0;
+    	offset_x = Math.random() * 4.0 - 2.0;
+    	offset_x = Math.random() * 4.0 - 2.0;
+    	mirror_fold = (int) (Math.random() * 2);
+    	fold_type = (int) (Math.random() * 5);
+    	fold_plane1_nx = Math.random() * 4.0 - 2.0;
+    	fold_plane1_ny = Math.random() * 4.0 - 2.0;
+    	fold_plane1_nz = Math.random() * 4.0 - 2.0;
+    	fold_plane1_dist = Math.random() * 2.0;
+    	fold_plane1_intensity = Math.random() * 2.0;
+    	edge_x = Math.random() * 4.0 - 2.0;
+    	edge_y = Math.random() * 4.0 - 2.0;
+    	rot_x = Math.random() * 360.0 - 180.0;
+    	rot_y = Math.random() * 360.0 - 180.0;
+    	rot_z = Math.random() * 360.0 - 180.0;
+    	rot_order = (int) (Math.random() * 2);
+    	rot_center_type = (int) (Math.random() * 3);
+    	transform_order = (int) (Math.random() * 3);
+    	int ps1 = (Math.random() < 0.75) ? 1 : 0;
+    	int ps2 = (Math.random() < 0.75) ? 2 : 0;
+    	int ps3 = (Math.random() < 0.75) ? 4 : 0;
+    	post_symmetry = ps1 + ps2 + ps3;
+    	color_mode = (int) (Math.random() * 6);
+    	color_scale = Math.random() * 6.0 - 3.0;
+   }
 
     // --- Initialization ---
     /**
@@ -311,9 +344,8 @@ public class KIFS3DFunc extends VariationFunc {
             iter_color = 1.0; // Assign full color if it didn't escape
         }
 
-        // --- Apply Post-Loop Symmetry --- (Unchanged)
+        // --- Apply Post-Loop Symmetry ---
          if (post_symmetry > POST_SYM_NONE) {
-             // ... (rest of symmetry code is the same)
             double signX = (pContext.random() < 0.5) ? -1.0 : 1.0;
             double signY = (pContext.random() < 0.5) ? -1.0 : 1.0;
             double signZ = (pContext.random() < 0.5) ? -1.0 : 1.0;
@@ -327,7 +359,6 @@ public class KIFS3DFunc extends VariationFunc {
          double color_value = 0.0;
          double temp_val = 0.0;
          switch (color_mode) {
-             // ... (rest of color mode code is the same)
             case COLOR_MODE_FINAL_R: temp_val = Math.sqrt(x * x + y * y + z * z) * color_scale; color_value = temp_val - Math.floor(temp_val); break;
             case COLOR_MODE_FINAL_XY_ANGLE: temp_val = Math.atan2(y, x); color_value = ((temp_val + Math.PI) / (2.0 * Math.PI)) * color_scale; color_value = color_value - Math.floor(color_value); break;
             case COLOR_MODE_FINAL_X: temp_val = x * color_scale; color_value = temp_val - Math.floor(temp_val); break;
@@ -336,12 +367,12 @@ public class KIFS3DFunc extends VariationFunc {
             case COLOR_MODE_ITER: default: color_value = iter_color; break;
          }
 
-        // Apply the variation amount (pAmount) (Unchanged)
+        // Apply the variation amount (pAmount)
         double finalX = x * pAmount;
         double finalY = y * pAmount;
         double finalZ = z * pAmount;
 
-        // Write the final coordinates and calculated color index (Unchanged)
+        // Write the final coordinates and calculated color index
         pVarTP.x += finalX;
         pVarTP.y += finalY;
         pVarTP.z += finalZ;
@@ -350,13 +381,13 @@ public class KIFS3DFunc extends VariationFunc {
 
     // --- Helper Methods for Transformations ---
 
-    // Internal class to return multiple values (Unchanged)
+    // Internal class to return multiple values
     private static class Point3D {
         double x, y, z;
         Point3D(double x, double y, double z) { this.x = x; this.y = y; this.z = z; }
     }
 
-    // applyFolding // MODIFIED: Added MIRROR_FOLD
+    // applyFolding
     // (pContext needed for random() method
     private Point3D applyFolding(FlameTransformationContext pContext, double x, double y, double z) {
     	if (mirror_fold <= 0) { // fold only
@@ -512,7 +543,7 @@ public class KIFS3DFunc extends VariationFunc {
     }
 
 
-    // --- Variation Naming & Type --- (Unchanged)
+    // --- Variation Naming & Type ---
 
     @Override
     public String getName() {
@@ -521,6 +552,6 @@ public class KIFS3DFunc extends VariationFunc {
 
     @Override
     public VariationFuncType[] getVariationTypes() {
-        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D};
+        return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION};
     }
 }
