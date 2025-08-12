@@ -59,7 +59,7 @@ public class FloraFunc extends VariationFunc {
 
     @Override
     public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-        double t = pAffineTP.getPrecalcAtan(); // Use direct angle for some formulas
+        double t = pAffineTP.getPrecalcAtanYX(); // Use direct angle for some formulas
         double r = (filled > 0 && filled > pContext.random()) ? pAmount * pContext.random() : pAmount;
 
         double lx = 0, ly = 0;
@@ -213,7 +213,7 @@ public class FloraFunc extends VariationFunc {
                 ly = hosta_r * sin(t);
                 break;
             case 18: // Alocasia (Elephant Ear) Leaf
-                t = pAffineTP.getPrecalcAtan(); // Use direct angle for this specific formula
+                t = pAffineTP.getPrecalcAtanYX(); // Use direct angle for this specific formula
                 double alocasia_base_r = 1.0 - sin(t);
                 double alocasia_lobe_definition = 1.0 - (0.1 + shapeMod * 0.4) * pow(cos(t), 2.0);
                 double alocasia_r = alocasia_base_r * alocasia_lobe_definition;
@@ -234,7 +234,7 @@ public class FloraFunc extends VariationFunc {
                 ly = columbine_r * sin(t);
                 break;
             case 21: // Birch Leaf (Final Corrected Formula from Test)
-                t = pAffineTP.getPrecalcAtan(); // Use direct angle
+                t = pAffineTP.getPrecalcAtanYX(); // Use direct angle
                 double birch_base_r = 1.0 - 0.9 * sin(t);
                 double primary_serrations = 1.0 + 0.05 * cos(20.0 * t);
                 double secondary_serrations = 1.0 + (0.02 + shapeMod * 0.03) * cos(40.0 * t);
@@ -255,7 +255,7 @@ public class FloraFunc extends VariationFunc {
                 ly = -linden_r * cos(t);
                 break;
             case 24: // Fiddlehead Fern
-                t = pAffineTP.getPrecalcAtan() * (2.0 + shapeMod * 4.0) * M_PI;
+                t = pAffineTP.getPrecalcAtanYX() * (2.0 + shapeMod * 4.0) * M_PI;
                 double fiddlehead_r = 0.05 * t;
                 lx = fiddlehead_r * cos(t);
                 ly = fiddlehead_r * sin(t);
