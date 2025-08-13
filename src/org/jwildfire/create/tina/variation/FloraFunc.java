@@ -260,29 +260,6 @@ public class FloraFunc extends VariationFunc {
                 lx = fiddlehead_r * cos(t);
                 ly = fiddlehead_r * sin(t);
                 break;
-            case 25: // Barnsley Fern (no stem)
-                double rand = pContext.random();
-                double totalProb = 0.99;
-                double p_frond = (0.85 - (shapeMod-0.5)*0.1) / totalProb;
-                double p_left  = (0.07 + (shapeMod-0.5)*0.05) / totalProb;
-                
-                if (rand < p_frond) {
-                    lx = 0.85 * x + 0.04 * y;
-                    ly = -0.04 * x + 0.85 * y + 1.6;
-                } else if (rand < p_frond + p_left) {
-                    lx = 0.2 * x - 0.26 * y;
-                    ly = 0.23 * x + 0.22 * y + 1.6;
-                } else {
-                    lx = -0.15 * x + 0.28 * y;
-                    ly = 0.26 * x + 0.24 * y + 0.44;
-                }
-                
-                pVarTP.x += lx * scale * pAmount;
-                pVarTP.y += ly * scale * pAmount;
-                if (pContext.isPreserveZCoordinate()) {
-                    pVarTP.z += pAmount * pAffineTP.z;
-                }
-                return;
         }
 
         // Apply distortion for a more organic look
@@ -315,7 +292,7 @@ public class FloraFunc extends VariationFunc {
     @Override
     public void setParameter(String pName, double pValue) {
         if (PARAM_LEAF_TYPE.equalsIgnoreCase(pName))
-            leafType = limitIntVal(Tools.FTOI(pValue), 0, 25);
+            leafType = limitIntVal(Tools.FTOI(pValue), 0, 24);
         else if (PARAM_FILLED.equalsIgnoreCase(pName))
             filled = Tools.limitValue(pValue, 0.0, 1.0);
         else if (PARAM_SCALE.equalsIgnoreCase(pName))
@@ -348,7 +325,7 @@ public class FloraFunc extends VariationFunc {
     
     @Override
     public void randomize() {
-    	leafType = (int) (Math.random() * 26);
+    	leafType = (int) (Math.random() * 25);
     	filled = Math.random();
     	scale = Math.random() * 2.0 + 0.5;
     	if (Math.random() < 0.5) distort = Math.random() * 0.2 - 0.1;
