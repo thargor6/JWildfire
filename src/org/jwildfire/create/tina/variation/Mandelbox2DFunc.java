@@ -24,6 +24,7 @@
  */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -162,23 +163,49 @@ public class Mandelbox2DFunc extends VariationFunc {
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_MANDELBOX_MODE.equalsIgnoreCase(pName)) { mandelboxMode = (int) pValue; }
+    if (PARAM_MANDELBOX_MODE.equalsIgnoreCase(pName)) { mandelboxMode = limitIntVal(Tools.FTOI(pValue), 0, 2); }
     else if (PARAM_ITERATIONS.equalsIgnoreCase(pName)) { iterations = Math.max(0, (int) pValue); }
     else if (PARAM_SCALE.equalsIgnoreCase(pName)) { scale = pValue; }
     else if (PARAM_FOLD_LIMIT.equalsIgnoreCase(pName)) { foldLimit = pValue; }
     else if (PARAM_MIN_RADIUS.equalsIgnoreCase(pName)) { minRadius = pValue; }
     else if (PARAM_FIXED_RADIUS.equalsIgnoreCase(pName)) { fixedRadius = pValue; }
     else if (PARAM_ROTATION.equalsIgnoreCase(pName)) { rotation = pValue; }
-    else if (PARAM_JULIA_MODE.equalsIgnoreCase(pName)) { juliaMode = (int) pValue; }
+    else if (PARAM_JULIA_MODE.equalsIgnoreCase(pName)) { juliaMode = limitIntVal(Tools.FTOI(pValue), 0, 1); }
     else if (PARAM_JULIA_X.equalsIgnoreCase(pName)) { juliaX = pValue; }
     else if (PARAM_JULIA_Y.equalsIgnoreCase(pName)) { juliaY = pValue; }
-    else if (PARAM_COLORING_MODE.equalsIgnoreCase(pName)) { coloringMode = (int) pValue; }
+    else if (PARAM_COLORING_MODE.equalsIgnoreCase(pName)) { coloringMode = limitIntVal(Tools.FTOI(pValue), 0, 2); }
     else if (PARAM_COLOR_SPEED.equalsIgnoreCase(pName)) { colorSpeed = pValue; }
     else { throw new IllegalArgumentException("Unknown parameter: " + pName); }
+  }
+  
+  @Override
+  public void randomize() {
+  	mandelboxMode = (int) (Math.random() * 3);
+  	iterations = (int) (Math.random() * 25);
+  	foldLimit = Math.random() * 2.0 + 0.5;
+  	if (mandelboxMode == 0) {
+  		scale = Math.random() * 4.5 - 3.0;
+  		fixedRadius = Math.random() * 5.0 + 0.1;
+  	} else if (mandelboxMode == 1) {
+  		scale = Math.random() * 3.0 - 1.0;
+  		fixedRadius = Math.random() * 1.5 + 0.1;
+  	} else {
+  		scale = Math.random() * 3.0 - 1.5;
+  		fixedRadius = Math.random() * 2.0 + 0.1;
+  	}
+  	if (Math.random() < 0.2) minRadius = Math.random() * 5.0;
+  	else minRadius = fixedRadius + Math.random() - 0.25;
+  	if (Math.random() < 0.3) rotation = Math.random() * 360.0 - 180.0;
+  	else rotation = Math.random() * 180.0 - 90.0;
+  	juliaMode = (int) (Math.random() * 2);
+  	juliaX = Math.random() * 5.0 - 2.5;
+  	juliaY = Math.random() * 5.0 - 2.5;
+  	coloringMode = (int) (Math.random() * 3);
+  	colorSpeed = Math.random();
   }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN};
   }
 }

@@ -252,6 +252,23 @@ public class CamouflageFunc extends VariationFunc {
   public String getName() {
     return "camouflage";
   }
+  
+  @Override
+  public void randomize() {
+  	seed = Math.random() * 2400.0 + 100.0;
+  	scale = Math.random() * 4.5 + 0.5;
+  	noiseType = (int) (Math.random() * 3);
+  	levels = (int) (Math.random() * 10 + 1);
+  	octaves = (int) (Math.random() * 10 + 1);
+  	persistence = (Math.random() + Math.random() + Math.random() + Math.random()) / 4.0;
+  	lacunarity = (Math.random() + Math.random() + Math.random() + Math.random()) / 2.0 + 1.0;
+  	if (Math.random() < 0.5) stretch = 1.0;
+  	else stretch = Math.random() * 1.5 + 0.5;
+  	rotation = Math.random();
+  	displacement = Math.random() * 4.0 - 2.0;
+  	zOffset = Math.random() * 2.0 - 1.0;
+  	colorize = (int) (Math.random() * 2);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

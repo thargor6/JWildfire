@@ -51,7 +51,10 @@ public class PolySurfFunc extends VariationFunc {
   private static final String PARAM_COLOR_MODE = "colorMode";
   private static final String PARAM_COLOR_SPEED = "colorSpeed";
   
+  private static final String RESSOURCE_DESCRIPTION = "description";
+
   private static final String[] paramNames = {PARAM_C, PARAM_MIRROR_X, PARAM_MIRROR_Y, PARAM_MIRROR_Z, PARAM_JULIA, PARAM_JULIA_X, PARAM_JULIA_Y, PARAM_JULIA_Z, PARAM_ENABLE_FOLD, PARAM_FOLD_X, PARAM_FOLD_Y, PARAM_ROT_X, PARAM_ROT_Y, PARAM_ROT_Z, PARAM_ENABLE_OFFSET, PARAM_OFFSET_X, PARAM_OFFSET_Y, PARAM_OFFSET_Z, PARAM_ENABLE_INVERT, PARAM_INVERT_RADIUS, PARAM_COLOR_MODE, PARAM_COLOR_SPEED};
+  private static final String[] ressourceNames = {RESSOURCE_DESCRIPTION};
 
   // Defaults
   private double c = 0.3;
@@ -76,6 +79,8 @@ public class PolySurfFunc extends VariationFunc {
   private double invertRadius = 1.0;
   private int colorMode = 0;
   private double colorSpeed = 1.0;
+
+  private String description = "org.jwildfire.create.tina.variation.reference.ReferenceFile polySurf.txt";
 
   private double sqr(double pVal) {
     return pVal * pVal;
@@ -205,13 +210,13 @@ public class PolySurfFunc extends VariationFunc {
     if (PARAM_C.equalsIgnoreCase(pName))
       c = pValue;
     else if (PARAM_MIRROR_X.equalsIgnoreCase(pName))
-      mirrorX = Tools.FTOI(pValue);
+      mirrorX = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (PARAM_MIRROR_Y.equalsIgnoreCase(pName))
-      mirrorY = Tools.FTOI(pValue);
+      mirrorY = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (PARAM_MIRROR_Z.equalsIgnoreCase(pName))
-      mirrorZ = Tools.FTOI(pValue);
+      mirrorZ = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (PARAM_JULIA.equalsIgnoreCase(pName))
-      julia = Tools.FTOI(pValue);
+      julia = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (PARAM_JULIA_X.equalsIgnoreCase(pName))
       juliaX = pValue;
     else if (PARAM_JULIA_Y.equalsIgnoreCase(pName))
@@ -219,7 +224,7 @@ public class PolySurfFunc extends VariationFunc {
     else if (PARAM_JULIA_Z.equalsIgnoreCase(pName))
       juliaZ = pValue;
     else if (PARAM_ENABLE_FOLD.equalsIgnoreCase(pName))
-      enableFold = Tools.FTOI(pValue);
+      enableFold = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (PARAM_FOLD_X.equalsIgnoreCase(pName))
       foldX = pValue;
     else if (PARAM_FOLD_Y.equalsIgnoreCase(pName))
@@ -231,7 +236,7 @@ public class PolySurfFunc extends VariationFunc {
     else if (PARAM_ROT_Z.equalsIgnoreCase(pName))
       rotZ = pValue;
     else if (PARAM_ENABLE_OFFSET.equalsIgnoreCase(pName))
-        enableOffset = Tools.FTOI(pValue);
+        enableOffset = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (PARAM_OFFSET_X.equalsIgnoreCase(pName))
         offsetX = pValue;
     else if (PARAM_OFFSET_Y.equalsIgnoreCase(pName))
@@ -239,17 +244,35 @@ public class PolySurfFunc extends VariationFunc {
     else if (PARAM_OFFSET_Z.equalsIgnoreCase(pName))
         offsetZ = pValue;
     else if (PARAM_ENABLE_INVERT.equalsIgnoreCase(pName))
-        enableInvert = Tools.FTOI(pValue);
+        enableInvert = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (PARAM_INVERT_RADIUS.equalsIgnoreCase(pName))
         invertRadius = pValue;
     else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName))
-        colorMode = Tools.FTOI(pValue);
+        colorMode = limitIntVal(Tools.FTOI(pValue), 0, 2);
     else if (PARAM_COLOR_SPEED.equalsIgnoreCase(pName))
         colorSpeed = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {description.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_DESCRIPTION.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+  
   @Override
   public String getName() {
     return "polySurf";
@@ -263,6 +286,33 @@ public class PolySurfFunc extends VariationFunc {
     c2z = 2 * c;
     c2 = sqr(c);
   }
+  
+  @Override
+  public void randomize() {
+  	if (Math.random() < 0.3) c = Math.random() * 1.0 + 0.1;
+  	else c = Math.random() * 0.4 + 0.1;
+  	mirrorX = (int) (Math.random() * 2);
+  	mirrorY = (int) (Math.random() * 2);
+  	mirrorZ = (int) (Math.random() * 2);
+  	julia = (int) (Math.random() * 2);
+  	juliaX = Math.random() * 4.0 - 2.0;
+  	juliaY = Math.random() * 4.0 - 2.0;
+  	juliaZ = Math.random() * 4.0 - 2.0;
+  	enableFold = (int) (Math.random() * 2);
+  	foldX = Math.random() * 6.0 - 3.0;
+  	foldY = Math.random() * 6.0 - 3.0;
+  	rotX = Math.random() * 360.0 - 180.0;
+  	rotY = Math.random() * 360.0 - 180.0;
+  	rotZ = Math.random() * 360.0 - 180.0;
+  	enableOffset = (int) (Math.random() * 2);
+  	offsetX = Math.random() * 6.0 - 3.0;
+  	offsetY = Math.random() * 6.0 - 3.0;
+  	offsetZ = Math.random() * 6.0 - 3.0;
+  	enableInvert = (Math.random() < 0.7) ? 0 : 1;
+  	invertRadius = Math.random() * 3.0 + 0.25;
+  	colorMode = (int) (Math.random() * 4);
+  	colorSpeed = Math.random() * 2.0;
+ }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
