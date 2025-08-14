@@ -64,10 +64,6 @@ public class FloraFunc extends VariationFunc {
 
         double lx = 0, ly = 0;
 
-        // For the fern, we operate directly on the affine coordinates
-        double x = pAffineTP.x;
-        double y = pAffineTP.y;
-
         switch (leafType) {
             case 0: // Ginkgo Leaf
                 t += M_PI_2; // Orient the fan upwards
