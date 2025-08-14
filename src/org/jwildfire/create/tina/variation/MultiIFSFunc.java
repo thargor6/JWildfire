@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import static java.lang.Math.IEEEremainder;
@@ -1523,9 +1524,9 @@ public class MultiIFSFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_IFS_TYPE.equalsIgnoreCase(pName))
-        ifs_type = (int) pValue;
+        ifs_type = limitIntVal(Tools.FTOI(pValue), 0, 73);
     else if (PARAM_COLORING_MODE.equalsIgnoreCase(pName))
-        coloringMode = (int) pValue;
+        coloringMode = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (PARAM_COLOR_SPEED.equalsIgnoreCase(pName))
         colorSpeed = pValue;
     else if (PARAM_COLOR_1.equalsIgnoreCase(pName))
@@ -1539,9 +1540,20 @@ public class MultiIFSFunc extends VariationFunc {
     else
         throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+  	ifs_type = (int) (Math.random() * 74);
+  	coloringMode = (int) (Math.random() * 2);
+  	colorSpeed = Math.random() * 2.0;
+  	color1 = Math.random();
+  	color2 = Math.random();
+  	color3 = Math.random();
+  	color4 = Math.random();
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[] { VariationFuncType.VARTYPE_2D };
+    return new VariationFuncType[] { VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SUPPORTED_BY_SWAN };
   }
 }
