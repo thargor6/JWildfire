@@ -1,0 +1,55 @@
+PolySurf: User's Guide
+
+Congratulations on your new fractal variation! PolySurf is a powerful and complex tool designed to create intricate, symmetrical, 3D shapes with a "many-surfaced" appearance. This guide will walk you through what each parameter does so you can explore its full potential.
+
+Getting Started: The Core Shape
+These are the most fundamental parameters that define the basic shape and complexity of the fractal.
+
+c: This is the main scaling parameter for the "curl" effect. Think of it as the master control for the fractal's complexity.
+
+Small values (like the default 0.3) tend to create more detailed, web-like structures.
+
+Larger values can make the shape more solid or cause it to explode into chaos.
+
+Tip: Start with small adjustments to c to see how it affects the overall shape. This is a very sensitive control!
+
+Symmetry & Mirroring
+These parameters control the overall symmetry of your fractal.
+
+mirrorX, mirrorY, mirrorZ: These are simple on/off switches (1 for on, 0 for off). When turned on, they randomly mirror the shape across the corresponding axis. Turning on mirrorX and mirrorY is what creates the 4-way symmetry that was key to our final design.
+
+Transforming the Shape
+These groups of parameters modify the shape in different ways. The fun comes from seeing how they interact with each other.
+
+1. Folding
+enableFold: An on/off switch to activate the folding effect.
+
+foldX, foldY: Controls the distance of the "crease" from the center. Folding adds sharp edges and repeating, layered details to the surface, making it look more complex and geometric.
+
+2. Rotation
+rotX, rotY, rotZ: These parameters twist and warp the final shape. Unlike moving the main transform triangle, this rotates the result of the calculation, leading to interesting distortions and shearing effects.
+
+3. Spherical Inversion
+enableInvert: An on/off switch to activate inversion.
+
+invertRadius: Controls the size of an invisible sphere. The fractal shape is "reflected" across the surface of this sphere. This is a powerful effect for creating hollow, cavernous spaces and sharp, filigree-like details.
+
+Offsets: Changing the Core Geometry
+There are two types of offsets in PolySurf, and they have very different effects.
+
+1. Pre-Scaling Offset (The "Offset" section)
+enableOffset, offsetX, offsetY, offsetZ: This offset is applied before the main curl calculation. It fundamentally changes the core geometry and can drastically alter the shape of the fractal. The default settings you chose (enableOffset=1, offsetX=1.0, offsetY=1.0) are key to the look we developed.
+
+2. Julia Mode (The "Julia" section)
+julia, juliaX, juliaY, juliaZ: This offset is applied right at the beginning. It shifts the entire "calculation space." Turning this on is like exploring a parallel universe version of your fractal—the shapes will be related but different. It's a fantastic way to find new, unexpected forms without changing your main parameters.
+
+Coloring
+colorMode: A switch to change how the fractal is colored.
+  0 (Off): Uses the standard flame coloring.
+  1 (Distance): Creates a color gradient based on how far a point is from the center.
+  2 (Angle): Creates a radial, "pie slice" color pattern.
+  3 (Height): Creates a color gradient based on the Z-axis (height).
+
+colorSpeed: Controls the intensity and repetition of the color patterns.
+
+Have fun exploring!
