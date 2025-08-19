@@ -160,8 +160,17 @@ public class SZubietaFunc extends DrawFunc {
       throw new IllegalArgumentException(pName);
   }
 
+  @Override
   public String getName() {
     return "szubieta";
+  }
+  
+  @Override
+  public void randomize() {
+  	width = (int) (Math.random() * 225 + 32);
+  	height = (int) (Math.random() * 225 + 32);
+  	type = (int) (Math.random() * 2);
+  	scale = Math.random();
   }
 
   @Override

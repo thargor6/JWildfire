@@ -4650,7 +4650,42 @@ public class QuadFunc extends VariationFunc {
     ul_cPower_julian = ul_1b / ul_1a * 0.5;	
   }
 
-
+  @Override
+  public void randomize() {
+  	mode = (int) (Math.random() * 2);
+  	ul_quad = (int) (Math.random() * 50);
+  	ul_amount = Math.random() * 1.5 + 0.5;
+  	ul_shiftx = (Math.random() < 0.5) ? 0.0 : Math.random() * 2.0 - 1.0;
+  	ul_shifty = (Math.random() < 0.5) ? 0.0 : Math.random() * 2.0 - 1.0;
+  	ul_seed = (int) (Math.random() * 1000000);
+  	myRandGen.randomize(ul_seed);
+  	ul_1a = myRandGen.random()*2;
+  	ul_1b = myRandGen.random()*2;
+  	ur_quad = (int) (Math.random() * 50);
+  	ur_amount = Math.random() * 1.5 + 0.5;
+  	ur_shiftx = (Math.random() < 0.5) ? 0.0 : Math.random() * 2.0 - 1.0;
+  	ur_shifty = (Math.random() < 0.5) ? 0.0 : Math.random() * 2.0 - 1.0;
+  	ur_seed = (int) (Math.random() * 1000000);
+  	myRandGen.randomize(ur_seed);
+  	ur_1a = myRandGen.random()*2;
+  	ur_1b = myRandGen.random()*2;
+  	ll_quad = (int) (Math.random() * 50);
+  	ll_amount = Math.random() * 1.5 + 0.5;
+  	ll_shiftx = (Math.random() < 0.5) ? 0.0 : Math.random() * 2.0 - 1.0;
+  	ll_shifty = (Math.random() < 0.5) ? 0.0 : Math.random() * 2.0 - 1.0;
+  	ll_seed = (int) (Math.random() * 1000000);
+  	myRandGen.randomize(ll_seed);
+  	ll_1a = myRandGen.random()*2;
+  	ll_1b = myRandGen.random()*2;
+  	lr_quad = (int) (Math.random() * 50);
+  	lr_amount = Math.random() * 1.5 + 0.5;
+  	lr_shiftx = (Math.random() < 0.5) ? 0.0 : Math.random() * 2.0 - 1.0;
+  	lr_shifty = (Math.random() < 0.5) ? 0.0 : Math.random() * 2.0 - 1.0;
+  	lr_seed = (int) (Math.random() * 1000000);
+  	myRandGen.randomize(lr_seed);
+  	lr_1a = myRandGen.random()*2;
+  	lr_1b = myRandGen.random()*2;
+  }
 
   @Override
   public boolean dynamicParameterExpansion() {
@@ -4664,33 +4699,9 @@ public class QuadFunc extends VariationFunc {
     return PARAM_LR_SEED.equalsIgnoreCase(pName) || PARAM_UR_SEED.equalsIgnoreCase(pName) || PARAM_LL_SEED.equalsIgnoreCase(pName) || PARAM_UL_SEED.equalsIgnoreCase(pName);
   }
 
-  //  private double kn_pi, pi_kn, ka, ka_kn;
-
-  // @Override
-  // public void init(FlameTransformationContext pContext, Layer pLayer, //XForm pXForm, double pAmount) {
-  //   kn_pi = (double) 2 * M_1_PI;
-  //   pi_kn = M_PI / (double) 2;
-//    ka = M_PI * 0.20;
-//    ka_kn = ka / (double) 2;
-  // }
-
-  //private double lr_pz_sin, lr_pz_cos, ur_pz_sin, ur_pz_cos, ll_pz_sin, ll_pz_cos, ul_pz_sin, ul_pz_cos;
-
-  //@Override
-  //public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-//		lr_pz_sin = sin(lr_spin * M_PI_2);
-//		lr_pz_cos = cos(lr_spin * M_PI_2);
-//		ur_pz_sin = sin(ur_spin * M_PI_2);
-//		ur_pz_cos = cos(ur_spin * M_PI_2);
-//		ll_pz_sin = sin(ll_spin * M_PI_2);
-//		ll_pz_cos = cos(ll_spin * M_PI_2);
-//		ul_pz_sin = sin(ul_spin * M_PI_2);
-//		ul_pz_cos = cos(ul_spin * M_PI_2);
-//	}
-
-//  @Override
-//  public VariationFuncType[] getVariationTypes() {
-//    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
-//  }
+  @Override
+  public VariationFuncType[] getVariationTypes() {
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_2D};
+  }
 
 }

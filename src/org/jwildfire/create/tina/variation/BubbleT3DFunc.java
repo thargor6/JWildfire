@@ -271,6 +271,16 @@ public class BubbleT3DFunc extends VariationFunc implements SupportsGPU {
 
     angHoleComp = M_PI - angle_of_hole;
   }
+  
+  @Override
+  public void randomize() {
+  	number_of_stripes = (int) (Math.random() * 11);
+  	ratio_of_stripes = Math.random() * 2.0;
+  	angle_of_hole = Math.random() * 5.0;
+  	exponent_z = Math.random() * 4.0;
+  	symmetry_z = (int) (Math.random() * 2);
+  	modus_blur = (int) (Math.random() * 2);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

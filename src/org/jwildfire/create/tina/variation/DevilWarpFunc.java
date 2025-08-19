@@ -84,6 +84,16 @@ public class DevilWarpFunc extends VariationFunc implements SupportsGPU {
     else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+  	a = Math.random() * 3.0;
+  	b = Math.random() * 3.0;
+  	effect = Math.random() * 6.0 - 3.0;
+  	warp = Math.random() * 6.0 - 3.0;
+  	rmin = Math.random() * 7.0 - 5.0;
+  	rmax = rmin + ((Math.random() < 0.8) ? Math.random() * 5.0 : Math.random() * 100.0);
+  }
 
   @Override
   public String getName() {

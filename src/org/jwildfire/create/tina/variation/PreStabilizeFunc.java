@@ -111,6 +111,14 @@ public class PreStabilizeFunc extends VariationFunc {
     start = true;
 
   }
+  
+  @Override
+  public void randomize() {
+  	n = (int) (Math.random() * 250 + 2);
+  	seed = (int) (Math.random() * 1000000);
+  	p = Math.random();
+  	dc = (int) (Math.random() * 2);
+  }
 
   @Override
   public int getPriority() {

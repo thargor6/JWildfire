@@ -184,6 +184,24 @@ public class MobiusDragon3DFunc extends VariationFunc implements SupportsGPU {
     else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+  	re = Math.random() * 4.0 - 2.0;
+  	im = Math.random() * 4.0 - 2.0;
+  	x_spread = (Math.random() < 0.8) ? sqrt((int) (Math.random() * 6 + 1)) : Math.random() * 2.5;
+  	y_spread = (Math.random() < 0.7) ? (int) (Math.random() * 5) : Math.random() * 10.0;
+  	z_spread = (Math.random() < 0.5) ? 0.0 : Math.random() * 3.0;
+  	x_add = Math.random();
+  	y_add = Math.random() * 1.5 - 1.0;
+  	log_spread = (Math.random() < 0.75) ? 2.71828 : Math.random() * 3.0 + 1.0;
+  	line_enable = (int) (Math.random() * 2);
+  	line_weight = Math.random() * 0.25;
+  	line_color_shift = Math.random();
+  	mag_color = (int) (Math.random() * 2);
+  	mag_color_scale = Math.random() * 2.0;
+  	iterations = (int) (Math.random() * ((Math.random() < 0.8) ? 0 : 10) + 1);
+  }
 
 
   @Override
@@ -193,7 +211,7 @@ public class MobiusDragon3DFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public VariationFuncType[] getVariationTypes() {
-    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SUPPORTS_GPU};
+    return new VariationFuncType[]{VariationFuncType.VARTYPE_3D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_SUPPORTS_GPU};
   }
 
   @Override

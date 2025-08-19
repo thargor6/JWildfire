@@ -79,6 +79,14 @@ public class EpispiralFunc extends VariationFunc implements SupportsGPU {
     else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+  	if (Math.random() < 0.5) n = floor(Math.random() * 17 + 3);
+  	else n = Math.random() * 48.0 + 2.0;
+  	thickness = (Math.random() < 0.2) ? 0.0 : Math.random() * 5.0 - 2.5;
+  	holes = Math.random() * 10.0 - 5.0;
+  }
 
   @Override
   public String getName() {

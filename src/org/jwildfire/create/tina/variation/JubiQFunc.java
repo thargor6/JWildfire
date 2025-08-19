@@ -232,6 +232,23 @@ public class JubiQFunc extends VariationFunc {
     _absN = iabs(Tools.FTOI(power));
     _cN = dist / power * 0.5;
   }
+  
+  @Override
+  public void randomize() {
+  	super.randomize();
+    power = (int) (Math.random() * 10 + 2);
+    if (Math.random() < 0.5)
+      power *= -1;
+    double r = Math.random();
+    if (r < 0.4)
+      dist = Math.random() * 0.5 + 0.75;
+    else if (r < 0.8)
+      dist = Math.random() * 3.3 + 0.2;
+    else 
+      dist = 1.0;
+    if (Math.random() < 0.4) 
+      dist *= -1;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
