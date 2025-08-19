@@ -80,6 +80,13 @@ public class ShiftFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "shift";
   }
+  
+  @Override
+  public void randomize() {
+  	shift_x = Math.random() * 6.0 - 3.0;
+  	shift_y = Math.random() * 6.0 - 3.0;
+  	angle = Math.random() * 360.0 - 180.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

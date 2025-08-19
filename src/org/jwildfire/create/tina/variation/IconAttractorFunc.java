@@ -34,9 +34,10 @@ public class IconAttractorFunc extends VariationFunc implements SupportsGPU {
   private static final String PARAM_CENTERY = "centery";
   private static final String PARAM_SCALE = "scale";
 
-
+  private static final String RESSOURCE_ID_REFERENCE = "presetId_reference";
+  
   private static final String[] paramNames = {PARAM_PRESETID, PARAM_DEGREE, PARAM_A, PARAM_B, PARAM_G, PARAM_O, PARAM_L, PARAM_CENTERX, PARAM_CENTERY, PARAM_SCALE};
-
+  private static final String[] ressourceNames = {RESSOURCE_ID_REFERENCE};
 
   int[] pdeg = {5, 3, 5, 3, 3, 9, 6, 23, 7, 5, 5, 5, 4, 3, 3, 3, 16};
   double[] pa = {5.0, -1.0, 1.806, 10.0, -2.5, 3.0, 5.0, -2.5, 1.0, 2.32, -2.0, 2.0, 2.0, -1.0, -1.0, -1.0, -2.5};
@@ -61,6 +62,8 @@ public class IconAttractorFunc extends VariationFunc implements SupportsGPU {
   private double scale = 5.0;
   private double bdcs;
 
+  private String id_reference = "org.jwildfire.create.tina.variation.reference.ReferenceFile iconattractor-presets.pdf";
+  
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     bdcs = 1.0 / (scale == 0.0 ? 10E-6 : scale);
   }
@@ -146,9 +149,53 @@ public class IconAttractorFunc extends VariationFunc implements SupportsGPU {
   }
 
   @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] {id_reference.getBytes()};
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_ID_REFERENCE.equalsIgnoreCase(pName)) {
+      return RessourceType.REFERENCE;
+    }
+    else throw new IllegalArgumentException(pName);
+  }
+
+  // Changing presetId will modify other params
+	@Override
+	public boolean dynamicParameterExpansion() {
+		return true;
+	}
+
+	@Override
+	public boolean dynamicParameterExpansion(String pName) {
+		return true;
+	}	
+	
+	@Override
+	public void randomize() {
+	  presetId = (int) (pdeg.length * Math.random());
+	  degree = pdeg[presetId];
+	  a = pa[presetId] + Math.random() * 0.2 - 0.1;
+	  b = pb[presetId] + Math.random() * 0.2 - 0.1;
+	  g = pg[presetId] + Math.random() * 0.2 - 0.1;
+	  o = po[presetId] + Math.random() * 0.2 - 0.1;
+	  l = pl[presetId] + Math.random() * 0.2 - 0.1;
+		centerx = Math.random() * 2.0 - 1.0;
+		centery = Math.random() * 2.0 - 1.0;
+		scale = Math.random() * 10.0;
+	}
+
+	@Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_SIMULATION, VariationFuncType.VARTYPE_DC, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU, VariationFuncType.VARTYPE_SUPPORTS_BACKGROUND};
   }
+	
   @Override
   public String getGPUCode(FlameTransformationContext context) {
     return   "    float bdcs = 1.0 / ( __iconattractor_js_scale  == 0.0 ? 10.0e-6 :  __iconattractor_js_scale );"

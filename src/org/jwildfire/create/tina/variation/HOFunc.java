@@ -86,6 +86,14 @@ public class HOFunc extends VariationFunc implements SupportsGPU {
     else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+  	// the parameters are doubles, but only integers actually seem to work
+  	xpow = (int) (Math.random() * 7 + 1);
+  	ypow = (int) (Math.random() * 7 + 1);
+  	zpow = (int) (Math.random() * 7 + 1);
+  }
 
   @Override
   public String getName() {

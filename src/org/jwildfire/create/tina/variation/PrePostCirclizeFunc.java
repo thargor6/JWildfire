@@ -103,6 +103,14 @@ public class PrePostCirclizeFunc extends VariationFunc {
     else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+  	n = (int) (Math.random() * 25 + 3);
+  	rotation = Math.random() * 360.0 - 180.0;
+  	rot_rad = rotation * M_PI / 180;
+  	reverse = (int) (Math.random() * 2);
+  }
 
   @Override
   public String getName() {

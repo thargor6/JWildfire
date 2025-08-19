@@ -184,7 +184,27 @@ public class HarmonographFunc extends VariationFunc implements SupportsGPU {
   public String getName() {
     return "harmonograph_js";
   }
+  
+  @Override
+  public void randomize() {
+  	seed = (int) (Math.random() * 1000000);
+  	time = (int) (Math.random() * 450 + 10);
+  	// changing seed already randomizes other params
+  	rand.setSeed(seed);
+  	calcParams();
+  }
+  
+  // Changing seed will modify other params
+	@Override
+	public boolean dynamicParameterExpansion() {
+		return true;
+	}
 
+	@Override
+	public boolean dynamicParameterExpansion(String pName) {
+		return true;
+	}	
+	
   @Override
   public VariationFuncType[] getVariationTypes() {
     return new VariationFuncType[]{VariationFuncType.VARTYPE_2D, VariationFuncType.VARTYPE_BASE_SHAPE, VariationFuncType.VARTYPE_SUPPORTS_GPU};

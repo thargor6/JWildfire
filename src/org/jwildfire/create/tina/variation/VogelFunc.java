@@ -77,6 +77,12 @@ public class VogelFunc extends VariationFunc implements SupportsGPU {
       pVarTP.z += pAmount * pAffineTP.z;
     }
   }
+  
+  @Override
+  public void randomize() {
+  	n = (int) (Math.random() * 50 + 2);
+  	scale = Math.random() * 2.0 - 1.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

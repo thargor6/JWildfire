@@ -180,6 +180,22 @@ public class MandelbrotFunc extends VariationFunc implements SupportsGPU {
     else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+  	iter = (int) (Math.random() * 950 + 50);
+  	xmin = Math.random() * 2.0 - 2.0;
+  	xmax = Math.random() * (1.0 - xmin) + xmin;
+  	ymin = Math.random() * 1.5 - 1.5;
+  	ymax = Math.random() * (1.5 - ymin) + ymin;
+  	invert = (int) (Math.random() * 2);
+  	skin = Math.random() * 0.99 + 0.01;
+    cx = (Math.random() < 0.75) ? 0.0 : Math.random() * 3.0 - 1.5;
+    cy = (Math.random() < 0.75) ? 0.0 : Math.random() * 3.0 - 1.5;
+    max_points = (Math.random() < 0.85) ? -1 : (int) (Math.random() * iter * (iter - 50) + 50*iter);
+    seed = (int) (Math.random() * 1000000);
+    rnd_z_range = Math.random() * 2.0 - 1.0;
+  }
 
   @Override
   public String getName() {

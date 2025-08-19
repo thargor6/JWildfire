@@ -1261,6 +1261,49 @@ public class SynthFunc extends VariationFunc {
     }
     return;
   }
+  
+  @Override
+  public void randomize() {
+  	a = (Math.random() < 0.5) ? 1.0 : Math.random() * 6.0 - 3.0;
+  	mode = (int) ((Math.random() < 0.9) ? Math.random()* 20 : Math.random() * 7 + 1000);
+  	power = Math.random() * 6.0 - 3.0;
+  	mix = (Math.random() < 0.5) ? 1.0 : Math.random() * 6.0 - 3.0;
+  	smooth = (int) (Math.random() * 2);
+  	double r = Math.random();
+  	b = Math.random() * 6.0 - 3.0;
+  	b_type = (int) (Math.random() * 9);
+  	b_skew = (Math.random() < 0.4) ? 0.0 : Math.random() * 2.0 - 1.0;
+  	b_phs = Math.random() * M_2_PI - M_PI;
+  	b_layer = (int) (Math.random() * 4);
+  	if (r < 0.8) {
+    	c = Math.random() * 6.0 - 3.0;
+    	c_type = (int) (Math.random() * 9);
+    	c_skew = (Math.random() < 0.4) ? 0.0 : Math.random() * 2.0 - 1.0;
+    	c_phs = Math.random() * M_2_PI - M_PI;
+    	c_layer = (int) (Math.random() * 4);
+  	} else c = 0.0;
+  	if (r < 0.6) {
+    	d = Math.random() * 6.0 - 3.0;
+    	d_type = (int) (Math.random() * 9);
+    	d_skew = (Math.random() < 0.4) ? 0.0 : Math.random() * 2.0 - 1.0;
+    	d_phs = Math.random() * M_2_PI - M_PI;
+    	d_layer = (int) (Math.random() * 4);
+  	} else d = 0.0;
+  	if (r < 0.4) {
+    	e = Math.random() * 6.0 - 3.0;
+    	e_type = (int) (Math.random() * 9);
+    	e_skew = (Math.random() < 0.4) ? 0.0 : Math.random() * 2.0 - 1.0;
+    	e_phs = Math.random() * M_2_PI - M_PI;
+    	e_layer = (int) (Math.random() * 4);
+  	} else e = 0.0;
+  	if (r < 0.2) {
+    	f = Math.random() * 6.0 - 3.0;
+    	f_type = (int) (Math.random() * 9);
+    	f_skew = (Math.random() < 0.4) ? 0.0 : Math.random() * 2.0 - 1.0;
+    	f_phs = Math.random() * M_2_PI - M_PI;
+    	f_layer = (int) (Math.random() * 4);
+  	} else f = 0.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

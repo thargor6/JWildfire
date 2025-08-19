@@ -106,6 +106,17 @@ public class WaveBlurWFFunc extends VariationFunc implements SupportsGPU {
     } else
       throw new IllegalArgumentException(pName);
   }
+  
+  @Override
+  public void randomize() {
+  	count = (int) (Math.random() * 25 + 1);
+  	amplitude_z = Math.random() * 3.0 - 1.5;
+  	phase = Math.random() * M_PI - M_PI_2;
+  	damping_z = Math.random() * 3.0;
+  	direct_color = (int) (Math.random() * 2);
+  	color_scale = Math.random();
+  	color_offset = Math.random() * 2.0 - 1.0;
+  }
 
   @Override
   public String getName() {
