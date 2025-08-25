@@ -618,6 +618,7 @@ VariationFuncList {
     registerVariationFunc(PrePostMobiusFunc.class);
     registerVariationFunc(PrePostAffineFunc.class);
     registerVariationFunc(PrePostCirclizeFunc.class);
+    registerVariationFunc(PrePostBlobFunc.class);
     registerVariationFunc(PTransformFunc.class);
 
     registerVariationFunc(InversionFunc.class);
