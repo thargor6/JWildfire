@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -35,29 +36,31 @@ public class PrePostBlobFunc extends VariationFunc {
   private double low = 0.8;
   private double high = 1.2;
   private double waves = 6;
+  
+  private double alow, ahigh;
+  
+  @Override
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+  	alow = 1 - pAmount * (1 - low);
+  	ahigh = 1 - pAmount * (1 - high);
+  }
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = atan2(pVarTP.x, pVarTP.y);
     double r = sqrt(pVarTP.x * pVarTP.x + pVarTP.y * pVarTP.y);
-    r = r * (low + (high - low) * (0.5 + 0.5 * sin(waves * a)));
-    double nx = sin(a) * r;
-    double ny = cos(a) * r;
-
-    pVarTP.x = pAmount * nx;
-    pVarTP.y = pAmount * ny;
+    r = r * (alow + (ahigh - alow) * (0.5 + 0.5 * sin(waves * a)));
+    pVarTP.x = sin(a) * r;
+    pVarTP.y = cos(a) * r;
   }
 
   @Override
   public void invtransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = atan2(pAffineTP.x, pAffineTP.y);
     double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-    r = r / (low + (high - low) * (0.5 + 0.5 * sin(waves * a)));
-    double nx = sin(a) * r;
-    double ny = cos(a) * r;
-
-    pAffineTP.x = pAmount * nx;
-    pAffineTP.y = pAmount * ny;
+    r = r / (alow + (ahigh - alow) * (0.5 + 0.5 * sin(waves * a)));
+    pAffineTP.x = sin(a) * r;
+    pAffineTP.y = cos(a) * r;
   }
 
   @Override
