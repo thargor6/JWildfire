@@ -1,9 +1,10 @@
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.base.Tools;
-import static org.jwildfire.base.mathlib.Complex;
+import org.jwildfire.base.mathlib.Complex;
 import static org.jwildfire.base.mathlib.MathLib.*;
 import java.util.Random;
 
@@ -45,7 +46,7 @@ public class PointMirrorSymmetryFunc extends VariationFunc {
   private boolean hasValidPoints = false;
 
   @Override
-  public void init(FlameTransformationContext pContext, XForm pXForm) {
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     initBuffers();
   }
   
@@ -248,8 +249,4 @@ public class PointMirrorSymmetryFunc extends VariationFunc {
     return 0;
   }
   
-  @Override
-  public boolean isStateful() {
-    return true;
-  }
 }
