@@ -1060,6 +1060,8 @@ VariationFuncList {
     registerVariationFunc(Mandelbox2DFunc.class);
     registerVariationFunc(MultiIFSFunc.class);
     registerVariationFunc(PolySurfFunc.class);
+    registerVariationFunc(FlameBulbFunc.class);
+    registerVariationFunc(PointMirrorSymmetryFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
@@ -1314,4 +1316,5 @@ VariationFuncList {
     VariationFuncList.refreshNameList();
   }
 }
+
 
