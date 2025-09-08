@@ -1061,6 +1061,8 @@ VariationFuncList {
     registerVariationFunc(MultiIFSFunc.class);
     registerVariationFunc(PolySurfFunc.class);
     registerVariationFunc(MobiqNFunc.class);
+    registerVariationFunc(FlameBulbFunc.class);
+    registerVariationFunc(PointMirrorSymmetryFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
