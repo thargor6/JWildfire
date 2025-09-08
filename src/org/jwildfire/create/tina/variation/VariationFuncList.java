@@ -1060,6 +1060,7 @@ VariationFuncList {
     registerVariationFunc(Mandelbox2DFunc.class);
     registerVariationFunc(MultiIFSFunc.class);
     registerVariationFunc(PolySurfFunc.class);
+    registerVariationFunc(MobiqNFunc.class);
     registerVariationFunc(FlameBulbFunc.class);
     registerVariationFunc(PointMirrorSymmetryFunc.class);
 
