@@ -37,11 +37,13 @@ public class CmdLauncherTools {
     try {
       Runtime runtime = Runtime.getRuntime();
       Process proc = runtime.exec(pCmd);
-
       StreamRedirector outputStreamHandler = new StreamRedirector(proc.getInputStream(), pOS, false);
       StreamRedirector errorStreamHandler = new StreamRedirector(proc.getErrorStream(), pOS, false);
       errorStreamHandler.start();
       outputStreamHandler.start();
+      if(!proc.isAlive()) {
+        throw new RuntimeException("Swan process terminated immediately with exit code " + proc.exitValue());
+      };
     }
     catch (Exception ex) {
       throw new RuntimeException(ex);

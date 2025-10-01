@@ -1,3 +1,102 @@
+V9.00 (01.10.2025)
+- added support for JWildfireSwan as the the official GPU-rendering backend for JWildfire.
+  While Fractal Architect and FARender is discontinued, you may use FARender as long as it
+  works for you, though. But, it will not receive any updates anymore, especially not for
+  new CUDA-versions.
+
+  The new rendering solution is much more flexible and powerful, both in terms of performance
+  and compatibility. And, it works on any major device, including macOS and Linux, while
+  FARender only works on Windows and with NVIDIA devices. And of course, I have much more control
+  over the source code, and can fix problems much more easily. And, adding more features on both sides
+  and making the rendering more compatible over time will be just a natural process.
+
+  Unlike FARender, integration of the swan renderer is done via REST, so Swan only needs to be started
+  once and can then be used as a rendering server. This leads to a much better user experience, because
+  it has not to be started again for each rendering job.
+
+  To enable this feature, you have first to enable the setting "useSwanForGpuRendering" in the
+  Preferences. Then, specify the path to the Swan executable in the setting "swanInstallationPath"
+  (here have only to specify the folder, where the executable is located, not the executable itself).
+  You can also change the port which is used for communication via the setting "swanApiPort",
+  but this is optional. Restart JWildfire and it should open up JWildfireSwan with enabled REST-API.
+  You can ignore the Swan-interface and leave it in the background. When you now render an image with
+  the GPU-option, the rendering is delegated to Swan. This works both in the main editor and in the
+  batch-renderer. So, you may use Swan to render frames for animations as well.
+  (You can also direcly export flames to Swan via the clipboard and render them there, of course. )
+
+- new variation randomize button, which creates a guided random set of parameters for the selected
+  variation, this way you can explore the parameter space of a variation in a more controlled way.
+  This nice feature, along with the enhancements to the variations themselves, was implemented
+  by Rick Sidwell
+
+- new variations by Brad Stefanov and Rick Sidwell:
+   - quad
+   - ringtile
+   - whirligig
+   - ringer
+   - rings3
+   - kifs3d
+   - tess_shape
+   - juliascopePlus
+   - cactusGlobe
+   - geometricPrimitives
+   - cell3D
+   - boxfold
+   - conicalSpiral
+   - drunkenTiles
+   - shapeWarp
+   - glynnSim2B
+   - romanesco
+   - naturalFoam
+   - deStijl
+   - meeple
+   - flora
+   - chaosCubes
+   - polySurf
+   - multi_ifs
+   - mandelbox2D
+   - camouflage
+   - point_mirror_symmetry
+   - flame_bulb
+   - prepost_blob
+   - mobiqN
+
+- new "Julian Recurrenceplot" script, created by Rick Sidwell
+
+- some references/documentation to certain variations, implemented by Rick Sidwell:
+   - recurrenceplot
+   - taprats
+   - wangtiles
+   - hamid
+   - isosfplot3d
+   - knots3d
+   - lsystem3D
+   - obj_mesh_primitive
+   - parplot2d
+   - polarplot2d
+   - sattractor3d
+   - yplot2d
+   - yplot3d
+   - auger
+   - barycentroid
+   - hexnix3D
+   - dc_cylinder
+   - dc_perlin
+   - falloff3
+   - post_smartcrop
+   - waved3b
+   - xheart
+   - juliascopePlus
+
+- changes/bug fixes to the following variations:
+   - lsystem3D_js
+   - rosoni
+   - post_mandel*_crop and other fractal crop variations
+   - bulge
+   - knots3D
+   - pre_affine3D and psot_affine3D
+   - optimizations to SDF solid variations, like cappedcone3D
+
 V8.50 (23.12.2023)
 - introducing a new type of transform: background transforms.
     - a background transform calculates a layer of a background, typically using one of the dc-type of variations

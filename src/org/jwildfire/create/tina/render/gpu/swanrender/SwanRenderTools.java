@@ -182,7 +182,7 @@ public class SwanRenderTools {
     // TODO: prefs
     renderFlameTo.setSwarm_size(1024);
     renderFlameTo.setIterations_per_frame(20);
-    renderFlameTo.setFrame(1);
+    renderFlameTo.setFrame(flame.getFrame());
 
     WriteOptions writeOptions = new WriteOptionsBuilder().closeStream(false).build();
     ByteArrayOutputStream os = new ByteArrayOutputStream();
