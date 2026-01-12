@@ -1,3 +1,17 @@
+V9.10 (13.01.2026)
+- implemented density-estimation-filter (similar to the one of Swan) to improve render quality
+  and added options to the ui (under antialiasing-tab).
+  You can change the default settings in the Preferences (also turn it off by default).
+  When you ancounter out-of-memory-problems or it feels to slow, set the de filter radius
+  to 0.0 to turn it off.
+  Does not apply to solid rendering.
+- fixed a bug in evaluation of motion curves
+- new variations by Brad Stefanov:
+   - neuron3D
+   - greebles
+   - busybrad
+   - attractor_flow
+
 V9.00 (01.10.2025)
 - added support for JWildfireSwan as the the official GPU-rendering backend for JWildfire.
   While Fractal Architect and FARender is discontinued, you may use FARender as long as it
