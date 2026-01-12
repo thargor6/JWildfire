@@ -387,7 +387,7 @@ public class Envelope implements Serializable, Cloneable {
     if ((indl >= 0) && (indr >= 0)) {
       double xdist = vSX[indr] - vSX[indl];
       if (xdist < 0.00000001)
-        return vSX[indl];
+        return vSY[indl];
       else
         return vSY[indl] + (pTime - vSX[indl]) / xdist * (vSY[indr] - vSY[indl]);
     }
