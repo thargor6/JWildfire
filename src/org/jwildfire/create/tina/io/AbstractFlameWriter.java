@@ -304,6 +304,9 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_AI_POST_DENOISER, pFlame.getAiPostDenoiser().toString()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_AI_POST_DENOISER_ONLY_FOR_CPU, pFlame.isPostDenoiserOnlyForCpuRender()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_OPTIX_DENOISER_BLEND, pFlame.getPostOptiXDenoiserBlend()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_DE_RADIUS, pFlame.getDeRadius()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_DE_CURVE, pFlame.getDeCurve()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_DE_COMPARISON_LINE, pFlame.getDeComparisonLine()));
     attrList.add(xb.createAttr("quality", pFlame.getSampleDensity()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_TYPE, pFlame.getBgColorType().toString()));
     if (BGColorType.GRADIENT_2X2.equals(pFlame.getBgColorType()) || BGColorType.GRADIENT_2X2_C.equals(pFlame.getBgColorType())) {

@@ -116,6 +116,7 @@ public class FlameFilePreview extends JPanel implements PropertyChangeListener {
           renderer.setProgressUpdater(null);
           flame.setSampleDensity(quality);
           flame.setSpatialFilterRadius(0.0);
+          flame.setDeRadius(0.0);
           RenderInfo info = new RenderInfo(imgWidth, imgHeight, RenderMode.PREVIEW);
           RenderedFlame res = renderer.renderFlame(info);
           preview = res.getImage();

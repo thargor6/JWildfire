@@ -409,6 +409,7 @@ public class QuiltRendererController implements FlameHolder {
         flame.setSampleDensity(Math.min(prefs.getTinaRenderRealtimeQuality(), 5.0));
 
         flame.setSpatialFilterRadius(0.0);
+        flame.setDeRadius(0.0);
         RenderedFlame res = renderer.renderFlame(info);
 
         SimpleImage image = res.getImage();

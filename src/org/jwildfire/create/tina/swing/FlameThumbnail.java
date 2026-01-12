@@ -82,6 +82,7 @@ public class FlameThumbnail {
     renderFlame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
     renderFlame.setSampleDensity(pQuality);
     renderFlame.setSpatialFilterRadius(0.0);
+    renderFlame.setDeRadius(0.0);
     return new FlameRenderer(renderFlame, prefs, false, false);
   }
 

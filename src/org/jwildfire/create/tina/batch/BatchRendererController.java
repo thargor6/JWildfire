@@ -511,6 +511,7 @@ public class BatchRendererController implements JobRenderThreadController {
             new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);
         flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
         flame.setSpatialFilterRadius(0.0);
+        flame.setDeRadius(0.0);
         RenderedFlame res = renderer.renderFlame(info);
         imgPanel.setImage(res.getImage());
       } else {

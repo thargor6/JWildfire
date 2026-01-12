@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2025 Andreas Maschke
+  Copyright (C) 1995-2026 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -177,6 +177,8 @@ public class PrefsReader {
         pPrefs.setTinaRandGenRunRandomScriptExcludedScripts(getProperty(props, Prefs.KEY_TINA_RANDOMBATCH_RUN_RANDOM_SCRIPT_EXCLUDED_SCRIPTS, pPrefs.getTinaRandGenRunRandomScriptExcludedScripts()));
         pPrefs.setTinaDefaultSpatialOversampling(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING, pPrefs.getTinaDefaultSpatialOversampling()));
         pPrefs.setTinaDefaultFilterVisualisationFlat(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT, pPrefs.isTinaDefaultFilterVisualisationFlat()));
+        pPrefs.setTinaDefaultDeRadius(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_DE_RADIUS, pPrefs.getTinaDefaultDeRadius()));
+        pPrefs.setTinaDefaultDeCurve(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_DE_CURVE, pPrefs.getTinaDefaultDeCurve()));
         try {
           pPrefs.setTinaDefaultAIPostDenoiser(AIPostDenoiserType.valueOf(getProperty(props, Prefs.KEY_TINA_DEFAULT_AI_POST_DENOISER, pPrefs.getTinaDefaultAIPostDenoiser().toString())));
         }

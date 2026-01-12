@@ -28,9 +28,9 @@ public class GPUCodeHelper {
   }
 
   private void run() {
-    VariationFunc codeFunc = new FractSalamanderWFFunc();
+    VariationFunc codeFunc = new RingerFunc();
     String code =
-            " ";
+        "";
 
     String gpuCode = "";
     String gpuFunctions = "";

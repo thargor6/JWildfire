@@ -358,6 +358,7 @@ public class MeshGenController {
         if (flame != null) {
           double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
           double oldSampleDensity = flame.getSampleDensity();
+          double oldDeRadius = flame.getDeRadius();
           try {
             double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
             double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -368,6 +369,7 @@ public class MeshGenController {
               renderer.setProgressUpdater(null);
               flame.setSampleDensity(3.0);
               flame.setSpatialFilterRadius(0.0);
+              flame.setDeRadius(0.0);
             } else {
               renderer.setProgressUpdater(renderSequenceProgressUpdater);
               flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
@@ -377,6 +379,7 @@ public class MeshGenController {
           } finally {
             flame.setSpatialFilterRadius(oldSpatialFilterRadius);
             flame.setSampleDensity(oldSampleDensity);
+            flame.setDeRadius(oldDeRadius);
           }
         }
       } else {

@@ -1246,6 +1246,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
+        double oldDeRadius = flame.getDeRadius();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -1268,12 +1269,14 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
             flame.setSampleDensity(Prefs.getPrefs().getTinaRenderRealtimeQuality() * 6.0);
           }
           flame.setSpatialFilterRadius(0.0);
+          flame.setDeRadius(0.0);
           RenderedFlame res = renderer.renderFlame(info);
           imgPanel.setImage(res.getImage());
         }
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSampleDensity(oldSampleDensity);
+          flame.setDeRadius(oldDeRadius);
         }
       }
     }

@@ -77,6 +77,10 @@ public class AbstractFlameReader {
   public static final String ATTR_FILTER_SHARPNESS = "filter_sharpness";
   public static final String ATTR_FILTER_LOW_DENSITY = "filter_low_density";
   public static final String ATTR_FILTER_INDICATOR = "filter_indicator";
+  public static final String ATTR_DE_RADIUS = "de_radius";
+  public static final String ATTR_DE_CURVE = "de_curve";
+  public static final String ATTR_DE_COMPARISON_LINE = "de_comparison_line";
+
   public static final String ATTR_QUALITY = "quality";
   public static final String ATTR_BACKGROUND = "background";
   public static final String ATTR_BACKGROUND_TYPE = "background_type";
@@ -344,7 +348,15 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_AI_POST_DENOISER_ONLY_FOR_CPU)) != null) {
       pFlame.setPostDenoiserOnlyForCpuRender("1".equals(hs));
     }
-
+    if ((hs = atts.get(ATTR_DE_RADIUS)) != null) {
+      pFlame.setDeRadius(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_DE_CURVE)) != null) {
+      pFlame.setDeCurve(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_DE_COMPARISON_LINE)) != null) {
+      pFlame.setDeComparisonLine(Double.parseDouble(hs));
+    }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pFlame.setSampleDensity(Double.parseDouble(hs));
     }

@@ -1125,6 +1125,7 @@ public class FlameRenderer {
     pFlame.setSpatialOversampling(1);
     pFlame.setSpatialFilteringType(FilteringType.GLOBAL_SMOOTHING);
     pFlame.setSpatialFilterRadius(0.0);
+    //pFlame.setDeRadius(0.0);
   }
 
   public void renderPointCloud(PointCloudRenderInfo pPointCloudRenderInfo, String pFilename) {

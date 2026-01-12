@@ -71,6 +71,7 @@ public class JWFRenderFilePreview extends JComponent implements PropertyChangeLi
           renderer.setProgressUpdater(null);
           flame.setSampleDensity(50);
           flame.setSpatialFilterRadius(0.0);
+          flame.setDeRadius(0.0);
           RenderInfo info = new RenderInfo(imgWidth, imgHeight, RenderMode.PREVIEW);
           RenderedFlame res = renderer.renderFlame(info);
           currThumbnail = new ImageIcon(res.getImage().getBufferedImg());

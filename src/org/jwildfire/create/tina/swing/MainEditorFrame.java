@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2023 Andreas Maschke
+  Copyright (C) 1995-2026 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -6095,7 +6095,8 @@ public class MainEditorFrame extends JFrame {
         getWeightingFieldParam07REd(), getWeightingFieldParam07Lbl(), getWeightingFieldParam08Cmb(), getWeightingFieldParam08Lbl(), getWeightingFieldPreviewImgRootPanel(),
         getTinaAIDenoiserCmb(), getTinaAIDenoiserOnlyForCPUCBx(), getTinaOptiXDenoiserBlendField(), getTinaOptiXDenoiserBlendSlider(), getTinaOptixDenoiseButton(),
         getTinaAIPostDenoiseExternalImageBtn(), getQuickMutationTypeCmb(), getQuickMutationBatchSizeEdit(), getQuickMutationStrengthEdit(), getQuickMutationButton(), getQuickMutationProgressBar(),
-            getQuickMutationPanel(), getDisplayFavouriteVariationsToggleBtn());
+            getQuickMutationPanel(), getDisplayFavouriteVariationsToggleBtn(),
+            getDeRadiusREd(), getDeRadiusSlider(), getDeCurveREd(), getDeCurveSlider(), getDeComparisonLineREd(), getDeComparisonLineSlider());
 
 
     tinaController = new TinaController(params);
@@ -11091,6 +11092,15 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField xFormAntialiasRadiusREd;
   private JLabel xFormAntialiasRadiusLbl;
   private JSlider xFormAntialiasRadiusSlider;
+  private JWFNumberField deRadiusREd;
+  private JLabel deRadiusLbl;
+  private JSlider deRadiusSlider;
+  private JWFNumberField deCurveREd;
+  private JLabel deCurveLbl;
+  private JSlider deCurveSlider;
+  private JWFNumberField deComparisonLineREd;
+  private JLabel deComparisonLineLbl;
+  private JSlider deComparisonLineSlider;
   private JPanel panel_6;
   private JPanel panel_7;
   private JPanel panel_13;
@@ -12295,7 +12305,15 @@ public class MainEditorFrame extends JFrame {
     if (antialiasPanel == null) {
       antialiasPanel = new JPanel();
       antialiasPanel.setLayout(null);
-
+      antialiasPanel.add(getDeRadiusREd());
+      antialiasPanel.add(getDeRadiusLbl());
+      antialiasPanel.add(getDeRadiusSlider());
+      antialiasPanel.add(getDeCurveREd());
+      antialiasPanel.add(getDeCurveLbl());
+      antialiasPanel.add(getDeCurveSlider());
+      antialiasPanel.add(getDeComparisonLineREd());
+      antialiasPanel.add(getDeComparisonLineLbl());
+      antialiasPanel.add(getDeComparisonLineSlider());
       antialiasPanel.add(getXFormAntialiasAmountREd());
       antialiasPanel.add(getXFormAntialiasAmountLbl());
       antialiasPanel.add(getXFormAntialiasAmountSlider());
@@ -12542,7 +12560,7 @@ public class MainEditorFrame extends JFrame {
       tinaOptiXDenoiserBlendField.setHasMaxValue(true);
       tinaOptiXDenoiserBlendField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaOptiXDenoiserBlendField.setEditable(true);
-      tinaOptiXDenoiserBlendField.setBounds(675, 75, 100, 24);
+      tinaOptiXDenoiserBlendField.setBounds(1122, 75, 100, 24);
       tinaOptiXDenoiserBlendField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -12576,7 +12594,7 @@ public class MainEditorFrame extends JFrame {
       lblOptiXBlend.setPreferredSize(new Dimension(94, 22));
       lblOptiXBlend.setLocation(new Point(488, 2));
       lblOptiXBlend.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblOptiXBlend.setBounds(565, 75, 107, 22);
+      lblOptiXBlend.setBounds(1012, 75, 107, 22);
       antialiasPanel.add(lblOptiXBlend);
 
       tinaOptiXDenoiserBlendSlider = new JSlider();
@@ -12587,7 +12605,7 @@ public class MainEditorFrame extends JFrame {
       tinaOptiXDenoiserBlendSlider.setName("tinaOptiXDenoiserBlendSlider");
       tinaOptiXDenoiserBlendSlider.setLocation(new Point(686, 2));
       tinaOptiXDenoiserBlendSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaOptiXDenoiserBlendSlider.setBounds(777, 75, 220, 24);
+      tinaOptiXDenoiserBlendSlider.setBounds(1224, 75, 220, 24);
       tinaOptiXDenoiserBlendSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -12644,7 +12662,7 @@ public class MainEditorFrame extends JFrame {
       tinaFilterIndicatorCBx = new JCheckBox("Indicator (red=sharp, green=smooth, blue=low density, displays only at the next-quickrender)");
       tinaFilterIndicatorCBx.setActionCommand("");
       tinaFilterIndicatorCBx.setToolTipText("Enable/disable the Adaptive filter indicator");
-      tinaFilterIndicatorCBx.setBounds(565, 127, 553, 18);
+      tinaFilterIndicatorCBx.setBounds(1012, 127, 553, 18);
       tinaFilterIndicatorCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -19017,7 +19035,7 @@ public class MainEditorFrame extends JFrame {
       xFormAntialiasAmountREd.setHasMinValue(true);
       xFormAntialiasAmountREd.setHasMaxValue(true);
       xFormAntialiasAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormAntialiasAmountREd.setBounds(675, 2, 100, 22);
+      xFormAntialiasAmountREd.setBounds(675, 74, 100, 22);
     }
     return xFormAntialiasAmountREd;
   }
@@ -19042,7 +19060,7 @@ public class MainEditorFrame extends JFrame {
       xFormAntialiasAmountLbl.setPreferredSize(new Dimension(64, 22));
       xFormAntialiasAmountLbl.setLocation(new Point(4, 4));
       xFormAntialiasAmountLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormAntialiasAmountLbl.setBounds(565, 2, 113, 22);
+      xFormAntialiasAmountLbl.setBounds(565, 74, 113, 22);
     }
     return xFormAntialiasAmountLbl;
   }
@@ -19070,7 +19088,7 @@ public class MainEditorFrame extends JFrame {
       xFormAntialiasAmountSlider.setMaximum(100);
       xFormAntialiasAmountSlider.setLocation(new Point(123, 4));
       xFormAntialiasAmountSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormAntialiasAmountSlider.setBounds(777, 2, 220, 22);
+      xFormAntialiasAmountSlider.setBounds(777, 74, 220, 22);
     }
     return xFormAntialiasAmountSlider;
   }
@@ -19100,7 +19118,7 @@ public class MainEditorFrame extends JFrame {
       xFormAntialiasRadiusREd.setHasMinValue(true);
       xFormAntialiasRadiusREd.setHasMaxValue(true);
       xFormAntialiasRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormAntialiasRadiusREd.setBounds(675, 28, 100, 22);
+      xFormAntialiasRadiusREd.setBounds(675, 100, 100, 22);
     }
     return xFormAntialiasRadiusREd;
   }
@@ -19125,7 +19143,7 @@ public class MainEditorFrame extends JFrame {
       xFormAntialiasRadiusLbl.setPreferredSize(new Dimension(64, 22));
       xFormAntialiasRadiusLbl.setLocation(new Point(4, 4));
       xFormAntialiasRadiusLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormAntialiasRadiusLbl.setBounds(565, 28, 113, 22);
+      xFormAntialiasRadiusLbl.setBounds(565, 100, 113, 22);
     }
     return xFormAntialiasRadiusLbl;
   }
@@ -19153,9 +19171,258 @@ public class MainEditorFrame extends JFrame {
       xFormAntialiasRadiusSlider.setMaximum(200);
       xFormAntialiasRadiusSlider.setLocation(new Point(123, 4));
       xFormAntialiasRadiusSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormAntialiasRadiusSlider.setBounds(777, 28, 220, 22);
+      xFormAntialiasRadiusSlider.setBounds(777, 100, 220, 22);
     }
     return xFormAntialiasRadiusSlider;
+  }
+
+  private JWFNumberField getDeRadiusREd() {
+    if (deRadiusREd == null) {
+      deRadiusREd = new JWFNumberField();
+      deRadiusREd.setMouseSpeed(0.1);
+      deRadiusREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!deRadiusREd.isMouseAdjusting() || deRadiusREd.getMouseChangeCount() == 0) {
+              if (!deRadiusSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().deRadiusREd_changed();
+          }
+        }
+      });
+      deRadiusREd.setValueStep(0.05);
+      deRadiusREd.setText("");
+      deRadiusREd.setSize(new Dimension(55, 22));
+      deRadiusREd.setPreferredSize(new Dimension(55, 22));
+      deRadiusREd.setMaxValue(2.0);
+      deRadiusREd.setLocation(new Point(68, 4));
+      deRadiusREd.setHasMinValue(true);
+      deRadiusREd.setHasMaxValue(true);
+      deRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      deRadiusREd.setBounds(675, 2, 100, 22);
+    }
+    return deRadiusREd;
+  }
+
+  private JLabel getDeRadiusLbl() {
+    if (deRadiusLbl == null) {
+      deRadiusLbl = new JLabel();
+      deRadiusLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().deRadiusREd_reset();
+          }
+        }
+      });
+
+      deRadiusLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      deRadiusLbl.setText("DE radius");
+      deRadiusLbl.setToolTipText("radius of the density estimation filter: 0 (disable density estimation), 1.0: default value");
+      deRadiusLbl.setSize(new Dimension(64, 22));
+      deRadiusLbl.setPreferredSize(new Dimension(64, 22));
+      deRadiusLbl.setLocation(new Point(4, 4));
+      deRadiusLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      deRadiusLbl.setBounds(565, 2, 113, 22);
+    }
+    return deRadiusLbl;
+  }
+
+  private JSlider getDeRadiusSlider() {
+    if (deRadiusSlider == null) {
+      deRadiusSlider = new JSlider();
+      deRadiusSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().deRadiusSlider_changed();
+          }
+        }
+      });
+      deRadiusSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      deRadiusSlider.setValue(0);
+      deRadiusSlider.setSize(new Dimension(220, 19));
+      deRadiusSlider.setPreferredSize(new Dimension(220, 19));
+      deRadiusSlider.setMinimum(0);
+      deRadiusSlider.setMaximum(200);
+      deRadiusSlider.setLocation(new Point(123, 4));
+      deRadiusSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      deRadiusSlider.setBounds(777, 2, 220, 22);
+    }
+    return deRadiusSlider;
+  }
+
+  private JWFNumberField getDeCurveREd() {
+    if (deCurveREd == null) {
+      deCurveREd = new JWFNumberField();
+      deCurveREd.setMouseSpeed(0.1);
+      deCurveREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!deCurveREd.isMouseAdjusting() || deCurveREd.getMouseChangeCount() == 0) {
+              if (!deCurveSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().deCurveREd_changed();
+          }
+        }
+      });
+      deCurveREd.setValueStep(0.05);
+      deCurveREd.setText("");
+      deCurveREd.setSize(new Dimension(55, 22));
+      deCurveREd.setPreferredSize(new Dimension(55, 22));
+      deCurveREd.setMaxValue(2.0);
+      deCurveREd.setLocation(new Point(68, 4));
+      deCurveREd.setHasMinValue(true);
+      deCurveREd.setHasMaxValue(true);
+      deCurveREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      deCurveREd.setBounds(675, 28, 100, 22);
+    }
+    return deCurveREd;
+  }
+
+  private JLabel getDeCurveLbl() {
+    if (deCurveLbl == null) {
+      deCurveLbl = new JLabel();
+      deCurveLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().deCurveREd_reset();
+          }
+        }
+      });
+
+      deCurveLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      deCurveLbl.setText("DE curve");
+      deCurveLbl.setToolTipText("DE reference curve. Higher values increase the effect of the filter but may also cause blur. In most case useful values are in the range of 0.6 ... 0.9");
+      deCurveLbl.setSize(new Dimension(64, 22));
+      deCurveLbl.setPreferredSize(new Dimension(64, 22));
+      deCurveLbl.setLocation(new Point(4, 4));
+      deCurveLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      deCurveLbl.setBounds(565, 28, 113, 22);
+    }
+    return deCurveLbl;
+  }
+
+  private JSlider getDeCurveSlider() {
+    if (deCurveSlider == null) {
+      deCurveSlider = new JSlider();
+      deCurveSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().deCurveSlider_changed();
+          }
+        }
+      });
+      deCurveSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      deCurveSlider.setValue(0);
+      deCurveSlider.setSize(new Dimension(220, 19));
+      deCurveSlider.setPreferredSize(new Dimension(220, 19));
+      deCurveSlider.setMinimum(0);
+      deCurveSlider.setMaximum(200);
+      deCurveSlider.setLocation(new Point(123, 4));
+      deCurveSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      deCurveSlider.setBounds(777, 28, 220, 22);
+    }
+    return deCurveSlider;
+  }
+
+  private JWFNumberField getDeComparisonLineREd() {
+    if (deComparisonLineREd == null) {
+      deComparisonLineREd = new JWFNumberField();
+      deComparisonLineREd.setMouseSpeed(0.1);
+      deComparisonLineREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!deComparisonLineREd.isMouseAdjusting() || deComparisonLineREd.getMouseChangeCount() == 0) {
+              if (!deComparisonLineSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().deComparisonLineREd_changed();
+          }
+        }
+      });
+      deComparisonLineREd.setValueStep(0.1);
+      deComparisonLineREd.setText("");
+      deComparisonLineREd.setSize(new Dimension(55, 22));
+      deComparisonLineREd.setPreferredSize(new Dimension(55, 22));
+      deComparisonLineREd.setMaxValue(1.0);
+      deComparisonLineREd.setLocation(new Point(68, 4));
+      deComparisonLineREd.setHasMinValue(true);
+      deComparisonLineREd.setHasMaxValue(true);
+      deComparisonLineREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      deComparisonLineREd.setBounds(675, 52, 100, 22);
+    }
+    return deComparisonLineREd;
+  }
+
+  private JLabel getDeComparisonLineLbl() {
+    if (deComparisonLineLbl == null) {
+      deComparisonLineLbl = new JLabel();
+      deComparisonLineLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.saveUndoPoint();
+            tinaController.getFlameControls().deComparisonLineREd_reset();
+          }
+        }
+      });
+
+      deComparisonLineLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+      deComparisonLineLbl.setText("DE comp. line");
+      deComparisonLineLbl.setToolTipText("Compare the result of the de-filter with image without the density estimation applied. The numeric value specifies the horizontal position of the comparison splitter (0: left, 1: right)");
+      deComparisonLineLbl.setSize(new Dimension(64, 22));
+      deComparisonLineLbl.setPreferredSize(new Dimension(64, 22));
+      deComparisonLineLbl.setLocation(new Point(4, 4));
+      deComparisonLineLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      deComparisonLineLbl.setBounds(565, 52, 113, 22);
+    }
+    return deComparisonLineLbl;
+  }
+
+  private JSlider getDeComparisonLineSlider() {
+    if (deComparisonLineSlider == null) {
+      deComparisonLineSlider = new JSlider();
+      deComparisonLineSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().deComparisonLineSlider_changed();
+          }
+        }
+      });
+      deComparisonLineSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      deComparisonLineSlider.setValue(0);
+      deComparisonLineSlider.setSize(new Dimension(220, 19));
+      deComparisonLineSlider.setPreferredSize(new Dimension(220, 19));
+      deComparisonLineSlider.setMinimum(0);
+      deComparisonLineSlider.setMaximum(100);
+      deComparisonLineSlider.setLocation(new Point(123, 4));
+      deComparisonLineSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      deComparisonLineSlider.setBounds(777, 52, 220, 22);
+    }
+    return deComparisonLineSlider;
   }
 
   private JButton getScriptEditBtn() {
@@ -22899,7 +23166,7 @@ public class MainEditorFrame extends JFrame {
       tinaAIDenoiserCmb.setPreferredSize(new Dimension(125, 22));
       tinaAIDenoiserCmb.setLocation(new Point(100, 4));
       tinaAIDenoiserCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaAIDenoiserCmb.setBounds(675, 51, 322, 24);
+      tinaAIDenoiserCmb.setBounds(1122, 51, 322, 24);
       tinaAIDenoiserCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
@@ -22921,7 +23188,7 @@ public class MainEditorFrame extends JFrame {
       lblPostDenoiser.setPreferredSize(new Dimension(94, 22));
       lblPostDenoiser.setLocation(new Point(488, 2));
       lblPostDenoiser.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblPostDenoiser.setBounds(565, 51, 107, 22);
+      lblPostDenoiser.setBounds(1012, 51, 107, 22);
       lblPostDenoiser.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -23159,7 +23426,7 @@ public class MainEditorFrame extends JFrame {
       tinaAIDenoiserOnlyForCPUCBx.setToolTipText("In many cases the GPU renders do not require a denoiser, while a CPU-based render would benefit from them. With this setting you may separate your post-denoiser settings between CPU- and GPU-render to some extent.");
       tinaAIDenoiserOnlyForCPUCBx.setFont(null);
       tinaAIDenoiserOnlyForCPUCBx.setActionCommand("");
-      tinaAIDenoiserOnlyForCPUCBx.setBounds(565, 100, 432, 18);
+      tinaAIDenoiserOnlyForCPUCBx.setBounds(1012, 100, 432, 18);
       tinaAIDenoiserOnlyForCPUCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {

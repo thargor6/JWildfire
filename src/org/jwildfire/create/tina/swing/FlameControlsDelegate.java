@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2020 Andreas Maschke
+  Copyright (C) 1995-2026 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -370,6 +370,18 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
+  public void deRadiusSlider_changed() {
+    flameSliderChanged(data.deRadiusSlider, data.deRadiusREd, "deRadius", TinaController.SLIDER_SCALE_COLOR, false);
+  }
+
+  public void deCurveSlider_changed() {
+    flameSliderChanged(data.deCurveSlider, data.deCurveREd, "deCurve", TinaController.SLIDER_SCALE_COLOR, false);
+  }
+
+  public void deComparisonLineSlider_changed() {
+    flameSliderChanged(data.deComparisonLineSlider, data.deComparisonLineREd, "deComparisonLine", TinaController.SLIDER_SCALE_COLOR, false);
+  }
+
   public void xFormAntialiasRadiusSlider_changed() {
     flameSliderChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR, false);
   }
@@ -380,6 +392,18 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void xFormAntialiasRadiusREd_changed() {
     flameTextFieldChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR, false);
+  }
+
+  public void deRadiusREd_changed() {
+    flameTextFieldChanged(data.deRadiusSlider, data.deRadiusREd, "deRadius", TinaController.SLIDER_SCALE_COLOR, false);
+  }
+
+  public void deCurveREd_changed() {
+    flameTextFieldChanged(data.deCurveSlider, data.deCurveREd, "deCurve", TinaController.SLIDER_SCALE_COLOR, false);
+  }
+
+  public void deComparisonLineREd_changed() {
+    flameTextFieldChanged(data.deComparisonLineSlider, data.deComparisonLineREd, "deComparisonLine", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void focusZSlider_stateChanged(ChangeEvent e) {
@@ -805,6 +829,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.motionBlurLengthSlider, data.motionBlurLengthField, "motionBlurLength", 1.0);
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.motionBlurTimeStepSlider, data.motionBlurTimeStepField, "motionBlurTimeStep", TinaController.SLIDER_SCALE_COLOR);
       owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.motionBlurDecaySlider, data.motionBlurDecayField, "motionBlurDecay", TinaController.SLIDER_SCALE_ZOOM);
+
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.deRadiusSlider, data.deRadiusREd, "deRadius", TinaController.SLIDER_SCALE_COLOR);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.deCurveSlider, data.deCurveREd, "deCurve", TinaController.SLIDER_SCALE_COLOR);
+      owner.getFrameControlsUtil().updateControl(getCurrFlame(), data.deComparisonLineSlider, data.deComparisonLineREd, "deComparisonLine", TinaController.SLIDER_SCALE_COLOR);
 
       data.flameFPSField.setValue(getCurrFlame().getFps());
       data.postSymmetryTypeCmb.setSelectedItem(getCurrFlame().getPostSymmetryType());
@@ -2436,6 +2464,18 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void xFormAntialiasRadiusREd_reset() {
     flameTextFieldReset(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR, false);
+  }
+
+  public void deRadiusREd_reset() {
+    flameTextFieldReset(data.deRadiusSlider, data.deRadiusREd, "deRadius", TinaController.SLIDER_SCALE_COLOR, false);
+  }
+
+  public void deCurveREd_reset() {
+    flameTextFieldReset(data.deCurveSlider, data.deCurveREd, "deCurve", TinaController.SLIDER_SCALE_COLOR, false);
+  }
+
+  public void deComparisonLineREd_reset() {
+    flameTextFieldReset(data.deComparisonLineSlider, data.deComparisonLineREd, "deComparisonLine", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void tinaOptiXDenoiserBlendField_reset() {

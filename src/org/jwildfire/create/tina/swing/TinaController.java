@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2023 Andreas Maschke
+  Copyright (C) 1995-2026 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -533,6 +533,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xFormAntialiasAmountSlider = parameterObject.pXFormAntialiasAmountSlider;
     data.xFormAntialiasRadiusREd = parameterObject.pXFormAntialiasRadiusREd;
     data.xFormAntialiasRadiusSlider = parameterObject.pXFormAntialiasRadiusSlider;
+    data.deRadiusREd = parameterObject.deRadiusREd;
+    data.deRadiusSlider = parameterObject.deRadiusSlider;
+    data.deCurveREd = parameterObject.deCurveREd;
+    data.deCurveSlider = parameterObject.deCurveSlider;
+    data.deComparisonLineREd = parameterObject.deComparisonLineREd;
+    data.deComparisonLineSlider = parameterObject.deComparisonLineSlider;
 
     data.relWeightsTable = parameterObject.pRelWeightsTable;
     data.relWeightsZeroButton = parameterObject.pRelWeightsZeroButton;

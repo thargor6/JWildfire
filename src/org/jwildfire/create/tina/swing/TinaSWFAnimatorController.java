@@ -803,6 +803,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         if (flame != null) {
           double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
           double oldSampleDensity = flame.getSampleDensity();
+          double oldDeRadius = flame.getDeRadius();
           try {
             double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
             double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -813,6 +814,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
               renderer.setProgressUpdater(null);
               flame.setSampleDensity(1.0);
               flame.setSpatialFilterRadius(0.0);
+              flame.setDeRadius(0.0);
             } else {
               renderer.setProgressUpdater(renderProgressUpdater);
               flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
@@ -822,6 +824,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           } finally {
             flame.setSpatialFilterRadius(oldSpatialFilterRadius);
             flame.setSampleDensity(oldSampleDensity);
+            flame.setDeRadius(oldDeRadius);
           }
         }
       } else {
@@ -837,6 +840,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private void prepareFlame(Flame pFlame) {
     pFlame.setSpatialFilterRadius(0.0);
+    pFlame.setDeRadius(0.0);
     pFlame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
   }
 
@@ -1445,6 +1449,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
         double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
         renderFlame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
         renderFlame.setSpatialFilterRadius(0.0);
+        renderFlame.setDeRadius(0.0);
         FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, false);
         renderFlame.setSampleDensity(pQuality / IMG_COUNT);
         RenderedFlame res = renderer.renderFlame(info);

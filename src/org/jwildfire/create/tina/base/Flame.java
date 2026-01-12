@@ -221,6 +221,10 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double antialiasAmount;
   private double antialiasRadius;
 
+  private double deRadius = 1.0;
+  private double deCurve = 0.8;
+  private double deComparisonLine = 0.0;
+
   private int motionBlurLength;
   private double motionBlurTimeStep;
   private double motionBlurDecay;
@@ -367,6 +371,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     antialiasRadius = Prefs.getPrefs().getTinaDefaultAntialiasingRadius();
     aiPostDenoiser = AIPostDenoiserFactory.getBestAvailableDenoiserType(Prefs.getPrefs().getTinaDefaultAIPostDenoiser());
     postOptiXDenoiserBlend = Prefs.getPrefs().getTinaDefaultPostOptiXDenoiserBlend();
+    deRadius = Prefs.getPrefs().getTinaDefaultDeRadius();
+    deCurve =  Prefs.getPrefs().getTinaDefaultDeCurve();
+    deComparisonLine = 0.0;
   }
 
   public void resetColoringSettings() {
@@ -852,6 +859,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     lastFilename = pFlame.lastFilename;
     antialiasAmount = pFlame.antialiasAmount;
     antialiasRadius = pFlame.antialiasRadius;
+    deRadius = pFlame.deRadius;
+    deCurve = pFlame.deCurve;
+    deComparisonLine = pFlame.deComparisonLine;
     spatialOversampling = pFlame.spatialOversampling;
     aiPostDenoiser = pFlame.aiPostDenoiser;
     postOptiXDenoiserBlend = pFlame.postOptiXDenoiserBlend;
@@ -1005,6 +1015,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         !name.equals(pFlame.name) ||
         !bgImageFilename.equals(pFlame.bgImageFilename) ||
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
+            (fabs(deRadius - pFlame.deRadius) > EPSILON) || (fabs(deCurve - pFlame.deCurve) > EPSILON) || (fabs(deComparisonLine - pFlame.deComparisonLine) > EPSILON) ||
         (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) || (fps != pFlame.fps) ||
         (fabs(motionBlurTimeStep - pFlame.motionBlurTimeStep) > EPSILON) || (fabs(motionBlurDecay - pFlame.motionBlurDecay) > EPSILON) ||
         (frame != pFlame.frame) || (frameCount != pFlame.frameCount) ||
@@ -1172,6 +1183,30 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setAntialiasAmount(double pAntialiasAmount) {
     antialiasAmount = pAntialiasAmount;
+  }
+
+  public double getDeRadius() {
+    return deRadius;
+  }
+
+  public void setDeRadius(double deRadius) {
+    this.deRadius = deRadius;
+  }
+
+  public double getDeCurve() {
+    return deCurve;
+  }
+
+  public void setDeCurve(double deCurve) {
+    this.deCurve = deCurve;
+  }
+
+  public double getDeComparisonLine() {
+    return deComparisonLine;
+  }
+
+  public void setDeComparisonLine(double deComparisonLine) {
+    this.deComparisonLine = deComparisonLine;
   }
 
   public double getAntialiasRadius() {
@@ -1672,6 +1707,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void applyFastOversamplingSettings() {
     setSpatialFilterRadius(0.0);
     setSpatialOversampling(1);
+    setDeRadius(0.0);
     setAiPostDenoiser(AIPostDenoiserType.NONE);
   }
 
@@ -1679,6 +1715,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     Prefs prefs = Prefs.getPrefs();
     setSpatialFilterRadius(prefs.getTinaDefaultSpatialFilterRadius());
     setSpatialOversampling(getSolidRenderSettings().isSolidRenderingEnabled() ? DFLT_SOLID_SPATIAL_OVERSAMPLING : prefs.getTinaDefaultSpatialOversampling());
+    setDeRadius(prefs.getTinaDefaultDeRadius());
+    setDeCurve(prefs.getTinaDefaultDeCurve());
     setAiPostDenoiser(AIPostDenoiserFactory.getBestAvailableDenoiserType(Prefs.getPrefs().getTinaDefaultAIPostDenoiser()));
     setPostOptiXDenoiserBlend(prefs.getTinaDefaultPostOptiXDenoiserBlend());
   }
@@ -1762,10 +1800,13 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public void setDefaultSolidRenderingSettings() {
+    Prefs prefs = Prefs.getPrefs();
     setSpatialOversampling(DFLT_SOLID_SPATIAL_OVERSAMPLING);
     setSpatialFilterRadius(0.5);
     setSpatialFilteringType(FilteringType.GLOBAL_SMOOTHING);
     setSpatialFilterKernel(FilterKernelType.GAUSSIAN);
+    setDeRadius(prefs.getTinaDefaultDeRadius());
+    setDeCurve(prefs.getTinaDefaultDeCurve());
     setAntialiasAmount(0.0);
     setAntialiasRadius(0.0);
   }

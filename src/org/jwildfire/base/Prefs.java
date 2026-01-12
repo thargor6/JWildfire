@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2025 Andreas Maschke
+  Copyright (C) 1995-2026 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -136,6 +136,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.5";
   static final String KEY_TINA_DEFAULT_AI_POST_DENOISER = "tina.default.ai_post_denoiser.3";
   static final String KEY_TINA_DEFAULT_POST_OPTIX_DENOISER_BLEND = "tina.default.post_optix_denoiser_blend";
+  static final String KEY_TINA_DEFAULT_DE_RADIUS = "tina.default.de_radius";
+  static final String KEY_TINA_DEFAULT_DE_CURVE = "tina.default.de_curve";
 
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
   static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel.5";
@@ -363,6 +365,12 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Default spatial filter-radius, used when creating a new flame (set to 0 in order to turn off spatial filtering)", category = PropertyCategory.TINA)
   private double tinaDefaultSpatialFilterRadius = 0.75;
+
+  @Property(description = "Default de-filter-radius, used when creating a new flame (set to 0 in order to turn off density estimation)", category = PropertyCategory.TINA)
+  private double tinaDefaultDeRadius = 1.0;
+
+  @Property(description = "Default de-filter-curve, higher values result in a higher effect of the filter, but may also increase blur)", category = PropertyCategory.TINA)
+  private double tinaDefaultDeCurve = 0.8;
 
   @Property(description = "Style of the controls (\"triangles\") in the editor", category = PropertyCategory.TINA, editorClass = FlamePanelTriangleStyleEditor.class)
   private FlamePanelControlStyle tinaEditorControlsStyle = FlamePanelControlStyle.TRIANGLE;
@@ -890,7 +898,8 @@ public class Prefs extends ManagedObject {
     tinaDefaultForegroundOpacity = pSrc.tinaDefaultForegroundOpacity;
     tinaDefaultAIPostDenoiser = pSrc.tinaDefaultAIPostDenoiser;
     tinaDefaultPostOptiXDenoiserBlend = pSrc.tinaDefaultPostOptiXDenoiserBlend;
-
+    tinaDefaultDeRadius = pSrc.tinaDefaultDeRadius;
+    tinaDefaultDeCurve = pSrc.tinaDefaultDeCurve;
     tinaEditorProgressivePreview = pSrc.tinaEditorProgressivePreview;
     tinaEditorProgressivePreviewMaxRenderTime = pSrc.tinaEditorProgressivePreviewMaxRenderTime;
     tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
@@ -1587,6 +1596,22 @@ public class Prefs extends ManagedObject {
     tinaDefaultSpatialFilterRadius = pTinaDefaultSpatialFilterRadius;
   }
 
+  public double getTinaDefaultDeCurve() {
+    return tinaDefaultDeCurve;
+  }
+
+  public void setTinaDefaultDeCurve(double tinaDefaultDeCurve) {
+    this.tinaDefaultDeCurve = tinaDefaultDeCurve;
+  }
+
+  public double getTinaDefaultDeRadius() {
+    return tinaDefaultDeRadius;
+  }
+
+  public void setTinaDefaultDeRadius(double tinaDefaultDeRadius) {
+    this.tinaDefaultDeRadius = tinaDefaultDeRadius;
+  }
+
   public boolean isTinaDefaultFilterVisualisationFlat() {
     return tinaDefaultFilterVisualisationFlat;
   }
@@ -1610,7 +1635,6 @@ public class Prefs extends ManagedObject {
   public void setTinaDefaultPostOptiXDenoiserBlend(double tinaDefaultPostOptiXDenoiserBlend) {
     this.tinaDefaultPostOptiXDenoiserBlend = tinaDefaultPostOptiXDenoiserBlend;
   }
-
 
   public double getTinaDefaultForegroundOpacity() {
     return tinaDefaultForegroundOpacity;

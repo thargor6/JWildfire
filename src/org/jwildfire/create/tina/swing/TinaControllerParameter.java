@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2023 Andreas Maschke
+  Copyright (C) 1995-2026 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
   General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -299,6 +299,13 @@ public class TinaControllerParameter {
   public JSlider pXFormAntialiasAmountSlider;
   public JWFNumberField pXFormAntialiasRadiusREd;
   public JSlider pXFormAntialiasRadiusSlider;
+  public JWFNumberField deRadiusREd;
+  public JSlider deRadiusSlider;
+  public JWFNumberField deCurveREd;
+  public JSlider deCurveSlider;
+  public JWFNumberField deComparisonLineREd;
+  public JSlider deComparisonLineSlider;
+
   public JPanel pDancingFlamesFlamePnl;
   public JPanel pDancingFlamesGraph1Pnl;
   public JButton pDancingFlamesLoadSoundBtn;
@@ -2005,7 +2012,14 @@ public class TinaControllerParameter {
       JButton quickMutationButton,
       JProgressBar quickMutationProgressBar,
       JPanel quickMutationPanel,
-      JToggleButton displayFavouriteVariationsToggleBtn) {
+      JToggleButton displayFavouriteVariationsToggleBtn,
+      JWFNumberField deRadiusREd,
+      JSlider deRadiusSlider,
+      JWFNumberField deCurveREd,
+      JSlider deCurveSlider,
+      JWFNumberField deComparisonLineREd,
+      JSlider deComparisonLineSlider
+  ) {
     this.weightingFieldTypeCmb = weightingFieldTypeCmb;
     this.weightingFieldInputCmb = weightingFieldInputCmb;
     this.weightingFieldColorIntensityREd = weightingFieldColorIntensityREd;
@@ -2050,6 +2064,12 @@ public class TinaControllerParameter {
     this.quickMutationProgressBar = quickMutationProgressBar;
     this.quickMutationPanel = quickMutationPanel;
     this.displayFavouriteVariationsToggleBtn = displayFavouriteVariationsToggleBtn;
+    this.deRadiusREd =  deRadiusREd;
+    this.deRadiusSlider = deRadiusSlider;
+    this.deCurveREd = deCurveREd;
+    this.deCurveSlider = deCurveSlider;
+    this.deComparisonLineREd = deComparisonLineREd;
+    this.deComparisonLineSlider = deComparisonLineSlider;
   }
 
   public void setEasyMovieMakerParams(

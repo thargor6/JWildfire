@@ -106,6 +106,7 @@ public class JobRenderThread implements Runnable {
             flame.setPixelsPerUnitScale((wScl + hScl) * 0.5);
             double oldSampleDensity = flame.getSampleDensity();
             double oldFilterRadius = flame.getSpatialFilterRadius();
+            double oldDeRadius = flame.getDeRadius();
             try {
               if (!doOverwriteExisting && new File(primaryFilename).exists()) {
                 controller.getJobProgressUpdater().initProgress(1);
@@ -131,6 +132,7 @@ public class JobRenderThread implements Runnable {
             } finally {
               flame.setSampleDensity(oldSampleDensity);
               flame.setSpatialFilterRadius(oldFilterRadius);
+              flame.setDeRadius(oldDeRadius);
             }
           } catch (Throwable ex) {
             job.setLastError(ex);
