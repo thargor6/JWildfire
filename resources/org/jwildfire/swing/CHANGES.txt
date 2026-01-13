@@ -1,4 +1,4 @@
-V9.10 (13.01.2026)
+V9.10 (14.01.2026)
 - implemented density-estimation-filter (similar to the one of Swan) to improve render quality
   and added options to the ui (under antialiasing-tab).
   You can change the default settings in the Preferences (also turn it off by default).
