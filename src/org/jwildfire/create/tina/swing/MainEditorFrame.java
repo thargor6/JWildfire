@@ -12829,7 +12829,7 @@ public class MainEditorFrame extends JFrame {
       tinaAIPostDenoiseExternalImageBtn.setText("Denoise img...");
       tinaAIPostDenoiseExternalImageBtn.setPreferredSize(new Dimension(190, 24));
       tinaAIPostDenoiseExternalImageBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaAIPostDenoiseExternalImageBtn.setBounds(1012, 52, 123, 24);
+      tinaAIPostDenoiseExternalImageBtn.setBounds(1248, 52, 123, 24);
       tinaAIPostDenoiseExternalImageBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/view-preview.png")));
       tinaAIPostDenoiseExternalImageBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -23166,7 +23166,7 @@ public class MainEditorFrame extends JFrame {
       tinaAIDenoiserCmb.setPreferredSize(new Dimension(125, 22));
       tinaAIDenoiserCmb.setLocation(new Point(100, 4));
       tinaAIDenoiserCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaAIDenoiserCmb.setBounds(1122, 51, 322, 24);
+      tinaAIDenoiserCmb.setBounds(1122, 51, 122, 24);
       tinaAIDenoiserCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
