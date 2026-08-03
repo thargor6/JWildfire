@@ -1073,6 +1073,11 @@ VariationFuncList {
     registerVariationFunc(CalcinationFunc.class);
     registerVariationFunc(KleinFunc.class);
     registerVariationFunc(SymmetricIconFunc.class);
+    registerVariationFunc(AfterimageFunc.class);
+    registerVariationFunc(AuroraFunc.class);
+    registerVariationFunc(CamFunc.class);
+    registerVariationFunc(HaloFunc.class);
+    registerVariationFunc(SatinFunc.class);
     
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
