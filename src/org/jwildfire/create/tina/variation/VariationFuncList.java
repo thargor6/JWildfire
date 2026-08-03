@@ -1068,6 +1068,12 @@ VariationFuncList {
     registerVariationFunc(GreeblesFunc.class);
     registerVariationFunc(Neuron3DFunc.class);
     
+    registerVariationFunc(AbsFoldFunc.class);
+    registerVariationFunc(AzimuthalFunc.class);
+    registerVariationFunc(CalcinationFunc.class);
+    registerVariationFunc(KleinFunc.class);
+    registerVariationFunc(SymmetricIconFunc.class);
+    
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       VariationFunc varFunc = getVariationInstance(funcCls.getKey(), false);
