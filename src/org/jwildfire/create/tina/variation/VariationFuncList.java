@@ -1082,7 +1082,12 @@ VariationFuncList {
     registerVariationFunc(AuroraCurtainFunc.class);
     registerVariationFunc(Lace2Func.class);
     registerVariationFunc(MercatorFunc.class);
-    
+    registerVariationFunc(BubbleColFunc.class);
+    registerVariationFunc(CatenaryFunc.class);
+    registerVariationFunc(InvoluteFunc.class);
+    registerVariationFunc(PWaveFunc.class);
+    registerVariationFunc(ZhukowskiFunc.class);
+   
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       VariationFunc varFunc = getVariationInstance(funcCls.getKey(), false);
