@@ -1087,6 +1087,11 @@ VariationFuncList {
     registerVariationFunc(InvoluteFunc.class);
     registerVariationFunc(PWaveFunc.class);
     registerVariationFunc(ZhukowskiFunc.class);
+    registerVariationFunc(CantorFunc.class);
+    registerVariationFunc(ChainmailFunc.class);
+    registerVariationFunc(DiatomFunc.class);
+    registerVariationFunc(LagrangeFunc.class);
+    registerVariationFunc(SphHarmonicFunc.class);
    
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
