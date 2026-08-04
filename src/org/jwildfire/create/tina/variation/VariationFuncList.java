@@ -1096,7 +1096,12 @@ VariationFuncList {
     registerVariationFunc(CausticFunc.class);
     registerVariationFunc(DeltoidFunc.class);
     registerVariationFunc(FogBankFunc.class);
-  
+    registerVariationFunc(BedheadFunc.class);
+    registerVariationFunc(BrickFunc.class);
+    registerVariationFunc(CatapultFunc.class);
+    registerVariationFunc(LiquefactionFunc.class);
+    registerVariationFunc(MembraneFunc.class);
+ 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       VariationFunc varFunc = getVariationInstance(funcCls.getKey(), false);
