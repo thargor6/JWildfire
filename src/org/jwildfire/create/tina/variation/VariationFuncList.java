@@ -1092,7 +1092,11 @@ VariationFuncList {
     registerVariationFunc(DiatomFunc.class);
     registerVariationFunc(LagrangeFunc.class);
     registerVariationFunc(SphHarmonicFunc.class);
-   
+    registerVariationFunc(AmoebaFunc.class);
+    registerVariationFunc(CausticFunc.class);
+    registerVariationFunc(DeltoidFunc.class);
+    registerVariationFunc(FogBankFunc.class);
+  
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       VariationFunc varFunc = getVariationInstance(funcCls.getKey(), false);
