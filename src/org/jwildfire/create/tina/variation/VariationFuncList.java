@@ -1116,6 +1116,11 @@ VariationFuncList {
     registerVariationFunc(CopperplateFunc.class);
     registerVariationFunc(CumulonimbusFunc.class);
     registerVariationFunc(DuffingFunc.class);
+    registerVariationFunc(CirrusFunc.class);
+    registerVariationFunc(ColorWheelFunc.class);
+    registerVariationFunc(CoronaFunc.class);
+    registerVariationFunc(KarmanVortexFunc.class);
+    registerVariationFunc(OuroborosFunc.class);
  
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
