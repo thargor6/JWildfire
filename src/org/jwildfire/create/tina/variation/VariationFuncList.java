@@ -1130,6 +1130,11 @@ VariationFuncList {
     registerVariationFunc(LabyrinthFunc.class);
     registerVariationFunc(MeanderFunc.class);
     registerVariationFunc(MitosisFunc.class);
+    registerVariationFunc(HexagonalFunc.class);
+    registerVariationFunc(NephroidFunc.class);
+    registerVariationFunc(RobinsonFunc.class);
+    registerVariationFunc(TentacleFunc.class);
+    registerVariationFunc(VirusFunc.class);
  
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
