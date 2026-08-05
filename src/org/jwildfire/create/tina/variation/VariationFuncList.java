@@ -1106,6 +1106,11 @@ VariationFuncList {
     registerVariationFunc(CollisionFunc.class);
     registerVariationFunc(JetStreamFunc.class);
     registerVariationFunc(LituusVarFunc.class);
+    registerVariationFunc(ChladniFunc.class);
+    registerVariationFunc(DomainFoldFunc.class);
+    registerVariationFunc(EmbroideryFunc.class);
+    registerVariationFunc(LeatherFunc.class);
+    registerVariationFunc(PistonFunc.class);
  
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
