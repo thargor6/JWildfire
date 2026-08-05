@@ -1121,6 +1121,10 @@ VariationFuncList {
     registerVariationFunc(CoronaFunc.class);
     registerVariationFunc(KarmanVortexFunc.class);
     registerVariationFunc(OuroborosFunc.class);
+    registerVariationFunc(CurlNoiseFunc.class);
+    registerVariationFunc(FlourishFunc.class);
+    registerVariationFunc(IsobarFunc.class);
+    registerVariationFunc(RewindFunc.class);
  
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
