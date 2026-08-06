@@ -1135,6 +1135,11 @@ VariationFuncList {
     registerVariationFunc(RobinsonFunc.class);
     registerVariationFunc(TentacleFunc.class);
     registerVariationFunc(VirusFunc.class);
+    registerVariationFunc(EpitrochoidFunc.class);
+    registerVariationFunc(GearTeethFunc.class);
+    registerVariationFunc(MirrorRotateFunc.class);
+    registerVariationFunc(ResonanceFunc.class);
+    registerVariationFunc(RidgedFunc.class);
  
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
