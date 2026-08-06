@@ -1159,6 +1159,11 @@ VariationFuncList {
     registerVariationFunc(FaradayFunc.class);
     registerVariationFunc(LatticeFunc.class);
     registerVariationFunc(SimplexWarpFunc.class);
+    registerVariationFunc(DiamondLatticeFunc.class);
+    registerVariationFunc(ErodeFunc.class);
+    registerVariationFunc(GothicArchFunc.class);
+    registerVariationFunc(LaminarFunc.class);
+    registerVariationFunc(ScrewFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
