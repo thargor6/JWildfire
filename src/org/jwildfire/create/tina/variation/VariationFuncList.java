@@ -1140,7 +1140,12 @@ VariationFuncList {
     registerVariationFunc(MirrorRotateFunc.class);
     registerVariationFunc(ResonanceFunc.class);
     registerVariationFunc(RidgedFunc.class);
- 
+    registerVariationFunc(MarbleFunc.class);
+    registerVariationFunc(MushroomFunc.class);
+    registerVariationFunc(PleatFunc.class);
+    registerVariationFunc(QuadrupoleFunc.class);
+    registerVariationFunc(RocheFunc.class);
+
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       VariationFunc varFunc = getVariationInstance(funcCls.getKey(), false);
