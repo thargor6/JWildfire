@@ -1194,6 +1194,10 @@ VariationFuncList {
     registerVariationFunc(VineFunc.class);
     registerVariationFunc(Waves3dDecayFunc.class);
     registerVariationFunc(WeaveFunc.class);
+    registerVariationFunc(ToroidalFunc.class);
+    registerVariationFunc(TunnelingFunc.class);
+    registerVariationFunc(WaveFuncFunc.class);
+    registerVariationFunc(WavesPhaseFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
