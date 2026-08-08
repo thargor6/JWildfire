@@ -1202,6 +1202,11 @@ VariationFuncList {
     registerVariationFunc(TorusKnotFunc.class);
     registerVariationFunc(TwistRibbonFunc.class);
     registerVariationFunc(WeldSeamFunc.class);
+    registerVariationFunc(SuperpositionFunc.class);
+    registerVariationFunc(TessellateFunc.class);
+    registerVariationFunc(TriLatticeFunc.class);
+    registerVariationFunc(WoodGrainFunc.class);
+    registerVariationFunc(WorleyFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
