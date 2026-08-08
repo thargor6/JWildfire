@@ -1186,6 +1186,10 @@ VariationFuncList {
     registerVariationFunc(MoebiusStripFunc.class);
     registerVariationFunc(SupernovaFunc.class);
     registerVariationFunc(TurbulenceFunc.class);
+    registerVariationFunc(HammerFunc.class);
+    registerVariationFunc(PhyllotaxisFunc.class);
+    registerVariationFunc(StereographicPlaneFunc.class);
+    registerVariationFunc(ZigzagFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
