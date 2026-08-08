@@ -1198,6 +1198,10 @@ VariationFuncList {
     registerVariationFunc(TunnelingFunc.class);
     registerVariationFunc(WaveFuncFunc.class);
     registerVariationFunc(WavesPhaseFunc.class);
+    registerVariationFunc(TaperFunc.class);
+    registerVariationFunc(TorusKnotFunc.class);
+    registerVariationFunc(TwistRibbonFunc.class);
+    registerVariationFunc(WeldSeamFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
