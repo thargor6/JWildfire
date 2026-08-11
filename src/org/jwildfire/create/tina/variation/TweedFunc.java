@@ -77,6 +77,17 @@ public class TweedFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "tweed"; }
+  
+  @Override
+  public void randomize() {
+  	freq = Math.random() * 5.0;
+  	if (Math.random() < 0.6) {
+  		amp = Math.random() * 0.5 - 0.25;
+  	}
+  	else {
+  		amp = Math.random() * 4.0 - 2.0;
+  	}
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

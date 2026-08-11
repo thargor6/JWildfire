@@ -76,6 +76,15 @@ public class GearTeethFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "gear_teeth"; }
+  
+  @Override
+  public void randomize() {
+  	teeth = Math.random() * 22.0 + 3.0;
+  	if (Math.random() < 0.75) {
+  		teeth = Math.round(teeth);
+  	}
+  	depth = Math.random();
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

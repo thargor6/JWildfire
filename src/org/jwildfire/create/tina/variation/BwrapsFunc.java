@@ -70,6 +70,12 @@ public class BwrapsFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "bwraps"; }
+  
+  @Override
+  public void randomize() {
+  	scale = Math.random() + 0.01;
+  	cellscale = Math.random() * 0.9 + 0.1;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -63,6 +63,15 @@ public class AmoebaFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "amoeba"; }
+  
+  @Override
+  public void randomize() {
+  	lobes = Math.random() * 13.0 + 2.0;
+  	if (Math.random() < 0.25) {
+  		lobes = Math.round(lobes);
+  	}
+  	amp = Math.random() * Math.random() - 0.5;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

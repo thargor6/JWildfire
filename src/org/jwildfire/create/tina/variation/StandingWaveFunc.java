@@ -76,6 +76,13 @@ public class StandingWaveFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "standing_wave"; }
+  
+  @Override
+  public void randomize() {
+  	freqx = Math.random() * 10.0 - 5.0;
+  	freqy = Math.random() * 10.0 - 5.0;
+  	amp = Math.random();
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

@@ -76,6 +76,12 @@ public class Waves3dDecayFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "waves3d_decay"; }
+  
+  @Override
+  public void randomize() {
+  	freq = Math.random() * 50.0 - 25.0;
+  	decay = Math.random() * 3.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

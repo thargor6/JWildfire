@@ -61,6 +61,15 @@ public class ColorWheelFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "color_wheel"; }
+  
+  @Override
+  public void randomize() {
+  	sectors = Math.random() * 18.0 + 2.0;
+  	if (Math.random() < 0.5) {
+  		sectors = Math.round(sectors);
+  	}
+  	speed = Math.random() * 2.33;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

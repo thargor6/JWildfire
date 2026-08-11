@@ -75,6 +75,12 @@ public class TurbulenceFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "turbulence"; }
+  
+  @Override
+  public void randomize() {
+  	freq = Math.random() * 15.0;
+  	amp = Math.random() * 6.0 - 3.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

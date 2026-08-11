@@ -81,6 +81,13 @@ public class QuasicrystalFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "quasicrystal"; }
+  
+  @Override
+  
+  public void randomize() {
+  	amp = Math.random() * 3.0;
+  	freq = Math.random() * 100.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

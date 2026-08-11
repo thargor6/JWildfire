@@ -78,6 +78,15 @@ public class PhyllotaxisFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "phyllotaxis"; }
+  
+  @Override
+  public void randomize() {
+  	spread = Math.random() * 3.0;
+  	angle_step = Math.random() * 720.0 - 360.0;
+  	if (Math.random() < 0.2) {
+  		angle_step *= 2.0;
+  	}
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

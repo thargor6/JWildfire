@@ -67,6 +67,12 @@ public class DopplerFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "doppler"; }
+  
+  @Override
+  public void randomize() {
+  	dir = Math.random() * 2.0 * Math.PI - Math.PI;
+  	speed = Math.random() * 2.0 - 1.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

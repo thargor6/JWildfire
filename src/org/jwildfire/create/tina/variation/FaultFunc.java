@@ -80,6 +80,12 @@ public class FaultFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "fault"; }
+  
+  @Override
+  public void randomize() {
+  	angle = Math.random() * 360.0 - 180.0;
+  	displacement = Math.random() * 6.0 - 3.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

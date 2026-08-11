@@ -67,6 +67,12 @@ public class DragonScaleFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "dragon_scale"; }
+  
+  @Override
+  public void randomize() {
+  	freq = Math.random() * 10.0;
+  	relief = Math.random() * 10.0 - 5.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

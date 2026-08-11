@@ -61,6 +61,17 @@ public class ChladniFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "chladni"; }
+  
+  @Override
+  public void randomize() {
+  	m = Math.random() * 10.0 - 5.0;
+  	n = Math.random() * 10.0 - 5.0;
+  	if (Math.random() < 0.75) {
+  		amplitude = Math.random() * 0.5;
+  	} else {
+  		amplitude = Math.random();
+  	}
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

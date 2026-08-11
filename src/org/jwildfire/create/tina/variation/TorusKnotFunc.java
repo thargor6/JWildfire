@@ -79,6 +79,22 @@ public class TorusKnotFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "torus_knot"; }
+  
+  @Override
+  public void randomize() {
+  	p = Math.random() * 19.0 + 1.0;
+  	q = Math.random() * 19.0 + 1.0;
+  	if (Math.random() < 0.5) {
+  		p = Math.round(p);
+  		q = Math.round(q);
+  	}
+  	r_big = Math.random() * 3.0;
+  	if (Math.random() < 0.6) {
+  		r_small = Math.random() * r_big;
+  	} else {
+  		r_small = Math.random() * 2.75 + 0.25;
+  	}
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

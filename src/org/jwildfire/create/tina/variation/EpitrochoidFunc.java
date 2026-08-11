@@ -64,6 +64,13 @@ public class EpitrochoidFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "epitrochoid"; }
+  
+  @Override
+  public void randomize() {
+  	r_big = Math.random() * 4.0 + 1.0;
+  	r_small = Math.random();
+  	d = Math.random() * 3.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

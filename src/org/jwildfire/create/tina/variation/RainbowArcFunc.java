@@ -88,6 +88,13 @@ public class RainbowArcFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "rainbow_arc"; }
+  
+  @Override
+  public void randomize() {
+  	radius = Math.random();
+  	width = Math.random();
+  	arc = Math.random() * Math.PI;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

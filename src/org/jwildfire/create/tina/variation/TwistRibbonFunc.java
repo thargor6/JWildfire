@@ -73,6 +73,12 @@ public class TwistRibbonFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "twist_ribbon"; }
+  
+  @Override
+  public void randomize() {
+  	freq = Math.random() * 30.0 - 15.0;
+  	width = Math.random() * 2.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

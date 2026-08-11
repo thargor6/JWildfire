@@ -79,6 +79,14 @@ public class SublimationFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "sublimation"; }
+  
+  @Override
+  public void randomize() {
+  	lift = Math.random() * 5.0 - 2.5;
+  	spread = Math.random() * 3.0;
+  	freq = Math.random() * 25.0;
+  	amp = Math.random() * 8.0 - 4.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

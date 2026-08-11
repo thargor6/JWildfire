@@ -63,6 +63,12 @@ public class DiatomFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "diatom"; }
+  
+  @Override
+  public void randomize() {
+  	spokes = (int) (Math.random() * 19 + 1);
+  	amplitude = Math.random() * 0.9 + 0.1;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

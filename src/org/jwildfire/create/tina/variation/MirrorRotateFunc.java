@@ -72,6 +72,11 @@ public class MirrorRotateFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "mirror_rotate"; }
+  
+  @Override
+  public void randomize() {
+  	angle = Math.random() * 180.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

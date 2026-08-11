@@ -82,6 +82,16 @@ public class FlourishFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "flourish"; }
+  
+  @Override
+  public void randomize() {
+  	n = Math.random() * 49.0 + 1.0;
+  	if (Math.random() < 0.7) {
+  		n = Math.round(n);
+  	}
+  	amp = Math.random() * 6.0 - 3.0;
+  	damp = Math.random() * 2.0 + 0.1;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

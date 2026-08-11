@@ -84,6 +84,13 @@ public class FractalZoomFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "fractal_zoom"; }
+  
+  @Override
+  public void randomize() {
+  	zoom = Math.random() * 2.5 + 0.5;
+  	angle = Math.random() * 2.0 * Math.PI - Math.PI;
+  	iters = (int) (Math.random() * 6.0 + 1.0);
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

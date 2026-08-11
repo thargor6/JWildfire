@@ -59,6 +59,12 @@ public class ContourMapFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "contour_map"; }
+  
+  @Override
+  public void randomize() {
+  	bands = Math.random() * 15.0;
+  	pull = Math.random() * 2.0 - 1.0;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

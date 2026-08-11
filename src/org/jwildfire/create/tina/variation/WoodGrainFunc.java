@@ -82,6 +82,17 @@ public class WoodGrainFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "wood_grain"; }
+  
+  @Override
+  public void randomize() {
+  	freq = Math.random() * 15.0;
+  	amp = Math.random() * 10.0 - 5.0;
+  	grain = Math.random() * 15.0;
+  	grain_freq = Math.random() * 30.0;
+  	if (Math.random() < 0.5) {
+  		grain_freq = Math.round(grain_freq);
+  	}
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {

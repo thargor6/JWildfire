@@ -75,6 +75,13 @@ public class SuperpositionFunc extends VariationFunc implements SupportsGPU {
 
   @Override
   public String getName() { return "superposition"; }
+  
+  @Override
+  public void randomize() {
+  	freq1 = Math.random() * 50.0 - 25.0;
+  	freq2 = Math.random() * 50.0 - 25.0;
+  	phase = Math.random() * 2.0 * Math.PI - Math.PI;
+  }
 
   @Override
   public VariationFuncType[] getVariationTypes() {
