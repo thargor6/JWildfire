@@ -1142,6 +1142,7 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_AI_POST_DENOISER_INFO));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_QUILTFLAMERENDERER));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_MESSAGE_LOG));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_VARIATION_LIST));
   }
 
   protected List<WindowPrefs> getWindowPrefs() {

@@ -51,6 +51,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   public static final String WINDOW_AI_POST_DENOISER_INFO = "AI_POST_DENOISER_INFO";
   public static final String WINDOW_QUILTFLAMERENDERER = "QUILTFLAMERENDERER";
   public static final String WINDOW_MESSAGE_LOG = "LOG_MESSAGES";
+  public static final String WINDOW_VARIATION_LIST = "VARIATIONLIST";
 
   private int width;
   private int height;
