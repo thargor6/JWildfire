@@ -116,6 +116,7 @@ public class JWildfire extends JApplet {
     helpInternalFrames.add(new DefaultJFrameHolder<>(MessageLogFrame.class, this, WindowPrefs.WINDOW_MESSAGE_LOG, "Message log"));
     helpInternalFrames.add(new DefaultJFrameHolder<>(AIPostDenoiserInfoFrame.class, this, WindowPrefs.WINDOW_AI_POST_DENOISER_INFO, "Supported AI-Post-Denoisers"));
     helpInternalFrames.add(new DefaultJFrameHolder<>(TipOfTheDayFrame.class, this, WindowPrefs.WINDOW_TIPOFTHEDAY, "Tip of the day"));
+    helpInternalFrames.add(new DefaultJFrameHolder<>(VariationListFrame.class, this, WindowPrefs.WINDOW_VARIATION_LIST, "Variation list"));
   }
 
   private static final long serialVersionUID = 1L;
@@ -186,6 +187,12 @@ public class JWildfire extends JApplet {
       catch (Exception ex) {
         ex.printStackTrace();
       }
+     try {
+       getJFrame(VariationListFrame.class).initVariationPane();
+     }
+     catch (Exception ex) {
+       ex.printStackTrace();
+     }
       try {
         getJFrame(AIPostDenoiserInfoFrame.class).initOptiXInfoPane();
       }
