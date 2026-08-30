@@ -566,8 +566,6 @@ flame.setName("Universe Set by Michael Bourne");
         varFunc.setParameter("Dens1", 1.56);
         varFunc.setParameter("Dens2", -0.44);
         varFunc.setParameter("Reverse", 1);
-        varFunc.setParameter("X", 9.68);
-        varFunc.setParameter("Y", 10);
         varFunc.setParameter("Seed", 0);
         xForm.addVariation(1, varFunc);
       }
@@ -831,8 +829,7 @@ flame.setName("Universe Set by Michael Bourne");
         varFunc.setParameter("Dens1", 1.56);
         varFunc.setParameter("Dens2", -0.44);
         varFunc.setParameter("Reverse", 1);
-        varFunc.setParameter("X", 9.68);
-        varFunc.setParameter("Y", 10);
+        
         varFunc.setParameter("Seed", 0);
         xForm.addVariation(1, varFunc);
       }
