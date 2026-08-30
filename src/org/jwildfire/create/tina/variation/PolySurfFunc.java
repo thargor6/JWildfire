@@ -88,47 +88,46 @@ public class PolySurfFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // 1. Determine the original quadrant.
-    double sign_x = pAffineTP.x >= 0 ? 1.0 : -1.0;
-    double sign_y = pAffineTP.y >= 0 ? 1.0 : -1.0;
-
-    // 2. Apply Julia offset if enabled.
+    // 1. Apply Julia offset if enabled.
     double x_calc = pAffineTP.x;
     double y_calc = pAffineTP.y;
     double z_calc = pAffineTP.z;
+    
     if (julia > 0) {
       x_calc += juliaX;
       y_calc += juliaY;
       z_calc += juliaZ;
     }
     
-    // 3. Apply folding logic if enabled.
+    // 2. Apply folding logic if enabled.
+    // Note: High foldX/foldY values can also create gaps or "tears" in the geometry.
     if (enableFold > 0) {
       x_calc = fabs(x_calc + foldX) - fabs(x_calc - foldX) - x_calc;
       y_calc = fabs(y_calc + foldY) - fabs(y_calc - foldY) - y_calc;
     }
     
-    // 4. Apply pre-scaling offset if enabled.
+    // 3. Apply pre-scaling offset if enabled.
     if (enableOffset > 0) {
         x_calc += offsetX;
         y_calc += offsetY;
         z_calc += offsetZ;
     }
 
-    // 5. Use absolute values for the main calculation.
-    double x_abs = fabs(x_calc);
-    double y_abs = fabs(y_calc);
+    // 4. Core calculation 
+    // We use the direct calculated values (not fabs) to ensure 
+    // the formula is continuous across the origin.
+    double r2 = sqr(x_calc) + sqr(y_calc) + sqr(z_calc);
     
-    // 6. Calculate the curl transformation.
-    double r2 = sqr(x_abs) + sqr(y_abs) + sqr(z_calc);
-    double r = pAmount / (r2 * c2 + c2z * z_calc + 1);
+    // Safety check for division by zero
+    double denominator = (r2 * c2 + c2z * z_calc + 1);
+    double r = (fabs(denominator) < 1.0E-10) ? pAmount : pAmount / denominator;
 
-    // 7. Calculate the transformation's effect (the "delta" vector).
-    double delta_x = r * x_abs;
-    double delta_y = r * y_abs;
+    // 5. Calculate the transformation's effect (the "delta" vector).
+    double delta_x = r * x_calc;
+    double delta_y = r * y_calc;
     double delta_z = r * (z_calc + c * r2);
     
-    // 8. Apply rotation to the delta vector.
+    // 6. Apply rotation to the delta vector.
     if(rotX != 0.0 || rotY != 0.0 || rotZ != 0.0) {
       double radX = Math.toRadians(rotX);
       double radY = Math.toRadians(rotY);
@@ -159,10 +158,10 @@ public class PolySurfFunc extends VariationFunc {
       delta_y = temp_y;
     }
 
-    // 9. Apply spherical inversion if enabled.
+    // 7. Apply spherical inversion if enabled.
     if (enableInvert > 0) {
       double r2_inv = sqr(delta_x) + sqr(delta_y) + sqr(delta_z);
-      if (r2_inv > 1.0E-9) { // Avoid division by zero
+      if (r2_inv > 1.0E-9) { 
         double factor = sqr(invertRadius) / r2_inv;
         delta_x *= factor;
         delta_y *= factor;
@@ -170,12 +169,17 @@ public class PolySurfFunc extends VariationFunc {
       }
     }
 
-    // 10. Apply the final delta with mirroring.
-    pVarTP.x += (mirrorX > 0 && pContext.random() < 0.5 ? -1.0 : 1.0) * sign_x * delta_x;
-    pVarTP.y += (mirrorY > 0 && pContext.random() < 0.5 ? -1.0 : 1.0) * sign_y * delta_y;
-    pVarTP.z += (mirrorZ > 0 && pContext.random() < 0.5 ? -1.0 : 1.0) * delta_z;
+    // 8. Apply final delta with consistent mirroring.
+    // Using a random sign flip for all enabled axes ensures symmetrical growth.
+    double mX = (mirrorX > 0 && pContext.random() < 0.5) ? -1.0 : 1.0;
+    double mY = (mirrorY > 0 && pContext.random() < 0.5) ? -1.0 : 1.0;
+    double mZ = (mirrorZ > 0 && pContext.random() < 0.5) ? -1.0 : 1.0;
 
-    // 11. Apply coloring
+    pVarTP.x += mX * delta_x;
+    pVarTP.y += mY * delta_y;
+    pVarTP.z += mZ * delta_z;
+
+    // 9. Apply coloring
     if (colorMode > 0) {
       double calculatedColor = 0.0;
       switch(colorMode) {
