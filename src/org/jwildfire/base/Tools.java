@@ -61,7 +61,7 @@ import org.jwildfire.io.ImageReader;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  private static final String APP_VERSION = "V9.10 (14.01.2026)";
+  private static final String APP_VERSION = "V9.20 (30.08.2026)";
 
   public static final boolean STEAM_EDITION = false;
   public static final boolean SPECIAL_VERSION = false;

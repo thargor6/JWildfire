@@ -1,3 +1,37 @@
+V9.20 (30.08.2026)
+- lots of new variations from JWildfireSwan, which were converted by Brad Stefanov and were added
+  by Rick Sidwell:
+   - superposition, tessellate, tri_lattice, wood_grain, worley
+   - taper, torus_knot, twist_ribbon, weld_seam
+   - toroidal, tunneling, wave_func, waves_phase
+   - tweed, vine, waves3d_decay, weave
+   - hammer, phyllotaxis, stereographic_plane, zigzag
+   - fbm_warp, moebius_strip, supernova, turbulence
+   - fault, inflate, pdj_v2, tidal_lock, tinkerbell
+   - dragon_scale, fractal_zoom, gnomonic_proj
+   - dipole, honeycomb, mercator_cylinder, quasicrystal, sublimation
+   - gradient_warp, quilt, rainbow_arc, schwarz_christoffel
+   - diamond_lattice, erode, gothic_arch, laminar, screw
+   - doppler, faraday, lattice, simplex_warp
+   - ikeda, quintessence, ruffle, secant, standing_wave
+   - cyclone, penrose_fold, pickover, stereographic, voronoi_fold
+   - marble, mushroom, pleat, quadrupole, roche
+   - epitrochoid, gear_teeth, mirror_rotate, resonance, ridged
+   - hexagonal, nephroid, robinson, tentacle, virus
+   - contour_map, gingerbread, labyrinth, meander, mitosis
+   - curl_noise, flourish, isobar, rewind
+   - cirrus, color_wheel, corona, karman_vortex, ouroboros
+   - bwraps, coagulation, copperplate, cumulonimbus, duffing
+   - chladni, domain_fold, embroidery, leather, piston
+   - astroid, bravais, collision, jet_stream, lituus_var
+   - bedhead, brick, catapult, liquefaction, membrane
+   - amoeba, caustic, deltoid, fog_bank
+   - cantor, chainmail, diatom, lagrange, sph_harmonic
+   - bubble_col, catenary, involute, p_wave, zhukowski
+   - aftershock, aurora_curtain, lace, mercator
+   - afterimage, aurora, cam, halo, satin
+   - abs_fold, azimuthal, calcination, klein, symmetric_icon
+
 V9.10 (14.01.2026)
 - implemented density-estimation-filter (similar to the one of Swan) to improve render quality
   and added options to the ui (under antialiasing-tab).
